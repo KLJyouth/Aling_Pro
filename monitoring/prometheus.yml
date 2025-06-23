@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'alingai_api_monitoring'
+    static_configs:
+      - targets: ['localhost:8080']  # 主监控系统
+  - job_name: 'alingai_api_gateway'
+    static_configs:
+      - targets: ['localhost:9000']  # API网关
+
+  # 添加被监控的API端点
+  - job_name: 'api_endpoints'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['localhost:3000'] # 内部API
+        labels:
+          api_type: 'internal'
+      - targets: ['api.alingai.com:443'] # 公开API
+        labels:
+          api_type: 'exposed'
+    
+    # 对于HTTPS端点配置TLS
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true  # 测试环境可用，生产环境应该配置证书 

@@ -1,0 +1,205 @@
+{
+  "system": {
+    "name": "AlingAi API监控系统",
+    "version": "1.0.0",
+    "log_level": "info",
+    "log_path": "../logs",
+    "port": 8080,
+    "admin_port": 8081
+  },
+  "api_gateway": {
+    "port": 9000,
+    "proxy_mode": true,
+    "request_timeout": 30000,
+    "max_requests_per_second": 1000,
+    "throttling_enabled": true
+  },
+  "metrics_collector": {
+    "sampling_rate": 1.0,
+    "metrics_buffer_size": 1000,
+    "flush_interval_ms": 5000
+  },
+  "storage": {
+    "type": "timescaledb",
+    "connection": {
+      "host": "localhost",
+      "port": 5432,
+      "database": "api_monitoring",
+      "user": "postgres",
+      "password": "password"
+    },
+    "retention_policy": {
+      "raw_data_days": 30,
+      "aggregated_data_days": 365
+    }
+  },
+  "alerting": {
+    "enabled": true,
+    "channels": [
+      {
+        "type": "email",
+        "config": {
+          "smtp_server": "smtp.example.com",
+          "smtp_port": 587,
+          "username": "alerts@example.com",
+          "password": "your_password",
+          "from": "alerts@example.com",
+          "recipients": ["admin@example.com"]
+        }
+      },
+      {
+        "type": "sms",
+        "config": {
+          "provider": "aliyun",
+          "access_key": "your_key",
+          "access_secret": "your_secret",
+          "sign_name": "AlingAi",
+          "template_code": "SMS_12345678",
+          "recipients": ["+8613800138000"]
+        }
+      },
+      {
+        "type": "webhook",
+        "config": {
+          "url": "https://hooks.slack.com/services/your/webhook/url",
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        }
+      },
+      {
+        "type": "websocket",
+        "config": {
+          "enabled": true
+        }
+      }
+    ],
+    "rules": [
+      {
+        "name": "高延迟",
+        "condition": "response_time > 2000",
+        "duration": "5m",
+        "severity": "warning",
+        "channels": ["email", "websocket"]
+      },
+      {
+        "name": "API错误率过高",
+        "condition": "error_rate > 0.05",
+        "duration": "5m",
+        "severity": "critical",
+        "channels": ["email", "sms", "webhook", "websocket"]
+      },
+      {
+        "name": "API不可用",
+        "condition": "availability < 0.99",
+        "duration": "5m",
+        "severity": "critical",
+        "channels": ["email", "sms", "webhook", "websocket"]
+      }
+    ]
+  },
+  "health_check": {
+    "interval_seconds": 60,
+    "timeout_seconds": 10,
+    "endpoints": [
+      {
+        "name": "第三方支付API",
+        "url": "https://payment-api.example.com/health",
+        "method": "GET",
+        "headers": {
+          "Authorization": "Bearer ${PAYMENT_API_TOKEN}"
+        },
+        "expected_status": 200,
+        "expected_content": "{\"status\":\"ok\"}",
+        "alert_on_failure": true
+      }
+    ]
+  },
+  "scheduler": {
+    "tasks": [
+      {
+        "name": "指标聚合",
+        "type": "metrics_aggregation",
+        "interval": "1h",
+        "config": {
+          "aggregation_period": "1h",
+          "metrics": ["response_time", "throughput", "error_rate"]
+        }
+      },
+      {
+        "name": "系统健康报告",
+        "type": "report_generation",
+        "interval": "1d",
+        "config": {
+          "report_type": "health",
+          "recipients": ["admin@example.com"]
+        }
+      }
+    ]
+  },
+  "api_endpoints": {
+    "monitored_apis": [
+      {
+        "type": "third_party",
+        "name": "支付服务",
+        "base_url": "https://payment-api.example.com",
+        "endpoints": [
+          {
+            "path": "/v1/payments",
+            "method": "POST",
+            "expected_status": 200,
+            "timeout_ms": 5000,
+            "sla_ms": 2000
+          },
+          {
+            "path": "/v1/payments/{id}",
+            "method": "GET",
+            "expected_status": 200,
+            "timeout_ms": 3000,
+            "sla_ms": 1000
+          }
+        ],
+        "auth": {
+          "type": "bearer",
+          "token_env": "PAYMENT_API_TOKEN"
+        }
+      },
+      {
+        "type": "internal",
+        "name": "用户服务",
+        "base_url": "http://localhost:3000",
+        "endpoints": [
+          {
+            "path": "/api/users",
+            "method": "GET",
+            "expected_status": 200,
+            "timeout_ms": 1000,
+            "sla_ms": 500
+          }
+        ],
+        "auth": {
+          "type": "none"
+        }
+      },
+      {
+        "type": "exposed",
+        "name": "公开API",
+        "base_url": "https://api.alingai.com",
+        "endpoints": [
+          {
+            "path": "/v1/data",
+            "method": "GET",
+            "expected_status": 200,
+            "timeout_ms": 2000,
+            "sla_ms": 1000
+          }
+        ],
+        "auth": {
+          "type": "api_key",
+          "header_name": "X-API-Key",
+          "key_env": "PUBLIC_API_KEY"
+        }
+      }
+    ]
+  }
+} 
