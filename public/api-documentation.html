@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API文档 - AlingAi Pro</title>
+    
+    <!-- CSS 引入 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.28.0/themes/prism.min.css" rel="stylesheet">
+    <link href="/assets/css/theme-system.css" rel="stylesheet">
+    <link href="/assets/css/accessibility.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f9fafb;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .main-container {
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin: 20px;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background: var(--light-color);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            min-height: 700px;
+        }
+
+        .nav-pills .nav-link {
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+
+        .nav-pills .nav-link:hover {
+            background-color: rgba(99, 102, 241, 0.1);
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .doc-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .doc-section:last-child {
+            border-bottom: none;
+        }
+
+        .code-block {
+            background-color: #1e1e3f;
+            color: #ffffff;
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            font-size: 0.8rem;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .language-tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .language-tab {
+            padding: 0.75rem 1.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .language-tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .language-tab:hover:not(.active) {
+            color: var(--primary-color);
+            border-bottom-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .parameter-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .parameter-table th,
+        .parameter-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .parameter-table thead th {
+            background-color: rgba(0, 0, 0, 0.02);
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .parameter-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .parameter-type {
+            font-size: 0.85rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background-color: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+            font-family: monospace;
+        }
+
+        .required-badge {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+            margin-left: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="main-container">
+            <div class="row g-0">
+                <!-- 侧边栏导航 -->
+                <div class="col-lg-2 sidebar">
+                    <div class="p-3">
+                        <div class="text-center mb-4">
+                            <img src="/assets/images/logo.png" alt="AlingAi Logo" height="40" class="mb-3">
+                            <h5 class="mb-0">用户中心</h5>
+                        </div>
+                        
+                        <div class="nav flex-column nav-pills">
+                            <a class="nav-link d-flex align-items-center" href="/user-console.html">
+                                <i class="bi bi-speedometer2 me-2"></i> 控制台
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/user-dashboard.html">
+                                <i class="bi bi-graph-up me-2"></i> 使用统计
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/api-community.html">
+                                <i class="bi bi-cloud me-2"></i> API社区
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/api-keys.html">
+                                <i class="bi bi-key me-2"></i> API密钥
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/api-integration.html">
+                                <i class="bi bi-code-slash me-2"></i> API对接
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/sdk-download.html">
+                                <i class="bi bi-download me-2"></i> SDK下载
+                            </a>
+                            <a class="nav-link d-flex align-items-center active" href="/api-documentation.html">
+                                <i class="bi bi-file-text me-2"></i> API文档
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/wallet.html">
+                                <i class="bi bi-wallet2 me-2"></i> 额度充值
+                            </a>
+                            <a class="nav-link d-flex align-items-center" href="/user-profile.html">
+                                <i class="bi bi-person-circle me-2"></i> 个人设置
+                            </a>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div>
+                            <a href="/logout.php" class="btn btn-outline-danger w-100">
+                                <i class="bi bi-box-arrow-right me-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 主内容区 -->
+                <div class="col-lg-10">
+                    <div class="p-4">
+                        <!-- 页面标题 -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="mb-0">API文档</h2>
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">欢迎，<strong>张三</strong></span>
+                                <img src="https://ui-avatars.com/api/?name=张三&background=random" class="rounded-circle" width="40" height="40">
+                            </div>
+                        </div>
+                        
+                        <!-- 文档内容 -->
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="sticky-top pt-3" style="top: 20px;">
+                                    <div class="nav flex-column nav-pills">
+                                        <a class="nav-link active" href="#getting-started">开始使用</a>
+                                        <a class="nav-link" href="#authentication">认证方式</a>
+                                        <a class="nav-link" href="#chat-api">对话API</a>
+                                        <a class="nav-link" href="#image-api">图像生成API</a>
+                                        <a class="nav-link" href="#speech-api">语音合成API</a>
+                                        <a class="nav-link" href="#rate-limits">速率限制</a>
+                                        <a class="nav-link" href="#error-handling">错误处理</a>
+                                        <a class="nav-link" href="#best-practices">最佳实践</a>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-9">
+                                <!-- 开始使用 -->
+                                <div id="getting-started" class="doc-section">
+                                    <h3>开始使用</h3>
+                                    <p>AlingAi API 提供一系列强大的人工智能功能，包括对话生成、图像创建和语音合成等。本文档将帮助您快速了解如何使用这些API。</p>
+                                    
+                                    <h5 class="mt-4">基本要求</h5>
+                                    <ul>
+                                        <li>您需要有一个有效的 AlingAi 账户</li>
+                                        <li>获取 API 密钥（在<a href="/api-keys.html">API密钥</a>页面创建）</li>
+                                        <li>确保账户中有足够的使用额度</li>
+                                    </ul>
+                                    
+                                    <h5 class="mt-4">API基础地址</h5>
+                                    <div class="code-block">
+                                        <div class="code-header">
+                                            <span>API基础地址</span>
+                                            <button class="copy-btn">
+                                                <i class="bi bi-clipboard"></i> 复制
+                                            </button>
+                                        </div>
+                                        <pre class="m-0 p-3"><code>https://api.alingai.pro/v1</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <!-- 认证方式 -->
+                                <div id="authentication" class="doc-section">
+                                    <h3>认证方式</h3>
+                                    <p>所有API请求都需要使用API密钥进行认证。您可以在请求头中添加您的API密钥。</p>
+                                    
+                                    <div class="code-block">
+                                        <div class="code-header">
+                                            <span>HTTP请求头</span>
+                                            <button class="copy-btn">
+                                                <i class="bi bi-clipboard"></i> 复制
+                                            </button>
+                                        </div>
+                                        <pre class="m-0 p-3"><code>Authorization: Bearer YOUR_API_KEY</code></pre>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning mt-3">
+                                        <i class="bi bi-exclamation-triangle me-2"></i>
+                                        <strong>安全提示：</strong> 请妥善保管您的API密钥，不要在客户端代码中暴露它。建议通过服务器中转API请求。
+                                    </div>
+                                </div>
+                                
+                                <!-- 对话API -->
+                                <div id="chat-api" class="doc-section">
+                                    <h3>对话API</h3>
+                                    <p>对话API允许您与AlingAi的对话模型进行交互，生成自然、连贯的对话响应。</p>
+                                    
+                                    <h5 class="mt-4">请求格式</h5>
+                                    
+                                    <table class="parameter-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="25%">参数</th>
+                                                <th width="20%">类型</th>
+                                                <th>描述</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>model<span class="required-badge">必填</span></td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>要使用的模型 ID，例如 "alingai-chat-1"</td>
+                                            </tr>
+                                            <tr>
+                                                <td>messages<span class="required-badge">必填</span></td>
+                                                <td><span class="parameter-type">array</span></td>
+                                                <td>对话消息数组，每条消息包含 role 和 content</td>
+                                            </tr>
+                                            <tr>
+                                                <td>temperature</td>
+                                                <td><span class="parameter-type">number</span></td>
+                                                <td>控制随机性，0-1之间，默认为0.7</td>
+                                            </tr>
+                                            <tr>
+                                                <td>max_tokens</td>
+                                                <td><span class="parameter-type">integer</span></td>
+                                                <td>生成文本的最大长度，默认为2048</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <div class="language-tabs mb-3">
+                                        <div class="language-tab active" data-lang="curl">cURL</div>
+                                        <div class="language-tab" data-lang="python">Python</div>
+                                        <div class="language-tab" data-lang="javascript">JavaScript</div>
+                                        <div class="language-tab" data-lang="php">PHP</div>
+                                    </div>
+                                    
+                                    <div class="code-examples">
+                                        <div class="code-example" data-lang="curl">
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span>cURL 示例</span>
+                                                    <button class="copy-btn">
+                                                        <i class="bi bi-clipboard"></i> 复制
+                                                    </button>
+                                                </div>
+                                                <pre class="m-0 p-3"><code>curl -X POST https://api.alingai.pro/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "alingai-chat-1",
+    "messages": [
+      {"role": "system", "content": "你是一个有用的智能助手。"},
+      {"role": "user", "content": "给我介绍一下人工智能的发展历程。"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 2048
+  }'</code></pre>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="code-example d-none" data-lang="python">
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span>Python 示例</span>
+                                                    <button class="copy-btn">
+                                                        <i class="bi bi-clipboard"></i> 复制
+                                                    </button>
+                                                </div>
+                                                <pre class="m-0 p-3"><code>import requests
+import json
+
+url = "https://api.alingai.pro/v1/chat/completions"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+data = {
+    "model": "alingai-chat-1",
+    "messages": [
+        {"role": "system", "content": "你是一个有用的智能助手。"},
+        {"role": "user", "content": "给我介绍一下人工智能的发展历程。"}
+    ],
+    "temperature": 0.7,
+    "max_tokens": 2048
+}
+
+response = requests.post(url, headers=headers, data=json.dumps(data))
+print(response.json())</code></pre>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="code-example d-none" data-lang="javascript">
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span>JavaScript 示例</span>
+                                                    <button class="copy-btn">
+                                                        <i class="bi bi-clipboard"></i> 复制
+                                                    </button>
+                                                </div>
+                                                <pre class="m-0 p-3"><code>fetch('https://api.alingai.pro/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY'
+  },
+  body: JSON.stringify({
+    model: 'alingai-chat-1',
+    messages: [
+      {role: 'system', content: '你是一个有用的智能助手。'},
+      {role: 'user', content: '给我介绍一下人工智能的发展历程。'}
+    ],
+    temperature: 0.7,
+    max_tokens: 2048
+  })
+})
+.then(response => response.json())
+.then(data => console.log(data))
+.catch(error => console.error('Error:', error));</code></pre>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="code-example d-none" data-lang="php">
+                                            <div class="code-block">
+                                                <div class="code-header">
+                                                    <span>PHP 示例</span>
+                                                    <button class="copy-btn">
+                                                        <i class="bi bi-clipboard"></i> 复制
+                                                    </button>
+                                                </div>
+                                                <pre class="m-0 p-3"><code>$url = 'https://api.alingai.pro/v1/chat/completions';
+$data = array(
+    'model' => 'alingai-chat-1',
+    'messages' => array(
+        array('role' => 'system', 'content' => '你是一个有用的智能助手。'),
+        array('role' => 'user', 'content' => '给我介绍一下人工智能的发展历程。')
+    ),
+    'temperature' => 0.7,
+    'max_tokens' => 2048
+);
+
+$options = array(
+    'http' => array(
+        'header'  => "Content-type: application/json\r\nAuthorization: Bearer YOUR_API_KEY\r\n",
+        'method'  => 'POST',
+        'content' => json_encode($data)
+    )
+);
+
+$context  = stream_context_create($options);
+$result = file_get_contents($url, false, $context);
+
+if ($result === FALSE) { 
+    echo "Error"; 
+} else {
+    var_dump(json_decode($result));
+}</code></pre>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 图像生成API -->
+                                <div id="image-api" class="doc-section">
+                                    <h3>图像生成API</h3>
+                                    <p>图像生成API允许您根据文本描述生成高质量的图像。</p>
+                                    
+                                    <h5 class="mt-4">请求格式</h5>
+                                    
+                                    <table class="parameter-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="25%">参数</th>
+                                                <th width="20%">类型</th>
+                                                <th>描述</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>prompt<span class="required-badge">必填</span></td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>图像描述文本</td>
+                                            </tr>
+                                            <tr>
+                                                <td>size</td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>生成图像尺寸，可选值："512x512", "1024x1024"，默认为"512x512"</td>
+                                            </tr>
+                                            <tr>
+                                                <td>n</td>
+                                                <td><span class="parameter-type">integer</span></td>
+                                                <td>生成图像数量，默认为1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <div class="code-block mt-4">
+                                        <div class="code-header">
+                                            <span>图像生成示例</span>
+                                            <button class="copy-btn">
+                                                <i class="bi bi-clipboard"></i> 复制
+                                            </button>
+                                        </div>
+                                        <pre class="m-0 p-3"><code>curl -X POST https://api.alingai.pro/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "prompt": "一只可爱的小猫坐在窗台上看日落",
+    "size": "1024x1024",
+    "n": 1
+  }'</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <!-- 语音合成API -->
+                                <div id="speech-api" class="doc-section">
+                                    <h3>语音合成API</h3>
+                                    <p>语音合成API可以将文本转换为自然、流畅的语音。</p>
+                                    
+                                    <h5 class="mt-4">请求格式</h5>
+                                    
+                                    <table class="parameter-table">
+                                        <thead>
+                                            <tr>
+                                                <th width="25%">参数</th>
+                                                <th width="20%">类型</th>
+                                                <th>描述</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>text<span class="required-badge">必填</span></td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>要转换为语音的文本</td>
+                                            </tr>
+                                            <tr>
+                                                <td>voice_id</td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>语音ID，可选值："female1", "male1", "female2", "male2"，默认为"female1"</td>
+                                            </tr>
+                                            <tr>
+                                                <td>format</td>
+                                                <td><span class="parameter-type">string</span></td>
+                                                <td>输出格式，可选值："mp3", "wav"，默认为"mp3"</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    
+                                    <div class="code-block mt-4">
+                                        <div class="code-header">
+                                            <span>语音合成示例</span>
+                                            <button class="copy-btn">
+                                                <i class="bi bi-clipboard"></i> 复制
+                                            </button>
+                                        </div>
+                                        <pre class="m-0 p-3"><code>curl -X POST https://api.alingai.pro/v1/speech/synthesize \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "text": "欢迎使用AlingAi语音合成服务，我们提供自然流畅的语音效果。",
+    "voice_id": "female1",
+    "format": "mp3"
+  }'</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <!-- 速率限制 -->
+                                <div id="rate-limits" class="doc-section">
+                                    <h3>速率限制</h3>
+                                    <p>为了确保服务质量并防止滥用，API请求受到速率限制。限制根据您的账户类型而有所不同。</p>
+                                    
+                                    <div class="table-responsive mt-4">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>账户类型</th>
+                                                    <th>请求限制</th>
+                                                    <th>每分钟请求数</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>基础版</td>
+                                                    <td>20 req/min</td>
+                                                    <td>20</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>高级版</td>
+                                                    <td>60 req/min</td>
+                                                    <td>60</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>企业版</td>
+                                                    <td>200 req/min</td>
+                                                    <td>200</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <!-- 错误处理 -->
+                                <div id="error-handling" class="doc-section">
+                                    <h3>错误处理</h3>
+                                    <p>API使用标准HTTP状态码表示请求状态，并在响应体中提供详细的错误信息。</p>
+                                    
+                                    <div class="table-responsive mt-4">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>状态码</th>
+                                                    <th>描述</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>200</td>
+                                                    <td>请求成功</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>400</td>
+                                                    <td>无效请求 - 请求参数错误</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>401</td>
+                                                    <td>未授权 - API密钥无效或缺失</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>403</td>
+                                                    <td>禁止访问 - 没有权限执行操作</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>429</td>
+                                                    <td>请求过多 - 超出速率限制</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>500</td>
+                                                    <td>服务器错误 - 内部服务错误</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="code-block mt-4">
+                                        <div class="code-header">
+                                            <span>错误响应示例</span>
+                                            <button class="copy-btn">
+                                                <i class="bi bi-clipboard"></i> 复制
+                                            </button>
+                                        </div>
+                                        <pre class="m-0 p-3"><code>{
+  "error": {
+    "code": "invalid_request_error",
+    "message": "必须提供prompt参数",
+    "param": "prompt",
+    "type": "invalid_parameter"
+  }
+}</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <!-- 最佳实践 -->
+                                <div id="best-practices" class="doc-section">
+                                    <h3>最佳实践</h3>
+                                    <p>以下是使用AlingAi API的一些最佳实践建议：</p>
+                                    
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5><i class="bi bi-shield-check text-success me-2"></i> 安全性</h5>
+                                            <ul class="mb-0">
+                                                <li>不要在客户端代码中暴露API密钥</li>
+                                                <li>使用后端服务中转API请求</li>
+                                                <li>定期轮换API密钥</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <h5><i class="bi bi-speedometer2 text-primary me-2"></i> 性能优化</h5>
+                                            <ul class="mb-0">
+                                                <li>缓存常用响应以减少API调用</li>
+                                                <li>对于长对话，考虑使用摘要技术减少历史消息长度</li>
+                                                <li>优化prompt设计，提供清晰、具体的指示</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5><i class="bi bi-currency-dollar text-warning me-2"></i> 成本控制</h5>
+                                            <ul class="mb-0">
+                                                <li>合理设置max_tokens参数，避免生成过长无用内容</li>
+                                                <li>根据需求选择适当的模型，不同模型有不同的定价</li>
+                                                <li>实现请求限制和监控，避免意外超额使用</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript 引入 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.28.0/prism.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 语言标签切换
+            const languageTabs = document.querySelectorAll('.language-tab');
+            const codeExamples = document.querySelectorAll('.code-example');
+            
+            languageTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有标签的active类
+                    languageTabs.forEach(t => t.classList.remove('active'));
+                    // 为当前标签添加active类
+                    this.classList.add('active');
+                    
+                    // 隐藏所有代码示例
+                    codeExamples.forEach(example => example.classList.add('d-none'));
+                    // 显示对应的代码示例
+                    const lang = this.getAttribute('data-lang');
+                    const example = document.querySelector(`.code-example[data-lang="${lang}"]`);
+                    if (example) {
+                        example.classList.remove('d-none');
+                    }
+                });
+            });
+            
+            // 复制代码功能
+            const copyButtons = document.querySelectorAll('.copy-btn');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const codeBlock = this.closest('.code-block');
+                    const code = codeBlock.querySelector('pre code').textContent;
+                    
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="bi bi-check"></i> 已复制';
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                        }, 2000);
+                    });
+                });
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
