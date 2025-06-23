@@ -25,17 +25,17 @@ use InvalidArgumentException;
  */
 class EnglishTokenizer implements TokenizerInterface
 {
-    private array ;
-    private array ;
-    private array ;
+    private array $config;
+    private array $dictionary;
+    private array $stopWords;
 
     /**
      * 构造函数
      *
-     * @param array  分词器配置
+     * @param array $config 分词器配置
      */
-    public function __construct(array  = [])
+    public function __construct(array $config = [])
     {
-        ->config = array_merge(->getDefaultConfig(), );
-        ->loadResources();
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->loadResources();
     }

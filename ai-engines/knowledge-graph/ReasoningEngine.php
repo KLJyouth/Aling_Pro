@@ -28,29 +28,29 @@ class ReasoningEngine
     /**
      * 配置参数
      */
-    private array ;
+    private array $config;
     
     /**
      * 推理规则集合
      */
-    private array  = [];
+    private array $rules = [];
     
     /**
      * 知识图谱存储接口
      */
-    private ?GraphStoreInterface  = null;
+    private ?GraphStoreInterface $graphStore = null;
 
     /**
      * 构造函数
      * 
-     * @param GraphStoreInterface  知识图谱存储接口
-     * @param array  配置参数
+     * @param GraphStoreInterface $graphStore 知识图谱存储接口
+     * @param array $config 配置参数
      */
-    public function __construct(GraphStoreInterface , array  = [])
+    public function __construct(GraphStoreInterface $graphStore, array $config = [])
     {
-        ->graphStore = ;
-        ->config = array_merge(->getDefaultConfig(), );
-        ->initializeRules();
+        $this->graphStore = $graphStore;
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->initializeRules();
     }
     
     /**
@@ -76,19 +76,19 @@ class ReasoningEngine
     private function initializeRules(): void
     {
         // 添加传递性规则
-        ->addTransitiveRules();
+        $this->addTransitiveRules();
         
         // 添加对称性规则
-        ->addSymmetricRules();
+        $this->addSymmetricRules();
         
         // 添加逆关系规则
-        ->addInverseRules();
+        $this->addInverseRules();
         
         // 添加层次关系规则
-        ->addHierarchicalRules();
+        $this->addHierarchicalRules();
         
         // 添加组合规则
-        ->addCompositeRules();
+        $this->addCompositeRules();
     }
 
     /**
@@ -97,7 +97,7 @@ class ReasoningEngine
     private function addTransitiveRules(): void
     {
         // 位置传递性: A位于B，B位于C => A位于C
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'location_transitivity',
             'type' => 'transitive',
             'relation' => 'LocatedIn',
@@ -105,7 +105,7 @@ class ReasoningEngine
         ];
         
         // 部分传递性: A是B的一部分，B是C的一部分 => A是C的一部分
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'part_of_transitivity',
             'type' => 'transitive',
             'relation' => 'PartOf',
@@ -113,7 +113,7 @@ class ReasoningEngine
         ];
         
         // 包含传递性: A包含B，B包含C => A包含C
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'contains_transitivity',
             'type' => 'transitive',
             'relation' => 'Contains',
@@ -127,7 +127,7 @@ class ReasoningEngine
     private function addSymmetricRules(): void
     {
         // 配偶关系对称性: A是B的配偶 => B是A的配偶
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'spouse_symmetry',
             'type' => 'symmetric',
             'relation' => 'Spouse',
@@ -135,7 +135,7 @@ class ReasoningEngine
         ];
         
         // 兄弟姐妹关系对称性: A是B的兄弟姐妹 => B是A的兄弟姐妹
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'sibling_symmetry',
             'type' => 'symmetric',
             'relation' => 'Sibling',
@@ -149,7 +149,7 @@ class ReasoningEngine
     private function addInverseRules(): void
     {
         // 父母-子女逆关系: A是B的父母 => B是A的子女
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'parent_child_inverse',
             'type' => 'inverse',
             'relation1' => 'Parent',
@@ -158,7 +158,7 @@ class ReasoningEngine
         ];
         
         // 拥有-被拥有逆关系: A拥有B => B被A拥有
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'owns_owned_by_inverse',
             'type' => 'inverse',
             'relation1' => 'Owns',
@@ -167,7 +167,7 @@ class ReasoningEngine
         ];
         
         // 创建-被创建逆关系: A创建了B => B被A创建
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'created_created_by_inverse',
             'type' => 'inverse',
             'relation1' => 'Created',
@@ -182,7 +182,7 @@ class ReasoningEngine
     private function addHierarchicalRules(): void
     {
         // 组织层次关系: A是B的一部分，B是组织 => A是组织
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'organization_hierarchy',
             'type' => 'hierarchical',
             'relation' => 'PartOf',
@@ -193,7 +193,7 @@ class ReasoningEngine
         ];
         
         // 地理层次关系: A位于B，B是地点 => A是地点
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'location_hierarchy',
             'type' => 'hierarchical',
             'relation' => 'LocatedIn',
@@ -210,7 +210,7 @@ class ReasoningEngine
     private function addCompositeRules(): void
     {
         // 同事关系: A在C工作，B在C工作 => A和B是同事
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'colleague_relation',
             'type' => 'composite',
             'relation1' => 'WorksFor',
@@ -221,63 +221,7 @@ class ReasoningEngine
         ];
         
         // 家族关系: A是B的父母，B是C的父母 => A是C的祖父母
-        ->rules[] = [
-            'name' => 'grandparent_relation',
-            'type' => 'composite',
-            'relation1' => 'Parent',
-            'relation2' => 'Parent',
-            'inferred_relation' => 'Grandparent',
-            'pattern' => 'chain',
-            'confidence_factor' => 0.9
-        ];
-    }
-
-    /**
-     * 添加层次关系规则
-     */
-    private function addHierarchicalRules(): void
-    {
-        // 组织层次关系: A是B的一部分，B是组织 => A是组织
-        ->rules[] = [
-            'name' => 'organization_hierarchy',
-            'type' => 'hierarchical',
-            'relation' => 'PartOf',
-            'source_type' => null,
-            'target_type' => 'Organization',
-            'inferred_type' => 'Organization',
-            'confidence_factor' => 0.8
-        ];
-        
-        // 地理层次关系: A位于B，B是地点 => A是地点
-        ->rules[] = [
-            'name' => 'location_hierarchy',
-            'type' => 'hierarchical',
-            'relation' => 'LocatedIn',
-            'source_type' => null,
-            'target_type' => 'Location',
-            'inferred_type' => 'Location',
-            'confidence_factor' => 0.8
-        ];
-    }
-    
-    /**
-     * 添加组合规则
-     */
-    private function addCompositeRules(): void
-    {
-        // 同事关系: A在C工作，B在C工作 => A和B是同事
-        ->rules[] = [
-            'name' => 'colleague_relation',
-            'type' => 'composite',
-            'relation1' => 'WorksFor',
-            'relation2' => 'WorksFor',
-            'inferred_relation' => 'Colleague',
-            'pattern' => 'common_target',
-            'confidence_factor' => 0.7
-        ];
-        
-        // 家族关系: A是B的父母，B是C的父母 => A是C的祖父母
-        ->rules[] = [
+        $this->rules[] = [
             'name' => 'grandparent_relation',
             'type' => 'composite',
             'relation1' => 'Parent',
@@ -295,52 +239,52 @@ class ReasoningEngine
      * @return array 推理结果
      * @throws Exception 如果推理过程中出现错误
      */
-    public function reason(array ): array
+    public function reason(array $query): array
     {
         // 验证查询参数
-        ->validateQuery();
+        $this->validateQuery($query);
         
         // 初始化结果集
-         = [];
-         = microtime(true);
+        $result = [];
+        $startTime = microtime(true);
         
         // 根据查询类型执行不同的推理策略
-        switch (['type']) {
+        switch ($query['type']) {
             case 'path_finding':
-                 = ->findPath();
+                $result = $this->findPath($query);
                 break;
             case 'entity_completion':
-                 = ->completeEntity();
+                $result = $this->completeEntity($query);
                 break;
             case 'relation_prediction':
-                 = ->predictRelation();
+                $result = $this->predictRelation($query);
                 break;
             case 'rule_based_inference':
-                 = ->applyRules();
+                $result = $this->applyRules($query);
                 break;
             default:
-                throw new InvalidArgumentException('不支持的查询类型: ' . ['type']);
+                throw new InvalidArgumentException('不支持的查询类型: ' . $query['type']);
         }
         
         // 检查超时
-         = (microtime(true) - ) * 1000; // 转换为毫秒
-        if ( > ->config['timeout']) {
-            ['timeout'] = true;
-            ['message'] = '推理操作超时，结果可能不完整';
+        $duration = (microtime(true) - $startTime) * 1000; // 转换为毫秒
+        if ($duration > $this->config['timeout']) {
+            $result['timeout'] = true;
+            $result['message'] = '推理操作超时，结果可能不完整';
         }
         
         // 限制返回结果数量
-        if (isset(['entities']) && count(['entities']) > ->config['max_results']) {
-            ['entities'] = array_slice(['entities'], 0, ->config['max_results']);
-            ['truncated'] = true;
+        if (isset($result['entities']) && count($result['entities']) > $this->config['max_results']) {
+            $result['entities'] = array_slice($result['entities'], 0, $this->config['max_results']);
+            $result['truncated'] = true;
         }
         
-        if (isset(['relations']) && count(['relations']) > ->config['max_results']) {
-            ['relations'] = array_slice(['relations'], 0, ->config['max_results']);
-            ['truncated'] = true;
+        if (isset($result['relations']) && count($result['relations']) > $this->config['max_results']) {
+            $result['relations'] = array_slice($result['relations'], 0, $this->config['max_results']);
+            $result['truncated'] = true;
         }
         
-        return ;
+        return $result;
     }
 
     /**
@@ -349,38 +293,38 @@ class ReasoningEngine
      * @param array  查询参数
      * @throws InvalidArgumentException 如果参数无效
      */
-    private function validateQuery(array ): void
+    private function validateQuery(array $query): void
     {
         // 检查必需的参数
-        if (!isset(['type'])) {
+        if (!isset($query['type'])) {
             throw new InvalidArgumentException('缺少必需的查询类型参数');
         }
         
         // 验证查询类型
-         = ['path_finding', 'entity_completion', 'relation_prediction', 'rule_based_inference'];
-        if (!in_array(['type'], )) {
-            throw new InvalidArgumentException('无效的查询类型: ' . ['type']);
+        $supportedTypes = ['path_finding', 'entity_completion', 'relation_prediction', 'rule_based_inference'];
+        if (!in_array($query['type'], $supportedTypes)) {
+            throw new InvalidArgumentException('无效的查询类型: ' . $query['type']);
         }
         
         // 根据查询类型验证特定参数
-        switch (['type']) {
+        switch ($query['type']) {
             case 'path_finding':
-                if (!isset(['source_entity']) || !isset(['target_entity'])) {
+                if (!isset($query['source_entity']) || !isset($query['target_entity'])) {
                     throw new InvalidArgumentException('路径查找需要源实体和目标实体');
                 }
                 break;
             case 'entity_completion':
-                if (!isset(['source_entity']) || !isset(['relation'])) {
+                if (!isset($query['source_entity']) || !isset($query['relation'])) {
                     throw new InvalidArgumentException('实体补全需要源实体和关系类型');
                 }
                 break;
             case 'relation_prediction':
-                if (!isset(['source_entity']) || !isset(['target_entity'])) {
+                if (!isset($query['source_entity']) || !isset($query['target_entity'])) {
                     throw new InvalidArgumentException('关系预测需要源实体和目标实体');
                 }
                 break;
             case 'rule_based_inference':
-                if (!isset(['entities']) && !isset(['relations'])) {
+                if (!isset($query['entities']) && !isset($query['relations'])) {
                     throw new InvalidArgumentException('基于规则的推理需要初始实体或关系');
                 }
                 break;
@@ -393,63 +337,61 @@ class ReasoningEngine
      * @param array  查询参数
      * @return array 路径查找结果
      */
-    private function findPath(array ): array
+    private function findPath(array $query): array
     {
-         = ['source_entity'];
-         = ['target_entity'];
-         = ['max_depth'] ?? ->config['max_inference_depth'];
-         = ['relation_types'] ?? null;
+        $sourceEntity = $query['source_entity'];
+        $targetEntity = $query['target_entity'];
+        $maxDepth = $query['max_depth'] ?? $this->config['max_inference_depth'];
+        $relationTypes = $query['relation_types'] ?? null;
         
         // 初始化结果
-         = [
+        $result = [
             'paths' => [],
-            'source_entity' => ,
-            'target_entity' => 
+            'source_entity' => $sourceEntity,
+            'target_entity' => $targetEntity
         ];
         
         // 使用广度优先搜索查找路径
-         = [[['id']]]; // 初始路径只包含源实体ID
-         = [['id'] => true]; // 记录已访问的实体
-         = 0;
+        $paths = [[['id']]]; // 初始路径只包含源实体ID
+        $visited = [['id'] => true]; // 记录已访问的实体
+        $pathCount = 0;
         
-        while (!empty() &&  < ->config['max_results']) {
-             = array_shift();
-             = end();
+        while (!empty($paths) && $pathCount < $this->config['max_results']) {
+            $path = array_shift($paths);
+            $currentEntity = end($path);
             
             // 如果到达目标实体，则记录路径
-            if ( === ['id']) {
-                 = ->buildCompletePath();
-                ['paths'][] = ;
-                ++;
+            if ($currentEntity === ['id']) {
+                $result['paths'][] = $this->buildCompletePath($path);
+                $pathCount++;
                 continue;
             }
             
             // 如果达到最大深度，则不再扩展
-            if (count() >= ) {
+            if (count($path) >= $maxDepth) {
                 continue;
             }
             
             // 获取当前实体的所有关系
-             = ->graphStore->getEntityRelations(, );
+            $relations = $this->graphStore->getEntityRelations($currentEntity, $relationTypes);
             
             // 遍历关系，扩展路径
-            foreach ( as ) {
-                 = (['source_id'] === ) ? ['target_id'] : ['source_id'];
+            foreach ($relations as $relation) {
+                $nextEntity = ($relation['source_id'] === $currentEntity) ? $relation['target_id'] : $relation['source_id'];
                 
                 // 避免环路
-                if (isset([])) {
+                if (isset($visited[$nextEntity])) {
                     continue;
                 }
                 
                 // 添加到队列和已访问集合
-                 = ;
-                [] = ;
-                [] = ;
-                [] = true;
+                $newPath = $path;
+                $newPath[] = $nextEntity;
+                $visited[$nextEntity] = true;
             }
         }
         
-        return ;
+        return $result;
     }
 
     /**
@@ -458,33 +400,31 @@ class ReasoningEngine
      * @param array  路径中的实体ID列表
      * @return array 完整路径信息
      */
-    private function buildCompletePath(array ): array
+    private function buildCompletePath(array $path): array
     {
-         = [];
-         = [];
+        $entities = [];
+        $relations = [];
         
         // 获取路径中的每个实体
-        foreach ( as ) {
-             = ->graphStore->getEntityById();
-            if () {
-                [] = ;
+        foreach ($path as $entityId) {
+            $entity = $this->graphStore->getEntityById($entityId);
+            if ($entity) {
+                $entities[] = $entity;
             }
         }
         
         // 获取相邻实体之间的关系
-        for ( = 0;  < count() - 1; ++) {
-             = [];
-             = [ + 1];
-             = ->graphStore->getRelationBetween(, );
-            if () {
-                [] = ;
+        for ($i = 0; $i < count($entities) - 1; $i++) {
+            $relation = $this->graphStore->getRelationBetween($entities[$i]['id'], $entities[$i + 1]['id']);
+            if ($relation) {
+                $relations[] = $relation;
             }
         }
         
         return [
-            'entities' => ,
-            'relations' => ,
-            'confidence' => ->calculatePathConfidence()
+            'entities' => $entities,
+            'relations' => $relations,
+            'confidence' => $this->calculatePathConfidence($relations)
         ];
     }
 
@@ -494,23 +434,23 @@ class ReasoningEngine
      * @param array  路径中的关系列表
      * @return float 路径置信度
      */
-    private function calculatePathConfidence(array ): float
+    private function calculatePathConfidence(array $relations): float
     {
-        if (empty()) {
+        if (empty($relations)) {
             return 0.0;
         }
         
         // 计算所有关系置信度的乘积，并根据路径长度进行调整
-         = 1.0;
-        foreach ( as ) {
-             *= ['confidence'];
+        $confidence = 1.0;
+        foreach ($relations as $relation) {
+            $confidence *= $relation['confidence'];
         }
         
         // 路径越长，置信度越低
-         = 1.0 / (1.0 + 0.1 * (count() - 1));
-         *= ;
+        $confidence = 1.0 / (1.0 + 0.1 * (count($relations) - 1));
+        $confidence *= $confidence;
         
-        return ;
+        return $confidence;
     }
 
     /**
@@ -519,43 +459,43 @@ class ReasoningEngine
      * @param array  查询参数
      * @return array 实体补全结果
      */
-    private function completeEntity(array ): array
+    private function completeEntity(array $query): array
     {
-         = ['source_entity'];
-         = ['relation'];
-         = ['limit'] ?? ->config['max_results'];
-         = ['confidence_threshold'] ?? ->config['confidence_threshold'];
+        $sourceEntity = $query['source_entity'];
+        $relation = $query['relation'];
+        $limit = $query['limit'] ?? $this->config['max_results'];
+        $confidenceThreshold = $query['confidence_threshold'] ?? $this->config['confidence_threshold'];
         
         // 初始化结果
-         = [
-            'source_entity' => ,
-            'relation' => ,
+        $result = [
+            'source_entity' => $sourceEntity,
+            'relation' => $relation,
             'target_entities' => []
         ];
         
         // 直接查询满足关系的目标实体
-         = ->graphStore->getRelatedEntities(['id'], );
+        $entities = $this->graphStore->getRelatedEntities(['id'], $relation);
         
         // 过滤低置信度结果
-        foreach ( as ) {
-            if (['confidence'] >= ) {
-                ['target_entities'][] = ;
+        foreach ($entities as $entity) {
+            if ($entity['confidence'] >= $confidenceThreshold) {
+                $result['target_entities'][] = $entity;
             }
         }
         
         // 如果直接结果不足，尝试使用规则推理
-        if (count(['target_entities']) <  && ->config['enable_rule_learning']) {
-             = ->inferRelatedEntities(, , );
+        if (count($result['target_entities']) < $limit && $this->config['enable_rule_learning']) {
+            $inferredEntities = $this->inferRelatedEntities($sourceEntity, $relation, $confidenceThreshold);
             
             // 合并结果，避免重复
-             = array_map(function() { return ['id']; }, ['target_entities']);
-            foreach ( as ) {
-                if (!in_array(['id'], )) {
-                    ['target_entities'][] = ;
-                    [] = ['id'];
+            $targetEntities = array_map(function($entity) { return $entity['id']; }, $result['target_entities']);
+            foreach ($inferredEntities as $entity) {
+                if (!in_array($entity['id'], $targetEntities)) {
+                    $result['target_entities'][] = $entity;
+                    $targetEntities[] = $entity['id'];
                     
                     // 达到限制数量则停止
-                    if (count(['target_entities']) >= ) {
+                    if (count($result['target_entities']) >= $limit) {
                         break;
                     }
                 }
@@ -563,11 +503,11 @@ class ReasoningEngine
         }
         
         // 按置信度排序
-        usort(['target_entities'], function(, ) {
-            return ['confidence'] <=> ['confidence'];
+        usort($result['target_entities'], function($a, $b) {
+            return $a['confidence'] <=> $b['confidence'];
         });
         
-        return ;
+        return $result;
     }
 
     /**
@@ -578,104 +518,112 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的相关实体列表
      */
-    private function inferRelatedEntities(array , string , float ): array
+    private function inferRelatedEntities(array $sourceEntity, string $relation, float $confidenceThreshold): array
     {
-         = [];
+        $inferredEntities = [];
         
         // 遍历所有规则
-        foreach (->rules as ) {
+        foreach ($this->rules as $rule) {
             // 对于组合规则
-            if (['type'] === 'composite' && ['inferred_relation'] === ) {
+            if ($rule['type'] === 'composite' && $rule['inferred_relation'] === $relation) {
                 // 链式规则: A与B有关系1，B与C有关系2 => A与C有关系3
-                if (['pattern'] === 'chain') {
+                if ($rule['pattern'] === 'chain') {
                     // 获取与源实体有关系1的中间实体
-                     = ->graphStore->getRelatedEntities(['id'], ['relation1']);
+                    $intermediateEntities = $this->graphStore->getRelatedEntities(['id'], ['relation1']);
                     
-                    foreach ( as ) {
+                    foreach ($intermediateEntities as $intermediateEntity) {
                         // 获取与中间实体有关系2的目标实体
-                         = ->graphStore->getRelatedEntities(['id'], ['relation2']);
+                        $targetEntities = $this->graphStore->getRelatedEntities(['id'], ['relation2']);
                         
-                        foreach ( as ) {
+                        foreach ($targetEntities as $targetEntity) {
                             // 计算推理置信度
-                             = ['confidence'] * ['confidence'] * ['confidence_factor'];
+                            $confidence = $intermediateEntity['confidence'] * $targetEntity['confidence'] * $rule['confidence_factor'];
                             
-                            if ( >= ) {
-                                ['confidence'] = ;
-                                ['inferred'] = true;
-                                ['inference_path'] = [
-                                    'rule' => ['name'],
-                                    'intermediate' => ['id']
+                            if ($confidence >= $confidenceThreshold) {
+                                $inferredEntities[] = [
+                                    'id' => $targetEntity['id'],
+                                    'confidence' => $confidence,
+                                    'inferred' => true,
+                                    'inference_path' => [
+                                        'rule' => $rule['name'],
+                                        'intermediate' => $intermediateEntity['id']
+                                    ]
                                 ];
-                                [] = ;
                             }
                         }
                     }
                 }
                 // 共同目标规则: A与C有关系1，B与C有关系2 => A与B有关系3
-                else if (['pattern'] === 'common_target') {
+                else if ($rule['pattern'] === 'common_target') {
                     // 获取与源实体有关系1的共同目标实体
-                     = ->graphStore->getRelatedEntities(['id'], ['relation1']);
+                    $commonTargetEntities = $this->graphStore->getRelatedEntities(['id'], ['relation1']);
                     
-                    foreach ( as ) {
+                    foreach ($commonTargetEntities as $commonTargetEntity) {
                         // 获取与共同目标有关系2的目标实体
-                         = ->graphStore->getEntitiesWithRelation(['relation2'], ['id']);
+                        $targetEntities = $this->graphStore->getEntitiesWithRelation(['relation2'], ['id']);
                         
-                        foreach ( as ) {
+                        foreach ($targetEntities as $targetEntity) {
                             // 计算推理置信度
-                             = ['confidence'] * ['confidence'] * ['confidence_factor'];
+                            $confidence = $commonTargetEntity['confidence'] * $targetEntity['confidence'] * $rule['confidence_factor'];
                             
-                            if ( >= ) {
-                                ['confidence'] = ;
-                                ['inferred'] = true;
-                                ['inference_path'] = [
-                                    'rule' => ['name'],
-                                    'common_target' => ['id']
+                            if ($confidence >= $confidenceThreshold) {
+                                $inferredEntities[] = [
+                                    'id' => $targetEntity['id'],
+                                    'confidence' => $confidence,
+                                    'inferred' => true,
+                                    'inference_path' => [
+                                        'rule' => $rule['name'],
+                                        'common_target' => $commonTargetEntity['id']
+                                    ]
                                 ];
-                                [] = ;
                             }
                         }
                     }
                 }
             }
             // 对于对称性规则
-            else if (['type'] === 'symmetric' && ['relation'] === ) {
+            else if ($rule['type'] === 'symmetric' && $rule['relation'] === $relation) {
                 // 如果A与B有对称关系，则B与A也有同样的关系
-                 = ->graphStore->getEntitiesWithRelation(['relation'], ['id']);
+                $entities = $this->graphStore->getEntitiesWithRelation(['relation'], ['id']);
                 
-                foreach ( as ) {
-                     = ['confidence'] * ['confidence_factor'];
+                foreach ($entities as $entity) {
+                    $confidence = $entity['confidence'] * $rule['confidence_factor'];
                     
-                    if ( >= ) {
-                        ['confidence'] = ;
-                        ['inferred'] = true;
-                        ['inference_path'] = [
-                            'rule' => ['name']
+                    if ($confidence >= $confidenceThreshold) {
+                        $inferredEntities[] = [
+                            'id' => $entity['id'],
+                            'confidence' => $confidence,
+                            'inferred' => true,
+                            'inference_path' => [
+                                'rule' => $rule['name']
+                            ]
                         ];
-                        [] = ;
                     }
                 }
             }
             // 对于逆关系规则
-            else if (['type'] === 'inverse' && ['relation2'] === ) {
+            else if ($rule['type'] === 'inverse' && $rule['relation2'] === $relation) {
                 // 如果A与B有关系1，则B与A有关系2
-                 = ->graphStore->getEntitiesWithRelation(['relation1'], ['id']);
+                $entities = $this->graphStore->getEntitiesWithRelation(['relation1'], ['id']);
                 
-                foreach ( as ) {
-                     = ['confidence'] * ['confidence_factor'];
+                foreach ($entities as $entity) {
+                    $confidence = $entity['confidence'] * $rule['confidence_factor'];
                     
-                    if ( >= ) {
-                        ['confidence'] = ;
-                        ['inferred'] = true;
-                        ['inference_path'] = [
-                            'rule' => ['name']
+                    if ($confidence >= $confidenceThreshold) {
+                        $inferredEntities[] = [
+                            'id' => $entity['id'],
+                            'confidence' => $confidence,
+                            'inferred' => true,
+                            'inference_path' => [
+                                'rule' => $rule['name']
+                            ]
                         ];
-                        [] = ;
                     }
                 }
             }
         }
         
-        return ;
+        return $inferredEntities;
     }
 
     /**
@@ -684,49 +632,43 @@ class ReasoningEngine
      * @param array  查询参数
      * @return array 关系预测结果
      */
-    private function predictRelation(array ): array
+    private function predictRelation(array $query): array
     {
-         = ['source_entity'];
-         = ['target_entity'];
-         = ['confidence_threshold'] ?? ->config['confidence_threshold'];
+        $sourceEntity = $query['source_entity'];
+        $targetEntity = $query['target_entity'];
+        $confidenceThreshold = $query['confidence_threshold'] ?? $this->config['confidence_threshold'];
         
         // 初始化结果
-         = [
-            'source_entity' => ,
-            'target_entity' => ,
+        $result = [
+            'source_entity' => $sourceEntity,
+            'target_entity' => $targetEntity,
             'relations' => []
         ];
         
         // 直接查询两个实体之间的关系
-         = ->graphStore->getRelationsBetween(['id'], ['id']);
+        $relations = $this->graphStore->getRelationsBetween(['id'], ['id']);
         
         // 过滤低置信度关系
-        foreach ( as ) {
-            if (['confidence'] >= ) {
-                ['relations'][] = ;
+        foreach ($relations as $relation) {
+            if ($relation['confidence'] >= $confidenceThreshold) {
+                $result['relations'][] = $relation;
             }
         }
         
         // 如果启用规则推理，尝试推理可能的关系
-        if (->config['enable_rule_learning']) {
-             = ->inferPossibleRelations(, , );
+        if ($this->config['enable_rule_learning']) {
+            $possibleRelations = $this->inferPossibleRelations($sourceEntity, $targetEntity, $confidenceThreshold);
             
             // 合并结果，避免重复
-             = array_map(function() { return ['type']; }, ['relations']);
-            foreach ( as ) {
-                if (!in_array(['type'], )) {
-                    ['relations'][] = ;
-                    [] = ['type'];
-                }
-            }
+            $result['relations'] = array_merge($result['relations'], $possibleRelations);
         }
         
         // 按置信度排序
-        usort(['relations'], function(, ) {
-            return ['confidence'] <=> ['confidence'];
+        usort($result['relations'], function($a, $b) {
+            return $a['confidence'] <=> $b['confidence'];
         });
         
-        return ;
+        return $result;
     }
 
     /**
@@ -737,91 +679,91 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的可能关系
      */
-    private function inferPossibleRelations(array , array , float ): array
+    private function inferPossibleRelations(array $sourceEntity, array $targetEntity, float $confidenceThreshold): array
     {
-         = [];
+        $possibleRelations = [];
         
         // 遍历所有规则
-        foreach (->rules as ) {
+        foreach ($this->rules as $rule) {
             // 对于组合规则
-            if (['type'] === 'composite') {
+            if ($rule['type'] === 'composite') {
                 // 链式规则: A与B有关系1，B与C有关系2 => A与C有关系3
-                if (['pattern'] === 'chain') {
+                if ($rule['pattern'] === 'chain') {
                     // 查找可能的中间实体
-                     = ->findIntermediateEntities(['id'], ['id'], ['relation1'], ['relation2']);
+                    $intermediateEntities = $this->findIntermediateEntities($sourceEntity['id'], $targetEntity['id'], $rule['relation1'], $rule['relation2']);
                     
-                    if (!empty()) {
+                    if (!empty($intermediateEntities)) {
                         // 创建推理关系
-                         = [
-                            'id' => md5(['id'] . ['id'] . ['inferred_relation']),
-                            'source_id' => ['id'],
-                            'target_id' => ['id'],
-                            'type' => ['inferred_relation'],
+                        $possibleRelations[] = [
+                            'id' => md5($sourceEntity['id'] . $targetEntity['id'] . $rule['inferred_relation']),
+                            'source_id' => $sourceEntity['id'],
+                            'target_id' => $targetEntity['id'],
+                            'type' => $rule['inferred_relation'],
                             'inferred' => true,
-                            'confidence' => ->calculateInferredRelationConfidence(, ['confidence_factor']),
+                            'confidence' => $this->calculateInferredRelationConfidence($intermediateEntities, $rule['confidence_factor']),
                             'inference_path' => [
-                                'rule' => ['name'],
-                                'intermediates' => array_map(function() { return ['id']; }, )
+                                'rule' => $rule['name'],
+                                'intermediates' => array_map(function($entity) { return $entity['id']; }, $intermediateEntities)
                             ]
                         ];
                         
-                        if (['confidence'] >= ) {
-                            [] = ;
+                        if ($possibleRelations[count($possibleRelations) - 1]['confidence'] >= $confidenceThreshold) {
+                            $possibleRelations[] = $possibleRelations[count($possibleRelations) - 1];
                         }
                     }
                 }
             }
             // 对于对称性规则
-            else if (['type'] === 'symmetric') {
+            else if ($rule['type'] === 'symmetric') {
                 // 检查是否存在反向关系
-                 = ->graphStore->getRelationBetween(['id'], ['id'], ['relation']);
+                $relation = $this->graphStore->getRelationBetween($sourceEntity['id'], $targetEntity['id'], $rule['relation']);
                 
-                if () {
-                     = [
-                        'id' => md5(['id'] . ['id'] . ['relation']),
-                        'source_id' => ['id'],
-                        'target_id' => ['id'],
-                        'type' => ['relation'],
+                if ($relation) {
+                    $possibleRelations[] = [
+                        'id' => md5($sourceEntity['id'] . $targetEntity['id'] . $rule['relation']),
+                        'source_id' => $sourceEntity['id'],
+                        'target_id' => $targetEntity['id'],
+                        'type' => $rule['relation'],
                         'inferred' => true,
-                        'confidence' => ['confidence'] * ['confidence_factor'],
+                        'confidence' => $sourceEntity['confidence'] * $rule['confidence_factor'],
                         'inference_path' => [
-                            'rule' => ['name'],
-                            'symmetric_relation_id' => ['id']
+                            'rule' => $rule['name'],
+                            'symmetric_relation_id' => $relation['id']
                         ]
                     ];
                     
-                    if (['confidence'] >= ) {
-                        [] = ;
+                    if ($possibleRelations[count($possibleRelations) - 1]['confidence'] >= $confidenceThreshold) {
+                        $possibleRelations[] = $possibleRelations[count($possibleRelations) - 1];
                     }
                 }
             }
             // 对于逆关系规则
-            else if (['type'] === 'inverse') {
+            else if ($rule['type'] === 'inverse') {
                 // 检查是否存在逆关系
-                 = ->graphStore->getRelationBetween(['id'], ['id'], ['relation1']);
+                $relation = $this->graphStore->getRelationBetween($sourceEntity['id'], $targetEntity['id'], $rule['relation1']);
                 
-                if () {
-                     = [
-                        'id' => md5(['id'] . ['id'] . ['relation2']),
-                        'source_id' => ['id'],
-                        'target_id' => ['id'],
-                        'type' => ['relation2'],
+                if ($relation) {
+                    $possibleRelations[] = [
+                        'id' => md5($sourceEntity['id'] . $targetEntity['id'] . $rule['relation2']),
+                        'source_id' => $sourceEntity['id'],
+                        'target_id' => $targetEntity['id'],
+                        'type' => $rule['relation2'],
                         'inferred' => true,
-                        'confidence' => ['confidence'] * ['confidence_factor'],
+                        'confidence' => $sourceEntity['confidence'] * $rule['confidence_factor'],
                         'inference_path' => [
-                            'rule' => ['name'],
-                            'inverse_relation_id' => ['id']
+                            'rule' => $rule['name'],
+                            'inverse_relation_id' => $relation['id']
                         ]
                     ];
                     
-                    if (['confidence'] >= ) {
-                        [] = ;
+                    if ($possibleRelations[count($possibleRelations) - 1]['confidence'] >= $confidenceThreshold) {
+                        $possibleRelations[] = $possibleRelations[count($possibleRelations) - 1];
                     }
                 }
             }
         }
         
-        return ;
+        return $possibleRelations;
     }
 
     /**
@@ -833,33 +775,31 @@ class ReasoningEngine
      * @param string  关系2
      * @return array 中间实体列表
      */
-    private function findIntermediateEntities(string , string , string , string ): array
+    private function findIntermediateEntities(string $sourceId, string $targetId, string $relation1, string $relation2): array
     {
-         = [];
+        $intermediateEntities = [];
         
         // 获取与源实体有关系1的实体
-         = ->graphStore->getRelatedEntities(, );
+        $entities = $this->graphStore->getRelatedEntities($sourceId, $relation1);
         
         // 获取与目标实体有关系2的实体
-         = ->graphStore->getEntitiesWithRelation(, );
+        $targetEntities = $this->graphStore->getEntitiesWithRelation($targetId, $relation2);
         
         // 找出共同的实体（交集）
-         = array_map(function() { return ['id']; }, );
-         = array_map(function() { return ['id']; }, );
+        $commonEntities = array_map(function($entity) { return $entity['id']; }, $entities);
+        $targetIds = array_map(function($entity) { return $entity['id']; }, $targetEntities);
         
-         = array_intersect(, );
+        $commonIds = array_intersect($commonEntities, $targetIds);
         
         // 构建中间实体列表
-        foreach ( as ) {
-             = array_search(, );
-             = array_search(, );
-            
-            if ( !== false &&  !== false) {
-                [] = [];
-            }
+        foreach ($commonIds as $commonId) {
+            $intermediateEntities[] = [
+                'id' => $commonId,
+                'confidence' => 1.0
+            ];
         }
         
-        return ;
+        return $intermediateEntities;
     }
     
     /**
@@ -869,22 +809,19 @@ class ReasoningEngine
      * @param float  置信度因子
      * @return float 推理关系置信度
      */
-    private function calculateInferredRelationConfidence(array , float ): float
+    private function calculateInferredRelationConfidence(array $intermediateEntities, float $confidenceFactor): float
     {
-        if (empty()) {
+        if (empty($intermediateEntities)) {
             return 0.0;
         }
         
         // 使用最高置信度的中间实体路径
-         = 0.0;
-        foreach ( as ) {
-             = ['confidence'] * ;
-            if ( > ) {
-                 = ;
-            }
+        $confidence = 0.0;
+        foreach ($intermediateEntities as $entity) {
+            $confidence += $entity['confidence'] * $confidenceFactor;
         }
         
-        return ;
+        return $confidence;
     }
 
     /**
@@ -893,65 +830,65 @@ class ReasoningEngine
      * @param array  查询参数
      * @return array 推理结果
      */
-    private function applyRules(array ): array
+    private function applyRules(array $query): array
     {
-         = ['rules'] ?? null;
-         = ['max_depth'] ?? ->config['max_inference_depth'];
-         = ['confidence_threshold'] ?? ->config['confidence_threshold'];
-         = ['entity_id'] ?? null;
-         = ['relation_types'] ?? null;
+        $rules = $query['rules'] ?? null;
+        $maxDepth = $query['max_depth'] ?? $this->config['max_inference_depth'];
+        $confidenceThreshold = $query['confidence_threshold'] ?? $this->config['confidence_threshold'];
+        $entityId = $query['entity_id'] ?? null;
+        $relationTypes = $query['relation_types'] ?? null;
         
         // 初始化结果
-         = [
+        $result = [
             'inferred_facts' => [],
             'applied_rules' => []
         ];
         
         // 如果指定了实体ID，则从该实体开始推理
-        if () {
-             = ->graphStore->getEntityById();
-            if (!) {
-                return ;
+        if ($entityId) {
+            $entity = $this->graphStore->getEntityById($entityId);
+            if (!$entity) {
+                return $result;
             }
             
-            ['entity'] = ;
-             = ->inferFactsFromEntity(, , , , );
-            ['inferred_facts'] = ;
+            $result['entity'] = $entity;
+            $inferredFacts = $this->inferFactsFromEntity($entity, $rules, $relationTypes, $confidenceThreshold, $maxDepth);
+            $result['inferred_facts'] = $inferredFacts;
         }
         // 否则对所有实体应用规则
         else {
-             = ->graphStore->getAllEntities();
-            foreach ( as ) {
-                 = ->inferFactsFromEntity(, , , , 1);
-                if (!empty()) {
-                    ['inferred_facts'] = array_merge(['inferred_facts'], );
+            $entities = $this->graphStore->getAllEntities();
+            foreach ($entities as $entity) {
+                $inferredFacts = $this->inferFactsFromEntity($entity, $rules, $relationTypes, $confidenceThreshold, 1);
+                if (!empty($inferredFacts)) {
+                    $result['inferred_facts'] = array_merge($result['inferred_facts'], $inferredFacts);
                 }
                 
                 // 限制推理结果数量
-                if (count(['inferred_facts']) >= ->config['max_results']) {
+                if (count($result['inferred_facts']) >= $this->config['max_results']) {
                     break;
                 }
             }
         }
         
         // 记录应用的规则
-         = [];
-        foreach (['inferred_facts'] as ) {
-            if (isset(['inference_path']['rule']) && !in_array(['inference_path']['rule'], )) {
-                [] = ['inference_path']['rule'];
+        $appliedRules = [];
+        foreach ($result['inferred_facts'] as $fact) {
+            if (isset($fact['inference_path']['rule']) && !in_array($fact['inference_path']['rule'], $rules)) {
+                $appliedRules[] = $fact['inference_path']['rule'];
             }
         }
         
-        foreach ( as ) {
-            foreach (->rules as ) {
-                if (['name'] === ) {
-                    ['applied_rules'][] = ;
+        foreach ($appliedRules as $ruleName) {
+            foreach ($this->rules as $rule) {
+                if ($rule['name'] === $ruleName) {
+                    $result['applied_rules'][] = $rule;
                     break;
                 }
             }
         }
         
-        return ;
+        return $result;
     }
     
     /**
@@ -964,70 +901,52 @@ class ReasoningEngine
      * @param int  最大推理深度
      * @return array 推理得到的事实列表
      */
-    private function inferFactsFromEntity(array , ?array  = null, ?array  = null, float  = 0.5, int  = 1): array
+    private function inferFactsFromEntity(array $entity, ?array $rules = null, ?array $relationTypes = null, float $confidenceThreshold = 0.5, int $maxDepth = 1): array
     {
-         = [];
-         = []; // 用于避免重复推理
-         = [['entity' => , 'depth' => 0]];
+        $inferredFacts = [];
+        $visited = [];
+        $queue = [['entity' => $entity, 'depth' => 0]];
         
-        while (!empty() && count() < ->config['max_results']) {
-             = array_shift();
-             = ['entity'];
-             = ['depth'];
+        while (!empty($queue) && count($inferredFacts) < $this->config['max_results']) {
+            $current = array_shift($queue);
+            $currentEntity = $current['entity'];
+            $currentDepth = $current['depth'];
             
-            if ( >= ) {
+            if ($currentDepth >= $maxDepth) {
                 continue;
             }
             
             // 对当前实体应用所有规则
-            foreach (->rules as ) {
+            foreach ($this->rules as $rule) {
                 // 如果指定了规则名称，则只应用这些规则
-                if ( !== null && !in_array(['name'], )) {
+                if ($rules !== null && !in_array($rule['name'], $rules)) {
                     continue;
                 }
                 
                 // 根据规则类型应用不同的推理策略
-                switch (['type']) {
+                switch ($rule['type']) {
                     case 'composite':
-                         = ->applyCompositeRule(, , , );
+                        $inferredFacts = array_merge($inferredFacts, $this->applyCompositeRule($currentEntity, $rule, $relationTypes, $confidenceThreshold));
                         break;
                     case 'symmetric':
-                         = ->applySymmetricRule(, , , );
+                        $inferredFacts = array_merge($inferredFacts, $this->applySymmetricRule($currentEntity, $rule, $relationTypes, $confidenceThreshold));
                         break;
                     case 'transitive':
-                         = ->applyTransitiveRule(, , , );
+                        $inferredFacts = array_merge($inferredFacts, $this->applyTransitiveRule($currentEntity, $rule, $relationTypes, $confidenceThreshold));
                         break;
                     case 'hierarchical':
-                         = ->applyHierarchicalRule(, , );
+                        $inferredFacts = array_merge($inferredFacts, $this->applyHierarchicalRule($currentEntity, $rule, $confidenceThreshold));
                         break;
                     case 'inverse':
-                         = ->applyInverseRule(, , , );
+                        $inferredFacts = array_merge($inferredFacts, $this->applyInverseRule($currentEntity, $rule, $relationTypes, $confidenceThreshold));
                         break;
                     default:
-                         = [];
-                }
-                
-                // 添加新推理的事实到结果中
-                foreach ( as ) {
-                     = ['type'] . '_' . ['source_id'] . '_' . ['target_id'];
-                    
-                    if (!isset([])) {
-                        [] = ;
-                        [] = true;
-                        
-                        // 如果推理深度未达到最大值，将相关实体加入队列继续推理
-                        if ( + 1 < ) {
-                             = ->graphStore->getEntityById(['target_id']);
-                            if () {
-                                [] = ['entity' => , 'depth' =>  + 1];
-                            }
-                        }
-                    }
+                        $inferredFacts = array_merge($inferredFacts, []);
                 }
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
 
     /**
@@ -1039,45 +958,45 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的事实列表
      */
-    private function applyCompositeRule(array , array , ?array  = null, float  = 0.5): array
+    private function applyCompositeRule(array $entity, array $rule, ?array $relationTypes = null, float $confidenceThreshold = 0.5): array
     {
-         = [];
+        $inferredFacts = [];
         
         // 链式规则: A与B有关系1，B与C有关系2 => A与C有关系3
-        if (['pattern'] === 'chain') {
+        if ($rule['pattern'] === 'chain') {
             // 如果指定了关系类型，且推理关系不在列表中，则跳过
-            if ( !== null && !in_array(['inferred_relation'], )) {
+            if ($relationTypes !== null && !in_array($rule['inferred_relation'], $relationTypes)) {
                 return [];
             }
             
             // 获取与源实体有关系1的中间实体
-             = ->graphStore->getRelatedEntities(['id'], ['relation1']);
+            $intermediateEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation1']]);
             
-            foreach ( as ) {
+            foreach ($intermediateEntities as $intermediateEntity) {
                 // 获取与中间实体有关系2的目标实体
-                 = ->graphStore->getRelatedEntities(['id'], ['relation2']);
+                $targetEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation2']]);
                 
-                foreach ( as ) {
+                foreach ($targetEntities as $targetEntity) {
                     // 避免自环
-                    if (['id'] === ['id']) {
+                    if ($intermediateEntity['id'] === $targetEntity['id']) {
                         continue;
                     }
                     
                     // 计算推理置信度
-                     = ['confidence'] * ['confidence'] * ['confidence_factor'];
+                    $confidence = $intermediateEntity['confidence'] * $targetEntity['confidence'] * $rule['confidence_factor'];
                     
-                    if ( >= ) {
+                    if ($confidence >= $confidenceThreshold) {
                         // 创建推理关系
-                        [] = [
-                            'id' => md5(['id'] . ['id'] . ['inferred_relation']),
-                            'source_id' => ['id'],
-                            'target_id' => ['id'],
-                            'type' => ['inferred_relation'],
+                        $inferredFacts[] = [
+                            'id' => md5($intermediateEntity['id'] . $targetEntity['id'] . $rule['inferred_relation']),
+                            'source_id' => $intermediateEntity['id'],
+                            'target_id' => $targetEntity['id'],
+                            'type' => $rule['inferred_relation'],
                             'inferred' => true,
-                            'confidence' => ,
+                            'confidence' => $confidence,
                             'inference_path' => [
-                                'rule' => ['name'],
-                                'intermediate' => ['id']
+                                'rule' => $rule['name'],
+                                'intermediate' => $intermediateEntity['id']
                             ]
                         ];
                     }
@@ -1085,40 +1004,40 @@ class ReasoningEngine
             }
         }
         // 共同目标规则: A与C有关系1，B与C有关系2 => A与B有关系3
-        else if (['pattern'] === 'common_target') {
+        else if ($rule['pattern'] === 'common_target') {
             // 如果指定了关系类型，且推理关系不在列表中，则跳过
-            if ( !== null && !in_array(['inferred_relation'], )) {
+            if ($relationTypes !== null && !in_array($rule['inferred_relation'], $relationTypes)) {
                 return [];
             }
             
             // 获取与源实体有关系1的共同目标实体
-             = ->graphStore->getRelatedEntities(['id'], ['relation1']);
+            $commonTargetEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation1']]);
             
-            foreach ( as ) {
+            foreach ($commonTargetEntities as $commonTargetEntity) {
                 // 获取与共同目标有关系2的目标实体
-                 = ->graphStore->getEntitiesWithRelation(['relation2'], ['id']);
+                $targetEntities = $this->graphStore->getEntitiesWithRelation(['relation2'], ['id']);
                 
-                foreach ( as ) {
+                foreach ($targetEntities as $targetEntity) {
                     // 避免自环
-                    if (['id'] === ['id']) {
+                    if ($commonTargetEntity['id'] === $targetEntity['id']) {
                         continue;
                     }
                     
                     // 计算推理置信度
-                     = ['confidence'] * ['confidence'] * ['confidence_factor'];
+                    $confidence = $commonTargetEntity['confidence'] * $targetEntity['confidence'] * $rule['confidence_factor'];
                     
-                    if ( >= ) {
+                    if ($confidence >= $confidenceThreshold) {
                         // 创建推理关系
-                        [] = [
-                            'id' => md5(['id'] . ['id'] . ['inferred_relation']),
-                            'source_id' => ['id'],
-                            'target_id' => ['id'],
-                            'type' => ['inferred_relation'],
+                        $inferredFacts[] = [
+                            'id' => md5($commonTargetEntity['id'] . $targetEntity['id'] . $rule['inferred_relation']),
+                            'source_id' => $commonTargetEntity['id'],
+                            'target_id' => $targetEntity['id'],
+                            'type' => $rule['inferred_relation'],
                             'inferred' => true,
-                            'confidence' => ,
+                            'confidence' => $confidence,
                             'inference_path' => [
-                                'rule' => ['name'],
-                                'common_target' => ['id']
+                                'rule' => $rule['name'],
+                                'common_target' => $commonTargetEntity['id']
                             ]
                         ];
                     }
@@ -1126,7 +1045,7 @@ class ReasoningEngine
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
 
     /**
@@ -1138,44 +1057,44 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的事实列表
      */
-    private function applySymmetricRule(array , array , ?array  = null, float  = 0.5): array
+    private function applySymmetricRule(array $entity, array $rule, ?array $relationTypes = null, float $confidenceThreshold = 0.5): array
     {
-         = [];
+        $inferredFacts = [];
         
         // 如果指定了关系类型，且规则关系不在列表中，则跳过
-        if ( !== null && !in_array(['relation'], )) {
+        if ($relationTypes !== null && !in_array($rule['relation'], $relationTypes)) {
             return [];
         }
         
         // 获取与实体有关系的目标实体
-         = ->graphStore->getEntitiesWithRelation(['relation'], ['id']);
+        $targetEntities = $this->graphStore->getEntitiesWithRelation(['relation'], ['id']);
         
-        foreach ( as ) {
+        foreach ($targetEntities as $targetEntity) {
             // 检查是否已存在反向关系
-             = ->graphStore->getRelationBetween(['id'], ['id'], ['relation']);
+            $relation = $this->graphStore->getRelationBetween($entity['id'], $targetEntity['id'], $rule['relation']);
             
             // 如果不存在反向关系，则创建推理关系
-            if (!) {
-                 = ['confidence'] * ['confidence_factor'];
+            if (!$relation) {
+                $confidence = $entity['confidence'] * $rule['confidence_factor'];
                 
-                if ( >= ) {
-                    [] = [
-                        'id' => md5(['id'] . ['id'] . ['relation']),
-                        'source_id' => ['id'],
-                        'target_id' => ['id'],
-                        'type' => ['relation'],
+                if ($confidence >= $confidenceThreshold) {
+                    $inferredFacts[] = [
+                        'id' => md5($entity['id'] . $targetEntity['id'] . $rule['relation']),
+                        'source_id' => $entity['id'],
+                        'target_id' => $targetEntity['id'],
+                        'type' => $rule['relation'],
                         'inferred' => true,
-                        'confidence' => ,
+                        'confidence' => $confidence,
                         'inference_path' => [
-                            'rule' => ['name'],
-                            'symmetric_relation_id' => md5(['id'] . ['id'] . ['relation'])
+                            'rule' => $rule['name'],
+                            'symmetric_relation_id' => md5($entity['id'] . $targetEntity['id'] . $rule['relation'])
                         ]
                     ];
                 }
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
     
     /**
@@ -1187,46 +1106,46 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的事实列表
      */
-    private function applyTransitiveRule(array , array , ?array  = null, float  = 0.5): array
+    private function applyTransitiveRule(array $entity, array $rule, ?array $relationTypes = null, float $confidenceThreshold = 0.5): array
     {
-         = [];
+        $inferredFacts = [];
         
         // 如果指定了关系类型，且规则关系不在列表中，则跳过
-        if ( !== null && !in_array(['relation'], )) {
+        if ($relationTypes !== null && !in_array($rule['relation'], $relationTypes)) {
             return [];
         }
         
         // 获取与实体有指定关系的目标实体
-         = ->graphStore->getRelatedEntities(['id'], ['relation']);
+        $targetEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation']]);
         
-        foreach ( as ) {
+        foreach ($targetEntities as $targetEntity) {
             // 获取与中间实体有相同关系的目标实体
-             = ->graphStore->getRelatedEntities(['id'], ['relation']);
+            $intermediateEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation']]);
             
-            foreach ( as ) {
+            foreach ($intermediateEntities as $intermediateEntity) {
                 // 避免自环和直接关系
-                if (['id'] === ['id'] || ['id'] === ['id']) {
+                if ($intermediateEntity['id'] === $entity['id'] || $intermediateEntity['id'] === $targetEntity['id']) {
                     continue;
                 }
                 
                 // 检查是否已存在直接关系
-                 = ->graphStore->getRelationBetween(['id'], ['id'], ['relation']);
+                $relation = $this->graphStore->getRelationBetween($intermediateEntity['id'], $targetEntity['id'], $rule['relation']);
                 
                 // 如果不存在直接关系，则创建推理关系
-                if (!) {
-                     = ['confidence'] * ['confidence'] * ['confidence_factor'];
+                if (!$relation) {
+                    $confidence = $intermediateEntity['confidence'] * $targetEntity['confidence'] * $rule['confidence_factor'];
                     
-                    if ( >= ) {
-                        [] = [
-                            'id' => md5(['id'] . ['id'] . ['relation']),
-                            'source_id' => ['id'],
-                            'target_id' => ['id'],
-                            'type' => ['relation'],
+                    if ($confidence >= $confidenceThreshold) {
+                        $inferredFacts[] = [
+                            'id' => md5($intermediateEntity['id'] . $targetEntity['id'] . $rule['relation']),
+                            'source_id' => $intermediateEntity['id'],
+                            'target_id' => $targetEntity['id'],
+                            'type' => $rule['relation'],
                             'inferred' => true,
-                            'confidence' => ,
+                            'confidence' => $confidence,
                             'inference_path' => [
-                                'rule' => ['name'],
-                                'intermediate' => ['id']
+                                'rule' => $rule['name'],
+                                'intermediate' => $intermediateEntity['id']
                             ]
                         ];
                     }
@@ -1234,7 +1153,7 @@ class ReasoningEngine
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
 
     /**
@@ -1245,45 +1164,45 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的事实列表
      */
-    private function applyHierarchicalRule(array , array , float  = 0.5): array
+    private function applyHierarchicalRule(array $entity, array $rule, float $confidenceThreshold = 0.5): array
     {
-         = [];
+        $inferredFacts = [];
         
         // 检查实体类型是否符合规则要求
-        if (['source_type'] !== null && ['type'] !== ['source_type']) {
+        if ($entity['source_type'] !== null && $entity['type'] !== $entity['source_type']) {
             return [];
         }
         
         // 获取与实体有指定关系的目标实体
-         = ->graphStore->getRelatedEntities(['id'], ['relation']);
+        $targetEntities = $this->graphStore->getRelatedEntities(['id'], [$rule['relation']]);
         
-        foreach ( as ) {
+        foreach ($targetEntities as $targetEntity) {
             // 检查目标实体类型是否符合规则要求
-            if (['target_type'] !== null && ['type'] !== ['target_type']) {
+            if ($targetEntity['target_type'] !== null && $targetEntity['type'] !== $targetEntity['target_type']) {
                 continue;
             }
             
             // 计算推理置信度
-             = ['confidence'] * ['confidence_factor'];
+            $confidence = $entity['confidence'] * $rule['confidence_factor'];
             
-            if ( >= ) {
+            if ($confidence >= $confidenceThreshold) {
                 // 创建推理事实：实体继承目标实体的类型
-                [] = [
-                    'id' => md5(['id'] . '_type_' . ['inferred_type']),
-                    'entity_id' => ['id'],
+                $inferredFacts[] = [
+                    'id' => md5($entity['id'] . '_type_' . $rule['inferred_type']),
+                    'entity_id' => $entity['id'],
                     'type' => 'type_assertion',
-                    'value' => ['inferred_type'],
+                    'value' => $rule['inferred_type'],
                     'inferred' => true,
-                    'confidence' => ,
+                    'confidence' => $confidence,
                     'inference_path' => [
-                        'rule' => ['name'],
-                        'relation_target' => ['id']
+                        'rule' => $rule['name'],
+                        'relation_target' => $targetEntity['id']
                     ]
                 ];
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
     
     /**
@@ -1295,43 +1214,43 @@ class ReasoningEngine
      * @param float  置信度阈值
      * @return array 推理得到的事实列表
      */
-    private function applyInverseRule(array , array , ?array  = null, float  = 0.5): array
+    private function applyInverseRule(array $entity, array $rule, ?array $relationTypes = null, float $confidenceThreshold = 0.5): array
     {
-         = [];
+        $inferredFacts = [];
         
         // 如果指定了关系类型，且推理关系不在列表中，则跳过
-        if ( !== null && !in_array(['relation2'], )) {
+        if ($relationTypes !== null && !in_array($rule['relation2'], $relationTypes)) {
             return [];
         }
         
         // 获取与实体有关系1的目标实体
-         = ->graphStore->getEntitiesWithRelation(['relation1'], ['id']);
+        $entities = $this->graphStore->getEntitiesWithRelation(['relation1'], ['id']);
         
-        foreach ( as ) {
+        foreach ($entities as $entity) {
             // 检查是否已存在逆关系
-             = ->graphStore->getRelationBetween(['id'], ['id'], ['relation2']);
+            $relation = $this->graphStore->getRelationBetween($entity['id'], $entity['id'], $rule['relation2']);
             
             // 如果不存在逆关系，则创建推理关系
-            if (!) {
-                 = ['confidence'] * ['confidence_factor'];
+            if (!$relation) {
+                $confidence = $entity['confidence'] * $rule['confidence_factor'];
                 
-                if ( >= ) {
-                    [] = [
-                        'id' => md5(['id'] . ['id'] . ['relation2']),
-                        'source_id' => ['id'],
-                        'target_id' => ['id'],
-                        'type' => ['relation2'],
+                if ($confidence >= $confidenceThreshold) {
+                    $inferredFacts[] = [
+                        'id' => md5($entity['id'] . $entity['id'] . $rule['relation2']),
+                        'source_id' => $entity['id'],
+                        'target_id' => $entity['id'],
+                        'type' => $rule['relation2'],
                         'inferred' => true,
-                        'confidence' => ,
+                        'confidence' => $confidence,
                         'inference_path' => [
-                            'rule' => ['name'],
-                            'inverse_relation_id' => md5(['id'] . ['id'] . ['relation1'])
+                            'rule' => $rule['name'],
+                            'inverse_relation_id' => md5($entity['id'] . $entity['id'] . $rule['relation1'])
                         ]
                     ];
                 }
             }
         }
         
-        return ;
+        return $inferredFacts;
     }
 }
