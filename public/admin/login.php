@@ -5,24 +5,229 @@
  * @author AlingAi Team
  */
 
-// 检查是否有登录错误
-$loginError = $_GET['error'] ?? '';
-$errorMessage = '';
+// 启动会话
+session_start();
 
-if ($loginError === 'invalid') {
-    $errorMessage = '用户名或密码无效';
-} elseif ($loginError === 'expired') {
-    $errorMessage = '会话已过期，请重新登录';
-} elseif ($loginError === 'unauthorized') {
-    $errorMessage = '您没有访问权限';
+// 检查是否已登录
+if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    // 已登录，重定向到管理后台
+    header('Location: index.php');
+    exit;
 }
 
-// CSRF保护
+// 处理登录请求
+$loginError = '';
+$loginSuccess = false;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // 验证CSRF令牌
+    if (!isset($_POST['csrf_token']) || !isset($_SESSION['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $loginError = '安全验证失败，请重新尝试登录';
+    } else {
+        // 清除CSRF令牌
+        unset($_SESSION['csrf_token']);
+        
+        // 获取登录信息
+        $username = $_POST['admin_username'] ?? '';
+        $password = $_POST['admin_password'] ?? '';
+        $rememberMe = isset($_POST['remember_me']);
+        
+        // 验证登录信息
+        if (empty($username) || empty($password)) {
+            $loginError = '请输入用户名和密码';
+        } else {
+            // 验证登录凭据
+            if (validateAdminLogin($username, $password)) {
+                // 登录成功
+                $_SESSION['admin_logged_in'] = true;
+                $_SESSION['admin_username'] = $username;
+                $_SESSION['admin_last_activity'] = time();
+                
+                // 记录登录日志
+                logAdminLogin($username, true);
+                
+                // 设置记住我cookie
+                if ($rememberMe) {
+                    $token = generateRememberToken($username);
+                    setcookie('admin_remember', $token, time() + 30 * 24 * 60 * 60, '/', '', true, true);
+                }
+                
+                // 重定向到管理后台
+                header('Location: index.php');
+                exit;
+            } else {
+                // 登录失败
+                $loginError = '用户名或密码错误';
+                logAdminLogin($username, false);
+            }
+        }
+    }
+}
+
+// 生成CSRF令牌
 $csrfToken = bin2hex(random_bytes(32));
 $_SESSION['csrf_token'] = $csrfToken;
 
 // 获取系统版本信息
 $systemVersion = '5.1.0';
+
+/**
+ * 验证管理员登录
+ */
+function validateAdminLogin($username, $password) {
+    // TODO: 从数据库验证管理员登录
+    // 这里是临时实现，实际应该从数据库验证
+    
+    try {
+        // 尝试加载配置文件
+        $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+            
+            // 连接数据库
+            if ($config['database']['type'] === 'sqlite') {
+                $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
+                $pdo = new PDO("sqlite:{$dbPath}");
+            } else {
+                $host = $config['database']['host'];
+                $port = $config['database']['port'] ?? 3306;
+                $dbname = $config['database']['database'];
+                $dbuser = $config['database']['username'];
+                $dbpass = $config['database']['password'];
+                
+                $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
+            }
+            
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // 查询用户
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? AND role = 'admin' AND status = 'active' LIMIT 1");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user && password_verify($password, $user['password'])) {
+                // 更新最后登录时间
+                $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?");
+                $updateStmt->execute([$user['id']]);
+                return true;
+            }
+        }
+        
+        return false;
+    } catch (Exception $e) {
+        // 出错时记录日志但返回登录失败
+        error_log('Admin login validation error: ' . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * 记录管理员登录日志
+ */
+function logAdminLogin($username, $success) {
+    try {
+        // 尝试加载配置文件
+        $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+            
+            // 连接数据库
+            if ($config['database']['type'] === 'sqlite') {
+                $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
+                $pdo = new PDO("sqlite:{$dbPath}");
+            } else {
+                $host = $config['database']['host'];
+                $port = $config['database']['port'] ?? 3306;
+                $dbname = $config['database']['database'];
+                $dbuser = $config['database']['username'];
+                $dbpass = $config['database']['password'];
+                
+                $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
+            }
+            
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // 获取用户ID
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? LIMIT 1");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user) {
+                // 记录安全审计日志
+                $stmt = $pdo->prepare("INSERT INTO security_audit_log (user_id, action, description, ip_address, user_agent, severity, status) 
+                                     VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([
+                    $user['id'],
+                    'admin_login',
+                    $success ? '管理员登录成功' : '管理员登录失败',
+                    $_SERVER['REMOTE_ADDR'],
+                    $_SERVER['HTTP_USER_AGENT'] ?? '',
+                    $success ? 'info' : 'warning',
+                    $success ? 'success' : 'failed'
+                ]);
+            }
+        }
+    } catch (Exception $e) {
+        // 记录日志错误
+        error_log('Admin login log error: ' . $e->getMessage());
+    }
+}
+
+/**
+ * 生成记住我令牌
+ */
+function generateRememberToken($username) {
+    $token = bin2hex(random_bytes(32));
+    
+    try {
+        // 尝试加载配置文件
+        $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
+        if (file_exists($configFile)) {
+            $config = require $configFile;
+            
+            // 连接数据库
+            if ($config['database']['type'] === 'sqlite') {
+                $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
+                $pdo = new PDO("sqlite:{$dbPath}");
+            } else {
+                $host = $config['database']['host'];
+                $port = $config['database']['port'] ?? 3306;
+                $dbname = $config['database']['database'];
+                $dbuser = $config['database']['username'];
+                $dbpass = $config['database']['password'];
+                
+                $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
+            }
+            
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // 获取用户ID
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ? LIMIT 1");
+            $stmt->execute([$username]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($user) {
+                // 保存令牌到数据库
+                $expiresAt = date('Y-m-d H:i:s', time() + 30 * 24 * 60 * 60);
+                
+                $stmt = $pdo->prepare("INSERT INTO user_sessions (user_id, token, ip_address, user_agent, expires_at) 
+                                     VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([
+                    $user['id'],
+                    $token,
+                    $_SERVER['REMOTE_ADDR'],
+                    $_SERVER['HTTP_USER_AGENT'] ?? '',
+                    $expiresAt
+                ]);
+            }
+        }
+    } catch (Exception $e) {
+        // 记录令牌生成错误
+        error_log('Remember token generation error: ' . $e->getMessage());
+    }
+    
+    return $token;
+}
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
@@ -127,14 +332,14 @@ $systemVersion = '5.1.0';
                 </div>
             </div>
             
-            <?php if ($errorMessage): ?>
+            <?php if ($loginError): ?>
             <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
                 <p class="font-bold">登录失败</p>
-                <p><?php echo htmlspecialchars($errorMessage); ?></p>
+                <p><?php echo htmlspecialchars($loginError); ?></p>
             </div>
             <?php endif; ?>
             
-            <form method="post" action="index.php" class="space-y-6">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="space-y-6">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
                 
                 <div>

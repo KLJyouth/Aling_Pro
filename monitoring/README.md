@@ -123,3 +123,78 @@ npm run load-test -- --url http://localhost:8080 --connections 50 --duration 60
 ## 许可证
 
 MIT 
+
+## 组件系统
+
+AlingAi API监控系统现在包含一个可复用的组件系统，使前端开发更加模块化和可维护。
+
+### 可用组件
+
+系统提供以下可复用组件：
+
+1. **StatusBadge** - 用于显示API状态的徽章组件
+   - 支持多种状态：正常、警告、严重、未知、检查中
+   - 可自定义显示文本
+
+2. **ApiChart** - 用于显示API指标图表的组件
+   - 支持响应时间趋势图
+   - 支持状态分布饼图
+   - 可配置高度和其他选项
+
+3. **AlertList** - 用于显示告警列表的组件
+   - 支持不同告警级别的显示
+   - 支持告警操作按钮（确认、忽略）
+   - 包含筛选控件
+
+4. **ApiTable** - 用于显示API列表的组件
+   - 支持分页和排序
+   - 实时更新API状态
+   - 包含筛选控件
+
+### 使用方法
+
+#### 服务器端渲染
+
+```javascript
+// 在路由处理程序中
+res.render('view-name', {
+  // ...其他数据
+  components: {
+    statusBadge: statusBadgeInstance,
+    apiChart: apiChartInstance,
+    alertList: alertListInstance,
+    apiTable: apiTableInstance
+  }
+});
+```
+
+在EJS模板中使用：
+
+```ejs
+<!-- 状态徽章 -->
+<%- components.statusBadge.render('healthy') %>
+
+<!-- API图表 -->
+<%- components.apiChart.renderResponseTimeChart('chartId', '图表标题', { height: '300px' }) %>
+
+<!-- 告警列表 -->
+<%- components.alertList.render(alerts, { limit: 5, showActions: true }) %>
+
+<!-- API表格 -->
+<%- components.apiTable.render(apiList, { showPagination: true }) %>
+```
+
+#### 客户端渲染
+
+```javascript
+// 状态徽章
+document.getElementById('statusContainer').innerHTML = window.renderStatusBadge('healthy');
+
+// 告警列表
+const alerts = [...]; // 告警数据
+document.getElementById('alertsContainer').innerHTML = window.renderAlertList(alerts, { showActions: true });
+```
+
+### 组件演示页面
+
+在开发模式下，可以访问 `/components-demo` 路径查看所有组件的演示和用法示例。 

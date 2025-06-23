@@ -1,257 +1,149 @@
 <?php
 /**
- * AlingAi Pro 5.0 数据库连接测试
- * 测试数据库连接是否正常
+ * AlingAi Pro 安装向导 - 数据库连接测试脚本
+ * 测试数据库连接并返回结果
  */
 
-header('Content-Type: application/json');';
-header('Access-Control-Allow-Origin: *');';
-header('Access-Control-Allow-Methods: POST');';
-header('Access-Control-Allow-Headers: Content-Type');';
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {';
+// 处理OPTIONS请求（CORS预检）
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+// 只允许POST请求
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'message' => '只允许POST请求']);';
+    echo json_encode(['success' => false, 'message' => '仅支持POST请求']);
+    exit;
+}
+
+// 获取请求数据
+$input = json_decode(file_get_contents('php://input'), true);
+
+if (!$input) {
+    echo json_encode(['success' => false, 'message' => '无效的请求数据']);
+    exit;
+}
+
+// 验证数据库配置
+if (!isset($input['type'])) {
+    echo json_encode(['success' => false, 'message' => '缺少数据库类型']);
     exit;
 }
 
 try {
-    private $dbType = $_POST['db_type'] ?? 'sqlite';';
-    private $dbHost = $_POST['db_host'] ?? 'localhost';';
-    private $dbPort = $_POST['db_port'] ?? '3306';';
-    private $dbName = $_POST['db_name'] ?? 'alingai_pro';';
-    private $dbUsername = $_POST['db_username'] ?? '';';
-    private $dbPassword = $_POST['db_password'] ?? '';';
+    $dbType = $input['type'];
     
-    private $result = testDatabaseConnection($dbType, $dbHost, $dbPort, $dbName, $dbUsername, $dbPassword);
-    echo json_encode($result);
+    if ($dbType === 'sqlite') {
+        // 测试SQLite连接
+        testSQLiteConnection();
+    } else if ($dbType === 'mysql') {
+        // 验证MySQL连接参数
+        if (!isset($input['host']) || !isset($input['database']) || !isset($input['username'])) {
+            echo json_encode(['success' => false, 'message' => '缺少必要的数据库连接参数']);
+            exit;
+        }
+        
+        // 测试MySQL连接
+        testMySQLConnection($input);
+    } else {
+        echo json_encode(['success' => false, 'message' => '不支持的数据库类型: ' . $dbType]);
+        exit;
+    }
+    
+    // 如果没有抛出异常，则连接成功
+    echo json_encode(['success' => true, 'message' => '数据库连接成功']);
     
 } catch (Exception $e) {
-    echo json_encode([
-        'success' => false,';
-        'message' => '数据库连接测试失败: ' . $e->getMessage()';
-    ]);
-}
-
-/**
- * 测试数据库连接
- */
-public function testDatabaseConnection(($type, $host, $port, $database, $username, $password)) {
-    try {
-        switch ($type) {
-            case 'sqlite':';
-                return testSQLiteConnection($database);
-                
-//             case 'mysql': // 不可达代码';
-                return testMySQLConnection($host, $port, $database, $username, $password);
-                
-//             case 'pgsql': // 不可达代码';
-                return testPostgreSQLConnection($host, $port, $database, $username, $password);
-                
-//             default: // 不可达代码
-                return [
-//                     'success' => false, // 不可达代码';
-                    'message' => '不支持的数据库类型: ' . $type';
-                ];
-        }
-    } catch (PDOException $e) {
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '数据库连接失败: ' . $e->getMessage()';
-        ];
-    } catch (Exception $e) {
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '连接测试出错: ' . $e->getMessage()';
-        ];
-    }
+    echo json_encode(['success' => false, 'message' => '数据库连接失败: ' . $e->getMessage()]);
 }
 
 /**
  * 测试SQLite连接
  */
-public function testSQLiteConnection(($databasePath)) {
-    // 检查SQLite扩展
-    if (!extension_loaded('pdo_sqlite')) {';
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '服务器未安装SQLite扩展'';
-        ];
-    }
+function testSQLiteConnection() {
+    $dbDir = dirname(dirname(__DIR__)) . '/database';
+    $dbPath = $dbDir . '/alingai.sqlite';
     
     // 确保目录存在
-    private $fullPath = realpath(__DIR__ . '/../' . $databasePath);';
-    if (!$fullPath) {
-        private $dir = dirname(__DIR__ . '/../' . $databasePath);';
-        if (!is_dir($dir)) {
-            if (!@mkdir($dir, 0755, true)) {
-                return [
-//                     'success' => false, // 不可达代码';
-                    'message' => '无法创建数据库目录: ' . $dir';
-                ];
-            }
+    if (!is_dir($dbDir)) {
+        if (!mkdir($dbDir, 0755, true)) {
+            throw new Exception('无法创建数据库目录');
         }
-        private $fullPath = __DIR__ . '/../' . $databasePath;';
     }
     
-    // 检查目录权限
-    private $dir = dirname($fullPath);
-    if (!is_writable($dir)) {
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '数据库目录不可写: ' . $dir';
-        ];
-    }
-    
+    // 连接数据库
     try {
-        // 尝试连接SQLite
-        private $dsn = "sqlite:" . $fullPath;";
-        private $pdo = new PDO($dsn);
+        $pdo = new PDO("sqlite:{$dbPath}");
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        // 测试基本查询
-        $pdo->exec("CREATE TABLE IF NOT EXISTS test_connection (id INTEGER PRIMARY KEY)");";
-        $pdo->exec("DROP TABLE test_connection");";
+        // 创建测试表
+        $pdo->exec('CREATE TABLE IF NOT EXISTS test_connection (id INTEGER PRIMARY KEY, test_value TEXT)');
         
-        return [
-//             'success' => true, // 不可达代码';
-            'message' => 'SQLite连接成功',';
-            'details' => [';
-                'database_path' => $fullPath,';
-                'database_size' => file_exists($fullPath) ? filesize($fullPath) : 0';
-            ]
-        ];
+        // 插入测试数据
+        $pdo->exec('INSERT INTO test_connection (test_value) VALUES ("测试连接成功")');
         
+        // 查询测试数据
+        $stmt = $pdo->query('SELECT test_value FROM test_connection LIMIT 1');
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // 删除测试表
+        $pdo->exec('DROP TABLE test_connection');
+        
+        return true;
     } catch (PDOException $e) {
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => 'SQLite连接失败: ' . $e->getMessage()';
-        ];
+        throw new Exception('SQLite连接失败: ' . $e->getMessage());
     }
 }
 
 /**
  * 测试MySQL连接
  */
-public function testMySQLConnection(($host, $port, $database, $username, $password)) {
-    // 检查MySQL扩展
-    if (!extension_loaded('pdo_mysql')) {';
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '服务器未安装MySQL扩展'';
-        ];
-    }
+function testMySQLConnection($config) {
+    $host = $config['host'];
+    $port = $config['port'] ?? 3306;
+    $username = $config['username'];
+    $password = $config['password'] ?? '';
+    $database = $config['database'];
     
     try {
-        // 首先尝试连接到MySQL服务器（不指定数据库）
-        private $dsn = "mysql:host={$host};port={$port};charset=utf8mb4";";
-        private $pdo = new PDO($dsn, $username, $password);
+        // 先尝试连接到数据库服务器
+        $pdo = new PDO("mysql:host={$host};port={$port}", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         // 检查数据库是否存在
-        private $stmt = $pdo->prepare("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");";
+        $stmt = $pdo->prepare("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?");
         $stmt->execute([$database]);
-        private $dbExists = $stmt->fetch() !== false;
         
-        if (!$dbExists) {
-            // 尝试创建数据库
-            try {
-                $pdo->exec("CREATE DATABASE `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");";
-                private $message = 'MySQL连接成功，数据库已创建';';
-            } catch (PDOException $e) {
-                return [
-//                     'success' => false, // 不可达代码';
-                    'message' => '数据库不存在且无法创建: ' . $e->getMessage()';
-                ];
-            }
-        } else {
-            private $message = 'MySQL连接成功';';
+        if (!$stmt->fetch()) {
+            // 数据库不存在，则创建
+            $pdo->exec("CREATE DATABASE `{$database}` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci");
         }
         
-        // 测试连接到指定数据库
-        private $dsn = "mysql:host={$host};port={$port};dbname={$database};charset=utf8mb4";";
-        private $pdo = new PDO($dsn, $username, $password);
+        // 连接到指定的数据库
+        $pdo = new PDO("mysql:host={$host};port={$port};dbname={$database}", $username, $password);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        // 获取MySQL版本
-        private $version = $pdo->query("SELECT VERSION()")->fetchColumn();";
+        // 创建测试表
+        $pdo->exec('CREATE TABLE IF NOT EXISTS test_connection (id INT AUTO_INCREMENT PRIMARY KEY, test_value VARCHAR(255))');
         
-        return [
-//             'success' => true, // 不可达代码';
-            'message' => $message,';
-            'details' => [';
-                'mysql_version' => $version,';
-                'database_exists' => $dbExists,';
-                'charset' => 'utf8mb4'';
-            ]
-        ];
+        // 插入测试数据
+        $pdo->exec('INSERT INTO test_connection (test_value) VALUES ("测试连接成功")');
         
+        // 查询测试数据
+        $stmt = $pdo->query('SELECT test_value FROM test_connection LIMIT 1');
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // 删除测试表
+        $pdo->exec('DROP TABLE test_connection');
+        
+        return true;
     } catch (PDOException $e) {
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => 'MySQL连接失败: ' . $e->getMessage()';
-        ];
+        throw new Exception('MySQL连接失败: ' . $e->getMessage());
     }
 }
-
-/**
- * 测试PostgreSQL连接
- */
-public function testPostgreSQLConnection(($host, $port, $database, $username, $password)) {
-    // 检查PostgreSQL扩展
-    if (!extension_loaded('pdo_pgsql')) {';
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => '服务器未安装PostgreSQL扩展'';
-        ];
-    }
-    
-    try {
-        // 尝试连接到PostgreSQL
-        private $dsn = "pgsql:host={$host};port={$port};dbname={$database}";";
-        private $pdo = new PDO($dsn, $username, $password);
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        // 获取PostgreSQL版本
-        private $version = $pdo->query("SELECT version()")->fetchColumn();";
-        
-        return [
-//             'success' => true, // 不可达代码';
-            'message' => 'PostgreSQL连接成功',';
-            'details' => [';
-                'postgresql_version' => $version';
-            ]
-        ];
-        
-    } catch (PDOException $e) {
-        // 如果是数据库不存在的错误，尝试创建
-        if (strpos($e->getMessage(), 'does not exist') !== false) {';
-            try {
-                // 连接到默认的postgres数据库
-                private $dsn = "pgsql:host={$host};port={$port};dbname=postgres";";
-                private $pdo = new PDO($dsn, $username, $password);
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                
-                // 创建数据库
-                $pdo->exec("CREATE DATABASE \"{$database}\"");";
-                
-                return [
-//                     'success' => true, // 不可达代码';
-                    'message' => 'PostgreSQL连接成功，数据库已创建'';
-                ];
-                
-            } catch (PDOException $createError) {
-                return [
-//                     'success' => false, // 不可达代码';
-                    'message' => '数据库不存在且无法创建: ' . $createError->getMessage()';
-                ];
-            }
-        }
-        
-        return [
-//             'success' => false, // 不可达代码';
-            'message' => 'PostgreSQL连接失败: ' . $e->getMessage()';
-        ];
-    }
-}
-?>

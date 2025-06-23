@@ -6,6 +6,9 @@ const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
 
+// 导入组件
+const components = require('./components');
+
 class WebInterface {
   /**
    * 创建Web界面
@@ -25,6 +28,20 @@ class WebInterface {
     // 定义视图路径
     this.viewsPath = path.join(__dirname, 'views');
     this.publicPath = path.join(__dirname, 'public');
+    
+    // 初始化组件
+    this.initComponents();
+  }
+
+  /**
+   * 初始化组件
+   * @private
+   */
+  initComponents() {
+    this.statusBadge = new components.StatusBadge();
+    this.apiChart = new components.ApiChart();
+    this.alertList = new components.AlertList();
+    this.apiTable = new components.ApiTable(this.statusBadge);
   }
 
   /**
@@ -67,7 +84,13 @@ class WebInterface {
           title: 'AlingAi API监控系统',
           apiList,
           recentAlerts,
-          activeMenu: 'dashboard'
+          activeMenu: 'dashboard',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
         });
       } catch (error) {
         this.logger.error('渲染仪表盘页面时出错:', error);
@@ -86,7 +109,13 @@ class WebInterface {
         res.render('apis', {
           title: 'API监控 - AlingAi API监控系统',
           apiList,
-          activeMenu: 'apis'
+          activeMenu: 'apis',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
         });
       } catch (error) {
         this.logger.error('渲染API监控页面时出错:', error);
@@ -116,7 +145,13 @@ class WebInterface {
           apiName,
           apiMetrics,
           aggregatedMetrics,
-          activeMenu: 'apis'
+          activeMenu: 'apis',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
         });
       } catch (error) {
         this.logger.error('渲染API详情页面时出错:', error);
@@ -135,7 +170,13 @@ class WebInterface {
         res.render('alerts', {
           title: '告警 - AlingAi API监控系统',
           alerts,
-          activeMenu: 'alerts'
+          activeMenu: 'alerts',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
         });
       } catch (error) {
         this.logger.error('渲染告警页面时出错:', error);
@@ -157,7 +198,13 @@ class WebInterface {
         res.render('health-checks', {
           title: '健康检查 - AlingAi API监控系统',
           healthChecks,
-          activeMenu: 'health-checks'
+          activeMenu: 'health-checks',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
         });
       } catch (error) {
         this.logger.error('渲染健康检查页面时出错:', error);
@@ -173,9 +220,31 @@ class WebInterface {
       res.render('settings', {
         title: '设置 - AlingAi API监控系统',
         config: this.config,
-        activeMenu: 'settings'
+        activeMenu: 'settings',
+        components: {
+          statusBadge: this.statusBadge,
+          apiChart: this.apiChart,
+          alertList: this.alertList,
+          apiTable: this.apiTable
+        }
       });
     });
+    
+    // 组件演示页面（仅在开发环境中可用）
+    if (process.env.NODE_ENV === 'development' || true) { // 暂时总是可用，便于测试
+      this.app.get('/components-demo', (req, res) => {
+        res.render('components-demo', {
+          title: '组件演示 - AlingAi API监控系统',
+          activeMenu: '',
+          components: {
+            statusBadge: this.statusBadge,
+            apiChart: this.apiChart,
+            alertList: this.alertList,
+            apiTable: this.apiTable
+          }
+        });
+      });
+    }
 
     // API - 获取最近的指标数据（用于图表实时更新）
     this.app.get('/api/metrics/:apiName', async (req, res) => {

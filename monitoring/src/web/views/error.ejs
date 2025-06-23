@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow border-left-danger">
+        <div class="card-body p-4">
+          <div class="text-center">
+            <% if (error && error.status === 404) { %>
+              <i class="bi bi-exclamation-circle text-warning" style="font-size: 5rem;"></i>
+              <h1 class="mt-3 mb-4">404 - 页面未找到</h1>
+              <p class="lead">您请求的页面不存在或已被移除。</p>
+            <% } else { %>
+              <i class="bi bi-exclamation-triangle text-danger" style="font-size: 5rem;"></i>
+              <h1 class="mt-3 mb-4">发生错误</h1>
+              <p class="lead"><%= message %></p>
+            <% } %>
+
+            <% if (process.env.NODE_ENV === 'development' && error && error.stack) { %>
+              <div class="alert alert-danger mt-4 text-start">
+                <h5>错误详情：</h5>
+                <pre><%= error.stack %></pre>
+              </div>
+            <% } %>
+
+            <div class="mt-4">
+              <a href="/" class="btn btn-primary">
+                <i class="bi bi-house"></i> 返回首页
+              </a>
+              <button class="btn btn-secondary ml-2" onclick="window.history.back();">
+                <i class="bi bi-arrow-left"></i> 返回上一页
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

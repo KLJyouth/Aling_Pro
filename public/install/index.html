@@ -3,77 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AlingAi Pro 5.0 - 系统安装向导</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <title>AlingAi Pro 5.1 安装向导</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
+        :root {
+            --primary-color: #4e54c8;
+            --secondary-color: #8f94fb;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
         
         .install-container {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .install-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            width: 100%;
+            max-width: 900px;
+            margin: 2rem auto;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+            border-radius: 0.5rem;
             overflow: hidden;
+            background-color: #fff;
+            flex: 1;
         }
         
         .install-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #fff;
+            padding: 2rem;
             text-align: center;
+            position: relative;
+        }
+        
+        .install-header h1 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .install-header p {
+            margin-bottom: 0;
+            opacity: 0.9;
         }
         
         .install-body {
-            padding: 40px;
+            padding: 2rem;
         }
         
         .step-indicator {
             display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 1.5rem;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #e9ecef;
+            z-index: 1;
         }
         
         .step {
-            width: 40px;
-            height: 40px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 3rem;
+            height: 3rem;
             border-radius: 50%;
+            background-color: #fff;
+            border: 2px solid #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 10px;
-            font-weight: bold;
+            margin: 0 auto 0.5rem;
+            font-weight: 600;
+            color: #6c757d;
             transition: all 0.3s ease;
         }
         
-        .step.active {
-            background: #667eea;
-            color: white;
+        .step.active .step-circle {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: #fff;
         }
         
-        .step.completed {
-            background: #28a745;
-            color: white;
+        .step.completed .step-circle {
+            background-color: var(--success-color);
+            border-color: var(--success-color);
+            color: #fff;
         }
         
-        .step.pending {
-            background: #f8f9fa;
+        .step-title {
+            font-size: 0.875rem;
             color: #6c757d;
-            border: 2px solid #dee2e6;
+            margin-top: 0.5rem;
+        }
+        
+        .step.active .step-title {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .step.completed .step-title {
+            color: var(--success-color);
+            font-weight: 600;
         }
         
         .step-content {
@@ -84,364 +132,451 @@
             display: block;
         }
         
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .btn-gradient {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
+        .form-label {
             font-weight: 500;
-            transition: all 0.3s ease;
         }
         
-        .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-            color: white;
+        .form-text {
+            font-size: 0.8rem;
         }
         
-        .requirement-check {
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-outline-secondary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-outline-secondary:hover, .btn-outline-secondary:focus {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .system-check-item {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 8px;
-            background: #f8f9fa;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e9ecef;
         }
         
-        .requirement-check.success {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
+        .system-check-item:last-child {
+            border-bottom: none;
         }
         
-        .requirement-check.error {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
+        .system-check-item .status {
+            font-weight: 500;
         }
         
-        .requirement-check.warning {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+        .system-check-item .status.pass {
+            color: var(--success-color);
         }
         
-        .progress-bar-custom {
-            height: 8px;
-            border-radius: 4px;
-            background: #e9ecef;
+        .system-check-item .status.fail {
+            color: var(--danger-color);
+        }
+        
+        .system-check-item .status.warning {
+            color: var(--warning-color);
+        }
+        
+        .progress-container {
+            margin-top: 2rem;
+        }
+        
+        .progress {
+            height: 0.5rem;
+            border-radius: 1rem;
             overflow: hidden;
-            margin: 20px 0;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        .progress-bar {
+            background-color: var(--primary-color);
             transition: width 0.5s ease;
-            border-radius: 4px;
         }
         
-        .install-logo {
-            width: 80px;
-            height: 80px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+        .install-footer {
+            padding: 1.5rem 2rem;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 2rem;
+            justify-content: space-between;
+        }
+        
+        .install-success {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .install-success-icon {
+            font-size: 5rem;
+            color: var(--success-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .install-error {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        
+        .install-error-icon {
+            font-size: 5rem;
+            color: var(--danger-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        .requirement-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .requirement-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .requirement-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .requirement-list li i {
+            margin-right: 0.5rem;
+        }
+        
+        .requirement-pass {
+            color: var(--success-color);
+        }
+        
+        .requirement-fail {
+            color: var(--danger-color);
+        }
+        
+        .requirement-warning {
+            color: var(--warning-color);
+        }
+        
+        @media (max-width: 768px) {
+            .install-container {
+                margin: 1rem;
+            }
+            
+            .install-header {
+                padding: 1.5rem;
+            }
+            
+            .install-body {
+                padding: 1.5rem;
+            }
+            
+            .step-indicator {
+                margin-bottom: 1.5rem;
+            }
+            
+            .step-circle {
+                width: 2.5rem;
+                height: 2.5rem;
+            }
+            
+            .step-title {
+                font-size: 0.75rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="install-container">
-        <div class="install-card">
-            <!-- 安装头部 -->
-            <div class="install-header">
-                <div class="install-logo">
-                    <i class="bi bi-cpu"></i>
+        <div class="install-header">
+            <h1>AlingAi Pro 5.1</h1>
+            <p>安装向导</p>
+        </div>
+        
+        <div class="install-body">
+            <div class="step-indicator">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-title">系统检查</div>
                 </div>
-                <h1 class="h3 mb-0">AlingAi Pro 5.0</h1>
-                <p class="mb-0">智能办公系统安装向导</p>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-title">数据库配置</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-title">管理员设置</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-title">安装</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-circle">5</div>
+                    <div class="step-title">完成</div>
+                </div>
             </div>
             
-            <!-- 安装主体 -->
-            <div class="install-body">
-                <!-- 步骤指示器 -->
-                <div class="step-indicator">
-                    <div class="step active" data-step="1">1</div>
-                    <div class="step pending" data-step="2">2</div>
-                    <div class="step pending" data-step="3">3</div>
-                    <div class="step pending" data-step="4">4</div>
-                    <div class="step pending" data-step="5">5</div>
+            <!-- 步骤1: 系统检查 -->
+            <div class="step-content active" id="step1">
+                <h3 class="mb-4">系统环境检查</h3>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">必要条件</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="requirement-list" id="requiredChecks">
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 PHP 版本...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 PDO 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 JSON 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 cURL 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查目录权限...</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <!-- 进度条 -->
-                <div class="progress-bar-custom">
-                    <div class="progress-fill" style="width: 20%"></div>
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">推荐条件</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="requirement-list" id="recommendedChecks">
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 OPcache 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 Mbstring 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查 GD 扩展...</li>
+                            <li class="p-3"><i class="bi bi-hourglass-split"></i> 检查内存限制...</li>
+                        </ul>
+                    </div>
                 </div>
                 
-                <!-- 步骤1: 欢迎页面 -->
-                <div class="step-content active" data-step="1">
-                    <div class="text-center">
-                        <h4><i class="bi bi-hand-thumbs-up text-primary"></i> 欢迎使用AlingAi Pro 5.0</h4>
-                        <p class="text-muted">感谢您选择AlingAi Pro 5.0智能办公系统。本向导将引导您完成系统安装和配置。</p>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-4">
-                                <div class="text-center p-3">
-                                    <i class="bi bi-lightning-charge text-warning" style="font-size: 2rem;"></i>
-                                    <h6 class="mt-2">高性能</h6>
-                                    <p class="small text-muted">优化的架构设计，响应迅速</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="text-center p-3">
-                                    <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
-                                    <h6 class="mt-2">安全可靠</h6>
-                                    <p class="small text-muted">企业级安全防护机制</p>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="text-center p-3">
-                                    <i class="bi bi-robot text-info" style="font-size: 2rem;"></i>
-                                    <h6 class="mt-2">AI智能</h6>
-                                    <p class="small text-muted">集成先进AI技术</p>
-                                </div>
-                            </div>
+                <div id="checkError" class="alert alert-danger d-none">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span>系统不满足最低安装要求，请解决上述问题后重试。</span>
+                </div>
+            </div>
+            
+            <!-- 步骤2: 数据库配置 -->
+            <div class="step-content" id="step2">
+                <h3 class="mb-4">数据库配置</h3>
+                
+                <form id="databaseForm">
+                    <div class="mb-3">
+                        <label class="form-label">数据库类型</label>
+                        <select class="form-select" id="dbType" name="dbType">
+                            <option value="mysql">MySQL / MariaDB</option>
+                            <option value="sqlite">SQLite</option>
+                        </select>
+                    </div>
+                    
+                    <div id="mysqlFields">
+                        <div class="mb-3">
+                            <label for="dbHost" class="form-label">数据库主机</label>
+                            <input type="text" class="form-control" id="dbHost" name="dbHost" value="localhost" required>
+                            <div class="form-text">通常为 localhost 或 127.0.0.1</div>
                         </div>
                         
-                        <div class="mt-4">
-                            <h6>安装内容：</h6>
-                            <ul class="list-unstyled text-start mt-3">
-                                <li><i class="bi bi-check-circle text-success"></i> 核心系统文件</li>
-                                <li><i class="bi bi-check-circle text-success"></i> 数据库结构</li>
-                                <li><i class="bi bi-check-circle text-success"></i> 基础配置</li>
-                                <li><i class="bi bi-check-circle text-success"></i> 管理员账户</li>
-                                <li><i class="bi bi-check-circle text-success"></i> 安全设置</li>
-                            </ul>
+                        <div class="mb-3">
+                            <label for="dbPort" class="form-label">端口</label>
+                            <input type="number" class="form-control" id="dbPort" name="dbPort" value="3306" required>
+                            <div class="form-text">MySQL 默认端口为 3306</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dbName" class="form-label">数据库名称</label>
+                            <input type="text" class="form-control" id="dbName" name="dbName" required>
+                            <div class="form-text">如果数据库不存在，安装程序将尝试创建</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dbUser" class="form-label">数据库用户名</label>
+                            <input type="text" class="form-control" id="dbUser" name="dbUser" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="dbPassword" class="form-label">数据库密码</label>
+                            <input type="password" class="form-control" id="dbPassword" name="dbPassword">
+                        </div>
+                    </div>
+                    
+                    <div id="sqliteFields" style="display: none;">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            SQLite 数据库文件将被创建在系统安全目录中。
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="testConnection" checked>
+                            <label class="form-check-label" for="testConnection">
+                                在继续前测试数据库连接
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="dbError" class="alert alert-danger d-none">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span></span>
+                    </div>
+                    
+                    <div id="dbSuccess" class="alert alert-success d-none">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <span>数据库连接成功！</span>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- 步骤3: 管理员设置 -->
+            <div class="step-content" id="step3">
+                <h3 class="mb-4">管理员账户设置</h3>
+                
+                <form id="adminForm">
+                    <div class="mb-3">
+                        <label for="adminUsername" class="form-label">管理员用户名</label>
+                        <input type="text" class="form-control" id="adminUsername" name="adminUsername" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="adminEmail" class="form-label">电子邮箱</label>
+                        <input type="email" class="form-control" id="adminEmail" name="adminEmail" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="adminPassword" class="form-label">密码</label>
+                        <input type="password" class="form-control" id="adminPassword" name="adminPassword" required>
+                        <div class="form-text">密码长度至少为8位，建议包含字母、数字和特殊字符</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="adminConfirmPassword" class="form-label">确认密码</label>
+                        <input type="password" class="form-control" id="adminConfirmPassword" name="adminConfirmPassword" required>
+                    </div>
+                    
+                    <div id="passwordError" class="alert alert-danger d-none">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <span>两次输入的密码不一致</span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">系统设置</label>
+                        <div class="mb-3">
+                            <label for="siteName" class="form-label">站点名称</label>
+                            <input type="text" class="form-control" id="siteName" name="siteName" value="AlingAi Pro">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="siteUrl" class="form-label">站点URL</label>
+                            <input type="url" class="form-control" id="siteUrl" name="siteUrl" placeholder="https://example.com">
+                            <div class="form-text">如果留空，将使用当前URL</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- 步骤4: 安装 -->
+            <div class="step-content" id="step4">
+                <h3 class="mb-4">安装进度</h3>
+                
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    正在安装 AlingAi Pro 系统，请勿关闭此页面...
+                </div>
+                
+                <div class="progress-container">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span id="currentStep">准备安装...</span>
+                        <span id="progressPercentage">0%</span>
+                    </div>
+                    
+                    <div class="progress mb-4">
+                        <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">安装日志</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="installLog" class="bg-light p-3 rounded" style="max-height: 200px; overflow-y: auto;">
+                            <!-- 安装日志将在这里显示 -->
                         </div>
                     </div>
                 </div>
                 
-                <!-- 步骤2: 系统检查 -->
-                <div class="step-content" data-step="2">
-                    <h4><i class="bi bi-gear text-primary"></i> 系统环境检查</h4>
-                    <p class="text-muted">正在检查您的服务器环境是否满足安装要求...</p>
+                <div id="installError" class="alert alert-danger mt-4 d-none">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span></span>
+                </div>
+            </div>
+            
+            <!-- 步骤5: 完成 -->
+            <div class="step-content" id="step5">
+                <div class="install-success">
+                    <div class="install-success-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h3 class="mb-3">安装成功！</h3>
+                    <p class="mb-4">AlingAi Pro 5.1 已成功安装到您的服务器。</p>
                     
-                    <div id="system-checks">
-                        <div class="requirement-check" data-check="php">
-                            <i class="bi bi-hourglass-split me-3"></i>
-                            <span>检查PHP版本 (需要 >= 8.1)...</span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-shield-lock fs-1 mb-3 text-primary"></i>
+                                    <h5>管理后台</h5>
+                                    <p class="mb-3">登录管理后台以配置系统设置</p>
+                                    <a href="../admin/login.php" class="btn btn-primary">访问管理后台</a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="requirement-check" data-check="extensions">
-                            <i class="bi bi-hourglass-split me-3"></i>
-                            <span>检查PHP扩展...</span>
-                        </div>
-                        <div class="requirement-check" data-check="permissions">
-                            <i class="bi bi-hourglass-split me-3"></i>
-                            <span>检查文件权限...</span>
-                        </div>
-                        <div class="requirement-check" data-check="memory">
-                            <i class="bi bi-hourglass-split me-3"></i>
-                            <span>检查内存限制...</span>
-                        </div>
-                        <div class="requirement-check" data-check="database">
-                            <i class="bi bi-hourglass-split me-3"></i>
-                            <span>检查数据库支持...</span>
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-house-door fs-1 mb-3 text-primary"></i>
+                                    <h5>网站首页</h5>
+                                    <p class="mb-3">访问您的新网站首页</p>
+                                    <a href="../index.html" class="btn btn-outline-primary">访问首页</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="mt-4 text-center" style="display: none;" id="check-complete">
-                        <div class="alert alert-success">
-                            <i class="bi bi-check-circle"></i> 所有系统检查已通过，可以继续安装！
-                        </div>
+                    <div class="alert alert-warning mt-4">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>安全提示：</strong> 为了安全起见，请删除或重命名安装目录。
                     </div>
                 </div>
                 
-                <!-- 步骤3: 数据库配置 -->
-                <div class="step-content" data-step="3">
-                    <h4><i class="bi bi-database text-primary"></i> 数据库配置</h4>
-                    <p class="text-muted">请配置数据库连接信息</p>
+                <div class="install-error d-none">
+                    <div class="install-error-icon">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </div>
+                    <h3 class="mb-3">安装失败</h3>
+                    <p class="mb-4">安装过程中发生错误，请查看安装日志获取详细信息。</p>
                     
-                    <form id="database-form">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库类型</label>
-                                    <select class="form-select" name="db_type" required>
-                                        <option value="mysql">MySQL</option>
-                                        <option value="sqlite" selected>SQLite (推荐)</option>
-                                        <option value="pgsql">PostgreSQL</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库主机</label>
-                                    <input type="text" class="form-control" name="db_host" value="localhost" placeholder="localhost">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库端口</label>
-                                    <input type="number" class="form-control" name="db_port" value="3306" placeholder="3306">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库名称</label>
-                                    <input type="text" class="form-control" name="db_name" value="alingai_pro" placeholder="alingai_pro" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库用户名</label>
-                                    <input type="text" class="form-control" name="db_username" placeholder="数据库用户名">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">数据库密码</label>
-                                    <input type="password" class="form-control" name="db_password" placeholder="数据库密码">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-3">
-                            <button type="button" class="btn btn-outline-primary" onclick="testDatabase()">
-                                <i class="bi bi-plug"></i> 测试连接
-                            </button>
-                            <span id="db-test-result" class="ms-3"></span>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- 步骤4: 管理员配置 -->
-                <div class="step-content" data-step="4">
-                    <h4><i class="bi bi-person-gear text-primary"></i> 管理员账户设置</h4>
-                    <p class="text-muted">设置系统管理员账户信息</p>
-                    
-                    <form id="admin-form">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">管理员用户名</label>
-                                    <input type="text" class="form-control" name="admin_username" value="admin" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">管理员邮箱</label>
-                                    <input type="email" class="form-control" name="admin_email" placeholder="admin@example.com" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">管理员密码</label>
-                                    <input type="password" class="form-control" name="admin_password" required>
-                                    <small class="form-text text-muted">密码长度至少8位，包含字母和数字</small>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="form-label">确认密码</label>
-                                    <input type="password" class="form-control" name="admin_password_confirm" required>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">站点名称</label>
-                            <input type="text" class="form-control" name="site_name" value="AlingAi Pro 5.0" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">站点URL</label>
-                            <input type="url" class="form-control" name="site_url" value="http://localhost:8000" required>
-                        </div>
-                    </form>
-                </div>
-                
-                <!-- 步骤5: 安装确认 -->
-                <div class="step-content" data-step="5">
-                    <h4><i class="bi bi-check-circle text-success"></i> 安装确认</h4>
-                    <p class="text-muted">请确认以下配置信息，点击"开始安装"进行系统安装</p>
-                    
-                    <div id="install-summary">
-                        <!-- 配置摘要将在这里显示 -->
+                    <div class="alert alert-danger">
+                        <div id="finalErrorMessage"></div>
                     </div>
                     
-                    <div id="install-progress" style="display: none;">
-                        <h5>安装进度</h5>
-                        <div class="progress mb-3">
-                            <div class="progress-bar progress-bar-striped progress-bar-animated" id="install-progress-bar" style="width: 0%"></div>
-                        </div>
-                        <div id="install-status">准备开始安装...</div>
-                    </div>
-                    
-                    <div id="install-complete" style="display: none;" class="text-center">
-                        <div class="alert alert-success">
-                            <h5><i class="bi bi-check-circle"></i> 安装完成！</h5>
-                            <p>AlingAi Pro 5.0已成功安装到您的服务器上。</p>
-                        </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-md-6">
-                                <div class="card border-primary">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-house-door text-primary" style="font-size: 2rem;"></i>
-                                        <h6 class="mt-2">访问前台</h6>
-                                        <a href="../index.html" class="btn btn-outline-primary btn-sm">
-                                            <i class="bi bi-box-arrow-up-right"></i> 打开网站
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="card border-success">
-                                    <div class="card-body text-center">
-                                        <i class="bi bi-gear text-success" style="font-size: 2rem;"></i>
-                                        <h6 class="mt-2">管理后台</h6>
-                                        <a href="../admin/" class="btn btn-outline-success btn-sm">
-                                            <i class="bi bi-box-arrow-up-right"></i> 管理面板
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 导航按钮 -->
-                <div class="d-flex justify-content-between mt-4">
-                    <button type="button" class="btn btn-outline-secondary" id="prev-btn" onclick="prevStep()" style="display: none;">
-                        <i class="bi bi-arrow-left"></i> 上一步
-                    </button>
-                    <button type="button" class="btn btn-gradient" id="next-btn" onclick="nextStep()">
-                        下一步 <i class="bi bi-arrow-right"></i>
-                    </button>
-                    <button type="button" class="btn btn-gradient" id="install-btn" onclick="startInstall()" style="display: none;">
-                        <i class="bi bi-download"></i> 开始安装
-                    </button>
+                    <button class="btn btn-primary" id="retryInstall">重试安装</button>
                 </div>
             </div>
         </div>
+        
+        <div class="install-footer">
+            <button type="button" class="btn btn-outline-secondary" id="prevBtn" disabled>上一步</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">下一步</button>
+        </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="install.js"></script>
 </body>
 </html>

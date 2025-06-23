@@ -1,0 +1,580 @@
+<!-- 筛选和搜索栏 -->
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="input-group">
+      <span class="input-group-text" id="search-addon">
+        <i class="bi bi-search"></i>
+      </span>
+      <input type="text" class="form-control" placeholder="搜索告警..." id="alertSearch">
+      <button class="btn btn-primary" type="button" id="searchBtn">搜索</button>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group float-end" role="group">
+      <button type="button" class="btn btn-outline-primary" id="filterAll">全部</button>
+      <button type="button" class="btn btn-outline-danger" id="filterCritical">严重</button>
+      <button type="button" class="btn btn-outline-warning" id="filterWarning">警告</button>
+      <button type="button" class="btn btn-outline-success" id="filterResolved">已解决</button>
+    </div>
+  </div>
+</div>
+
+<!-- 告警统计卡片 -->
+<div class="row mb-4">
+  <div class="col-md-3 mb-3 mb-md-0">
+    <div class="card border-left-primary h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+              总告警数
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalAlerts">
+              <%= alerts.length %>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="bi bi-bell fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 mb-3 mb-md-0">
+    <div class="card border-left-danger h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+              严重告警
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800" id="criticalAlerts">
+              <%= alerts.filter(a => a.level === 'critical').length %>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="bi bi-exclamation-triangle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 mb-3 mb-md-0">
+    <div class="card border-left-warning h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+              警告
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800" id="warningAlerts">
+              <%= alerts.filter(a => a.level === 'warning').length %>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="bi bi-exclamation-circle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3 mb-3 mb-md-0">
+    <div class="card border-left-success h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+              已解决
+            </div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800" id="resolvedAlerts">
+              <%= alerts.filter(a => a.status === 'resolved').length %>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="bi bi-check-circle fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 告警列表 -->
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">告警列表</h6>
+        <div class="dropdown">
+          <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <i class="bi bi-funnel"></i> 更多筛选
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#" id="todayFilter">今天</a></li>
+            <li><a class="dropdown-item" href="#" id="yesterdayFilter">昨天</a></li>
+            <li><a class="dropdown-item" href="#" id="thisWeekFilter">本周</a></li>
+            <li><a class="dropdown-item" href="#" id="thisMonthFilter">本月</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#" id="exportAlertsBtn">导出告警数据</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-body">
+        <% if (alerts && alerts.length > 0) { %>
+          <div class="table-responsive">
+            <table class="table table-bordered" id="alertsTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>时间</th>
+                  <th>级别</th>
+                  <th>API</th>
+                  <th>标题</th>
+                  <th>消息</th>
+                  <th>状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% alerts.forEach(function(alert) { %>
+                  <tr data-alert-id="<%= alert.id %>" class="alert-row <%= alert.level === 'critical' ? 'table-danger' : (alert.level === 'warning' ? 'table-warning' : '') %> <%= alert.status === 'resolved' ? 'text-muted' : '' %>">
+                    <td><%= new Date(alert.timestamp).toLocaleString() %></td>
+                    <td>
+                      <% if (alert.level === 'critical') { %>
+                        <span class="badge bg-danger">严重</span>
+                      <% } else if (alert.level === 'warning') { %>
+                        <span class="badge bg-warning text-dark">警告</span>
+                      <% } else { %>
+                        <span class="badge bg-info">信息</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <a href="/apis/<%= alert.api_name %>"><%= alert.api_name %></a>
+                    </td>
+                    <td><%= alert.title %></td>
+                    <td><%= alert.message %></td>
+                    <td>
+                      <% if (alert.status === 'resolved') { %>
+                        <span class="badge bg-success">已解决</span>
+                      <% } else if (alert.status === 'acknowledged') { %>
+                        <span class="badge bg-primary">已确认</span>
+                      <% } else { %>
+                        <span class="badge bg-secondary">未处理</span>
+                      <% } %>
+                    </td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-info view-alert" data-alert-id="<%= alert.id %>">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                        <% if (alert.status !== 'resolved') { %>
+                          <button type="button" class="btn btn-success resolve-alert" data-alert-id="<%= alert.id %>">
+                            <i class="bi bi-check"></i>
+                          </button>
+                        <% } %>
+                        <button type="button" class="btn btn-danger delete-alert" data-alert-id="<%= alert.id %>">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <div class="text-center py-5">
+            <i class="bi bi-check-circle text-success" style="font-size: 3rem;"></i>
+            <h4 class="mt-3">没有告警记录</h4>
+            <p class="text-muted">太好了！目前没有任何告警需要处理。</p>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 告警详情模态框 -->
+<div class="modal fade" id="alertDetailModal" tabindex="-1" aria-labelledby="alertDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="alertDetailModalLabel">告警详情</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">告警ID:</label>
+              <div id="alertId"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">时间:</label>
+              <div id="alertTime"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">级别:</label>
+              <div id="alertLevel"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">API:</label>
+              <div id="alertApi"></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label class="form-label fw-bold">标题:</label>
+              <div id="alertTitle"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">消息:</label>
+              <div id="alertMessage"></div>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">状态:</label>
+              <div id="alertStatus"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="m-0 font-weight-bold">附加信息</h6>
+              </div>
+              <div class="card-body">
+                <pre id="alertDetails" class="bg-light p-3 rounded"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="acknowledgeAlertBtn">确认告警</button>
+        <button type="button" class="btn btn-success" id="resolveAlertBtn">标记为已解决</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 绑定搜索按钮事件
+    document.getElementById('searchBtn').addEventListener('click', searchAlerts);
+    document.getElementById('alertSearch').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        searchAlerts();
+      }
+    });
+    
+    // 绑定筛选按钮事件
+    document.getElementById('filterAll').addEventListener('click', function() {
+      filterAlerts('all');
+    });
+    document.getElementById('filterCritical').addEventListener('click', function() {
+      filterAlerts('critical');
+    });
+    document.getElementById('filterWarning').addEventListener('click', function() {
+      filterAlerts('warning');
+    });
+    document.getElementById('filterResolved').addEventListener('click', function() {
+      filterAlerts('resolved');
+    });
+    
+    // 绑定时间筛选事件
+    document.getElementById('todayFilter').addEventListener('click', function() {
+      filterByTime('today');
+    });
+    document.getElementById('yesterdayFilter').addEventListener('click', function() {
+      filterByTime('yesterday');
+    });
+    document.getElementById('thisWeekFilter').addEventListener('click', function() {
+      filterByTime('week');
+    });
+    document.getElementById('thisMonthFilter').addEventListener('click', function() {
+      filterByTime('month');
+    });
+    
+    // 绑定导出按钮事件
+    document.getElementById('exportAlertsBtn').addEventListener('click', exportAlerts);
+    
+    // 绑定查看告警事件
+    document.querySelectorAll('.view-alert').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const alertId = this.getAttribute('data-alert-id');
+        viewAlertDetails(alertId);
+      });
+    });
+    
+    // 绑定解决告警事件
+    document.querySelectorAll('.resolve-alert').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const alertId = this.getAttribute('data-alert-id');
+        resolveAlert(alertId);
+      });
+    });
+    
+    // 绑定删除告警事件
+    document.querySelectorAll('.delete-alert').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const alertId = this.getAttribute('data-alert-id');
+        deleteAlert(alertId);
+      });
+    });
+    
+    // 绑定模态框按钮事件
+    document.getElementById('acknowledgeAlertBtn').addEventListener('click', acknowledgeCurrentAlert);
+    document.getElementById('resolveAlertBtn').addEventListener('click', resolveCurrentAlert);
+  });
+  
+  // 搜索告警
+  function searchAlerts() {
+    const searchTerm = document.getElementById('alertSearch').value.toLowerCase();
+    const alertRows = document.querySelectorAll('.alert-row');
+    
+    alertRows.forEach(function(row) {
+      const apiName = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+      const title = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+      const message = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+      
+      if (apiName.includes(searchTerm) || title.includes(searchTerm) || message.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+  
+  // 筛选告警
+  function filterAlerts(filter) {
+    const alertRows = document.querySelectorAll('.alert-row');
+    
+    // 高亮选中的筛选按钮
+    document.getElementById('filterAll').classList.remove('active', 'btn-primary');
+    document.getElementById('filterAll').classList.add('btn-outline-primary');
+    document.getElementById('filterCritical').classList.remove('active', 'btn-danger');
+    document.getElementById('filterCritical').classList.add('btn-outline-danger');
+    document.getElementById('filterWarning').classList.remove('active', 'btn-warning');
+    document.getElementById('filterWarning').classList.add('btn-outline-warning');
+    document.getElementById('filterResolved').classList.remove('active', 'btn-success');
+    document.getElementById('filterResolved').classList.add('btn-outline-success');
+    
+    if (filter === 'all') {
+      document.getElementById('filterAll').classList.remove('btn-outline-primary');
+      document.getElementById('filterAll').classList.add('active', 'btn-primary');
+      alertRows.forEach(row => row.style.display = '');
+    } else if (filter === 'critical') {
+      document.getElementById('filterCritical').classList.remove('btn-outline-danger');
+      document.getElementById('filterCritical').classList.add('active', 'btn-danger');
+      
+      alertRows.forEach(function(row) {
+        const level = row.querySelector('td:nth-child(2) .badge').textContent;
+        if (level === '严重') {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    } else if (filter === 'warning') {
+      document.getElementById('filterWarning').classList.remove('btn-outline-warning');
+      document.getElementById('filterWarning').classList.add('active', 'btn-warning');
+      
+      alertRows.forEach(function(row) {
+        const level = row.querySelector('td:nth-child(2) .badge').textContent;
+        if (level === '警告') {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    } else if (filter === 'resolved') {
+      document.getElementById('filterResolved').classList.remove('btn-outline-success');
+      document.getElementById('filterResolved').classList.add('active', 'btn-success');
+      
+      alertRows.forEach(function(row) {
+        const status = row.querySelector('td:nth-child(6) .badge').textContent;
+        if (status === '已解决') {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  }
+  
+  // 按时间筛选
+  function filterByTime(timeFrame) {
+    const alertRows = document.querySelectorAll('.alert-row');
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    
+    alertRows.forEach(function(row) {
+      const timeStr = row.querySelector('td:nth-child(1)').textContent;
+      const alertTime = new Date(timeStr);
+      let show = false;
+      
+      if (timeFrame === 'today') {
+        show = alertTime >= today;
+      } else if (timeFrame === 'yesterday') {
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        show = alertTime >= yesterday && alertTime < today;
+      } else if (timeFrame === 'week') {
+        const weekStart = new Date(today);
+        weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+        show = alertTime >= weekStart;
+      } else if (timeFrame === 'month') {
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        show = alertTime >= monthStart;
+      }
+      
+      row.style.display = show ? '' : 'none';
+    });
+  }
+  
+  // 导出告警数据
+  function exportAlerts() {
+    alert('导出功能即将推出');
+  }
+  
+  // 查看告警详情
+  function viewAlertDetails(alertId) {
+    // 这里应该通过AJAX获取告警详情
+    // 以下是模拟数据
+    const alertData = {
+      id: alertId,
+      timestamp: new Date().toISOString(),
+      level: Math.random() > 0.5 ? 'critical' : 'warning',
+      api_name: 'users-api',
+      title: '响应时间过长',
+      message: 'API响应时间超过阈值(2000ms)',
+      status: Math.random() > 0.7 ? 'resolved' : (Math.random() > 0.5 ? 'acknowledged' : 'pending'),
+      details: JSON.stringify({
+        threshold: 2000,
+        actual_response_time: 3542,
+        check_id: 'check_' + Math.floor(Math.random() * 10000),
+        endpoint: 'https://api.example.com/users',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Request-ID': 'req_' + Math.floor(Math.random() * 10000)
+        }
+      }, null, 2)
+    };
+    
+    // 填充模态框
+    document.getElementById('alertId').textContent = alertData.id;
+    document.getElementById('alertTime').textContent = new Date(alertData.timestamp).toLocaleString();
+    
+    const levelDisplay = document.getElementById('alertLevel');
+    if (alertData.level === 'critical') {
+      levelDisplay.innerHTML = '<span class="badge bg-danger">严重</span>';
+    } else if (alertData.level === 'warning') {
+      levelDisplay.innerHTML = '<span class="badge bg-warning text-dark">警告</span>';
+    } else {
+      levelDisplay.innerHTML = '<span class="badge bg-info">信息</span>';
+    }
+    
+    document.getElementById('alertApi').innerHTML = '<a href="/apis/' + alertData.api_name + '">' + alertData.api_name + '</a>';
+    document.getElementById('alertTitle').textContent = alertData.title;
+    document.getElementById('alertMessage').textContent = alertData.message;
+    
+    const statusDisplay = document.getElementById('alertStatus');
+    if (alertData.status === 'resolved') {
+      statusDisplay.innerHTML = '<span class="badge bg-success">已解决</span>';
+    } else if (alertData.status === 'acknowledged') {
+      statusDisplay.innerHTML = '<span class="badge bg-primary">已确认</span>';
+    } else {
+      statusDisplay.innerHTML = '<span class="badge bg-secondary">未处理</span>';
+    }
+    
+    document.getElementById('alertDetails').textContent = alertData.details;
+    
+    // 根据状态控制按钮显示
+    document.getElementById('acknowledgeAlertBtn').style.display = alertData.status === 'pending' ? '' : 'none';
+    document.getElementById('resolveAlertBtn').style.display = alertData.status !== 'resolved' ? '' : 'none';
+    
+    // 存储当前告警ID
+    document.getElementById('acknowledgeAlertBtn').setAttribute('data-alert-id', alertId);
+    document.getElementById('resolveAlertBtn').setAttribute('data-alert-id', alertId);
+    
+    // 显示模态框
+    const modal = new bootstrap.Modal(document.getElementById('alertDetailModal'));
+    modal.show();
+  }
+  
+  // 确认当前告警
+  function acknowledgeCurrentAlert() {
+    const alertId = document.getElementById('acknowledgeAlertBtn').getAttribute('data-alert-id');
+    
+    // 这里应该通过AJAX更新告警状态
+    console.log('确认告警:', alertId);
+    
+    // 模拟成功
+    alert('告警已确认');
+    
+    // 关闭模态框
+    const modal = bootstrap.Modal.getInstance(document.getElementById('alertDetailModal'));
+    modal.hide();
+    
+    // 刷新页面
+    setTimeout(function() {
+      window.location.reload();
+    }, 1000);
+  }
+  
+  // 解决当前告警
+  function resolveCurrentAlert() {
+    const alertId = document.getElementById('resolveAlertBtn').getAttribute('data-alert-id');
+    
+    // 这里应该通过AJAX更新告警状态
+    console.log('解决告警:', alertId);
+    
+    // 模拟成功
+    alert('告警已标记为已解决');
+    
+    // 关闭模态框
+    const modal = bootstrap.Modal.getInstance(document.getElementById('alertDetailModal'));
+    modal.hide();
+    
+    // 刷新页面
+    setTimeout(function() {
+      window.location.reload();
+    }, 1000);
+  }
+  
+  // 解决告警
+  function resolveAlert(alertId) {
+    if (confirm('确定要将此告警标记为已解决吗？')) {
+      // 这里应该通过AJAX更新告警状态
+      console.log('解决告警:', alertId);
+      
+      // 模拟成功
+      alert('告警已标记为已解决');
+      
+      // 刷新页面
+      setTimeout(function() {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+  
+  // 删除告警
+  function deleteAlert(alertId) {
+    if (confirm('确定要删除此告警吗？此操作无法撤销。')) {
+      // 这里应该通过AJAX删除告警
+      console.log('删除告警:', alertId);
+      
+      // 模拟成功
+      alert('告警已删除');
+      
+      // 刷新页面
+      setTimeout(function() {
+        window.location.reload();
+      }, 1000);
+    }
+  }
+</script> 

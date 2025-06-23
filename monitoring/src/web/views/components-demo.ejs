@@ -1,0 +1,295 @@
+<!-- 页面标题 -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">组件演示</h6>
+  </div>
+  <div class="card-body">
+    <p>本页面展示了AlingAi API监控系统的各种可复用组件，方便开发和使用。</p>
+  </div>
+</div>
+
+<!-- 状态徽章组件 -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">状态徽章组件 (StatusBadge)</h6>
+      </div>
+      <div class="card-body">
+        <h5>基本用法</h5>
+        <div class="mb-3">
+          <p>健康状态: <%- components.statusBadge.render('healthy') %></p>
+          <p>警告状态: <%- components.statusBadge.render('warning') %></p>
+          <p>严重状态: <%- components.statusBadge.render('critical') %></p>
+          <p>未知状态: <%- components.statusBadge.render('unknown') %></p>
+          <p>检查中状态: <%- components.statusBadge.render('pending') %></p>
+        </div>
+        
+        <h5>自定义文本</h5>
+        <div class="mb-3">
+          <p>自定义文本: <%- components.statusBadge.render('healthy', '运行良好') %></p>
+          <p>自定义文本: <%- components.statusBadge.render('warning', '需要注意') %></p>
+          <p>自定义文本: <%- components.statusBadge.render('critical', '需要立即处理') %></p>
+        </div>
+        
+        <h5>用法示例</h5>
+        <pre><code>// 服务器端渲染
+<%- '<%- components.statusBadge.render(\'healthy\') %>' %> 
+
+// 客户端渲染
+&lt;span id="statusBadge"&gt;&lt;/span&gt;
+&lt;script&gt;
+  document.getElementById('statusBadge').innerHTML = 
+    window.renderStatusBadge('healthy');
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- API图表组件 -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">API图表组件 (ApiChart)</h6>
+      </div>
+      <div class="card-body">
+        <h5>响应时间图表</h5>
+        <div class="mb-4">
+          <%- components.apiChart.renderResponseTimeChart('demoResponseTimeChart', '响应时间趋势示例', { height: '250px' }) %>
+        </div>
+        
+        <h5>状态分布图表</h5>
+        <div class="mb-4">
+          <%- components.apiChart.renderStatusChart('demoStatusChart', '状态分布示例', { height: '250px' }) %>
+        </div>
+        
+        <h5>用法示例</h5>
+        <pre><code>// 响应时间图表
+<%- '<%- components.apiChart.renderResponseTimeChart(\'chartId\', \'图表标题\', { height: \'300px\' }) %>' %>
+
+// 状态分布图表
+<%- '<%- components.apiChart.renderStatusChart(\'chartId\', \'图表标题\', { height: \'300px\' }) %>' %>
+
+// 更新图表数据
+&lt;script&gt;
+  if (window.charts && window.charts['chartId']) {
+    const chart = window.charts['chartId'];
+    chart.data.labels = ['标签1', '标签2', '标签3'];
+    chart.data.datasets = [{
+      label: '数据集标签',
+      data: [10, 20, 30],
+      backgroundColor: 'rgba(78, 115, 223, 0.6)',
+      borderColor: 'rgba(78, 115, 223, 1)',
+      borderWidth: 2
+    }];
+    chart.update();
+  }
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 告警列表组件 -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">告警列表组件 (AlertList)</h6>
+      </div>
+      <div class="card-body">
+        <h5>基本用法</h5>
+        <div class="mb-4">
+          <div id="demoAlertList">加载中...</div>
+        </div>
+        
+        <h5>筛选控件</h5>
+        <div class="mb-4">
+          <%- components.alertList.renderFilters() %>
+        </div>
+        
+        <h5>用法示例</h5>
+        <pre><code>// 服务器端渲染
+<%- '<%- components.alertList.render(alerts, { limit: 5, showActions: true }) %>' %>
+
+// 客户端渲染
+&lt;div id="alertListContainer"&gt;&lt;/div&gt;
+&lt;script&gt;
+  const alerts = [
+    {
+      id: 'alert-1',
+      title: 'API响应时间过长',
+      message: 'API响应时间(2500ms)超过阈值(2000ms)',
+      severity: 'warning',
+      timestamp: new Date(),
+      api_name: 'example-api'
+    }
+  ];
+  
+  document.getElementById('alertListContainer').innerHTML = 
+    window.renderAlertList(alerts, { showActions: true });
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- API表格组件 -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card shadow">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">API表格组件 (ApiTable)</h6>
+      </div>
+      <div class="card-body">
+        <h5>基本用法</h5>
+        <div class="mb-4">
+          <%- components.apiTable.render([
+            { name: 'example-api-1', url: 'https://api.example.com/v1/endpoint1' },
+            { name: 'example-api-2', url: 'https://api.example.com/v1/endpoint2' },
+            { name: 'example-api-3', url: 'https://api.example.com/v1/endpoint3' }
+          ], { tableId: 'demoApiTable' }) %>
+        </div>
+        
+        <h5>筛选控件</h5>
+        <div class="mb-4">
+          <%- components.apiTable.renderFilters() %>
+        </div>
+        
+        <h5>用法示例</h5>
+        <pre><code>// 服务器端渲染
+<%- '<%- components.apiTable.render(apiList, { showPagination: true, tableId: \'apiTable\' }) %>' %>
+
+// 客户端筛选
+&lt;script&gt;
+  document.getElementById('apiFiltersForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const status = document.getElementById('filterStatus').value;
+    const responseTime = document.getElementById('filterResponseTime').value;
+    
+    // 在这里实现筛选逻辑
+    console.log('筛选条件:', { status, responseTime });
+  });
+&lt;/script&gt;</code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 初始化演示数据的脚本 -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 初始化告警列表演示
+    initDemoAlertList();
+    
+    // 初始化图表演示
+    initDemoCharts();
+  });
+  
+  // 初始化告警列表演示
+  function initDemoAlertList() {
+    const alerts = [
+      {
+        id: 'demo-alert-1',
+        title: 'API响应时间过长',
+        message: '用户API响应时间(2500ms)超过阈值(2000ms)',
+        severity: 'warning',
+        timestamp: new Date(Date.now() - 3600000),
+        api_name: 'user-api'
+      },
+      {
+        id: 'demo-alert-2',
+        title: 'API请求失败',
+        message: 'API请求失败，状态码: 500',
+        severity: 'critical',
+        timestamp: new Date(Date.now() - 7200000),
+        api_name: 'payment-api'
+      },
+      {
+        id: 'demo-alert-3',
+        title: '健康检查失败',
+        message: '健康检查连续3次失败',
+        severity: 'warning',
+        timestamp: new Date(Date.now() - 10800000),
+        api_name: 'auth-api'
+      }
+    ];
+    
+    document.getElementById('demoAlertList').innerHTML = window.renderAlertList 
+      ? window.renderAlertList(alerts, { showActions: true })
+      : components.alertList.render(alerts, { showActions: true });
+  }
+  
+  // 初始化图表演示
+  function initDemoCharts() {
+    // 响应时间图表
+    if (window.charts && window.charts['demoResponseTimeChart']) {
+      const chart = window.charts['demoResponseTimeChart'];
+      const labels = [];
+      
+      // 生成过去12小时的标签
+      const now = new Date();
+      for (let i = 11; i >= 0; i--) {
+        const time = new Date(now.getTime() - i * 3600000);
+        labels.push(time.getHours() + ':00');
+      }
+      
+      // 生成两个API的示例数据
+      const api1Data = [];
+      const api2Data = [];
+      
+      for (let i = 0; i < 12; i++) {
+        api1Data.push(Math.floor(Math.random() * 300) + 50);
+        api2Data.push(Math.floor(Math.random() * 200) + 100);
+      }
+      
+      // 更新图表数据
+      chart.data.labels = labels;
+      chart.data.datasets = [
+        {
+          label: 'API 1',
+          data: api1Data,
+          backgroundColor: 'rgba(78, 115, 223, 0.6)',
+          borderColor: 'rgba(78, 115, 223, 1)',
+          borderWidth: 2,
+          pointRadius: 3,
+          fill: false,
+          tension: 0.1
+        },
+        {
+          label: 'API 2',
+          data: api2Data,
+          backgroundColor: 'rgba(28, 200, 138, 0.6)',
+          borderColor: 'rgba(28, 200, 138, 1)',
+          borderWidth: 2,
+          pointRadius: 3,
+          fill: false,
+          tension: 0.1
+        }
+      ];
+      chart.update();
+    }
+    
+    // 状态分布图表
+    if (window.charts && window.charts['demoStatusChart']) {
+      const chart = window.charts['demoStatusChart'];
+      
+      // 更新图表数据
+      chart.data.labels = ['成功', '失败', '超时'];
+      chart.data.datasets[0].data = [85, 10, 5];
+      chart.data.datasets[0].backgroundColor = [
+        'rgba(28, 200, 138, 0.6)',
+        'rgba(231, 74, 59, 0.6)',
+        'rgba(246, 194, 62, 0.6)'
+      ];
+      chart.data.datasets[0].borderColor = [
+        'rgba(28, 200, 138, 1)',
+        'rgba(231, 74, 59, 1)',
+        'rgba(246, 194, 62, 1)'
+      ];
+      chart.update();
+    }
+  }
+</script> 

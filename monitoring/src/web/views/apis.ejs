@@ -1,0 +1,593 @@
+<!-- 筛选和搜索栏 -->
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="input-group">
+      <span class="input-group-text" id="search-addon">
+        <i class="bi bi-search"></i>
+      </span>
+      <input type="text" class="form-control" placeholder="搜索API..." id="apiSearch">
+      <button class="btn btn-primary" type="button" id="searchBtn">搜索</button>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group float-end" role="group">
+      <button type="button" class="btn btn-outline-primary" id="filterAll">全部</button>
+      <button type="button" class="btn btn-outline-success" id="filterHealthy">正常</button>
+      <button type="button" class="btn btn-outline-danger" id="filterUnhealthy">异常</button>
+    </div>
+  </div>
+</div>
+
+<!-- API筛选控件 -->
+<%- components.apiTable.renderFilters() %>
+
+<!-- API列表表格 -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+    <h6 class="m-0 font-weight-bold text-primary">监控中的API</h6>
+    <div>
+      <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#addApiModal">
+        <i class="bi bi-plus-circle"></i> 添加API
+      </button>
+      <div class="btn-group ms-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-gear"></i> 批量操作
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#" id="refreshAllApis"><i class="bi bi-arrow-clockwise"></i> 刷新所有API</a></li>
+          <li><a class="dropdown-item" href="#" id="exportApiList"><i class="bi bi-download"></i> 导出API列表</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" id="pauseAllApis"><i class="bi bi-pause-circle"></i> 暂停所有监控</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <!-- 使用API表格组件显示API状态列表 -->
+    <%- components.apiTable.render(apiList, { showPagination: true, tableId: 'apiListTable' }) %>
+  </div>
+</div>
+
+<!-- API概览图表 -->
+<div class="row">
+  <div class="col-lg-6">
+    <!-- 使用API图表组件显示响应时间统计图 -->
+    <%- components.apiChart.renderResponseTimeChart('apiResponseTimeOverview', 'API响应时间概览', { height: '300px' }) %>
+  </div>
+  <div class="col-lg-6">
+    <!-- 使用API图表组件显示成功率统计图 -->
+    <%- components.apiChart.renderStatusChart('apiSuccessRateOverview', 'API成功率概览', { height: '300px' }) %>
+  </div>
+</div>
+
+<!-- 添加API模态框 -->
+<div class="modal fade" id="addApiModal" tabindex="-1" aria-labelledby="addApiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addApiModalLabel">添加新API监控</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="addApiForm">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="apiName" class="form-label">API名称</label>
+              <input type="text" class="form-control" id="apiName" required placeholder="例如: user-service">
+              <div class="form-text">请输入一个唯一的名称以标识此API</div>
+            </div>
+            <div class="col-md-6">
+              <label for="apiUrl" class="form-label">API URL</label>
+              <input type="url" class="form-control" id="apiUrl" required placeholder="https://api.example.com/v1/endpoint">
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="apiMethod" class="form-label">请求方法</label>
+              <select class="form-select" id="apiMethod">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <option value="PATCH">PATCH</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="apiInterval" class="form-label">检查间隔</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="apiInterval" value="60" min="10" max="3600">
+                <span class="input-group-text">秒</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label for="apiTimeout" class="form-label">超时时间</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="apiTimeout" value="5000" min="1000" max="60000">
+                <span class="input-group-text">毫秒</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="apiHeaders" class="form-label">请求头</label>
+            <textarea class="form-control" id="apiHeaders" rows="3" placeholder='{"Content-Type": "application/json", "Authorization": "Bearer $TOKEN"}'></textarea>
+            <div class="form-text">请输入JSON格式的请求头，支持环境变量引用</div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="apiBody" class="form-label">请求体(POST/PUT/PATCH)</label>
+            <textarea class="form-control" id="apiBody" rows="3" placeholder='{"key": "value"}'></textarea>
+            <div class="form-text">请输入JSON格式的请求体数据</div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="successCodes" class="form-label">成功状态码</label>
+              <input type="text" class="form-control" id="successCodes" value="200,201,204" placeholder="200,201,204">
+              <div class="form-text">以逗号分隔的HTTP状态码列表</div>
+            </div>
+            <div class="col-md-6">
+              <label for="alertThreshold" class="form-label">告警阈值</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="alertThreshold" value="2000" min="100">
+                <span class="input-group-text">毫秒</span>
+              </div>
+              <div class="form-text">当响应时间超过此值时触发告警</div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="enableAlerts" checked>
+                <label class="form-check-label" for="enableAlerts">启用告警</label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="enableSsl" checked>
+                <label class="form-check-label" for="enableSsl">SSL验证</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" id="saveApiBtn">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 删除确认模态框 -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">确认删除</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>您确定要删除API "<span id="deleteApiName"></span>" 吗？</p>
+        <p class="text-danger">此操作无法撤销，所有相关的监控数据将被永久删除。</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">删除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 初始化图表数据
+    initApiOverviewCharts();
+    
+    // 初始化添加API表单事件
+    initAddApiForm();
+    
+    // 监听筛选表单提交
+    document.getElementById('apiFiltersForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      applyApiFilters();
+    });
+    
+    // 初始加载API状态
+    loadApiStatus();
+    
+    // 定时刷新API状态
+    setInterval(loadApiStatus, 60000); // 每分钟刷新一次
+    
+    // 刷新按钮事件
+    document.getElementById('refreshBtn').addEventListener('click', function() {
+      loadApiStatus();
+    });
+    
+    // 搜索功能
+    document.getElementById('searchBtn').addEventListener('click', searchApis);
+    document.getElementById('apiSearch').addEventListener('keyup', function(event) {
+      if (event.key === 'Enter') {
+        searchApis();
+      }
+    });
+    
+    // 过滤按钮事件
+    document.getElementById('filterAll').addEventListener('click', function() {
+      filterApis('all');
+    });
+    document.getElementById('filterHealthy').addEventListener('click', function() {
+      filterApis('healthy');
+    });
+    document.getElementById('filterUnhealthy').addEventListener('click', function() {
+      filterApis('unhealthy');
+    });
+    
+    // 编辑API按钮事件
+    document.querySelectorAll('.edit-api').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const apiName = this.getAttribute('data-api-name');
+        editApi(apiName);
+      });
+    });
+    
+    // 删除API按钮事件
+    document.querySelectorAll('.delete-api').forEach(function(button) {
+      button.addEventListener('click', function() {
+        const apiName = this.getAttribute('data-api-name');
+        showDeleteConfirmation(apiName);
+      });
+    });
+    
+    // 保存API按钮事件
+    document.getElementById('saveApiBtn').addEventListener('click', saveApi);
+    
+    // 确认删除按钮事件
+    document.getElementById('confirmDeleteBtn').addEventListener('click', deleteApi);
+  });
+  
+  // 加载API状态数据
+  function loadApiStatus() {
+    // 这里应该通过AJAX获取API状态数据
+    // 以下是模拟数据
+    const apiRows = document.querySelectorAll('.api-row');
+    
+    apiRows.forEach(function(row) {
+      const apiName = row.getAttribute('data-api-name');
+      const statusBadge = row.querySelector('.status-badge');
+      const responseTimeCell = row.querySelector('.response-time');
+      const successRateCell = row.querySelector('.success-rate');
+      const lastCheckCell = row.querySelector('.last-check');
+      
+      // 模拟数据生成
+      const isHealthy = Math.random() > 0.2;
+      const responseTime = Math.floor(Math.random() * 500) + 50;
+      const successRate = (Math.random() * 20 + 80).toFixed(2);
+      const lastCheck = new Date().toLocaleString();
+      
+      // 更新状态
+      statusBadge.textContent = isHealthy ? '正常' : '异常';
+      statusBadge.className = 'badge rounded-pill ' + (isHealthy ? 'bg-success' : 'bg-danger');
+      responseTimeCell.textContent = responseTime + ' ms';
+      successRateCell.textContent = successRate + '%';
+      lastCheckCell.textContent = lastCheck;
+      
+      // 设置数据属性用于过滤
+      row.setAttribute('data-status', isHealthy ? 'healthy' : 'unhealthy');
+    });
+  }
+  
+  // 搜索API
+  function searchApis() {
+    const searchTerm = document.getElementById('apiSearch').value.toLowerCase();
+    const apiRows = document.querySelectorAll('.api-row');
+    
+    apiRows.forEach(function(row) {
+      const apiName = row.getAttribute('data-api-name').toLowerCase();
+      const apiUrl = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+      
+      if (apiName.includes(searchTerm) || apiUrl.includes(searchTerm)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+  
+  // 过滤API
+  function filterApis(filter) {
+    const apiRows = document.querySelectorAll('.api-row');
+    
+    // 高亮选中的过滤按钮
+    document.getElementById('filterAll').classList.remove('active', 'btn-primary');
+    document.getElementById('filterAll').classList.add('btn-outline-primary');
+    document.getElementById('filterHealthy').classList.remove('active', 'btn-success');
+    document.getElementById('filterHealthy').classList.add('btn-outline-success');
+    document.getElementById('filterUnhealthy').classList.remove('active', 'btn-danger');
+    document.getElementById('filterUnhealthy').classList.add('btn-outline-danger');
+    
+    if (filter === 'all') {
+      document.getElementById('filterAll').classList.remove('btn-outline-primary');
+      document.getElementById('filterAll').classList.add('active', 'btn-primary');
+      apiRows.forEach(row => row.style.display = '');
+    } else if (filter === 'healthy') {
+      document.getElementById('filterHealthy').classList.remove('btn-outline-success');
+      document.getElementById('filterHealthy').classList.add('active', 'btn-success');
+      apiRows.forEach(function(row) {
+        if (row.getAttribute('data-status') === 'healthy') {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    } else if (filter === 'unhealthy') {
+      document.getElementById('filterUnhealthy').classList.remove('btn-outline-danger');
+      document.getElementById('filterUnhealthy').classList.add('active', 'btn-danger');
+      apiRows.forEach(function(row) {
+        if (row.getAttribute('data-status') === 'unhealthy') {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    }
+  }
+  
+  // 初始化API概览图表
+  function initApiOverviewCharts() {
+    // 响应时间概览图表
+    if (window.charts && window.charts['apiResponseTimeOverview']) {
+      const chart = window.charts['apiResponseTimeOverview'];
+      const apiCount = Math.min(5, <%= apiList.length %>);
+      const labels = [];
+      
+      // 生成过去7天的日期标签
+      const now = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date(now);
+        date.setDate(date.getDate() - i);
+        labels.push(date.toLocaleDateString());
+      }
+      
+      // 生成数据集
+      const datasets = [];
+      const apiNames = Array.from(document.querySelectorAll('[data-api-name]'))
+        .map(el => el.getAttribute('data-api-name'))
+        .slice(0, 5); // 最多显示5个API
+      
+      const colors = [
+        'rgba(78, 115, 223, 0.6)',
+        'rgba(28, 200, 138, 0.6)',
+        'rgba(246, 194, 62, 0.6)',
+        'rgba(54, 185, 204, 0.6)',
+        'rgba(231, 74, 59, 0.6)'
+      ];
+      
+      apiNames.forEach((api, index) => {
+        datasets.push({
+          label: api,
+          data: Array.from({length: 7}, () => Math.floor(Math.random() * 500) + 50),
+          backgroundColor: colors[index % colors.length],
+          borderColor: colors[index % colors.length].replace('0.6', '1'),
+          borderWidth: 2,
+          pointRadius: 3,
+          pointBackgroundColor: colors[index % colors.length].replace('0.6', '1'),
+          pointBorderColor: '#fff',
+          fill: false,
+          tension: 0.1
+        });
+      });
+      
+      chart.data.labels = labels;
+      chart.data.datasets = datasets;
+      chart.update();
+    }
+    
+    // 成功率概览图表
+    if (window.charts && window.charts['apiSuccessRateOverview']) {
+      const chart = window.charts['apiSuccessRateOverview'];
+      
+      // 随机生成成功率数据
+      const data = [];
+      const labels = [];
+      const backgroundColor = [];
+      const borderColor = [];
+      
+      // 获取API名称
+      const apiNames = Array.from(document.querySelectorAll('[data-api-name]'))
+        .map(el => el.getAttribute('data-api-name'))
+        .slice(0, 5); // 最多显示5个API
+      
+      apiNames.forEach((api, index) => {
+        const successRate = Math.random() * 5 + 95; // 95-100%
+        data.push(successRate);
+        labels.push(api);
+        
+        // 根据成功率设置颜色
+        let color;
+        if (successRate >= 99) {
+          color = 'rgba(28, 200, 138, 0.6)'; // 绿色
+        } else if (successRate >= 95) {
+          color = 'rgba(246, 194, 62, 0.6)'; // 黄色
+        } else {
+          color = 'rgba(231, 74, 59, 0.6)'; // 红色
+        }
+        
+        backgroundColor.push(color);
+        borderColor.push(color.replace('0.6', '1'));
+      });
+      
+      // 更新图表数据
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = data;
+      chart.data.datasets[0].backgroundColor = backgroundColor;
+      chart.data.datasets[0].borderColor = borderColor;
+      chart.update();
+    }
+  }
+  
+  // 初始化添加API表单
+  function initAddApiForm() {
+    document.getElementById('saveApiBtn').addEventListener('click', function() {
+      const form = document.getElementById('addApiForm');
+      
+      // 简单验证
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      
+      // 收集表单数据
+      const apiData = {
+        name: document.getElementById('apiName').value,
+        url: document.getElementById('apiUrl').value,
+        method: document.getElementById('apiMethod').value,
+        interval: parseInt(document.getElementById('apiInterval').value),
+        timeout: parseInt(document.getElementById('apiTimeout').value),
+        headers: document.getElementById('apiHeaders').value,
+        body: document.getElementById('apiBody').value,
+        successCodes: document.getElementById('successCodes').value.split(',').map(code => parseInt(code.trim())),
+        alertThreshold: parseInt(document.getElementById('alertThreshold').value),
+        enableAlerts: document.getElementById('enableAlerts').checked,
+        enableSsl: document.getElementById('enableSsl').checked
+      };
+      
+      console.log('添加API:', apiData);
+      
+      // 这里应该发送AJAX请求添加API
+      // 暂时模拟成功响应
+      alert('API已添加: ' + apiData.name);
+      
+      // 关闭模态框
+      const modal = bootstrap.Modal.getInstance(document.getElementById('addApiModal'));
+      modal.hide();
+      
+      // 刷新页面
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    });
+  }
+  
+  // 应用API筛选
+  function applyApiFilters() {
+    const statusFilter = document.getElementById('filterStatus').value;
+    const responseTimeFilter = document.getElementById('filterResponseTime').value;
+    const successRateFilter = document.getElementById('filterSuccessRate').value;
+    
+    console.log('应用筛选:', {
+      status: statusFilter,
+      responseTime: responseTimeFilter,
+      successRate: successRateFilter
+    });
+    
+    // 这里应该根据筛选条件过滤表格数据
+    // 现在只是简单地记录到控制台
+    alert('筛选功能即将上线');
+  }
+  
+  // 编辑API
+  function editApi(apiName) {
+    // 这里应该通过AJAX获取API详情
+    // 以下是模拟数据
+    const apiData = {
+      id: '12345',
+      name: apiName,
+      url: 'https://api.example.com/' + apiName.toLowerCase(),
+      method: 'GET',
+      interval: '300',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer TOKEN'
+      },
+      timeout: 5000,
+      expectedStatusCode: 200
+    };
+    
+    showApiModal(apiData);
+  }
+  
+  // 保存API
+  function saveApi() {
+    // 获取表单数据
+    const apiId = document.getElementById('apiId').value;
+    const apiName = document.getElementById('apiName').value;
+    const apiUrl = document.getElementById('apiUrl').value;
+    const requestMethod = document.getElementById('requestMethod').value;
+    const checkInterval = document.getElementById('checkInterval').value;
+    const requestHeaders = document.getElementById('requestHeaders').value;
+    const requestBody = document.getElementById('requestBody').value;
+    const timeout = document.getElementById('timeout').value;
+    const expectedStatusCode = document.getElementById('expectedStatusCode').value;
+    const expectedResponse = document.getElementById('expectedResponse').value;
+    const alertOnFailure = document.getElementById('alertOnFailure').checked;
+    
+    // 表单验证
+    if (!apiName || !apiUrl) {
+      alert('API名称和URL是必填项！');
+      return;
+    }
+    
+    // 构造请求数据
+    const apiData = {
+      id: apiId,
+      name: apiName,
+      url: apiUrl,
+      method: requestMethod,
+      interval: parseInt(checkInterval, 10),
+      headers: requestHeaders ? JSON.parse(requestHeaders) : {},
+      body: requestBody,
+      timeout: parseInt(timeout, 10),
+      expectedStatusCode: parseInt(expectedStatusCode, 10),
+      expectedResponse: expectedResponse,
+      alertOnFailure: alertOnFailure
+    };
+    
+    // 这里应该通过AJAX保存API数据
+    console.log('保存API数据', apiData);
+    
+    // 模拟保存成功
+    alert('API保存成功！');
+    
+    // 关闭模态框
+    const modal = bootstrap.Modal.getInstance(document.getElementById('apiModal'));
+    modal.hide();
+    
+    // 刷新页面
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+  
+  // 显示删除确认对话框
+  function showDeleteConfirmation(apiName) {
+    document.getElementById('deleteApiName').textContent = apiName;
+    const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+    modal.show();
+    
+    // 存储要删除的API名称
+    document.getElementById('confirmDeleteBtn').setAttribute('data-api-name', apiName);
+  }
+  
+  // 删除API
+  function deleteApi() {
+    const apiName = document.getElementById('confirmDeleteBtn').getAttribute('data-api-name');
+    
+    // 这里应该通过AJAX删除API
+    console.log('删除API:', apiName);
+    
+    // 模拟删除成功
+    alert('API删除成功！');
+    
+    // 关闭模态框
+    const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'));
+    modal.hide();
+    
+    // 刷新页面
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  }
+</script> 
