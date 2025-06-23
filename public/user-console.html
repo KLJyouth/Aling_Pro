@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户控制台 - AlingAi Pro</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <script src="assets/js/chart.min.js"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏导航 -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="user-profile text-center mb-4">
+                        <img src="assets/images/user-avatar.png" alt="用户头像" class="avatar rounded-circle">
+                        <h5 class="mt-2 text-white">用户名</h5>
+                        <span class="badge bg-success">普通会员</span>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="user-console.html">
+                                <i class="bi bi-speedometer2 me-2"></i> 控制台
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-usage.html">
+                                <i class="bi bi-graph-up me-2"></i> API使用统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="wallet.html">
+                                <i class="bi bi-wallet2 me-2"></i> 额度充值
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-keys.html">
+                                <i class="bi bi-key me-2"></i> API密钥管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-integration.html">
+                                <i class="bi bi-code-slash me-2"></i> API对接生成
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sdk-download.html">
+                                <i class="bi bi-download me-2"></i> SDK下载
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="bi bi-person-circle me-2"></i> 个人设置
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i> 技术支持
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>API社区</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-marketplace.html">
+                                <i class="bi bi-shop me-2"></i> API市场
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-publish.html">
+                                <i class="bi bi-cloud-upload me-2"></i> 发布API
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">用户控制台</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="refreshStats">刷新数据</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exportModal">导出报告</button>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary">
+                            <i class="bi bi-plus-circle"></i> 创建应用
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 快速状态卡片 -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">可用额度</h5>
+                                <h2 class="card-text text-primary">¥ <span id="availableBalance">2,500</span></h2>
+                                <p class="text-muted">总额度: ¥ <span id="totalBalance">3,000</span></p>
+                                <button class="btn btn-sm btn-outline-primary">充值</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">API调用次数</h5>
+                                <h2 class="card-text text-success"><span id="apiCalls">1,253</span></h2>
+                                <p class="text-muted">过去30天</p>
+                                <div class="progress" style="height: 5px;">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 45%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">应用数量</h5>
+                                <h2 class="card-text text-info"><span id="appCount">4</span></h2>
+                                <p class="text-muted">已创建应用</p>
+                                <a href="#" class="btn btn-sm btn-outline-info">管理应用</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">API密钥</h5>
+                                <h2 class="card-text text-warning"><span id="apiKeyCount">3</span></h2>
+                                <p class="text-muted">活跃密钥</p>
+                                <a href="api-keys.html" class="btn btn-sm btn-outline-warning">管理密钥</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API使用图表 -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">API调用统计</h5>
+                                <div class="btn-group btn-group-sm">
+                                    <button type="button" class="btn btn-outline-secondary active" data-period="day">今日</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-period="week">本周</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-period="month">本月</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="apiUsageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">API调用分布</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="apiDistributionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速访问和最近活动 -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">快速访问</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row text-center">
+                                    <div class="col-4 mb-3">
+                                        <a href="api-keys.html" class="quick-access-item">
+                                            <i class="bi bi-key fs-2"></i>
+                                            <p>API密钥</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 mb-3">
+                                        <a href="wallet.html" class="quick-access-item">
+                                            <i class="bi bi-wallet2 fs-2"></i>
+                                            <p>额度充值</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 mb-3">
+                                        <a href="sdk-download.html" class="quick-access-item">
+                                            <i class="bi bi-download fs-2"></i>
+                                            <p>SDK下载</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 mb-3">
+                                        <a href="api-docs.html" class="quick-access-item">
+                                            <i class="bi bi-file-earmark-text fs-2"></i>
+                                            <p>API文档</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 mb-3">
+                                        <a href="support-tickets.html" class="quick-access-item">
+                                            <i class="bi bi-headset fs-2"></i>
+                                            <p>技术支持</p>
+                                        </a>
+                                    </div>
+                                    <div class="col-4 mb-3">
+                                        <a href="api-integration.html" class="quick-access-item">
+                                            <i class="bi bi-code-slash fs-2"></i>
+                                            <p>API对接</p>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">最近活动</h5>
+                                <a href="#" class="text-decoration-none">查看全部</a>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">创建了新的API密钥</h6>
+                                        <small>3分钟前</small>
+                                    </div>
+                                    <p class="mb-1">为应用"内容生成器"创建了新的API密钥</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">额度充值</h6>
+                                        <small>2小时前</small>
+                                    </div>
+                                    <p class="mb-1">成功充值¥1,000额度</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">更新个人信息</h6>
+                                        <small>昨天</small>
+                                    </div>
+                                    <p class="mb-1">更新了联系电话和企业信息</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">下载了Python SDK</h6>
+                                        <small>2天前</small>
+                                    </div>
+                                    <p class="mb-1">下载了最新版本的Python SDK包</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 推荐API和公告 -->
+                <div class="row mb-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">推荐API</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <div class="api-card">
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/images/api-icon-1.png" alt="API图标" class="api-icon me-3">
+                                                <div>
+                                                    <h6 class="mb-1">智能文本分析API</h6>
+                                                    <div class="small text-muted">情感分析 | 实体识别 | 文本分类</div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <span class="badge bg-success">热门</span>
+                                                <span class="badge bg-secondary">99.9%可用性</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <a href="#" class="btn btn-sm btn-outline-primary">查看详情</a>
+                                                <a href="#" class="btn btn-sm btn-outline-secondary">集成</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <div class="api-card">
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/images/api-icon-2.png" alt="API图标" class="api-icon me-3">
+                                                <div>
+                                                    <h6 class="mb-1">高级图像识别API</h6>
+                                                    <div class="small text-muted">对象检测 | 场景分类 | OCR</div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2">
+                                                <span class="badge bg-info">新上线</span>
+                                                <span class="badge bg-secondary">99.7%可用性</span>
+                                            </div>
+                                            <div class="mt-2">
+                                                <a href="#" class="btn btn-sm btn-outline-primary">查看详情</a>
+                                                <a href="#" class="btn btn-sm btn-outline-secondary">集成</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="mb-0">系统公告</h5>
+                            </div>
+                            <div class="list-group list-group-flush">
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">系统升级通知</h6>
+                                        <small>今天</small>
+                                    </div>
+                                    <p class="mb-1">系统将于本周六凌晨2点-4点进行例行维护升级</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">新功能发布</h6>
+                                        <small>3天前</small>
+                                    </div>
+                                    <p class="mb-1">多模态API功能现已上线，欢迎体验</p>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">价格调整</h6>
+                                        <small>1周前</small>
+                                    </div>
+                                    <p class="mb-1">大规模语言模型API价格下调30%，即日起生效</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 导出报告模态框 -->
+    <div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exportModalLabel">导出API使用报告</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="reportType" class="form-label">报告类型</label>
+                            <select class="form-select" id="reportType">
+                                <option value="usage">API使用统计</option>
+                                <option value="cost">费用统计</option>
+                                <option value="performance">性能统计</option>
+                                <option value="comprehensive">综合报告</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="timeRange" class="form-label">时间范围</label>
+                            <select class="form-select" id="timeRange">
+                                <option value="today">今天</option>
+                                <option value="yesterday">昨天</option>
+                                <option value="last7days">过去7天</option>
+                                <option value="last30days">过去30天</option>
+                                <option value="thisMonth">本月</option>
+                                <option value="lastMonth">上月</option>
+                                <option value="custom">自定义...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fileFormat" class="form-label">文件格式</label>
+                            <select class="form-select" id="fileFormat">
+                                <option value="pdf">PDF</option>
+                                <option value="excel">Excel</option>
+                                <option value="csv">CSV</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">导出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // API使用图表
+        const apiUsageCtx = document.getElementById('apiUsageChart').getContext('2d');
+        const apiUsageChart = new Chart(apiUsageCtx, {
+            type: 'line',
+            data: {
+                labels: ['00:00', '03:00', '06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+                datasets: [{
+                    label: 'API调用次数',
+                    data: [65, 59, 80, 81, 56, 55, 72, 40],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // API分布图表
+        const apiDistributionCtx = document.getElementById('apiDistributionChart').getContext('2d');
+        const apiDistributionChart = new Chart(apiDistributionCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['文本生成', '图像识别', '语音转文本', '情感分析', '其他'],
+                datasets: [{
+                    data: [45, 25, 15, 10, 5],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.8)',
+                        'rgba(255, 99, 132, 0.8)',
+                        'rgba(75, 192, 192, 0.8)',
+                        'rgba(255, 206, 86, 0.8)',
+                        'rgba(153, 102, 255, 0.8)'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // 切换API使用统计时间段
+        document.querySelectorAll('[data-period]').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('[data-period]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // 这里可以根据选择的时间段更新图表数据
+                const period = this.getAttribute('data-period');
+                updateChartData(period);
+            });
+        });
+
+        // 模拟更新图表数据
+        function updateChartData(period) {
+            let newData;
+            
+            switch(period) {
+                case 'day':
+                    newData = [65, 59, 80, 81, 56, 55, 72, 40];
+                    break;
+                case 'week':
+                    newData = [120, 110, 90, 100, 85, 95, 105];
+                    break;
+                case 'month':
+                    newData = [320, 350, 310, 330, 390, 360, 380, 340, 330, 320];
+                    break;
+                default:
+                    newData = [65, 59, 80, 81, 56, 55, 72, 40];
+            }
+            
+            apiUsageChart.data.datasets[0].data = newData;
+            apiUsageChart.update();
+        }
+
+        // 刷新统计数据按钮
+        document.getElementById('refreshStats').addEventListener('click', function() {
+            // 模拟刷新数据
+            document.getElementById('availableBalance').textContent = (Math.random() * 3000).toFixed(0);
+            document.getElementById('apiCalls').textContent = (Math.random() * 2000).toFixed(0);
+            
+            // 更新图表
+            updateChartData('day');
+        });
+    </script>
+</body>
+</html> 

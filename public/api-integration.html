@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API对接生成 - AlingAi Pro</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css">
+    <style>
+        .code-preview {
+            background: #272822;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .endpoint-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+        .endpoint-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        .endpoint-card.active {
+            border-left-color: var(--bs-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏导航 -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="user-profile text-center mb-4">
+                        <img src="assets/images/user-avatar.png" alt="用户头像" class="avatar rounded-circle">
+                        <h5 class="mt-2 text-white">用户名</h5>
+                        <span class="badge bg-success">普通会员</span>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="user-console.html">
+                                <i class="bi bi-speedometer2 me-2"></i> 控制台
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-usage.html">
+                                <i class="bi bi-graph-up me-2"></i> API使用统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="wallet.html">
+                                <i class="bi bi-wallet2 me-2"></i> 额度充值
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-keys.html">
+                                <i class="bi bi-key me-2"></i> API密钥管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="api-integration.html">
+                                <i class="bi bi-code-slash me-2"></i> API对接生成
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sdk-download.html">
+                                <i class="bi bi-download me-2"></i> SDK下载
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="bi bi-person-circle me-2"></i> 个人设置
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i> 技术支持
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>API社区</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-marketplace.html">
+                                <i class="bi bi-shop me-2"></i> API市场
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-publish.html">
+                                <i class="bi bi-cloud-upload me-2"></i> 发布API
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">API对接生成</h1>
+                </div>
+
+                <!-- 功能介绍 -->
+                <div class="alert alert-info mb-4">
+                    <div class="d-flex">
+                        <div class="me-3">
+                            <i class="bi bi-info-circle-fill fs-3"></i>
+                        </div>
+                        <div>
+                            <h5 class="alert-heading">快速集成AlingAi API</h5>
+                            <p class="mb-0">选择您需要的API功能和编程语言，系统将自动为您生成集成代码，直接复制到您的项目中即可使用。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <!-- 选项配置区域 -->
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0">配置选项</h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="apiConfigForm">
+                                    <!-- API功能选择 -->
+                                    <div class="mb-3">
+                                        <label class="form-label">选择API功能</label>
+                                        <select class="form-select" id="apiFeature">
+                                            <option value="text">文本生成</option>
+                                            <option value="image">图像生成</option>
+                                            <option value="analysis">数据分析</option>
+                                            <option value="chat">聊天接口</option>
+                                            <option value="embedding">文本向量</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- 编程语言选择 -->
+                                    <div class="mb-3">
+                                        <label class="form-label">编程语言</label>
+                                        <select class="form-select" id="programmingLanguage">
+                                            <option value="python">Python</option>
+                                            <option value="javascript">JavaScript</option>
+                                            <option value="php">PHP</option>
+                                            <option value="java">Java</option>
+                                            <option value="csharp">C#</option>
+                                            <option value="go">Go</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- 集成方式 -->
+                                    <div class="mb-3">
+                                        <label class="form-label">集成方式</label>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="radio" name="integrationType" id="sdkIntegration" checked>
+                                            <label class="form-check-label" for="sdkIntegration">
+                                                使用SDK (推荐)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="integrationType" id="directApiIntegration">
+                                            <label class="form-check-label" for="directApiIntegration">
+                                                直接调用API
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- 高级选项 -->
+                                    <div class="mb-3">
+                                        <a class="d-flex justify-content-between text-decoration-none" data-bs-toggle="collapse" href="#advancedOptions" role="button" aria-expanded="false">
+                                            <span>高级选项</span>
+                                            <i class="bi bi-chevron-down"></i>
+                                        </a>
+                                        <div class="collapse mt-2" id="advancedOptions">
+                                            <div class="card card-body bg-light">
+                                                <div class="mb-2">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="includeErrorHandling" checked>
+                                                        <label class="form-check-label" for="includeErrorHandling">
+                                                            包含错误处理
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="includeAuthentication" checked>
+                                                        <label class="form-check-label" for="includeAuthentication">
+                                                            包含身份验证
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="includeRateLimiting">
+                                                        <label class="form-check-label" for="includeRateLimiting">
+                                                            包含速率限制处理
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-0">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="includeComments" checked>
+                                                        <label class="form-check-label" for="includeComments">
+                                                            包含详细注释
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="button" class="btn btn-primary w-100" id="generateCodeBtn">
+                                        <i class="bi bi-code-slash me-2"></i>生成集成代码
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- API端点列表 -->
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0">可用API端点</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="endpointsList">
+                                    <div class="endpoint-card list-group-item list-group-item-action active">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-1">文本生成</h6>
+                                            <span class="badge bg-primary">POST</span>
+                                        </div>
+                                        <p class="mb-1 text-muted small">/v1/completions</p>
+                                    </div>
+                                    <div class="endpoint-card list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-1">聊天对话</h6>
+                                            <span class="badge bg-primary">POST</span>
+                                        </div>
+                                        <p class="mb-1 text-muted small">/v1/chat/completions</p>
+                                    </div>
+                                    <div class="endpoint-card list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-1">图像生成</h6>
+                                            <span class="badge bg-primary">POST</span>
+                                        </div>
+                                        <p class="mb-1 text-muted small">/v1/images/generations</p>
+                                    </div>
+                                    <div class="endpoint-card list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-1">文本分析</h6>
+                                            <span class="badge bg-primary">POST</span>
+                                        </div>
+                                        <p class="mb-1 text-muted small">/v1/analysis/text</p>
+                                    </div>
+                                    <div class="endpoint-card list-group-item list-group-item-action">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="mb-1">文本向量</h6>
+                                            <span class="badge bg-primary">POST</span>
+                                        </div>
+                                        <p class="mb-1 text-muted small">/v1/embeddings</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 代码预览区域 -->
+                    <div class="col-md-8">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">集成代码</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-2" id="copyCodeBtn">
+                                        <i class="bi bi-clipboard me-1"></i>复制代码
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" id="downloadCodeBtn">
+                                        <i class="bi bi-download me-1"></i>下载代码
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="code-preview">
+                                    <pre><code class="language-python" id="codePreview">
+# AlingAI API集成示例代码 - Python
+# 文本生成API
+
+import requests
+import os
+
+# 设置API密钥
+api_key = "YOUR_API_KEY"
+
+# API端点
+api_url = "https://api.alingai.com/v1/completions"
+
+# 请求头
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+# 请求参数
+payload = {
+    "model": "alingai-text-001",
+    "prompt": "使用AlingAI生成一段关于人工智能的文字",
+    "max_tokens": 100,
+    "temperature": 0.7
+}
+
+# 发送请求
+try:
+    response = requests.post(api_url, headers=headers, json=payload)
+    response.raise_for_status()  # 抛出HTTP错误
+    
+    # 解析响应
+    result = response.json()
+    generated_text = result["choices"][0]["text"]
+    
+    # 打印生成的文本
+    print("生成的文本:")
+    print(generated_text)
+    
+except requests.exceptions.HTTPError as http_err:
+    print(f"HTTP错误: {http_err}")
+except Exception as err:
+    print(f"发生错误: {err}")
+</code></pre>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <span class="badge bg-light text-dark border">Python</span>
+                                        <span class="badge bg-light text-dark border">文本生成</span>
+                                        <span class="badge bg-light text-dark border">v1</span>
+                                    </div>
+                                    <small class="text-muted">上次更新: 2023-07-15</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 参数说明 -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0">参数说明</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>参数名</th>
+                                                <th>类型</th>
+                                                <th>必填</th>
+                                                <th>描述</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>model</code></td>
+                                                <td>string</td>
+                                                <td>是</td>
+                                                <td>要使用的模型ID</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>prompt</code></td>
+                                                <td>string</td>
+                                                <td>是</td>
+                                                <td>用于生成文本的提示</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>max_tokens</code></td>
+                                                <td>integer</td>
+                                                <td>否</td>
+                                                <td>生成文本的最大长度</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>temperature</code></td>
+                                                <td>number</td>
+                                                <td>否</td>
+                                                <td>采样温度，控制输出的随机性</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>top_p</code></td>
+                                                <td>number</td>
+                                                <td>否</td>
+                                                <td>核采样，控制输出的多样性</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 示例响应 -->
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-white py-3">
+                                <h5 class="mb-0">示例响应</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="code-preview">
+                                    <pre><code class="language-json">{
+  "id": "cmpl-6PtSbxFcOW7rqN5mR5JV",
+  "object": "text_completion",
+  "created": 1684001010,
+  "model": "alingai-text-001",
+  "choices": [
+    {
+      "text": "人工智能是计算机科学的一个分支，它致力于研究和开发能够模拟人类智能的机器。这些系统能够学习、推理、适应、感知和与环境交互。随着技术的发展，人工智能正在日益融入我们的日常生活，从智能手机助手到自动驾驶汽车，从医疗诊断到金融预测。",
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 15,
+    "completion_tokens": 100,
+    "total_tokens": 115
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-json.min.js"></script>
+    <script>
+        // 复制代码按钮
+        document.getElementById('copyCodeBtn').addEventListener('click', function() {
+            const codeElement = document.getElementById('codePreview');
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            // 显示复制成功提示
+            this.innerHTML = '<i class="bi bi-check me-1"></i>已复制';
+            setTimeout(() => {
+                this.innerHTML = '<i class="bi bi-clipboard me-1"></i>复制代码';
+            }, 2000);
+        });
+        
+        // 端点选择
+        document.querySelectorAll('.endpoint-card').forEach(card => {
+            card.addEventListener('click', function() {
+                // 移除其他卡片的活跃状态
+                document.querySelectorAll('.endpoint-card').forEach(c => {
+                    c.classList.remove('active');
+                });
+                
+                // 添加当前卡片的活跃状态
+                this.classList.add('active');
+                
+                // 更新API功能下拉选择框
+                const endpointName = this.querySelector('h6').textContent;
+                const apiFeatureSelect = document.getElementById('apiFeature');
+                
+                switch(endpointName) {
+                    case '文本生成':
+                        apiFeatureSelect.value = 'text';
+                        break;
+                    case '聊天对话':
+                        apiFeatureSelect.value = 'chat';
+                        break;
+                    case '图像生成':
+                        apiFeatureSelect.value = 'image';
+                        break;
+                    case '文本分析':
+                        apiFeatureSelect.value = 'analysis';
+                        break;
+                    case '文本向量':
+                        apiFeatureSelect.value = 'embedding';
+                        break;
+                }
+            });
+        });
+        
+        // 生成代码按钮
+        document.getElementById('generateCodeBtn').addEventListener('click', function() {
+            const apiFeature = document.getElementById('apiFeature').value;
+            const language = document.getElementById('programmingLanguage').value;
+            const codePreview = document.getElementById('codePreview');
+            
+            // 移除所有语言类
+            codePreview.className = '';
+            // 添加新的语言类
+            codePreview.classList.add(`language-${language}`);
+            
+            // 更新代码示例 (简化版本，实际应用中可能需要AJAX请求获取代码)
+            let code = '';
+            
+            if (language === 'python') {
+                if (apiFeature === 'text') {
+                    code = `
+# AlingAI API集成示例代码 - Python
+# 文本生成API
+
+import requests
+import os
+
+# 设置API密钥
+api_key = "YOUR_API_KEY"
+
+# API端点
+api_url = "https://api.alingai.com/v1/completions"
+
+# 请求头
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+# 请求参数
+payload = {
+    "model": "alingai-text-001",
+    "prompt": "使用AlingAI生成一段关于人工智能的文字",
+    "max_tokens": 100,
+    "temperature": 0.7
+}
+
+# 发送请求
+try:
+    response = requests.post(api_url, headers=headers, json=payload)
+    response.raise_for_status()  # 抛出HTTP错误
+    
+    # 解析响应
+    result = response.json()
+    generated_text = result["choices"][0]["text"]
+    
+    # 打印生成的文本
+    print("生成的文本:")
+    print(generated_text)
+    
+except requests.exceptions.HTTPError as http_err:
+    print(f"HTTP错误: {http_err}")
+except Exception as err:
+    print(f"发生错误: {err}")
+`;
+                } else if (apiFeature === 'chat') {
+                    code = `
+# AlingAI API集成示例代码 - Python
+# 聊天对话API
+
+import requests
+import os
+
+# 设置API密钥
+api_key = "YOUR_API_KEY"
+
+# API端点
+api_url = "https://api.alingai.com/v1/chat/completions"
+
+# 请求头
+headers = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
+
+# 请求参数
+payload = {
+    "model": "alingai-chat-001",
+    "messages": [
+        {"role": "system", "content": "你是一个智能助手"},
+        {"role": "user", "content": "介绍一下AlingAI的特点"}
+    ],
+    "max_tokens": 150,
+    "temperature": 0.7
+}
+
+# 发送请求
+try:
+    response = requests.post(api_url, headers=headers, json=payload)
+    response.raise_for_status()
+    
+    # 解析响应
+    result = response.json()
+    assistant_message = result["choices"][0]["message"]["content"]
+    
+    # 打印助手回复
+    print("助手回复:")
+    print(assistant_message)
+    
+except requests.exceptions.HTTPError as http_err:
+    print(f"HTTP错误: {http_err}")
+except Exception as err:
+    print(f"发生错误: {err}")
+`;
+                }
+            } else if (language === 'javascript') {
+                if (apiFeature === 'text') {
+                    code = `
+// AlingAI API集成示例代码 - JavaScript
+// 文本生成API
+
+// 设置API密钥
+const apiKey = "YOUR_API_KEY";
+
+// API端点
+const apiUrl = "https://api.alingai.com/v1/completions";
+
+// 请求参数
+const payload = {
+  model: "alingai-text-001",
+  prompt: "使用AlingAI生成一段关于人工智能的文字",
+  max_tokens: 100,
+  temperature: 0.7
+};
+
+// 发送请求
+fetch(apiUrl, {
+  method: 'POST',
+  headers: {
+    'Authorization': \`Bearer \${apiKey}\`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
+.then(response => {
+  if (!response.ok) {
+    throw new Error(\`HTTP错误: \${response.status}\`);
+  }
+  return response.json();
+})
+.then(data => {
+  const generatedText = data.choices[0].text;
+  console.log("生成的文本:");
+  console.log(generatedText);
+})
+.catch(error => {
+  console.error("发生错误:", error);
+});
+`;
+                }
+            }
+            
+            codePreview.textContent = code.trim();
+            // 重新高亮代码
+            Prism.highlightElement(codePreview);
+        });
+        
+        // 下载代码按钮
+        document.getElementById('downloadCodeBtn').addEventListener('click', function() {
+            const language = document.getElementById('programmingLanguage').value;
+            const apiFeature = document.getElementById('apiFeature').value;
+            const code = document.getElementById('codePreview').textContent;
+            
+            // 确定文件扩展名
+            let extension = '';
+            switch(language) {
+                case 'python': extension = 'py'; break;
+                case 'javascript': extension = 'js'; break;
+                case 'php': extension = 'php'; break;
+                case 'java': extension = 'java'; break;
+                case 'csharp': extension = 'cs'; break;
+                case 'go': extension = 'go'; break;
+                default: extension = 'txt';
+            }
+            
+            // 创建下载链接
+            const blob = new Blob([code], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `alingai_${apiFeature}_example.${extension}`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        });
+    </script>
+</body>
+</html> 

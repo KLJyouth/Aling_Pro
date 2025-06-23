@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API密钥管理 - AlingAi Pro</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/custom.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- 侧边栏导航 -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="user-profile text-center mb-4">
+                        <img src="assets/images/user-avatar.png" alt="用户头像" class="avatar rounded-circle">
+                        <h5 class="mt-2 text-white">用户名</h5>
+                        <span class="badge bg-success">普通会员</span>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="user-console.html">
+                                <i class="bi bi-speedometer2 me-2"></i> 控制台
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-usage.html">
+                                <i class="bi bi-graph-up me-2"></i> API使用统计
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="wallet.html">
+                                <i class="bi bi-wallet2 me-2"></i> 额度充值
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="api-keys.html">
+                                <i class="bi bi-key me-2"></i> API密钥管理
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-integration.html">
+                                <i class="bi bi-code-slash me-2"></i> API对接生成
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="sdk-download.html">
+                                <i class="bi bi-download me-2"></i> SDK下载
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="profile.html">
+                                <i class="bi bi-person-circle me-2"></i> 个人设置
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="support-tickets.html">
+                                <i class="bi bi-ticket-detailed me-2"></i> 技术支持
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>API社区</span>
+                    </h6>
+                    <ul class="nav flex-column mb-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-marketplace.html">
+                                <i class="bi bi-shop me-2"></i> API市场
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="api-publish.html">
+                                <i class="bi bi-cloud-upload me-2"></i> 发布API
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- 主内容区 -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">API密钥管理</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createKeyModal">
+                            <i class="bi bi-plus-circle me-1"></i> 创建新密钥
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 提示信息 -->
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <strong>安全提示：</strong> API密钥是敏感信息，请妥善保管。创建后的密钥只显示一次，请立即保存。
+                </div>
+
+                <!-- API密钥列表 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">API密钥列表</h5>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>密钥名称</th>
+                                    <th>密钥前缀</th>
+                                    <th>创建时间</th>
+                                    <th>最后使用</th>
+                                    <th>状态</th>
+                                    <th>权限</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>生产环境密钥</td>
+                                    <td><code>sk_prod_2345...8910</code></td>
+                                    <td>2023-07-15</td>
+                                    <td>2023-07-21</td>
+                                    <td><span class="badge bg-success">活跃</span></td>
+                                    <td>所有API</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editKeyModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteKeyModal">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>测试环境密钥</td>
+                                    <td><code>sk_test_1234...5678</code></td>
+                                    <td>2023-06-20</td>
+                                    <td>2023-07-20</td>
+                                    <td><span class="badge bg-success">活跃</span></td>
+                                    <td>所有API</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editKeyModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteKeyModal">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>前端应用密钥</td>
+                                    <td><code>sk_web_6789...0123</code></td>
+                                    <td>2023-05-10</td>
+                                    <td>2023-07-19</td>
+                                    <td><span class="badge bg-success">活跃</span></td>
+                                    <td>只读</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editKeyModal">
+                                                <i class="bi bi-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteKeyModal">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>旧测试密钥</td>
+                                    <td><code>sk_old_9876...5432</code></td>
+                                    <td>2023-04-05</td>
+                                    <td>2023-06-15</td>
+                                    <td><span class="badge bg-secondary">已停用</span></td>
+                                    <td>所有API</td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-success">
+                                                <i class="bi bi-arrow-clockwise"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteKeyModal">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 使用指南 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">API密钥使用指南</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6>1. 在HTTP请求中使用API密钥</h6>
+                        <div class="bg-light p-3 mb-3 rounded">
+                            <code>
+                                curl -X POST https://api.alingai.com/v1/completions \<br>
+                                -H "Content-Type: application/json" \<br>
+                                -H "Authorization: Bearer YOUR_API_KEY" \<br>
+                                -d '{"prompt": "写一首关于AI的诗", "max_tokens": 100}'
+                            </code>
+                        </div>
+
+                        <h6>2. 在SDK中使用API密钥</h6>
+                        <div class="bg-light p-3 mb-3 rounded">
+                            <code>
+                                # Python 示例<br>
+                                from alingai import AlingAI<br><br>
+                                
+                                client = AlingAI(api_key="YOUR_API_KEY")<br>
+                                response = client.completions.create(<br>
+                                &nbsp;&nbsp;prompt="写一首关于AI的诗",<br>
+                                &nbsp;&nbsp;max_tokens=100<br>
+                                )
+                            </code>
+                        </div>
+
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            了解更多API使用方法，请参阅<a href="api-docs.html" class="alert-link">API文档</a>和<a href="sdk-download.html" class="alert-link">SDK文档</a>。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 密钥安全最佳实践 -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">密钥安全最佳实践</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-shield-lock text-primary fs-2"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>保护您的密钥</h6>
+                                        <p class="text-muted">永远不要在客户端代码中嵌入API密钥，不要将密钥存储在公共仓库中。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-arrow-repeat text-primary fs-2"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>定期轮换密钥</h6>
+                                        <p class="text-muted">建议每90天轮换一次API密钥，以提高安全性。</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex">
+                                    <div class="flex-shrink-0">
+                                        <i class="bi bi-speedometer2 text-primary fs-2"></i>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6>设置使用限制</h6>
+                                        <p class="text-muted">为每个密钥设置使用限制，防止超额使用和潜在滥用。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 创建新密钥模态框 -->
+    <div class="modal fade" id="createKeyModal" tabindex="-1" aria-labelledby="createKeyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createKeyModalLabel">创建新API密钥</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="keyName" class="form-label">密钥名称</label>
+                            <input type="text" class="form-control" id="keyName" placeholder="例如：生产环境密钥">
+                            <div class="form-text">为密钥起一个容易识别的名称。</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keyType" class="form-label">密钥类型</label>
+                            <select class="form-select" id="keyType">
+                                <option value="production">生产环境</option>
+                                <option value="test">测试环境</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keyPermission" class="form-label">API权限</label>
+                            <select class="form-select" id="keyPermission">
+                                <option value="all">所有API</option>
+                                <option value="readonly">只读API</option>
+                                <option value="limited">有限API</option>
+                                <option value="custom">自定义权限</option>
+                            </select>
+                        </div>
+                        <div id="customPermissionsContainer" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label">选择API权限</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="textGenerationApi" checked>
+                                    <label class="form-check-label" for="textGenerationApi">
+                                        文本生成API
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="imageGenerationApi" checked>
+                                    <label class="form-check-label" for="imageGenerationApi">
+                                        图像生成API
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="speechApi" checked>
+                                    <label class="form-check-label" for="speechApi">
+                                        语音转换API
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="embeddingsApi">
+                                    <label class="form-check-label" for="embeddingsApi">
+                                        嵌入向量API
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="analysisApi">
+                                    <label class="form-check-label" for="analysisApi">
+                                        内容分析API
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="keyExpiration" class="form-label">过期时间</label>
+                            <select class="form-select" id="keyExpiration">
+                                <option value="never">永不过期</option>
+                                <option value="30days">30天</option>
+                                <option value="90days">90天</option>
+                                <option value="180days">180天</option>
+                                <option value="365days">365天</option>
+                                <option value="custom">自定义...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="customExpirationContainer" style="display: none;">
+                            <label for="customExpiration" class="form-label">自定义过期时间</label>
+                            <input type="date" class="form-control" id="customExpiration">
+                        </div>
+                        <div class="mb-3">
+                            <label for="usageLimit" class="form-label">使用限制</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="usageLimit" placeholder="输入最大调用次数">
+                                <span class="input-group-text">次/月</span>
+                            </div>
+                            <div class="form-text">留空表示无限制。</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmCreateKey">创建密钥</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑密钥模态框 -->
+    <div class="modal fade" id="editKeyModal" tabindex="-1" aria-labelledby="editKeyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editKeyModalLabel">编辑API密钥</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="editKeyName" class="form-label">密钥名称</label>
+                            <input type="text" class="form-control" id="editKeyName" value="生产环境密钥">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editKeyPermission" class="form-label">API权限</label>
+                            <select class="form-select" id="editKeyPermission">
+                                <option value="all" selected>所有API</option>
+                                <option value="readonly">只读API</option>
+                                <option value="limited">有限API</option>
+                                <option value="custom">自定义权限</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editKeyExpiration" class="form-label">过期时间</label>
+                            <select class="form-select" id="editKeyExpiration">
+                                <option value="never" selected>永不过期</option>
+                                <option value="30days">30天</option>
+                                <option value="90days">90天</option>
+                                <option value="180days">180天</option>
+                                <option value="365days">365天</option>
+                                <option value="custom">自定义...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editUsageLimit" class="form-label">使用限制</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="editUsageLimit" value="10000">
+                                <span class="input-group-text">次/月</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="keyStatusSwitch" checked>
+                                <label class="form-check-label" for="keyStatusSwitch">
+                                    密钥状态（启用/禁用）
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" id="confirmEditKey">保存更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除密钥确认模态框 -->
+    <div class="modal fade" id="deleteKeyModal" tabindex="-1" aria-labelledby="deleteKeyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteKeyModalLabel">确认删除密钥</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>警告：</strong> 删除操作不可逆，删除后将无法使用此密钥访问API。
+                    </div>
+                    <p>您确定要删除密钥 <strong>"生产环境密钥"</strong> 吗？</p>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmDeleteCheck">
+                        <label class="form-check-label" for="confirmDeleteCheck">
+                            我理解这个操作的后果，并确认要删除此密钥
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteKey" disabled>删除密钥</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新密钥创建成功模态框 -->
+    <div class="modal fade" id="keyCreatedModal" tabindex="-1" aria-labelledby="keyCreatedModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="keyCreatedModalLabel">API密钥创建成功</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        您的新API密钥已成功创建！
+                    </div>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        <strong>重要提示：</strong> 这是您唯一一次看到完整密钥的机会，请立即保存。
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">您的API密钥</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="newApiKey" value="sk_prod_12345678901234567890" readonly>
+                            <button class="btn btn-outline-secondary" type="button" id="copyApiKey">
+                                <i class="bi bi-clipboard"></i> 复制
+                            </button>
+                        </div>
+                    </div>
+                    <p>密钥详情：</p>
+                    <ul>
+                        <li>名称：<span id="createdKeyName">生产环境密钥</span></li>
+                        <li>类型：<span id="createdKeyType">生产环境</span></li>
+                        <li>权限：<span id="createdKeyPermission">所有API</span></li>
+                        <li>过期时间：<span id="createdKeyExpiration">永不过期</span></li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">我已保存密钥</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // 自定义权限选项显示/隐藏
+            $('#keyPermission').change(function() {
+                if ($(this).val() === 'custom') {
+                    $('#customPermissionsContainer').show();
+                } else {
+                    $('#customPermissionsContainer').hide();
+                }
+            });
+
+            // 自定义过期时间选项显示/隐藏
+            $('#keyExpiration').change(function() {
+                if ($(this).val() === 'custom') {
+                    $('#customExpirationContainer').show();
+                } else {
+                    $('#customExpirationContainer').hide();
+                }
+            });
+
+            // 确认删除复选框
+            $('#confirmDeleteCheck').change(function() {
+                $('#confirmDeleteKey').prop('disabled', !this.checked);
+            });
+
+            // 创建密钥
+            $('#confirmCreateKey').click(function() {
+                // 这里应该有实际的创建密钥API调用
+                // 模拟成功创建后显示密钥信息
+                $('#createKeyModal').modal('hide');
+                
+                // 更新创建成功模态框中的信息
+                $('#createdKeyName').text($('#keyName').val() || '生产环境密钥');
+                $('#createdKeyType').text($('#keyType option:selected').text());
+                $('#createdKeyPermission').text($('#keyPermission option:selected').text());
+                $('#createdKeyExpiration').text($('#keyExpiration option:selected').text());
+                
+                // 生成一个模拟的API密钥
+                const randomKey = 'sk_' + $('#keyType').val().substring(0, 4) + '_' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+                $('#newApiKey').val(randomKey);
+                
+                // 显示创建成功模态框
+                $('#keyCreatedModal').modal('show');
+            });
+
+            // 复制API密钥
+            $('#copyApiKey').click(function() {
+                const apiKeyInput = document.getElementById('newApiKey');
+                apiKeyInput.select();
+                document.execCommand('copy');
+                
+                // 更改按钮文本以指示复制成功
+                const originalText = $(this).html();
+                $(this).html('<i class="bi bi-check"></i> 已复制');
+                
+                // 2秒后恢复原始文本
+                setTimeout(() => {
+                    $(this).html(originalText);
+                }, 2000);
+            });
+
+            // 编辑密钥
+            $('#confirmEditKey').click(function() {
+                // 这里应该有实际的更新密钥API调用
+                // 模拟成功更新
+                $('#editKeyModal').modal('hide');
+                
+                // 显示成功消息
+                alert('密钥更新成功！');
+            });
+
+            // 删除密钥
+            $('#confirmDeleteKey').click(function() {
+                // 这里应该有实际的删除密钥API调用
+                // 模拟成功删除
+                $('#deleteKeyModal').modal('hide');
+                
+                // 显示成功消息
+                alert('密钥删除成功！');
+            });
+        });
+    </script>
+</body>
+</html> 
