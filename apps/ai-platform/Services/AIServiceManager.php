@@ -229,7 +229,7 @@ class AIServiceManager extends AbstractServiceManager
         try {
             $this->logger->info('Processing knowledge graph query', ['query' => $query]);
             
-            private $result = $this->knowledgeProcessor->queryGraph($query, $options);
+            $result = $this->knowledgeProcessor->queryGraph($query, $options);
             
             // 记录使用指标
             $this->recordUsageMetrics('knowledge_graph_query', [
@@ -254,13 +254,13 @@ class AIServiceManager extends AbstractServiceManager
             $this->logger->info('Processing AI Q&A request', ['question' => $question]);
             
             // 首先尝试使用知识图谱问答
-            private $kgResult = $this->knowledgeProcessor->answerQuestion($question, $options);
+            $kgResult = $this->knowledgeProcessor->answerQuestion($question, $options);
             
             // 如果需要，结合NLP问答
-            private $nlpResult = $this->nlpProcessor->answerQuestion($question, $context, $options);
+            $nlpResult = $this->nlpProcessor->answerQuestion($question, $context, $options);
             
             // 融合结果
-            private $result = [
+            $result = [
                 'question' => $question,
                 'knowledge_graph_answer' => $kgResult,
                 'nlp_answer' => $nlpResult,
@@ -291,7 +291,7 @@ class AIServiceManager extends AbstractServiceManager
         try {
             $this->logger->info('Processing multi-modal analysis request');
             
-            private $results = [];
+            $results = [];
             
             // 处理文本输入
             if (isset($inputs['text'])) {
@@ -341,20 +341,20 @@ class AIServiceManager extends AbstractServiceManager
         try {
             $this->logger->info('Processing batch AI tasks', ['task_count' => count($tasks)]);
             
-            private $results = [];
-            private $concurrency = $options['concurrency'] ?? 3;
+            $results = [];
+            $concurrency = $options['concurrency'] ?? 3;
             
             // 分批处理任务
-            private $batches = array_chunk($tasks, $concurrency);
+            $batches = array_chunk($tasks, $concurrency);
             
             foreach ($batches as $batchIndex => $batch) {
                 $this->logger->info("Processing batch {$batchIndex}", ['tasks_in_batch' => count($batch)]);
                 
-                private $batchResults = [];
+                $batchResults = [];
                 
                 foreach ($batch as $taskIndex => $task) {
                     try {
-                        private $taskResult = $this->processTask($task);
+                        $taskResult = $this->processTask($task);
                         $batchResults[$taskIndex] = $taskResult;
                     } catch (\Exception $e) {
                         $batchResults[$taskIndex] = [
@@ -364,7 +364,7 @@ class AIServiceManager extends AbstractServiceManager
                     }
                 }
                 
-                private $results = array_merge($results, $batchResults);
+                $results = array_merge($results, $batchResults);
             }
             
             // 记录使用指标
@@ -391,9 +391,9 @@ class AIServiceManager extends AbstractServiceManager
      */
     private function processTask(array $task): array
     {
-        private $taskType = $task['type'] ?? 'unknown';
-        private $data = $task['data'] ?? [];
-        private $options = $task['options'] ?? [];
+        $taskType = $task['type'] ?? 'unknown';
+        $data = $task['data'] ?? [];
+        $options = $task['options'] ?? [];
         
         switch ($taskType) {
             case 'text_analysis':
@@ -418,12 +418,12 @@ class AIServiceManager extends AbstractServiceManager
      */
     private function performCrossModalAnalysis(array $modalResults): array
     {
-        private $insights = [];
+        $insights = [];
         
         // 文本和图像的关联分析
         if (isset($modalResults['text_analysis']) && isset($modalResults['image_analysis'])) {
-            private $textSentiment = $modalResults['text_analysis']['sentiment']['sentiment'] ?? 'neutral';
-            private $imageClassification = $modalResults['image_analysis']['classification']['primary_category'] ?? 'unknown';
+            $textSentiment = $modalResults['text_analysis']['sentiment']['sentiment'] ?? 'neutral';
+            $imageClassification = $modalResults['image_analysis']['classification']['primary_category'] ?? 'unknown';
             
             $insights['text_image_correlation'] = [
                 'text_sentiment' => $textSentiment,
@@ -434,8 +434,8 @@ class AIServiceManager extends AbstractServiceManager
         
         // 语音和文本的情感一致性分析
         if (isset($modalResults['speech_analysis']) && isset($modalResults['text_analysis'])) {
-            private $speechEmotion = $modalResults['speech_analysis']['emotion_analysis']['primary_emotion'] ?? 'neutral';
-            private $textSentiment = $modalResults['text_analysis']['sentiment']['sentiment'] ?? 'neutral';
+            $speechEmotion = $modalResults['speech_analysis']['emotion_analysis']['primary_emotion'] ?? 'neutral';
+            $textSentiment = $modalResults['text_analysis']['sentiment']['sentiment'] ?? 'neutral';
             
             $insights['speech_text_emotion_consistency'] = [
                 'speech_emotion' => $speechEmotion,
@@ -453,13 +453,13 @@ class AIServiceManager extends AbstractServiceManager
     private function calculateConsistencyScore(string $textSentiment, string $imageCategory): float
     {
         // 简化的一致性评分算法
-        private $consistencyMap = [
+        $consistencyMap = [
             'positive' => ['landscape', 'nature', 'portrait'],
             'negative' => ['architecture', 'technology'],
             'neutral' => ['architecture', 'landscape', 'technology']
         ];
         
-        private $expectedCategories = $consistencyMap[$textSentiment] ?? [];
+        $expectedCategories = $consistencyMap[$textSentiment] ?? [];
         return in_array($imageCategory, $expectedCategories) ? 0.8 : 0.3;
     }
 
@@ -468,7 +468,7 @@ class AIServiceManager extends AbstractServiceManager
      */
     private function calculateEmotionalAlignment(string $speechEmotion, string $textSentiment): float
     {
-        private $alignmentMap = [
+        $alignmentMap = [
             'happy' => ['positive'],
             'sad' => ['negative'],
             'angry' => ['negative'],
@@ -477,7 +477,7 @@ class AIServiceManager extends AbstractServiceManager
             'calm' => ['neutral', 'positive']
         ];
         
-        private $expectedSentiments = $alignmentMap[$speechEmotion] ?? [];
+        $expectedSentiments = $alignmentMap[$speechEmotion] ?? [];
         return in_array($textSentiment, $expectedSentiments) ? 0.9 : 0.4;
     }
 
@@ -513,7 +513,7 @@ class AIServiceManager extends AbstractServiceManager
         $this->modelMetrics[$operation]['last_request'] = date('Y-m-d H:i:s');
         
         if (isset($metrics['processing_time'])) {
-            private $processingTime = $metrics['processing_time'];
+            $processingTime = $metrics['processing_time'];
             $this->modelMetrics[$operation]['total_processing_time'] += $processingTime;
             $this->modelMetrics[$operation]['average_processing_time'] = 
                 $this->modelMetrics[$operation]['total_processing_time'] / 
@@ -572,7 +572,7 @@ class AIServiceManager extends AbstractServiceManager
     public function healthCheck(): bool
     {
         try {
-            private $health = $this->getHealthStatus();
+            $health = $this->getHealthStatus();
             return $health['overall_status'] === 'healthy';
         } catch (\Exception $e) {
             $this->logger->error('Health check failed: ' . $e->getMessage());
@@ -585,7 +585,7 @@ class AIServiceManager extends AbstractServiceManager
      */
     public function getHealthStatus(): array
     {
-        private $health = [
+        $health = [
             'overall_status' => 'healthy',
             'services' => [],
             'issues' => []
@@ -593,7 +593,7 @@ class AIServiceManager extends AbstractServiceManager
         
         // 检查各个服务状态
         try {
-            private $nlpStatus = $this->nlpProcessor->getStatus();
+            $nlpStatus = $this->nlpProcessor->getStatus();
             $health['services']['nlp'] = $nlpStatus['status'];
         } catch (\Exception $e) {
             $health['services']['nlp'] = 'error';
@@ -601,7 +601,7 @@ class AIServiceManager extends AbstractServiceManager
         }
         
         try {
-            private $visionStatus = $this->visionProcessor->getStatus();
+            $visionStatus = $this->visionProcessor->getStatus();
             $health['services']['computer_vision'] = $visionStatus['status'];
         } catch (\Exception $e) {
             $health['services']['computer_vision'] = 'error';
@@ -609,7 +609,7 @@ class AIServiceManager extends AbstractServiceManager
         }
         
         try {
-            private $speechStatus = $this->speechProcessor->getStatus();
+            $speechStatus = $this->speechProcessor->getStatus();
             $health['services']['speech'] = $speechStatus['status'];
         } catch (\Exception $e) {
             $health['services']['speech'] = 'error';
@@ -617,7 +617,7 @@ class AIServiceManager extends AbstractServiceManager
         }
         
         try {
-            private $kgStatus = $this->knowledgeProcessor->getStatus();
+            $kgStatus = $this->knowledgeProcessor->getStatus();
             $health['services']['knowledge_graph'] = $kgStatus['status'];
         } catch (\Exception $e) {
             $health['services']['knowledge_graph'] = 'error';

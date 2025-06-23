@@ -27,7 +27,7 @@ use AlingAi\Middleware\AuthenticationMiddleware;
 
 return function (App $app) {
     // Web页面路由 - 使用新的WebController
-//     $app->get('/', WebController::class . ':index')->setName('home');
+//     $app->get('/', \AlingAi\Controllers\WebController::class . ':index')->setName('home');
  // 不可达代码';
     $app->get('/chat', \AlingAi\Controllers\WebController::class . ':chat')->setName('chat');
     $app->get('/login', \AlingAi\Controllers\WebController::class . ':login')->setName('login');
@@ -38,25 +38,25 @@ return function (App $app) {
     $app->get('/terms', \AlingAi\Controllers\WebController::class . ':terms')->setName('terms');
     
     // 增强页面路由
-    $app->get('/profile-enhanced', \WebController::class . ':profileEnhanced')->setName('profile.enhanced');
-    $app->get('/admin-enhanced', \WebController::class . ':adminEnhanced')->setName('admin.enhanced');
+    $app->get('/profile-enhanced', \AlingAi\Controllers\WebController::class . ':profileEnhanced')->setName('profile.enhanced');
+    $app->get('/admin-enhanced', \AlingAi\Controllers\WebController::class . ':adminEnhanced')->setName('admin.enhanced');
     
     // 静态页面
-    $app->get('/about', \WebController::class . ':about')->setName('about');
-    $app->get('/features', \WebController::class . ':features')->setName('features');
+    $app->get('/about', \AlingAi\Controllers\WebController::class . ':about')->setName('about');
+    $app->get('/features', \AlingAi\Controllers\WebController::class . ':features')->setName('features');
     
     // 认证路由组
     $app->group('/auth', function (RouteCollectorProxy $group) {
-        $group->get('/login', AuthController::class . ':showLogin')->setName('auth.login');
-        $group->post('/login', AuthController::class . ':login');
-        $group->get('/register', AuthController::class . ':showRegister')->setName('auth.register');
-        $group->post('/register', AuthController::class . ':register');
-        $group->get('/logout', AuthController::class . ':logout')->setName('auth.logout');
-        $group->get('/forgot-password', AuthController::class . ':showForgotPassword')->setName('auth.forgot');
-        $group->post('/forgot-password', AuthController::class . ':forgotPassword');
-        $group->get('/reset-password/{token}', AuthController::class . ':showResetPassword')->setName('auth.reset');
-        $group->post('/reset-password', AuthController::class . ':resetPassword');
-        $group->get('/verify/{token}', AuthController::class . ':verifyEmail')->setName('auth.verify');
+        $group->get('/login', \AlingAi\Controllers\AuthController::class . ':showLogin')->setName('auth.login');
+        $group->post('/login', \AlingAi\Controllers\AuthController::class . ':login');
+        $group->get('/register', \AlingAi\Controllers\AuthController::class . ':showRegister')->setName('auth.register');
+        $group->post('/register', \AlingAi\Controllers\AuthController::class . ':register');
+        $group->get('/logout', \AlingAi\Controllers\AuthController::class . ':logout')->setName('auth.logout');
+        $group->get('/forgot-password', \AlingAi\Controllers\AuthController::class . ':showForgotPassword')->setName('auth.forgot');
+        $group->post('/forgot-password', \AlingAi\Controllers\AuthController::class . ':forgotPassword');
+        $group->get('/reset-password/{token}', \AlingAi\Controllers\AuthController::class . ':showResetPassword')->setName('auth.reset');
+        $group->post('/reset-password', \AlingAi\Controllers\AuthController::class . ':resetPassword');
+        $group->get('/verify/{token}', \AlingAi\Controllers\AuthController::class . ':verifyEmail')->setName('auth.verify');
     });
     
     // API路由组
