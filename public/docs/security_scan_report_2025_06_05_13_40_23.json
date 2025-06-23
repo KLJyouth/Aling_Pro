@@ -1,0 +1,29 @@
+{
+    "timestamp": "2025-06-05 13:40:23",
+    "results": {
+        "DB_CONNECTION": "数据库连接正常",
+        "DB_USER_PRIVILEGE": "使用专用数据库用户",
+        "DB_VERSION": "数据库版本: 8.0.24",
+        "FILE_PROTECTION": "配置目录 受保护",
+        "LOG_DIRECTORY": "日志目录存在",
+        "JWT_STRENGTH": "JWT 密钥长度充足",
+        "RATE_LIMIT": "API 速率限制合理",
+        "UPLOAD_SIZE": "文件上传大小限制合理"
+    },
+    "warnings": {
+        "DEBUG_MODE": "调试模式在生产环境中应该关闭",
+        "HTTPS_FORCE": "建议在生产环境中强制使用 HTTPS",
+        "SESSION_SECURITY": "会话 Cookie 应启用 Secure 标志",
+        "DB_REMOTE_ACCESS": "远程数据库连接，确保网络安全",
+        "UPLOAD_PERMS": "上传目录不应有执行权限",
+        "REDIS_PORT": "建议修改 Redis 默认端口",
+        "WS_SSL": "WebSocket 应启用 SSL",
+        "REDIS_EXTENSION": "Redis 扩展未安装，跳过Redis连接测试",
+        "REDIS_AUTH_CONFIG": "Redis 配置中未设置密码"
+    },
+    "errors": {
+        "ENV_PERMS": ".env 文件对其他用户可读",
+        "REDIS_AUTH": "Redis 缺少密码保护"
+    },
+    "security_score": 65.79
+}

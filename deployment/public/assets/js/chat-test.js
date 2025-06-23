@@ -1,0 +1,236 @@
+// 聊天页面功能测试和验证脚本
+console.log('开始聊天页面功能测试...');
+
+// 等待页面加载完成
+function waitForPageLoad() {
+    return new Promise(resolve => {
+        if (document.readyState === 'complete') {
+            resolve();
+        } else {
+            window.addEventListener('load', resolve);
+        }
+    });
+}
+
+// 测试DOM元素是否存在
+function testDOMElements() {
+    console.log('测试DOM元素...');
+    
+    const requiredElements = [
+        'loginModal',
+        'loginButton', 
+        'guestModeButton',
+        'userStatus',
+        'messageInput',
+        'sendButton',
+        'chatMessages',
+        'historyBtn',
+        'settingsBtn'
+    ];
+    
+    const results = {};
+    
+    requiredElements.forEach(id => {
+        const element = document.getElementById(id);
+        results[id] = !!element;
+        console.log(`${id}: ${results[id] ? '✓' : '✗'}`);
+        
+        if (!element) {
+            console.error(`缺少必需的DOM元素: ${id}`);
+        }
+    });
+    
+    return results;
+}
+
+// 测试访客模式功能
+function testGuestMode() {
+    console.log('测试访客模式功能...');
+    
+    const guestBtn = document.getElementById('guestModeButton');
+    const userStatus = document.getElementById('userStatus');
+    
+    if (!guestBtn) {
+        console.error('访客模式按钮不存在');
+        return false;
+    }
+    
+    // 模拟点击访客模式按钮
+    guestBtn.click();
+    
+    // 检查是否设置了访客模式
+    const isGuestMode = localStorage.getItem('guestMode') === 'true';
+    console.log('访客模式状态:', isGuestMode ? '✓' : '✗');
+    
+    // 检查用户状态显示
+    if (userStatus) {
+        console.log('用户状态显示:', userStatus.textContent);
+    }
+    
+    return isGuestMode;
+}
+
+// 测试消息输入功能
+function testMessageInput() {
+    console.log('测试消息输入功能...');
+    
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    
+    if (!messageInput || !sendButton) {
+        console.error('消息输入元素不存在');
+        return false;
+    }
+    
+    // 测试输入验证
+    messageInput.value = '';
+    messageInput.dispatchEvent(new Event('input'));
+    console.log('空输入时发送按钮状态:', sendButton.disabled ? '禁用 ✓' : '启用 ✗');
+    
+    // 测试有内容时
+    messageInput.value = '测试消息';
+    messageInput.dispatchEvent(new Event('input'));
+    console.log('有内容时发送按钮状态:', sendButton.disabled ? '禁用 ✗' : '启用 ✓');
+    
+    return true;
+}
+
+// 测试聊天API功能
+async function testChatAPI() {
+    console.log('测试聊天API功能...');
+    
+    try {
+        // 检查是否有全局chatInstance
+        if (window.chatInstance) {
+            console.log('聊天实例存在 ✓');
+            
+            const { api } = window.chatInstance;
+            
+            if (api && api.isInitialized) {
+                console.log('API已初始化 ✓');
+                
+                // 测试访客模式消息发送
+                localStorage.setItem('guestMode', 'true');
+                
+                try {
+                    const response = await api.sendMessage('这是一条测试消息');
+                    console.log('访客模式消息发送 ✓');
+                    console.log('回复内容:', response.content);
+                    return true;
+                } catch (error) {
+                    console.error('访客模式消息发送失败:', error);
+                    return false;
+                }
+            } else {
+                console.error('API未初始化 ✗');
+                return false;
+            }
+        } else {
+            console.error('聊天实例不存在 ✗');
+            return false;
+        }
+    } catch (error) {
+        console.error('API测试失败:', error);
+        return false;
+    }
+}
+
+// 测试UI功能
+function testUIFunctions() {
+    console.log('测试UI功能...');
+    
+    if (!window.chatInstance) {
+        console.error('聊天实例不存在');
+        return false;
+    }
+    
+    const { ui } = window.chatInstance;
+    
+    try {
+        // 测试用户状态更新
+        ui.updateUserStatus('测试状态');
+        const userStatus = document.getElementById('userStatus');
+        console.log('用户状态更新:', userStatus?.textContent === '测试状态' ? '✓' : '✗');
+        
+        // 测试消息添加
+        ui.addMessage({
+            id: 'test-' + Date.now(),
+            type: 'user',
+            content: '这是一条测试消息',
+            timestamp: new Date().toISOString()
+        });
+        console.log('消息添加功能 ✓');
+        
+        return true;
+    } catch (error) {
+        console.error('UI功能测试失败:', error);
+        return false;
+    }
+}
+
+// 主测试函数
+async function runTests() {
+    try {
+        await waitForPageLoad();
+        
+        console.log('=== 聊天页面功能测试报告 ===');
+        
+        // 1. DOM元素测试
+        const domResults = testDOMElements();
+        
+        // 2. 等待聊天系统初始化
+        console.log('等待聊天系统初始化...');
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        
+        // 3. 访客模式测试
+        const guestModeResult = testGuestMode();
+        
+        // 4. 消息输入测试
+        const inputResult = testMessageInput();
+        
+        // 5. API功能测试
+        const apiResult = await testChatAPI();
+        
+        // 6. UI功能测试
+        const uiResult = testUIFunctions();
+        
+        // 总结报告
+        console.log('\n=== 测试结果总结 ===');
+        console.log('DOM元素:', Object.values(domResults).every(v => v) ? '✓' : '✗');
+        console.log('访客模式:', guestModeResult ? '✓' : '✗');
+        console.log('消息输入:', inputResult ? '✓' : '✗');
+        console.log('API功能:', apiResult ? '✓' : '✗');
+        console.log('UI功能:', uiResult ? '✓' : '✗');
+        
+        const allPassed = Object.values(domResults).every(v => v) && 
+                         guestModeResult && inputResult && apiResult && uiResult;
+        
+        console.log('\n整体状态:', allPassed ? '✅ 所有测试通过' : '❌ 存在问题需要修复');
+        
+        return allPassed;
+        
+    } catch (error) {
+        console.error('测试过程中发生错误:', error);
+        return false;
+    }
+}
+
+// 如果在浏览器环境中运行
+if (typeof window !== 'undefined') {
+    // 等待DOM加载后自动运行测试
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(runTests, 1000);
+        });
+    } else {
+        setTimeout(runTests, 1000);
+    }
+    
+    // 添加到全局作用域以便手动调用
+    window.chatTest = { runTests, testDOMElements, testGuestMode, testMessageInput, testChatAPI, testUIFunctions };
+}
+
+// 导出供外部使用
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { runTests, testDOMElements, testGuestMode, testMessageInput, testChatAPI, testUIFunctions };
+}

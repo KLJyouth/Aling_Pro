@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术文档 - AlingAI Platform</title>
+    <meta name="description" content="AlingAI Platform技术文档，包含量子安全架构、零信任实施、AI算法原理、系统集成指南等详细技术资料。">
+    <meta name="keywords" content="技术文档,量子安全,零信任架构,AI算法,系统架构,集成指南,技术规范">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for code highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-muted: #6b7280;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --code-bg: #1e293b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--gradient-bg);
+            color: white;
+            padding: 100px 0 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Main Content Layout */
+        .docs-container {
+            min-height: 100vh;
+            padding-top: 2rem;
+        }
+
+        .sidebar {
+            background: var(--light-color);
+            border-right: 1px solid var(--border-color);
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            position: sticky;
+            top: 100px;
+            padding: 2rem 1rem;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-section-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 2rem 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        /* Documentation Cards */
+        .doc-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+        }
+
+        .doc-card:hover {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .doc-card h3 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .doc-card h4 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            color: var(--primary-color);
+        }
+
+        .doc-card h5 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem 0;
+            color: var(--dark-color);
+        }
+
+        /* Architecture Diagrams */
+        .architecture-diagram {
+            background: var(--light-color);
+            border: 2px dashed var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .diagram-layer {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem;
+            display: inline-block;
+            min-width: 150px;
+        }
+
+        .diagram-layer.quantum {
+            border-color: var(--success-color);
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+        }
+
+        .diagram-layer.ai {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+        }
+
+        .diagram-layer.security {
+            border-color: var(--warning-color);
+            background: linear-gradient(135deg, #fffbeb, #fefce8);
+        }
+
+        /* Code Blocks */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Tech Specs Tables */
+        .tech-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .tech-table th {
+            background: var(--light-color);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tech-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tech-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Feature Lists */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li i {
+            color: var(--success-color);
+            margin-right: 1rem;
+            width: 20px;
+        }
+
+        /* Alert Boxes */
+        .alert-box {
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-info {
+            background: #eff6ff;
+            border-color: var(--primary-color);
+            color: #1e40af;
+        }
+
+        .alert-warning {
+            background: #fffbeb;
+            border-color: var(--warning-color);
+            color: #92400e;
+        }
+
+        .alert-success {
+            background: #ecfdf5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        /* Integration Steps */
+        .integration-steps {
+            counter-reset: step-counter;
+        }
+
+        .integration-step {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            counter-increment: step-counter;
+        }
+
+        .integration-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: var(--primary-color);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        /* Performance Metrics */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .content-area {
+                padding: 1rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../homepage.html">
+                <i class="fas fa-shield-alt me-2"></i>AlingAI Platform
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            解决方案
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../solutions/quantum-security.html">量子安全服务</a></li>
+                            <li><a class="dropdown-item" href="../solutions/zero-trust.html">零信任架构</a></li>
+                            <li><a class="dropdown-item" href="../solutions/ai-security-assistant.html">AI安全助手</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            开发者
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="api-docs.html">API文档</a></li>
+                            <li><a class="dropdown-item" href="technical-docs.html">技术文档</a></li>
+                            <li><a class="dropdown-item" href="../downloads/sdk.html">SDK下载</a></li>
+                            <li><a class="dropdown-item" href="examples.html">示例代码</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            支持
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../support/help-center.html">帮助中心</a></li>
+                            <li><a class="dropdown-item" href="../support/technical-support.html">技术支持</a></li>
+                            <li><a class="dropdown-item" href="../contact.html">联系我们</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../partners.html">合作伙伴</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title">技术文档</h1>
+                <p class="hero-subtitle">
+                    深入了解AlingAI Platform的技术架构、算法原理和最佳实践
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container-fluid docs-container">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-lg-3 d-none d-lg-block">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">架构概览</div>
+                        <ul class="sidebar-nav">
+                            <li><a href="#system-architecture" class="active">系统架构</a></li>
+                            <li><a href="#security-framework">安全框架</a></li>
+                            <li><a href="#performance">性能指标</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">量子安全</div>
+                        <ul class="sidebar-nav">
+                            <li><a href="#quantum-architecture">量子架构</a></li>
+                            <li><a href="#quantum-algorithms">量子算法</a></li>
+                            <li><a href="#qkd-protocol">QKD协议</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">零信任架构</div>
+                        <ul class="sidebar-nav">
+                            <li><a href="#zero-trust-principles">设计原则</a></li>
+                            <li><a href="#identity-verification">身份验证</a></li>
+                            <li><a href="#access-control">访问控制</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">AI引擎</div>
+                        <ul class="sidebar-nav">
+                            <li><a href="#ai-architecture">AI架构</a></li>
+                            <li><a href="#ml-algorithms">机器学习算法</a></li>
+                            <li><a href="#threat-detection">威胁检测</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-section">
+                        <div class="sidebar-section-title">集成指南</div>
+                        <ul class="sidebar-nav">
+                            <li><a href="#integration-overview">集成概述</a></li>
+                            <li><a href="#deployment-guide">部署指南</a></li>
+                            <li><a href="#best-practices">最佳实践</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="col-lg-9">
+                <div class="content-area">
+                    <!-- System Architecture -->
+                    <section id="system-architecture">
+                        <div class="doc-card">
+                            <h3>系统架构</h3>
+                            <p>AlingAI Platform采用现代化微服务架构，结合量子安全技术和零信任原则，构建下一代安全平台。</p>
+                            
+                            <div class="architecture-diagram">
+                                <div style="margin-bottom: 2rem;">
+                                    <div class="diagram-layer ai">前端界面</div>
+                                    <div class="diagram-layer ai">移动应用</div>
+                                    <div class="diagram-layer ai">API网关</div>
+                                </div>
+                                <div style="margin-bottom: 2rem;">
+                                    <div class="diagram-layer quantum">量子加密层</div>
+                                    <div class="diagram-layer security">零信任网关</div>
+                                    <div class="diagram-layer ai">AI安全引擎</div>
+                                </div>
+                                <div style="margin-bottom: 2rem;">
+                                    <div class="diagram-layer">用户服务</div>
+                                    <div class="diagram-layer">认证服务</div>
+                                    <div class="diagram-layer">威胁检测</div>
+                                    <div class="diagram-layer">日志分析</div>
+                                </div>
+                                <div>
+                                    <div class="diagram-layer quantum">量子数据库</div>
+                                    <div class="diagram-layer">缓存层</div>
+                                    <div class="diagram-layer">监控系统</div>
+                                </div>
+                            </div>
+
+                            <h4>架构特点</h4>
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check"></i>微服务架构，模块化设计</li>
+                                <li><i class="fas fa-check"></i>容器化部署，支持Kubernetes</li>
+                                <li><i class="fas fa-check"></i>量子安全加密，后量子密码学</li>
+                                <li><i class="fas fa-check"></i>零信任网络架构</li>
+                                <li><i class="fas fa-check"></i>AI驱动的智能安全</li>
+                                <li><i class="fas fa-check"></i>分布式部署，全球负载均衡</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Security Framework -->
+                    <section id="security-framework">
+                        <div class="doc-card">
+                            <h3>安全框架</h3>
+                            <p>多层防护的安全框架，从物理层到应用层提供全方位保护。</p>
+                            
+                            <table class="tech-table">
+                                <thead>
+                                    <tr>
+                                        <th>安全层级</th>
+                                        <th>技术栈</th>
+                                        <th>防护对象</th>
+                                        <th>安全等级</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>量子安全层</td>
+                                        <td>QKD, Post-Quantum Crypto</td>
+                                        <td>数据传输与存储</td>
+                                        <td>量子级</td>
+                                    </tr>
+                                    <tr>
+                                        <td>网络安全层</td>
+                                        <td>Zero Trust, mTLS</td>
+                                        <td>网络通信</td>
+                                        <td>军用级</td>
+                                    </tr>
+                                    <tr>
+                                        <td>应用安全层</td>
+                                        <td>OWASP, SAST, DAST</td>
+                                        <td>应用程序</td>
+                                        <td>企业级</td>
+                                    </tr>
+                                    <tr>
+                                        <td>数据安全层</td>
+                                        <td>AES-256, 同态加密</td>
+                                        <td>敏感数据</td>
+                                        <td>政府级</td>
+                                    </tr>
+                                    <tr>
+                                        <td>身份安全层</td>
+                                        <td>MFA, 生物识别</td>
+                                        <td>用户身份</td>
+                                        <td>银行级</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="alert-box alert-info">
+                                <strong>安全认证：</strong> AlingAI Platform已通过ISO 27001、SOC 2 Type II、CC EAL4+等国际安全认证。
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Performance Metrics -->
+                    <section id="performance">
+                        <div class="doc-card">
+                            <h3>性能指标</h3>
+                            <p>基于分布式架构和量子计算加速的高性能指标。</p>
+                            
+                            <div class="metrics-grid">
+                                <div class="metric-card">
+                                    <span class="metric-value">99.99%</span>
+                                    <div class="metric-label">系统可用性</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">&lt;10ms</span>
+                                    <div class="metric-label">平均响应时间</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">1M+</span>
+                                    <div class="metric-label">并发用户支持</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">100GB/s</span>
+                                    <div class="metric-label">数据处理速度</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">99.8%</span>
+                                    <div class="metric-label">威胁检测准确率</div>
+                                </div>
+                                <div class="metric-card">
+                                    <span class="metric-value">50ms</span>
+                                    <div class="metric-label">量子加密延迟</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Quantum Architecture -->
+                    <section id="quantum-architecture">
+                        <div class="doc-card">
+                            <h3>量子安全架构</h3>
+                            <p>基于量子密钥分发（QKD）和后量子密码学的下一代安全架构。</p>
+                            
+                            <h4>量子密钥分发（QKD）</h4>
+                            <p>利用量子力学的基本原理，确保密钥分发的绝对安全性。</p>
+                            
+                            <div class="code-block">
+                                <pre><code class="language-python"># QKD协议实现示例
+class QuantumKeyDistribution:
+    def __init__(self):
+        self.quantum_channel = QuantumChannel()
+        self.classical_channel = ClassicalChannel()
+    
+    def generate_quantum_keys(self, length=256):
+        """生成量子密钥"""
+        photons = self.prepare_quantum_states(length)
+        measurements = self.measure_photons(photons)
+        sifted_key = self.sift_key(measurements)
+        return self.error_correction(sifted_key)
+    
+    def detect_eavesdropping(self, key_sample):
+        """检测窃听攻击"""
+        error_rate = self.calculate_error_rate(key_sample)
+        return error_rate > QUANTUM_ERROR_THRESHOLD</code></pre>
+                            </div>
+
+                            <h4>后量子密码学</h4>
+                            <p>采用抗量子计算攻击的密码算法，确保在量子计算机时代的安全性。</p>
+                            
+                            <table class="tech-table">
+                                <thead>
+                                    <tr>
+                                        <th>算法类型</th>
+                                        <th>具体算法</th>
+                                        <th>安全强度</th>
+                                        <th>应用场景</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>格基密码</td>
+                                        <td>CRYSTALS-Kyber</td>
+                                        <td>NIST Level 3</td>
+                                        <td>密钥封装</td>
+                                    </tr>
+                                    <tr>
+                                        <td>基于哈希</td>
+                                        <td>SPHINCS+</td>
+                                        <td>NIST Level 5</td>
+                                        <td>数字签名</td>
+                                    </tr>
+                                    <tr>
+                                        <td>基于编码</td>
+                                        <td>Classic McEliece</td>
+                                        <td>NIST Level 3</td>
+                                        <td>公钥加密</td>
+                                    </tr>
+                                    <tr>
+                                        <td>多变量</td>
+                                        <td>Rainbow</td>
+                                        <td>NIST Level 1</td>
+                                        <td>快速签名</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Zero Trust Principles -->
+                    <section id="zero-trust-principles">
+                        <div class="doc-card">
+                            <h3>零信任设计原则</h3>
+                            <p>基于"永不信任，始终验证"的核心理念构建的安全架构。</p>
+                            
+                            <h4>核心原则</h4>
+                            <div class="integration-steps">
+                                <div class="integration-step">
+                                    <div class="step-title">显式验证</div>
+                                    <p>始终基于所有可用数据点进行身份验证和授权，包括用户身份、位置、设备健康状况、服务或工作负载、数据分类和异常。</p>
+                                </div>
+                                
+                                <div class="integration-step">
+                                    <div class="step-title">最小权限访问</div>
+                                    <p>使用即时(JIT)和足够(JEA)访问权限、基于风险的自适应策略以及数据保护来限制用户访问权限，以帮助保护数据和提高工作效率。</p>
+                                </div>
+                                
+                                <div class="integration-step">
+                                    <div class="step-title">假设缺口</div>
+                                    <p>最大限度地减少爆炸半径并细分访问权限。验证端到端加密并使用分析来获得可见性，推动威胁检测并改进防御。</p>
+                                </div>
+                            </div>
+
+                            <h4>实施架构</h4>
+                            <div class="architecture-diagram">
+                                <div style="margin-bottom: 1rem;">
+                                    <div class="diagram-layer security">身份与访问管理(IAM)</div>
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <div class="diagram-layer security">设备合规检查</div>
+                                    <div class="diagram-layer security">行为分析</div>
+                                </div>
+                                <div style="margin-bottom: 1rem;">
+                                    <div class="diagram-layer security">网络微分段</div>
+                                    <div class="diagram-layer security">加密隧道</div>
+                                </div>
+                                <div>
+                                    <div class="diagram-layer security">应用防护</div>
+                                    <div class="diagram-layer security">数据分类保护</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- AI Architecture -->
+                    <section id="ai-architecture">
+                        <div class="doc-card">
+                            <h3>AI安全引擎架构</h3>
+                            <p>基于深度学习和强化学习的智能安全防护系统。</p>
+                            
+                            <h4>核心组件</h4>
+                            <table class="tech-table">
+                                <thead>
+                                    <tr>
+                                        <th>组件</th>
+                                        <th>技术栈</th>
+                                        <th>功能</th>
+                                        <th>性能指标</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>威胁检测引擎</td>
+                                        <td>CNN + LSTM</td>
+                                        <td>实时威胁识别</td>
+                                        <td>99.8% 准确率</td>
+                                    </tr>
+                                    <tr>
+                                        <td>行为分析模块</td>
+                                        <td>Transformer</td>
+                                        <td>异常行为检测</td>
+                                        <td>95% 召回率</td>
+                                    </tr>
+                                    <tr>
+                                        <td>智能响应系统</td>
+                                        <td>强化学习</td>
+                                        <td>自动化响应</td>
+                                        <td>&lt;100ms 响应</td>
+                                    </tr>
+                                    <tr>
+                                        <td>知识图谱</td>
+                                        <td>Graph Neural Network</td>
+                                        <td>关联分析</td>
+                                        <td>千万级节点</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>AI模型训练</h4>
+                            <div class="code-block">
+                                <pre><code class="language-python"># AI威胁检测模型
+class ThreatDetectionModel(nn.Module):
+    def __init__(self, input_dim, hidden_dim, num_classes):
+        super().__init__()
+        self.cnn_layers = nn.Sequential(
+            nn.Conv1d(input_dim, 64, kernel_size=3),
+            nn.ReLU(),
+            nn.Conv1d(64, 128, kernel_size=3),
+            nn.ReLU(),
+            nn.MaxPool1d(2)
+        )
+        
+        self.lstm = nn.LSTM(128, hidden_dim, batch_first=True)
+        self.classifier = nn.Linear(hidden_dim, num_classes)
+        self.attention = MultiHeadAttention(hidden_dim, 8)
+    
+    def forward(self, x):
+        # CNN特征提取
+        x = self.cnn_layers(x)
+        
+        # LSTM序列建模
+        lstm_out, _ = self.lstm(x.permute(0, 2, 1))
+        
+        # 注意力机制
+        attended = self.attention(lstm_out)
+        
+        # 分类预测
+        return self.classifier(attended[:, -1, :])</code></pre>
+                            </div>
+
+                            <div class="alert-box alert-success">
+                                <strong>AI模型优势：</strong> 采用联邦学习技术，在保护数据隐私的同时实现全球威胁情报共享。
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Integration Overview -->
+                    <section id="integration-overview">
+                        <div class="doc-card">
+                            <h3>系统集成指南</h3>
+                            <p>快速集成AlingAI Platform到您的现有系统中。</p>
+                            
+                            <h4>集成方式</h4>
+                            <div class="integration-steps">
+                                <div class="integration-step">
+                                    <div class="step-title">SDK集成</div>
+                                    <p>使用官方SDK快速集成，支持Java、Python、Go、JavaScript等主流编程语言。</p>
+                                    <div class="code-block">
+                                        <pre><code class="language-javascript">// JavaScript SDK示例
+import { AlingAI } from '@alingai/sdk';
+
+const client = new AlingAI({
+  apiKey: 'your-api-key',
+  quantumEnabled: true
+});
+
+// 威胁检测
+const result = await client.threatDetection.analyze({
+  data: logData,
+  type: 'network_traffic'
+});</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-step">
+                                    <div class="step-title">REST API集成</div>
+                                    <p>通过RESTful API直接集成，支持标准HTTP协议。</p>
+                                    <div class="code-block">
+                                        <pre><code class="language-bash"># API调用示例
+curl -X POST https://api.alingai.com/v1/threat/detect \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "data": "base64_encoded_data",
+    "type": "malware_detection"
+  }'</code></pre>
+                                    </div>
+                                </div>
+                                
+                                <div class="integration-step">
+                                    <div class="step-title">WebSocket集成</div>
+                                    <p>实时威胁监控和事件推送。</p>
+                                    <div class="code-block">
+                                        <pre><code class="language-javascript">// WebSocket连接
+const ws = new WebSocket('wss://api.alingai.com/v1/ws');
+
+ws.onmessage = (event) => {
+  const threat = JSON.parse(event.data);
+  if (threat.severity === 'critical') {
+    handleCriticalThreat(threat);
+  }
+};</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h4>支持的集成平台</h4>
+                            <ul class="feature-list">
+                                <li><i class="fas fa-check"></i>SIEM系统 (Splunk, QRadar, ArcSight)</li>
+                                <li><i class="fas fa-check"></i>云平台 (AWS, Azure, GCP, 阿里云)</li>
+                                <li><i class="fas fa-check"></i>容器平台 (Kubernetes, Docker)</li>
+                                <li><i class="fas fa-check"></i>CI/CD工具 (Jenkins, GitLab, GitHub Actions)</li>
+                                <li><i class="fas fa-check"></i>监控平台 (Prometheus, Grafana, DataDog)</li>
+                                <li><i class="fas fa-check"></i>企业应用 (SAP, Oracle, Microsoft 365)</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- Best Practices -->
+                    <section id="best-practices">
+                        <div class="doc-card">
+                            <h3>最佳实践</h3>
+                            <p>基于行业经验总结的最佳实践指南。</p>
+                            
+                            <h4>安全最佳实践</h4>
+                            <div class="alert-box alert-warning">
+                                <strong>重要提示：</strong> 在生产环境中部署前，请确保完成安全配置检查清单。
+                            </div>
+                            
+                            <ul class="feature-list">
+                                <li><i class="fas fa-shield-alt"></i>启用多因子认证(MFA)</li>
+                                <li><i class="fas fa-shield-alt"></i>配置网络访问控制列表(ACL)</li>
+                                <li><i class="fas fa-shield-alt"></i>定期更新安全补丁</li>
+                                <li><i class="fas fa-shield-alt"></i>实施数据备份和恢复策略</li>
+                                <li><i class="fas fa-shield-alt"></i>监控和审计用户活动</li>
+                                <li><i class="fas fa-shield-alt"></i>使用强密码策略</li>
+                            </ul>
+
+                            <h4>性能优化</h4>
+                            <table class="tech-table">
+                                <thead>
+                                    <tr>
+                                        <th>优化项</th>
+                                        <th>建议配置</th>
+                                        <th>预期效果</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>API调用频率</td>
+                                        <td>批量处理，最大1000条/次</td>
+                                        <td>提升30%性能</td>
+                                    </tr>
+                                    <tr>
+                                        <td>缓存策略</td>
+                                        <td>Redis集群，TTL=300s</td>
+                                        <td>减少50%延迟</td>
+                                    </tr>
+                                    <tr>
+                                        <td>连接池</td>
+                                        <td>最大连接数=100</td>
+                                        <td>提升并发能力</td>
+                                    </tr>
+                                    <tr>
+                                        <td>数据压缩</td>
+                                        <td>gzip压缩，级别=6</td>
+                                        <td>减少70%带宽</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>监控和运维</h4>
+                            <div class="code-block">
+                                <pre><code class="language-yaml"># 监控配置示例
+monitoring:
+  metrics:
+    - api_response_time
+    - threat_detection_rate
+    - quantum_key_generation_speed
+    - error_rate
+  
+  alerts:
+    - name: high_error_rate
+      threshold: 5%
+      window: 5m
+    
+    - name: slow_response
+      threshold: 1000ms
+      window: 1m
+  
+  dashboards:
+    - security_overview
+    - performance_metrics
+    - quantum_status</code></pre>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">解决方案</h5>
+                    <a href="../solutions/quantum-security.html" class="footer-link">量子安全服务</a>
+                    <a href="../solutions/zero-trust.html" class="footer-link">零信任架构</a>
+                    <a href="../solutions/ai-security-assistant.html" class="footer-link">AI安全助手</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">开发者</h5>
+                    <a href="api-docs.html" class="footer-link">API文档</a>
+                    <a href="technical-docs.html" class="footer-link">技术文档</a>
+                    <a href="../downloads/sdk.html" class="footer-link">SDK下载</a>
+                    <a href="examples.html" class="footer-link">示例代码</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">支持</h5>
+                    <a href="../support/help-center.html" class="footer-link">帮助中心</a>
+                    <a href="../support/technical-support.html" class="footer-link">技术支持</a>
+                    <a href="../contact.html" class="footer-link">联系我们</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">公司</h5>
+                    <a href="../partners.html" class="footer-link">合作伙伴</a>
+                    <a href="../downloads/partnership-handbook.html" class="footer-link">合作手册</a>
+                    <a href="../privacy.html" class="footer-link">隐私政策</a>
+                    <a href="../terms.html" class="footer-link">服务条款</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AlingAI Platform. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Prism.js for code highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        // Sidebar navigation
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.sidebar-nav a').forEach(l => {
+                    l.classList.remove('active');
+                });
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Smooth scroll to target
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Auto-highlight current section in sidebar
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.sidebar-nav a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

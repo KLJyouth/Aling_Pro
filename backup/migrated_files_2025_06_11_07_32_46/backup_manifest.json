@@ -1,0 +1,162 @@
+{
+    "backup_time": "2025-06-11 07:32:46",
+    "backup_reason": "Public folder migration cleanup",
+    "files": [
+        {
+            "original": "api_server.php",
+            "target": "public\/api\/server.php",
+            "original_size": 7300,
+            "target_size": 7318
+        },
+        {
+            "original": "simple_api_server.php",
+            "target": "public\/api\/simple-server.php",
+            "original_size": 11350,
+            "target_size": 11356
+        },
+        {
+            "original": "clean_api_server.php",
+            "target": "public\/api\/clean-server.php",
+            "original_size": 7656,
+            "target_size": 7668
+        },
+        {
+            "original": "api_validation.php",
+            "target": "public\/api\/validation.php",
+            "original_size": 5131,
+            "target_size": 5131
+        },
+        {
+            "original": "api_performance_validation.php",
+            "target": "public\/api\/performance-validation.php",
+            "original_size": 4787,
+            "target_size": 4787
+        },
+        {
+            "original": "comprehensive_api_test.php",
+            "target": "public\/test\/api-comprehensive.php",
+            "original_size": 6516,
+            "target_size": 6516
+        },
+        {
+            "original": "simple_api_test.php",
+            "target": "public\/test\/api-simple.php",
+            "original_size": 5340,
+            "target_size": 5340
+        },
+        {
+            "original": "direct_api_test.php",
+            "target": "public\/test\/api-direct.php",
+            "original_size": 8624,
+            "target_size": 8624
+        },
+        {
+            "original": "http_api_test.php",
+            "target": "public\/test\/api-http.php",
+            "original_size": 7418,
+            "target_size": 7418
+        },
+        {
+            "original": "integration_test.php",
+            "target": "public\/test\/integration.php",
+            "original_size": 5677,
+            "target_size": 5677
+        },
+        {
+            "original": "performance_test.php",
+            "target": "public\/test\/performance.php",
+            "original_size": 8560,
+            "target_size": 8560
+        },
+        {
+            "original": "simple_connection_test.php",
+            "target": "public\/test\/connection.php",
+            "original_size": 1453,
+            "target_size": 1453
+        },
+        {
+            "original": "simple_route_test.php",
+            "target": "public\/test\/route.php",
+            "original_size": 2651,
+            "target_size": 2651
+        },
+        {
+            "original": "comprehensive_system_test_v5.php",
+            "target": "public\/test\/system-comprehensive-v5.php",
+            "original_size": 23669,
+            "target_size": 23669
+        },
+        {
+            "original": "complete_system_test.php",
+            "target": "public\/test\/system-complete.php",
+            "original_size": 18818,
+            "target_size": 18818
+        },
+        {
+            "original": "final_integration_test.php",
+            "target": "public\/test\/integration-final.php",
+            "original_size": 9110,
+            "target_size": 9110
+        },
+        {
+            "original": "frontend_integration_test.php",
+            "target": "public\/test\/frontend-integration.php",
+            "original_size": 6734,
+            "target_size": 6734
+        },
+        {
+            "original": "quick_health_check.php",
+            "target": "public\/monitor\/health.php",
+            "original_size": 5388,
+            "target_size": 5388
+        },
+        {
+            "original": "ai_service_health_check.php",
+            "target": "public\/monitor\/ai-health.php",
+            "original_size": 1285,
+            "target_size": 1285
+        },
+        {
+            "original": "performance_monitoring_health.php",
+            "target": "public\/monitor\/performance.php",
+            "original_size": 2146,
+            "target_size": 2146
+        },
+        {
+            "original": "ai_service_integration_health.php",
+            "target": "public\/monitor\/ai-integration.php",
+            "original_size": 1462,
+            "target_size": 1462
+        },
+        {
+            "original": "database_management.php",
+            "target": "public\/tools\/database-management.php",
+            "original_size": 17269,
+            "target_size": 17287
+        },
+        {
+            "original": "cache_optimizer.php",
+            "target": "public\/tools\/cache-optimizer.php",
+            "original_size": 15291,
+            "target_size": 15303
+        },
+        {
+            "original": "performance_optimizer.php",
+            "target": "public\/tools\/performance-optimizer.php",
+            "original_size": 14377,
+            "target_size": 14389
+        },
+        {
+            "original": "install\/test_server.php",
+            "target": "public\/install\/test-server.php",
+            "original_size": 4777,
+            "target_size": 4777
+        },
+        {
+            "original": "install\/test_api_cli.php",
+            "target": "public\/install\/test-api-cli.php",
+            "original_size": 928,
+            "target_size": 928
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "alingai-php-sdk",
+  "description": "AlingAI Platform PHP SDK - 量子安全API客户端库",
+  "version": "2.0.0",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "AlingAI Development Team",
+      "email": "dev@alingai.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "AlingAI\\": "src/"
+    }
+  },
+  "extra": {
+    "platform": "AlingAI",
+    "quantum-enabled": true
+  }
+}

@@ -1,0 +1,69 @@
+// 主入口文件
+import { initChat } from './chat/core.js';
+import { setupUI } from './chat/ui.js';
+import { initAPI } from './chat/api.js';
+import { initHistoryManager } from './history/manager.js';
+import { initHistoryRenderer } from './history/render.js';
+
+// 初始化应用
+document.addEventListener('DOMContentLoaded', () => {
+    // 初始化核心聊天功能
+    const chatCore = initChat();
+    
+    // 设置UI交互
+    const ui = setupUI();
+    
+    // 初始化API交互
+    const api = initAPI();
+    
+    // 初始化历史记录管理
+    const historyManager = initHistoryManager();
+    const historyRenderer = initHistoryRenderer(historyManager);
+    
+    // 设置历史渲染回调
+    historyRenderer.setCallback('onSelectSession', (sessionId) => {
+        historyManager.callCallback('onSelectHistory', sessionId);
+    });
+
+    // 连接各模块
+    ui.setCallback('onSendMessage', (message) => {
+        api.sendMessage(message)
+            .then(response => chatCore.processResponse(response))
+            .catch(error => ui.showError(error));
+    });
+    
+    ui.setCallback('onLogin', (username) => {
+        // 显示加载状态
+        ui.showLoading();
+        
+        // 加载用户会话
+        historyManager.loadSessions(username)
+            .then(sessions => {
+                // 隐藏登录模态框
+                ui.hideLoginModal();
+                
+                // 渲染会话列表
+                historyRenderer.renderSessions(sessions);
+                
+                // 显示主界面
+                document.getElementById('mainContainer').style.display = 'block';
+                
+                // 设置当前用户
+                chatCore.currentUser = username;
+            })
+            .catch(error => {
+                ui.showError(error);
+                document.getElementById('loginError').textContent = error.message;
+                document.getElementById('loginError').style.display = 'block';
+            });
+    });
+
+    historyManager.setCallback('onSelectHistory', (historyId) => {
+        api.loadHistory(historyId)
+            .then(messages => chatCore.displayHistory(messages))
+            .catch(error => ui.showError(error));
+    });
+    
+    // 启动应用
+    ui.showLoginModal();
+});

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档中心</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                maxWidth: 'none',
+                                color: '#333',
+                                a: {
+                                    color: '#3182ce',
+                                    '&:hover': {
+                                        color: '#2c5282',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.7.0/styles/github.css">
+    
+    <!-- 自定义样式 -->
+    <style>
+        .sidebar {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        
+        .content-wrapper {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
+        
+        .nav-link {
+            @apply px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200;
+        }
+        
+        .nav-link.active {
+            @apply bg-blue-100 text-blue-700;
+        }
+        
+        .prose pre {
+            @apply bg-gray-50 border rounded-lg;
+        }
+        
+        .prose code {
+            @apply text-blue-600 bg-blue-50 px-1 rounded;
+        }
+        
+        .prose pre code {
+            @apply text-gray-800 bg-transparent px-0;
+        }
+        
+        .prose h1 {
+            @apply text-3xl font-bold mb-8 pb-2 border-b;
+        }
+        
+        .prose h2 {
+            @apply text-2xl font-semibold mt-8 mb-4;
+        }
+        
+        .prose h3 {
+            @apply text-xl font-semibold mt-6 mb-3;
+        }
+        
+        .prose p {
+            @apply mb-4;
+        }
+        
+        .prose ul {
+            @apply list-disc list-inside mb-4;
+        }
+        
+        .prose ol {
+            @apply list-decimal list-inside mb-4;
+        }
+        
+        .prose blockquote {
+            @apply border-l-4 border-gray-200 pl-4 italic;
+        }
+        
+        .prose table {
+            @apply min-w-full border border-gray-200 my-4;
+        }
+        
+        .prose th {
+            @apply bg-gray-50 px-4 py-2 border-b border-gray-200 font-semibold text-left;
+        }
+        
+        .prose td {
+            @apply px-4 py-2 border-b border-gray-200;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 顶部导航栏 -->
+    <header class="bg-white shadow-sm">
+        <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-8"></div>
+                <a href="/docs" class="text-xl font-bold text-gray-900">文档中心</a>
+                <div class="hidden md:flex space-x-4">
+                    <a href="/docs/AlingAi_docs" class="nav-link" data-type="alingai">AlingAI文档</a>
+                    <a href="/docs/Stanfai_docs" class="nav-link" data-type="stanfai">Stanfai文档</a>
+                    <a href="/docs/api" class="nav-link" data-type="api">API文档</a>
+                    <a href="/docs/examples" class="nav-link" data-type="examples">示例代码</a>
+                </div>
+            </div>
+            
+            <!-- 搜索框 -->
+            <div class="hidden md:block">
+                <div class="relative">
+                    <input type="search" 
+                           id="search-input"
+                           placeholder="搜索文档..." 
+                           class="w-64 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div id="search-results" 
+                         class="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg hidden">
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex">
+            <!-- 侧边栏 -->
+            <aside id="sidebar" class="hidden lg:block w-64 pr-8">
+                <nav class="sidebar space-y-1">
+                    <!-- 侧边栏内容将通过JavaScript动态加载 -->
+                </nav>
+            </aside>
+
+            <!-- 文档内容 -->
+            <div class="flex-1 content-wrapper">
+                <article id="content" class="prose prose-blue max-w-none">
+                    <!-- Markdown内容将被插入到这里 -->
+                </article>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-white border-t mt-8">
+        <div class="container mx-auto px-4 py-6 text-center text-gray-600">
+            <p>&copy; 2024 文档中心. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script>
+        // 高亮当前页面的导航链接
+        document.addEventListener('DOMContentLoaded', () => {
+            const docType = document.body.dataset.docType;
+            if (docType) {
+                document.querySelector(`[data-type="${docType}"]`)?.classList.add('active');
+            }
+        });
+
+        // 搜索功能
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+        
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+            
+            if (query.length < 2) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                fetch(`/docs/search?q=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.results.length > 0) {
+                            searchResults.innerHTML = data.results.map(result => `
+                                <a href="${result.path}" class="block px-4 py-2 hover:bg-gray-100">
+                                    <div class="font-medium">${result.title}</div>
+                                    <div class="text-sm text-gray-600">${result.context}</div>
+                                </a>
+                            `).join('');
+                            searchResults.classList.remove('hidden');
+                        } else {
+                            searchResults.innerHTML = `
+                                <div class="px-4 py-2 text-gray-600">
+                                    未找到相关结果
+                                </div>
+                            `;
+                            searchResults.classList.remove('hidden');
+                        }
+                    });
+            }, 300);
+        });
+
+        // 点击其他地方时隐藏搜索结果
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.add('hidden');
+            }
+        });
+
+        // 加载侧边栏
+        fetch('/docs/structure')
+            .then(res => res.json())
+            .then(structure => {
+                const sidebar = document.getElementById('sidebar');
+                const currentPath = window.location.pathname;
+                
+                // 根据当前路径确定要显示的文档类型
+                let currentDocs = [];
+                if (currentPath.includes('AlingAi_docs')) {
+                    currentDocs = structure.AlingAi.docs;
+                } else if (currentPath.includes('Stanfai_docs')) {
+                    currentDocs = structure.Stanfai.docs;
+                }
+                
+                if (currentDocs.length > 0) {
+                    const nav = sidebar.querySelector('nav');
+                    nav.innerHTML = currentDocs.map(doc => `
+                        <a href="${doc.path}" 
+                           class="nav-link ${currentPath === doc.path ? 'active' : ''}">
+                            ${doc.title}
+                        </a>
+                    `).join('');
+                }
+            });
+    </script>
+</body>
+</html>

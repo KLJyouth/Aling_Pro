@@ -1,0 +1,232 @@
+{
+    "timestamp": "2025-06-01 20:38:10",
+    "execution_time": 2.04,
+    "summary": {
+        "total_checks": 49,
+        "passed": 29,
+        "failed": 4,
+        "warnings": 16
+    },
+    "results": [
+        {
+            "status": "pass",
+            "message": "PHP版本: 8.1.32 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 pdo: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 pdo_mysql: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 json: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 openssl: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 mbstring: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 curl: 已安装 ✓"
+        },
+        {
+            "status": "fail",
+            "message": "PHP扩展 gd: 未安装"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 zip: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 xml: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "PHP扩展 hash: 已安装 ✓"
+        },
+        {
+            "status": "warn",
+            "message": "推荐扩展 redis: 未安装（建议安装以提升性能）"
+        },
+        {
+            "status": "warn",
+            "message": "推荐扩展 opcache: 未安装（建议安装以提升性能）"
+        },
+        {
+            "status": "warn",
+            "message": "推荐扩展 imagick: 未安装（建议安装以提升性能）"
+        },
+        {
+            "status": "pass",
+            "message": "内存限制: 128M ✓"
+        },
+        {
+            "status": "pass",
+            "message": "执行时间限制: 0 ✓"
+        },
+        {
+            "status": "fail",
+            "message": "错误显示: 已开启（生产环境应关闭）"
+        },
+        {
+            "status": "pass",
+            "message": "错误日志: 已启用 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "文件上传限制: 2M ✓"
+        },
+        {
+            "status": "pass",
+            "message": "POST数据限制: 8M ✓"
+        },
+        {
+            "status": "warn",
+            "message": "时区未设置，建议在php.ini中设置date.timezone"
+        },
+        {
+            "status": "pass",
+            "message": "服务器软件: Unknown ✓"
+        },
+        {
+            "status": "warn",
+            "message": "HTTPS: 未启用（生产环境强烈建议启用SSL）"
+        },
+        {
+            "status": "fail",
+            "message": "数据库连接失败: SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。"
+        },
+        {
+            "status": "pass",
+            "message": "目录可写: storage\/logs ✓"
+        },
+        {
+            "status": "warn",
+            "message": "目录不存在: storage\/cache"
+        },
+        {
+            "status": "warn",
+            "message": "目录不存在: storage\/uploads"
+        },
+        {
+            "status": "warn",
+            "message": "目录不存在: storage\/sessions"
+        },
+        {
+            "status": "warn",
+            "message": "文件权限 .env: 应该只读"
+        },
+        {
+            "status": "warn",
+            "message": "文件权限 config\/app.php: 应该只读"
+        },
+        {
+            "status": "warn",
+            "message": "文件权限 composer.json: 应该只读"
+        },
+        {
+            "status": "pass",
+            "message": ".env配置文件: 存在 ✓"
+        },
+        {
+            "status": "pass",
+            "message": ".env文件位置: 安全（不在public目录） ✓"
+        },
+        {
+            "status": "pass",
+            "message": "目录保护 vendor: 不在public目录 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "目录保护 src: 不在public目录 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "目录保护 config: 不在public目录 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "目录保护 storage: 不在public目录 ✓"
+        },
+        {
+            "status": "fail",
+            "message": "JWT密钥: 未配置或使用默认值"
+        },
+        {
+            "status": "warn",
+            "message": "调试模式: 已开启（生产环境建议关闭）"
+        },
+        {
+            "status": "pass",
+            "message": "Composer类映射: 已优化 ✓"
+        },
+        {
+            "status": "warn",
+            "message": "Redis缓存: PHP Redis扩展未安装"
+        },
+        {
+            "status": "pass",
+            "message": "日志配置: daily ✓"
+        },
+        {
+            "status": "pass",
+            "message": "OpenSSL扩展: 已安装 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "OpenSSL版本: OpenSSL 1.1.1w  11 Sep 2023 ✓"
+        },
+        {
+            "status": "warn",
+            "message": "备份脚本: 不存在，建议创建自动备份脚本"
+        },
+        {
+            "status": "warn",
+            "message": "备份目录: 不存在"
+        },
+        {
+            "status": "warn",
+            "message": "错误日志路径: 未设置"
+        },
+        {
+            "status": "pass",
+            "message": "应用日志目录: 可写 ✓"
+        },
+        {
+            "status": "pass",
+            "message": "健康检查脚本: 存在 ✓"
+        }
+    ],
+    "errors": [
+        "PHP扩展 gd: 未安装",
+        "错误显示: 已开启（生产环境应关闭）",
+        "数据库连接失败: SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。",
+        "JWT密钥: 未配置或使用默认值"
+    ],
+    "warnings": [
+        "推荐扩展 redis: 未安装（建议安装以提升性能）",
+        "推荐扩展 opcache: 未安装（建议安装以提升性能）",
+        "推荐扩展 imagick: 未安装（建议安装以提升性能）",
+        "时区未设置，建议在php.ini中设置date.timezone",
+        "HTTPS: 未启用（生产环境强烈建议启用SSL）",
+        "目录不存在: storage\/cache",
+        "目录不存在: storage\/uploads",
+        "目录不存在: storage\/sessions",
+        "文件权限 .env: 应该只读",
+        "文件权限 config\/app.php: 应该只读",
+        "文件权限 composer.json: 应该只读",
+        "调试模式: 已开启（生产环境建议关闭）",
+        "Redis缓存: PHP Redis扩展未安装",
+        "备份脚本: 不存在，建议创建自动备份脚本",
+        "备份目录: 不存在",
+        "错误日志路径: 未设置"
+    ]
+}

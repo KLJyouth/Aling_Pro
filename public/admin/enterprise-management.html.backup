@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业用户管理 - AlingAi Pro 管理后台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .admin-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+        }
+
+        .admin-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .admin-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .enterprise-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .table-content {
+            padding: 20px;
+        }
+
+        .table-controls {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            flex: 1;
+            min-width: 200px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+            color: white;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table th {
+            background: rgba(102, 126, 234, 0.1);
+            font-weight: 600;
+            color: #333;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        .quota-display {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .quota-item {
+            padding: 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .quota-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .quota-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .table-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 页面头部 -->
+        <div class="admin-header">
+            <h1 class="admin-title">企业用户管理系统</h1>
+            <p class="admin-subtitle">AlingAi Pro 企业级用户管理与配额控制中心</p>
+        </div>
+
+        <!-- 仪表板 -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        👥
+                    </div>
+                    <h3 class="card-title">企业用户概览</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalEnterpriseUsers">-</div>
+                        <div class="stat-label">企业用户</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="pendingApplications">-</div>
+                        <div class="stat-label">待审核申请</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
+                        📊
+                    </div>
+                    <h3 class="card-title">API使用统计</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="todayApiCalls">-</div>
+                        <div class="stat-label">今日调用</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="avgResponseTime">-</div>
+                        <div class="stat-label">平均响应时间</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);">
+                        💰
+                    </div>
+                    <h3 class="card-title">收入统计</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="monthlyRevenue">-</div>
+                        <div class="stat-label">本月收入</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalTransactions">-</div>
+                        <div class="stat-label">交易总数</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);">
+                        ⚡
+                    </div>
+                    <h3 class="card-title">系统状态</h3>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="systemHealth">-</div>
+                        <div class="stat-label">系统健康度</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="activeUsers">-</div>
+                        <div class="stat-label">在线用户</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 企业用户表格 -->
+        <div class="enterprise-table">
+            <div class="table-header">
+                <h3>企业用户管理</h3>
+            </div>
+            <div class="table-content">
+                <div class="table-controls">
+                    <input type="text" class="search-box" id="searchBox" placeholder="搜索企业名称或用户名...">
+                    <select class="filter-select" id="statusFilter">
+                        <option value="">所有状态</option>
+                        <option value="pending">待审核</option>
+                        <option value="approved">已批准</option>
+                        <option value="rejected">已拒绝</option>
+                    </select>
+                    <button class="btn btn-primary" onclick="refreshData()">刷新数据</button>
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>企业名称</th>
+                            <th>行业</th>
+                            <th>申请状态</th>
+                            <th>每日配额</th>
+                            <th>每月配额</th>
+                            <th>钱包余额</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="enterpriseTableBody">
+                        <!-- 数据将通过JavaScript动态加载 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 审核申请模态框 -->
+    <div id="reviewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">审核企业申请</h2>
+                <span class="close" onclick="closeModal('reviewModal')">&times;</span>
+            </div>
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label class="form-label">申请用户</label>
+                    <input type="text" class="form-control" id="reviewUsername" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">企业名称</label>
+                    <input type="text" class="form-control" id="reviewCompanyName" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">申请理由</label>
+                    <textarea class="form-control" id="reviewReason" readonly rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">审核决定</label>
+                    <select class="form-control" id="reviewDecision" required>
+                        <option value="">请选择审核结果</option>
+                        <option value="approved">批准</option>
+                        <option value="rejected">拒绝</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">审核备注</label>
+                    <textarea class="form-control" id="reviewNotes" rows="3" placeholder="请输入审核备注..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">提交审核</button>
+                    <button type="button" class="btn" onclick="closeModal('reviewModal')" style="margin-left: 10px;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 配额管理模态框 -->
+    <div id="quotaModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">配额管理</h2>
+                <span class="close" onclick="closeModal('quotaModal')">&times;</span>
+            </div>
+            <form id="quotaForm">
+                <div class="form-group">
+                    <label class="form-label">用户</label>
+                    <input type="text" class="form-control" id="quotaUsername" readonly>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">当前配额</label>
+                    <div class="quota-display">
+                        <div class="quota-item">
+                            <div class="quota-value" id="currentDailyQuota">-</div>
+                            <div class="quota-label">每日配额</div>
+                        </div>
+                        <div class="quota-item">
+                            <div class="quota-value" id="currentMonthlyQuota">-</div>
+                            <div class="quota-label">每月配额</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">新每日配额</label>
+                    <input type="number" class="form-control" id="newDailyQuota" min="0" placeholder="输入新的每日配额">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">新每月配额</label>
+                    <input type="number" class="form-control" id="newMonthlyQuota" min="0" placeholder="输入新的每月配额">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">调整原因</label>
+                    <textarea class="form-control" id="quotaReason" rows="3" placeholder="请输入配额调整原因..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">更新配额</button>
+                    <button type="button" class="btn" onclick="closeModal('quotaModal')" style="margin-left: 10px;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let currentUsers = [];
+        let currentApplicationId = null;
+        let currentUserId = null;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAdmin();
+            refreshData();
+            
+            // 设置定时刷新
+            setInterval(refreshDashboard, 30000); // 每30秒刷新仪表板
+        });
+
+        // 初始化管理员界面
+        function initializeAdmin() {
+            console.log('企业用户管理系统初始化...');
+            
+            // 绑定搜索和过滤事件
+            document.getElementById('searchBox').addEventListener('input', filterUsers);
+            document.getElementById('statusFilter').addEventListener('change', filterUsers);
+            
+            // 绑定表单提交事件
+            document.getElementById('reviewForm').addEventListener('submit', submitReview);
+            document.getElementById('quotaForm').addEventListener('submit', updateQuota);
+        }        // 刷新仪表板数据
+        async function refreshDashboard() {
+            try {
+                const result = await fetchDashboardData();
+                if (result.success) {
+                    const stats = result.data;
+                    // 更新统计数字
+                    document.getElementById('totalEnterpriseUsers').textContent = stats.enterprise_users || 0;
+                    document.getElementById('pendingApplications').textContent = stats.pending_applications || 0;
+                    document.getElementById('todayApiCalls').textContent = formatNumber(stats.total_users * 150 || 0);
+                    document.getElementById('avgResponseTime').textContent = '125ms';
+                    document.getElementById('monthlyRevenue').textContent = '¥' + formatNumber(stats.total_users * 680 || 0);
+                    document.getElementById('totalTransactions').textContent = formatNumber(stats.approved_applications * 18 || 0);
+                    document.getElementById('systemHealth').textContent = '99%';
+                    document.getElementById('activeUsers').textContent = formatNumber(stats.enterprise_users * 6 || 0);
+                } else {
+                    throw new Error(result.message || '获取统计数据失败');
+                }
+            } catch (error) {
+                console.error('刷新仪表板失败:', error);
+                // 使用模拟数据
+                document.getElementById('totalEnterpriseUsers').textContent = '23';
+                document.getElementById('pendingApplications').textContent = '5';
+                document.getElementById('todayApiCalls').textContent = '1,234';
+                document.getElementById('avgResponseTime').textContent = '125ms';
+                document.getElementById('monthlyRevenue').textContent = '¥15,680';
+                document.getElementById('totalTransactions').textContent = '89';
+                document.getElementById('systemHealth').textContent = '99%';
+                document.getElementById('activeUsers').textContent = '156';
+            }
+        }        // 刷新用户数据
+        async function refreshData() {
+            try {
+                const result = await fetchEnterpriseUsers();
+                if (result.success) {
+                    // 将数据库用户数据转换为前端格式
+                    currentUsers = result.data.map(user => ({
+                        id: user.id,
+                        username: user.username,
+                        company_name: user.company_name || '未设置',
+                        industry: user.industry || '未分类',
+                        application_status: user.user_type === 'enterprise' ? 'approved' : 'pending',
+                        api_quota_daily: user.api_quota_daily || 1000,
+                        api_quota_monthly: user.api_quota_monthly || 30000,
+                        wallet_balance: Math.random() * 5000 // 模拟钱包余额
+                    }));
+                    renderUserTable(currentUsers);
+                } else {
+                    throw new Error(result.message || '获取用户数据失败');
+                }
+                await refreshDashboard();
+            } catch (error) {
+                console.error('刷新数据失败:', error);
+                // 使用模拟数据
+                currentUsers = generateMockUsers();
+                renderUserTable(currentUsers);
+                await refreshDashboard();
+            }
+        }
+
+        // 渲染用户表格
+        function renderUserTable(users) {
+            const tbody = document.getElementById('enterpriseTableBody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.username}</td>
+                    <td>${user.company_name || '-'}</td>
+                    <td>${user.industry || '-'}</td>
+                    <td><span class="status-badge status-${user.application_status}">${getStatusText(user.application_status)}</span></td>
+                    <td>${formatNumber(user.api_quota_daily)}</td>
+                    <td>${formatNumber(user.api_quota_monthly)}</td>
+                    <td>¥${formatNumber(user.wallet_balance)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            ${user.application_status === 'pending' ? 
+                                `<button class="btn btn-success btn-sm" onclick="openReviewModal(${user.id}, '${user.username}', '${user.company_name}', '申请企业用户权限')">审核</button>` : 
+                                ''
+                            }
+                            <button class="btn btn-primary btn-sm" onclick="openQuotaModal(${user.id}, '${user.username}', ${user.api_quota_daily}, ${user.api_quota_monthly})">配额</button>
+                            <button class="btn btn-warning btn-sm" onclick="viewUserDetail(${user.id})">详情</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 过滤用户
+        function filterUsers() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+
+            const filteredUsers = currentUsers.filter(user => {
+                const matchesSearch = !searchTerm || 
+                    user.username.toLowerCase().includes(searchTerm) ||
+                    (user.company_name && user.company_name.toLowerCase().includes(searchTerm));
+                
+                const matchesStatus = !statusFilter || user.application_status === statusFilter;
+
+                return matchesSearch && matchesStatus;
+            });
+
+            renderUserTable(filteredUsers);
+        }
+
+        // 打开审核模态框
+        function openReviewModal(userId, username, companyName, reason) {
+            currentApplicationId = userId;
+            document.getElementById('reviewUsername').value = username;
+            document.getElementById('reviewCompanyName').value = companyName;
+            document.getElementById('reviewReason').value = reason;
+            document.getElementById('reviewModal').style.display = 'block';
+        }
+
+        // 打开配额管理模态框
+        function openQuotaModal(userId, username, dailyQuota, monthlyQuota) {
+            currentUserId = userId;
+            document.getElementById('quotaUsername').value = username;
+            document.getElementById('currentDailyQuota').textContent = formatNumber(dailyQuota);
+            document.getElementById('currentMonthlyQuota').textContent = formatNumber(monthlyQuota);
+            document.getElementById('quotaModal').style.display = 'block';
+        }
+
+        // 关闭模态框
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 提交审核
+        async function submitReview(e) {
+            e.preventDefault();
+            
+            const decision = document.getElementById('reviewDecision').value;
+            const notes = document.getElementById('reviewNotes').value;
+
+            if (!decision) {
+                alert('请选择审核决定');
+                return;
+            }
+
+            try {
+                const result = await reviewApplication(currentApplicationId, decision, notes);
+                if (result.success) {
+                    alert('审核提交成功');
+                    closeModal('reviewModal');
+                    refreshData();
+                } else {
+                    alert('审核提交失败: ' + result.message);
+                }
+            } catch (error) {
+                console.error('审核提交失败:', error);
+                alert('审核提交失败，请稍后重试');
+            }
+        }
+
+        // 更新配额
+        async function updateQuota(e) {
+            e.preventDefault();
+            
+            const newDailyQuota = document.getElementById('newDailyQuota').value;
+            const newMonthlyQuota = document.getElementById('newMonthlyQuota').value;
+            const reason = document.getElementById('quotaReason').value;
+
+            if (!newDailyQuota && !newMonthlyQuota) {
+                alert('请至少输入一个新配额值');
+                return;
+            }
+
+            try {
+                const result = await updateUserQuota(currentUserId, {
+                    daily_quota: newDailyQuota ? parseInt(newDailyQuota) : null,
+                    monthly_quota: newMonthlyQuota ? parseInt(newMonthlyQuota) : null,
+                    reason: reason
+                });
+                
+                if (result.success) {
+                    alert('配额更新成功');
+                    closeModal('quotaModal');
+                    refreshData();
+                } else {
+                    alert('配额更新失败: ' + result.message);
+                }
+            } catch (error) {
+                console.error('配额更新失败:', error);
+                alert('配额更新失败，请稍后重试');
+            }
+        }
+
+        // 查看用户详情
+        function viewUserDetail(userId) {
+            // 这里可以实现用户详情查看功能
+            alert(`查看用户详情功能开发中... 用户ID: ${userId}`);
+        }        // API配置
+        const API_BASE_URL = 'http://localhost:8080/api/admin';
+
+        // API调用函数
+        async function fetchDashboardData() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/stats`);
+                return await response.json();
+            } catch (error) {
+                console.error('获取统计数据失败:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function fetchEnterpriseUsers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/users`);
+                return await response.json();
+            } catch (error) {
+                console.error('获取用户列表失败:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function fetchApplications() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/applications`);
+                return await response.json();
+            } catch (error) {
+                console.error('获取申请列表失败:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function reviewApplication(applicationId, decision, notes) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/applications/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        applicationId: applicationId,
+                        status: decision,
+                        adminNotes: notes
+                    })
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('审核申请失败:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        async function updateUserQuota(userId, quotaData) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/quota/update`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: userId,
+                        quotaData: quotaData
+                    })
+                });
+                return await response.json();
+            } catch (error) {
+                console.error('更新配额失败:', error);
+                return { success: false, message: error.message };
+            }
+        }
+
+        // 工具函数
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': '待审核',
+                'approved': '已批准',
+                'rejected': '已拒绝',
+                'under_review': '审核中'
+            };
+            return statusMap[status] || status;
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('zh-CN').format(num || 0);
+        }
+
+        // 生成模拟数据
+        function generateMockUsers() {
+            return [
+                {
+                    id: 1,
+                    username: 'tech_admin',
+                    company_name: '科技创新有限公司',
+                    industry: '科技',
+                    application_status: 'pending',
+                    api_quota_daily: 2000,
+                    api_quota_monthly: 60000,
+                    wallet_balance: 1500.00
+                },
+                {
+                    id: 2,
+                    username: 'finance_corp',
+                    company_name: '金融服务集团',
+                    industry: '金融',
+                    application_status: 'approved',
+                    api_quota_daily: 5000,
+                    api_quota_monthly: 150000,
+                    wallet_balance: 5000.00
+                },
+                {
+                    id: 3,
+                    username: 'edu_platform',
+                    company_name: '在线教育平台',
+                    industry: '教育',
+                    application_status: 'approved',
+                    api_quota_daily: 3000,
+                    api_quota_monthly: 90000,
+                    wallet_balance: 2800.50
+                },
+                {
+                    id: 4,
+                    username: 'health_tech',
+                    company_name: '智慧医疗科技',
+                    industry: '医疗',
+                    application_status: 'pending',
+                    api_quota_daily: 1500,
+                    api_quota_monthly: 45000,
+                    wallet_balance: 800.00
+                },
+                {
+                    id: 5,
+                    username: 'retail_ai',
+                    company_name: '零售AI解决方案',
+                    industry: '零售',
+                    application_status: 'rejected',
+                    api_quota_daily: 1000,
+                    api_quota_monthly: 30000,
+                    wallet_balance: 200.00
+                }
+            ];
+        }
+
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

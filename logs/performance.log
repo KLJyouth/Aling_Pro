@@ -1,0 +1,760 @@
+
+{"timestamp":"2025-06-15 16:21:11","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:11","start_time":1750004469.19856},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:13","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:13","start_time":1750004471.365105},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:15","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:15","start_time":1750004473.498655},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:17","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:17","start_time":1750004475.642474},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:19","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:19","start_time":1750004477.785313},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:22","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:22","start_time":1750004479.920219},"memory_mb":8}
+
+{"timestamp":"2025-06-15 16:21:24","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 16:21:24","start_time":1750004482.061715},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:37","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:37","start_time":1750007013.079129},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:39","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:39","start_time":1750007017.008647},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:41","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:41","start_time":1750007019.166328},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:43","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:43","start_time":1750007021.326052},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:45","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:45","start_time":1750007023.467837},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:47","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:47","start_time":1750007025.618858},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:03:49","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:03:49","start_time":1750007027.771324},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:17","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:17","start_time":1750007535.449762},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:19","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:19","start_time":1750007537.59262},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:21","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:21","start_time":1750007539.714727},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:24","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:24","start_time":1750007541.858296},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:26","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:26","start_time":1750007544.012186},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:28","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:28","start_time":1750007546.152767},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:12:30","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:12:30","start_time":1750007548.314156},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:04","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:04","start_time":1750007582.191207},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:06","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:06","start_time":1750007584.35363},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:08","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:08","start_time":1750007586.516333},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:10","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:10","start_time":1750007588.744713},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:13","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:13","start_time":1750007590.876465},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:15","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:15","start_time":1750007593.00719},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:13:17","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:13:17","start_time":1750007595.156292},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:08","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:08","start_time":1750007646.425669},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:11","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:11","start_time":1750007648.899876},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:13","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:13","start_time":1750007651.051852},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:15","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:15","start_time":1750007653.187388},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:17","start_time":1750007655.377327},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:19","start_time":1750007657.503026},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:14:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:14:21","start_time":1750007659.636781},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:40","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:40","start_time":1750008998.338353},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:42","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:42","start_time":1750009000.49294},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:44","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:44","start_time":1750009002.649147},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:46","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:46","start_time":1750009004.807949},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:49","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:49","start_time":1750009006.974585},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:51","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:51","start_time":1750009009.123954},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:36:53","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:36:53","start_time":1750009011.282353},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:25","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:25","start_time":1750009042.99841},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:27","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:27","start_time":1750009045.145362},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:29","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:29","start_time":1750009047.294236},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:31","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:31","start_time":1750009049.454262},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:33","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:33","start_time":1750009051.660643},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:35","start_time":1750009053.814593},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:37:38","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:37:38","start_time":1750009055.957859},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:44","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:44","start_time":1750009122.196942},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:46","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:46","start_time":1750009124.346814},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:48","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:48","start_time":1750009126.501782},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:50","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:50","start_time":1750009128.629176},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:52","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:52","start_time":1750009130.764609},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:55","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:55","start_time":1750009132.910962},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:38:57","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 17:38:57","start_time":1750009135.061706},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:41:50","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:41:50","start_time":1750009308.454014},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:41:52","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:41:52","start_time":1750009310.622289},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:41:54","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:41:54","start_time":1750009312.786422},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:41:57","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:41:57","start_time":1750009314.92047},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:41:59","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:41:59","start_time":1750009317.050659},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:42:01","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:42:01","start_time":1750009319.201559},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:42:03","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:42:03","start_time":1750009321.349737},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:09","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:09","start_time":1750009386.978178},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:11","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:11","start_time":1750009389.13391},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:13","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:13","start_time":1750009391.280369},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:15","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:15","start_time":1750009393.425696},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:17","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:17","start_time":1750009395.583445},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:19","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:19","start_time":1750009397.720525},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:43:22","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:43:22","start_time":1750009399.856009},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:36","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:36","start_time":1750009474.074947},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:38","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:38","start_time":1750009476.235941},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:40","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:40","start_time":1750009478.366673},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:42","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:42","start_time":1750009480.527358},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:44","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:44","start_time":1750009482.669814},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:46","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:46","start_time":1750009484.804603},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:44:49","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:44:49","start_time":1750009486.945236},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:47:58","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:47:58","start_time":1750009676.699321},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:01","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:01","start_time":1750009678.867208},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:03","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:03","start_time":1750009681.015516},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:05","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:05","start_time":1750009683.143079},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:07","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:07","start_time":1750009685.305693},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:09","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:09","start_time":1750009687.468576},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:11","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:11","start_time":1750009689.628704},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:52","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:52","start_time":1750009730.159158},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:54","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:54","start_time":1750009732.296951},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:56","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:56","start_time":1750009734.432632},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:48:58","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:48:58","start_time":1750009736.579827},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:49:00","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:49:00","start_time":1750009738.721007},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:49:03","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:49:03","start_time":1750009740.86228},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:49:05","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:49:05","start_time":1750009743.018332},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:44","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:44","start_time":1750009842.212384},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:46","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:46","start_time":1750009844.376886},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:48","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:48","start_time":1750009846.524545},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:50","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:50","start_time":1750009848.655863},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:52","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:52","start_time":1750009850.82268},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:55","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:55","start_time":1750009852.958414},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:50:57","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:50:57","start_time":1750009855.112769},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:16","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:16","start_time":1750009934.5722},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:18","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:18","start_time":1750009936.722501},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:21","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:21","start_time":1750009938.865438},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:23","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:23","start_time":1750009941.03001},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:25","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:25","start_time":1750009943.200589},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:27","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:27","start_time":1750009945.354554},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:29","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:29","start_time":1750009947.541647},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:44","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:44","start_time":1750009962.404222},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:46","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:46","start_time":1750009964.551924},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:48","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:48","start_time":1750009966.689952},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:51","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:51","start_time":1750009968.840286},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:53","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:53","start_time":1750009971.02249},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:55","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:55","start_time":1750009973.187441},"memory_mb":8}
+
+{"timestamp":"2025-06-15 17:52:57","type":"api_request_start","data":{"endpoint":"\/api\/","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT; Windows NT 10.0; zh-CN) WindowsPowerShell\/5.1.26100.4202","ip":"127.0.0.1","timestamp":"2025-06-15 17:52:57","start_time":1750009975.318766},"memory_mb":8}
+
+{"timestamp":"2025-06-15 18:11:04","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:04","start_time":1750011061.081939},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:06","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:06","start_time":1750011064.758077},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:09","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:09","start_time":1750011066.917065},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:11","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:11","start_time":1750011069.076606},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:13","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:13","start_time":1750011071.247183},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:15","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:15","start_time":1750011073.411116},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:11:17","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 18:11:17","start_time":1750011075.57184},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:12","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:12","start_time":1750012212.68764},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:12","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:12","start_time":1750012212.801344},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012212.918068},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012213.028542},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012213.135121},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012213.256378},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012213.364205},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:13","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:13","start_time":1750012213.888008},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.000252},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.106687},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.218103},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.33293},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.439682},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:14","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:14","start_time":1750012214.54674},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.055375},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.170958},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.286271},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.395329},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.510346},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.617482},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:15","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:15","start_time":1750012215.790525},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.292754},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.400441},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.514305},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.632302},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.739497},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:16","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:16","start_time":1750012216.855723},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012216.957843},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012217.449351},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012217.562951},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012217.671575},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012217.781438},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:17","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:17","start_time":1750012217.890031},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:18","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:18","start_time":1750012218.000275},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:18","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/login","method":"POST","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:18","start_time":1750012218.105108},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:18","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:18","start_time":1750012218.60543},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:18","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:18","start_time":1750012218.716896},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:18","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:18","start_time":1750012218.823446},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012218.935327},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012219.042808},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012219.156849},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/auth\/status","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012219.267314},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012219.765026},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:19","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:19","start_time":1750012219.875526},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:20","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:20","start_time":1750012219.986976},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:20","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:20","start_time":1750012220.097361},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:20","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:20","start_time":1750012220.201328},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:20","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:20","start_time":1750012220.318877},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:20","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/profile","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:20","start_time":1750012220.434541},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012220.929545},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.064715},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.226768},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.347927},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.465631},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.575898},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:21","type":"api_request_start","data":{"endpoint":"\/api\/v1\/users\/list","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:21","start_time":1750012221.677631},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.170223},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.278941},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.413762},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.52234},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.630279},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.732395},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:22","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/info","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:22","start_time":1750012222.836428},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:23","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:23","start_time":1750012223.341301},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:23","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:23","start_time":1750012223.458709},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:23","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:23","start_time":1750012223.567662},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:23","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:23","start_time":1750012223.681346},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:23","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:23","start_time":1750012223.793439},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:24","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:24","start_time":1750012223.903397},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:24","type":"api_request_start","data":{"endpoint":"\/api\/v1\/system\/health","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:24","start_time":1750012224.022067},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:24","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:24","start_time":1750012224.513437},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:24","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:24","start_time":1750012224.711826},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:24","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:24","start_time":1750012224.821144},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012224.930496},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012225.043747},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012225.147961},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/security\/overview","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012225.26177},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012225.75306},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:25","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:25","start_time":1750012225.866862},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:26","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:26","start_time":1750012225.976274},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:26","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:26","start_time":1750012226.086631},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:26","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:26","start_time":1750012226.270303},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:26","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:26","start_time":1750012226.37889},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:26","type":"api_request_start","data":{"endpoint":"\/api\/v1\/ai\/agents","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:26","start_time":1750012226.495796},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.011122},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.114685},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.222339},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.343097},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.453369},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.567051},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:27","type":"api_request_start","data":{"endpoint":"\/api\/v1\/blockchain\/wallet","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:27","start_time":1750012227.676725},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.179979},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.286332},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.401938},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.512986},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.624956},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.738321},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:28","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/dashboard","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:28","start_time":1750012228.847866},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:29","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/analytics","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:29","start_time":1750012229.343742},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:29","type":"api_request_start","data":{"endpoint":"\/api\/v2\/enhanced\/analytics","method":"GET","user_agent":"","ip":"127.0.0.1","timestamp":"2025-06-15 18:30:29","start_time":1750012229.452906},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:29","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:29","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/enhanced\/analytics","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\UserApiController.php","line":16,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":53,"function":"__construct","class":"AlingAi\\Controllers\\Api\\UserApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:30","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:30","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/admin\/system\/status","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:30","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:30","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/admin\/users\/manage","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:31","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:31","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/security\/quantum\/status","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:31","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:31","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/ai\/advanced\/query","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:32","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:32","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v2\/cache\/management","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:32","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:32","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v3\/next-gen\/interface","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:33","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:33","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v3\/next-gen\/features","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:33","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:33","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v3\/quantum\/advanced","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:34","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:34","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v3\/ai\/neural\/network","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:34","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:34","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/v3\/blockchain\/smart-contracts","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:35","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:35","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/admin\/dashboard","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:35","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:35","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/admin\/users","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:36","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:36","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/admin\/system","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:36","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:36","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/admin\/logs","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:37","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:37","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/security\/status","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:37","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:37","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/security\/scan","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:38","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:38","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/security\/threats","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:38","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:38","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/quantum\/status","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:39","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:39","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/quantum\/random","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:39","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:39","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/quantum\/encrypt","method":"POST"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:40","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:40","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/quantum\/decrypt","method":"POST"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:40","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:40","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/ai\/chat","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:41","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:41","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/ai\/agents","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:41","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:41","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/ai\/models","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:42","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:42","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/system\/metrics","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:42","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:42","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/system\/performance","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:30:43","type":"api_response","data":429,"memory_mb":6}
+{"timestamp":"2025-06-15 18:30:43","type":"error","data":{"message":"Rate limit exceeded","context":{"status_code":429,"details":null,"endpoint":"\/api\/system\/cache","method":"GET"},"stack_trace":[{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":293,"function":"logError","class":"AlingAi\\Services\\PerformanceMonitorService","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":73,"function":"sendErrorResponse","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Controllers\\Api\\BaseApiController.php","line":37,"function":"initializeSecurity","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":50,"function":"__construct","class":"AlingAi\\Controllers\\Api\\BaseApiController","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":43,"function":"initializeControllers","class":"ApiRouter","type":"->"},{"file":"E:\\Code\\AlingAi\\AlingAi_pro\\public\\api\\index.php","line":413,"function":"__construct","class":"ApiRouter","type":"->"}]},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:35","start_time":1750012955.680076},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:35","start_time":1750012955.804894},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:36","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:36","start_time":1750012955.914492},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:36","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:36","start_time":1750012956.034906},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:36","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:36","start_time":1750012956.147522},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:36","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:36","start_time":1750012956.251206},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:36","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:36","start_time":1750012956.365832},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012956.883829},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.002691},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.10826},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.222699},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.338387},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.452312},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:37","start_time":1750012957.557429},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.048507},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.1612},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.274074},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.382684},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.488661},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.593213},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:38","start_time":1750012958.70381},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.205813},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.317513},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.431309},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.538944},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.650316},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:39","start_time":1750012959.765501},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:42:40","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:42:40","start_time":1750012959.871769},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:10","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:10","start_time":1750013350.799277},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013350.912101},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013351.019687},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013351.133196},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013351.249406},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013351.349446},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:11","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:11","start_time":1750013351.463609},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013351.98242},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.089157},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.209036},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.32283},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.433474},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.539435},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:12","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:12","start_time":1750013352.654257},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.153554},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.259347},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.377662},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.490311},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.608659},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.723669},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:13","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:13","start_time":1750013353.82468},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:14","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:14","start_time":1750013354.340616},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:14","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:14","start_time":1750013354.455396},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:14","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:14","start_time":1750013354.565661},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:14","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:14","start_time":1750013354.679552},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:14","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:14","start_time":1750013354.810372},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:15","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:15","start_time":1750013354.929258},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:49:15","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:49:15","start_time":1750013355.035168},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:47","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:47","start_time":1750013505.790269},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013507.950324},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013508.062401},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013508.176729},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013508.285554},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013508.395958},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:48","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:48","start_time":1750013508.513811},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.089232},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.196076},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.300628},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.409616},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.515197},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.629446},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:49","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:49","start_time":1750013509.74134},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.249402},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.368761},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.476456},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.586295},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.694659},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:50","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:50","start_time":1750013510.802984},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013510.915435},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013511.415489},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013511.531276},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013511.646692},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013511.759202},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:51","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:51","start_time":1750013511.871451},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:52","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:52","start_time":1750013511.979755},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:51:52","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/6.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:51:52","start_time":1750013512.0902},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.029883},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.147912},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.258296},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.374866},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.481629},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.594941},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:35","type":"api_request_start","data":{"endpoint":"\/api\/health","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:35","start_time":1750013675.704153},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.225728},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.33694},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.450347},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.565115},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.682163},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:36","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:36","start_time":1750013676.792506},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:37","type":"api_request_start","data":{"endpoint":"\/api\/version","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:37","start_time":1750013676.902809},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:37","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:37","start_time":1750013677.41416},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:37","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:37","start_time":1750013677.52618},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:37","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:37","start_time":1750013677.641053},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013677.741464},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013678.010143},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013678.123436},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/status","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013678.24462},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013678.740807},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:38","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:38","start_time":1750013678.846416},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:39","start_time":1750013678.957541},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:39","start_time":1750013679.078778},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:39","start_time":1750013679.181452},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:39","start_time":1750013679.287769},"memory_mb":6}
+
+{"timestamp":"2025-06-15 18:54:39","type":"api_request_start","data":{"endpoint":"\/api\/test","method":"GET","user_agent":"AlingAiPro-Test\/1.0","ip":"127.0.0.1","timestamp":"2025-06-15 18:54:39","start_time":1750013679.404782},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:34","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:34","start_time":1750014574.84664},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014574.951105},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014575.059533},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014575.160361},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014575.27696},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014575.396229},"memory_mb":6}
+
+{"timestamp":"2025-06-15 19:09:35","type":"api_request_start","data":{"endpoint":"\/api","method":"GET","user_agent":"Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/116.0.5845.97 Safari\/537.36 Core\/1.116.489.400 QQBrowser\/13.7.6351.400","ip":"127.0.0.1","timestamp":"2025-06-15 19:09:35","start_time":1750014575.500616},"memory_mb":6}

@@ -1,0 +1,19 @@
+{
+    "php": {
+        "display_errors": "Off",
+        "display_startup_errors": "Off",
+        "log_errors": "On",
+        "error_reporting": 32767,
+        "memory_limit": "256M",
+        "max_execution_time": 30,
+        "upload_max_filesize": "10M",
+        "post_max_size": "10M"
+    },
+    "application": {
+        "environment": "production",
+        "debug": false,
+        "cache_enabled": true,
+        "session_secure": true,
+        "csrf_protection": true
+    }
+}

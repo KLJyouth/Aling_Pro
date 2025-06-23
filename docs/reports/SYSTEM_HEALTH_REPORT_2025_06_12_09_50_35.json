@@ -1,0 +1,310 @@
+{
+    "timestamp": 1749721835,
+    "version": "6.0.0",
+    "total_tests": 60,
+    "passed_tests": 42,
+    "failed_tests": 18,
+    "success_rate": 70,
+    "results": [
+        {
+            "test": "PHP\u7248\u672c\u68c0\u67e5 (\u8981\u6c42 >= 8.1)",
+            "passed": true,
+            "message": "\u5f53\u524d\u7248\u672c: 8.1.32"
+        },
+        {
+            "test": "PHP\u6269\u5c55: pdo",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: pdo_mysql",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: redis",
+            "passed": false,
+            "message": "\u672a\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: curl",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: json",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: openssl",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: mbstring",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: xml",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: gd",
+            "passed": false,
+            "message": "\u672a\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: zip",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: intl",
+            "passed": false,
+            "message": "\u672a\u5b89\u88c5"
+        },
+        {
+            "test": "PHP\u6269\u5c55: bcmath",
+            "passed": true,
+            "message": "\u5df2\u5b89\u88c5"
+        },
+        {
+            "test": "\u5185\u5b58\u9650\u5236\u68c0\u67e5",
+            "passed": false,
+            "message": "\u5f53\u524d\u8bbe\u7f6e: 128M"
+        },
+        {
+            "test": "\u6267\u884c\u65f6\u95f4\u9650\u5236",
+            "passed": true,
+            "message": "\u5f53\u524d\u8bbe\u7f6e: 0\u79d2"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: storage\/logs",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: storage\/logs",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: storage\/framework\/cache",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: storage\/framework\/cache",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: storage\/framework\/sessions",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: storage\/framework\/sessions",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: storage\/framework\/views",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: storage\/framework\/views",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: bootstrap\/cache",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: bootstrap\/cache",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u76ee\u5f55\u6743\u9650: public",
+            "passed": true,
+            "message": "\u5f53\u524d\u6743\u9650: 777 (\u671f\u671b: 755)"
+        },
+        {
+            "test": "\u76ee\u5f55\u53ef\u5199\u6027: public",
+            "passed": true,
+            "message": "\u53ef\u5199"
+        },
+        {
+            "test": "\u6570\u636e\u5e93\u8fde\u63a5",
+            "passed": true,
+            "message": "\u8fde\u63a5\u6210\u529f"
+        },
+        {
+            "test": "MySQL\u7248\u672c\u68c0\u67e5",
+            "passed": true,
+            "message": "\u7248\u672c: 8.0.24"
+        },
+        {
+            "test": "\u6838\u5fc3\u8868: users",
+            "passed": true,
+            "message": "\u5b58\u5728"
+        },
+        {
+            "test": "\u6838\u5fc3\u8868: enterprises",
+            "passed": false,
+            "message": "\u4e0d\u5b58\u5728"
+        },
+        {
+            "test": "\u6838\u5fc3\u8868: workspaces",
+            "passed": false,
+            "message": "\u4e0d\u5b58\u5728"
+        },
+        {
+            "test": "\u6838\u5fc3\u8868: projects",
+            "passed": false,
+            "message": "\u4e0d\u5b58\u5728"
+        },
+        {
+            "test": "Redis\u6269\u5c55",
+            "passed": false,
+            "message": "Redis\u6269\u5c55\u672a\u5b89\u88c5"
+        },
+        {
+            "test": "\u5e94\u7528\u6838\u5fc3\u6587\u4ef6",
+            "passed": true,
+            "message": "\u5b58\u5728"
+        },
+        {
+            "test": "\u914d\u7f6e\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5b58\u5728"
+        },
+        {
+            "test": "\u6027\u80fd\u76d1\u63a7\u5668",
+            "passed": true,
+            "message": "\u5b58\u5728"
+        },
+        {
+            "test": "\u96f6\u4fe1\u4efb\u5b89\u5168\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5b58\u5728"
+        },
+        {
+            "test": "\u4f01\u4e1a\u670d\u52a1\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u5de5\u4f5c\u7a7a\u95f4\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u9879\u76ee\u7ba1\u7406\u5668",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u56e2\u961f\u7ba1\u7406\u5668",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "AI\u670d\u52a1\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u81ea\u7136\u8bed\u8a00\u5904\u7406",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u8ba1\u7b97\u673a\u89c6\u89c9",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u8bed\u97f3\u5904\u7406",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u533a\u5757\u94fe\u670d\u52a1\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u94b1\u5305\u7ba1\u7406\u5668",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u667a\u80fd\u5408\u7ea6\u7ba1\u7406\u5668",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u96f6\u4fe1\u4efb\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u8ba4\u8bc1\u7ba1\u7406\u5668",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u52a0\u5bc6\u7ba1\u7406\u5668",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u5185\u5b58\u4f7f\u7528\u7387",
+            "passed": true,
+            "message": "3.12% (4 MB \/ 128M)"
+        },
+        {
+            "test": "\u78c1\u76d8\u4f7f\u7528\u7387",
+            "passed": true,
+            "message": "41.69% (\u53ef\u7528: 271.57 GB)"
+        },
+        {
+            "test": "\u7cfb\u7edf\u54cd\u5e94\u65f6\u95f4",
+            "passed": false,
+            "message": "1749721835693.99 ms"
+        },
+        {
+            "test": "API\u8def\u7531",
+            "passed": true,
+            "message": "\u5df2\u914d\u7f6e"
+        },
+        {
+            "test": "Web\u8def\u7531",
+            "passed": false,
+            "message": "\u7f3a\u5931"
+        },
+        {
+            "test": "\u653f\u5e9c\u95e8\u6237",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u4f01\u4e1a\u5de5\u4f5c\u7a7a\u95f4",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        },
+        {
+            "test": "\u7ba1\u7406\u5458\u63a7\u5236\u53f0",
+            "passed": true,
+            "message": "\u5df2\u90e8\u7f72"
+        }
+    ]
+}

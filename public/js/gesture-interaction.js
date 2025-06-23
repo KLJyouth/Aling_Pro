@@ -1,0 +1,548 @@
+try {
+/**
+ * 高级手势交互系统
+ * 支持多点触控、手势识别和交互反馈
+ */
+class AdvancedGestureSystem {
+    constructor() {
+        this.gestureRecognizer = new GestureRecognizer();
+        this.touchTracker = new TouchTracker();
+        this.interactionCallbacks = new Map();
+        this.enabled = true;
+        
+        this.gestures = {
+            tap: { fingers: 1, duration: [0, 300] },
+            doubleTap: { fingers: 1, interval: [0, 400] },
+            longPress: { fingers: 1, duration: [800, Infinity] },
+            pinch: { fingers: 2, type: 'pinch' },
+            swipe: { fingers: 1, distance: 50 },
+            rotate: { fingers: 2, type: 'rotate' },
+            threeFinger: { fingers: 3, type: 'tap' }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.createVisualFeedback();
+        
+    }
+    
+    setupEventListeners() {
+        const container = document.querySelector('.cpp-animation-container-enhanced');
+        if (!container) return;
+        
+        // 触摸事件
+        container.addEventListener('touchstart', this.handleTouchStart.bind(this), { passive: false });
+        container.addEventListener('touchmove', this.handleTouchMove.bind(this), { passive: false });
+        container.addEventListener('touchend', this.handleTouchEnd.bind(this), { passive: false });
+        
+        // 鼠标事件（模拟手势）
+        container.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        container.addEventListener('mousemove', this.handleMouseMove.bind(this));
+        container.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        
+        // 滚轮事件
+        container.addEventListener('wheel', this.handleWheel.bind(this), { passive: false });
+        
+        // 键盘手势
+        document.addEventListener('keydown', this.handleKeyDown.bind(this));
+    }
+    
+    handleTouchStart(event) {
+        if (!this.enabled) return;
+        
+        event.preventDefault();
+        this.touchTracker.startTracking(event);
+        
+        const touches = Array.from(event.touches);
+        this.createTouchVisuals(touches);
+    }
+    
+    handleTouchMove(event) {
+        if (!this.enabled) return;
+        
+        event.preventDefault();
+        this.touchTracker.updateTracking(event);
+        
+        // 检测手势
+        const gesture = this.gestureRecognizer.analyze(this.touchTracker.getState());
+        if (gesture) {
+            this.executeGestureAction(gesture);
+        }
+    }
+    
+    handleTouchEnd(event) {
+        if (!this.enabled) return;
+        
+        const gesture = this.touchTracker.endTracking(event);
+        if (gesture) {
+            this.executeGestureAction(gesture);
+        }
+        
+        this.clearTouchVisuals();
+    }
+    
+    handleMouseDown(event) {
+        this.mouseState = {
+            startX: event.clientX,
+            startY: event.clientY,
+            startTime: Date.now(),
+            isDown: true
+        };
+        
+        this.createMouseVisual(event.clientX, event.clientY);
+    }
+    
+    handleMouseMove(event) {
+        if (!this.mouseState?.isDown) return;
+        
+        const deltaX = event.clientX - this.mouseState.startX;
+        const deltaY = event.clientY - this.mouseState.startY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        if (distance > 50) {
+            // 检测滑动方向
+            const angle = Math.atan2(deltaY, deltaX);
+            const direction = this.getSwipeDirection(angle);
+            
+            this.executeGestureAction({
+                type: 'swipe',
+                direction,
+                distance,
+                velocity: distance / (Date.now() - this.mouseState.startTime)
+            });
+        }
+    }
+    
+    handleMouseUp(event) {
+        if (!this.mouseState) return;
+        
+        const duration = Date.now() - this.mouseState.startTime;
+        const deltaX = event.clientX - this.mouseState.startX;
+        const deltaY = event.clientY - this.mouseState.startY;
+        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        
+        if (distance < 10) {
+            if (duration < 300) {
+                this.executeGestureAction({ type: 'tap', x: event.clientX, y: event.clientY });
+            } else {
+                this.executeGestureAction({ type: 'longPress', x: event.clientX, y: event.clientY });
+            }
+        }
+        
+        this.mouseState = null;
+        this.clearMouseVisual();
+    }
+    
+    handleWheel(event) {
+        if (!this.enabled) return;
+        
+        event.preventDefault();
+        
+        const direction = event.deltaY > 0 ? 'down' : 'up';
+        this.executeGestureAction({
+            type: 'scroll',
+            direction,
+            delta: Math.abs(event.deltaY)
+        });
+    }
+    
+    handleKeyDown(event) {
+        const keyGestures = {
+            'Space': 'restart',
+            'Enter': 'trigger',
+            'Escape': 'reset',
+            'ArrowUp': 'speedUp',
+            'ArrowDown': 'slowDown',
+            'ArrowLeft': 'previous',
+            'ArrowRight': 'next'
+        };
+        
+        const action = keyGestures[event.code];
+        if (action) {
+            event.preventDefault();
+            this.executeGestureAction({ type: 'keyboard', action });
+        }
+    }
+    
+    executeGestureAction(gesture) {
+        
+        
+        switch (gesture.type) {
+            case 'tap':
+                this.onTap(gesture);
+                break;
+            case 'doubleTap':
+                this.onDoubleTap(gesture);
+                break;
+            case 'longPress':
+                this.onLongPress(gesture);
+                break;
+            case 'pinch':
+                this.onPinch(gesture);
+                break;
+            case 'swipe':
+                this.onSwipe(gesture);
+                break;
+            case 'rotate':
+                this.onRotate(gesture);
+                break;
+            case 'scroll':
+                this.onScroll(gesture);
+                break;
+            case 'keyboard':
+                this.onKeyboard(gesture);
+                break;
+        }
+        
+        // 触发回调
+        const callback = this.interactionCallbacks.get(gesture.type);
+        if (callback) {
+            callback(gesture);
+        }
+    }
+    
+    onTap(gesture) {
+        // 在点击位置创建涟漪效果
+        this.createRippleEffect(gesture.x, gesture.y);
+        
+        // 触发音效
+        if (window.audioEnhancement) {
+            window.audioEnhancement.playTypingSound();
+        }
+        
+        // 重新开始动画
+        if (window.cppAnimation) {
+            window.cppAnimation.restart();
+        }
+    }
+    
+    onDoubleTap(gesture) {
+        // 切换全屏模式
+        this.toggleFullscreen();
+        
+        if (window.audioEnhancement) {
+            window.audioEnhancement.playQuantumSound();
+        }
+    }
+    
+    onLongPress(gesture) {
+        // 打开设置菜单
+        this.showSettingsMenu();
+        
+        if (window.audioEnhancement) {
+            window.audioEnhancement.playAbsorptionSound();
+        }
+    }
+    
+    onPinch(gesture) {
+        // 缩放效果
+        const scale = gesture.scale || 1;
+        this.scaleAnimation(scale);
+    }
+    
+    onSwipe(gesture) {
+        switch (gesture.direction) {
+            case 'left':
+                this.previousEffect();
+                break;
+            case 'right':
+                this.nextEffect();
+                break;
+            case 'up':
+                this.speedUpAnimation();
+                break;
+            case 'down':
+                this.slowDownAnimation();
+                break;
+        }
+    }
+    
+    onRotate(gesture) {
+        const angle = gesture.angle || 0;
+        this.rotateAnimation(angle);
+    }
+    
+    onScroll(gesture) {
+        if (gesture.direction === 'up') {
+            this.increaseParticles();
+        } else {
+            this.decreaseParticles();
+        }
+    }
+    
+    onKeyboard(gesture) {
+        switch (gesture.action) {
+            case 'restart':
+                if (window.cppAnimation) window.cppAnimation.restart();
+                break;
+            case 'trigger':
+                this.triggerSpecialEffect();
+                break;
+            case 'reset':
+                this.resetToDefault();
+                break;
+            case 'speedUp':
+                this.speedUpAnimation();
+                break;
+            case 'slowDown':
+                this.slowDownAnimation();
+                break;
+        }
+    }
+    
+    // 视觉反馈方法
+    createTouchVisuals(touches) {
+        touches.forEach((touch, index) => {
+            const visual = document.createElement('div');
+            visual.className = 'touch-visual';
+            visual.style.cssText = `
+                position: fixed;
+                left: ${touch.clientX - 20}px;
+                top: ${touch.clientY - 20}px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                background: rgba(0, 255, 255, 0.6);
+                border: 2px solid rgba(0, 255, 255, 0.8);
+                pointer-events: none;
+                z-index: 10000;
+                animation: touchPulse 0.6s ease-out;
+            `;
+            visual.dataset.touchId = touch.identifier;
+            document.body.appendChild(visual);
+        });
+    }
+    
+    createMouseVisual(x, y) {
+        const visual = document.createElement('div');
+        visual.className = 'mouse-visual';
+        visual.style.cssText = `
+            position: fixed;
+            left: ${x - 15}px;
+            top: ${y - 15}px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 0, 255, 0.4);
+            border: 2px solid rgba(255, 0, 255, 0.6);
+            pointer-events: none;
+            z-index: 10000;
+            animation: mousePulse 0.8s ease-out infinite;
+        `;
+        document.body.appendChild(visual);
+    }
+    
+    createRippleEffect(x, y) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: fixed;
+            left: ${x}px;
+            top: ${y}px;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.4);
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            animation: rippleExpand 0.8s ease-out;
+        `;
+        document.body.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 800);
+    }
+    
+    clearTouchVisuals() {
+        document.querySelectorAll('.touch-visual').forEach(el => el.remove());
+    }
+    
+    clearMouseVisual() {
+        document.querySelectorAll('.mouse-visual').forEach(el => el.remove());
+    }
+    
+    getSwipeDirection(angle) {
+        const degrees = (angle * 180 / Math.PI + 360) % 360;
+        
+        if (degrees >= 315 || degrees < 45) return 'right';
+        if (degrees >= 45 && degrees < 135) return 'down';
+        if (degrees >= 135 && degrees < 225) return 'left';
+        return 'up';
+    }
+    
+    // 动画控制方法
+    speedUpAnimation() {
+        if (window.cppAnimation) {
+            window.cppAnimation.adjustSpeed(1.2);
+        }
+    }
+    
+    slowDownAnimation() {
+        if (window.cppAnimation) {
+            window.cppAnimation.adjustSpeed(0.8);
+        }
+    }
+    
+    scaleAnimation(scale) {
+        const container = document.querySelector('.cpp-animation-container-enhanced');
+        if (container) {
+            container.style.transform = `scale(${scale})`;
+        }
+    }
+    
+    rotateAnimation(angle) {
+        const container = document.querySelector('.cpp-animation-container-enhanced');
+        if (container) {
+            container.style.transform = `rotate(${angle}deg)`;
+        }
+    }
+    
+    // 其他控制方法
+    toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+    
+    showSettingsMenu() {
+        // 这里可以集成设置面板
+        
+    }
+    
+    // 注册手势回调
+    onGesture(gestureType, callback) {
+        this.interactionCallbacks.set(gestureType, callback);
+    }
+    
+    // 启用/禁用手势
+    toggle() {
+        this.enabled = !this.enabled;
+        return this.enabled;
+    }
+}
+
+// 简化的手势识别器
+class GestureRecognizer {
+    analyze(touchState) {
+        // 基础手势识别逻辑
+        if (!touchState || !touchState.touches) return null;
+        
+        const touches = touchState.touches;
+        
+        if (touches.length === 2) {
+            return this.analyzeTwoFingerGesture(touches);
+        }
+        
+        return null;
+    }
+    
+    analyzeTwoFingerGesture(touches) {
+        const [touch1, touch2] = touches;
+        const distance = Math.sqrt(
+            Math.pow(touch1.x - touch2.x, 2) + 
+            Math.pow(touch1.y - touch2.y, 2)
+        );
+        
+        // 简单的缩放检测
+        if (Math.abs(distance - this.lastDistance) > 10) {
+            const scale = distance / (this.lastDistance || distance);
+            this.lastDistance = distance;
+            
+            return {
+                type: 'pinch',
+                scale,
+                center: {
+                    x: (touch1.x + touch2.x) / 2,
+                    y: (touch1.y + touch2.y) / 2
+                }
+            };
+        }
+        
+        return null;
+    }
+}
+
+// 简化的触摸跟踪器
+class TouchTracker {
+    constructor() {
+        this.touches = new Map();
+        this.state = null;
+    }
+    
+    startTracking(event) {
+        this.state = {
+            touches: Array.from(event.touches).map(touch => ({
+                id: touch.identifier,
+                x: touch.clientX,
+                y: touch.clientY,
+                startTime: Date.now()
+            })),
+            startTime: Date.now()
+        };
+    }
+    
+    updateTracking(event) {
+        if (!this.state) return;
+        
+        this.state.touches = Array.from(event.touches).map(touch => ({
+            id: touch.identifier,
+            x: touch.clientX,
+            y: touch.clientY
+        }));
+    }
+    
+    endTracking(event) {
+        if (!this.state) return null;
+        
+        const duration = Date.now() - this.state.startTime;
+        const touchCount = this.state.touches.length;
+        
+        // 检测基础手势
+        if (touchCount === 1 && duration < 300) {
+            return { type: 'tap', ...this.state.touches[0] };
+        }
+        
+        if (touchCount === 1 && duration > 800) {
+            return { type: 'longPress', ...this.state.touches[0] };
+        }
+        
+        this.state = null;
+        return null;
+    }
+    
+    getState() {
+        return this.state;
+    }
+}
+
+// 添加CSS动画
+const gestureStyles = document.createElement('style');
+gestureStyles.textContent = `
+    @keyframes touchPulse {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(2); opacity: 0; }
+    }
+    
+    @keyframes mousePulse {
+        0%, 100% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.2); opacity: 0.4; }
+    }
+    
+    @keyframes rippleExpand {
+        0% { width: 0; height: 0; opacity: 1; }
+        100% { width: 200px; height: 200px; opacity: 0; }
+    }
+`;
+document.head.appendChild(gestureStyles);
+
+// 全局实例
+window.gestureSystem = new AdvancedGestureSystem();
+
+} catch (error) {
+    console.error(error);
+    // 处理错误
+}

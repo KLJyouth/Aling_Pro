@@ -1,0 +1,264 @@
+try {
+/**
+ * 简约科技背景管理器
+ * 替换复杂的3D量子动画，提供清爽的科技感背景
+ */
+
+class MinimalistBackground {
+    constructor() {
+        this.container = null;
+        this.isInitialized = false;
+        this.animationFrameId = null;
+        this.performanceMode = this.detectPerformanceMode();
+        
+        this.init();
+    }
+    
+    detectPerformanceMode() {
+        // 检测设备性能，自动调整动画复杂度
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        
+        if (!gl) return 'low';
+        
+        const renderer = gl.getParameter(gl.RENDERER).toLowerCase();
+        if (renderer.includes('intel') || renderer.includes('software')) {
+            return 'low';
+        } else if (renderer.includes('nvidia') || renderer.includes('amd')) {
+            return 'high';
+        }
+        
+        return 'medium';
+    }
+    
+    init() {
+        
+        
+        // 移除旧的背景容器
+        const oldContainer = document.getElementById('backgroundContainer');
+        if (oldContainer) {
+            oldContainer.remove();
+        }
+        
+        // 创建新的背景容器
+        this.container = document.createElement('div');
+        this.container.id = 'minimalistBackground';
+        this.container.className = 'minimalist-background';
+        
+        // 添加背景元素
+        this.createBackgroundElements();
+        
+        // 插入到页面
+        document.body.insertBefore(this.container, document.body.firstChild);
+        
+        this.isInitialized = true;
+        
+        
+        // 触发自定义事件
+        window.dispatchEvent(new CustomEvent('minimalistBackgroundReady'));
+    }
+    
+    createBackgroundElements() {
+        // 基础渐变背景已通过CSS设置
+        
+        // 添加粒子效果
+        if (this.performanceMode !== 'low') {
+            const particles = document.createElement('div');
+            particles.className = 'minimalist-particles';
+            this.container.appendChild(particles);
+        }
+        
+        // 添加网格效果
+        const grid = document.createElement('div');
+        grid.className = 'minimalist-grid';
+        this.container.appendChild(grid);
+        
+        // 添加中心光晕
+        if (this.performanceMode === 'high') {
+            const glow = document.createElement('div');
+            glow.className = 'minimalist-glow';
+            this.container.appendChild(glow);
+        }
+        
+        // 添加科技线条
+        this.createTechLines();
+    }
+    
+    createTechLines() {
+        const linesContainer = document.createElement('div');
+        linesContainer.className = 'tech-lines';
+        
+        const lineCount = this.performanceMode === 'high' ? 3 : 
+                         this.performanceMode === 'medium' ? 2 : 1;
+        
+        for (let i = 0; i < lineCount; i++) {
+            const line = document.createElement('div');
+            line.className = 'tech-line';
+            linesContainer.appendChild(line);
+        }
+        
+        this.container.appendChild(linesContainer);
+    }
+    
+    // 动态更新背景颜色主题
+    setTheme(theme) {
+        if (!this.container) return;
+        
+        const themes = {
+            blue: 'linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%)',
+            purple: 'linear-gradient(135deg, #0f0a1a 0%, #1f1a2e 50%, #2e1a3e 100%)',
+            green: 'linear-gradient(135deg, #0a1a0e 0%, #1a2e1a 50%, #1e3e16 100%)',
+            default: 'linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%)'
+        };
+        
+        this.container.style.background = themes[theme] || themes.default;
+        
+    }
+    
+    // 响应用户交互
+    onUserInteraction(event) {
+        if (!this.container) return;
+        
+        // 添加交互效果
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79, 172, 254, 0.3) 0%, transparent 70%);
+            pointer-events: none;
+            animation: ripple-effect 2s ease-out forwards;
+            left: ${event.clientX - 50}px;
+            top: ${event.clientY - 50}px;
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-effect {
+                0% { transform: scale(0); opacity: 1; }
+                100% { transform: scale(3); opacity: 0; }
+            }
+        `;
+        
+        if (!document.head.querySelector('style[data-ripple]')) {
+            style.setAttribute('data-ripple', 'true');
+            document.head.appendChild(style);
+        }
+        
+        this.container.appendChild(ripple);
+        
+        setTimeout(() => {
+            if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+            }
+        }, 2000);
+    }
+    
+    // 暂停动画（节能模式）
+    pauseAnimations() {
+        if (this.container) {
+            this.container.style.animationPlayState = 'paused';
+            this.container.querySelectorAll('*').forEach(el => {
+                el.style.animationPlayState = 'paused';
+            });
+        }
+    }
+    
+    // 恢复动画
+    resumeAnimations() {
+        if (this.container) {
+            this.container.style.animationPlayState = 'running';
+            this.container.querySelectorAll('*').forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        }
+    }
+    
+    // 销毁背景
+    destroy() {
+        if (this.animationFrameId) {
+            cancelAnimationFrame(this.animationFrameId);
+        }
+        
+        if (this.container && this.container.parentNode) {
+            this.container.parentNode.removeChild(this.container);
+        }
+        
+        this.isInitialized = false;
+        
+    }
+    
+    // 兼容旧量子系统的接口
+    updateState(state) {
+        if (state && state.theme) {
+            this.setTheme(state.theme);
+        }
+    }
+    
+    triggerAnimation(type) {
+        
+        // 可以根据type添加不同的动画效果
+    }
+}
+
+// 全局实例
+window.minimalistBackground = null;
+
+// 初始化背景系统
+function initMinimalistBackground() {
+    if (!window.minimalistBackground) {
+        window.minimalistBackground = new MinimalistBackground();
+        
+        // 添加用户交互监听
+        document.addEventListener('click', (e) => {
+            if (window.minimalistBackground) {
+                window.minimalistBackground.onUserInteraction(e);
+            }
+        });
+        
+        // 页面可见性变化时暂停/恢复动画
+        document.addEventListener('visibilitychange', () => {
+            if (!window.minimalistBackground) return;
+            
+            if (document.hidden) {
+                window.minimalistBackground.pauseAnimations();
+            } else {
+                window.minimalistBackground.resumeAnimations();
+            }
+        });
+        
+        
+    }
+}
+
+// 兼容量子系统的全局变量
+window.quantumParticleSystem = {
+    updateState: (state) => {
+        if (window.minimalistBackground) {
+            window.minimalistBackground.updateState(state);
+        }
+    },
+    triggerAnimation: (type) => {
+        if (window.minimalistBackground) {
+            window.minimalistBackground.triggerAnimation(type);
+        }
+    }
+};
+
+// 自动初始化
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMinimalistBackground);
+} else {
+    initMinimalistBackground();
+}
+
+// 导出类供其他模块使用
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MinimalistBackground;
+}
+
+} catch (error) {
+    console.error(error);
+    // 处理错误
+}

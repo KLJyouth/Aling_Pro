@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi 管理员控制台</title>
+    <meta name="description" content="AlingAi系统管理员控制台 - 用户管理、系统监控、API管理">
+    
+    <!-- 核心资源 -->
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- 字体 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap">
+
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#0A0016',
+                        'neon-pink': '#FF2B75',
+                        'tech-blue': '#00D4FF',
+                        'cyan-glow': 'rgba(0, 212, 255, 0.15)',
+                        'longling': '#6C13FF',
+                        'admin-dark': '#1a1a2e',
+                        'admin-accent': '#e94560'
+                    },
+                    fontFamily: {
+                        'heading': ['"JetBrains Mono"', 'monospace'],
+                        'body': ['"Inter"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A0016 0%, #1A003C 100%);
+            color: rgba(255, 255, 255, 0.9);
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-card {
+            background: radial-gradient(circle at 10% 20%, rgba(26, 0, 60, 0.3) 0%, rgba(10, 0, 22, 0.3) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(108, 19, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .quantum-text {
+            background: linear-gradient(90deg, #FF2B75, #6C13FF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .quantum-button {
+            background: linear-gradient(135deg, #6C13FF 0%, #FF2B75 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quantum-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 19, 255, 0.3);
+        }
+
+        .admin-sidebar {
+            background: linear-gradient(180deg, rgba(26, 26, 46, 0.9) 0%, rgba(10, 0, 22, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 100vh;
+        }
+
+        .sidebar-nav .nav-link {
+            color: rgba(255, 255, 255, 0.7);
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-nav .nav-link:hover,
+        .sidebar-nav .nav-link.active {
+            background: linear-gradient(135deg, rgba(108, 19, 255, 0.2) 0%, rgba(255, 43, 117, 0.2) 100%);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(10, 0, 22, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(108, 19, 255, 0.1) 0%, rgba(255, 43, 117, 0.1) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(108, 19, 255, 0.2);
+        }
+
+        .content-area {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .table-dark-custom {
+            background: rgba(26, 26, 46, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table-dark-custom th,
+        .table-dark-custom td {
+            border-color: rgba(255, 255, 255, 0.1);
+            padding: 16px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-offline {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #FF2B75, #6C13FF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(108, 19, 255, 0.6);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        .action-button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-view {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-view:hover {
+            background: rgba(34, 197, 94, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 1000;
+                width: 280px;
+                transition: transform 0.3s ease;
+            }
+
+            .admin-sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 浮动粒子背景 -->
+    <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 1.5s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 2.5s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 3.5s;"></div>
+    </div>
+
+    <div class="d-flex">
+        <!-- 侧边栏 -->
+        <nav class="admin-sidebar p-4" style="width: 280px;">
+            <div class="text-center mb-4">
+                <h3 class="quantum-text font-heading">AlingAi</h3>
+                <p class="text-white/60 text-sm">管理员控制台</p>
+            </div>
+
+            <ul class="nav flex-column sidebar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-tab="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>仪表板</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="users">
+                        <i class="fas fa-users"></i>
+                        <span>用户管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="chat">
+                        <i class="fas fa-comments"></i>
+                        <span>聊天记录</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="api">
+                        <i class="fas fa-code"></i>
+                        <span>API管理</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="system">
+                        <i class="fas fa-server"></i>
+                        <span>系统监控</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="logs">
+                        <i class="fas fa-file-alt"></i>
+                        <span>系统日志</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-tab="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>系统设置</span>
+                    </a>
+                </li>
+                <li class="nav-item mt-4">
+                    <a class="nav-link text-danger" href="#" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>退出登录</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- 主内容区 -->
+        <div class="flex-1 main-content" style="margin-left: 0;">
+            <!-- 头部 -->
+            <header class="admin-header p-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <button class="btn btn-link text-white d-md-none me-3" id="sidebarToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h4 class="mb-0 text-white">管理员控制台</h4>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="text-end">
+                            <small class="text-white/60 d-block">欢迎回来</small>
+                            <span class="text-white font-weight-bold" id="adminUsername">管理员</span>
+                        </div>
+                        <div class="position-relative">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=6C13FF&color=fff" 
+                                 alt="Admin" class="rounded-circle" width="40" height="40" alt="">
+                            <span class="position-absolute bottom-0 end-0 bg-success rounded-circle" 
+                                  style="width: 12px; height: 12px; border: 2px solid white;"></span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 主内容 -->
+            <main class="p-4">
+                <!-- 仪表板页面 -->
+                <div id="dashboard-tab" class="tab-content active">
+                    <!-- 统计卡片 -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-white/60 mb-1">总用户数</h6>
+                                        <div class="metric-value" id="totalUsers">1,234</div>
+                                    </div>
+                                    <div class="bg-primary/20 p-3 rounded-circle">
+                                        <i class="fas fa-users text-primary fa-lg"></i>
+                                    </div>
+                                </div>
+                                <small class="text-success">
+                                    <i class="fas fa-arrow-up"></i> +12% 本月
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-white/60 mb-1">在线用户</h6>
+                                        <div class="metric-value" id="onlineUsers">156</div>
+                                    </div>
+                                    <div class="bg-success/20 p-3 rounded-circle">
+                                        <i class="fas fa-circle text-success fa-lg"></i>
+                                    </div>
+                                </div>
+                                <small class="text-success">
+                                    <i class="fas fa-arrow-up"></i> +8% 上小时
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-white/60 mb-1">API调用</h6>
+                                        <div class="metric-value" id="apiCalls">45.6K</div>
+                                    </div>
+                                    <div class="bg-info/20 p-3 rounded-circle">
+                                        <i class="fas fa-code text-info fa-lg"></i>
+                                    </div>
+                                </div>
+                                <small class="text-warning">
+                                    <i class="fas fa-arrow-down"></i> -3% 今日
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="stat-card">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-white/60 mb-1">系统负载</h6>
+                                        <div class="metric-value" id="systemLoad">68%</div>
+                                    </div>
+                                    <div class="bg-warning/20 p-3 rounded-circle">
+                                        <i class="fas fa-server text-warning fa-lg"></i>
+                                    </div>
+                                </div>
+                                <small class="text-info">
+                                    <i class="fas fa-minus"></i> 稳定
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 图表区域 -->
+                    <div class="row mb-4">
+                        <div class="col-md-8 mb-3">
+                            <div class="content-area p-4">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-chart-line me-2"></i>用户活跃度趋势
+                                </h5>
+                                <div class="chart-container">
+                                    <canvas id="userActivityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="content-area p-4">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-pie-chart me-2"></i>API使用分布
+                                </h5>
+                                <div class="chart-container">
+                                    <canvas id="apiUsageChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 最近活动 -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="content-area p-4">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-clock me-2"></i>最近活动
+                                </h5>
+                                <div id="recentActivities">
+                                    <div class="d-flex align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <div class="bg-primary rounded-circle p-2 me-3">
+                                            <i class="fas fa-user-plus text-white"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-white">新用户注册</div>
+                                            <small class="text-white/60">user123@example.com • 2分钟前</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <div class="bg-success rounded-circle p-2 me-3">
+                                            <i class="fas fa-comments text-white"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-white">聊天会话开始</div>
+                                            <small class="text-white/60">用户456 • 5分钟前</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <div class="bg-warning rounded-circle p-2 me-3">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <div class="text-white">API调用异常</div>
+                                            <small class="text-white/60">错误代码: 429 • 8分钟前</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="content-area p-4">
+                                <h5 class="text-white mb-3">
+                                    <i class="fas fa-server me-2"></i>系统状态
+                                </h5>
+                                <div id="systemStatus">
+                                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <span class="text-white">CPU使用率</span>
+                                        <span class="status-badge status-warning">68%</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <span class="text-white">内存使用率</span>
+                                        <span class="status-badge status-online">45%</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <span class="text-white">磁盘空间</span>
+                                        <span class="status-badge status-online">23%</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 rounded" style="background: rgba(255,255,255,0.05);">
+                                        <span class="text-white">数据库连接</span>
+                                        <span class="status-badge status-online">正常</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 用户管理页面 -->
+                <div id="users-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="text-white mb-0">
+                                <i class="fas fa-users me-2"></i>用户管理
+                            </h5>
+                            <div class="d-flex gap-2">
+                                <button class="quantum-button px-4 py-2" onclick="refreshUsers()">
+                                    <i class="fas fa-sync-alt me-2"></i>刷新
+                                </button>
+                                <button class="quantum-button px-4 py-2" onclick="addUser()">
+                                    <i class="fas fa-plus me-2"></i>添加用户
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 搜索和筛选 -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white/10 border-white/20 text-white">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input type="text" class="form-control bg-white/10 border-white/20 text-white" 
+                                           placeholder="搜索用户..." id="userSearch">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select bg-white/10 border-white/20 text-white" id="userRoleFilter">
+                                    <option value="">所有角色</option>
+                                    <option value="admin">管理员</option>
+                                    <option value="user">普通用户</option>
+                                    <option value="vip">VIP用户</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select bg-white/10 border-white/20 text-white" id="userStatusFilter">
+                                    <option value="">所有状态</option>
+                                    <option value="active">活跃</option>
+                                    <option value="inactive">非活跃</option>
+                                    <option value="banned">已封禁</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- 用户表格 -->
+                        <div class="table-responsive">
+                            <table class="table table-dark table-dark-custom">
+                                <thead>
+                                    <tr>
+                                        <th>用户ID</th>
+                                        <th>用户名</th>
+                                        <th>邮箱</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>注册时间</th>
+                                        <th>最后登录</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td>1001</td>
+                                        <td>admin</td>
+                                        <td>admin@alingai.com</td>
+                                        <td><span class="status-badge status-warning">管理员</span></td>
+                                        <td><span class="status-badge status-online">在线</span></td>
+                                        <td>2024-01-15</td>
+                                        <td>2分钟前</td>
+                                        <td>
+                                            <button class="action-button btn-view me-1" onclick="viewUser(1001)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-button btn-edit me-1" onclick="editUser(1001)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-button btn-delete" onclick="deleteUser(1001)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>1002</td>
+                                        <td>user123</td>
+                                        <td>user123@example.com</td>
+                                        <td><span class="status-badge status-online">普通用户</span></td>
+                                        <td><span class="status-badge status-online">在线</span></td>
+                                        <td>2024-02-10</td>
+                                        <td>15分钟前</td>
+                                        <td>
+                                            <button class="action-button btn-view me-1" onclick="viewUser(1002)">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="action-button btn-edit me-1" onclick="editUser(1002)">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="action-button btn-delete" onclick="deleteUser(1002)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 分页 -->
+                        <nav aria-label="用户分页">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link bg-white/10 border-white/20 text-white">上一页</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link bg-longling border-longling">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link bg-white/10 border-white/20 text-white" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link bg-white/10 border-white/20 text-white" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link bg-white/10 border-white/20 text-white" href="#">下一页</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- 其他标签页内容（聊天记录、API管理等）占位 -->
+                <div id="chat-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <h5 class="text-white mb-4">
+                            <i class="fas fa-comments me-2"></i>聊天记录管理
+                        </h5>
+                        <p class="text-white/60">聊天记录管理功能正在开发中...</p>
+                    </div>
+                </div>
+
+                <div id="api-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <h5 class="text-white mb-4">
+                            <i class="fas fa-code me-2"></i>API管理
+                        </h5>
+                        <p class="text-white/60">API管理功能正在开发中...</p>
+                    </div>
+                </div>
+
+                <div id="system-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <h5 class="text-white mb-4">
+                            <i class="fas fa-server me-2"></i>系统监控
+                        </h5>
+                        <p class="text-white/60">系统监控功能正在开发中...</p>
+                    </div>
+                </div>
+
+                <div id="logs-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <h5 class="text-white mb-4">
+                            <i class="fas fa-file-alt me-2"></i>系统日志
+                        </h5>
+                        <p class="text-white/60">系统日志功能正在开发中...</p>
+                    </div>
+                </div>
+
+                <div id="settings-tab" class="tab-content">
+                    <div class="content-area p-4">
+                        <h5 class="text-white mb-4">
+                            <i class="fas fa-cog me-2"></i>系统设置
+                        </h5>
+                        <p class="text-white/60">系统设置功能正在开发中...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- 用户详情模态框 -->
+    <div class="modal fade" id="userDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-admin-dark">
+                <div class="modal-header border-white/20">
+                    <h5 class="modal-title text-white">用户详情</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="userDetailContent">
+                        <!-- 用户详情内容将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+                <div class="modal-footer border-white/20">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="quantum-button px-4 py-2">保存更改</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知容器 -->
+    <div id="notifications" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
+    <!-- JavaScript -->
+    <script>
+        // 全局变量
+        let currentTab = 'dashboard';
+        let charts = {};
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeAdmin();
+            checkAuthority();
+        });
+
+        // 检查管理员权限
+        function checkAuthority() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            // TODO: 验证管理员权限
+            const username = localStorage.getItem('username') || 'admin';
+            document.getElementById('adminUsername').textContent = username;
+        }
+
+        // 初始化管理后台
+        function initializeAdmin() {
+            setupSidebarNavigation();
+            setupMobileToggle();
+            initializeCharts();
+            loadDashboardData();
+        }
+
+        // 设置侧边栏导航
+        function setupSidebarNavigation() {
+            const navLinks = document.querySelectorAll('.sidebar-nav .nav-link[data-tab]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabName = this.dataset.tab;
+                    switchTab(tabName);
+                });
+            });
+        }
+
+        // 设置移动端侧边栏切换
+        function setupMobileToggle() {
+            const toggleBtn = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.admin-sidebar');
+            
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    sidebar.classList.toggle('active');
+                });
+            }
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            // 更新导航状态
+            document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // 更新内容区域
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+            document.getElementById(`${tabName}-tab`).style.display = 'block';
+
+            currentTab = tabName;
+
+            // 根据标签页加载相应数据
+            switch(tabName) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'users':
+                    loadUsersData();
+                    break;
+                case 'chat':
+                    loadChatData();
+                    break;
+                case 'api':
+                    loadApiData();
+                    break;
+                case 'system':
+                    loadSystemData();
+                    break;
+                case 'logs':
+                    loadLogsData();
+                    break;
+                case 'settings':
+                    loadSettingsData();
+                    break;
+            }
+        }
+
+        // 初始化图表
+        function initializeCharts() {
+            // 用户活跃度趋势图
+            const userActivityCtx = document.getElementById('userActivityChart');
+            if (userActivityCtx) {
+                charts.userActivity = new Chart(userActivityCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                        datasets: [{
+                            label: '活跃用户',
+                            data: [65, 59, 80, 81, 56, 85, 92],
+                            borderColor: '#6C13FF',
+                            backgroundColor: 'rgba(108, 19, 255, 0.1)',
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // API使用分布饼图
+            const apiUsageCtx = document.getElementById('apiUsageChart');
+            if (apiUsageCtx) {
+                charts.apiUsage = new Chart(apiUsageCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['聊天API', '翻译API', '图像API', '语音API'],
+                        datasets: [{
+                            data: [45, 25, 20, 10],
+                            backgroundColor: [
+                                '#6C13FF',
+                                '#FF2B75',
+                                '#00D4FF',
+                                '#FFA500'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    padding: 20
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // 加载仪表板数据
+        async function loadDashboardData() {
+            try {
+                // 模拟数据加载
+                setTimeout(() => {
+                    updateStatistics();
+                    updateRecentActivities();
+                    updateSystemStatus();
+                }, 500);
+            } catch (error) {
+                console.error('加载仪表板数据失败:', error);
+                showNotification('数据加载失败', 'error');
+            }
+        }
+
+        // 更新统计数据
+        function updateStatistics() {
+            // 模拟实时数据更新
+            const stats = {
+                totalUsers: Math.floor(Math.random() * 1000) + 1000,
+                onlineUsers: Math.floor(Math.random() * 200) + 100,
+                apiCalls: (Math.random() * 50 + 30).toFixed(1) + 'K',
+                systemLoad: Math.floor(Math.random() * 30) + 60
+            };
+
+            document.getElementById('totalUsers').textContent = stats.totalUsers.toLocaleString();
+            document.getElementById('onlineUsers').textContent = stats.onlineUsers;
+            document.getElementById('apiCalls').textContent = stats.apiCalls;
+            document.getElementById('systemLoad').textContent = stats.systemLoad + '%';
+        }
+
+        // 更新最近活动
+        function updateRecentActivities() {
+            // TODO: 从API获取真实数据
+        }
+
+        // 更新系统状态
+        function updateSystemStatus() {
+            // TODO: 从API获取真实系统状态
+        }
+
+        // 加载用户数据
+        function loadUsersData() {
+            // TODO: 实现用户数据加载
+            console.log('加载用户数据...');
+        }
+
+        // 加载聊天数据
+        function loadChatData() {
+            console.log('加载聊天数据...');
+        }
+
+        // 加载API数据
+        function loadApiData() {
+            console.log('加载API数据...');
+        }
+
+        // 加载系统数据
+        function loadSystemData() {
+            console.log('加载系统数据...');
+        }
+
+        // 加载日志数据
+        function loadLogsData() {
+            console.log('加载日志数据...');
+        }
+
+        // 加载设置数据
+        function loadSettingsData() {
+            console.log('加载设置数据...');
+        }
+
+        // 用户管理功能
+        function refreshUsers() {
+            showNotification('正在刷新用户数据...', 'info');
+            loadUsersData();
+        }
+
+        function addUser() {
+            showNotification('添加用户功能即将开放', 'info');
+        }
+
+        function viewUser(userId) {
+            showNotification(`查看用户 ${userId} 的详细信息`, 'info');
+            // TODO: 显示用户详情模态框
+        }
+
+        function editUser(userId) {
+            showNotification(`编辑用户 ${userId}`, 'info');
+            // TODO: 显示编辑用户模态框
+        }
+
+        function deleteUser(userId) {
+            if (confirm('确定要删除此用户吗？此操作不可撤销。')) {
+                showNotification(`删除用户 ${userId}`, 'warning');
+                // TODO: 实现删除用户功能
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('authToken');
+                localStorage.removeItem('username');
+                window.location.href = '/login.html';
+            }
+        }
+
+        // 通知系统
+        function showNotification(message, type = 'info') {
+            const notificationContainer = document.getElementById('notifications');
+            const notification = document.createElement('div');
+            
+            const typeClasses = {
+                'success': 'bg-success',
+                'error': 'bg-danger',
+                'warning': 'bg-warning',
+                'info': 'bg-info'
+            };
+
+            notification.className = `alert ${typeClasses[type]} text-white mb-2`;
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <span>${message}</span>
+                    <button type="button" class="btn-close btn-close-white ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+
+            notificationContainer.appendChild(notification);
+
+            // 3秒后自动删除
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 3000);
+        }
+
+        // 定时刷新数据
+        setInterval(() => {
+            if (currentTab === 'dashboard') {
+                updateStatistics();
+            }
+        }, 30000); // 30秒刷新一次
+    </script>
+</body>
+</html>

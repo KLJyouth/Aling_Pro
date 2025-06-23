@@ -1,0 +1,29 @@
+[
+    {
+        "name": "SecurityMonitor",
+        "type": "security",
+        "status": "active",
+        "config": "{\"monitoring_interval\":1000,\"threat_threshold\":0.7,\"auto_response\":true}",
+        "id": 1,
+        "created_at": "2025-06-10 06:50:04",
+        "updated_at": "2025-06-10 06:50:04"
+    },
+    {
+        "name": "SystemAnalyzer",
+        "type": "system",
+        "status": "active",
+        "config": "{\"analysis_interval\":5000,\"performance_threshold\":0.8,\"auto_optimization\":true}",
+        "id": 2,
+        "created_at": "2025-06-10 06:50:04",
+        "updated_at": "2025-06-10 06:50:04"
+    },
+    {
+        "name": "UserAssistant",
+        "type": "assistant",
+        "status": "active",
+        "config": "{\"response_timeout\":30000,\"learning_enabled\":true,\"personality\":\"professional\"}",
+        "id": 3,
+        "created_at": "2025-06-10 06:50:04",
+        "updated_at": "2025-06-10 06:50:04"
+    }
+]

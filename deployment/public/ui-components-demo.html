@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro - 高级UI组件库演示</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/advanced-ui-components.css">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: var(--font-family-primary);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            line-height: var(--line-height-normal);
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-8);
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .demo-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            background: var(--theme-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .demo-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--text-secondary);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .theme-selector {
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: center;
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .demo-section {
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            margin-bottom: var(--spacing-6);
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: var(--spacing-2);
+        }
+        
+        .component-grid {
+            display: grid;
+            gap: var(--spacing-6);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .component-item {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-6);
+        }
+        
+        .component-name {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-4);
+            color: var(--color-primary);
+        }
+        
+        .component-demo {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .component-code {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-secondary);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-4);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-sm);
+            color: var(--text-secondary);
+            overflow-x: auto;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: var(--spacing-3);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .size-group {
+            display: flex;
+            gap: var(--spacing-2);
+            align-items: center;
+            margin-bottom: var(--spacing-3);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-4);
+        }
+        
+        .input-group {
+            display: grid;
+            gap: var(--spacing-4);
+            max-width: 400px;
+        }
+        
+        .demo-form {
+            background: var(--bg-surface);
+            padding: var(--spacing-6);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-primary);
+        }
+        
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            font-size: var(--font-size-sm);
+            margin-top: var(--spacing-2);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-success);
+        }
+        
+        @media (max-width: 768px) {
+            .demo-container {
+                padding: var(--spacing-4);
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .theme-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- 头部 -->
+        <header class="demo-header">
+            <h1 class="demo-title">AlingAi Pro UI 组件库</h1>
+            <p class="demo-subtitle">现代化、可复用的量子主题UI组件集合</p>
+            
+            <!-- 主题选择器 -->
+            <div class="theme-selector">
+                <button data-component="button" data-variant="outline" data-size="small" onclick="QuantumUI.ThemeManager.setTheme('quantum')">量子主题</button>
+                <button data-component="button" data-variant="outline" data-size="small" onclick="QuantumUI.ThemeManager.setTheme('classic')">经典主题</button>
+                <button data-component="button" data-variant="outline" data-size="small" onclick="QuantumUI.ThemeManager.setTheme('minimal')">简约主题</button>
+                <button data-component="button" data-variant="outline" data-size="small" onclick="QuantumUI.ThemeManager.setTheme('neon')">霓虹主题</button>
+            </div>
+            
+            <div class="status-indicator">
+                <div class="status-dot"></div>
+                <span>组件库已加载</span>
+            </div>
+        </header>
+
+        <!-- 按钮组件 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-hand-pointer"></i>
+                按钮组件 (QuantumButton)
+            </h2>
+            
+            <div class="component-grid">
+                <div class="component-item">
+                    <h3 class="component-name">按钮变体</h3>
+                    <div class="component-demo">
+                        <div class="button-group">
+                            <button data-component="button" data-variant="primary">主要按钮</button>
+                            <button data-component="button" data-variant="secondary">次要按钮</button>
+                            <button data-component="button" data-variant="outline">轮廓按钮</button>
+                            <button data-component="button" data-variant="ghost">幽灵按钮</button>
+                            <button data-component="button" data-variant="danger">危险按钮</button>
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;button data-component="button" data-variant="primary"&gt;主要按钮&lt;/button&gt;
+&lt;button data-component="button" data-variant="secondary"&gt;次要按钮&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <h3 class="component-name">按钮尺寸</h3>
+                    <div class="component-demo">
+                        <div class="size-group">
+                            <button data-component="button" data-size="small">小号</button>
+                            <button data-component="button" data-size="medium">中号</button>
+                            <button data-component="button" data-size="large">大号</button>
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;button data-component="button" data-size="small"&gt;小号&lt;/button&gt;
+&lt;button data-component="button" data-size="medium"&gt;中号&lt;/button&gt;
+&lt;button data-component="button" data-size="large"&gt;大号&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <h3 class="component-name">带图标按钮</h3>
+                    <div class="component-demo">
+                        <div class="button-group">
+                            <button data-component="button" data-icon="fas fa-download" data-icon-position="left">下载</button>
+                            <button data-component="button" data-icon="fas fa-upload" data-icon-position="right">上传</button>
+                            <button data-component="button" data-icon="fas fa-heart" data-icon-position="only" data-variant="outline"></button>
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;button data-component="button" data-icon="fas fa-download"&gt;下载&lt;/button&gt;
+&lt;button data-component="button" data-icon="fas fa-heart" data-icon-position="only"&gt;&lt;/button&gt;
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <h3 class="component-name">按钮状态</h3>
+                    <div class="component-demo">
+                        <div class="button-group">
+                            <button data-component="button" id="loadingBtn">点击加载</button>
+                            <button data-component="button" disabled>禁用状态</button>
+                            <button data-component="button" data-quantum-effect="true" data-quantum-particles="true">量子效果</button>
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;button data-component="button" data-loading="true"&gt;加载中...&lt;/button&gt;
+&lt;button data-component="button" disabled&gt;禁用状态&lt;/button&gt;
+&lt;button data-component="button" data-quantum-effect="true"&gt;量子效果&lt;/button&gt;
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 卡片组件 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-clone"></i>
+                卡片组件 (QuantumCard)
+            </h2>
+            
+            <div class="card-grid">
+                <div data-component="card" data-variant="default" data-hoverable="true">
+                    <h3>默认卡片</h3>
+                    <p>这是一个默认样式的卡片组件，支持悬停效果和点击交互。</p>
+                    <button data-component="button" data-size="small">了解更多</button>
+                </div>
+                
+                <div data-component="card" data-variant="elevated" data-quantum-effect="true">
+                    <h3>提升卡片</h3>
+                    <p>具有更强阴影效果的卡片，适合需要突出显示的内容。</p>
+                    <button data-component="button" data-size="small" data-variant="outline">查看详情</button>
+                </div>
+                
+                <div data-component="card" data-variant="glass" data-quantum-effect="true" data-clickable="true">
+                    <h3>玻璃卡片</h3>
+                    <p>具有玻璃态效果的卡片，现代感十足。</p>
+                    <button data-component="button" data-size="small" data-variant="ghost">进入</button>
+                </div>
+            </div>
+            
+            <div class="component-code">
+&lt;div data-component="card" data-variant="default" data-hoverable="true"&gt;
+    &lt;h3&gt;卡片标题&lt;/h3&gt;
+    &lt;p&gt;卡片内容...&lt;/p&gt;
+&lt;/div&gt;
+            </div>
+        </section>
+
+        <!-- 输入框组件 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-edit"></i>
+                输入框组件 (QuantumInput)
+            </h2>
+            
+            <div class="component-grid">
+                <div class="component-item">
+                    <h3 class="component-name">基础输入框</h3>
+                    <div class="component-demo">
+                        <div class="input-group">
+                            <input data-component="input" 
+                                   data-label="用户名" 
+                                   data-placeholder="请输入用户名" 
+                                   data-required="true">
+                            
+                            <input data-component="input" 
+                                   data-label="邮箱地址" 
+                                   data-type="email"
+                                   data-placeholder="example@alingai.com"
+                                   data-help-text="我们不会分享您的邮箱地址">
+                            
+                            <input data-component="input" 
+                                   data-label="密码" 
+                                   data-type="password"
+                                   data-placeholder="请输入密码"
+                                   data-quantum-effect="true">
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;input data-component="input" 
+       data-label="用户名" 
+       data-placeholder="请输入用户名" 
+       data-required="true"&gt;
+                    </div>
+                </div>
+                
+                <div class="component-item">
+                    <h3 class="component-name">输入框变体</h3>
+                    <div class="component-demo">
+                        <div class="input-group">
+                            <input data-component="input" 
+                                   data-variant="default"
+                                   data-label="默认样式"
+                                   data-placeholder="默认输入框">
+                            
+                            <input data-component="input" 
+                                   data-variant="filled"
+                                   data-label="填充样式"
+                                   data-placeholder="填充输入框">
+                            
+                            <input data-component="input" 
+                                   data-variant="outlined"
+                                   data-label="轮廓样式"
+                                   data-placeholder="轮廓输入框">
+                        </div>
+                    </div>
+                    <div class="component-code">
+&lt;input data-component="input" data-variant="outlined"&gt;
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模态框演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-window-maximize"></i>
+                模态框组件 (QuantumModal)
+            </h2>
+            
+            <div class="component-item">
+                <h3 class="component-name">模态框演示</h3>
+                <div class="component-demo">
+                    <div class="button-group">
+                        <button data-component="button" onclick="showModal('small')">小型模态框</button>
+                        <button data-component="button" onclick="showModal('medium')">中型模态框</button>
+                        <button data-component="button" onclick="showModal('large')">大型模态框</button>
+                        <button data-component="button" data-variant="outline" onclick="showQuantumModal()">量子效果模态框</button>
+                    </div>
+                </div>
+                <div class="component-code">
+// 创建模态框
+const modal = QuantumUI.modal(null, {
+    size: 'medium',
+    quantumEffect: true
+});
+
+// 显示模态框
+modal.show();
+                </div>
+            </div>
+        </section>
+
+        <!-- 工具提示演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-comment-dots"></i>
+                工具提示组件 (QuantumTooltip)
+            </h2>
+            
+            <div class="component-item">
+                <h3 class="component-name">工具提示演示</h3>
+                <div class="component-demo">
+                    <div class="button-group">
+                        <button data-component="button" 
+                                data-tooltip="这是一个顶部工具提示"
+                                data-tooltip-position="top">顶部提示</button>
+                        
+                        <button data-component="button" 
+                                data-tooltip="这是一个底部工具提示"
+                                data-tooltip-position="bottom">底部提示</button>
+                        
+                        <button data-component="button" 
+                                data-tooltip="这是一个左侧工具提示"
+                                data-tooltip-position="left">左侧提示</button>
+                        
+                        <button data-component="button" 
+                                data-tooltip="这是一个右侧工具提示"
+                                data-tooltip-position="right">右侧提示</button>
+                    </div>
+                </div>
+                <div class="component-code">
+&lt;button data-tooltip="提示内容" data-tooltip-position="top"&gt;按钮&lt;/button&gt;
+                </div>
+            </div>
+        </section>
+
+        <!-- 表单演示 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-wpforms"></i>
+                完整表单演示
+            </h2>
+            
+            <div class="demo-form">
+                <h3>用户注册表单</h3>
+                <form id="demoForm">
+                    <div class="input-group">
+                        <input data-component="input" 
+                               data-label="用户名" 
+                               data-placeholder="请输入用户名"
+                               data-required="true"
+                               name="username">
+                        
+                        <input data-component="input" 
+                               data-label="邮箱地址"
+                               data-type="email"
+                               data-placeholder="your@email.com"
+                               data-required="true"
+                               data-quantum-effect="true"
+                               name="email">
+                        
+                        <input data-component="input" 
+                               data-label="密码"
+                               data-type="password"
+                               data-placeholder="请输入密码"
+                               data-required="true"
+                               data-help-text="密码至少8位，包含字母和数字"
+                               name="password">
+                        
+                        <div style="display: flex; gap: var(--spacing-3); margin-top: var(--spacing-6);">
+                            <button type="submit" data-component="button" data-variant="primary">注册账号</button>
+                            <button type="button" data-component="button" data-variant="ghost">取消</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- API 文档 -->
+        <section class="demo-section">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                API 文档
+            </h2>
+            
+            <div data-component="card" data-variant="elevated">
+                <h3>快速开始</h3>
+                <div class="component-code">
+// 1. 引入CSS和JS文件
+&lt;link rel="stylesheet" href="assets/css/advanced-ui-components.css"&gt;
+&lt;script src="assets/js/advanced-ui-components.js"&gt;&lt;/script&gt;
+
+// 2. 自动初始化（推荐）
+&lt;button data-component="button" data-variant="primary"&gt;按钮&lt;/button&gt;
+
+// 3. 手动初始化
+const button = QuantumUI.button(element, {
+    variant: 'primary',
+    quantumEffect: true
+});
+
+// 4. 主题切换
+QuantumUI.ThemeManager.setTheme('quantum');
+
+// 5. 响应式断点检查
+if (QuantumUI.ResponsiveManager.isBreakpoint('md')) {
+    // 中等屏幕及以上
+}
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="assets/js/advanced-ui-components.js"></script>
+    
+    <script>
+        // 演示功能
+        let demoModals = [];
+        
+        function showModal(size) {
+            const modal = QuantumUI.modal(null, {
+                size: size,
+                quantumEffect: true,
+                destroyOnClose: true
+            });
+            
+            modal.setTitle(`${size.toUpperCase()} 模态框`);
+            modal.setContent(`
+                <p>这是一个 <strong>${size}</strong> 尺寸的模态框演示。</p>
+                <p>支持键盘导航（ESC关闭）、点击背景关闭、焦点管理等功能。</p>
+                <div style="margin-top: 1rem;">
+                    <button data-component="button" onclick="modal.close()">关闭</button>
+                </div>
+            `);
+            
+            modal.show();
+            demoModals.push(modal);
+            
+            // 重新初始化模态框内的组件
+            setTimeout(() => {
+                QuantumUI.init();
+            }, 100);
+        }
+        
+        function showQuantumModal() {
+            const modal = QuantumUI.modal(null, {
+                size: 'medium',
+                quantumEffect: true,
+                quantumParticles: true,
+                destroyOnClose: true
+            });
+            
+            modal.setTitle('🌌 量子效果模态框');
+            modal.setContent(`
+                <div style="text-align: center; padding: 2rem;">
+                    <h3 style="background: var(--theme-gradient); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        欢迎来到量子世界
+                    </h3>
+                    <p>这个模态框展示了量子主题的所有特效：</p>
+                    <ul style="text-align: left; margin: 1rem 0;">
+                        <li>渐变背景效果</li>
+                        <li>粒子动画</li>
+                        <li>发光阴影</li>
+                        <li>平滑过渡</li>
+                    </ul>
+                    <button data-component="button" data-variant="primary" data-quantum-effect="true" onclick="modal.close()">
+                        进入量子隧道
+                    </button>
+                </div>
+            `);
+            
+            modal.show();
+            
+            // 重新初始化组件
+            setTimeout(() => {
+                QuantumUI.init();
+            }, 100);
+        }
+        
+        // 加载按钮演示
+        document.getElementById('loadingBtn').addEventListener('click', function() {
+            const button = QuantumUI.ComponentRegistry.getInstance(this);
+            if (button) {
+                button.setLoading(true);
+                button.setText('加载中...');
+                
+                setTimeout(() => {
+                    button.setLoading(false);
+                    button.setText('加载完成!');
+                    
+                    setTimeout(() => {
+                        button.setText('点击加载');
+                    }, 2000);
+                }, 3000);
+            }
+        });
+        
+        // 工具提示初始化
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            const tooltip = QuantumUI.tooltip(element, {
+                content: element.getAttribute('data-tooltip'),
+                position: element.getAttribute('data-tooltip-position') || 'top',
+                quantumEffect: true
+            });
+        });
+        
+        // 表单演示
+        document.getElementById('demoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const modal = QuantumUI.modal(null, {
+                size: 'small',
+                quantumEffect: true,
+                destroyOnClose: true
+            });
+            
+            modal.setTitle('🎉 注册成功');
+            modal.setContent(`
+                <div style="text-align: center; padding: 1rem;">
+                    <p>恭喜！您的账号已成功注册。</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">这只是一个演示，没有实际提交数据。</p>
+                    <button data-component="button" data-variant="primary" onclick="modal.close()">确定</button>
+                </div>
+            `);
+            
+            modal.show();
+            
+            setTimeout(() => {
+                QuantumUI.init();
+            }, 100);
+        });
+        
+        // 主题切换事件
+        document.addEventListener('themeChange', function(e) {
+            console.log('主题已切换到:', e.detail.theme);
+        });
+        
+        // 响应式断点变化事件
+        document.addEventListener('breakpointChange', function(e) {
+            console.log('断点已变化到:', e.detail.breakpoint, '宽度:', e.detail.width);
+        });
+        
+        // 组件事件监听示例
+        document.addEventListener('ui:click', function(e) {
+            if (e.detail.component.constructor.componentName === 'button') {
+                console.log('按钮被点击:', e.target);
+            }
+        });
+        
+        console.log('🚀 AlingAi Pro UI 组件库演示页面已加载');
+        console.log('📚 可用组件:', Object.keys(window.QuantumUI));
+        console.log('🎨 当前主题:', QuantumUI.ThemeManager.getTheme());
+        console.log('📱 当前断点:', QuantumUI.ResponsiveManager.getBreakpoint());
+    </script>
+</body>
+</html>

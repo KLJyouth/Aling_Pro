@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="h-full bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 政府门户 - 智能政务管理平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gov-blue': '#1E40AF',
+                        'gov-red': '#DC2626',
+                        'gov-gold': '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="h-full">
+    <div id="app" x-data="governmentPortal()" class="min-h-full">
+        <!-- 导航栏 -->
+        <nav class="bg-gov-blue shadow-lg">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center">
+                            <i class="fas fa-building text-white text-2xl mr-3"></i>
+                            <span class="text-white text-xl font-bold">AlingAi 政府门户</span>
+                        </div>
+                        <div class="hidden md:ml-6 md:flex md:space-x-8">
+                            <a href="#dashboard" @click="activeTab = 'dashboard'" 
+                               :class="activeTab === 'dashboard' ? 'border-white text-white' : 'border-transparent text-blue-100 hover:text-white'"
+                               class="border-b-2 px-1 pt-1 pb-4 text-sm font-medium">
+                                <i class="fas fa-chart-line mr-2"></i>数据看板
+                            </a>
+                            <a href="#services" @click="activeTab = 'services'"
+                               :class="activeTab === 'services' ? 'border-white text-white' : 'border-transparent text-blue-100 hover:text-white'"
+                               class="border-b-2 px-1 pt-1 pb-4 text-sm font-medium">
+                                <i class="fas fa-cogs mr-2"></i>政务服务
+                            </a>
+                            <a href="#ai" @click="activeTab = 'ai'"
+                               :class="activeTab === 'ai' ? 'border-white text-white' : 'border-transparent text-blue-100 hover:text-white'"
+                               class="border-b-2 px-1 pt-1 pb-4 text-sm font-medium">
+                                <i class="fas fa-robot mr-2"></i>AI助手
+                            </a>
+                            <a href="#documents" @click="activeTab = 'documents'"
+                               :class="activeTab === 'documents' ? 'border-white text-white' : 'border-transparent text-blue-100 hover:text-white'"
+                               class="border-b-2 px-1 pt-1 pb-4 text-sm font-medium">
+                                <i class="fas fa-file-alt mr-2"></i>文档管理
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="text-white mr-4">
+                            <span class="text-sm">欢迎，</span>
+                            <span class="font-medium" x-text="user.name"></span>
+                        </div>
+                        <button @click="logout()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm">
+                            <i class="fas fa-sign-out-alt mr-1"></i>退出
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容区域 -->
+        <main class="max-w-7xl mx-auto py-6 px-4">
+            <!-- 数据看板 -->
+            <div x-show="activeTab === 'dashboard'" x-transition>
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">政务数据看板</h1>
+                    <p class="text-gray-600 mt-2">实时监控政务服务运行状况</p>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-users text-blue-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">今日办事人数</p>
+                                <p class="text-2xl font-semibold text-gray-900" x-text="stats.todayUsers"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-file-check text-green-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">办理完成</p>
+                                <p class="text-2xl font-semibold text-gray-900" x-text="stats.completedToday"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-clock text-yellow-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">待处理</p>
+                                <p class="text-2xl font-semibold text-gray-900" x-text="stats.pending"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <div class="flex items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-percentage text-purple-500 text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-sm font-medium text-gray-500">满意度</p>
+                                <p class="text-2xl font-semibold text-gray-900" x-text="stats.satisfaction + '%'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 实时图表 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">实时业务量</h3>
+                        <div class="h-64 bg-gray-100 rounded flex items-center justify-center">
+                            <canvas id="realTimeChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow p-6">
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">服务分类统计</h3>
+                        <div class="space-y-4">
+                            <template x-for="service in serviceStats" :key="service.name">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-600" x-text="service.name"></span>
+                                    <div class="flex items-center">
+                                        <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" :style="`width: ${service.percentage}%`"></div>
+                                        </div>
+                                        <span class="text-sm text-gray-900" x-text="service.count"></span>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 政务服务 -->
+            <div x-show="activeTab === 'services'" x-transition>
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">政务服务</h1>
+                    <p class="text-gray-600 mt-2">便民服务一站式办理</p>
+                </div>
+
+                <!-- 服务分类 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <template x-for="category in serviceCategories" :key="category.id">
+                        <div class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 cursor-pointer"
+                             @click="selectServiceCategory(category)">
+                            <div class="flex items-center mb-4">
+                                <i :class="category.icon + ' text-2xl text-blue-500 mr-3'"></i>
+                                <h3 class="text-lg font-medium text-gray-900" x-text="category.name"></h3>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-4" x-text="category.description"></p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-500" x-text="`${category.services.length} 项服务`"></span>
+                                <span class="text-blue-500 text-sm">立即办理 →</span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- 快速服务入口 -->
+                <div class="mt-8 bg-white rounded-lg shadow p-6">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">快速服务入口</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <template x-for="quickService in quickServices" :key="quickService.id">
+                            <button @click="startQuickService(quickService)"
+                                    class="flex flex-col items-center p-4 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i :class="quickService.icon + ' text-2xl text-blue-500 mb-2'"></i>
+                                <span class="text-sm text-gray-700 text-center" x-text="quickService.name"></span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI助手 -->
+            <div x-show="activeTab === 'ai'" x-transition>
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">AI政务助手</h1>
+                    <p class="text-gray-600 mt-2">智能问答，快速解决政务问题</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-robot text-white"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">AI助手小政</h3>
+                                <p class="text-gray-500">我可以帮助您解答政务相关问题</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 聊天区域 -->
+                    <div class="h-96 overflow-y-auto p-6 space-y-4" id="chatArea">
+                        <template x-for="message in chatMessages" :key="message.id">
+                            <div :class="message.isUser ? 'flex justify-end' : 'flex justify-start'">
+                                <div :class="message.isUser ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-900'"
+                                     class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg">
+                                    <p class="text-sm" x-text="message.content"></p>
+                                    <span class="text-xs opacity-75" x-text="message.time"></span>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <!-- 输入区域 -->
+                    <div class="border-t p-4">
+                        <div class="flex space-x-2">
+                            <input x-model="currentMessage" 
+                                   @keyup.enter="sendMessage()"
+                                   type="text" 
+                                   placeholder="请输入您的问题..."
+                                   class="flex-1 border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button @click="sendMessage()" 
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- 快速问题 -->
+                        <div class="mt-4">
+                            <p class="text-sm text-gray-500 mb-2">常见问题：</p>
+                            <div class="flex flex-wrap gap-2">
+                                <template x-for="question in quickQuestions" :key="question">
+                                    <button @click="askQuestion(question)"
+                                            class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full">
+                                        <span x-text="question"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 文档管理 -->
+            <div x-show="activeTab === 'documents'" x-transition>
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900">文档管理</h1>
+                    <p class="text-gray-600 mt-2">政务文档集中管理和智能搜索</p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow">
+                    <!-- 搜索和操作栏 -->
+                    <div class="p-6 border-b">
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <div class="flex-1">
+                                <div class="relative">
+                                    <input x-model="documentSearch"
+                                           @input="searchDocuments()"
+                                           type="text" 
+                                           placeholder="搜索文档..."
+                                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                            </div>
+                            <button @click="uploadDocument()"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">
+                                <i class="fas fa-upload mr-2"></i>上传文档
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 文档列表 -->
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <template x-for="document in filteredDocuments" :key="document.id">
+                                <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                    <div class="flex items-center space-x-4">
+                                        <i :class="getDocumentIcon(document.type) + ' text-2xl text-gray-400'"></i>
+                                        <div>
+                                            <h4 class="text-sm font-medium text-gray-900" x-text="document.name"></h4>
+                                            <p class="text-sm text-gray-500" x-text="document.description"></p>
+                                            <div class="flex items-center space-x-4 mt-1 text-xs text-gray-400">
+                                                <span x-text="document.date"></span>
+                                                <span x-text="document.size"></span>
+                                                <span x-text="document.category"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <button @click="viewDocument(document)"
+                                                class="text-blue-500 hover:text-blue-700">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        <button @click="downloadDocument(document)"
+                                                class="text-green-500 hover:text-green-700">
+                                            <i class="fas fa-download"></i>
+                                        </button>
+                                        <button @click="deleteDocument(document)"
+                                                class="text-red-500 hover:text-red-700">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function governmentPortal() {
+            return {
+                activeTab: 'dashboard',
+                user: {
+                    name: '张政务',
+                    role: '管理员'
+                },
+                stats: {
+                    todayUsers: 1248,
+                    completedToday: 876,
+                    pending: 234,
+                    satisfaction: 96
+                },
+                serviceStats: [
+                    { name: '证件办理', count: 324, percentage: 80 },
+                    { name: '户籍管理', count: 198, percentage: 60 },
+                    { name: '税务服务', count: 156, percentage: 45 },
+                    { name: '社保医保', count: 134, percentage: 40 },
+                    { name: '其他服务', count: 64, percentage: 20 }
+                ],
+                serviceCategories: [
+                    {
+                        id: 1,
+                        name: '证件办理',
+                        icon: 'fas fa-id-card',
+                        description: '身份证、护照、驾驶证等证件办理服务',
+                        services: ['身份证办理', '护照申请', '驾驶证换证']
+                    },
+                    {
+                        id: 2,
+                        name: '户籍管理',
+                        icon: 'fas fa-home',
+                        description: '户口迁移、变更、证明等户籍相关服务',
+                        services: ['户口迁移', '户籍变更', '户口证明']
+                    },
+                    {
+                        id: 3,
+                        name: '税务服务',
+                        icon: 'fas fa-calculator',
+                        description: '纳税申报、税务咨询、发票管理',
+                        services: ['个税申报', '企业纳税', '发票开具']
+                    },
+                    {
+                        id: 4,
+                        name: '社保医保',
+                        icon: 'fas fa-heartbeat',
+                        description: '社会保险、医疗保险相关业务',
+                        services: ['社保缴费', '医保报销', '保险转移']
+                    },
+                    {
+                        id: 5,
+                        name: '市政服务',
+                        icon: 'fas fa-city',
+                        description: '城市规划、建设审批等市政服务',
+                        services: ['建设许可', '规划审批', '市政咨询']
+                    },
+                    {
+                        id: 6,
+                        name: '教育服务',
+                        icon: 'fas fa-graduation-cap',
+                        description: '入学申请、学籍管理、教育咨询',
+                        services: ['入学申请', '转学手续', '教育咨询']
+                    }
+                ],
+                quickServices: [
+                    { id: 1, name: '身份证办理', icon: 'fas fa-id-card' },
+                    { id: 2, name: '户口证明', icon: 'fas fa-file-alt' },
+                    { id: 3, name: '纳税申报', icon: 'fas fa-receipt' },
+                    { id: 4, name: '社保查询', icon: 'fas fa-shield-alt' },
+                    { id: 5, name: '预约服务', icon: 'fas fa-calendar' },
+                    { id: 6, name: '在线咨询', icon: 'fas fa-comments' }
+                ],
+                chatMessages: [
+                    {
+                        id: 1,
+                        content: '您好！我是AI助手小政，很高兴为您服务。请问有什么可以帮助您的吗？',
+                        isUser: false,
+                        time: '14:30'
+                    }
+                ],
+                currentMessage: '',
+                quickQuestions: [
+                    '如何办理身份证？',
+                    '户口迁移需要什么材料？',
+                    '个人所得税怎么申报？',
+                    '社保卡如何申请？'
+                ],
+                documentSearch: '',
+                documents: [
+                    {
+                        id: 1,
+                        name: '身份证办理指南.pdf',
+                        description: '详细介绍身份证办理流程和所需材料',
+                        type: 'pdf',
+                        date: '2025-06-10',
+                        size: '2.3MB',
+                        category: '证件办理'
+                    },
+                    {
+                        id: 2,
+                        name: '户籍管理规定.docx',
+                        description: '最新户籍管理相关法规和政策',
+                        type: 'word',
+                        date: '2025-06-08',
+                        size: '1.8MB',
+                        category: '户籍管理'
+                    },
+                    {
+                        id: 3,
+                        name: '税务政策解读.xlsx',
+                        description: '2025年最新税务政策详细解读',
+                        type: 'excel',
+                        date: '2025-06-05',
+                        size: '3.2MB',
+                        category: '税务服务'
+                    }
+                ],
+
+                init() {
+                    this.initializeChart();
+                    this.loadInitialData();
+                },
+
+                get filteredDocuments() {
+                    if (!this.documentSearch) return this.documents;
+                    return this.documents.filter(doc => 
+                        doc.name.toLowerCase().includes(this.documentSearch.toLowerCase()) ||
+                        doc.description.toLowerCase().includes(this.documentSearch.toLowerCase())
+                    );
+                },
+
+                selectServiceCategory(category) {
+                    alert(`选择了服务分类：${category.name}`);
+                },
+
+                startQuickService(service) {
+                    alert(`开始办理：${service.name}`);
+                },
+
+                sendMessage() {
+                    if (!this.currentMessage.trim()) return;
+                    
+                    // 添加用户消息
+                    this.chatMessages.push({
+                        id: Date.now(),
+                        content: this.currentMessage,
+                        isUser: true,
+                        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+                    });
+
+                    // 模拟AI回复
+                    setTimeout(() => {
+                        this.chatMessages.push({
+                            id: Date.now(),
+                            content: this.getAIResponse(this.currentMessage),
+                            isUser: false,
+                            time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+                        });
+                    }, 1000);
+
+                    this.currentMessage = '';
+                },
+
+                askQuestion(question) {
+                    this.currentMessage = question;
+                    this.sendMessage();
+                },
+
+                getAIResponse(message) {
+                    const responses = {
+                        '身份证': '身份证办理需要携带户口本原件和复印件，1寸白底照片2张，工作日9:00-17:00到当地派出所或政务服务中心办理。',
+                        '户口': '户口迁移需要准备：1.迁入地准迁证 2.原户口本 3.身份证 4.相关证明材料。建议先咨询目标迁入地派出所具体要求。',
+                        '税': '个人所得税可以通过"个人所得税"APP在线申报，也可以到税务大厅现场办理。年收入超过12万元需要进行年度汇算清缴。',
+                        '社保': '社保卡申请可以通过社保局官网、支付宝、微信小程序等多种方式办理，也可以到社保服务大厅现场申请。'
+                    };
+
+                    for (const [key, response] of Object.entries(responses)) {
+                        if (message.includes(key)) {
+                            return response;
+                        }
+                    }
+
+                    return '感谢您的咨询！这个问题比较复杂，建议您拨打政务服务热线12345或到就近的政务服务中心咨询具体详情。我们的工作人员会为您提供专业的帮助。';
+                },
+
+                searchDocuments() {
+                    // 搜索功能已通过计算属性实现
+                },
+
+                uploadDocument() {
+                    alert('文档上传功能');
+                },
+
+                viewDocument(document) {
+                    alert(`查看文档：${document.name}`);
+                },
+
+                downloadDocument(document) {
+                    alert(`下载文档：${document.name}`);
+                },
+
+                deleteDocument(document) {
+                    if (confirm(`确定要删除文档"${document.name}"吗？`)) {
+                        this.documents = this.documents.filter(d => d.id !== document.id);
+                    }
+                },
+
+                getDocumentIcon(type) {
+                    const icons = {
+                        pdf: 'fas fa-file-pdf',
+                        word: 'fas fa-file-word',
+                        excel: 'fas fa-file-excel',
+                        image: 'fas fa-file-image',
+                        default: 'fas fa-file'
+                    };
+                    return icons[type] || icons.default;
+                },
+
+                logout() {
+                    if (confirm('确定要退出系统吗？')) {
+                        alert('退出成功');
+                    }
+                },
+
+                initializeChart() {
+                    // 这里可以集成 Chart.js 或其他图表库
+                    console.log('初始化图表');
+                },
+
+                loadInitialData() {
+                    // 加载初始数据
+                    console.log('加载初始数据');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

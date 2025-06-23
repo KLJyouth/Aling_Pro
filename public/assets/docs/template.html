@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珑凌科技文档中心</title>
+    <meta name="description" content="珑凌科技技术文档中心 - 详细的API文档、开发指南和最佳实践">
+    
+    <!-- 核心资源 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <!-- 字体预加载 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&family=Fira+Code&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&family=Fira+Code&display=swap">
+
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#0A0016',
+                        'neon-pink': '#FF2B75',
+                        'tech-blue': '#00D4FF',
+                        'cyan-glow': 'rgba(0, 212, 255, 0.15)',
+                        'longling': '#6C13FF'
+                    },
+                    fontFamily: {
+                        'heading': ['"JetBrains Mono"', 'monospace'],
+                        'body': ['"Inter"', 'sans-serif'],
+                        'code': ['"Fira Code"', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A0016 0%, #1A003C 100%);
+            color: rgba(255, 255, 255, 0.9);
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: radial-gradient(circle at 10% 20%, rgba(26, 0, 60, 0.3) 0%, rgba(10, 0, 22, 0.3) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .quantum-text {
+            background: linear-gradient(90deg, #FF2B75, #6C13FF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* 文档特定样式 */
+        .doc-content {
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .doc-content h1 {
+            font-size: 2.5em;
+            margin-bottom: 1em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .doc-content h2 {
+            font-size: 2em;
+            margin: 1.5em 0 1em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .doc-content h3 {
+            font-size: 1.5em;
+            margin: 1.2em 0 0.8em;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .doc-content p {
+            margin-bottom: 1.2em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .doc-content code {
+            font-family: 'Fira Code', monospace;
+            background: rgba(108, 19, 255, 0.1);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .doc-content pre {
+            background: rgba(10, 0, 22, 0.5);
+            padding: 1.5em;
+            border-radius: 12px;
+            margin: 1.5em 0;
+            overflow-x: auto;
+        }
+
+        .doc-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .doc-content ul, .doc-content ol {
+            margin: 1em 0;
+            padding-left: 1.5em;
+        }
+
+        .doc-content li {
+            margin: 0.5em 0;
+        }
+
+        .doc-content table {
+            width: 100%;
+            margin: 1.5em 0;
+            border-collapse: collapse;
+        }
+
+        .doc-content th, .doc-content td {
+            padding: 0.75em 1em;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .doc-content th {
+            background: rgba(108, 19, 255, 0.1);
+            font-weight: 600;
+        }
+
+        /* 目录样式 */
+        .toc {
+            position: sticky;
+            top: 2rem;
+            max-height: calc(100vh - 4rem);
+            overflow-y: auto;
+            padding-right: 1rem;
+        }
+
+        .toc::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .toc::-webkit-scrollbar-thumb {
+            background: rgba(108, 19, 255, 0.5);
+            border-radius: 2px;
+        }
+
+        .toc-link {
+            display: block;
+            padding: 0.5em 0;
+            color: rgba(255, 255, 255, 0.6);
+            transition: all 0.3s ease;
+            border-left: 2px solid transparent;
+            padding-left: 1em;
+        }
+
+        .toc-link:hover {
+            color: rgba(255, 255, 255, 0.9);
+            border-left-color: #6C13FF;
+        }
+
+        .toc-link.active {
+            color: #00D4FF;
+            border-left-color: #00D4FF;
+        }
+
+        /* 搜索框样式 */
+        .search-box {
+            background: rgba(10, 0, 22, 0.5);
+            border: 1px solid rgba(108, 19, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            border-color: #6C13FF;
+            box-shadow: 0 0 0 2px rgba(108, 19, 255, 0.2);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .toc {
+                position: relative;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen font-body">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full z-50 glass-card bg-opacity-80 backdrop-blur-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-2">
+                    <img src="/logo.svg" alt="珑凌科技" class="h-8 w-auto" alt="">
+                    <span class="quantum-text text-xl font-heading">珑凌科技</span>
+                </a>
+
+                <!-- 桌面端导航菜单 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="nav-link">首页</a>
+                    <a href="/docs" class="nav-link">文档中心</a>
+                    <a href="/api" class="nav-link">API</a>
+                    <a href="/whitepaper" class="nav-link">白皮书</a>
+                    
+                    <!-- 语言选择器 -->
+                    <div class="lang-selector flex items-center gap-2 text-sm">
+                        <span class="current-lang">中文</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </div>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden quantum-button p-2" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="container mx-auto px-4 pt-24 pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- 左侧边栏 -->
+            <aside class="md:col-span-1">
+                <!-- 搜索框 -->
+                <div class="mb-8">
+                    <input type="search" 
+                           placeholder="搜索文档..." 
+                           class="w-full px-4 py-2 rounded-lg search-box text-white">
+                </div>
+
+                <!-- 文档目录 -->
+                <nav class="toc">
+                    <div class="mb-4">
+                        <h3 class="text-lg font-heading mb-2">开始使用</h3>
+                        <a href="#introduction" class="toc-link">简介</a>
+                        <a href="#quickstart" class="toc-link">快速开始</a>
+                        <a href="#installation" class="toc-link">安装</a>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h3 class="text-lg font-heading mb-2">核心概念</h3>
+                        <a href="#architecture" class="toc-link">系统架构</a>
+                        <a href="#authentication" class="toc-link">认证授权</a>
+                        <a href="#api-basics" class="toc-link">API基础</a>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="text-lg font-heading mb-2">API参考</h3>
+                        <a href="#rest-api" class="toc-link">REST API</a>
+                        <a href="#websocket-api" class="toc-link">WebSocket API</a>
+                        <a href="#sdk" class="toc-link">SDK</a>
+                    </div>
+
+                    <div class="mb-4">
+                        <h3 class="text-lg font-heading mb-2">最佳实践</h3>
+                        <a href="#security" class="toc-link">安全性</a>
+                        <a href="#performance" class="toc-link">性能优化</a>
+                        <a href="#monitoring" class="toc-link">监控告警</a>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- 主要内容 -->
+            <div class="md:col-span-3">
+                <article class="glass-card p-8 doc-content">
+                    <!-- 文档内容 -->
+                    <div id="doc-content">
+                        <h1 id="introduction" class="quantum-text">珑凌科技文档中心</h1>
+                        
+                        <p>欢迎来到珑凌科技技术文档中心。这里提供详细的API文档、开发指南和最佳实践，帮助您快速集成和使用我们的服务。</p>
+
+                        <h2 id="quickstart">快速开始</h2>
+                        <p>按照以下步骤快速开始使用珑凌科技的服务：</p>
+                        
+                        <ol>
+                            <li>注册账户并获取API密钥</li>
+                            <li>选择您需要的服务类型</li>
+                            <li>集成SDK或直接调用API</li>
+                            <li>开始构建您的应用</li>
+                        </ol>
+
+                        <h2 id="installation">安装</h2>
+                        <p>您可以通过多种方式安装和使用我们的服务：</p>
+
+                        <h3>NPM安装</h3>
+                        <pre><code>npm install @longling/sdk</code></pre>
+
+                        <h3>CDN引入</h3>
+                        <pre><code>&lt;script src="https://cdn.longling.tech/sdk/v1/longling.min.js"&gt;&lt;/script&gt;</code></pre>
+
+                        <h2 id="architecture">系统架构</h2>
+                        <p>珑凌科技采用微服务架构，提供高可用、高性能的服务体验。主要组件包括：</p>
+                        
+                        <ul>
+                            <li><strong>API网关</strong> - 统一的入口和路由管理</li>
+                            <li><strong>认证服务</strong> - 用户身份验证和授权</li>
+                            <li><strong>核心服务</strong> - 业务逻辑处理</li>
+                            <li><strong>数据存储</strong> - 分布式数据库集群</li>
+                        </ul>
+
+                        <h2 id="authentication">认证授权</h2>
+                        <p>所有API调用都需要进行身份验证。我们支持以下认证方式：</p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>认证方式</th>
+                                    <th>描述</th>
+                                    <th>适用场景</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>API Key</td>
+                                    <td>基于密钥的认证</td>
+                                    <td>服务端调用</td>
+                                </tr>
+                                <tr>
+                                    <td>JWT Token</td>
+                                    <td>JSON Web Token</td>
+                                    <td>客户端应用</td>
+                                </tr>
+                                <tr>
+                                    <td>OAuth 2.0</td>
+                                    <td>标准授权协议</td>
+                                    <td>第三方集成</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h2 id="api-basics">API基础</h2>
+                        <p>我们的API采用RESTful设计原则，支持JSON格式的数据交换。</p>
+
+                        <h3>基础URL</h3>
+                        <pre><code>https://api.longling.tech/v1</code></pre>
+
+                        <h3>请求示例</h3>
+                        <pre><code>curl -X GET \
+  https://api.longling.tech/v1/user/profile \
+  -H 'Authorization: Bearer YOUR_TOKEN' \
+  -H 'Content-Type: application/json'</code></pre>
+
+                        <h2 id="rest-api">REST API</h2>
+                        <p>详细的REST API文档，包括所有端点的说明、参数和响应格式。</p>
+
+                        <h2 id="websocket-api">WebSocket API</h2>
+                        <p>实时通信API，支持双向数据传输和事件订阅。</p>
+
+                        <h2 id="sdk">SDK</h2>
+                        <p>提供多种编程语言的SDK，简化集成过程。</p>
+
+                        <h2 id="security">安全性</h2>
+                        <p>安全最佳实践，包括数据加密、访问控制和安全审计。</p>
+
+                        <h2 id="performance">性能优化</h2>
+                        <p>性能优化指南，帮助您提升应用的响应速度和稳定性。</p>
+
+                        <h2 id="monitoring">监控告警</h2>
+                        <p>监控和告警配置，确保服务的高可用性。</p>
+                    </div>
+
+                    <!-- 文档底部导航 -->
+                    <div class="flex justify-between items-center mt-12 pt-8 border-t border-white/10">
+                        <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>上一章</span>
+                        </a>
+                        <a href="#" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors">
+                            <span>下一章</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- 反馈区域 -->
+                <div class="mt-8 glass-card p-6">
+                    <h3 class="text-xl font-heading mb-4">文档反馈</h3>
+                    <p class="text-gray-300 mb-4">这篇文档对您有帮助吗？</p>
+                    <div class="flex gap-4">
+                        <button class="px-4 py-2 rounded-lg border border-longling hover:bg-longling hover:bg-opacity-20 transition-all">
+                            <i class="far fa-thumbs-up mr-2"></i>有帮助
+                        </button>
+                        <button class="px-4 py-2 rounded-lg border border-longling hover:bg-longling hover:bg-opacity-20 transition-all">
+                            <i class="far fa-thumbs-down mr-2"></i>需改进
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部 -->
+    <footer class="py-8 px-4 border-t border-white/10">
+        <div class="container mx-auto text-center text-sm text-gray-400">
+            <p>© 广西港妙科技有限公司 2024 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- AI助手悬浮按钮 -->
+    <div class="fixed bottom-8 right-8 z-50">
+        <button class="w-16 h-16 bg-gradient-to-r from-neon-pink to-longling rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105" id="docHelper">
+            <i class="fas fa-robot text-white text-2xl"></i>
+        </button>
+    </div>
+
+    <!-- 文档相关脚本 -->
+    <script>
+        // 目录高亮
+        const tocLinks = document.querySelectorAll('.toc-link');
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '-100px 0px -50% 0px'
+        };
+
+        const highlightToc = (entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const tocLink = document.querySelector(`.toc-link[href="#${id}"]`);
+                if (tocLink) {
+                    if (entry.isIntersecting) {
+                        tocLink.classList.add('active');
+                    } else {
+                        tocLink.classList.remove('active');
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(highlightToc, observerOptions);
+        document.querySelectorAll('h1[id], h2[id], h3[id]').forEach((section) => {
+            observer.observe(section);
+        });
+
+        // 移动端菜单
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                // 切换菜单显示状态
+                console.log('Mobile menu toggled');
+            });
+        }
+
+        // 文档助手
+        const docHelper = document.getElementById('docHelper');
+        if (docHelper) {
+            docHelper.addEventListener('click', () => {
+                // 实现文档助手功能 - 可以跳转到聊天页面
+                window.location.href = '/chat.html';
+            });
+        }
+
+        // 搜索功能
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                // 这里可以实现搜索功能
+                console.log('Searching for:', query);
+            });
+        }
+
+        // 平滑滚动到锚点
+        document.querySelectorAll('.toc-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

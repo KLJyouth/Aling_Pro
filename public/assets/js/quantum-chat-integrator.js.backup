@@ -1,0 +1,1289 @@
+/**
+ * 量子球-聊天系统实时集成模块
+ * 连接3D量子球可视化与聊天功能，提供实时动画反馈
+ */
+
+class QuantumChatIntegrator {
+    constructor() {
+        this.wsConnection = null;
+        this.quantumBallSystem = null;
+        this.chatSystem = null;
+        this.isConnected = false;
+        this.reconnectAttempts = 0;
+        this.maxReconnectAttempts = 5;
+        this.reconnectInterval = 3000;
+        this.quantumSphereRef = null; // 量子球系统引用（首页用）
+        
+        // 动画状态管理
+        this.currentAnimation = null;
+        this.animationQueue = [];
+        this.isAnimating = false;
+        
+        // 事件监听器
+        this.eventListeners = new Map();
+        
+        this.init();
+    }
+    
+    // 设置量子球系统引用（用于首页）
+    setQuantumSphereReference(quantumSphereObjects) {
+        this.quantumSphereRef = quantumSphereObjects;
+        console.log('🎯 量子球系统引用已设置', Object.keys(quantumSphereObjects));
+    }
+    
+    async init() {
+        console.log('🌊 初始化量子球-聊天集成系统...');
+        
+        // 等待量子球系统就绪
+        await this.waitForQuantumBallSystem();
+        
+        // 初始化WebSocket连接
+        await this.initWebSocketConnection();
+        
+        // 设置聊天事件监听
+        this.setupChatEventListeners();
+        
+        // 设置页面级事件监听
+        this.setupPageEventListeners();
+        
+        console.log('✅ 量子球-聊天集成系统初始化完成');
+    }
+      async waitForQuantumBallSystem() {
+        return new Promise((resolve) => {
+            const checkQuantumSystem = () => {
+                // 检查量子球系统和动画系统是否存在
+                const hasQuantumParticleSystem = window.quantumParticleSystem || 
+                    document.getElementById('backgroundContainer') ||
+                    window.QuantumParticleSystem;
+                
+                const hasQuantumAnimationSystem = window.quantumAnimation || 
+                    window.QuantumAnimationSystem;
+                
+                if (hasQuantumParticleSystem && hasQuantumAnimationSystem) {
+                    this.quantumBallSystem = window.quantumParticleSystem || 
+                                           window.QuantumParticleSystem ||
+                                           this.createQuantumBallProxy();
+                    
+                    console.log('🎯 量子球系统和动画系统已就绪');
+                    resolve();
+                } else {
+                    console.log('⏳ 等待量子系统初始化...', {
+                        quantumParticleSystem: !!hasQuantumParticleSystem,
+                        quantumAnimationSystem: !!hasQuantumAnimationSystem
+                    });
+                    setTimeout(checkQuantumSystem, 500);
+                }
+            };
+            
+            checkQuantumSystem();
+        });
+    }
+      createQuantumBallProxy() {
+        // 创建量子球系统代理，用于兼容性
+        return {
+            updateState: (state) => {
+                console.log('📊 量子球状态更新:', state);
+                this.triggerVisualFeedback(state);
+            },
+            triggerAnimation: (type, data) => {
+                console.log('🎬 触发量子球动画:', type, data);
+                // 使用正确的方法名
+                this.triggerChatEvent(type, data);
+            }
+        };
+    }
+
+    // 添加视觉反馈方法
+    triggerVisualFeedback(state) {
+        console.log('🎨 应用视觉反馈:', state);
+        
+        // 应用到背景容器
+        const container = document.getElementById('backgroundContainer');
+        if (container && state.mode) {
+            container.className = `quantum-${state.mode}`;
+            
+            // 应用颜色变化
+            if (state.colors && state.colors.length > 0) {
+                this.applyColorAnimation(container, state.colors);
+            }
+            
+            // 应用效果动画
+            if (state.effects && state.effects.length > 0) {
+                this.applyEffectAnimation(container, state.effects);
+            }
+        }
+        
+        // 应用到量子加载器
+        const quantumLoader = document.getElementById('quantumLoader');
+        if (quantumLoader && state.visible) {
+            quantumLoader.style.display = 'flex';
+            
+            setTimeout(() => {
+                quantumLoader.style.display = 'none';
+            }, state.duration || 2000);
+        }
+    }
+    
+    async initWebSocketConnection() {
+        try {
+            const wsUrl = `ws://${window.location.host}/ws`;
+            console.log('🔌 连接WebSocket:', wsUrl);
+            
+            this.wsConnection = new WebSocket(wsUrl);
+            
+            this.wsConnection.onopen = () => {
+                console.log('✅ WebSocket连接已建立');
+                this.isConnected = true;
+                this.reconnectAttempts = 0;
+                
+                // 发送初始化消息
+                this.sendWebSocketMessage({
+                    type: 'quantumBallSync',
+                    action: 'init',
+                    data: {
+                        page: window.location.pathname,
+                        timestamp: new Date().toISOString()
+                    }
+                });
+                
+                this.emit('connected');
+            };
+            
+            this.wsConnection.onmessage = (event) => {
+                this.handleWebSocketMessage(event);
+            };
+            
+            this.wsConnection.onclose = () => {
+                console.log('🔌 WebSocket连接已关闭');
+                this.isConnected = false;
+                this.scheduleReconnect();
+                this.emit('disconnected');
+            };
+            
+            this.wsConnection.onerror = (error) => {
+                console.error('❌ WebSocket连接错误:', error);
+                this.emit('error', error);
+            };
+            
+        } catch (error) {
+            console.error('❌ WebSocket初始化失败:', error);
+            this.scheduleReconnect();
+        }
+    }
+    
+    scheduleReconnect() {
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+            this.reconnectAttempts++;
+            console.log(`🔄 尝试第${this.reconnectAttempts}次重连...`);
+            
+            setTimeout(() => {
+                this.initWebSocketConnection();
+            }, this.reconnectInterval * this.reconnectAttempts);
+        } else {
+            console.error('❌ WebSocket重连失败，已达到最大重试次数');
+            this.emit('reconnectFailed');
+        }
+    }
+    
+    handleWebSocketMessage(event) {
+        try {
+            const message = JSON.parse(event.data);
+            console.log('📨 收到WebSocket消息:', message.type);
+            
+            switch (message.type) {
+                case 'quantumBallUpdate':
+                    this.handleQuantumBallUpdate(message.data);
+                    break;
+                    
+                case 'quantumBallAnimation':
+                    this.handleQuantumBallAnimation(message);
+                    break;
+                    
+                case 'chatResponse':
+                    this.handleChatResponse(message.data);
+                    break;
+                    
+                case 'welcome':
+                    console.log('🎉 WebSocket欢迎消息:', message.message);
+                    break;
+                    
+                case 'pong':
+                    // 心跳响应
+                    break;
+                    
+                default:
+                    console.log('📨 未处理的消息类型:', message.type);
+            }
+        } catch (error) {
+            console.error('❌ 处理WebSocket消息失败:', error);
+        }
+    }
+    
+    handleQuantumBallUpdate(data) {
+        console.log('🌊 量子球状态更新:', data);
+        
+        if (this.quantumBallSystem && this.quantumBallSystem.updateState) {
+            this.quantumBallSystem.updateState(data);
+        } else {
+            this.applyQuantumBallStyles(data);
+        }
+        
+        this.emit('quantumBallUpdate', data);
+    }
+      handleQuantumBallAnimation(message) {
+        console.log('🎬 量子球动画:', message.eventType);
+        
+        const { eventType, animation, chatData } = message;
+        
+        // 应用动画到首页量子球系统
+        this.applyAnimationToQuantumSphere(eventType, animation);
+        
+        // 添加到动画队列
+        this.animationQueue.push({
+            type: eventType,
+            animation: animation,
+            data: chatData,
+            timestamp: Date.now()
+        });
+        
+        // 处理动画队列
+        this.processAnimationQueue();
+        
+        this.emit('quantumBallAnimation', { eventType, animation, chatData });
+    }
+    
+    async processAnimationQueue() {
+        if (this.isAnimating || this.animationQueue.length === 0) {
+            return;
+        }
+        
+        this.isAnimating = true;
+        
+        while (this.animationQueue.length > 0) {
+            const animationItem = this.animationQueue.shift();
+            await this.executeAnimation(animationItem);
+        }
+        
+        this.isAnimating = false;
+    }
+    
+    async executeAnimation(animationItem) {
+        const { type, animation, data } = animationItem;
+        
+        console.log(`🎭 执行动画: ${type}`, animation);
+        
+        try {
+            // 应用动画到量子球系统
+            if (this.quantumBallSystem && this.quantumBallSystem.triggerAnimation) {
+                this.quantumBallSystem.triggerAnimation(type, animation);
+            } else {
+                await this.executeAnimationFallback(type, animation);
+            }
+            
+            // 等待动画完成
+            if (animation.duration) {
+                await new Promise(resolve => setTimeout(resolve, animation.duration));
+            }
+            
+        } catch (error) {
+            console.error('❌ 执行动画失败:', error);
+        }
+    }
+    
+    async executeAnimationFallback(type, animation) {
+        // 后备动画实现
+        const container = document.getElementById('backgroundContainer');
+        if (!container) return;
+        
+        const animationClass = `quantum-animation-${type}`;
+        container.classList.add(animationClass);
+        
+        // 应用样式变化
+        if (animation.colors) {
+            this.applyColorAnimation(container, animation.colors);
+        }
+        
+        if (animation.effects) {
+            this.applyEffectAnimation(container, animation.effects);
+        }
+        
+        // 清理动画类
+        setTimeout(() => {
+            container.classList.remove(animationClass);
+        }, animation.duration || 2000);
+    }
+    
+    applyColorAnimation(container, colors) {
+        const colorMappings = {
+            'tech-blue': '#0ea5e9',
+            'quantum': '#6b46c1',
+            'longling': '#8b5cf6',
+            'red': '#ef4444',
+            'orange': '#f97316'
+        };
+        
+        const cssColors = colors.map(color => colorMappings[color] || color).join(', ');
+        container.style.background = `linear-gradient(45deg, ${cssColors})`;
+        container.style.opacity = '0.3';
+        
+        setTimeout(() => {
+            container.style.background = '';
+            container.style.opacity = '';
+        }, 2000);
+    }
+    
+    applyEffectAnimation(container, effects) {
+        effects.forEach(effect => {
+            switch (effect) {
+                case 'pulse':
+                    container.style.animation = 'pulse 1s ease-in-out infinite';
+                    break;
+                case 'shake':
+                    container.style.animation = 'shake 0.5s ease-in-out infinite';
+                    break;
+                case 'glow':
+                    container.style.boxShadow = '0 0 20px rgba(107, 70, 193, 0.5)';
+                    break;
+            }
+        });
+        
+        setTimeout(() => {
+            container.style.animation = '';
+            container.style.boxShadow = '';
+        }, 2000);
+    }
+    
+    setupChatEventListeners() {
+        console.log('📡 设置聊天事件监听器...');
+        
+        // 监听消息发送事件
+        document.addEventListener('chatMessageSent', (event) => {
+            this.handleChatMessageSent(event.detail);
+        });
+        
+        // 监听AI响应事件
+        document.addEventListener('chatResponseReceived', (event) => {
+            this.handleChatResponseReceived(event.detail);
+        });
+        
+        // 监听聊天错误事件
+        document.addEventListener('chatError', (event) => {
+            this.handleChatError(event.detail);
+        });
+        
+        // 监听聊天模块的直接调用
+        if (window.chatInstance) {
+            this.integrateChatInstance(window.chatInstance);
+        }
+        
+        // 监听聊天实例创建
+        document.addEventListener('chatInstanceCreated', (event) => {
+            this.integrateChatInstance(event.detail);
+        });
+    }
+    
+    integrateChatInstance(chatInstance) {
+        console.log('🔗 集成聊天实例...');
+        
+        this.chatSystem = chatInstance;
+        
+        // 如果聊天实例有事件系统，则集成
+        if (chatInstance.core && chatInstance.core.on) {
+            chatInstance.core.on('messageSent', (data) => {
+                this.triggerChatEvent('userMessageSent', data);
+            });
+            
+            chatInstance.core.on('responseReceived', (data) => {
+                this.triggerChatEvent('aiResponseReceived', data);
+            });
+            
+            chatInstance.core.on('error', (data) => {
+                this.triggerChatEvent('chatError', data);
+            });
+        }
+        
+        // 覆盖聊天API调用以注入量子球事件
+        if (chatInstance.api && chatInstance.api.sendMessage) {
+            const originalSendMessage = chatInstance.api.sendMessage.bind(chatInstance.api);
+            
+            chatInstance.api.sendMessage = async (message, options = {}) => {
+                // 触发用户消息动画
+                this.triggerChatEvent('userMessageSent', { message, options });
+                
+                try {
+                    // 触发AI思考动画
+                    this.triggerChatEvent('aiThinking', { message });
+                    
+                    const result = await originalSendMessage(message, options);
+                    
+                    // 触发AI响应动画
+                    this.triggerChatEvent('aiResponseReceived', { 
+                        message, 
+                        response: result,
+                        options 
+                    });
+                    
+                    return result;
+                } catch (error) {
+                    // 触发错误动画
+                    this.triggerChatEvent('chatError', { message, error, options });
+                    throw error;
+                }
+            };
+        }
+    }
+    
+    handleChatMessageSent(data) {
+        console.log('💬 用户消息发送:', data);
+        this.triggerChatEvent('userMessageSent', data);
+    }
+    
+    handleChatResponseReceived(data) {
+        console.log('🤖 AI响应接收:', data);
+        this.triggerChatEvent('aiResponseReceived', data);
+    }
+    
+    handleChatError(data) {
+        console.log('❌ 聊天错误:', data);
+        this.triggerChatEvent('chatError', data);
+    }
+      triggerChatEvent(eventType, data) {
+        console.log(`🚀 触发聊天事件: ${eventType}`, data);
+        
+        // 首先尝试直接应用到首页量子球系统
+        if (this.quantumSphereRef) {
+            this.applyAnimationToQuantumSphere(eventType, data);
+        }
+        
+        // 如果WebSocket连接可用，也通过WebSocket发送
+        if (this.isConnected && this.wsConnection) {
+            this.sendWebSocketMessage({
+                type: 'chatEvent',
+                eventType: eventType,
+                data: data,
+                timestamp: new Date().toISOString()
+            });
+        } else {
+            console.log('🎨 使用本地动画效果 (WebSocket未连接)');
+            // 使用本地动画效果作为fallback
+            this.applyLocalAnimationEffect(eventType, data);
+        }
+        
+        // 触发自定义事件，供其他模块监听
+        document.dispatchEvent(new CustomEvent(`quantumChatEvent:${eventType}`, {
+            detail: { eventType, data, timestamp: new Date().toISOString() }
+        }));
+    }
+    
+    // 本地动画效果fallback
+    applyLocalAnimationEffect(eventType, data) {
+        const backgroundContainer = document.getElementById('backgroundContainer') || 
+                                  document.getElementById('minimalistBackground');
+        
+        if (!backgroundContainer) {
+            console.warn('⚠️ 未找到背景容器，跳过动画效果');
+            return;
+        }
+        
+        // 添加动画类
+        const animationClass = `chat-event-${eventType}`;
+        backgroundContainer.classList.add(animationClass);
+        
+        // 应用颜色效果
+        switch (eventType) {
+            case 'userMessageSent':
+                backgroundContainer.style.filter = 'hue-rotate(30deg) brightness(1.1)';
+                break;
+            case 'aiThinking':
+                backgroundContainer.style.filter = 'hue-rotate(180deg) brightness(0.9)';
+                break;
+            case 'aiResponseReceived':
+                backgroundContainer.style.filter = 'hue-rotate(120deg) brightness(1.2)';
+                break;
+            case 'chatError':
+                backgroundContainer.style.filter = 'hue-rotate(0deg) brightness(1.3) saturate(1.5)';
+                break;
+        }
+        
+        // 清除效果
+        setTimeout(() => {
+            backgroundContainer.classList.remove(animationClass);
+            backgroundContainer.style.filter = '';
+        }, 2000);
+    }
+    
+    setupPageEventListeners() {
+        // 监听页面焦点变化
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.triggerQuantumBallMode('idle');
+            } else {
+                this.triggerQuantumBallMode('active');
+            }
+        });
+        
+        // 监听页面卸载
+        window.addEventListener('beforeunload', () => {
+            if (this.wsConnection) {
+                this.wsConnection.close();
+            }
+        });
+    }
+    
+    triggerQuantumBallMode(mode) {
+        this.sendWebSocketMessage({
+            type: 'quantumBallSync',
+            data: {
+                mode: mode,
+                timestamp: new Date().toISOString()
+            }
+        });
+    }
+    
+    sendWebSocketMessage(message) {
+        if (this.wsConnection && this.wsConnection.readyState === WebSocket.OPEN) {
+            this.wsConnection.send(JSON.stringify(message));
+        } else {
+            console.warn('⚠️ WebSocket未连接，消息发送失败:', message);
+        }
+    }
+    
+    // 事件系统
+    on(event, callback) {
+        if (!this.eventListeners.has(event)) {
+            this.eventListeners.set(event, []);
+        }
+        this.eventListeners.get(event).push(callback);
+    }
+    
+    off(event, callback) {
+        if (this.eventListeners.has(event)) {
+            const callbacks = this.eventListeners.get(event);
+            const index = callbacks.indexOf(callback);
+            if (index > -1) {
+                callbacks.splice(index, 1);
+            }
+        }
+    }
+    
+    emit(event, data) {
+        if (this.eventListeners.has(event)) {
+            this.eventListeners.get(event).forEach(callback => {
+                try {
+                    callback(data);
+                } catch (error) {
+                    console.error(`❌ 事件处理器错误 (${event}):`, error);
+                }
+            });
+        }
+    }
+    
+    // 公共API方法
+    async callQuantumAPI(endpoint, method = 'GET', data = null) {
+        try {
+            const url = `/api/quantum${endpoint}`;
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (data && method !== 'GET') {
+                options.body = JSON.stringify(data);
+            }
+            
+            const response = await fetch(url, options);
+            const result = await response.json();
+            
+            console.log(`📡 量子球API调用: ${endpoint}`, result);
+            return result;
+        } catch (error) {
+            console.error(`❌ 量子球API调用失败: ${endpoint}`, error);
+            throw error;
+        }
+    }
+    
+    // 聊天页面直接调用的动画方法
+    async triggerUserMessageAnimation(message) {
+        console.log('🗨️ 触发用户消息动画', message);
+        return this.triggerChatEvent('userMessageSent', { message });
+    }
+    
+    async triggerAIThinkingAnimation() {
+        console.log('🤔 触发AI思考动画');
+        return this.triggerChatEvent('aiThinking', {});
+    }
+    
+    async triggerAIResponseAnimation(response) {
+        console.log('🤖 触发AI响应动画', response);
+        return this.triggerChatEvent('aiResponseReceived', { response });
+    }
+    
+    async triggerErrorAnimation(error) {
+        console.log('❌ 触发错误动画', error);
+        return this.triggerChatEvent('chatError', { error });
+    }
+    
+    // 应用动画到首页量子球系统
+    applyAnimationToQuantumSphere(animationType, animationData) {
+        if (!this.quantumSphereRef) {
+            console.warn('⚠️ 首页量子球系统引用未设置');
+            return;
+        }
+        
+        const { quantumSphere, particleCloud, waveForm, connectionLines, lightBeams } = this.quantumSphereRef;
+        
+        switch (animationType) {
+            case 'userMessageSent':
+                this.applyUserMessageAnimation(quantumSphere, particleCloud);
+                break;
+            case 'aiThinking':
+                this.applyAIThinkingAnimation(waveForm, connectionLines);
+                break;
+            case 'aiResponseReceived':
+                this.applyAIResponseAnimation(quantumSphere, lightBeams);
+                break;
+            case 'chatError':
+                this.applyErrorAnimation(quantumSphere, particleCloud);
+                break;
+        }
+    }
+    
+    applyUserMessageAnimation(quantumSphere, particleCloud) {
+        if (quantumSphere && quantumSphere.mesh) {
+            // 用户消息：蓝色脉冲
+            quantumSphere.mesh.material.color.setHex(0x0ea5e9);
+            quantumSphere.mesh.scale.setScalar(1.2);
+            
+            setTimeout(() => {
+                quantumSphere.mesh.material.color.setHex(0x6C13FF);
+                quantumSphere.mesh.scale.setScalar(1.0);
+            }, 1000);
+        }
+        
+        if (particleCloud && particleCloud.particles) {
+            particleCloud.particles.forEach(particle => {
+                particle.material.color.setHex(0x0ea5e9);
+                particle.userData.speed *= 1.5;
+            });
+            
+            setTimeout(() => {
+                particleCloud.particles.forEach(particle => {
+                    particle.material.color.setHex(Math.random() > 0.5 ? 0x6C13FF : 0x00D4FF);
+                    particle.userData.speed /= 1.5;
+                });
+            }, 2000);
+        }
+    }
+    
+    applyAIThinkingAnimation(waveForm, connectionLines) {
+        if (waveForm && waveForm.waveMesh) {
+            // AI思考：波形加速
+            waveForm.time += 0.1;
+            waveForm.waveMesh.material.color.setHex(0x6b46c1);
+            waveForm.waveMesh.material.opacity = 0.8;
+        }
+        
+        if (connectionLines && connectionLines.lines) {
+            connectionLines.lines.forEach(line => {
+                line.material.color.setHex(0x8b5cf6);
+                line.userData.rotationSpeed *= 2;
+            });
+        }
+    }
+    
+    applyAIResponseAnimation(quantumSphere, lightBeams) {
+        if (quantumSphere && quantumSphere.mesh) {
+            // AI响应：绿色光芒
+            quantumSphere.mesh.material.color.setHex(0x10b981);
+            
+            if (quantumSphere.core) {
+                quantumSphere.core.material.color.setHex(0x34d399);
+            }
+            
+            setTimeout(() => {
+                quantumSphere.mesh.material.color.setHex(0x6C13FF);
+                if (quantumSphere.core) {
+                    quantumSphere.core.material.color.setHex(0xFF2B75);
+                }
+            }, 2000);
+        }
+        
+        if (lightBeams && lightBeams.beams) {
+            lightBeams.beams.forEach(beam => {
+                beam.material.color.setHex(0x10b981);
+                beam.material.opacity = 1.0;
+            });
+            
+            setTimeout(() => {
+                lightBeams.beams.forEach(beam => {
+                    beam.material.color.setHex(0x00D4FF);
+                    beam.material.opacity = 0.6;
+                });
+            }, 1500);
+        }
+    }
+    
+    applyErrorAnimation(quantumSphere, particleCloud) {
+        if (quantumSphere && quantumSphere.mesh) {
+            // 错误：红色警告
+            quantumSphere.mesh.material.color.setHex(0xef4444);
+            
+            // 震动效果
+            let shakeCount = 0;
+            const shakeInterval = setInterval(() => {
+                quantumSphere.mesh.position.x += (Math.random() - 0.5) * 0.2;
+                quantumSphere.mesh.position.y += (Math.random() - 0.5) * 0.2;
+                shakeCount++;
+                
+                if (shakeCount > 10) {
+                    clearInterval(shakeInterval);
+                    quantumSphere.mesh.position.set(0, 0, -5);
+                    quantumSphere.mesh.material.color.setHex(0x6C13FF);
+                }
+            }, 100);
+        }
+        
+        if (particleCloud && particleCloud.particles) {
+            particleCloud.particles.forEach(particle => {
+                particle.material.color.setHex(0xef4444);
+                particle.userData.speed *= 0.5;
+            });
+            
+            setTimeout(() => {
+                particleCloud.particles.forEach(particle => {
+                    particle.material.color.setHex(Math.random() > 0.5 ? 0x6C13FF : 0x00D4FF);
+                    particle.userData.speed *= 2;
+                });
+            }, 3000);
+        }
+    }
+    
+    // 调试和测试方法
+    testIntegration() {
+        console.log('🧪 测试量子球-聊天集成...');
+        
+        // 测试各种动画
+        const testAnimations = [
+            'userMessageSent',
+            'aiThinking', 
+            'aiResponseReceived',
+            'chatError'
+        ];
+        
+        testAnimations.forEach((animation, index) => {
+            setTimeout(() => {
+                this.triggerChatEvent(animation, {
+                    test: true,
+                    message: `测试动画: ${animation}`,
+                    timestamp: new Date().toISOString()
+                });
+            }, index * 3000);
+        });
+    }
+      getSystemStatus() {
+        return {
+            isConnected: this.isConnected,
+            reconnectAttempts: this.reconnectAttempts,
+            hasQuantumBallSystem: !!this.quantumBallSystem,
+            hasChatSystem: !!this.chatSystem,
+            animationQueueLength: this.animationQueue.length,
+            isAnimating: this.isAnimating,
+            currentPage: window.location.pathname
+        };
+    }
+    
+    // 公共初始化方法 - 供外部调用
+    async initialize() {
+        console.log('🚀 QuantumChatIntegrator 公共初始化开始...');
+        try {
+            // 如果已经初始化过，直接返回
+            if (this.isConnected) {
+                console.log('✅ QuantumChatIntegrator 已经初始化，跳过重复初始化');
+                return Promise.resolve();
+            }
+            
+            // 调用内部初始化方法
+            await this.init();
+            
+            console.log('✅ QuantumChatIntegrator 公共初始化完成');
+            return Promise.resolve();
+        } catch (error) {
+            console.error('❌ QuantumChatIntegrator 初始化失败:', error);
+            throw error;
+        }
+    }
+}
+
+// 全局初始化
+let quantumChatIntegrator = null;
+
+// 页面加载时自动初始化
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        try {
+            quantumChatIntegrator = new QuantumChatIntegrator();
+            window.quantumChatIntegrator = quantumChatIntegrator;
+            
+            console.log('🌊 量子球-聊天集成器已全局初始化');
+            
+            // 通知其他模块集成器已就绪
+            document.dispatchEvent(new CustomEvent('quantumChatIntegratorReady', {
+                detail: quantumChatIntegrator
+            }));
+              } catch (error) {
+            console.error('❌ 量子球-聊天集成器初始化失败:', error);
+        }
+    }, 1000); // 延迟1秒确保其他系统初始化完成
+});
+
+// 添加全局初始化方法供外部调用
+if (typeof window !== 'undefined') {
+    window.initializeQuantumChatIntegrator = function() {
+        if (window.quantumChatIntegrator) {
+            console.log('🌊 量子球-聊天集成器手动初始化...');
+            return window.quantumChatIntegrator;
+        } else {
+            console.warn('⚠️ 量子球-聊天集成器尚未就绪，请稍后重试');
+            return null;
+        }
+        }
+
+    // 处理量子球点击事件
+    handleQuantumBallClick(event) {
+        console.log('🎯 量子球点击事件触发', event);
+        
+        // 防止事件冒泡
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        // 触发量子动画效果
+        this.triggerQuantumAnimation('click', {
+            position: event ? { x: event.clientX, y: event.clientY } : null,
+            intensity: 'high',
+            duration: 2000
+        });
+        
+        // 显示聊天界面
+        this.showChatInterface();
+        
+        // 发送交互事件到服务器
+        if (this.wsConnection && this.wsConnection.readyState === WebSocket.OPEN) {
+            this.wsConnection.send(JSON.stringify({
+                type: 'quantum_ball_interaction',
+                timestamp: Date.now(),
+                data: {
+                    action: 'click',
+                    position: event ? { x: event.clientX, y: event.clientY } : null
+                }
+            }));
+        }
+        
+        return true;
+    }
+
+    // 初始化聊天系统
+    async initializeChatSystem() {
+        console.log('💬 初始化聊天系统...');
+        
+        try {
+            // 获取聊天容器
+            const chatContainer = document.getElementById('chat-container');
+            const floatingButton = document.getElementById('floating-chat-button');
+            const quantumOrb = document.getElementById('quantum-orb-container');
+            
+            if (!chatContainer || !floatingButton) {
+                console.warn('⚠️ 聊天界面元素未找到，创建基础结构...');
+                this.createChatInterface();
+            }
+            
+            // 设置聊天事件监听器
+            this.setupChatInterfaceEvents();
+            
+            // 初始化聊天历史
+            await this.loadChatHistory();
+            
+            // 连接到聊天服务
+            await this.connectToChatService();
+            
+            // 显示量子球（如果存在）
+            if (quantumOrb) {
+                quantumOrb.style.display = 'block';
+                setTimeout(() => {
+                    quantumOrb.style.opacity = '1';
+                }, 100);
+            }
+            
+            console.log('✅ 聊天系统初始化完成');
+            return true;
+            
+        } catch (error) {
+            console.error('❌ 聊天系统初始化失败:', error);
+            return false;
+        }
+    }
+
+    // 连接到量子球
+    connectToQuantumOrb() {
+        console.log('🔗 连接量子球系统...');
+        
+        const quantumOrb = document.getElementById('quantum-orb-container');
+        
+        if (quantumOrb) {
+            // 添加点击事件监听器
+            quantumOrb.addEventListener('click', (event) => {
+                this.handleQuantumBallClick(event);
+            });
+            
+            // 添加悬停效果
+            quantumOrb.addEventListener('mouseenter', () => {
+                this.triggerQuantumAnimation('hover', { intensity: 'medium' });
+            });
+            
+            quantumOrb.addEventListener('mouseleave', () => {
+                this.triggerQuantumAnimation('idle', { intensity: 'low' });
+            });
+            
+            // 显示量子球        quantumOrb.style.display = 'block';
+            
+            console.log('✅ 量子球连接成功');
+            return true;
+        } else {
+            console.warn('⚠️ 量子球容器未找到');
+            return false;
+        }
+    }
+
+    // 创建聊天界面（如果不存在）
+    createChatInterface() {
+        console.log('🏗️ 创建聊天界面...');
+        
+        // 检查是否已存在
+        if (document.getElementById('chat-container')) {
+            return;
+        }
+        
+        // 创建悬浮聊天按钮
+        const floatingButton = document.createElement('div');
+        floatingButton.id = 'floating-chat-button';
+        floatingButton.innerHTML = `
+            <i class="fas fa-comments text-xl"></i>
+            <div class="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
+        `;
+        
+        document.body.appendChild(floatingButton);
+        
+        // 使用悬浮按钮管理器注册聊天按钮
+        if (window.floatingButtonsManager) {
+            window.floatingButtonsManager.registerButton('chat', {
+                element: floatingButton,
+                preferredPosition: 'bottom-right-1',
+                type: 'chat',
+                priority: 5,
+                title: '智能助手聊天',
+                icon: 'fas fa-comments',
+                onClick: () => {
+                    this.showChatInterface();
+                }
+            });
+        } else {
+            // 后备方案
+            floatingButton.className = 'fixed bottom-140 right-6 z-50 w-14 h-14 bg-gradient-to-br from-tech-blue to-purple-500 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-all duration-300 flex items-center justify-center';
+            floatingButton.addEventListener('click', () => {
+                this.showChatInterface();
+            });
+        }
+        
+        // 创建聊天容器HTML
+        const chatHTML = `
+            <div id="chat-container" class="fixed bottom-6 right-6 z-40 w-80 h-96 bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg shadow-2xl border border-tech-blue opacity-0 transform translate-y-8 transition-all duration-300" style="display: none;">
+                <div class="chat-header p-4 border-b border-gray-700 flex justify-between items-center">
+                    <h3 class="text-white font-semibold">智能助手</h3>
+                    <button id="close-chat" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="chat-messages p-4 h-64 overflow-y-auto">
+                    <div class="message bot-message mb-3">
+                        <div class="message-content bg-gray-700 p-3 rounded-lg text-white text-sm">
+                            您好！我是珑凌科技的智能助手，有什么可以帮助您的吗？
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input p-4 border-t border-gray-700">
+                    <div class="flex gap-2">
+                        <input type="text" id="chat-input" placeholder="输入消息..." class="flex-1 bg-gray-700 text-white p-2 rounded border border-gray-600 focus:border-tech-blue focus:outline-none">
+                        <button id="send-chat" class="bg-tech-blue text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        // 添加到页面
+        document.body.insertAdjacentHTML('beforeend', chatHTML);
+        console.log('✅ 聊天界面创建完成');
+    }
+
+    // 设置聊天界面事件
+    setupChatInterfaceEvents() {
+        const floatingButton = document.getElementById('floating-chat-button');
+        const chatContainer = document.getElementById('chat-container');
+        const closeButton = document.getElementById('close-chat');
+        const sendButton = document.getElementById('send-chat');
+        const chatInput = document.getElementById('chat-input');
+        
+        // 浮动按钮点击事件
+        if (floatingButton) {
+            floatingButton.addEventListener('click', () => {
+                this.showChatInterface();
+            });
+        }
+        
+        // 关闭按钮事件
+        if (closeButton) {
+            closeButton.addEventListener('click', () => {
+                this.hideChatInterface();
+            });
+        }
+        
+        // 发送按钮事件
+        if (sendButton) {
+            sendButton.addEventListener('click', () => {
+                this.sendMessage();
+            });
+        }
+        
+        // 输入框回车事件
+        if (chatInput) {
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendMessage();
+                }
+            });
+        }
+    }
+
+    // 显示聊天界面
+    showChatInterface() {
+        const chatContainer = document.getElementById('chat-container');
+        const floatingButton = document.getElementById('floating-chat-button');
+        
+        if (chatContainer) {
+            chatContainer.style.display = 'block';
+            setTimeout(() => {
+                chatContainer.style.opacity = '1';
+                chatContainer.style.transform = 'translateY(0)';
+            }, 10);
+        }
+        
+        if (floatingButton) {
+            floatingButton.style.display = 'none';
+        }
+        
+        // 触发量子动画
+        this.triggerQuantumAnimation('chat_open', { intensity: 'high' });
+    }
+
+    // 隐藏聊天界面
+    hideChatInterface() {
+        const chatContainer = document.getElementById('chat-container');
+        const floatingButton = document.getElementById('floating-chat-button');
+        
+        if (chatContainer) {
+            chatContainer.style.opacity = '0';
+            chatContainer.style.transform = 'translateY(8px)';
+            setTimeout(() => {
+                chatContainer.style.display = 'none';
+            }, 300);
+        }
+        
+        if (floatingButton) {
+            floatingButton.style.display = 'flex';
+        }
+        
+        // 触发量子动画
+        this.triggerQuantumAnimation('chat_close', { intensity: 'medium' });
+    }
+
+    // 发送消息
+    sendMessage() {
+        const chatInput = document.getElementById('chat-input');
+        const messagesContainer = document.querySelector('.chat-messages');
+        
+        if (!chatInput || !messagesContainer) return;
+        
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // 添加用户消息到界面
+        this.addMessageToChat('user', message);
+        
+        // 清空输入框
+        chatInput.value = '';
+        
+        // 发送到服务器
+        if (this.wsConnection && this.wsConnection.readyState === WebSocket.OPEN) {
+            this.wsConnection.send(JSON.stringify({
+                type: 'chat_message',
+                message: message,
+                timestamp: Date.now()
+            }));
+        }
+        
+        // 触发量子动画
+        this.triggerQuantumAnimation('message_sent', { 
+            intensity: 'medium',
+            message: message 
+        });
+    }
+
+    // 添加消息到聊天界面
+    addMessageToChat(sender, message) {
+        const messagesContainer = document.querySelector('.chat-messages');
+        if (!messagesContainer) return;
+        
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${sender}-message mb-3`;
+        
+        const isUser = sender === 'user';
+        messageElement.innerHTML = `
+            <div class="message-content ${isUser ? 'bg-tech-blue ml-8' : 'bg-gray-700 mr-8'} p-3 rounded-lg text-white text-sm">
+                ${message}
+            </div>
+        `;
+        
+        messagesContainer.appendChild(messageElement);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // 加载聊天历史
+    async loadChatHistory() {
+        try {
+            // 这里可以从本地存储或服务器加载聊天历史
+            const history = localStorage.getItem('chat_history');
+            if (history) {
+                const messages = JSON.parse(history);
+                const messagesContainer = document.querySelector('.chat-messages');
+                if (messagesContainer && messages.length > 0) {
+                    messagesContainer.innerHTML = ''; // 清空默认消息
+                    messages.forEach(msg => {
+                        this.addMessageToChat(msg.sender, msg.message);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('加载聊天历史失败:', error);
+        }
+    }
+
+    // 连接到聊天服务
+    async connectToChatService() {
+        try {
+            // 这里可以建立与聊天服务的连接
+            console.log('🔗 连接到聊天服务...');
+            // 实际实现会根据具体的聊天服务API来定制
+        } catch (error) {
+            console.error('连接聊天服务失败:', error);
+        }
+    }
+
+    // 触发量子动画
+    triggerQuantumAnimation(type, data = {}) {
+        console.log('🎬 触发量子动画:', type, data);
+        
+        // 应用到量子球
+        const quantumOrb = document.getElementById('quantum-orb-container');
+        if (quantumOrb) {
+            const core = quantumOrb.querySelector('.orb-core');
+            const ring = quantumOrb.querySelector('.orb-ring');
+            const glow = quantumOrb.querySelector('.orb-glow');
+            
+            switch (type) {
+                case 'click':
+                    if (core) core.style.animation = 'pulse 0.5s ease-in-out';
+                    if (ring) ring.style.animation = 'spin 1s linear infinite';
+                    break;
+                case 'hover':
+                    if (glow) glow.style.opacity = '0.4';
+                    break;
+                case 'idle':
+                    if (glow) glow.style.opacity = '0.2';
+                    break;
+                case 'message_sent':
+                    if (core) {
+                        core.style.background = 'linear-gradient(45deg, #00ff88, #0088ff)';
+                        setTimeout(() => {
+                            core.style.background = '';
+                        }, 1000);
+                    }
+                    break;
+            }
+        }
+        
+        // 应用到背景粒子系统
+        if (window.quantumParticleSystem) {
+            try {
+                window.quantumParticleSystem.triggerAnimation(type, data);
+            } catch (error) {
+                console.warn('量子粒子系统动画触发失败:', error);
+            }        }
+    }
+
+    // 触发聊天事件（兼容性方法）
+    triggerChatEvent(eventType, data = {}) {
+        console.log('📡 触发聊天事件:', eventType, data);
+        
+        // 这是一个兼容性方法，用于向后兼容
+        switch (eventType) {
+            case 'click':
+            case 'quantum_ball_click':
+                this.handleQuantumBallClick(data.event);
+                break;
+                
+            case 'message_sent':
+                this.triggerQuantumAnimation('message_sent', data);
+                break;
+                
+            case 'chat_open':
+                this.showChatInterface();
+                break;
+                
+            case 'chat_close':
+                this.hideChatInterface();
+                break;
+                
+            case 'animation':
+                this.triggerQuantumAnimation(data.type || 'pulse', data);
+                break;
+                
+            default:
+                console.log('🔄 通用聊天事件:', eventType, data);
+                this.triggerQuantumAnimation(eventType, data);
+        }
+        
+        // 发送事件到WebSocket（如果连接）
+        if (this.wsConnection && this.wsConnection.readyState === WebSocket.OPEN) {
+            this.wsConnection.send(JSON.stringify({
+                type: 'chat_event',
+                eventType: eventType,
+                data: data,
+                timestamp: Date.now()
+            }));
+        }
+        
+        return true;
+    }
+}
+
+// 导出给其他模块使用
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = QuantumChatIntegrator;
+}
+
+console.log('📦 量子球-聊天集成模块已加载');

@@ -1,0 +1,21 @@
+<?php
+
+namespace AlingAi\Models\DataExchange;
+
+/**
+ * DataCatalog
+ *
+ * @package AlingAi\Models\DataExchange
+ */
+class DataCatalog
+{
+    // 类属性和方法
+    
+    /**
+     * 构造函数
+     */
+    public function __construct()
+    {
+        // 初始化代码
+    }
+}

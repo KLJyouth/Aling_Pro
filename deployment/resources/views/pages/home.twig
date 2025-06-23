@@ -1,0 +1,609 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}{{ app.name }} - 智能AI助手平台{% endblock %}
+{% block description %}领先的AI智能助手平台，提供智能对话、文档处理、数据分析等服务，让人工智能技术更好地为您服务。{% endblock %}
+{% block keywords %}AI助手,人工智能,智能对话,文档处理,数据分析,机器学习{% endblock %}
+
+{% block styles %}
+<link href="{{ asset('css/quantum.css') }}" rel="stylesheet">
+<link href="{{ asset('css/quantum-styles.css') }}" rel="stylesheet">
+<link href="{{ asset('css/unified-background-manager.css') }}" rel="stylesheet">
+<style>
+    .hero-section {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+    
+    .quantum-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .feature-card {
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    }
+    
+    .stats-section {
+        background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        padding: 60px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 20px;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #3498db;
+        display: block;
+    }
+    
+    .cta-section {
+        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        color: white;
+        padding: 80px 0;
+    }
+</style>
+{% endblock %}
+
+{% block body_class %}homepage{% endblock %}
+
+{% block content %}
+<!-- 英雄区域 -->
+<section class="hero-section">
+    <div id="quantum-background" class="quantum-background"></div>
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold text-white mb-4">
+                        欢迎来到 <span class="text-warning">{{ app.name }}</span>
+                    </h1>
+                    <p class="lead text-white-75 mb-4">
+                        体验下一代AI智能助手平台，集成先进的人工智能技术，
+                        为您提供智能对话、文档处理、数据分析等全方位服务。
+                    </p>
+                    <div class="hero-actions">
+                        {% if not auth_check() %}
+                        <a href="{{ url('register') }}" class="btn btn-warning btn-lg me-3">
+                            <i class="bi bi-rocket-takeoff me-2"></i>免费开始
+                        </a>
+                        <a href="{{ url('login') }}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>立即登录
+                        </a>
+                        {% else %}
+                        <a href="{{ url('chat') }}" class="btn btn-warning btn-lg me-3">
+                            <i class="bi bi-chat-dots me-2"></i>开始对话
+                        </a>
+                        <a href="{{ url('dashboard') }}" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-speedometer2 me-2"></i>控制台
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <div class="quantum-demo-container">
+                        <div id="quantum-demo" class="quantum-demo"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 功能特性 -->
+<section class="features-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">强大功能特性</h2>
+            <p class="lead text-muted">探索AI技术带来的无限可能</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-chat-dots-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">智能对话</h5>
+                        <p class="card-text text-muted">
+                            基于先进的自然语言处理技术，提供流畅自然的对话体验，
+                            支持多轮对话、上下文理解和个性化回复。
+                        </p>
+                        <a href="{{ url('chat') }}" class="btn btn-outline-primary">
+                            立即体验 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-file-earmark-text-fill text-success" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">文档处理</h5>
+                        <p class="card-text text-muted">
+                            智能文档分析、摘要生成、内容提取和格式转换，
+                            支持多种文件格式，让文档处理变得简单高效。
+                        </p>
+                        <a href="{{ url('documents') }}" class="btn btn-outline-success">
+                            了解更多 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-graph-up-arrow text-info" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">数据分析</h5>
+                        <p class="card-text text-muted">
+                            强大的数据分析和可视化功能，帮助您深入洞察数据价值，
+                            生成专业报告和智能预测。
+                        </p>
+                        <a href="{{ url('analytics') }}" class="btn btn-outline-info">
+                            探索功能 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-shield-check-fill text-warning" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">安全可靠</h5>
+                        <p class="card-text text-muted">
+                            企业级安全保障，数据加密传输和存储，
+                            符合国际安全标准，保护您的隐私和数据安全。
+                        </p>
+                        <a href="{{ url('security') }}" class="btn btn-outline-warning">
+                            安全保障 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-puzzle-fill text-danger" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">API集成</h5>
+                        <p class="card-text text-muted">
+                            丰富的API接口和SDK，轻松集成到您的应用中，
+                            支持多种编程语言和开发框架。
+                        </p>
+                        <a href="{{ url('api-docs') }}" class="btn btn-outline-danger">
+                            查看文档 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-6">
+                <div class="card feature-card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="bi bi-lightning-charge-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h5 class="card-title">高性能</h5>
+                        <p class="card-text text-muted">
+                            优化的算法和架构设计，提供毫秒级响应速度，
+                            支持高并发访问，确保稳定可靠的服务体验。
+                        </p>
+                        <a href="{{ url('performance') }}" class="btn btn-outline-primary">
+                            性能指标 <i class="bi bi-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 统计数据 -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="10000">0</span>
+                    <h6 class="stat-label text-muted">活跃用户</h6>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="1000000">0</span>
+                    <h6 class="stat-label text-muted">处理文档</h6>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="5000000">0</span>
+                    <h6 class="stat-label text-muted">对话次数</h6>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-item">
+                    <span class="stat-number" data-count="99">0</span>
+                    <span style="font-size: 1.5rem; color: #3498db;">%</span>
+                    <h6 class="stat-label text-muted">服务可用性</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 用户案例 -->
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">用户好评</h2>
+            <p class="lead text-muted">听听用户们怎么说</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('images/avatars/user1.jpg') }}" alt="用户头像" 
+                                     class="rounded-circle" width="50" height="50">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-0">张总</h6>
+                                <small class="text-muted">科技公司CEO</small>
+                            </div>
+                        </div>
+                        <blockquote class="blockquote mb-0">
+                            <p class="text-muted">
+                                "AlingAi大大提高了我们团队的工作效率，智能文档处理功能特别实用，
+                                为我们节省了大量时间。"
+                            </p>
+                        </blockquote>
+                        <div class="text-warning mt-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('images/avatars/user2.jpg') }}" alt="用户头像" 
+                                     class="rounded-circle" width="50" height="50">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-0">李教授</h6>
+                                <small class="text-muted">大学研究员</small>
+                            </div>
+                        </div>
+                        <blockquote class="blockquote mb-0">
+                            <p class="text-muted">
+                                "数据分析功能非常强大，帮助我们处理复杂的研究数据，
+                                生成的报告专业又详细。"
+                            </p>
+                        </blockquote>
+                        <div class="text-warning mt-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <img src="{{ asset('images/avatars/user3.jpg') }}" alt="用户头像" 
+                                     class="rounded-circle" width="50" height="50">
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-0">王经理</h6>
+                                <small class="text-muted">市场营销</small>
+                            </div>
+                        </div>
+                        <blockquote class="blockquote mb-0">
+                            <p class="text-muted">
+                                "AI助手的对话体验很自然，帮助我们快速响应客户需求，
+                                客户满意度明显提升。"
+                            </p>
+                        </blockquote>
+                        <div class="text-warning mt-2">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 行动号召 -->
+<section class="cta-section">
+    <div class="container text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="display-5 fw-bold mb-4">准备体验AI的力量？</h2>
+                <p class="lead mb-4">
+                    立即注册，开启您的智能AI助手之旅。
+                    享受免费试用期，体验所有核心功能。
+                </p>
+                {% if not auth_check() %}
+                <div class="cta-actions">
+                    <a href="{{ url('register') }}" class="btn btn-warning btn-lg me-3">
+                        <i class="bi bi-rocket-takeoff me-2"></i>免费注册
+                    </a>
+                    <a href="{{ url('contact') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-telephone me-2"></i>联系销售
+                    </a>
+                </div>
+                {% else %}
+                <div class="cta-actions">
+                    <a href="{{ url('chat') }}" class="btn btn-warning btn-lg me-3">
+                        <i class="bi bi-chat-dots me-2"></i>开始对话
+                    </a>
+                    <a href="{{ url('dashboard') }}" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-speedometer2 me-2"></i>访问控制台
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('js/quantum-particles.js') }}"></script>
+<script src="{{ asset('js/unified-background-manager.js') }}"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化量子粒子背景
+    initQuantumBackground();
+    
+    // 初始化统计数字动画
+    initStatsAnimation();
+    
+    // 初始化特性卡片动画
+    initFeatureCards();
+});
+
+// 初始化量子背景
+function initQuantumBackground() {
+    if (typeof QuantumParticles !== 'undefined') {
+        const quantumBg = document.getElementById('quantum-background');
+        if (quantumBg) {
+            new QuantumParticles(quantumBg, {
+                particleCount: 50,
+                particleSize: 2,
+                particleSpeed: 0.5,
+                connectDistance: 150,
+                colors: ['#fff', '#3498db', '#f39c12']
+            });
+        }
+    }
+    
+    // 量子演示动画
+    const quantumDemo = document.getElementById('quantum-demo');
+    if (quantumDemo) {
+        createQuantumDemo(quantumDemo);
+    }
+}
+
+// 创建量子演示动画
+function createQuantumDemo(container) {
+    container.style.cssText = `
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        position: relative;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(52,152,219,0.2) 0%, transparent 70%);
+    `;
+    
+    // 创建多个轨道
+    for (let i = 0; i < 3; i++) {
+        const orbit = document.createElement('div');
+        orbit.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: ${100 + i * 60}px;
+            height: ${100 + i * 60}px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotate ${3 + i}s linear infinite;
+        `;
+        
+        // 创建粒子
+        const particle = document.createElement('div');
+        particle.style.cssText = `
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: #f39c12;
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #f39c12;
+        `;
+        
+        orbit.appendChild(particle);
+        container.appendChild(orbit);
+    }
+    
+    // 添加CSS动画
+    if (!document.getElementById('quantum-demo-styles')) {
+        const style = document.createElement('style');
+        style.id = 'quantum-demo-styles';
+        style.textContent = `
+            @keyframes rotate {
+                from { transform: translate(-50%, -50%) rotate(0deg); }
+                to { transform: translate(-50%, -50%) rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// 初始化统计数字动画
+function initStatsAnimation() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumbers = entry.target.querySelectorAll('.stat-number');
+                statNumbers.forEach(animateNumber);
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    const statsSection = document.querySelector('.stats-section');
+    if (statsSection) {
+        observer.observe(statsSection);
+    }
+}
+
+// 数字动画函数
+function animateNumber(element) {
+    const target = parseInt(element.getAttribute('data-count'));
+    const duration = 2000;
+    const step = target / (duration / 16);
+    let current = 0;
+    
+    const updateNumber = () => {
+        current += step;
+        if (current < target) {
+            element.textContent = Math.floor(current).toLocaleString();
+            requestAnimationFrame(updateNumber);
+        } else {
+            element.textContent = target.toLocaleString();
+        }
+    };
+    
+    requestAnimationFrame(updateNumber);
+}
+
+// 初始化特性卡片动画
+function initFeatureCards() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    const featureCards = document.querySelectorAll('.feature-card');
+    featureCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'all 0.6s ease';
+        observer.observe(card);
+    });
+}
+
+// 页面滚动视差效果
+window.addEventListener('scroll', function() {
+    const scrolled = window.pageYOffset;
+    const parallax = document.querySelector('.hero-section');
+    
+    if (parallax) {
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${speed}px)`;
+    }
+});
+</script>
+{% endblock %}
+
+{% block ready_script %}
+// 页面加载完成后的额外初始化
+console.log('Homepage ready');
+
+// 检查是否有欢迎消息
+{% if auth_check() %}
+    showNotification('欢迎回来，{{ auth_user().username }}！', 'success');
+{% endif %}
+
+// 启动自动演示（如果用户空闲）
+let idleTimer;
+function startIdleDemo() {
+    idleTimer = setTimeout(() => {
+        // 显示功能演示
+        if (confirm('要查看功能演示吗？')) {
+            window.location.href = '{{ url("demo") }}';
+        }
+    }, 30000); // 30秒后
+}
+
+function resetIdleTimer() {
+    clearTimeout(idleTimer);
+    startIdleDemo();
+}
+
+// 监听用户活动
+['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(event => {
+    document.addEventListener(event, resetIdleTimer, true);
+});
+
+startIdleDemo();
+{% endblock %}

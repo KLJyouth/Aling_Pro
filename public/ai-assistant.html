@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI安全助手 - 珑凌科技</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-quantum-dark text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            珑凌科技
+                        </h1>
+                        <p class="text-xs text-gray-400">AI安全助手</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-4 py-2 text-quantum-accent hover:text-white transition-colors duration-300">返回首页</a>
+                    <a href="/chat.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg transition-all duration-300">
+                        体验助手
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-20">
+        <!-- 英雄区域 -->
+        <section class="py-20 bg-gradient-to-b from-quantum-purple/20 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        AI安全助手
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        24/7智能安全顾问，基于深度学习的威胁检测、风险评估和安全策略建议
+                    </p>
+                </div>
+                <!-- 实时对话演示 -->
+                <div class="max-w-4xl mx-auto">
+                    <div class="bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20 p-8">
+                        <div class="flex items-center justify-center mb-6">
+                            <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-full flex items-center justify-center animate-pulse">
+                                <i class="fas fa-robot text-white text-2xl"></i>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h3 class="text-xl font-semibold mb-4">AlingAI Assistant 正在线</h3>
+                            <p class="text-gray-400 mb-6">随时为您提供专业的安全咨询和技术支持</p>
+                            <a href="/chat.html" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
+                                <i class="fas fa-comments mr-2"></i>开始对话
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心能力 -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-quantum-accent">核心能力</h2>
+                    <p class="text-xl text-gray-300">AI驱动的智能安全服务</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- 威胁检测 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20 hover:border-quantum-primary/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-search text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">智能威胁检测</h3>
+                        <p class="text-gray-400 mb-6">基于机器学习的行为分析和异常检测</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>深度学习模型</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>行为基线分析</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>实时异常检测</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>零日攻击识别</li>
+                        </ul>
+                    </div>
+
+                    <!-- 智能问答 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-accent/20 hover:border-quantum-accent/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-comments text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">智能问答系统</h3>
+                        <p class="text-gray-400 mb-6">自然语言处理的专业安全咨询</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>自然语言理解</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>上下文感知</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>多轮对话</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>专业术语解释</li>
+                        </ul>
+                    </div>
+
+                    <!-- 自动化响应 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-secondary/20 hover:border-quantum-secondary/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-secondary to-neon-pink rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-magic text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">自动化响应</h3>
+                        <p class="text-gray-400 mb-6">智能化的安全事件处置和建议</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>事件分类处理</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>响应策略推荐</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>自动化修复</li>
+                            <li><i class="fas fa-brain text-quantum-accent mr-2"></i>预防性建议</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 应用场景 -->
+        <section class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-quantum-secondary">应用场景</h2>
+                    <p class="text-xl text-gray-300">覆盖全场景的智能安全服务</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <div class="space-y-8">
+                        <!-- SOC运营 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-quantum-primary rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-shield-alt text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">SOC安全运营</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">协助安全分析师进行威胁检测和事件响应</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>日志分析和关联</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>告警去重和优先级</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>事件调查协助</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 漏洞管理 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-quantum-accent rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-bug text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">漏洞管理</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">智能化漏洞评估和修复建议</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>漏洞风险评估</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>修复优先级排序</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>补丁管理建议</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 合规审计 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-quantum-secondary rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-clipboard-check text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">合规审计</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">自动化合规检查和报告生成</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>合规标准映射</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>自动化检查</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>报告自动生成</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- 安全培训 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-cyber-green rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-graduation-cap text-black"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">安全培训</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">个性化安全意识培训和知识传授</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>个性化学习路径</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>模拟钓鱼演练</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>知识库查询</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 风险评估 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-neural-blue/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-neural-blue rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-chart-line text-white"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">风险评估</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">智能化安全风险分析和建议</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>资产风险评估</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>威胁建模</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>风险量化分析</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 事件响应 -->
+                        <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-matrix-green/20">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-matrix-green rounded-lg flex items-center justify-center mr-4">
+                                    <i class="fas fa-exclamation-triangle text-black"></i>
+                                </div>
+                                <h4 class="text-lg font-semibold">事件响应</h4>
+                            </div>
+                            <p class="text-gray-400 text-sm mb-4">实时安全事件处置指导</p>
+                            <div class="space-y-2">
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>事件分类和严重性</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>响应流程指导</span>
+                                </div>
+                                <div class="flex items-center text-xs">
+                                    <i class="fas fa-check text-quantum-accent mr-2"></i>
+                                    <span>取证建议</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术架构 -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-quantum-accent">技术架构</h2>
+                    <p class="text-xl text-gray-300">先进的AI技术栈</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-4 gap-8">
+                    <!-- 自然语言处理 -->
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <div class="w-16 h-16 bg-quantum-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-language text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">NLP引擎</h4>
+                        <p class="text-gray-400 text-sm">
+                            Transformer架构<br>
+                            多语言支持<br>
+                            意图识别<br>
+                            实体抽取
+                        </p>
+                    </div>
+
+                    <!-- 机器学习 -->
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                        <div class="w-16 h-16 bg-quantum-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-brain text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">ML算法</h4>
+                        <p class="text-gray-400 text-sm">
+                            深度学习<br>
+                            异常检测<br>
+                            时序分析<br>
+                            集成学习
+                        </p>
+                    </div>
+
+                    <!-- 知识图谱 -->
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                        <div class="w-16 h-16 bg-quantum-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-project-diagram text-white text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">知识图谱</h4>
+                        <p class="text-gray-400 text-sm">
+                            安全本体<br>
+                            关系推理<br>
+                            知识融合<br>
+                            图神经网络
+                        </p>
+                    </div>
+
+                    <!-- 推理引擎 -->
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                        <div class="w-16 h-16 bg-cyber-green rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-cogs text-black text-xl"></i>
+                        </div>
+                        <h4 class="font-semibold mb-2">推理引擎</h4>
+                        <p class="text-gray-400 text-sm">
+                            规则引擎<br>
+                            逻辑推理<br>
+                            决策树<br>
+                            专家系统
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 性能指标 -->
+                <div class="mt-16 grid lg:grid-cols-4 gap-8">
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <div class="text-3xl font-bold text-quantum-primary mb-2">95%</div>
+                        <div class="text-sm text-gray-400">准确率</div>
+                    </div>
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                        <div class="text-3xl font-bold text-quantum-accent mb-2">< 200ms</div>
+                        <div class="text-sm text-gray-400">响应时间</div>
+                    </div>
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                        <div class="text-3xl font-bold text-quantum-secondary mb-2">20+</div>
+                        <div class="text-sm text-gray-400">支持语言</div>
+                    </div>
+                    <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                        <div class="text-3xl font-bold text-cyber-green mb-2">24/7</div>
+                        <div class="text-sm text-gray-400">在线服务</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 立即体验 -->
+        <section class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6 text-center">
+                <div class="bg-gradient-to-r from-quantum-primary/10 to-quantum-accent/10 backdrop-blur-xl rounded-2xl border border-quantum-primary/20 p-12">
+                    <h2 class="text-3xl font-bold mb-6 text-white">体验AI安全助手</h2>
+                    <p class="text-xl text-gray-300 mb-8">您的专属安全顾问，随时为您服务</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/chat.html" class="px-8 py-4 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
+                            <i class="fas fa-comments mr-2"></i>立即对话
+                        </a>
+                        <a href="/api" class="px-8 py-4 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300">
+                            <i class="fas fa-code mr-2"></i>API集成
+                        </a>
+                        <a href="/docs" class="px-8 py-4 border border-quantum-secondary text-quantum-secondary rounded-lg font-semibold hover:bg-quantum-secondary hover:text-white transition-all duration-300">
+                            <i class="fas fa-book mr-2"></i>使用指南
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400 text-sm">© 2024 珑凌科技. 保留所有权利.</p>
+        </div>
+    </footer>
+</body>
+</html>

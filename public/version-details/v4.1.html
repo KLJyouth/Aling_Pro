@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Platform v4.1.0 - 智能分析引擎 | 版本详情</title>
+    
+    <!-- SEO 和元数据 -->
+    <meta name="description" content="AlingAI Platform v4.1.0 详细发布说明，包含智能分析引擎、高级机器学习算法、可视化报告系统等重要功能更新">
+    <meta name="keywords" content="AlingAI v4.1,智能分析,机器学习,可视化报告,版本更新,发布说明">
+    <meta name="author" content="珑凌科技">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AlingAI Platform v4.1.0 - 智能分析引擎">
+    <meta property="og:description" content="引入先进的智能分析引擎，提供深度洞察和预测能力">
+    <meta property="og:type" content="website">
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#9333EA">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 核心框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- 核心样式表 -->
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-dark': '#0A0016',
+                        'quantum-purple': '#1A003C',
+                        'quantum-primary': '#6C13FF',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#0EA5E9',
+                        'cyber-green': '#00FF94',
+                        'deep-purple': '#9333EA',
+                        'pink-glow': '#EC4899',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'jetbrains': ['JetBrains Mono', 'monospace'],
+                        'fira': ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 智能分析主题样式 */
+        .analysis-glow {
+            background: linear-gradient(135deg, #9333EA, #EC4899);
+            box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+        }
+        
+        .analysis-card {
+            background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(236, 72, 153, 0.1));
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s ease;
+        }
+        
+        .analysis-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(147, 51, 234, 0.3);
+            border-color: rgba(147, 51, 234, 0.6);
+        }
+        
+        /* 数据可视化动画 */
+        @keyframes dataFlow {
+            0% { transform: translateX(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .data-flow {
+            animation: dataFlow 3s ease-in-out infinite;
+        }
+        
+        /* 智能图表样式 */
+        .chart-container {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .chart-line {
+            stroke: url(#gradient);
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawLine 3s ease-out forwards;
+        }
+        
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* ML算法卡片 */
+        .ml-algorithm {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ml-algorithm::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(147, 51, 234, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .ml-algorithm:hover::before {
+            left: 100%;
+        }
+        
+        /* 性能指标环形进度条 */
+        .circular-progress {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+        
+        .progress-bg {
+            stroke: rgba(147, 51, 234, 0.2);
+        }
+        
+        .progress-fill {
+            stroke: url(#progressGradient);
+            stroke-dasharray: 0 1000;
+            animation: fillProgress 2s ease-out forwards;
+        }
+        
+        @keyframes fillProgress {
+            to {
+                stroke-dasharray: var(--progress) 1000;
+            }
+        }
+        
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-quantum-dark via-quantum-purple to-quantum-dark text-white font-inter overflow-x-hidden">
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-quantum-dark/80 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-deep-purple to-pink-glow rounded-xl flex items-center justify-center">
+                            <i class="fas fa-brain text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-bold">AlingAI Platform</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <span class="px-3 py-1 bg-gradient-to-r from-deep-purple to-pink-glow rounded-full text-xs font-semibold">
+                            v4.1.0
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 导航链接 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/version-timeline.html" class="text-white/80 hover:text-white transition-colors">版本历史</a>
+                    <a href="/developers" class="text-white/80 hover:text-white transition-colors">开发者</a>
+                    <a href="/support" class="text-white/80 hover:text-white transition-colors">支持</a>
+                    <a href="/" class="px-4 py-2 bg-gradient-to-r from-deep-purple to-pink-glow rounded-lg text-white font-medium hover:shadow-lg transition-all duration-300">
+                        返回首页
+                    </a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero 区域 -->
+    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-3 mb-6 animate-fade-scale">
+                    <div class="w-16 h-16 analysis-glow rounded-2xl flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="hero-title text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-deep-purple via-white to-pink-glow bg-clip-text text-transparent">
+                            v4.1.0
+                        </h1>
+                        <p class="text-2xl md:text-3xl font-light text-white/90">智能分析引擎</p>
+                    </div>
+                </div>
+                
+                <p class="text-xl text-white/80 max-w-3xl mx-auto mb-8 animate-slide-up">
+                    引入先进的智能分析引擎，集成机器学习算法和深度学习模型，为企业提供数据驱动的安全洞察和威胁预测能力
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 animate-slide-up">
+                    <div class="flex items-center space-x-2 text-deep-purple">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="font-medium">发布日期：2024年4月20日</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-pink-glow">
+                        <i class="fas fa-code-branch"></i>
+                        <span class="font-medium">构建版本：4.1.0-stable</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-white/80">
+                        <i class="fas fa-download"></i>
+                        <span class="font-medium">下载量：85,000+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 智能分析核心功能 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                智能分析核心功能
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 机器学习引擎 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-deep-purple to-pink-glow rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-deep-purple">机器学习引擎</h3>
+                    <p class="text-white/80 mb-6">
+                        集成多种ML算法，支持异常检测、模式识别和预测分析，为安全防护提供智能支持
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-deep-purple mr-2"></i>支持15+机器学习算法</li>
+                        <li class="flex items-center"><i class="fas fa-check text-deep-purple mr-2"></i>实时模型训练和更新</li>
+                        <li class="flex items-center"><i class="fas fa-check text-deep-purple mr-2"></i>自动特征工程</li>
+                    </ul>
+                </div>
+                
+                <!-- 威胁预测系统 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-pink-glow to-red-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-pink-glow">威胁预测系统</h3>
+                    <p class="text-white/80 mb-6">
+                        基于历史数据和行为模式，预测潜在安全威胁，提前采取防护措施
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-pink-glow mr-2"></i>预测准确率达到92%</li>
+                        <li class="flex items-center"><i class="fas fa-check text-pink-glow mr-2"></i>提前7天威胁预警</li>
+                        <li class="flex items-center"><i class="fas fa-check text-pink-glow mr-2"></i>智能风险评估</li>
+                    </ul>
+                </div>
+                
+                <!-- 数据可视化 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-pie text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-blue-400">智能可视化</h3>
+                    <p class="text-white/80 mb-6">
+                        多维度数据可视化，提供直观的安全态势感知和趋势分析
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>20+图表类型</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>实时数据更新</li>
+                        <li class="flex items-center"><i class="fas fa-check text-blue-400 mr-2"></i>交互式仪表板</li>
+                    </ul>
+                </div>
+                
+                <!-- 行为分析 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-user-shield text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-green-400">用户行为分析</h3>
+                    <p class="text-white/80 mb-6">
+                        深度分析用户行为模式，识别异常操作和潜在内部威胁
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>行为基线建立</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>异常行为检测</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>风险评分机制</li>
+                    </ul>
+                </div>
+                
+                <!-- 智能报告 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">智能报告生成</h3>
+                    <p class="text-white/80 mb-6">
+                        自动生成深度分析报告，提供决策支持和合规性文档
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>自动报告生成</li>
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>多格式导出</li>
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>定制报告模板</li>
+                    </ul>
+                </div>
+                
+                <!-- API集成 -->
+                <div class="analysis-card p-8 rounded-2xl">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-plug text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-indigo-400">API集成能力</h3>
+                    <p class="text-white/80 mb-6">
+                        提供完整的API接口，支持与第三方系统和工具的无缝集成
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-indigo-400 mr-2"></i>RESTful API设计</li>
+                        <li class="flex items-center"><i class="fas fa-check text-indigo-400 mr-2"></i>Webhook支持</li>
+                        <li class="flex items-center"><i class="fas fa-check text-indigo-400 mr-2"></i>SDK多语言支持</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 机器学习算法展示 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                内置机器学习算法
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 监督学习算法 -->
+                <div class="ml-algorithm p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-deep-purple mb-4">监督学习</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Random Forest</span>
+                            <span class="text-green-400 text-sm">95.2%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Support Vector Machine</span>
+                            <span class="text-green-400 text-sm">93.8%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Neural Networks</span>
+                            <span class="text-green-400 text-sm">96.5%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Gradient Boosting</span>
+                            <span class="text-green-400 text-sm">94.1%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 无监督学习算法 -->
+                <div class="ml-algorithm p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-pink-glow mb-4">无监督学习</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">K-Means Clustering</span>
+                            <span class="text-blue-400 text-sm">异常检测</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">DBSCAN</span>
+                            <span class="text-blue-400 text-sm">模式识别</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Isolation Forest</span>
+                            <span class="text-blue-400 text-sm">离群点检测</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">PCA</span>
+                            <span class="text-blue-400 text-sm">降维分析</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 深度学习算法 -->
+                <div class="ml-algorithm p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-yellow-400 mb-4">深度学习</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">LSTM Networks</span>
+                            <span class="text-purple-400 text-sm">时序分析</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Autoencoder</span>
+                            <span class="text-purple-400 text-sm">异常检测</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">CNN</span>
+                            <span class="text-purple-400 text-sm">模式识别</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-white/80">Transformer</span>
+                            <span class="text-purple-400 text-sm">序列建模</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 性能指标 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                分析引擎性能指标
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 检测准确率 -->
+                <div class="text-center">
+                    <div class="relative w-32 h-32 mx-auto mb-6">
+                        <svg class="circular-progress w-full h-full">
+                            <defs>
+                                <linearGradient id="progressGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#9333EA"/>
+                                    <stop offset="100%" style="stop-color:#EC4899"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-circle progress-bg" cx="64" cy="64" r="56"></circle>
+                            <circle class="progress-circle progress-fill" cx="64" cy="64" r="56" style="--progress: 330"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-deep-purple">92%</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">威胁预测准确率</h3>
+                    <p class="text-white/60 text-sm">基于ML算法的威胁预测</p>
+                </div>
+                
+                <!-- 处理速度 -->
+                <div class="text-center">
+                    <div class="relative w-32 h-32 mx-auto mb-6">
+                        <svg class="circular-progress w-full h-full">
+                            <defs>
+                                <linearGradient id="progressGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#0EA5E9"/>
+                                    <stop offset="100%" style="stop-color:#8B5CF6"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-circle progress-bg" cx="64" cy="64" r="56"></circle>
+                            <circle class="progress-circle progress-fill" cx="64" cy="64" r="56" style="--progress: 285"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-quantum-accent">5ms</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">分析响应时间</h3>
+                    <p class="text-white/60 text-sm">实时数据处理能力</p>
+                </div>
+                
+                <!-- 数据处理量 -->
+                <div class="text-center">
+                    <div class="relative w-32 h-32 mx-auto mb-6">
+                        <svg class="circular-progress w-full h-full">
+                            <defs>
+                                <linearGradient id="progressGradient3" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#00FF94"/>
+                                    <stop offset="100%" style="stop-color:#0EA5E9"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-circle progress-bg" cx="64" cy="64" r="56"></circle>
+                            <circle class="progress-circle progress-fill" cx="64" cy="64" r="56" style="--progress: 308"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-xl font-bold text-cyber-green">10TB</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">日处理数据量</h3>
+                    <p class="text-white/60 text-sm">大规模数据分析能力</p>
+                </div>
+                
+                <!-- 模型数量 -->
+                <div class="text-center">
+                    <div class="relative w-32 h-32 mx-auto mb-6">
+                        <svg class="circular-progress w-full h-full">
+                            <defs>
+                                <linearGradient id="progressGradient4" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#F59E0B"/>
+                                    <stop offset="100%" style="stop-color:#EF4444"/>
+                                </linearGradient>
+                            </defs>
+                            <circle class="progress-circle progress-bg" cx="64" cy="64" r="56"></circle>
+                            <circle class="progress-circle progress-fill" cx="64" cy="64" r="56" style="--progress: 264"></circle>
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-2xl font-bold text-yellow-400">15+</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">内置算法模型</h3>
+                    <p class="text-white/60 text-sm">丰富的AI算法库</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 代码示例 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                智能分析API示例
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Python SDK 示例 -->
+                <div class="chart-container">
+                    <div class="p-6 border-b border-deep-purple/30">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fab fa-python text-blue-400 text-xl"></i>
+                                <span class="font-semibold text-white">Python SDK - 威胁预测</span>
+                            </div>
+                            <button class="text-white/60 hover:text-white transition-colors">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <pre class="text-sm"><code class="language-python">from alingai.analysis import ThreatPredictor
+from alingai.models import SecurityEvent
+
+# 初始化威胁预测器
+predictor = ThreatPredictor(
+    model='neural_network_v2',
+    confidence_threshold=0.85
+)
+
+# 加载历史安全事件数据
+events = SecurityEvent.load_from_database(
+    start_date='2024-01-01',
+    end_date='2024-04-01'
+)
+
+# 训练预测模型
+predictor.train(events)
+
+# 预测未来7天的威胁
+predictions = predictor.predict_threats(
+    horizon_days=7,
+    include_confidence=True
+)
+
+for prediction in predictions:
+    print(f"日期: {prediction.date}")
+    print(f"威胁类型: {prediction.threat_type}")
+    print(f"风险等级: {prediction.risk_level}")
+    print(f"置信度: {prediction.confidence:.2%}")
+    print("---")
+</code></pre>
+                    </div>
+                </div>
+                
+                <!-- REST API 示例 -->
+                <div class="chart-container">
+                    <div class="p-6 border-b border-deep-purple/30">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-code text-green-400 text-xl"></i>
+                                <span class="font-semibold text-white">REST API - 行为分析</span>
+                            </div>
+                            <button class="text-white/60 hover:text-white transition-colors">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <pre class="text-sm"><code class="language-json"># POST /api/v4.1/analysis/behavior
+{
+  "user_id": "user123",
+  "analysis_type": "anomaly_detection",
+  "time_range": {
+    "start": "2024-04-01T00:00:00Z",
+    "end": "2024-04-20T23:59:59Z"
+  },
+  "parameters": {
+    "sensitivity": "high",
+    "baseline_days": 30,
+    "algorithms": [
+      "isolation_forest",
+      "local_outlier_factor",
+      "one_class_svm"
+    ]
+  }
+}
+
+# Response
+{
+  "analysis_id": "anl_abc123def456",
+  "status": "completed",
+  "results": {
+    "anomaly_score": 0.85,
+    "risk_level": "HIGH",
+    "anomalous_activities": [
+      {
+        "timestamp": "2024-04-15T14:30:00Z",
+        "activity": "unusual_login_pattern",
+        "confidence": 0.92,
+        "description": "登录时间异常"
+      }
+    ],
+    "recommendations": [
+      "启用多因素认证",
+      "增加账户监控频率"
+    ]
+  }
+}
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 升级指南 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                升级到v4.1.0
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- 新功能亮点 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-deep-purple">主要新功能</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-deep-purple/10 to-pink-glow/10 border border-deep-purple/30 rounded-xl">
+                            <div class="w-10 h-10 bg-gradient-to-br from-deep-purple to-pink-glow rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-brain text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">智能分析引擎</h4>
+                                <p class="text-white/70 text-sm">全新的ML引擎，支持15+算法，提供强大的数据分析和威胁预测能力</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-xl">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-chart-line text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">可视化仪表板</h4>
+                                <p class="text-white/70 text-sm">全新设计的交互式仪表板，支持多维度数据展示和实时更新</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-green-500/10 to-teal-500/10 border border-green-500/30 rounded-xl">
+                            <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-user-shield text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">行为分析模块</h4>
+                                <p class="text-white/70 text-sm">深度用户行为分析，智能识别异常操作和潜在威胁</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl">
+                            <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-plug text-white text-sm"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">API增强</h4>
+                                <p class="text-white/70 text-sm">完善的RESTful API和多语言SDK，支持灵活的第三方集成</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 兼容性说明 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-pink-glow">兼容性与注意事项</h3>
+                    <div class="space-y-6">
+                        <div class="p-6 bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-check-circle text-green-400 text-xl"></i>
+                                <h4 class="font-semibold text-green-400">向后兼容</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• 完全兼容v4.0.x版本的API</li>
+                                <li>• 现有配置文件无需修改</li>
+                                <li>• 数据库架构自动升级</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
+                                <h4 class="font-semibold text-yellow-400">升级要求</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• 最低Python 3.8版本要求</li>
+                                <li>• 增加内存需求：最低8GB</li>
+                                <li>• GPU支持推荐（可选）</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-rocket text-blue-400 text-xl"></i>
+                                <h4 class="font-semibold text-blue-400">性能提升</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• 分析速度提升200%</li>
+                                <li>• 内存使用优化30%</li>
+                                <li>• 支持更大规模数据处理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 下载和链接 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8 bg-gradient-to-r from-deep-purple to-pink-glow bg-clip-text text-transparent">
+                体验智能分析引擎
+            </h2>
+            
+            <p class="text-xl text-white/80 mb-12">
+                立即下载v4.1.0，开启数据驱动的智能安全分析之旅
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <a href="/downloads/v4.1.0" class="p-6 bg-gradient-to-br from-deep-purple/20 to-pink-glow/20 border border-deep-purple/30 rounded-2xl hover:shadow-lg hover:shadow-deep-purple/20 transition-all duration-300 group">
+                    <i class="fas fa-download text-3xl text-deep-purple mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">下载v4.1.0</h3>
+                    <p class="text-white/70 text-sm">完整的智能分析功能包</p>
+                </a>
+                
+                <a href="/docs/analysis-engine" class="p-6 bg-gradient-to-br from-blue-500/20 to-purple-600/20 border border-blue-500/30 rounded-2xl hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300 group">
+                    <i class="fas fa-book-open text-3xl text-blue-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">分析引擎文档</h3>
+                    <p class="text-white/70 text-sm">详细的使用指南和API文档</p>
+                </a>
+                
+                <a href="/examples/ml-analysis" class="p-6 bg-gradient-to-br from-green-500/20 to-teal-500/20 border border-green-500/30 rounded-2xl hover:shadow-lg hover:shadow-green-500/20 transition-all duration-300 group">
+                    <i class="fas fa-code text-3xl text-green-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">示例代码</h3>
+                    <p class="text-white/70 text-sm">机器学习分析示例和教程</p>
+                </a>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="/version-timeline.html" class="px-8 py-4 bg-gradient-to-r from-deep-purple to-pink-glow rounded-xl text-white font-semibold hover:shadow-lg hover:shadow-deep-purple/30 transition-all duration-300">
+                    <i class="fas fa-history mr-2"></i>
+                    查看版本历史
+                </a>
+                <a href="/" class="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all duration-300">
+                    <i class="fas fa-home mr-2"></i>
+                    返回首页
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div class="w-10 h-10 bg-gradient-to-br from-deep-purple to-pink-glow rounded-xl flex items-center justify-center">
+                        <i class="fas fa-brain text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white">AlingAI Platform v4.1.0</div>
+                        <div class="text-sm text-white/60">智能分析引擎版本</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-white/60">
+                    <a href="/privacy" class="hover:text-white transition-colors">隐私政策</a>
+                    <a href="/terms" class="hover:text-white transition-colors">服务条款</a>
+                    <a href="/support" class="hover:text-white transition-colors">技术支持</a>
+                    <span>© 2024 珑凌科技</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 注册 GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            // Hero动画
+            gsap.from('.animate-fade-scale', {
+                duration: 1.2,
+                scale: 0.8,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            });
+            
+            gsap.from('.animate-slide-up', {
+                duration: 0.8,
+                y: 60,
+                opacity: 0,
+                stagger: 0.2,
+                delay: 0.4,
+                ease: "power3.out"
+            });
+            
+            // 分析卡片动画
+            gsap.from('.analysis-card', {
+                scrollTrigger: {
+                    trigger: '.analysis-card',
+                    start: 'top 80%'
+                },
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+            
+            // ML算法卡片动画
+            gsap.from('.ml-algorithm', {
+                scrollTrigger: {
+                    trigger: '.ml-algorithm',
+                    start: 'top 80%'
+                },
+                duration: 0.6,
+                y: 30,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "power2.out"
+            });
+            
+            // 环形进度条动画
+            const progressCircles = document.querySelectorAll('.progress-fill');
+            progressCircles.forEach((circle, index) => {
+                gsap.to(circle, {
+                    scrollTrigger: {
+                        trigger: circle,
+                        start: 'top 80%'
+                    },
+                    strokeDasharray: `${circle.style.getPropertyValue('--progress')} 1000`,
+                    duration: 2,
+                    delay: index * 0.2,
+                    ease: "power3.out"
+                });
+            });
+        });
+        
+        // 数据流动画
+        function createDataFlow() {
+            const containers = document.querySelectorAll('.chart-container');
+            containers.forEach(container => {
+                if (Math.random() > 0.7) {
+                    const dataPoint = document.createElement('div');
+                    dataPoint.className = 'absolute w-2 h-2 bg-deep-purple rounded-full data-flow';
+                    dataPoint.style.top = Math.random() * 100 + '%';
+                    dataPoint.style.left = '0%';
+                    container.appendChild(dataPoint);
+                    
+                    setTimeout(() => {
+                        if (dataPoint.parentNode) {
+                            dataPoint.parentNode.removeChild(dataPoint);
+                        }
+                    }, 3000);
+                }
+            });
+        }
+        
+        // 每2秒创建新的数据流
+        setInterval(createDataFlow, 2000);
+        
+        // 代码复制功能
+        document.querySelectorAll('.chart-container button').forEach(button => {
+            button.addEventListener('click', function() {
+                const codeBlock = this.closest('.chart-container').querySelector('code');
+                const text = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(text).then(function() {
+                    const originalIcon = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check text-green-400"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = originalIcon;
+                    }, 2000);
+                });
+            });
+        });
+        
+        // 性能指标实时更新动画
+        function updateMetrics() {
+            const progressElements = document.querySelectorAll('.progress-fill');
+            progressElements.forEach(element => {
+                const currentProgress = element.style.getPropertyValue('--progress');
+                const baseProgress = parseInt(currentProgress);
+                const variation = Math.random() * 10 - 5; // ±5的变化
+                const newProgress = Math.max(0, Math.min(351, baseProgress + variation));
+                
+                gsap.to(element, {
+                    '--progress': newProgress,
+                    duration: 1,
+                    ease: "power2.inOut"
+                });
+            });
+        }
+        
+        // 每10秒更新一次指标
+        setInterval(updateMetrics, 10000);
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 卡片悬浮效果
+        document.querySelectorAll('.analysis-card, .ml-algorithm').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                gsap.to(this, {
+                    duration: 0.3,
+                    y: -8,
+                    scale: 1.02,
+                    ease: "power2.out"
+                });
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                gsap.to(this, {
+                    duration: 0.3,
+                    y: 0,
+                    scale: 1,
+                    ease: "power2.out"
+                });
+            });
+        });
+    </script>
+</body>
+</html>

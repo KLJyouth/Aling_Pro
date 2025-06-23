@@ -1,0 +1,125 @@
+[2025-06-21 13:36:43] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:36:43] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:36:45] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:36:48] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:36:54] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:36:54] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:36:56] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:36:56] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:39:10] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:39:10] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:39:12] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:39:12] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:39:20] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:39:20] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:39:22] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:39:22] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:39:42] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:39:42] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:39:44] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:39:44] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:40:35] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:40:35] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:40:37] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:40:37] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:42:37] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:42:37] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:42:39] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:42:39] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:43:13] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:43:13] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:43:15] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:43:15] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:57:13] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 13:57:13] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 13:57:15] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 13:57:15] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 13:57:15] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 13:57:15] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 13:57:15] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 13:57:15] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 13:57:15] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 13:57:15] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/","status":500,"duration":"8.96ms"}
+[2025-06-21 14:02:13] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:02:13] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:02:15] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:02:17] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:02:17] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:02:17] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:17] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:02:17] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:17] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 14:02:17] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/","status":200,"duration":"3.19ms"}
+[2025-06-21 14:02:31] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:02:31] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:02:33] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:02:33] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:02:33] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:02:33] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:33] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:02:33] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:33] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 14:02:33] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/","status":200,"duration":"0.25ms"}
+[2025-06-21 14:02:39] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:02:39] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:02:41] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:02:41] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:02:41] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:02:41] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:41] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:02:41] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:41] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 14:02:41] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/threat-visualization","status":200,"duration":"0.23ms"}
+[2025-06-21 14:02:44] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:02:44] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:02:46] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:02:46] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:02:46] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:02:46] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:46] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:02:46] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:02:46] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 14:02:46] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/health","status":200,"duration":"0.29ms"}
+[2025-06-21 14:03:02] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:03:02] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:03:04] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:03:04] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:03:04] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:03:04] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:03:04] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:03:04] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:03:04] [AlingAiPro] [error] System initialization error: PDO connection not available. Current connection type: file {"exception":{},"trace":"#0 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(255): AlingAi\\Services\\DatabaseService->getPdo()\n#1 E:\\Code\\AlingAi\\AlingAi_pro\\src\\Core\\AlingAiProApplication.php(72): AlingAi\\Core\\AlingAiProApplication->performSystemInitialization()\n#2 E:\\Code\\AlingAi\\AlingAi_pro\\public\\index.php(80): AlingAi\\Core\\AlingAiProApplication->__construct()\n#3 {main}"}
+[2025-06-21 14:03:04] [AlingAiPro] [info] Route processed {"method":"GET","uri":"http:\/\/localhost:8000\/chat","status":200,"duration":"0.25ms"}
+[2025-06-21 14:28:54] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:28:54] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:28:56] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:28:56] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:28:56] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:28:56] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:28:56] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:28:56] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:28:56] [AlingAiPro] [info] Using file system database
+[2025-06-21 14:28:56] [AlingAiPro] [info] AlingAi Pro Application initialized successfully {"version":"6.0.0","environment":"development","php_version":"8.1.32","memory_limit":"512M","timestamp":"2025-06-21 14:28:56"}
+[2025-06-21 14:28:56] [AlingAiPro] [warning] 请求来源验证失败
+[2025-06-21 14:28:56] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:28:56] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:28:58] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:28:58] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:28:58] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:28:58] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:28:58] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:28:58] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:28:58] [AlingAiPro] [info] Using file system database
+[2025-06-21 14:28:58] [AlingAiPro] [info] AlingAi Pro Application initialized successfully {"version":"6.0.0","environment":"development","php_version":"8.1.32","memory_limit":"512M","timestamp":"2025-06-21 14:28:58"}
+[2025-06-21 14:28:58] [AlingAiPro] [warning] 请求来源验证失败
+[2025-06-21 14:28:58] [AlingAiPro] [warning] Database connection failed, falling back to file system storage {"connection":"mysql","error":"could not find driver"}
+[2025-06-21 14:28:58] [AlingAiPro] [info] File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services\/..\/..\/storage\/data"}
+[2025-06-21 14:29:00] [AlingAiPro] [warning] Redis connection failed, falling back to file cache {"error":"由于目标计算机积极拒绝，无法连接。 [tcp:\/\/127.0.0.1:6379]"}
+[2025-06-21 14:29:00] [AlingAiPro] [info] File cache initialized successfully
+[2025-06-21 14:29:00] [AlingAiPro] [info] Initializing Complete Router Integration
+[2025-06-21 14:29:00] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:29:00] [AlingAiPro] [info] Enhanced Agent Coordination routes registered
+[2025-06-21 14:29:00] [AlingAiPro] [info] Complete Router Integration initialized successfully
+[2025-06-21 14:29:00] [AlingAiPro] [info] Using file system database
+[2025-06-21 14:29:00] [AlingAiPro] [info] AlingAi Pro Application initialized successfully {"version":"6.0.0","environment":"development","php_version":"8.1.32","memory_limit":"512M","timestamp":"2025-06-21 14:29:00"}
+[2025-06-21 14:29:00] [AlingAiPro] [warning] 请求来源验证失败

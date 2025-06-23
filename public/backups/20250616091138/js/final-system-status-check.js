@@ -1,0 +1,141 @@
+/**
+ * AlingAi Pro - 最终系统状态检查
+ * 验证所有增强功能的工作状态
+ */
+
+function finalSystemStatusCheck() {
+    console.log('\n' + '='.repeat(60));
+    console.log('🎯 AlingAi Pro 最终系统状态检查');
+    console.log('='.repeat(60));
+    
+    const systems = [
+        // 核心动画系统
+        { name: 'Three.js Scene', check: () => !!window.scene },
+        { name: 'Three.js Renderer', check: () => !!window.renderer },
+        { name: 'Three.js Camera', check: () => !!window.camera },
+        { name: 'Particle System', check: () => !!window.particleSystem },
+        
+        // 增强功能系统
+        { name: 'Audio Enhancement System', check: () => !!window.audioEnhancementSystem },
+        { name: 'Gesture Interaction System', check: () => !!window.gestureInteractionSystem },
+        { name: 'Data Visualization System', check: () => !!window.dataVisualizationSystem },
+        { name: 'Social Customization System', check: () => !!window.socialCustomizationSystem },
+        
+        // 管理和监控系统
+        { name: 'System Integration Manager', check: () => !!window.systemIntegrationManager },
+        { name: 'Ultimate Performance Validator', check: () => !!window.ultimatePerformanceValidator },
+        { name: 'Advanced Debug Console', check: () => !!window.advancedDebugConsole },
+        { name: 'Realtime Performance Dashboard', check: () => !!window.realtimePerformanceDashboard },
+        { name: 'Intelligent Error Recovery', check: () => !!window.intelligentErrorRecovery },
+        
+        // 验证和演示系统
+        { name: 'Complete System Validator', check: () => !!window.completeSystemValidator },
+        { name: 'Functionality Demonstrator', check: () => !!window.functionalityDemonstrator }
+    ];
+    
+    let passedCount = 0;
+    let totalCount = systems.length;
+    
+    systems.forEach((system, index) => {
+        const status = system.check();
+        const icon = status ? '✅' : '❌';
+        const statusText = status ? 'LOADED' : 'NOT FOUND';
+        
+        console.log(`${icon} ${(index + 1).toString().padStart(2, '0')}. ${system.name.padEnd(35, '.')} ${statusText}`);
+        
+        if (status) passedCount++;
+    });
+    
+    console.log('='.repeat(60));
+    
+    const successRate = (passedCount / totalCount * 100).toFixed(1);
+    console.log(`📊 系统完整性: ${passedCount}/${totalCount} (${successRate}%)`);
+    
+    // 性能检查
+    if (window.performance && window.performance.memory) {
+        const memory = window.performance.memory;
+        const memoryMB = (memory.usedJSHeapSize / 1024 / 1024).toFixed(1);
+        console.log(`💾 内存使用: ${memoryMB}MB`);
+    }
+    
+    // FPS检查
+    if (window.fps) {
+        console.log(`🎮 当前FPS: ${window.fps}`);
+    }
+    
+    console.log('='.repeat(60));
+    
+    // 系统健康评估
+    if (successRate >= 90) {
+        console.log('🎉 系统状态: 优秀 - 所有主要功能正常工作');
+    } else if (successRate >= 75) {
+        console.log('⚠️  系统状态: 良好 - 大部分功能正常，部分模块可能需要检查');
+    } else if (successRate >= 50) {
+        console.log('🔧 系统状态: 一般 - 需要检查未加载的模块');
+    } else {
+        console.log('❌ 系统状态: 异常 - 大量模块未正常加载');
+    }
+    
+    // 功能快速测试
+    console.log('\n🧪 快速功能测试:');
+    
+    // 测试音效系统
+    if (window.audioEnhancementSystem) {
+        try {
+            console.log('✅ 音效系统: 可用');
+        } catch (e) {
+            console.log('❌ 音效系统: 错误 -', e.message);
+        }
+    }
+    
+    // 测试手势系统
+    if (window.gestureInteractionSystem) {
+        console.log('✅ 手势系统: 可用');
+    }
+    
+    // 测试社交系统
+    if (window.socialCustomizationSystem) {
+        console.log('✅ 社交系统: 可用');
+    }
+    
+    // 测试验证系统
+    if (window.completeSystemValidator) {
+        console.log('✅ 验证系统: 可用');
+    }
+    
+    // 测试演示系统
+    if (window.functionalityDemonstrator) {
+        console.log('✅ 演示系统: 可用');
+    }
+    
+    console.log('\n📋 可用操作:');
+    console.log('• Ctrl+Shift+V - 运行完整系统验证');
+    console.log('• Ctrl+Shift+H - 快速健康检查');
+    console.log('• 右上角演示面板 - 功能演示');
+    console.log('• Ctrl+Shift+D - 调试控制台');
+    console.log('• Ctrl+Shift+P - 性能仪表盘');
+    
+    console.log('\n' + '='.repeat(60));
+    
+    return {
+        totalSystems: totalCount,
+        loadedSystems: passedCount,
+        successRate: parseFloat(successRate),
+        status: successRate >= 90 ? 'excellent' : successRate >= 75 ? 'good' : successRate >= 50 ? 'fair' : 'poor'
+    };
+}
+
+// 等待页面加载完成后自动运行检查
+if (document.readyState === 'complete') {
+    setTimeout(finalSystemStatusCheck, 2000);
+} else {
+    window.addEventListener('load', () => {
+        setTimeout(finalSystemStatusCheck, 2000);
+    });
+}
+
+// 添加到全局作用域供手动调用
+window.finalSystemStatusCheck = finalSystemStatusCheck;
+
+console.log('🔍 Final System Status Check 已加载');
+console.log('📋 调用 finalSystemStatusCheck() 进行手动检查');

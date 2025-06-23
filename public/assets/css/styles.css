@@ -1,0 +1,112 @@
+/**
+ * AlingAi核心样式
+ * 包含量子主题按钮和3D效果
+ * @version 2.1.0
+ */
+
+.quantum-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.quantum-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.quantum-button:active {
+  transform: translateY(0);
+}
+
+.quantum-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.quantum-button:hover::before {
+  left: 100%;
+}
+
+.quantum-button-console {
+  background: linear-gradient(135deg, #2D3748 0%, #4A5568 100%);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.quantum-button-console:hover {
+  background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+  border-color: rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+}
+
+.hologram {
+  position: relative;
+}
+
+.hologram::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(168, 85, 247, 0.1) 50%, transparent 70%);
+  pointer-events: none;
+  animation: hologram-scan 3s infinite;
+}
+
+@keyframes hologram-scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .quantum-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+.quantum-button:focus {
+  outline: 2px solid rgba(168, 85, 247, 0.5);
+  outline-offset: 2px;
+}
+
+@media (prefers-contrast: high) {
+  .quantum-button {
+    border: 2px solid white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quantum-button,
+  .quantum-button::before,
+  .card-3d,
+  .hologram::after {
+    transition: none;
+    animation: none;
+  }
+} 

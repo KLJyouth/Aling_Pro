@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珑凌科技 | 量子安全·智能未来 - AI驱动的企业级安全解决方案</title>
+    
+    <!-- SEO 和元数据 (来自enhanced版本) -->
+    <meta name="description" content="珑凌科技 - 全球领先的量子安全基础设施与AI智能解决方案提供商，为企业级客户提供从底层加密到智能决策的全栈安全服务">
+    <meta name="keywords" content="珑凌科技,量子安全,人工智能,AI助手,零信任,企业安全,智能对话,量子计算,数据保护,AlingAI">
+    <meta name="author" content="珑凌科技">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="珑凌科技 | 量子安全·智能未来">
+    <meta property="og:description" content="AI驱动的企业级量子安全解决方案，重新定义数字化安全标准">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gxggm.com">
+    <meta property="og:image" content="/assets/images/og-image.jpg">
+    
+    <!-- PWA 和图标 -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- 字体预加载优化 (来自new版本) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fira+Code&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fira+Code&display=swap" rel="stylesheet">
+      <!-- 核心框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+      <!-- 核心样式表 -->
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <link href="/assets/css/minimalist-backgrounds.css" rel="stylesheet">
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+    <link href="/assets/css/quantum-chat-animations.css" rel="stylesheet">
+    <link href="/assets/css/modal-fixes.css" rel="stylesheet">
+    <link href="/assets/css/input-theme-fixes.css" rel="stylesheet">
+    <link href="/assets/css/cpp-animation.css" rel="stylesheet">
+    
+    <!-- 量子恒星系统样式 -->
+    <style>        /* 量子恒星系统样式 */
+        .quantum-star-container {
+            position: absolute;
+            top: 50%;
+            right: 8%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            z-index: 15;
+        }
+        
+        /* 合作伙伴LOGO动画 */
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-5px) scale(1.05); }
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 10px rgba(138, 43, 226, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(138, 43, 226, 0.4), 0 0 30px rgba(14, 165, 233, 0.3); }
+        }
+        
+        .partner-logo {
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        
+        .partner-logo:hover {
+            animation: logoFloat 1s ease-in-out infinite, logoGlow 2s ease-in-out infinite;
+        }
+        
+        .partner-logo:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+        
+        .partner-logo:nth-child(even) {
+            animation-delay: 1s;
+        }
+        
+        .code-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 50%;
+            border: 2px solid rgba(14, 165, 233, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.3);
+            overflow: hidden;
+        }
+        
+        .code-line {
+            font-family: 'Consolas', monospace;
+            font-size: 8px;
+            color: white;
+            margin: 1px 0;
+            opacity: 0;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            text-shadow: 0 0 5px currentColor;
+        }
+        
+        .code-char {
+            display: inline-block;
+            transition: all 0.1s ease;
+        }
+        
+        /* 量子恒星 */
+        .quantum-star {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 30% 30%, 
+                    rgba(255, 255, 255, 0.3) 0%, 
+                    rgba(173, 216, 230, 0.8) 15%,
+                    rgba(138, 43, 226, 0.9) 35%, 
+                    rgba(75, 0, 130, 0.95) 60%, 
+                    rgba(25, 25, 112, 1) 85%,
+                    rgba(0, 0, 0, 1) 100%);
+            opacity: 0;
+            box-shadow: 
+                0 0 60px rgba(138, 43, 226, 0.8), 
+                0 0 90px rgba(75, 0, 130, 0.6), 
+                0 0 120px rgba(138, 43, 226, 0.4),
+                inset 0 0 40px rgba(255, 255, 255, 0.2),
+                inset 0 0 25px rgba(173, 216, 230, 0.3);
+            animation: quantumPulse 4s infinite alternate;
+            overflow: hidden;
+        }
+        
+        /* 量子粒子表面纹理 */
+        .quantum-star::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.4) 0%, transparent 30%),
+                radial-gradient(circle at 75% 30%, rgba(173, 216, 230, 0.5) 0%, transparent 25%),
+                radial-gradient(circle at 30% 80%, rgba(138, 43, 226, 0.3) 0%, transparent 35%),
+                radial-gradient(circle at 70% 70%, rgba(75, 0, 130, 0.4) 0%, transparent 25%);
+            animation: quantumTexture 12s linear infinite;
+            z-index: 1;
+        }
+        
+        /* 量子能量活动层 */
+        .quantum-star::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 20%),
+                radial-gradient(ellipse at 60% 70%, rgba(173, 216, 230, 0.5) 0%, transparent 15%),
+                radial-gradient(ellipse at 80% 50%, rgba(138, 43, 226, 0.4) 0%, transparent 25%);
+            animation: quantumActivity 8s ease-in-out infinite alternate;
+            z-index: 2;
+        }
+        
+        @keyframes quantumPulse {
+            0% { 
+                box-shadow: 
+                    0 0 40px rgba(138, 43, 226, 0.6), 
+                    0 0 80px rgba(75, 0, 130, 0.4), 
+                    0 0 100px rgba(138, 43, 226, 0.3),
+                    inset 0 0 25px rgba(255, 255, 255, 0.15),
+                    inset 0 0 15px rgba(173, 216, 230, 0.2);
+                transform: translate(-50%, -50%) scale(0.98);
+            }
+            100% { 
+                box-shadow: 
+                    0 0 60px rgba(138, 43, 226, 0.8), 
+                    0 0 90px rgba(75, 0, 130, 0.6), 
+                    0 0 120px rgba(138, 43, 226, 0.4),
+                    inset 0 0 40px rgba(255, 255, 255, 0.2),
+                    inset 0 0 25px rgba(173, 216, 230, 0.3);
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+        }
+        
+        @keyframes quantumTexture {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.01); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
+        @keyframes quantumActivity {
+            0% { opacity: 0.4; transform: scale(0.96); }
+            50% { opacity: 0.8; transform: scale(1.04); }
+            100% { opacity: 0.5; transform: scale(0.99); }
+        }
+        
+        /* 光圈 */
+        .light-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            border: 3px solid rgba(138, 43, 226, 0.7);
+            background: radial-gradient(circle, 
+                rgba(173, 216, 230, 0.1) 0%, 
+                rgba(138, 43, 226, 0.1) 50%, 
+                transparent 70%);
+            box-shadow: 
+                0 0 40px rgba(138, 43, 226, 0.6), 
+                0 0 70px rgba(173, 216, 230, 0.4),
+                inset 0 0 40px rgba(138, 43, 226, 0.2);
+            opacity: 0;
+            animation: quantumLightPulse 2.5s infinite alternate;
+        }
+        
+        @keyframes quantumLightPulse {
+            0% { 
+                border-color: rgba(138, 43, 226, 0.5);
+                box-shadow: 
+                    0 0 30px rgba(138, 43, 226, 0.4), 
+                    0 0 50px rgba(173, 216, 230, 0.3);
+            }
+            100% { 
+                border-color: rgba(173, 216, 230, 0.9);
+                box-shadow: 
+                    0 0 50px rgba(138, 43, 226, 0.7), 
+                    0 0 80px rgba(173, 216, 230, 0.5);
+            }
+        }
+        
+        /* 爆炸效果 */
+        .explosion-wave {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 3px solid rgba(138, 43, 226, 0.8);
+            opacity: 0;
+        }
+        
+        @keyframes explosionWave {
+            0% {
+                width: 40px;
+                height: 40px;
+                opacity: 1;
+                border-width: 5px;
+                border-color: rgba(173, 216, 230, 1);
+            }
+            50% {
+                opacity: 0.6;
+                border-color: rgba(138, 43, 226, 0.8);
+            }
+            100% {
+                width: 600px;
+                height: 600px;
+                opacity: 0;
+                border-width: 1px;
+                border-color: rgba(173, 216, 230, 0);
+            }
+        }
+        
+        /* 代码粒子爆炸 */
+        .code-explosion-particle {
+            position: absolute;
+            font-family: 'Consolas', monospace;
+            font-size: 12px;
+            color: rgba(173, 216, 230, 0.9);
+            text-shadow: 0 0 8px currentColor;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* 量子粒子层 */
+        .quantum-particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            background: radial-gradient(circle, rgba(173, 216, 230, 0.8) 0%, rgba(138, 43, 226, 0.5) 100%);
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        .quantum-particle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        /* 日冕层 */
+        .corona {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 360px;
+            height: 360px;
+            border-radius: 50%;
+            background: radial-gradient(circle, 
+                rgba(173, 216, 230, 0.15) 0%, 
+                rgba(138, 43, 226, 0.12) 40%,
+                rgba(75, 0, 130, 0.08) 70%, 
+                transparent 85%);
+            opacity: 0;
+            animation: quantumCoronaPulse 6s infinite alternate;
+        }
+        
+        @keyframes quantumCoronaPulse {
+            0% { 
+                width: 360px;
+                height: 360px;
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(0.95);
+                filter: blur(0px);
+            }
+            100% { 
+                width: 420px;
+                height: 420px;
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1.05);
+                filter: blur(1px);
+            }
+        }
+        
+        /* 量子行星带 */
+        .quantum-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(60deg) rotateZ(15deg);
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            opacity: 0;
+        }
+        
+        .ring-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(transparent 45%, 
+                rgba(173, 216, 230, 0.15) 70%, 
+                rgba(138, 43, 226, 0.12) 85%, 
+                transparent 100%);
+            animation: ringPulse 8s infinite alternate;
+        }
+        
+        @keyframes ringPulse {
+            0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.98); }
+            100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.02); }
+        }
+        
+        /* 3D Hello World */
+        .hello-world-3d {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 
+                0 0 15px rgba(173, 216, 230, 1), 
+                0 0 30px rgba(138, 43, 226, 0.8), 
+                0 0 45px rgba(75, 0, 130, 0.6),
+                0 0 60px rgba(138, 43, 226, 0.4);
+            opacity: 0;
+            white-space: nowrap;
+            letter-spacing: 5px;
+            animation: text3DFloat 5s infinite alternate;
+            z-index: 20;
+        }
+        
+        @keyframes text3DFloat {
+            0% { transform: translate(-50%, -50%) scale(1) rotateY(-3deg); }
+            100% { transform: translate(-50%, -50%) scale(1.05) rotateY(3deg); }
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            15% {
+                opacity: 1;
+            }
+            85% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .quantum-star-container {
+                right: 4%;
+                width: 350px;
+                height: 350px;
+            }
+            
+            .code-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .quantum-star {
+                width: 230px;
+                height: 230px;
+            }
+            
+            .light-circle {
+                width: 270px;
+                height: 270px;
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .quantum-star-container {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                margin: 2rem auto;
+                width: 300px;
+                height: 300px;
+            }
+            
+            .code-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .quantum-star {
+                width: 180px;
+                height: 180px;
+            }
+            
+            .light-circle {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .hello-world-3d {
+                font-size: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .quantum-star-container {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .code-container {
+                width: 150px;
+                height: 150px;
+                padding: 15px;
+            }
+            
+            .quantum-star {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .light-circle {
+                width: 170px;
+                height: 170px;
+            }
+            
+            .hello-world-3d {
+                font-size: 1.5rem;
+                letter-spacing: 2px;
+            }
+            
+            .code-line {
+                font-size: 6px;
+            }
+        }
+    </style>
+    
+    <!-- Tailwind 自定义配置 (来自enhanced版本) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#6C13FF',
+                        'quantum-secondary': '#FF2B75',
+                        'quantum-accent': '#00D4FF',
+                        'quantum-dark': '#0A0016',
+                        'quantum-purple': '#1A003C',
+                        'neural-blue': '#0066FF',
+                        'cyber-green': '#00FF88',
+                        'matrix-green': '#00FF41',
+                        'neon-pink': '#FF0080',
+                        'deep-space': '#0B0B1A',
+                        'tech-blue': '#00BFFF'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'jetbrains': ['JetBrains Mono', 'monospace'],
+                        'fira': ['Fira Code', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite alternate',
+                        'gradient': 'gradient 15s ease infinite',
+                        'matrix-rain': 'matrix-rain 20s linear infinite',
+                        'quantum-spin': 'quantum-spin 4s linear infinite',
+                        'data-flow': 'data-flow 3s ease-in-out infinite',
+                        'neural-pulse': 'neural-pulse 2s ease-in-out infinite'
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                        'xl': '30px'
+                    }
+                }
+            }
+        }
+    </script>
+      <!-- 核心JavaScript模块 - 简化版本，只引用实际存在的文件 -->
+    
+    <!-- 1. 基础系统 -->
+    <script src="/js/main.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script src="/js/auth.js" defer></script>
+    
+    <!-- 2. 国际化系统 -->
+    <script src="/js/i18n/translations.js" defer></script>
+    <script src="/js/i18n/i18n-manager.js" defer></script>
+    
+    <!-- 3. 聊天系统 -->
+    <script src="/js/chat-system.js" defer></script>
+    <script src="/js/homepage-ai-chat.js" defer></script>
+    
+    <!-- 4. 增强功能 -->
+    <script src="/js/gesture-interaction.js" defer></script>
+    <script src="/js/data-visualization.js" defer></script>
+    <script src="/js/social-customization.js" defer></script>
+    
+    <!-- 5. 悬浮按钮系统 -->
+    <script src="/js/floating-buttons-manager.js" defer></script>
+    <script src="/js/chat-button-integrator.js" defer></script>
+    
+    <!-- 6. 修复和优化脚本 -->
+    <script src="/js/homepage-fixes.js" defer></script>
+    <script src="/js/frontend-fixes.js" defer></script>
+    <script src="/js/frontend-validation.js" defer></script>
+    
+    <!-- 环境检测和条件加载 -->
+    <script>
+        // 开发环境检测
+        const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        // 性能监控仅在开发环境启用
+        if (!isDevelopment) {            // 生产环境下移除调试脚本
+            const debugScripts = [
+                'animation-performance-monitor.js',
+                'ultimate-performance-validator.js',
+                'advanced-debug-console.js',
+                'realtime-performance-dashboard.js',
+                'complete-system-validator.js',
+                'functionality-demonstrator.js',
+                'final-system-status-check.js',
+                'final-integration-test.js',
+                'floating-buttons-diagnostic.js'
+            ];
+            
+            debugScripts.forEach(script => {
+                const element = document.querySelector(`script[src*="${script}"]`);
+                if (element) element.remove();
+            });
+        }
+        
+        // 渐进式功能加载
+        window.AlingAI = {
+            modules: {},
+            config: {
+                isDevelopment,
+                features: {
+                    quantumEffects: true,
+                    aiChat: true,
+                    internalization: true,
+                    audioEnhancement: true,
+                    gestureInteraction: true,
+                    dataVisualization: true,
+                    socialCustomization: true
+                }
+            }
+        };
+    </script>
+    
+    <!-- 高对比度和无障碍样式 -->
+    <style>
+        /* 响应式设计优化 */
+        @media (max-width: 768px) {
+            .quantum-particle { display: none; }
+            .three-background { opacity: 0.3; }
+        }
+        
+        /* 减少动画 - 尊重用户偏好 */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
+        /* 高对比度模式 */
+        @media (prefers-contrast: high) {
+            :root {
+                --quantum-primary: #0000FF;
+                --quantum-secondary: #FF0000;
+                --quantum-accent: #00FFFF;
+            }
+        }
+        
+        /* 加载状态 */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0A0016 0%, #1A003C 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .quantum-loader {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(108, 19, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #6C13FF;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="bg-quantum-dark text-white overflow-x-hidden">
+    <!-- 页面加载动画 -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="quantum-loader mx-auto mb-4"></div>
+            <p class="text-quantum-accent font-jetbrains">正在初始化量子系统...</p>
+        </div>
+    </div>
+
+    <!-- 核心页面结构将在这里继续... -->
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            珑凌科技
+                        </h1>
+                        <p class="text-xs text-gray-400">AlingAI Platform</p>
+                    </div>
+                </div>
+
+                <!-- 导航菜单 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-white hover:text-quantum-accent transition-colors duration-300">首页</a>
+                    <a href="#solutions" class="nav-link text-gray-300 hover:text-quantum-accent transition-colors duration-300">解决方案</a>
+                    <a href="#products" class="nav-link text-gray-300 hover:text-quantum-accent transition-colors duration-300">产品服务</a>
+                    <a href="#about" class="nav-link text-gray-300 hover:text-quantum-accent transition-colors duration-300">关于我们</a>
+                    <a href="/api" class="nav-link text-gray-300 hover:text-quantum-accent transition-colors duration-300">API文档</a>
+                    <a href="/docs" class="nav-link text-gray-300 hover:text-quantum-accent transition-colors duration-300">技术文档</a>
+                </div>
+
+                <!-- 用户操作区域 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 语言切换 -->
+                    <div class="language-switcher">
+                        <button id="languageToggle" class="px-3 py-1 rounded border border-quantum-primary/30 text-sm hover:bg-quantum-primary/20 transition-all duration-300">
+                            <i class="fas fa-globe mr-1"></i>
+                            <span id="currentLanguage">中文</span>
+                        </button>
+                    </div>
+
+                    <!-- 用户菜单 -->
+                    <div class="flex items-center space-x-2">
+                        <a href="/login.html" class="px-4 py-2 text-sm text-quantum-accent hover:text-white transition-colors duration-300">登录</a>
+                        <a href="/register.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300">注册</a>
+                        <a href="/profile.html" class="px-3 py-2 text-quantum-accent hover:text-white transition-colors duration-300" title="个人中心">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="/dashboard.html" class="px-3 py-2 text-quantum-accent hover:text-white transition-colors duration-300" title="控制台">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </a>
+                    </div>
+
+                    <!-- 移动端菜单按钮 -->
+                    <button id="mobileMenuToggle" class="md:hidden p-2 text-quantum-accent hover:text-white transition-colors duration-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="md:hidden bg-black/90 backdrop-blur-xl border-t border-quantum-primary/20 hidden">
+            <div class="container mx-auto px-6 py-4 space-y-4">
+                <a href="#home" class="block text-white hover:text-quantum-accent transition-colors duration-300">首页</a>
+                <a href="#solutions" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300">解决方案</a>
+                <a href="#products" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300">产品服务</a>
+                <a href="#about" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300">关于我们</a>
+                <a href="/api" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300">API文档</a>
+                <a href="/docs" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300">技术文档</a>
+                <div class="pt-4 border-t border-quantum-primary/20">
+                    <a href="/login.html" class="block text-quantum-accent hover:text-white transition-colors duration-300 mb-2">登录</a>
+                    <a href="/register.html" class="block px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-center hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300">注册</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main>        <!-- 英雄区域 -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative">
+            <!-- 3D背景容器 -->
+            <div id="three-background" class="absolute inset-0 z-0"></div>
+            <div id="quantum-particles" class="absolute inset-0 z-10"></div>
+            
+            <!-- 量子恒星系统 -->
+            <div class="quantum-star-container" id="quantum-star-container">
+                <!-- 代码容器 -->
+                <div class="code-container" id="code-container"></div>
+                
+                <!-- 光圈 -->
+                <div class="light-circle" id="light-circle"></div>
+                
+                <!-- 量子恒星 -->
+                <div class="quantum-star" id="quantum-star"></div>
+                
+                <!-- 量子粒子层 -->
+                <div class="quantum-particle-layer" id="quantum-particle-layer"></div>
+                
+                <!-- 日冕层 -->
+                <div class="corona" id="corona"></div>
+                
+                <!-- 3D Hello World -->
+                <div class="hello-world-3d" id="hello-world-3d">Hello, World!</div>
+                
+                <!-- 量子行星带 -->
+                <div class="quantum-ring" id="quantum-ring">
+                    <div class="ring-layer" style="width: 500px; height: 500px;"></div>
+                    <div class="ring-layer" style="width: 450px; height: 450px;"></div>
+                    <div class="ring-layer" style="width: 400px; height: 400px;"></div>
+                    <div class="ring-layer" style="width: 350px; height: 350px;"></div>
+                    <div class="ring-layer" style="width: 300px; height: 300px;"></div>
+                </div>
+            </div>
+            
+            <div class="container mx-auto px-6 z-20 relative">
+                <div class="grid lg:grid-cols-2 gap-8 items-center">
+                    <!-- 左侧：主要内容 -->
+                    <div class="text-center lg:text-left">
+                        <!-- 主标题 -->
+                        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-quantum-primary via-quantum-accent to-quantum-secondary bg-clip-text text-transparent animate-gradient">
+                            量子安全·智能未来
+                        </h1>
+                        
+                        <!-- 副标题 -->
+                        <p class="text-lg md:text-xl lg:text-2xl text-gray-300 mb-8 leading-relaxed">
+                            AI驱动的企业级量子安全解决方案<br>
+                            重新定义数字化安全标准
+                        </p>
+                        
+                        <!-- 特色介绍 -->
+                        <div class="grid md:grid-cols-1 lg:grid-cols-1 gap-4 mb-8">
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20 hover:border-quantum-primary/40 transition-all duration-300">
+                                <i class="fas fa-shield-alt text-quantum-primary text-xl mb-2"></i>
+                                <h3 class="text-base font-semibold mb-1">零信任安全</h3>
+                                <p class="text-gray-400 text-sm">全方位身份验证，多重安全防护</p>
+                            </div>
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20 hover:border-quantum-accent/40 transition-all duration-300">
+                                <i class="fas fa-robot text-quantum-accent text-xl mb-2"></i>
+                                <h3 class="text-base font-semibold mb-1">AI智能助手</h3>
+                                <p class="text-gray-400 text-sm">24/7智能对话，专业技术支持</p>
+                            </div>
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20 hover:border-quantum-secondary/40 transition-all duration-300">
+                                <i class="fas fa-atom text-quantum-secondary text-xl mb-2"></i>
+                                <h3 class="text-base font-semibold mb-1">量子计算</h3>
+                                <p class="text-gray-400 text-sm">下一代计算技术，突破性能极限</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 行动按钮 -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                            <button class="px-8 py-4 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-rocket mr-2"></i>
+                                立即体验
+                            </button>
+                            <button class="px-8 py-4 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-black transition-all duration-300">
+                                <i class="fas fa-play mr-2"></i>
+                                观看演示
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 右侧：量子恒星系统占位（在移动端显示） -->
+                    <div class="lg:hidden flex justify-center">
+                        <!-- 量子恒星系统已在绝对定位中处理 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 滚动提示 -->
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-quantum-accent animate-bounce">
+                <i class="fas fa-chevron-down text-2xl"></i>
+            </div>
+        </section>
+
+        <!-- 解决方案部分 -->
+        <section id="solutions" class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        企业级解决方案
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                        为不同行业和规模的企业提供定制化的量子安全解决方案
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- 金融安全解决方案 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20 hover:border-quantum-primary/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-university text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">金融安全</h3>
+                        <p class="text-gray-400 mb-6">银行级量子加密，保护金融交易和客户数据安全</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>量子密钥分发</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>交易防篡改</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>风险实时监控</li>
+                        </ul>
+                    </div>
+
+                    <!-- 医疗数据保护 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-accent/20 hover:border-quantum-accent/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-heartbeat text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">医疗健康</h3>
+                        <p class="text-gray-400 mb-6">符合HIPAA标准的医疗数据保护和隐私计算</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>患者隐私保护</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>医疗数据加密</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>合规性审计</li>
+                        </ul>
+                    </div>
+
+                    <!-- 政府机构 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-secondary/20 hover:border-quantum-secondary/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-secondary to-neon-pink rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-landmark text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">政府机构</h3>
+                        <p class="text-gray-400 mb-6">国家级安全标准，保护关键基础设施和敏感信息</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>国密算法支持</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>等级保护合规</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>应急响应机制</li>
+                        </ul>
+                    </div>
+
+                    <!-- 企业云安全 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-cyber-green/20 hover:border-cyber-green/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-cyber-green to-tech-blue rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-cloud text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">企业云安全</h3>
+                        <p class="text-gray-400 mb-6">混合云环境下的统一安全管理和威胁防护</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>云原生安全</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>多云管理</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>零信任网络</li>
+                        </ul>
+                    </div>
+
+                    <!-- 物联网安全 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-neural-blue/20 hover:border-neural-blue/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-neural-blue to-quantum-primary rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-network-wired text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">物联网安全</h3>
+                        <p class="text-gray-400 mb-6">为智能设备和边缘计算提供轻量级量子安全方案</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>设备身份认证</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>边缘计算保护</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>轻量级加密</li>
+                        </ul>
+                    </div>
+
+                    <!-- 数据中心安全 -->
+                    <div class="group p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-matrix-green/20 hover:border-matrix-green/40 transition-all duration-300 hover:transform hover:scale-105">
+                        <div class="w-16 h-16 bg-gradient-to-r from-matrix-green to-quantum-accent rounded-xl flex items-center justify-center mb-6 group-hover:animate-pulse">
+                            <i class="fas fa-server text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">数据中心</h3>
+                        <p class="text-gray-400 mb-6">大规模数据中心的安全架构设计和威胁检测</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>基础设施保护</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>实时监控</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>自动化响应</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 产品服务部分 -->
+        <section id="products" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        核心产品服务
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                        从基础设施到应用层面，提供全栈式的量子安全产品和服务
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12">
+                    <!-- AlingAI Platform -->
+                    <div class="space-y-8">
+                        <div class="text-center lg:text-left">
+                            <h3 class="text-3xl font-bold mb-4 text-quantum-accent">AlingAI Platform</h3>
+                            <p class="text-lg text-gray-300 mb-6">AI驱动的智能安全管理平台</p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                                <div class="w-12 h-12 bg-quantum-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-comments text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">智能对话系统</h4>
+                                    <p class="text-gray-400">24/7 AI助手，提供技术支持和安全咨询</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                                <div class="w-12 h-12 bg-quantum-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-chart-line text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">实时监控面板</h4>
+                                    <p class="text-gray-400">全方位的安全状态监控和可视化分析</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                                <div class="w-12 h-12 bg-quantum-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-cogs text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">自动化响应</h4>
+                                    <p class="text-gray-400">智能威胁识别与自动化安全策略执行</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- API & SDK -->
+                    <div class="space-y-8">
+                        <div class="text-center lg:text-left">
+                            <h3 class="text-3xl font-bold mb-4 text-quantum-secondary">开发者生态</h3>
+                            <p class="text-lg text-gray-300 mb-6">完整的API和SDK支持</p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                                <div class="w-12 h-12 bg-cyber-green rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-code text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">RESTful API</h4>
+                                    <p class="text-gray-400">标准化的API接口，支持多种编程语言</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-neural-blue/20">
+                                <div class="w-12 h-12 bg-neural-blue rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-cube text-white"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">多语言SDK</h4>
+                                    <p class="text-gray-400">Python、JavaScript、Java、Go等主流语言支持</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-matrix-green/20">
+                                <div class="w-12 h-12 bg-matrix-green rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-book text-black"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-2">技术文档</h4>
+                                    <p class="text-gray-400">详细的开发文档和最佳实践指南</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速访问链接 -->
+                <div class="mt-16 text-center">
+                    <div class="inline-flex flex-wrap gap-4 justify-center">
+                        <a href="/api" class="px-6 py-3 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300">
+                            <i class="fas fa-code mr-2"></i>API文档
+                        </a>
+                        <a href="/docs" class="px-6 py-3 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-black transition-all duration-300">
+                            <i class="fas fa-book mr-2"></i>技术文档
+                        </a>
+                        <a href="/dashboard.html" class="px-6 py-3 border border-quantum-secondary text-quantum-secondary rounded-lg font-semibold hover:bg-quantum-secondary hover:text-white transition-all duration-300">
+                            <i class="fas fa-tachometer-alt mr-2"></i>控制台
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于我们部分 -->
+        <section id="about" class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        关于珑凌科技
+                    </h2>
+                    <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                        我们致力于打造下一代量子安全基础设施，为数字化时代提供坚实的安全保障
+                    </p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-quantum-accent">技术愿景</h3>
+                        <p class="text-gray-300 leading-relaxed">
+                            在量子计算时代即将到来的今天，传统的加密技术面临前所未有的挑战。珑凌科技汇聚全球顶尖的量子安全专家和AI研究团队，
+                            致力于研发能够抵御量子计算攻击的下一代安全解决方案。
+                        </p>
+                        <p class="text-gray-300 leading-relaxed">
+                            我们的AlingAI平台结合了人工智能、量子密码学和零信任架构，为企业提供从芯片级到应用层的全栈安全保护，
+                            确保在量子时代依然能够保护客户的数字资产和隐私安全。
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-6 mt-8">
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                                <div class="text-2xl font-bold text-quantum-primary mb-1">100+</div>
+                                <div class="text-sm text-gray-400">企业客户</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                                <div class="text-2xl font-bold text-quantum-accent mb-1">99.9%</div>
+                                <div class="text-sm text-gray-400">可用性保障</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                                <div class="text-2xl font-bold text-quantum-secondary mb-1">24/7</div>
+                                <div class="text-sm text-gray-400">技术支持</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                                <div class="text-2xl font-bold text-cyber-green mb-1">50+</div>
+                                <div class="text-sm text-gray-400">专利技术</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-quantum-secondary">核心优势</h3>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                                <i class="fas fa-atom text-quantum-primary text-xl mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">量子前沿技术</h4>
+                                    <p class="text-gray-400 text-sm">掌握后量子密码学核心算法，领先行业3-5年</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                                <i class="fas fa-brain text-quantum-accent text-xl mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">AI驱动智能</h4>
+                                    <p class="text-gray-400 text-sm">机器学习算法实现智能威胁识别和响应</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                                <i class="fas fa-shield-alt text-quantum-secondary text-xl mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">零信任架构</h4>
+                                    <p class="text-gray-400 text-sm">基于身份的全方位安全验证和访问控制</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-4 p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                                <i class="fas fa-globe text-cyber-green text-xl mt-1"></i>
+                                <div>
+                                    <h4 class="font-semibold mb-1">全球化服务</h4>
+                                    <p class="text-gray-400 text-sm">多地区部署，满足不同国家和地区的合规要求</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-8">
+                            <button class="w-full px-6 py-3 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300">
+                                <i class="fas fa-envelope mr-2"></i>
+                                联系我们
+                            </button>
+                        </div>
+                    </div>                </div>
+            </div>
+        </section>
+
+        <!-- 合作伙伴板块 -->
+        <section id="partners" class="relative py-20 overflow-hidden">
+            <!-- 背景图片层 -->
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+                     style="background-image: url('images/11.png');">
+                </div>
+                <!-- 深色遮罩层 -->
+                <div class="absolute inset-0 bg-gradient-to-r from-quantum-dark/95 via-quantum-purple/85 to-quantum-dark/95"></div>
+                <!-- 动态光效层 -->
+                <div class="absolute inset-0 bg-gradient-to-br from-quantum-primary/10 via-transparent to-quantum-accent/10"></div>
+            </div>
+
+            <!-- 装饰性几何元素 -->
+            <div class="absolute inset-0 z-10 pointer-events-none">
+                <!-- 左上角装饰 -->
+                <div class="absolute top-10 left-10 w-32 h-32 border border-quantum-primary/20 rounded-lg transform rotate-45 animate-pulse"></div>
+                <div class="absolute top-20 left-20 w-16 h-16 bg-quantum-accent/10 rounded-full animate-ping"></div>
+                
+                <!-- 右下角装饰 -->
+                <div class="absolute bottom-10 right-10 w-24 h-24 border-2 border-quantum-secondary/30 rounded-full"></div>
+                <div class="absolute bottom-20 right-20 w-8 h-8 bg-cyber-green/20 rounded-lg transform rotate-12 animate-bounce"></div>
+                
+                <!-- 浮动粒子效果 -->
+                <div class="absolute top-1/4 left-1/3 w-2 h-2 bg-quantum-primary rounded-full animate-float"></div>
+                <div class="absolute top-3/4 right-1/4 w-3 h-3 bg-quantum-accent/60 rounded-full animate-float" style="animation-delay: 1s"></div>
+                <div class="absolute top-1/2 left-1/4 w-1 h-1 bg-cyber-green rounded-full animate-ping" style="animation-delay: 2s"></div>
+            </div>
+
+            <div class="container mx-auto px-6 relative z-20">
+                <!-- 标题区域 -->
+                <div class="text-center mb-16">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full mb-6 shadow-lg shadow-quantum-primary/25">
+                        <i class="fas fa-handshake text-white text-2xl"></i>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-quantum-primary via-white to-quantum-accent bg-clip-text text-transparent">
+                        战略合作伙伴
+                    </h2>
+                    <p class="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                        携手全球顶尖企业，共建量子安全生态圈
+                        <br>
+                        <span class="text-quantum-accent font-medium">Together We Secure the Quantum Future</span>
+                    </p>
+                    
+                    <!-- 装饰性分割线 -->
+                    <div class="flex items-center justify-center mt-8 space-x-4">
+                        <div class="w-12 h-0.5 bg-gradient-to-r from-transparent to-quantum-primary"></div>
+                        <div class="w-3 h-3 border-2 border-quantum-accent rounded-full"></div>
+                        <div class="w-24 h-0.5 bg-gradient-to-r from-quantum-primary to-quantum-accent"></div>
+                        <div class="w-3 h-3 border-2 border-quantum-secondary rounded-full"></div>
+                        <div class="w-12 h-0.5 bg-gradient-to-r from-quantum-secondary to-transparent"></div>
+                    </div>
+                </div>
+
+                <!-- 合作伙伴分类展示 -->
+                <div class="grid lg:grid-cols-3 gap-8 mb-16">
+                    <!-- 技术合作伙伴 -->
+                    <div class="group">
+                        <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-quantum-primary/20 p-8 hover:border-quantum-primary/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-quantum-primary/20">
+                            <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-quantum-primary/20 to-quantum-accent/20 rounded-xl mb-6 group-hover:animate-pulse">
+                                <i class="fas fa-microchip text-quantum-primary text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">技术合作伙伴</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                与全球领先的芯片制造商、云服务提供商和量子计算公司深度合作
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-accent mr-3"></i>
+                                    量子芯片技术联合研发
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-accent mr-3"></i>
+                                    云原生安全架构优化
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-accent mr-3"></i>
+                                    后量子密码标准制定
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 行业合作伙伴 -->
+                    <div class="group">
+                        <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-quantum-secondary/20 p-8 hover:border-quantum-secondary/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-quantum-secondary/20">
+                            <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-quantum-secondary/20 to-neon-pink/20 rounded-xl mb-6 group-hover:animate-pulse">
+                                <i class="fas fa-industry text-quantum-secondary text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">行业合作伙伴</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                覆盖金融、医疗、政府、能源等关键基础设施领域的头部企业
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-secondary mr-3"></i>
+                                    金融级安全解决方案
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-secondary mr-3"></i>
+                                    医疗数据隐私保护
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-quantum-secondary mr-3"></i>
+                                    关键基础设施防护
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 学术合作伙伴 -->
+                    <div class="group">
+                        <div class="bg-white/5 backdrop-blur-xl rounded-2xl border border-cyber-green/20 p-8 hover:border-cyber-green/50 transition-all duration-500 hover:transform hover:scale-105 hover:shadow-2xl hover:shadow-cyber-green/20">
+                            <div class="flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyber-green/20 to-matrix-green/20 rounded-xl mb-6 group-hover:animate-pulse">
+                                <i class="fas fa-graduation-cap text-cyber-green text-3xl"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-4">学术合作伙伴</h3>
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                与国内外顶尖高校和科研院所建立产学研深度合作关系
+                            </p>
+                            <div class="space-y-3">
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-cyber-green mr-3"></i>
+                                    量子算法前沿研究
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-cyber-green mr-3"></i>
+                                    人才培养计划共建
+                                </div>
+                                <div class="flex items-center text-sm text-gray-400">
+                                    <i class="fas fa-check text-cyber-green mr-3"></i>
+                                    技术转化与孵化
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合作成果展示 -->
+                <div class="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-xl rounded-3xl border border-white/20 p-8 lg:p-12">
+                    <div class="text-center mb-12">
+                        <h3 class="text-3xl font-bold text-white mb-4">合作成果</h3>
+                        <p class="text-gray-300 text-lg">共同推动量子安全技术的产业化应用</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center group">
+                            <div class="w-16 h-16 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-rocket text-white text-2xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-quantum-primary mb-2">50+</div>
+                            <div class="text-gray-400 text-sm">联合项目</div>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="w-16 h-16 bg-gradient-to-br from-quantum-secondary to-neon-pink rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-certificate text-white text-2xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-quantum-secondary mb-2">100+</div>
+                            <div class="text-gray-400 text-sm">专利成果</div>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="w-16 h-16 bg-gradient-to-br from-cyber-green to-matrix-green rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-users text-black text-2xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-cyber-green mb-2">1000+</div>
+                            <div class="text-gray-400 text-sm">联合团队</div>
+                        </div>
+
+                        <div class="text-center group">
+                            <div class="w-16 h-16 bg-gradient-to-br from-neural-blue to-tech-blue rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-globe text-white text-2xl"></i>
+                            </div>
+                            <div class="text-3xl font-bold text-neural-blue mb-2">30+</div>
+                            <div class="text-gray-400 text-sm">国家地区</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 合作邀请 -->
+                <div class="text-center mt-16">
+                    <div class="inline-block p-8 bg-gradient-to-r from-quantum-primary/10 to-quantum-accent/10 backdrop-blur-xl rounded-2xl border border-quantum-primary/30">
+                        <h3 class="text-2xl font-bold text-white mb-4">携手共建量子安全未来</h3>
+                        <p class="text-gray-300 mb-6 max-w-2xl">
+                            我们诚邀更多志同道合的伙伴加入珑凌科技生态圈，共同探索量子安全技术的无限可能
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                            <button class="px-8 py-4 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg hover:shadow-quantum-primary/25 transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-handshake mr-2"></i>
+                                成为合作伙伴
+                            </button>
+                            <button class="px-8 py-4 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-black transition-all duration-300">
+                                <i class="fas fa-download mr-2"></i>
+                                下载合作手册
+                            </button>                        </div>
+                    </div>
+                </div>
+
+                <!-- 合作伙伴LOGO展示区域 -->
+                <div class="mt-20">
+                    <div class="text-center mb-12">
+                        <h3 class="text-2xl font-bold text-white mb-4">我们的合作伙伴</h3>
+                        <p class="text-gray-300">与全球领先企业和机构携手共进</p>
+                        
+                        <!-- 装饰分割线 -->
+                        <div class="flex items-center justify-center mt-6 space-x-3">
+                            <div class="w-8 h-0.5 bg-gradient-to-r from-transparent to-quantum-primary"></div>
+                            <div class="w-2 h-2 bg-quantum-accent rounded-full animate-pulse"></div>
+                            <div class="w-16 h-0.5 bg-gradient-to-r from-quantum-primary to-quantum-secondary"></div>
+                            <div class="w-2 h-2 bg-quantum-primary rounded-full animate-pulse" style="animation-delay: 0.5s"></div>
+                            <div class="w-8 h-0.5 bg-gradient-to-r from-quantum-secondary to-transparent"></div>
+                        </div>
+                    </div>                    <!-- 合作伙伴LOGO网格 -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+                        <!-- 技术合作伙伴 -->
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-primary/20 flex items-center justify-center mb-3 group-hover:border-quantum-primary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fab fa-microsoft text-2xl text-blue-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">Microsoft</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-primary/20 flex items-center justify-center mb-3 group-hover:border-quantum-primary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fab fa-aws text-2xl text-orange-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">Amazon Web Services</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-accent/20 flex items-center justify-center mb-3 group-hover:border-quantum-accent/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fab fa-google text-2xl text-blue-500"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">Google Cloud</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-secondary/20 flex items-center justify-center mb-3 group-hover:border-quantum-secondary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-atom text-2xl text-quantum-primary"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">IBM Quantum</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-cyber-green/20 flex items-center justify-center mb-3 group-hover:border-cyber-green/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-microchip text-2xl text-cyber-green"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">Intel</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-neural-blue/20 flex items-center justify-center mb-3 group-hover:border-neural-blue/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-shield-alt text-2xl text-neural-blue"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">NVIDIA</span>
+                        </div>
+
+                        <!-- 金融行业合作伙伴 -->
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-primary/20 flex items-center justify-center mb-3 group-hover:border-quantum-primary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-university text-2xl text-yellow-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">中国银行</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-accent/20 flex items-center justify-center mb-3 group-hover:border-quantum-accent/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-landmark text-2xl text-green-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">工商银行</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-secondary/20 flex items-center justify-center mb-3 group-hover:border-quantum-secondary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-chart-line text-2xl text-blue-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">招商银行</span>
+                        </div>
+
+                        <!-- 学术研究机构 -->
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-cyber-green/20 flex items-center justify-center mb-3 group-hover:border-cyber-green/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-graduation-cap text-2xl text-red-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">清华大学</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-neural-blue/20 flex items-center justify-center mb-3 group-hover:border-neural-blue/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-flask text-2xl text-purple-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">北京大学</span>
+                        </div>
+
+                        <div class="group flex flex-col items-center partner-logo">
+                            <div class="w-20 h-20 bg-white/10 backdrop-blur-sm rounded-xl border border-quantum-primary/20 flex items-center justify-center mb-3 group-hover:border-quantum-primary/50 group-hover:bg-white/20 transition-all duration-300 group-hover:scale-110">
+                                <i class="fas fa-satellite text-2xl text-cyan-400"></i>
+                            </div>
+                            <span class="text-sm text-gray-400 group-hover:text-white transition-colors duration-300">中科院</span>
+                        </div>
+                    </div>
+
+                    <!-- 更多合作伙伴提示 -->
+                    <div class="text-center mt-12">
+                        <div class="inline-flex items-center px-6 py-3 bg-white/5 backdrop-blur-sm rounded-full border border-quantum-primary/20">
+                            <i class="fas fa-plus text-quantum-accent mr-2"></i>
+                            <span class="text-gray-300 text-sm">还有更多优质合作伙伴加入中...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 额外的动态装饰元素 -->
+            <div class="absolute inset-0 z-5 pointer-events-none">
+                <!-- 网格背景 -->
+                <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(circle at 25% 25%, rgba(138,43,226,0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(14,165,233,0.3) 0%, transparent 50%)"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <!-- 公司信息 -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-atom text-white text-sm"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-quantum-accent">珑凌科技</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        全球领先的量子安全基础设施提供商，为企业级客户提供从底层加密到智能决策的全栈解决方案。
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 产品服务 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">产品服务</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">AlingAI Platform</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">量子安全服务</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">零信任架构</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">AI安全助手</a>
+                    </div>
+                </div>
+
+                <!-- 开发者资源 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">开发者</h3>
+                    <div class="space-y-2">
+                        <a href="/api" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">API文档</a>
+                        <a href="/docs" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">技术文档</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">SDK下载</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">示例代码</a>
+                    </div>
+                </div>
+
+                <!-- 支持帮助 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">支持</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">帮助中心</a>
+                        <a href="#" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">技术支持</a>
+                        <a href="/contact.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">联系我们</a>
+                        <a href="/privacy.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">隐私政策</a>
+                        <a href="/terms.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">服务条款</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-quantum-primary/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 珑凌科技. 保留所有权利.
+                </p>
+                <p class="text-gray-400 text-sm mt-4 md:mt-0">
+                    ICP备案号：粤ICP备2024000000号
+                </p>
+            </div>
+        </div>
+    </footer>    <!-- 右下角悬浮按钮组 -->
+    <div id="floatingButtons" class="fixed bottom-6 right-6 z-50">
+        <!-- 主悬浮按钮容器 -->
+        <div class="flex flex-col items-end space-y-4">
+            <!-- AI聊天按钮 -->
+            <div class="relative group">
+                <button id="aiChatToggle" class="w-14 h-14 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center">
+                    <i class="fas fa-comments text-white text-xl group-hover:scale-110 transition-transform duration-300"></i>
+                </button>
+                <!-- 提示标签 -->
+                <div class="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    AI智能助手
+                </div>
+            </div>
+            
+            <!-- 返回顶部按钮 -->
+            <div class="relative group">
+                <button id="backToTop" class="w-12 h-12 bg-quantum-accent/20 backdrop-blur-sm border border-quantum-accent/30 rounded-full shadow-lg hover:shadow-xl hover:bg-quantum-accent/30 transition-all duration-300 flex items-center justify-center opacity-0 translate-y-4">
+                    <i class="fas fa-arrow-up text-quantum-accent text-sm group-hover:scale-110 transition-transform duration-300"></i>
+                </button>
+                <!-- 提示标签 -->
+                <div class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    返回顶部
+                </div>
+            </div>
+            
+            <!-- 快速导航按钮 -->
+            <div class="relative group">
+                <button id="quickNav" class="w-12 h-12 bg-quantum-secondary/20 backdrop-blur-sm border border-quantum-secondary/30 rounded-full shadow-lg hover:shadow-xl hover:bg-quantum-secondary/30 transition-all duration-300 flex items-center justify-center opacity-0 translate-y-4">
+                    <i class="fas fa-compass text-quantum-secondary text-sm group-hover:scale-110 transition-transform duration-300"></i>
+                </button>
+                <!-- 提示标签 -->
+                <div class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    快速导航
+                </div>
+            </div>
+            
+            <!-- 主题切换按钮 -->
+            <div class="relative group">
+                <button id="themeToggle" class="w-12 h-12 bg-cyber-green/20 backdrop-blur-sm border border-cyber-green/30 rounded-full shadow-lg hover:shadow-xl hover:bg-cyber-green/30 transition-all duration-300 flex items-center justify-center opacity-0 translate-y-4">
+                    <i class="fas fa-palette text-cyber-green text-sm group-hover:scale-110 transition-transform duration-300"></i>
+                </button>
+                <!-- 提示标签 -->
+                <div class="absolute right-14 top-1/2 transform -translate-y-1/2 bg-black/80 text-white text-xs px-3 py-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                    主题切换
+                </div>
+            </div>
+        </div>
+        
+        <!-- 快速导航面板 -->
+        <div id="quickNavPanel" class="absolute bottom-16 right-0 w-56 bg-black/90 backdrop-blur-xl rounded-lg border border-quantum-primary/20 shadow-xl p-4 scale-0 origin-bottom-right transition-transform duration-300">
+            <h3 class="text-white font-semibold mb-3 text-sm">快速导航</h3>
+            <div class="space-y-2">
+                <a href="#home" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-home mr-2"></i>首页
+                </a>
+                <a href="#solutions" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-shield-alt mr-2"></i>解决方案
+                </a>
+                <a href="#products" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-cube mr-2"></i>产品服务
+                </a>
+                <a href="#about" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-info-circle mr-2"></i>关于我们
+                </a>
+                <div class="border-t border-quantum-primary/20 my-2"></div>
+                <a href="/api" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-code mr-2"></i>API文档
+                </a>
+                <a href="/dashboard.html" class="block text-gray-300 hover:text-quantum-accent transition-colors duration-300 text-sm py-1">
+                    <i class="fas fa-tachometer-alt mr-2"></i>控制台
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <style>        /* 悬浮按钮动画样式 */
+        #floatingButtons {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        
+        #floatingButtons button {
+            backdrop-filter: blur(10px);
+        }
+        
+        #floatingButtons .group:hover button {
+            transform: scale(1.1);
+        }
+        
+        /* 滚动时显示返回顶部按钮 */
+        .show-back-to-top #backToTop {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        .show-nav-buttons #quickNav,
+        .show-nav-buttons #themeToggle {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+        }
+        
+        /* 渐进显示动画 */
+        #quickNav {
+            transition-delay: 100ms;
+        }
+        
+        #themeToggle {
+            transition-delay: 200ms;
+        }
+    </style>
+
+    <!-- AI聊天面板 -->
+    <div id="aiChatPanel" class="fixed bottom-24 right-6 w-96 h-96 bg-black/90 backdrop-blur-xl rounded-2xl border border-quantum-primary/30 shadow-2xl transform scale-0 origin-bottom-right transition-transform duration-300 z-40">
+        <div class="flex flex-col h-full">
+            <!-- 聊天头部 -->
+            <div class="flex items-center justify-between p-4 border-b border-quantum-primary/20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-semibold text-white">AlingAI Assistant</h3>
+                        <p class="text-xs text-quantum-accent">在线</p>
+                    </div>
+                </div>
+                <button id="aiChatClose" class="text-gray-400 hover:text-white transition-colors duration-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- 聊天消息区域 -->
+            <div id="aiChatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+                <div class="flex items-start space-x-3">
+                    <div class="w-6 h-6 bg-quantum-primary rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-xs"></i>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 max-w-xs">
+                        <p class="text-sm text-white">您好！我是AlingAI智能助手，有什么可以帮助您的吗？</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输入区域 -->
+            <div class="p-4 border-t border-quantum-primary/20">
+                <div class="flex items-center space-x-2">
+                    <input id="aiChatInput" type="text" placeholder="输入您的问题..." class="flex-1 bg-white/10 backdrop-blur-sm border border-quantum-primary/30 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-quantum-primary">
+                    <button id="aiChatSend" class="p-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-paper-plane text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 核心脚本初始化 -->
+    <script>
+        // 页面加载完成后初始化系统
+        document.addEventListener('DOMContentLoaded', function() {
+            // 隐藏加载动画
+            setTimeout(() => {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('loading-hidden');
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }
+            }, 2000);
+
+            // 初始化导航菜单
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }            // 初始化AI聊天系统
+            const aiChatToggle = document.getElementById('aiChatToggle');
+            const aiChatPanel = document.getElementById('aiChatPanel');
+            const aiChatClose = document.getElementById('aiChatClose');
+            const aiChatSend = document.getElementById('aiChatSend');
+            const aiChatInput = document.getElementById('aiChatInput');
+
+            if (aiChatToggle && aiChatPanel) {
+                aiChatToggle.addEventListener('click', () => {
+                    aiChatPanel.classList.toggle('scale-0');
+                });
+
+                if (aiChatClose) {
+                    aiChatClose.addEventListener('click', () => {
+                        aiChatPanel.classList.add('scale-0');
+                    });
+                }
+
+                if (aiChatSend && aiChatInput) {
+                    const sendMessage = () => {
+                        const message = aiChatInput.value.trim();
+                        if (message) {
+                            // 这里将连接到实际的AI聊天系统
+                            console.log('发送消息:', message);
+                            aiChatInput.value = '';
+                        }
+                    };
+
+                    aiChatSend.addEventListener('click', sendMessage);
+                    aiChatInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            sendMessage();
+                        }
+                    });
+                }
+            }
+            
+            // 初始化悬浮按钮功能
+            initializeFloatingButtons();
+
+            // 平滑滚动导航
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });            // 系统状态通知
+            console.log('🚀 AlingAI系统已成功初始化');
+            console.log('📊 量子安全模块已加载');
+            console.log('🤖 AI助手系统就绪');
+            console.log('🌐 国际化支持已启用');
+              // 初始化量子恒星系统
+            initializeQuantumStarSystem();
+        });
+        
+        // 悬浮按钮功能初始化
+        function initializeFloatingButtons() {
+            const backToTopBtn = document.getElementById('backToTop');
+            const quickNavBtn = document.getElementById('quickNav');
+            const quickNavPanel = document.getElementById('quickNavPanel');
+            const themeToggleBtn = document.getElementById('themeToggle');
+            const floatingButtons = document.getElementById('floatingButtons');
+            
+            // 滚动监听 - 显示/隐藏按钮
+            let scrollTimeout;
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                // 显示返回顶部按钮
+                if (scrollTop > 300) {
+                    document.body.classList.add('show-back-to-top');
+                } else {
+                    document.body.classList.remove('show-back-to-top');
+                }
+                
+                // 显示其他导航按钮
+                if (scrollTop > 500) {
+                    document.body.classList.add('show-nav-buttons');
+                } else {
+                    document.body.classList.remove('show-nav-buttons');
+                }
+                
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // 滚动停止后的处理
+                }, 150);
+            });
+            
+            // 返回顶部功能
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+            
+            // 快速导航面板切换
+            if (quickNavBtn && quickNavPanel) {
+                quickNavBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    quickNavPanel.classList.toggle('scale-0');
+                });
+                
+                // 点击外部关闭面板
+                document.addEventListener('click', (e) => {
+                    if (!quickNavPanel.contains(e.target) && !quickNavBtn.contains(e.target)) {
+                        quickNavPanel.classList.add('scale-0');
+                    }
+                });
+            }
+            
+            // 主题切换功能
+            if (themeToggleBtn) {
+                let currentTheme = 'dark'; // 默认暗色主题
+                
+                themeToggleBtn.addEventListener('click', () => {
+                    if (currentTheme === 'dark') {
+                        // 切换到亮色主题
+                        document.documentElement.style.setProperty('--quantum-dark', '#F8FAFC');
+                        document.documentElement.style.setProperty('--text-primary', '#1F2937');
+                        currentTheme = 'light';
+                        
+                        // 更新图标
+                        themeToggleBtn.querySelector('i').className = 'fas fa-moon text-cyber-green text-sm group-hover:scale-110 transition-transform duration-300';
+                    } else {
+                        // 切换回暗色主题
+                        document.documentElement.style.removeProperty('--quantum-dark');
+                        document.documentElement.style.removeProperty('--text-primary');
+                        currentTheme = 'dark';
+                        
+                        // 更新图标
+                        themeToggleBtn.querySelector('i').className = 'fas fa-palette text-cyber-green text-sm group-hover:scale-110 transition-transform duration-300';
+                    }
+                });
+            }
+            
+            // 悬浮按钮动画效果
+            setTimeout(() => {
+                if (floatingButtons) {
+                    floatingButtons.style.opacity = '1';
+                    floatingButtons.style.transform = 'translateY(0)';
+                }
+            }, 1000);
+        }
+        
+        // 量子恒星系统控制器
+        function initializeQuantumStarSystem() {
+            // 全局变量
+            let animationPlayed = false;
+            let codeContainer, quantumStar, helloWorld3D;
+            let quantumRing, corona, quantumParticleLayer, lightCircle;
+            let codeLines, currentLine = 0, codeAnimationComplete = false;
+            let rotationInterval, quantumEruptionInterval;
+            let maxDisplayedLines = 8;
+            
+            // C++代码
+            const cppCode = `#include <iostream>
+#include <string>
+#include <vector>
+#include <cmath>
+
+class QuantumStar {
+private:
+    std::string name;
+    float mass;
+    float radius;
+    std::vector<std::string> elements;
+    bool isActive;
+    
+public:
+    QuantumStar(const std::string& n, float m, float r) 
+        : name(n), mass(m), radius(r), isActive(false) {
+        initializeElements();
+    }
+    
+    void initializeElements() {
+        elements = {"Hydrogen", "Helium", "Quantum Particles"};
+        std::cout << "Quantum elements initialized..." << std::endl;
+    }
+    
+    void activate() {
+        isActive = true;
+        std::cout << "QuantumStar " << name << " activated!" << std::endl;
+    }
+    
+    void emitParticles() {
+        if (isActive) {
+            std::cout << "Emitting quantum particles..." << std::endl;
+            generateCoronaLayer();
+        }
+    }
+    
+    void generateCoronaLayer() {
+        std::cout << "Corona layer with quantum plasma..." << std::endl;
+    }
+    
+    void createHelloWorld() {
+        std::cout << "Creating 3D Hello, World!..." << std::endl;
+    }
+    
+    void maintainStableState() {
+        std::cout << "Quantum star stable state..." << std::endl;
+    }
+};
+
+int main() {
+    std::cout << "Initializing quantum star system..." << std::endl;
+    
+    QuantumStar quantumStar("量子恒星", 2.5e30, 696340);
+    
+    quantumStar.activate();
+    std::cout << "Blue-purple gradient activated..." << std::endl;
+    
+    quantumStar.emitParticles();
+    quantumStar.createHelloWorld();
+    quantumStar.maintainStableState();
+    
+    std::cout << "System operational." << std::endl;
+    return 0;
+}`;
+
+            // 初始化DOM元素
+            function initializeElements() {
+                codeContainer = document.getElementById('code-container');
+                quantumStar = document.getElementById('quantum-star');
+                helloWorld3D = document.getElementById('hello-world-3d');
+                quantumRing = document.getElementById('quantum-ring');
+                corona = document.getElementById('corona');
+                quantumParticleLayer = document.getElementById('quantum-particle-layer');
+                lightCircle = document.getElementById('light-circle');
+                
+                codeLines = cppCode.split('\n');
+            }
+            
+            // 显示光圈并开始代码动画
+            function showLightCircle() {
+                if (!lightCircle) return;
+                
+                gsap.to(lightCircle, {
+                    opacity: 0.8,
+                    duration: 2,
+                    ease: 'power2.out',
+                    onComplete: startCodeAnimationInsideCircle
+                });
+            }
+            
+            // 在光圈内开始代码动画
+            function startCodeAnimationInsideCircle() {
+                setTimeout(typeLine, 500);
+            }
+            
+            // 逐行显示代码
+            function typeLine() {
+                if (currentLine < codeLines.length && !codeAnimationComplete && codeContainer) {
+                    const line = codeLines[currentLine];
+                    const lineElement = document.createElement('div');
+                    lineElement.classList.add('code-line');
+                    lineElement.style.animation = 'floatUp 3s linear forwards';
+                    
+                    // 添加字符并设置颜色
+                    for (let i = 0; i < line.length; i++) {
+                        const charElement = document.createElement('span');
+                        charElement.classList.add('code-char');
+                        charElement.textContent = line[i];
+                        
+                        // 语法高亮
+                        if (line.includes('#include') && line.charAt(i) === '#') {
+                            charElement.style.color = '#00F0FF';
+                        } else if (line.includes('void') || line.includes('int') || line.includes('return')) {
+                            charElement.style.color = '#FACC15';
+                        } else if (line.charAt(i) === '"') {
+                            charElement.style.color = '#FF00FF';
+                        } else if (line.charAt(i) === '{' || line.charAt(i) === '}') {
+                            charElement.style.color = '#A855F7';
+                        } else if (line.charAt(i) === ';' || line.charAt(i) === ',') {
+                            charElement.style.color = '#EF4444';
+                        } else if (line.charAt(i) === '<' || line.charAt(i) === '>') {
+                            charElement.style.color = '#00FF7F';
+                        } else {
+                            charElement.style.color = 'white';
+                        }
+                        
+                        lineElement.appendChild(charElement);
+                    }
+                    
+                    codeContainer.appendChild(lineElement);
+                    
+                    // 限制显示行数
+                    const allLines = codeContainer.querySelectorAll('.code-line');
+                    if (allLines.length > maxDisplayedLines) {
+                        codeContainer.removeChild(allLines[0]);
+                    }
+                    
+                    // 显示行动画
+                    gsap.to(lineElement, {
+                        opacity: 1,
+                        duration: 0.3,
+                        ease: 'power2.out',
+                        onComplete: () => {
+                            currentLine++;
+                            setTimeout(typeLine, 250);
+                        }
+                    });
+                } else if (!codeAnimationComplete) {
+                    codeAnimationComplete = true;
+                    setTimeout(startCircleRotation, 1000);
+                }
+            }
+            
+            // 开始光圈旋转并吸收代码
+            function startCircleRotation() {
+                // 光圈旋转
+                rotationInterval = setInterval(() => {
+                    if (lightCircle) {
+                        const currentRotation = parseFloat(lightCircle.style.transform.replace(/.*rotate\((.*)deg\).*/, '$1')) || 0;
+                        lightCircle.style.transform = `translate(-50%, -50%) rotate(${currentRotation + 2}deg)`;
+                    }
+                }, 20);
+                
+                setTimeout(absorbCodeAndMoveCircle, 1500);
+            }
+            
+            // 代码被光圈吸收
+            function absorbCodeAndMoveCircle() {
+                // 代码向光圈中心收缩消失
+                const allCodeElements = codeContainer?.querySelectorAll('.code-char') || [];
+                allCodeElements.forEach((char, index) => {
+                    gsap.to(char, {
+                        scale: 0,
+                        opacity: 0,
+                        x: Math.random() * 30 - 15,
+                        y: Math.random() * 30 - 15,
+                        rotation: Math.random() * 720 - 360,
+                        duration: 0.8 + (index * 0.003),
+                        ease: 'power2.in'
+                    });
+                });
+                
+                // 隐藏代码容器
+                if (codeContainer) {
+                    gsap.to(codeContainer, {
+                        opacity: 0,
+                        duration: 1.5
+                    });
+                }
+                
+                setTimeout(startCollapseExplosion, 2000);
+            }
+            
+            // 光圈坍缩爆炸效果
+            function startCollapseExplosion() {
+                if (!lightCircle) return;
+                
+                // 第一阶段：急速坍缩
+                gsap.to(lightCircle, {
+                    width: '60px',
+                    height: '60px',
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: 'power4.in',
+                    onComplete: () => {
+                        // 第二阶段：爆炸
+                        createExplosionEffect();
+                        // 隐藏光圈
+                        gsap.to(lightCircle, {
+                            opacity: 0,
+                            duration: 0.3
+                        });
+                    }
+                });
+            }
+            
+            // 创建爆炸效果
+            function createExplosionEffect() {
+                const quantumContainer = document.getElementById('quantum-star-container');
+                if (!quantumContainer) return;
+                
+                // 创建多重爆炸波
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const wave = document.createElement('div');
+                        wave.className = 'explosion-wave';
+                        wave.style.animation = `explosionWave ${1.5 + i * 0.3}s ease-out forwards`;
+                        quantumContainer.appendChild(wave);
+                        
+                        setTimeout(() => wave.remove(), 2000);
+                    }, i * 200);
+                }
+                
+                // 创建代码粒子爆炸
+                createCodeExplosionParticles();
+                
+                // 延迟显示恒星
+                setTimeout(() => {
+                    transformToQuantumStar();
+                }, 1000);
+            }
+            
+            // 创建代码粒子爆炸效果
+            function createCodeExplosionParticles() {
+                const characters = ['{', '}', '(', ')', '<', '>', ';', '=', '*', '&', '+', '-', '/', '%'];
+                const particleCount = 20;
+                const quantumContainer = document.getElementById('quantum-star-container');
+                if (!quantumContainer) return;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'code-explosion-particle';
+                    particle.textContent = characters[Math.floor(Math.random() * characters.length)];
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.color = `hsl(${Math.random() * 60 + 180}, 100%, 70%)`;
+                    
+                    quantumContainer.appendChild(particle);
+                    
+                    // 随机方向爆炸
+                    const angle = (Math.PI * 2 * i) / particleCount;
+                    const distance = Math.random() * 200 + 80;
+                    const endX = Math.cos(angle) * distance;
+                    const endY = Math.sin(angle) * distance;
+                    
+                    gsap.fromTo(particle, 
+                        { 
+                            opacity: 1,
+                            scale: 0,
+                            rotation: 0
+                        },
+                        {
+                            opacity: 0,
+                            scale: 1.5,
+                            x: endX,
+                            y: endY,
+                            rotation: Math.random() * 720 - 360,
+                            duration: 2 + Math.random(),
+                            ease: 'power3.out',
+                            onComplete: () => particle.remove()
+                        }
+                    );
+                }
+            }
+            
+            // 变成量子恒星
+            function transformToQuantumStar() {
+                // 隐藏光圈，显示量子恒星
+                if (lightCircle) {
+                    gsap.to(lightCircle, {
+                        opacity: 0,
+                        duration: 1.5
+                    });
+                }
+                
+                if (quantumStar) {
+                    gsap.to(quantumStar, {
+                        opacity: 1,
+                        duration: 2,
+                        onComplete: () => {
+                            createQuantumSurface();
+                            activateCorona();
+                            setTimeout(createHelloWorld3D, 1000);
+                            animationPlayed = true;
+                        }
+                    });
+                }
+                
+                // 显示量子行星带
+                if (quantumRing) {
+                    gsap.to(quantumRing, {
+                        opacity: 0.8,
+                        duration: 3,
+                        delay: 1
+                    });
+                    
+                    // 让行星环自转
+                    gsap.to(quantumRing, {
+                        rotation: -360,
+                        duration: 60,
+                        repeat: -1,
+                        ease: 'none'
+                    });
+                }
+            }
+            
+            // 创建量子恒星表面细节
+            function createQuantumSurface() {
+                if (!quantumParticleLayer) return;
+                
+                // 添加表面量子粒子
+                for (let i = 0; i < 80; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'quantum-particle';
+                    particle.style.width = Math.random() * 4 + 2 + 'px';
+                    particle.style.height = particle.style.width;
+                    
+                    const angle = Math.random() * 360;
+                    const radius = Math.random() * 120 + 30;
+                    const x = Math.cos(angle * Math.PI / 180) * radius + 50;
+                    const y = Math.sin(angle * Math.PI / 180) * radius + 50;
+                    
+                    particle.style.left = x + '%';
+                    particle.style.top = y + '%';
+                    
+                    // 不同类型的表面特征
+                    const particleType = Math.random();
+                    if (particleType < 0.3) {
+                        // 量子黑子效果
+                        particle.style.background = `radial-gradient(circle, rgba(25, 25, 112, 0.8) 0%, rgba(75, 0, 130, 0.6) 100%)`;
+                        particle.style.boxShadow = `0 0 12px rgba(75, 0, 130, 0.8)`;
+                    } else if (particleType < 0.6) {
+                        // 量子耀斑效果
+                        particle.style.background = `radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, rgba(173, 216, 230, 0.7) 100%)`;
+                        particle.style.boxShadow = `0 0 15px rgba(173, 216, 230, 1)`;
+                    } else {
+                        // 正常量子粒子
+                        particle.style.background = `hsl(${Math.random() * 80 + 240}, 100%, ${Math.random() * 30 + 60}%)`;
+                        particle.style.boxShadow = `0 0 8px currentColor`;
+                    }
+                    
+                    quantumParticleLayer.appendChild(particle);
+                    
+                    gsap.to(particle, {
+                        opacity: Math.random() * 0.9 + 0.4,
+                        duration: Math.random() * 4 + 2,
+                        repeat: -1,
+                        yoyo: true
+                    });
+                    
+                    // 粒子旋转运动和脉动
+                    gsap.to(particle, {
+                        rotation: 360,
+                        duration: Math.random() * 15 + 8,
+                        repeat: -1,
+                        ease: 'none'
+                    });
+                    
+                    // 随机大小变化模拟表面活动
+                    gsap.to(particle, {
+                        scale: Math.random() * 0.5 + 0.8,
+                        duration: Math.random() * 3 + 1,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: 'sine.inOut'
+                    });
+                }
+                
+                gsap.to(quantumParticleLayer, {
+                    opacity: 0.8,
+                    duration: 2
+                });
+            }
+            
+            // 激活日冕层
+            function activateCorona() {
+                if (!corona) return;
+                
+                gsap.to(corona, {
+                    opacity: 0.5,
+                    duration: 2
+                });
+            }
+            
+            // 创建3D Hello World文字
+            function createHelloWorld3D() {
+                if (!helloWorld3D) return;
+                
+                // 显示3D文字
+                gsap.to(helloWorld3D, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.5,
+                    ease: 'back.out(1.7)',
+                    onComplete: () => {
+                        // 2.5秒后淡出
+                        setTimeout(() => {
+                            gsap.to(helloWorld3D, {
+                                opacity: 0,
+                                scale: 0,
+                                duration: 1.5,
+                                ease: 'power2.in'
+                            });
+                        }, 2500);
+                    }
+                });
+            }
+            
+            // 初始化DOM元素并开始动画
+            initializeElements();
+            
+            if (!animationPlayed) {
+                setTimeout(showLightCircle, 2000);
+            }
+        }
+    </script>
+</body>
+</html>

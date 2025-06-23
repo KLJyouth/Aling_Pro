@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Pro 5.0 - 实时威胁监控与3D可视化</title>
+    
+    <!-- 核心样式 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+        
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px;
+            grid-template-rows: 60px 1fr 50px;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+        }
+        
+        .header {
+            grid-column: 1 / -1;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border: 1px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .header h1 {
+            color: #00ffff;
+            font-size: 24px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .status-label {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .status-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .sidebar-left, .sidebar-right {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            border: 1px solid #333;
+            overflow: hidden;
+        }
+        
+        .main-visualization {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            border: 1px solid #00ffff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar-header {
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .sidebar-content {
+            padding: 10px;
+            height: calc(100% - 50px);
+            overflow-y: auto;
+        }
+        
+        .threat-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff4757;
+            transition: all 0.3s;
+        }
+        
+        .threat-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .threat-item.high {
+            border-left-color: #ff3742;
+            box-shadow: 0 0 10px rgba(255, 55, 66, 0.3);
+        }
+        
+        .threat-item.medium {
+            border-left-color: #ff9f43;
+            box-shadow: 0 0 10px rgba(255, 159, 67, 0.3);
+        }
+        
+        .threat-item.low {
+            border-left-color: #10ac84;
+            box-shadow: 0 0 10px rgba(16, 172, 132, 0.3);
+        }
+        
+        .threat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .threat-ip {
+            font-family: 'Courier New', monospace;
+            color: #00ffff;
+            font-weight: bold;
+        }
+        
+        .threat-level {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .threat-level.high {
+            background: #ff3742;
+        }
+        
+        .threat-level.medium {
+            background: #ff9f43;
+        }
+        
+        .threat-level.low {
+            background: #10ac84;
+        }
+        
+        .threat-details {
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .threat-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .control-panel {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .control-btn {
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .control-btn.danger {
+            background: linear-gradient(45deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+        
+        .control-btn.success {
+            background: linear-gradient(45deg, #4ecdc4 0%, #44a08d 100%);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff4757;
+            box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.connected {
+            background: #2ed573;
+            box-shadow: 0 0 10px rgba(46, 213, 115, 0.5);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            padding: 0 20px;
+            border: 1px solid #333;
+        }
+        
+        .footer-left {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .footer-right {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+        
+        /* 3D可视化容器 */
+        #threat-globe-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        
+        .visualization-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 5px;
+            padding: 10px;
+            z-index: 100;
+        }
+        
+        .visualization-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 100;
+        }
+        
+        .viz-btn {
+            background: rgba(0, 255, 255, 0.8);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            color: #000;
+            cursor: pointer;
+            font-size: 10px;
+        }
+        
+        .threat-notification {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(255, 71, 87, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #ff3742;
+            max-width: 300px;
+            z-index: 1000;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: 60px 200px 1fr 50px;
+            }
+            
+            .sidebar-left, .sidebar-right {
+                display: none;
+            }
+        }
+    </style>
+    
+    <!-- Three.js 库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1>🛡️ AlingAI Pro 5.0 实时威胁监控</h1>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">威胁数</div>
+                    <div class="status-value" id="total-threats">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">阻止攻击</div>
+                    <div class="status-value" id="blocked-attacks">0</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">运行时间</div>
+                    <div class="status-value" id="uptime">00:00:00</div>
+                </div>
+                <div class="connection-status">
+                    <div class="status-indicator" id="connection-status"></div>
+                    <span id="connection-text">连接中...</span>
+                </div>
+            </div>
+        </header>
+        
+        <!-- 左侧边栏 - 实时威胁 -->
+        <aside class="sidebar-left">
+            <div class="sidebar-header">🚨 实时威胁监控</div>
+            <div class="sidebar-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="threat-rate">0.0</div>
+                        <div class="stat-label">威胁/分钟</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="active-ips">0</div>
+                        <div class="stat-label">活跃IP</div>
+                    </div>
+                </div>
+                <div id="threat-list">
+                    <!-- 威胁列表将动态填充 -->
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主要可视化区域 -->
+        <main class="main-visualization">
+            <div id="threat-globe-container"></div>
+            
+            <!-- 可视化覆盖层 -->
+            <div class="visualization-overlay">
+                <div style="font-size: 12px; color: #00ffff;">
+                    <div>🌍 全球威胁态势</div>
+                    <div id="globe-stats">正在加载...</div>
+                </div>
+            </div>
+            
+            <!-- 可视化控制 -->
+            <div class="visualization-controls">
+                <button class="viz-btn" onclick="toggleRotation()">暂停/继续</button>
+                <button class="viz-btn" onclick="resetView()">重置视图</button>
+                <button class="viz-btn" onclick="toggleThreats()">威胁节点</button>
+                <button class="viz-btn" onclick="toggleConnections()">攻击连线</button>
+                <button class="viz-btn" onclick="changeViewMode()">视图模式</button>
+            </div>
+        </main>
+        
+        <!-- 右侧边栏 - 系统状态 -->
+        <aside class="sidebar-right">
+            <div class="sidebar-header">📊 系统监控</div>
+            <div class="sidebar-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="cpu-usage">0%</div>
+                        <div class="stat-label">CPU使用率</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="memory-usage">0MB</div>
+                        <div class="stat-label">内存使用</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="disk-usage">0%</div>
+                        <div class="stat-label">磁盘使用</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="network-load">0 Mbps</div>
+                        <div class="stat-label">网络负载</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 15px 0 10px 0; color: #00ffff;">🔥 热点攻击源</h4>
+                <div id="attack-sources">
+                    <!-- 攻击源列表将动态填充 -->
+                </div>
+                
+                <h4 style="margin: 15px 0 10px 0; color: #00ffff;">🎯 攻击目标</h4>
+                <div id="attack-targets">
+                    <!-- 攻击目标列表将动态填充 -->
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 控制面板 -->
+        <div class="control-panel">
+            <button class="control-btn" onclick="startMonitoring()">▶️ 开始监控</button>
+            <button class="control-btn danger" onclick="stopMonitoring()">⏸️ 停止监控</button>
+            <button class="control-btn success" onclick="refreshData()">🔄 刷新数据</button>
+            <button class="control-btn" onclick="exportData()">📊 导出报告</button>
+            <button class="control-btn" onclick="openSettings()">⚙️ 设置</button>
+        </div>
+        
+        <!-- 底部状态栏 -->
+        <footer class="footer">
+            <div class="footer-left">
+                AlingAI Pro 5.0 Enterprise Security Suite | Version 5.0.0-Beta
+            </div>
+            <div class="footer-right">
+                <span>WebSocket: <span id="ws-status">断开</span></span>
+                <span>延迟: <span id="latency">0ms</span></span>
+                <span>© 2024 珑凌科技</span>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 通知容器 -->
+    <div id="notifications-container"></div>
+    
+    <!-- JavaScript -->
+    <script src="/assets/js/real-time-security-dashboard.js"></script>
+    <script>
+        // 全局变量
+        let ws = null;
+        let threatVisualization = null;
+        let isMonitoring = false;
+        let lastPingTime = 0;
+        
+        // WebSocket配置
+        const WS_URL = 'ws://{{ websocket_host|default('localhost') }}:{{ websocket_port|default('8080') }}';
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 初始化实时威胁监控系统...');
+            
+            // 初始化WebSocket连接
+            initWebSocket();
+            
+            // 初始化3D可视化
+            init3DVisualization();
+            
+            // 启动状态更新
+            startStatusUpdates();
+            
+            console.log('✅ 系统初始化完成');
+        });
+        
+        // 初始化WebSocket连接
+        function initWebSocket() {
+            try {
+                ws = new WebSocket(WS_URL);
+                
+                ws.onopen = function(event) {
+                    console.log('🔗 WebSocket连接已建立');
+                    updateConnectionStatus(true);
+                    requestInitialData();
+                };
+                
+                ws.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleWebSocketMessage(data);
+                    } catch (error) {
+                        console.error('❌ 解析WebSocket消息失败:', error);
+                    }
+                };
+                
+                ws.onclose = function(event) {
+                    console.log('📴 WebSocket连接已关闭');
+                    updateConnectionStatus(false);
+                    
+                    // 自动重连
+                    setTimeout(initWebSocket, 5000);
+                };
+                
+                ws.onerror = function(error) {
+                    console.error('❌ WebSocket连接错误:', error);
+                    updateConnectionStatus(false);
+                };
+                
+            } catch (error) {
+                console.error('❌ 初始化WebSocket失败:', error);
+                updateConnectionStatus(false);
+            }
+        }
+        
+        // 处理WebSocket消息
+        function handleWebSocketMessage(data) {
+            switch (data.type) {
+                case 'initial_data':
+                    handleInitialData(data.data);
+                    break;
+                    
+                case 'realtime_data':
+                    handleRealtimeData(data.data);
+                    break;
+                    
+                case 'threat_detected':
+                    handleThreatDetected(data.data);
+                    break;
+                    
+                case 'attack_blocked':
+                    handleAttackBlocked(data.data);
+                    break;
+                    
+                case 'threat_data':
+                    handleThreatData(data.data);
+                    break;
+                    
+                case 'statistics':
+                    handleStatistics(data.data);
+                    break;
+                    
+                case 'error':
+                    console.error('⚠️ 服务器错误:', data.message);
+                    showNotification('错误', data.message, 'error');
+                    break;
+                    
+                default:
+                    console.log('📝 未知消息类型:', data.type);
+            }
+        }
+        
+        // 处理初始数据
+        function handleInitialData(data) {
+            console.log('📊 接收到初始数据:', data);
+            
+            // 更新监控状态
+            isMonitoring = data.monitoring_status;
+            
+            // 更新统计信息
+            if (data.threat_statistics) {
+                updateStatistics(data.threat_statistics);
+            }
+            
+            // 更新系统指标
+            if (data.system_metrics) {
+                updateSystemMetrics(data.system_metrics);
+            }
+            
+            // 更新威胁列表
+            if (data.active_threats) {
+                updateThreatList(data.active_threats);
+            }
+        }
+        
+        // 处理实时数据
+        function handleRealtimeData(data) {
+            // 更新系统指标
+            if (data.system_metrics) {
+                updateSystemMetrics(data.system_metrics);
+            }
+            
+            // 更新连接状态
+            updateConnectionStatus(true);
+        }
+        
+        // 处理威胁检测
+        function handleThreatDetected(threatData) {
+            console.log('🚨 检测到新威胁:', threatData);
+            
+            // 添加到威胁列表
+            addThreatToList(threatData);
+            
+            // 在3D可视化中显示
+            if (threatVisualization) {
+                threatVisualization.addThreatMarker(threatData);
+            }
+            
+            // 显示通知
+            showThreatNotification(threatData);
+            
+            // 播放警报音
+            playAlertSound(threatData.threat_level);
+            
+            // 更新统计
+            incrementThreatCount();
+        }
+        
+        // 处理攻击阻止
+        function handleAttackBlocked(attackData) {
+            console.log('🛡️ 阻止攻击:', attackData);
+            
+            // 显示阻止通知
+            showNotification('攻击已阻止', `IP ${attackData.ip} 的攻击已被成功阻止`, 'success');
+            
+            // 更新统计
+            incrementBlockedCount();
+        }
+        
+        // 处理威胁数据
+        function handleThreatData(data) {
+            // 更新威胁列表
+            if (data.active_threats) {
+                updateThreatList(data.active_threats);
+            }
+            
+            // 更新统计
+            if (data.threat_statistics) {
+                updateStatistics(data.threat_statistics);
+            }
+        }
+        
+        // 处理统计数据
+        function handleStatistics(data) {
+            updateStatistics(data);
+        }
+        
+        // 更新连接状态
+        function updateConnectionStatus(connected) {
+            const indicator = document.getElementById('connection-status');
+            const text = document.getElementById('connection-text');
+            const wsStatus = document.getElementById('ws-status');
+            
+            if (connected) {
+                indicator.classList.add('connected');
+                text.textContent = '已连接';
+                wsStatus.textContent = '已连接';
+            } else {
+                indicator.classList.remove('connected');
+                text.textContent = '断开连接';
+                wsStatus.textContent = '断开';
+            }
+        }
+        
+        // 更新统计信息
+        function updateStatistics(stats) {
+            document.getElementById('total-threats').textContent = stats.total_threats || 0;
+            document.getElementById('blocked-attacks').textContent = stats.blocked_attacks || 0;
+            
+            if (stats.threat_rate) {
+                document.getElementById('threat-rate').textContent = stats.threat_rate.toFixed(1);
+            }
+        }
+        
+        // 更新系统指标
+        function updateSystemMetrics(metrics) {
+            if (metrics.cpu_usage !== undefined) {
+                document.getElementById('cpu-usage').textContent = metrics.cpu_usage.toFixed(1) + '%';
+            }
+            
+            if (metrics.memory_usage !== undefined) {
+                document.getElementById('memory-usage').textContent = 
+                    Math.round(metrics.memory_usage / 1024 / 1024) + 'MB';
+            }
+            
+            if (metrics.disk_usage !== undefined) {
+                document.getElementById('disk-usage').textContent = metrics.disk_usage.toFixed(1) + '%';
+            }
+        }
+        
+        // 更新威胁列表
+        function updateThreatList(threats) {
+            const threatList = document.getElementById('threat-list');
+            threatList.innerHTML = '';
+            
+            threats.forEach(threat => {
+                addThreatToList(threat, false);
+            });
+        }
+        
+        // 添加威胁到列表
+        function addThreatToList(threat, prepend = true) {
+            const threatList = document.getElementById('threat-list');
+            const threatItem = document.createElement('div');
+            
+            const levelClass = getThreatLevelClass(threat.threat_level);
+            threatItem.className = `threat-item ${levelClass}`;
+            
+            threatItem.innerHTML = `
+                <div class="threat-header">
+                    <span class="threat-ip">${threat.ip || threat.source_ip}</span>
+                    <span class="threat-level ${levelClass}">${threat.threat_level}</span>
+                </div>
+                <div class="threat-details">
+                    类型: ${threat.threats ? threat.threats.map(t => t.type).join(', ') : threat.type || 'Unknown'}
+                </div>
+                <div class="threat-time">
+                    ${new Date(threat.timestamp * 1000 || Date.now()).toLocaleTimeString()}
+                </div>
+            `;
+            
+            if (prepend) {
+                threatList.insertBefore(threatItem, threatList.firstChild);
+            } else {
+                threatList.appendChild(threatItem);
+            }
+            
+            // 限制列表长度
+            while (threatList.children.length > 20) {
+                threatList.removeChild(threatList.lastChild);
+            }
+        }
+        
+        // 获取威胁级别CSS类
+        function getThreatLevelClass(level) {
+            if (typeof level === 'number') {
+                if (level >= 80) return 'high';
+                if (level >= 50) return 'medium';
+                return 'low';
+            }
+            
+            return level?.toLowerCase() || 'low';
+        }
+        
+        // 显示威胁通知
+        function showThreatNotification(threat) {
+            const notification = document.createElement('div');
+            notification.className = 'threat-notification';
+            
+            notification.innerHTML = `
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+                <strong>🚨 威胁警报</strong><br>
+                IP: ${threat.ip || threat.source_ip}<br>
+                级别: ${threat.threat_level}<br>
+                类型: ${threat.threats ? threat.threats.map(t => t.type).join(', ') : threat.type}
+            `;
+            
+            document.getElementById('notifications-container').appendChild(notification);
+            
+            // 自动移除
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 10000);
+        }
+        
+        // 显示通知
+        function showNotification(title, message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `threat-notification ${type}`;
+            
+            notification.innerHTML = `
+                <button class="notification-close" onclick="this.parentElement.remove()">×</button>
+                <strong>${title}</strong><br>
+                ${message}
+            `;
+            
+            document.getElementById('notifications-container').appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+        
+        // 播放警报音
+        function playAlertSound(level) {
+            // 这里可以添加音频播放逻辑
+            console.log('🔊 播放警报音:', level);
+        }
+        
+        // 增加威胁计数
+        function incrementThreatCount() {
+            const element = document.getElementById('total-threats');
+            element.textContent = parseInt(element.textContent) + 1;
+        }
+        
+        // 增加阻止计数
+        function incrementBlockedCount() {
+            const element = document.getElementById('blocked-attacks');
+            element.textContent = parseInt(element.textContent) + 1;
+        }
+        
+        // 启动状态更新
+        function startStatusUpdates() {
+            // 更新运行时间
+            setInterval(() => {
+                updateUptime();
+                updateLatency();
+            }, 1000);
+        }
+        
+        // 更新运行时间
+        function updateUptime() {
+            // 这里应该从服务器获取真实的运行时间
+            const uptimeElement = document.getElementById('uptime');
+            const currentTime = uptimeElement.textContent;
+            const [hours, minutes, seconds] = currentTime.split(':').map(Number);
+            
+            let newSeconds = seconds + 1;
+            let newMinutes = minutes;
+            let newHours = hours;
+            
+            if (newSeconds >= 60) {
+                newSeconds = 0;
+                newMinutes++;
+                if (newMinutes >= 60) {
+                    newMinutes = 0;
+                    newHours++;
+                }
+            }
+            
+            uptimeElement.textContent = 
+                `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}:${newSeconds.toString().padStart(2, '0')}`;
+        }
+        
+        // 更新延迟
+        function updateLatency() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const pingTime = Date.now();
+                ws.send(JSON.stringify({ action: 'ping', timestamp: pingTime }));
+                lastPingTime = pingTime;
+            }
+        }
+        
+        // 请求初始数据
+        function requestInitialData() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: 'request_initial_data' }));
+            }
+        }
+        
+        // 控制函数
+        function startMonitoring() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: 'start_monitoring' }));
+            }
+        }
+        
+        function stopMonitoring() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: 'stop_monitoring' }));
+            }
+        }
+        
+        function refreshData() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ action: 'request_threat_data' }));
+                ws.send(JSON.stringify({ action: 'request_statistics' }));
+            }
+        }
+        
+        function exportData() {
+            // 实现数据导出功能
+            showNotification('导出', '正在准备报告...', 'info');
+        }
+        
+        function openSettings() {
+            // 实现设置界面
+            showNotification('设置', '设置界面开发中...', 'info');
+        }
+        
+        // 3D可视化相关函数（占位符）
+        function init3DVisualization() {
+            console.log('🌍 初始化3D威胁可视化...');
+            // 这里将集成之前创建的3D可视化代码
+        }
+        
+        function toggleRotation() {
+            console.log('⏸️ 切换旋转状态');
+        }
+        
+        function resetView() {
+            console.log('🔄 重置视图');
+        }
+        
+        function toggleThreats() {
+            console.log('🔴 切换威胁节点显示');
+        }
+        
+        function toggleConnections() {
+            console.log('🔗 切换攻击连线显示');
+        }
+        
+        function changeViewMode() {
+            console.log('👀 切换视图模式');
+        }
+    </script>
+</body>
+</html>

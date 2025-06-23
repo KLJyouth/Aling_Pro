@@ -1,0 +1,99 @@
+{
+    "test_time": "2025-06-09 07:50:06",
+    "total_tests": 15,
+    "passed_tests": 0,
+    "failed_tests": 15,
+    "success_rate": 0,
+    "results": {
+        "API\u9996\u9875": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "API\u72b6\u6001": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u7cfb\u7edf\u5065\u5eb7\u68c0\u67e5": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u7528\u6237\u767b\u5f55": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u7528\u6237\u6ce8\u518c": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u7528\u6237\u4fe1\u606f": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 401,
+            "response": false
+        },
+        "\u83b7\u53d6\u7528\u6237\u5217\u8868": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 401,
+            "response": false
+        },
+        "\u7528\u6237\u7edf\u8ba1\u4fe1\u606f": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 401,
+            "response": false
+        },
+        "\u83b7\u53d6\u7cfb\u7edf\u8bbe\u7f6e": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u7cfb\u7edf\u4fe1\u606f": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u6587\u4ef6\u4e0a\u4f20\u7aef\u70b9": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 405,
+            "response": false
+        },
+        "\u6570\u636e\u5e93\u72b6\u6001": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "\u6570\u636e\u5e93\u7edf\u8ba1": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "AI\u670d\u52a1\u72b6\u6001": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        },
+        "AI\u6a21\u578b\u5217\u8868": {
+            "success": false,
+            "http_code": 0,
+            "expected_code": 200,
+            "response": false
+        }
+    }
+}

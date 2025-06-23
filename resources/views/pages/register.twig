@@ -1,0 +1,1507 @@
+{% extends "layouts/app.twig" %}
+
+{% set page_title = "用户注册" %}
+{% set page_description = "注册AlingAi账户，开启您的AI智能助手之旅" %}
+{% set hide_navigation = true %}
+{% set register_page = true %}
+
+{% block content %}
+<div class="auth-container">
+    <!-- 背景动画效果 -->
+    <div class="auth-bg">
+        <div class="quantum-field auth-quantum"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+    </div>
+
+    <!-- 主要注册区域 -->
+    <div class="auth-main">
+        <div class="container-fluid h-100">
+            <div class="row h-100 g-0">
+                <!-- 左侧品牌展示区 -->
+                <div class="col-lg-5 d-none d-lg-flex auth-brand">
+                    <div class="brand-content">
+                        <div class="brand-logo">
+                            <img src="/images/logo-light.svg" alt="AlingAi Logo" class="logo-img">
+                            <h1 class="brand-title">AlingAi</h1>
+                        </div>
+                        <div class="brand-tagline">
+                            <h2>加入AI革命</h2>
+                            <p>与全球用户一起探索人工智能的无限可能</p>
+                        </div>
+                        <div class="brand-benefits">
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <i class="bi bi-rocket-takeoff"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>免费开始</h4>
+                                    <p>注册即可免费体验强大的AI功能</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <i class="bi bi-shield-lock"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>隐私保护</h4>
+                                    <p>您的数据安全是我们的首要任务</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <i class="bi bi-globe"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>全球社区</h4>
+                                    <p>与世界各地的AI爱好者交流学习</p>
+                                </div>
+                            </div>
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <i class="bi bi-graph-up"></i>
+                                </div>
+                                <div class="benefit-content">
+                                    <h4>持续更新</h4>
+                                    <p>最新AI技术和功能持续为您提供</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="testimonial">
+                            <div class="testimonial-content">
+                                <i class="bi bi-quote"></i>
+                                <p>"AlingAi改变了我的工作方式，让我的效率提升了300%！"</p>
+                                <div class="testimonial-author">
+                                    <img src="/images/avatars/user1.jpg" alt="User Avatar" class="author-avatar">
+                                    <div class="author-info">
+                                        <strong>张小明</strong>
+                                        <span>产品经理</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧注册表单区 -->
+                <div class="col-lg-7 col-12 auth-form-section">
+                    <div class="auth-form-container">
+                        <!-- 移动端logo -->
+                        <div class="mobile-brand d-lg-none">
+                            <img src="/images/logo.svg" alt="AlingAi" class="mobile-logo">
+                            <h1>AlingAi</h1>
+                        </div>
+
+                        <!-- 注册表单 -->
+                        <div class="auth-form-wrapper">
+                            <div class="auth-header">
+                                <h2 class="auth-title">
+                                    <i class="bi bi-person-plus me-2"></i>
+                                    创建账户
+                                </h2>
+                                <p class="auth-subtitle">开始您的AI智能助手之旅</p>
+                            </div>
+
+                            <!-- 社交注册按钮 -->
+                            <div class="social-login mb-4">
+                                <button class="btn social-btn google-btn" type="button">
+                                    <i class="bi bi-google"></i>
+                                    <span>使用Google注册</span>
+                                </button>
+                                <button class="btn social-btn github-btn" type="button">
+                                    <i class="bi bi-github"></i>
+                                    <span>使用GitHub注册</span>
+                                </button>
+                            </div>
+
+                            <div class="divider">
+                                <span>或使用邮箱注册</span>
+                            </div>
+
+                            <!-- 注册表单 -->
+                            <form id="registerForm" class="auth-form" novalidate>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="username" class="form-label">
+                                                <i class="bi bi-person me-1"></i>
+                                                用户名
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-at"></i>
+                                                </span>
+                                                <input 
+                                                    type="text" 
+                                                    class="form-control" 
+                                                    id="username" 
+                                                    name="username" 
+                                                    placeholder="请输入用户名"
+                                                    required
+                                                    autocomplete="username"
+                                                    data-validation="required|min:3|max:20|username"
+                                                >
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                            <div class="form-hint">
+                                                <small class="text-muted">3-20个字符，字母数字下划线</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="email" class="form-label">
+                                                <i class="bi bi-envelope me-1"></i>
+                                                邮箱地址
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-envelope-at"></i>
+                                                </span>
+                                                <input 
+                                                    type="email" 
+                                                    class="form-control" 
+                                                    id="email" 
+                                                    name="email" 
+                                                    placeholder="请输入邮箱地址"
+                                                    required
+                                                    autocomplete="email"
+                                                    data-validation="required|email"
+                                                >
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="password" class="form-label">
+                                                <i class="bi bi-key me-1"></i>
+                                                密码
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-lock"></i>
+                                                </span>
+                                                <input 
+                                                    type="password" 
+                                                    class="form-control" 
+                                                    id="password" 
+                                                    name="password" 
+                                                    placeholder="请输入密码"
+                                                    required
+                                                    autocomplete="new-password"
+                                                    data-validation="required|min:8|password"
+                                                >
+                                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                            <!-- 密码强度指示器 -->
+                                            <div class="password-strength">
+                                                <div class="strength-bar">
+                                                    <div class="strength-fill"></div>
+                                                </div>
+                                                <small class="strength-text text-muted">密码强度</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="password_confirmation" class="form-label">
+                                                <i class="bi bi-shield-check me-1"></i>
+                                                确认密码
+                                            </label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">
+                                                    <i class="bi bi-lock-fill"></i>
+                                                </span>
+                                                <input 
+                                                    type="password" 
+                                                    class="form-control" 
+                                                    id="password_confirmation" 
+                                                    name="password_confirmation" 
+                                                    placeholder="请再次输入密码"
+                                                    required
+                                                    autocomplete="new-password"
+                                                    data-validation="required|match:password"
+                                                >
+                                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 个人信息（可选） -->
+                                <div class="optional-section">
+                                    <h6 class="section-title">
+                                        <i class="bi bi-person-vcard me-2"></i>
+                                        个人信息（可选）
+                                        <button type="button" class="btn btn-sm btn-link toggle-optional">
+                                            <i class="bi bi-chevron-down"></i>
+                                        </button>
+                                    </h6>
+                                    <div class="optional-fields" style="display: none;">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="first_name" class="form-label">姓名</label>
+                                                    <input 
+                                                        type="text" 
+                                                        class="form-control" 
+                                                        id="first_name" 
+                                                        name="first_name" 
+                                                        placeholder="请输入姓名"
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="phone" class="form-label">手机号码</label>
+                                                    <input 
+                                                        type="tel" 
+                                                        class="form-control" 
+                                                        id="phone" 
+                                                        name="phone" 
+                                                        placeholder="请输入手机号码"
+                                                        data-validation="phone"
+                                                    >
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="company" class="form-label">公司/组织</label>
+                                            <input 
+                                                type="text" 
+                                                class="form-control" 
+                                                id="company" 
+                                                name="company" 
+                                                placeholder="请输入公司或组织名称"
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 服务条款和隐私政策 -->
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input 
+                                            class="form-check-input" 
+                                            type="checkbox" 
+                                            id="terms" 
+                                            name="terms" 
+                                            required
+                                            data-validation="required"
+                                        >
+                                        <label class="form-check-label" for="terms">
+                                            我已阅读并同意
+                                            <a href="/terms" target="_blank" class="link-primary">服务条款</a>
+                                            和
+                                            <a href="/privacy" target="_blank" class="link-primary">隐私政策</a>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- 营销邮件订阅 -->
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="newsletter" name="newsletter">
+                                        <label class="form-check-label" for="newsletter">
+                                            接收产品更新和技巧分享邮件（可选）
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary auth-submit" id="registerSubmit">
+                                    <span class="btn-text">
+                                        <i class="bi bi-person-plus-fill me-2"></i>
+                                        创建账户
+                                    </span>
+                                    <span class="btn-loading d-none">
+                                        <span class="spinner-border spinner-border-sm me-2"></span>
+                                        注册中...
+                                    </span>
+                                </button>
+                            </form>
+
+                            <!-- 登录链接 -->
+                            <div class="auth-footer">
+                                <p class="login-prompt">
+                                    已有账户？
+                                    <a href="{{ url_for('auth.login') }}" class="login-link">
+                                        立即登录
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 安全保障 -->
+                        <div class="security-notice">
+                            <div class="security-features">
+                                <div class="security-item">
+                                    <i class="bi bi-shield-lock-fill text-success"></i>
+                                    <span>SSL加密</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="bi bi-eye-slash-fill text-success"></i>
+                                    <span>隐私保护</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                    <span>安全认证</span>
+                                </div>
+                                <div class="security-item">
+                                    <i class="bi bi-globe2 text-success"></i>
+                                    <span>GDPR合规</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 帮助浮动按钮 -->
+    <div class="auth-help">
+        <button class="btn btn-floating help-btn" data-bs-toggle="modal" data-bs-target="#helpModal">
+            <i class="bi bi-question-circle"></i>
+        </button>
+    </div>
+</div>
+
+<!-- 帮助模态框 -->
+<div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-info-circle me-2"></i>
+                    注册帮助
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h6><i class="bi bi-person-plus me-2"></i>注册方式</h6>
+                    <ul>
+                        <li>使用邮箱地址快速注册</li>
+                        <li>支持Google、GitHub第三方注册</li>
+                        <li>注册后需验证邮箱激活账户</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h6><i class="bi bi-shield-check me-2"></i>密码要求</h6>
+                    <ul>
+                        <li>至少8个字符长度</li>
+                        <li>包含大小写字母、数字</li>
+                        <li>建议包含特殊符号增强安全性</li>
+                    </ul>
+                </div>
+                <div class="help-section">
+                    <h6><i class="bi bi-envelope me-2"></i>邮箱验证</h6>
+                    <p>注册后我们会发送验证邮件到您的邮箱，请点击邮件中的链接完成账户激活。</p>
+                </div>
+                <div class="help-section">
+                    <h6><i class="bi bi-telephone me-2"></i>需要帮助？</h6>
+                    <p>如遇到问题，请联系客服：<a href="mailto:support@alingai.com">support@alingai.com</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 邮箱验证提示模态框 -->
+<div class="modal fade" id="verificationModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-envelope-check me-2 text-success"></i>
+                    验证您的邮箱
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <div class="verification-icon mb-3">
+                    <i class="bi bi-envelope-check-fill" style="font-size: 4rem; color: #28a745;"></i>
+                </div>
+                <h6>注册成功！</h6>
+                <p class="mb-3">我们已向您的邮箱 <strong id="verificationEmail"></strong> 发送了验证邮件。</p>
+                <p class="text-muted small">请检查您的收件箱和垃圾邮件文件夹，点击邮件中的验证链接来激活您的账户。</p>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="button" class="btn btn-primary" id="resendVerification">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        重新发送验证邮件
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/auth/login'">
+                        <i class="bi bi-box-arrow-in-right me-2"></i>
+                        前往登录
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+/* 继承登录页面的基础样式 */
+.auth-container {
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    z-index: 1;
+}
+
+.auth-quantum {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.3;
+}
+
+.floating-shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.floating-shapes .shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 25s infinite linear;
+}
+
+.shape-1 { width: 50px; height: 50px; top: 15%; left: 8%; animation-delay: 0s; }
+.shape-2 { width: 70px; height: 70px; top: 55%; left: 15%; animation-delay: 5s; }
+.shape-3 { width: 35px; height: 35px; top: 25%; right: 20%; animation-delay: 10s; }
+.shape-4 { width: 90px; height: 90px; top: 75%; right: 30%; animation-delay: 15s; }
+.shape-5 { width: 45px; height: 45px; top: 45%; left: 50%; animation-delay: 20s; }
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-25px) rotate(90deg); }
+    50% { transform: translateY(0px) rotate(180deg); }
+    75% { transform: translateY(-25px) rotate(270deg); }
+}
+
+.auth-main {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+}
+
+/* 品牌展示区（注册页特殊样式） */
+.auth-brand {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px);
+    color: white;
+    padding: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-content {
+    max-width: 420px;
+    text-align: left;
+}
+
+.brand-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+}
+
+.brand-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    background: linear-gradient(45deg, #fff, #f0f8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.brand-tagline {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.brand-tagline h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #f8f9fa;
+}
+
+.brand-tagline p {
+    color: #e9ecef;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* 优势列表 */
+.brand-benefits {
+    margin-bottom: 2rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(77, 171, 247, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.benefit-icon i {
+    font-size: 1.5rem;
+    color: #4dabf7;
+}
+
+.benefit-content h4 {
+    font-size: 1rem;
+    margin: 0 0 0.25rem 0;
+    color: #f8f9fa;
+    font-weight: 600;
+}
+
+.benefit-content p {
+    font-size: 0.85rem;
+    color: #e9ecef;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* 用户评价 */
+.testimonial {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+}
+
+.testimonial-content {
+    text-align: center;
+}
+
+.testimonial-content .bi-quote {
+    font-size: 2rem;
+    color: #4dabf7;
+    margin-bottom: 1rem;
+}
+
+.testimonial-content p {
+    font-style: italic;
+    color: #f8f9fa;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.author-info strong {
+    display: block;
+    color: #f8f9fa;
+    font-size: 0.9rem;
+}
+
+.author-info span {
+    color: #e9ecef;
+    font-size: 0.8rem;
+}
+
+/* 表单区域 */
+.auth-form-section {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 550px;
+}
+
+.mobile-brand {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.mobile-logo {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 0.5rem;
+}
+
+.mobile-brand h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #495057;
+    margin: 0;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: #6c757d;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* 社交登录按钮 */
+.social-login {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.google-btn {
+    background: #fff;
+    color: #db4437;
+}
+
+.google-btn:hover {
+    background: #db4437;
+    color: white;
+    border-color: #db4437;
+}
+
+.github-btn {
+    background: #333;
+    color: white;
+    border-color: #333;
+}
+
+.github-btn:hover {
+    background: #24292e;
+    border-color: #24292e;
+}
+
+.social-btn i {
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #dee2e6;
+}
+
+.divider span {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* 表单样式 */
+.auth-form .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-form .form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.auth-form .input-group-text {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #6c757d;
+}
+
+.auth-form .form-control {
+    padding: 0.75rem;
+    border-radius: 0 8px 8px 0;
+    border-color: #ced4da;
+    transition: all 0.3s ease;
+}
+
+.auth-form .form-control:focus {
+    border-color: #4dabf7;
+    box-shadow: 0 0 0 0.2rem rgba(77, 171, 247, 0.25);
+}
+
+.form-hint {
+    margin-top: 0.25rem;
+}
+
+.form-hint small {
+    font-size: 0.8rem;
+}
+
+.toggle-password {
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    background: #f8f9fa;
+}
+
+/* 密码强度指示器 */
+.password-strength {
+    margin-top: 0.5rem;
+}
+
+.strength-bar {
+    height: 4px;
+    background: #e9ecef;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+}
+
+.strength-fill {
+    height: 100%;
+    background: #dc3545;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.strength-text {
+    font-size: 0.8rem;
+}
+
+/* 强度等级颜色 */
+.strength-weak .strength-fill { background: #dc3545; width: 25%; }
+.strength-fair .strength-fill { background: #fd7e14; width: 50%; }
+.strength-good .strength-fill { background: #ffc107; width: 75%; }
+.strength-strong .strength-fill { background: #28a745; width: 100%; }
+
+/* 可选信息区域 */
+.optional-section {
+    margin: 1.5rem 0;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    background: #f8f9fa;
+}
+
+.section-title {
+    padding: 1rem;
+    margin: 0;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    color: #495057;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+}
+
+.toggle-optional {
+    padding: 0;
+    color: #6c757d;
+    text-decoration: none;
+}
+
+.optional-fields {
+    padding: 1rem;
+}
+
+.optional-fields .form-group {
+    margin-bottom: 1rem;
+}
+
+/* 表单检查项 */
+.form-check {
+    margin-bottom: 1rem;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.form-check-label a {
+    color: #4dabf7;
+    text-decoration: none;
+}
+
+.form-check-label a:hover {
+    text-decoration: underline;
+}
+
+.auth-submit {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #4dabf7, #339af0);
+    border: none;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.auth-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(77, 171, 247, 0.4);
+}
+
+.auth-footer {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.login-prompt {
+    margin: 0;
+    color: #6c757d;
+}
+
+.login-link {
+    color: #4dabf7;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-link:hover {
+    color: #339af0;
+    text-decoration: underline;
+}
+
+/* 安全保障显示 */
+.security-notice {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(40, 167, 69, 0.1);
+    border-radius: 8px;
+}
+
+.security-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+}
+
+.security-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #155724;
+}
+
+.security-item i {
+    margin-right: 0.5rem;
+    font-size: 1rem;
+}
+
+/* 帮助按钮 */
+.auth-help {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+}
+
+.help-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #4dabf7;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(77, 171, 247, 0.4);
+    transition: all 0.3s ease;
+}
+
+.help-btn:hover {
+    transform: scale(1.1);
+    background: #339af0;
+}
+
+/* 模态框样式 */
+.help-section {
+    margin-bottom: 1.5rem;
+}
+
+.help-section:last-child {
+    margin-bottom: 0;
+}
+
+.help-section h6 {
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.help-section ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
+.help-section li {
+    margin-bottom: 0.25rem;
+    color: #6c757d;
+}
+
+.verification-icon {
+    animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* 响应式设计 */
+@media (max-width: 991.98px) {
+    .auth-form-section {
+        min-height: 100vh;
+        padding: 1.5rem;
+    }
+    
+    .social-login {
+        grid-template-columns: 1fr;
+    }
+    
+    .security-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .benefit-item {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .auth-form-container {
+        max-width: 100%;
+    }
+    
+    .optional-fields .row {
+        margin: 0;
+    }
+    
+    .optional-fields .col-md-6 {
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .auth-help {
+        bottom: 1rem;
+        right: 1rem;
+    }
+    
+    .help-btn {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .auth-form-section {
+        padding: 1rem;
+    }
+    
+    .auth-title {
+        font-size: 1.5rem;
+    }
+    
+    .brand-benefits {
+        margin-bottom: 1.5rem;
+    }
+    
+    .benefit-item {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .benefit-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .benefit-icon i {
+        font-size: 1.25rem;
+    }
+}
+
+/* 表单验证样式 */
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.invalid-feedback {
+    display: block;
+    font-size: 0.875rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+/* 加载动画 */
+.btn-loading .spinner-border {
+    width: 1rem;
+    height: 1rem;
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 可选信息展开/收起
+    document.querySelector('.toggle-optional')?.addEventListener('click', function() {
+        const fields = document.querySelector('.optional-fields');
+        const icon = this.querySelector('i');
+        
+        if (fields.style.display === 'none') {
+            fields.style.display = 'block';
+            icon.className = 'bi bi-chevron-up';
+        } else {
+            fields.style.display = 'none';
+            icon.className = 'bi bi-chevron-down';
+        }
+    });
+    
+    // 密码可见性切换
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.toggle-password')) {
+            const button = e.target.closest('.toggle-password');
+            const input = button.parentElement.querySelector('input');
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'bi bi-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'bi bi-eye';
+            }
+        }
+    });
+    
+    // 密码强度检测
+    const passwordInput = document.getElementById('password');
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            checkPasswordStrength(this.value);
+        });
+    }
+    
+    // 表单验证
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!validateForm(this)) {
+                return;
+            }
+            
+            const submitBtn = document.getElementById('registerSubmit');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            
+            // 显示加载状态
+            btnText.classList.add('d-none');
+            btnLoading.classList.remove('d-none');
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(this);
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 显示邮箱验证模态框
+                    document.getElementById('verificationEmail').textContent = formData.get('email');
+                    const verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
+                    verificationModal.show();
+                } else {
+                    showNotification(result.message || '注册失败，请检查输入信息', 'error');
+                    
+                    // 显示字段错误
+                    if (result.errors) {
+                        showFieldErrors(result.errors);
+                    }
+                }
+            } catch (error) {
+                console.error('注册错误:', error);
+                showNotification('网络错误，请稍后重试', 'error');
+            } finally {
+                // 恢复按钮状态
+                btnText.classList.remove('d-none');
+                btnLoading.classList.add('d-none');
+                submitBtn.disabled = false;
+            }
+        });
+    }
+    
+    // 重新发送验证邮件
+    document.getElementById('resendVerification')?.addEventListener('click', async function() {
+        const email = document.getElementById('verificationEmail').textContent;
+        const button = this;
+        const originalText = button.innerHTML;
+        
+        button.disabled = true;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>发送中...';
+        
+        try {
+            const response = await fetch('/auth/resend-verification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({ email: email })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                showNotification('验证邮件已重新发送', 'success');
+            } else {
+                showNotification(result.message || '发送失败，请稍后重试', 'error');
+            }
+        } catch (error) {
+            console.error('重发邮件错误:', error);
+            showNotification('网络错误，请稍后重试', 'error');
+        } finally {
+            button.disabled = false;
+            button.innerHTML = originalText;
+        }
+    });
+    
+    // 社交注册
+    document.querySelector('.google-btn')?.addEventListener('click', function() {
+        window.location.href = '/auth/google?action=register';
+    });
+    
+    document.querySelector('.github-btn')?.addEventListener('click', function() {
+        window.location.href = '/auth/github?action=register';
+    });
+});
+
+// 密码强度检测
+function checkPasswordStrength(password) {
+    const strengthBar = document.querySelector('.strength-fill');
+    const strengthText = document.querySelector('.strength-text');
+    const strengthContainer = document.querySelector('.password-strength');
+    
+    if (!strengthBar || !strengthText || !strengthContainer) return;
+    
+    let score = 0;
+    let feedback = '';
+    
+    if (password.length >= 8) score += 1;
+    if (password.match(/[a-z]/)) score += 1;
+    if (password.match(/[A-Z]/)) score += 1;
+    if (password.match(/[0-9]/)) score += 1;
+    if (password.match(/[^a-zA-Z0-9]/)) score += 1;
+    
+    // 移除所有强度类
+    strengthContainer.classList.remove('strength-weak', 'strength-fair', 'strength-good', 'strength-strong');
+    
+    switch (score) {
+        case 0:
+        case 1:
+            strengthContainer.classList.add('strength-weak');
+            feedback = '密码太弱';
+            break;
+        case 2:
+            strengthContainer.classList.add('strength-fair');
+            feedback = '密码较弱';
+            break;
+        case 3:
+        case 4:
+            strengthContainer.classList.add('strength-good');
+            feedback = '密码较强';
+            break;
+        case 5:
+            strengthContainer.classList.add('strength-strong');
+            feedback = '密码很强';
+            break;
+    }
+    
+    strengthText.textContent = feedback;
+}
+
+// 表单验证函数
+function validateForm(form) {
+    const inputs = form.querySelectorAll('[data-validation]');
+    let isValid = true;
+    
+    inputs.forEach(input => {
+        const rules = input.getAttribute('data-validation').split('|');
+        const value = input.value.trim();
+        let fieldValid = true;
+        let errorMessage = '';
+        
+        // 清除之前的验证状态
+        input.classList.remove('is-valid', 'is-invalid');
+        const feedback = input.parentElement.querySelector('.invalid-feedback') || 
+                        input.closest('.form-group').querySelector('.invalid-feedback');
+        if (feedback) feedback.textContent = '';
+        
+        // 验证规则
+        for (const rule of rules) {
+            if (rule === 'required' && !value) {
+                fieldValid = false;
+                errorMessage = '此字段为必填项';
+                break;
+            }
+            
+            if (rule.startsWith('min:')) {
+                const minLength = parseInt(rule.split(':')[1]);
+                if (value.length < minLength && value.length > 0) {
+                    fieldValid = false;
+                    errorMessage = `最少需要${minLength}个字符`;
+                    break;
+                }
+            }
+            
+            if (rule.startsWith('max:')) {
+                const maxLength = parseInt(rule.split(':')[1]);
+                if (value.length > maxLength) {
+                    fieldValid = false;
+                    errorMessage = `最多允许${maxLength}个字符`;
+                    break;
+                }
+            }
+            
+            if (rule === 'email' && value && !isValidEmail(value)) {
+                fieldValid = false;
+                errorMessage = '请输入有效的邮箱地址';
+                break;
+            }
+            
+            if (rule === 'username' && value && !isValidUsername(value)) {
+                fieldValid = false;
+                errorMessage = '用户名只能包含字母、数字和下划线';
+                break;
+            }
+            
+            if (rule === 'password' && value && !isStrongPassword(value)) {
+                fieldValid = false;
+                errorMessage = '密码需包含大小写字母、数字，至少8个字符';
+                break;
+            }
+            
+            if (rule === 'phone' && value && !isValidPhone(value)) {
+                fieldValid = false;
+                errorMessage = '请输入有效的手机号码';
+                break;
+            }
+            
+            if (rule.startsWith('match:')) {
+                const matchField = rule.split(':')[1];
+                const matchInput = form.querySelector(`[name="${matchField}"]`);
+                if (matchInput && value !== matchInput.value) {
+                    fieldValid = false;
+                    errorMessage = '两次输入的密码不匹配';
+                    break;
+                }
+            }
+        }
+        
+        // 应用验证结果
+        if (fieldValid && value) {
+            input.classList.add('is-valid');
+        } else if (!fieldValid) {
+            input.classList.add('is-invalid');
+            if (feedback) feedback.textContent = errorMessage;
+            isValid = false;
+        }
+    });
+    
+    // 检查必需的复选框
+    const termsCheckbox = form.querySelector('#terms');
+    if (termsCheckbox && !termsCheckbox.checked) {
+        showNotification('请阅读并同意服务条款和隐私政策', 'error');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+// 验证函数
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidUsername(username) {
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    return usernameRegex.test(username);
+}
+
+function isStrongPassword(password) {
+    return password.length >= 8 && 
+           /[a-z]/.test(password) && 
+           /[A-Z]/.test(password) && 
+           /[0-9]/.test(password);
+}
+
+function isValidPhone(phone) {
+    const phoneRegex = /^1[3-9]\d{9}$/;
+    return phoneRegex.test(phone);
+}
+
+// 显示字段错误
+function showFieldErrors(errors) {
+    Object.keys(errors).forEach(fieldName => {
+        const input = document.querySelector(`[name="${fieldName}"]`);
+        if (input) {
+            input.classList.add('is-invalid');
+            const feedback = input.parentElement.querySelector('.invalid-feedback') || 
+                            input.closest('.form-group').querySelector('.invalid-feedback');
+            if (feedback) {
+                feedback.textContent = errors[fieldName][0]; // 显示第一个错误
+            }
+        }
+    });
+}
+
+// 通知系统
+function showNotification(message, type = 'info') {
+    // 创建通知元素
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'error' ? 'danger' : type} alert-dismissible notification-toast`;
+    notification.innerHTML = `
+        <div class="d-flex align-items-center">
+            <i class="bi bi-${getNotificationIcon(type)} me-2"></i>
+            <span>${message}</span>
+            <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert"></button>
+        </div>
+    `;
+    
+    // 添加到页面
+    const container = document.querySelector('.auth-form-container') || document.body;
+    container.insertBefore(notification, container.firstChild);
+    
+    // 自动删除
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+function getNotificationIcon(type) {
+    const icons = {
+        success: 'check-circle',
+        error: 'exclamation-triangle',
+        warning: 'exclamation-triangle',
+        info: 'info-circle'
+    };
+    return icons[type] || 'info-circle';
+}
+</script>
+{% endblock %}

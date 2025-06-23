@@ -1,0 +1,430 @@
+try {
+/**
+ * AlingAi Pro - 悬浮按钮管理系统
+ * 统一管理所有悬浮按钮的位置、层级和交互，防止重叠和冲突
+ */
+
+class FloatingButtonsManager {
+    constructor() {
+        this.buttons = new Map();
+        this.zIndexBase = 1000;
+        this.positions = {
+            // 定义标准位置网格 (右侧边栏区域)
+            'top-right-1': { top: '20px', right: '20px' },      // 性能仪表板
+            'top-right-2': { top: '90px', right: '20px' },      // 扩展位置1  
+            'middle-right-1': { top: '50%', right: '20px', transform: 'translateY(-50%)' }, // 中间位置
+            'bottom-right-1': { bottom: '140px', right: '20px' }, // 聊天按钮
+            'bottom-right-2': { bottom: '80px', right: '20px' },  // 自定义按钮
+            'bottom-right-3': { bottom: '20px', right: '20px' },  // 调试控制台
+            
+            // 左侧位置 (如果需要)
+            'bottom-left-1': { bottom: '20px', left: '20px' },
+            'top-left-1': { top: '20px', left: '20px' }
+        };
+        this.occupiedPositions = new Set();
+        this.init();
+    }
+
+    init() {
+        this.createManagerCSS();
+        this.setupGlobalEventListeners();
+        
+    }
+
+    createManagerCSS() {
+        const style = document.createElement('style');
+        style.id = 'floating-buttons-manager-styles';
+        style.textContent = `
+            /* 悬浮按钮管理器样式 */
+            .floating-btn-managed {
+                position: fixed !important;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                border-radius: 50% !important;
+                width: 56px !important;
+                height: 56px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                cursor: pointer !important;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+                backdrop-filter: blur(10px) !important;
+                border: none !important;
+                outline: none !important;
+                user-select: none !important;
+            }
+
+            .floating-btn-managed:hover {
+                transform: translateY(-2px) scale(1.05) !important;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+            }
+
+            .floating-btn-managed:active {
+                transform: translateY(0) scale(0.98) !important;
+            }
+
+            /* 按钮类型样式 */
+            .floating-btn-chat {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+                color: white !important;
+                z-index: 1010 !important;
+            }
+
+            .floating-btn-dashboard {
+                background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%) !important;
+                color: white !important;
+                z-index: 1020 !important;
+            }
+
+            .floating-btn-customization {
+                background: linear-gradient(135deg, #00ffff 0%, #00ff00 100%) !important;
+                color: #000 !important;
+                z-index: 1030 !important;
+                font-size: 20px !important;
+            }
+
+            .floating-btn-debug {
+                background: linear-gradient(135deg, #374151 0%, #1f2937 100%) !important;
+                color: white !important;
+                border: 1px solid #4b5563 !important;
+                z-index: 1040 !important;
+            }
+
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .floating-btn-managed {
+                    width: 48px !important;
+                    height: 48px !important;
+                    font-size: 16px !important;
+                }
+                
+                /* 移动端重新排列 */
+                .floating-btn-managed[data-position="top-right-1"] {
+                    top: 10px !important;
+                    right: 10px !important;
+                }
+                
+                .floating-btn-managed[data-position="bottom-right-1"] {
+                    bottom: 80px !important;
+                    right: 10px !important;
+                }
+                
+                .floating-btn-managed[data-position="bottom-right-2"] {
+                    bottom: 140px !important;
+                    right: 10px !important;
+                }
+                
+                .floating-btn-managed[data-position="bottom-right-3"] {
+                    bottom: 20px !important;
+                    right: 10px !important;
+                }
+            }
+
+            /* 隐藏状态 */
+            .floating-btn-managed.hidden {
+                opacity: 0 !important;
+                pointer-events: none !important;
+                transform: scale(0.8) !important;
+            }
+
+            /* 通知徽章 */
+            .floating-btn-badge {
+                position: absolute;
+                top: -4px;
+                right: -4px;
+                background: #ef4444;
+                color: white;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 10px;
+                font-weight: bold;
+                border: 2px solid white;
+                z-index: 1;
+            }
+
+            /* 工具提示样式 */
+            .floating-btn-tooltip {
+                position: absolute;
+                right: 100%;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 6px 12px;
+                border-radius: 6px;
+                font-size: 12px;
+                white-space: nowrap;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+                margin-right: 10px;
+                backdrop-filter: blur(10px);
+            }
+
+            .floating-btn-managed:hover .floating-btn-tooltip {
+                opacity: 1;
+            }
+
+            /* 折叠状态 */
+            .floating-buttons-collapsed .floating-btn-managed:not(.primary) {
+                opacity: 0.3;
+                pointer-events: none;
+                transform: scale(0.7);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    /**
+     * 注册悬浮按钮
+     * @param {string} id - 按钮唯一标识
+     * @param {Object} config - 按钮配置
+     */
+    registerButton(id, config) {
+        const {
+            element,
+            preferredPosition,
+            type = 'default',
+            priority = 0,
+            title = '',
+            icon = '',
+            onClick = null,
+            badge = null
+        } = config;
+
+        // 为现有按钮分配位置
+        const position = this.allocatePosition(preferredPosition, priority);
+        
+        if (!position) {
+            console.warn(`无法为按钮 ${id} 分配位置`);
+            return false;
+        }
+
+        // 应用统一样式和位置
+        this.applyButtonStyles(element, type, position, {
+            title,
+            icon,
+            badge
+        });
+
+        // 注册点击事件
+        if (onClick) {
+            element.addEventListener('click', onClick);
+        }
+
+        // 存储按钮信息
+        this.buttons.set(id, {
+            element,
+            position,
+            type,
+            priority,
+            config
+        });
+
+        
+        return true;
+    }
+
+    /**
+     * 分配按钮位置
+     */
+    allocatePosition(preferred, priority) {
+        // 如果首选位置可用，使用它
+        if (preferred && this.positions[preferred] && !this.occupiedPositions.has(preferred)) {
+            this.occupiedPositions.add(preferred);
+            return preferred;
+        }
+
+        // 否则按优先级分配可用位置
+        const availablePositions = Object.keys(this.positions)
+            .filter(pos => !this.occupiedPositions.has(pos))
+            .sort(); // 按名称排序确保一致性
+
+        if (availablePositions.length > 0) {
+            const allocated = availablePositions[0];
+            this.occupiedPositions.add(allocated);
+            return allocated;
+        }
+
+        return null; // 无可用位置
+    }
+
+    /**
+     * 应用按钮样式
+     */
+    applyButtonStyles(element, type, position, options = {}) {
+        // 添加基础类
+        element.classList.add('floating-btn-managed', `floating-btn-${type}`);
+        element.setAttribute('data-position', position);
+
+        // 应用位置样式
+        const posConfig = this.positions[position];
+        Object.keys(posConfig).forEach(key => {
+            element.style[key] = posConfig[key];
+        });
+
+        // 添加图标（如果提供）
+        if (options.icon && !element.querySelector('.floating-btn-icon')) {
+            element.innerHTML = `<i class="floating-btn-icon ${options.icon}"></i>`;
+        }
+
+        // 添加工具提示
+        if (options.title) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'floating-btn-tooltip';
+            tooltip.textContent = options.title;
+            element.appendChild(tooltip);
+        }
+
+        // 添加徽章
+        if (options.badge) {
+            this.updateBadge(element, options.badge);
+        }
+    }
+
+    /**
+     * 更新按钮徽章
+     */
+    updateBadge(element, badgeText) {
+        let badge = element.querySelector('.floating-btn-badge');
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'floating-btn-badge';
+            element.appendChild(badge);
+        }
+        badge.textContent = badgeText;
+        badge.style.display = badgeText ? 'flex' : 'none';
+    }
+
+    /**
+     * 隐藏/显示按钮
+     */
+    toggleButton(id, visible = null) {
+        const button = this.buttons.get(id);
+        if (!button) return false;
+
+        const isVisible = visible !== null ? visible : button.element.classList.contains('hidden');
+        
+        if (isVisible) {
+            button.element.classList.remove('hidden');
+        } else {
+            button.element.classList.add('hidden');
+        }
+
+        return true;
+    }
+
+    /**
+     * 移除按钮
+     */
+    unregisterButton(id) {
+        const button = this.buttons.get(id);
+        if (!button) return false;
+
+        // 释放位置
+        this.occupiedPositions.delete(button.position);
+        
+        // 移除元素
+        if (button.element.parentNode) {
+            button.element.parentNode.removeChild(button.element);
+        }
+
+        // 从注册表移除
+        this.buttons.delete(id);
+
+        
+        return true;
+    }
+
+    /**
+     * 获取所有按钮状态
+     */
+    getButtonsStatus() {
+        const status = {};
+        this.buttons.forEach((button, id) => {
+            status[id] = {
+                position: button.position,
+                type: button.type,
+                visible: !button.element.classList.contains('hidden'),
+                element: button.element
+            };
+        });
+        return status;
+    }
+
+    /**
+     * 设置全局事件监听器
+     */
+    setupGlobalEventListeners() {
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Shift+H 隐藏/显示所有悬浮按钮
+            if (e.ctrlKey && e.shiftKey && e.key === 'H') {
+                e.preventDefault();
+                this.toggleAllButtons();
+            }
+        });
+
+        // 窗口大小变化时重新排列
+        window.addEventListener('resize', () => {
+            this.repositionButtons();
+        });
+    }
+
+    /**
+     * 切换所有按钮显示状态
+     */
+    toggleAllButtons() {
+        const hasVisible = Array.from(this.buttons.values())
+            .some(button => !button.element.classList.contains('hidden'));
+
+        this.buttons.forEach((button, id) => {
+            this.toggleButton(id, !hasVisible);
+        });
+    }
+
+    /**
+     * 重新定位所有按钮（响应式）
+     */
+    repositionButtons() {
+        this.buttons.forEach((button) => {
+            const posConfig = this.positions[button.position];
+            Object.keys(posConfig).forEach(key => {
+                button.element.style[key] = posConfig[key];
+            });
+        });
+    }
+
+    /**
+     * 智能排列 - 自动优化按钮位置
+     */
+    optimizeLayout() {
+        const buttonsArray = Array.from(this.buttons.entries())
+            .sort(([,a], [,b]) => b.priority - a.priority); // 按优先级排序
+
+        // 重新分配位置
+        this.occupiedPositions.clear();
+        
+        buttonsArray.forEach(([id, button]) => {
+            const newPosition = this.allocatePosition(null, button.priority);
+            if (newPosition && newPosition !== button.position) {
+                button.position = newPosition;
+                this.applyButtonStyles(button.element, button.type, newPosition, button.config);
+                
+            }
+        });
+    }
+}
+
+// 全局实例
+window.floatingButtonsManager = new FloatingButtonsManager();
+
+
+
+} catch (error) {
+    console.error(error);
+    // 处理错误
+}

@@ -1,0 +1,47 @@
+# Prometheus 配置 - AlingAi Pro
+# 生成时间: {date('Y-m-d H:i:s')}
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+scrape_configs:
+  # 系统指标
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+    scrape_interval: 60s
+    
+  # 应用指标
+  - job_name: 'alingai-app'
+    static_configs:
+      - targets: ['localhost:8080']
+    scrape_interval: 30s
+    metrics_path: '/metrics'
+    
+  # 数据库指标
+  - job_name: 'mysql-exporter'
+    static_configs:
+      - targets: ['localhost:9104']
+    scrape_interval: 60s
+    
+  # Redis 指标
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['localhost:9121']
+    scrape_interval: 60s
+    
+  # Nginx 指标
+  - job_name: 'nginx-exporter'
+    static_configs:
+      - targets: ['localhost:9113']
+    scrape_interval: 30s

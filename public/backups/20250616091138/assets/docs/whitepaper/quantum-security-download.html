@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白皮书下载 - AlingAi 珑凌AI智能平台</title>
+    <link rel="icon" type="image/svg+xml" href="/logo.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-pink': '#FF2B75',
+                        'longling': '#6C13FF',
+                        'electric-blue': '#00D4FF'
+                    },
+                    fontFamily: {
+                        'heading': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .quantum-text {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF, #00D4FF);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: quantum-flow 3s ease-in-out infinite;
+        }
+
+        @keyframes quantum-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 43, 117, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00D4FF;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #00D4FF;
+            font-weight: bold;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00D4FF;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .download-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-body">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full z-50 glass-card bg-opacity-80 backdrop-blur-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <img src="/logo.svg" alt="AlingAi" class="h-8 w-auto">
+                    <span class="quantum-text text-xl font-heading">AlingAi</span>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="nav-link">首页</a>
+                    <a href="/docs/template.html" class="nav-link">文档</a>
+                    <a href="/docs/whitepaper/quantum-security.html" class="nav-link">技术白皮书</a>
+                    <a href="/contact.html" class="nav-link">联系我们</a>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="glass-card m-4 mt-20 p-6">
+            <div class="flex flex-col space-y-4">
+                <a href="/" class="nav-link">首页</a>
+                <a href="/docs/template.html" class="nav-link">文档</a>
+                <a href="/docs/whitepaper/quantum-security.html" class="nav-link">技术白皮书</a>
+                <a href="/contact.html" class="nav-link">联系我们</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <main class="pt-24 pb-16">
+        <div class="container mx-auto px-4 max-w-4xl">
+            <!-- 页面标题 -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-heading quantum-text mb-4">技术白皮书下载</h1>
+                <p class="text-lg text-gray-300">获取AlingAi量子安全架构的详细技术文档</p>
+            </div>
+
+            <!-- 白皮书信息卡片 -->
+            <div class="download-card">
+                <div class="flex items-start space-x-6">
+                    <div class="w-16 h-16 bg-gradient-to-r from-neon-pink to-longling rounded-lg flex items-center justify-center">
+                        <i class="fas fa-file-pdf text-2xl text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-heading quantum-text mb-2">量子安全架构白皮书</h2>
+                        <p class="text-gray-300 mb-4">
+                            详细介绍AlingAi平台的量子安全技术架构、区块链集成方案以及人工智能安全框架的技术文档。
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-electric-blue mb-2">文档包含内容：</h3>
+                                <ul class="feature-list text-sm text-gray-300">
+                                    <li>量子加密技术架构</li>
+                                    <li>区块链安全集成</li>
+                                    <li>AI安全防护体系</li>
+                                    <li>零信任网络架构</li>
+                                    <li>安全合规框架</li>
+                                    <li>性能基准测试</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-electric-blue mb-2">文档信息：</h3>
+                                <div class="text-sm text-gray-300 space-y-1">
+                                    <p><strong>版本：</strong> v1.0 (2025年5月)</p>
+                                    <p><strong>页数：</strong> 45页</p>
+                                    <p><strong>格式：</strong> PDF</p>
+                                    <p><strong>语言：</strong> 中文</p>
+                                    <p><strong>文件大小：</strong> 约3.2MB</p>
+                                    <p><strong>更新：</strong> 2025年5月29日</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 下载选项 -->
+            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                <!-- PDF下载 -->
+                <div class="download-card text-center">
+                    <div class="w-12 h-12 bg-gradient-to-r from-neon-pink to-longling rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-download text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold quantum-text mb-2">PDF下载</h3>
+                    <p class="text-gray-300 mb-4">下载完整的PDF格式技术白皮书，适合离线阅读和打印。</p>
+                    
+                    <div id="pdfDownloadBtn">
+                        <button onclick="generatePDF()" class="btn-primary w-full">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            生成并下载PDF
+                        </button>
+                    </div>
+                    
+                    <div id="pdfGenerating" class="hidden">
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="loading-spinner mr-3"></div>
+                            <span>正在生成PDF...</span>
+                        </div>
+                        <p class="text-sm text-gray-400">这可能需要几秒钟时间</p>
+                    </div>
+                </div>
+
+                <!-- 在线阅读 -->
+                <div class="download-card text-center">
+                    <div class="w-12 h-12 bg-gradient-to-r from-electric-blue to-longling rounded-lg flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-eye text-xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold quantum-text mb-2">在线阅读</h3>
+                    <p class="text-gray-300 mb-4">直接在浏览器中阅读技术白皮书，支持搜索和导航。</p>
+                    
+                    <a href="/docs/whitepaper/quantum-security.html" class="btn-secondary w-full">
+                        <i class="fas fa-book-open mr-2"></i>
+                        在线阅读
+                    </a>
+                </div>
+            </div>
+
+            <!-- 其他资源 -->
+            <div class="download-card mt-8">
+                <h3 class="text-xl font-semibold quantum-text mb-4">相关资源</h3>
+                <div class="grid md:grid-cols-3 gap-4">
+                    <a href="/docs/template.html" class="flex items-center p-3 rounded-lg bg-rgba-255-255-255-5 hover:bg-rgba-255-255-255-10 transition-all">
+                        <i class="fas fa-book text-electric-blue mr-3"></i>
+                        <div>
+                            <div class="font-semibold">技术文档</div>
+                            <div class="text-sm text-gray-400">完整的开发文档</div>
+                        </div>
+                    </a>
+                    <a href="/api-docs.html" class="flex items-center p-3 rounded-lg bg-rgba-255-255-255-5 hover:bg-rgba-255-255-255-10 transition-all">
+                        <i class="fas fa-code text-neon-pink mr-3"></i>
+                        <div>
+                            <div class="font-semibold">API文档</div>
+                            <div class="text-sm text-gray-400">API接口说明</div>
+                        </div>
+                    </a>
+                    <a href="/contact.html" class="flex items-center p-3 rounded-lg bg-rgba-255-255-255-5 hover:bg-rgba-255-255-255-10 transition-all">
+                        <i class="fas fa-envelope text-longling mr-3"></i>
+                        <div>
+                            <div class="font-semibold">技术支持</div>
+                            <div class="text-sm text-gray-400">联系技术团队</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 注意事项 -->
+            <div class="download-card mt-8">
+                <h3 class="text-xl font-semibold quantum-text mb-4">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    使用说明
+                </h3>
+                <div class="text-gray-300 space-y-2">
+                    <p>• 本技术白皮书仅供学习和研究使用</p>
+                    <p>• 商业使用请联系我们获取授权</p>
+                    <p>• 文档内容会定期更新，建议关注最新版本</p>
+                    <p>• 如有技术问题，请通过官方渠道联系我们</p>
+                </div>
+            </div>
+
+            <!-- 返回按钮 -->
+            <div class="text-center mt-8">
+                <a href="/docs/whitepaper/quantum-security.html" class="btn-secondary mr-4">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    返回白皮书
+                </a>
+                <a href="/" class="btn-primary">
+                    <i class="fas fa-home mr-2"></i>
+                    返回首页
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // 关闭移动菜单当点击外部区域
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = e.target.closest('button');
+            
+            if (!mobileMenu.contains(e.target) && !menuButton) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // PDF生成功能
+        async function generatePDF() {
+            const downloadBtn = document.getElementById('pdfDownloadBtn');
+            const generatingDiv = document.getElementById('pdfGenerating');
+            
+            // 显示生成状态
+            downloadBtn.classList.add('hidden');
+            generatingDiv.classList.remove('hidden');
+            
+            try {
+                // 模拟PDF生成过程
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // 获取白皮书内容并转换为PDF
+                const response = await fetch('/docs/whitepaper/quantum-security.html');
+                const htmlContent = await response.text();
+                
+                // 创建一个新窗口用于打印
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write(htmlContent);
+                printWindow.document.close();
+                
+                // 等待内容加载完成后触发打印
+                printWindow.onload = function() {
+                    setTimeout(() => {
+                        printWindow.print();
+                        printWindow.close();
+                    }, 500);
+                };
+                
+                // 显示完成消息
+                generatingDiv.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-check-circle text-green-400 text-2xl mb-2"></i>
+                        <p class="text-green-400 font-semibold">PDF生成完成！</p>
+                        <p class="text-sm text-gray-400">请检查浏览器的打印对话框</p>
+                    </div>
+                `;
+                
+                // 3秒后恢复原始状态
+                setTimeout(() => {
+                    downloadBtn.classList.remove('hidden');
+                    generatingDiv.classList.add('hidden');
+                    generatingDiv.innerHTML = `
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="loading-spinner mr-3"></div>
+                            <span>正在生成PDF...</span>
+                        </div>
+                        <p class="text-sm text-gray-400">这可能需要几秒钟时间</p>
+                    `;
+                }, 3000);
+                
+            } catch (error) {
+                console.error('PDF生成失败:', error);
+                
+                generatingDiv.innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-triangle text-orange-400 text-2xl mb-2"></i>
+                        <p class="text-orange-400 font-semibold">生成失败</p>
+                        <p class="text-sm text-gray-400">请尝试在线阅读或联系技术支持</p>
+                    </div>
+                `;
+                
+                setTimeout(() => {
+                    downloadBtn.classList.remove('hidden');
+                    generatingDiv.classList.add('hidden');
+                    generatingDiv.innerHTML = `
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="loading-spinner mr-3"></div>
+                            <span>正在生成PDF...</span>
+                        </div>
+                        <p class="text-sm text-gray-400">这可能需要几秒钟时间</p>
+                    `;
+                }, 3000);
+            }
+        }
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('白皮书下载页面加载完成');
+            
+            // 检查是否是从白皮书页面跳转来的
+            if (document.referrer.includes('quantum-security.html')) {
+                // 可以在此处添加一些特殊处理
+                console.log('从技术白皮书页面跳转而来');
+            }
+        });
+    </script>
+</body>
+</html>

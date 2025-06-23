@@ -1,0 +1,49 @@
+{
+    "timestamp": "2025-06-07 19:17:03",
+    "php_version": "8.1.32",
+    "os": "WINNT",
+    "sapi": "cli",
+    "results": {
+        "disabled_functions": [],
+        "available_functions": [
+            "exec",
+            "shell_exec",
+            "system",
+            "passthru",
+            "popen",
+            "proc_open",
+            "putenv",
+            "file_get_contents",
+            "file_put_contents",
+            "fopen",
+            "fwrite",
+            "curl_exec",
+            "curl_init",
+            "mail",
+            "ini_set",
+            "set_time_limit"
+        ],
+        "file_compatibility": {
+            "three_complete_compilation_validator.php": {
+                "fixed": true,
+                "issues": []
+            },
+            "install\/install.php": {
+                "fixed": true,
+                "issues": []
+            },
+            "scripts\/system_monitor.php": {
+                "fixed": true,
+                "issues": []
+            },
+            "bin\/health-check.php": {
+                "fixed": true,
+                "issues": []
+            },
+            "install\/api\/services.php": {
+                "fixed": true,
+                "issues": []
+            }
+        }
+    }
+}

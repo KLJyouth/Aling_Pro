@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Platform v5.2.0 - 云端智能优化 | 版本详情</title>
+    
+    <!-- SEO 和元数据 -->
+    <meta name="description" content="AlingAI Platform v5.2.0 详细发布说明，包含云端AI优化、实时威胁检测增强、多云部署支持等重要功能更新">
+    <meta name="keywords" content="AlingAI v5.2,云端优化,AI威胁检测,多云部署,版本更新,发布说明">
+    <meta name="author" content="珑凌科技">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="AlingAI Platform v5.2.0 - 云端智能优化">
+    <meta property="og:description" content="全面提升云端AI性能，强化实时威胁检测能力">
+    <meta property="og:type" content="website">
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#00FF94">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 核心框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- 核心样式表 -->
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-dark': '#0A0016',
+                        'quantum-purple': '#1A003C',
+                        'quantum-primary': '#6C13FF',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#0EA5E9',
+                        'cyber-green': '#00FF94',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'jetbrains': ['JetBrains Mono', 'monospace'],
+                        'fira': ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 自定义动画 */
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes glowPulse {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 148, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 255, 148, 0.6);
+            }
+        }
+        
+        .animate-slide-up {
+            animation: slideInUp 0.8s ease-out forwards;
+        }
+        
+        .animate-fade-scale {
+            animation: fadeInScale 0.6s ease-out forwards;
+        }
+        
+        .animate-glow {
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+        
+        /* 代码块增强样式 */
+        .code-container {
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .code-header {
+            background: linear-gradient(90deg, rgba(0, 255, 148, 0.1), rgba(14, 165, 233, 0.1));
+            border-bottom: 1px solid rgba(0, 255, 148, 0.2);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+        }
+        
+        /* 技术架构卡片 */
+        .tech-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 148, 0.2);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 255, 148, 0.2);
+            border-color: rgba(0, 255, 148, 0.4);
+        }
+        
+        /* 性能指标动画 */
+        .metric-bar {
+            background: linear-gradient(90deg, rgba(0, 255, 148, 0.2), rgba(14, 165, 233, 0.2));
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .metric-fill {
+            background: linear-gradient(90deg, #00FF94, #0EA5E9);
+            height: 100%;
+            border-radius: 4px;
+            transition: width 2s ease-out;
+        }
+        
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .grid-cols-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-quantum-dark via-quantum-purple to-quantum-dark text-white font-inter overflow-x-hidden">
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-quantum-dark/80 backdrop-blur-xl border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-xl flex items-center justify-center">
+                            <i class="fas fa-atom text-white text-lg"></i>
+                        </div>
+                        <span class="text-xl font-bold">AlingAI Platform</span>
+                    </a>
+                    <div class="hidden md:block">
+                        <span class="px-3 py-1 bg-gradient-to-r from-cyber-green to-quantum-accent rounded-full text-xs font-semibold">
+                            v5.2.0
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 导航链接 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/version-timeline.html" class="text-white/80 hover:text-white transition-colors">版本历史</a>
+                    <a href="/developers" class="text-white/80 hover:text-white transition-colors">开发者</a>
+                    <a href="/support" class="text-white/80 hover:text-white transition-colors">支持</a>
+                    <a href="/" class="px-4 py-2 bg-gradient-to-r from-cyber-green to-quantum-accent rounded-lg text-white font-medium hover:shadow-lg transition-all duration-300">
+                        返回首页
+                    </a>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-white">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero 区域 -->
+    <section class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center space-x-3 mb-6 animate-fade-scale">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-2xl flex items-center justify-center animate-glow">
+                        <i class="fas fa-cloud text-white text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="hero-title text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-cyber-green via-white to-quantum-accent bg-clip-text text-transparent">
+                            v5.2.0
+                        </h1>
+                        <p class="text-2xl md:text-3xl font-light text-white/90">云端智能优化</p>
+                    </div>
+                </div>
+                
+                <p class="text-xl text-white/80 max-w-3xl mx-auto mb-8 animate-slide-up">
+                    全面提升云端AI性能，强化实时威胁检测能力，支持多云环境部署，为企业提供更加智能、高效的安全解决方案
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 animate-slide-up">
+                    <div class="flex items-center space-x-2 text-cyber-green">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span class="font-medium">发布日期：2024年8月15日</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-quantum-accent">
+                        <i class="fas fa-code-branch"></i>
+                        <span class="font-medium">构建版本：5.2.0-beta.3</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-white/80">
+                        <i class="fas fa-download"></i>
+                        <span class="font-medium">下载量：125,000+</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 核心亮点 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                核心亮点
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 云端AI优化 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-brain text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-cyber-green">云端AI引擎优化</h3>
+                    <p class="text-white/80 mb-6">
+                        全新的分布式AI计算架构，支持动态负载均衡和智能资源调度，性能提升300%
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-cyber-green mr-2"></i>GPU集群自动扩缩容</li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyber-green mr-2"></i>模型推理延迟降低70%</li>
+                        <li class="flex items-center"><i class="fas fa-check text-cyber-green mr-2"></i>多云环境无缝切换</li>
+                    </ul>
+                </div>
+                
+                <!-- 实时威胁检测 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-quantum-accent to-quantum-secondary rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-shield-virus text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-quantum-accent">实时威胁检测增强</h3>
+                    <p class="text-white/80 mb-6">
+                        基于机器学习的威胁检测算法优化，支持零日攻击识别和自适应防护策略
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-quantum-accent mr-2"></i>检测准确率达到99.8%</li>
+                        <li class="flex items-center"><i class="fas fa-check text-quantum-accent mr-2"></i>误报率降低85%</li>
+                        <li class="flex items-center"><i class="fas fa-check text-quantum-accent mr-2"></i>毫秒级响应时间</li>
+                    </ul>
+                </div>
+                
+                <!-- 多云部署 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-cloud-upload-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-purple-400">多云部署支持</h3>
+                    <p class="text-white/80 mb-6">
+                        支持AWS、Azure、GCP、阿里云等主流云平台，提供统一管理界面和自动化部署
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>一键多云部署</li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>跨云数据同步</li>
+                        <li class="flex items-center"><i class="fas fa-check text-purple-400 mr-2"></i>成本智能优化</li>
+                    </ul>
+                </div>
+                
+                <!-- API网关升级 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-route text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">API网关2.0</h3>
+                    <p class="text-white/80 mb-6">
+                        全新设计的API网关，支持GraphQL、gRPC，提供高级路由和流量管理功能
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>智能负载均衡</li>
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>动态限流熔断</li>
+                        <li class="flex items-center"><i class="fas fa-check text-yellow-400 mr-2"></i>API版本管理</li>
+                    </ul>
+                </div>
+                
+                <!-- 监控告警 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-red-400">智能监控告警</h3>
+                    <p class="text-white/80 mb-6">
+                        基于AI的智能监控系统，支持预测性告警和自动化故障恢复
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-red-400 mr-2"></i>预测性维护</li>
+                        <li class="flex items-center"><i class="fas fa-check text-red-400 mr-2"></i>自动故障恢复</li>
+                        <li class="flex items-center"><i class="fas fa-check text-red-400 mr-2"></i>多维度指标分析</li>
+                    </ul>
+                </div>
+                
+                <!-- 用户体验 -->
+                <div class="tech-card p-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6">
+                        <i class="fas fa-user-friends text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-green-400">用户体验提升</h3>
+                    <p class="text-white/80 mb-6">
+                        全新的控制台界面设计，提供个性化仪表板和智能操作建议
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/70">
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>响应式界面设计</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>智能操作提示</li>
+                        <li class="flex items-center"><i class="fas fa-check text-green-400 mr-2"></i>多语言支持</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 性能指标 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                性能提升数据
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-rocket text-white text-2xl"></i>
+                    </div>
+                    <div class="text-4xl font-bold text-cyber-green mb-2">300%</div>
+                    <div class="text-white/80">AI引擎性能提升</div>
+                    <div class="metric-bar mt-4">
+                        <div class="metric-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-quantum-accent to-quantum-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clock text-white text-2xl"></i>
+                    </div>
+                    <div class="text-4xl font-bold text-quantum-accent mb-2">70%</div>
+                    <div class="text-white/80">响应时间降低</div>
+                    <div class="metric-bar mt-4">
+                        <div class="metric-fill" style="width: 70%"></div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-check text-white text-2xl"></i>
+                    </div>
+                    <div class="text-4xl font-bold text-purple-400 mb-2">99.8%</div>
+                    <div class="text-white/80">威胁检测准确率</div>
+                    <div class="metric-bar mt-4">
+                        <div class="metric-fill" style="width: 99%"></div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-24 h-24 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-bar text-white text-2xl"></i>
+                    </div>
+                    <div class="text-4xl font-bold text-yellow-400 mb-2">85%</div>
+                    <div class="text-white/80">误报率降低</div>
+                    <div class="metric-bar mt-4">
+                        <div class="metric-fill" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 技术架构图 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                云端架构升级
+            </h2>
+            
+            <div class="relative">
+                <div class="code-container">
+                    <div class="code-header">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                        </div>
+                        <span class="text-cyber-green font-jetbrains text-sm">cloud-architecture-v5.2.yaml</span>
+                        <button class="text-white/60 hover:text-white">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                    <pre class="p-6 text-sm"><code class="language-yaml">apiVersion: v1
+kind: CloudArchitecture
+metadata:
+  name: alingai-platform-v5.2
+  version: "5.2.0"
+spec:
+  compute:
+    aiEngine:
+      provider: "multi-cloud"
+      scaling:
+        enabled: true
+        minInstances: 5
+        maxInstances: 100
+        metrics:
+          - type: "gpu-utilization"
+            targetPercentage: 70
+          - type: "inference-latency"
+            targetThreshold: "50ms"
+    
+  networking:
+    apiGateway:
+      version: "2.0"
+      protocols:
+        - http2
+        - grpc
+        - graphql
+      features:
+        - intelligent-routing
+        - dynamic-load-balancing
+        - circuit-breaker
+    
+  security:
+    threatDetection:
+      engine: "ml-enhanced"
+      accuracy: 99.8
+      falsePositiveRate: 0.12
+      responseTime: "< 10ms"
+    
+  monitoring:
+    predictiveAnalytics: true
+    autoHealing: true
+    alerting:
+      channels:
+        - email
+        - slack
+        - webhook
+        - sms
+</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 迁移指南 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                升级迁移指南
+            </h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- 升级步骤 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-cyber-green">自动升级步骤</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white font-bold text-sm">1</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">备份现有配置</h4>
+                                <p class="text-white/70 text-sm">系统会自动备份当前配置和数据，确保升级过程安全可靠</p>
+                                <div class="code-container mt-4">
+                                    <pre class="p-4 text-xs"><code class="language-bash">./alingai backup --version 5.1.x --output ./backup-$(date +%Y%m%d)</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-quantum-accent to-quantum-secondary rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white font-bold text-sm">2</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">下载更新包</h4>
+                                <p class="text-white/70 text-sm">从官方渠道下载v5.2.0更新包，验证数字签名</p>
+                                <div class="code-container mt-4">
+                                    <pre class="p-4 text-xs"><code class="language-bash">wget https://releases.alingai.com/v5.2.0/alingai-platform-5.2.0.tar.gz
+gpg --verify alingai-platform-5.2.0.tar.gz.sig</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white font-bold text-sm">3</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">执行升级</h4>
+                                <p class="text-white/70 text-sm">运行升级脚本，系统将自动处理依赖更新和配置迁移</p>
+                                <div class="code-container mt-4">
+                                    <pre class="p-4 text-xs"><code class="language-bash">./alingai upgrade --to 5.2.0 --auto-migrate</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-teal-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <span class="text-white font-bold text-sm">4</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white mb-2">验证升级</h4>
+                                <p class="text-white/70 text-sm">运行健康检查，确认所有组件正常运行</p>
+                                <div class="code-container mt-4">
+                                    <pre class="p-4 text-xs"><code class="language-bash">./alingai health-check --comprehensive</code></pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 注意事项 -->
+                <div>
+                    <h3 class="text-2xl font-bold mb-8 text-yellow-400">重要注意事项</h3>
+                    <div class="space-y-6">
+                        <div class="p-6 bg-gradient-to-r from-yellow-500/10 to-orange-500/10 border border-yellow-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
+                                <h4 class="font-semibold text-yellow-400">兼容性变更</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• API Gateway 2.0 不再支持旧版REST API格式</li>
+                                <li>• 配置文件格式从TOML迁移到YAML</li>
+                                <li>• 某些已弃用的API端点将被移除</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-info-circle text-blue-400 text-xl"></i>
+                                <h4 class="font-semibold text-blue-400">性能优化</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• 内存使用量减少40%</li>
+                                <li>• 启动时间缩短60%</li>
+                                <li>• 支持热升级，无需重启服务</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-6 bg-gradient-to-r from-green-500/10 to-teal-500/10 border border-green-500/30 rounded-xl">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <i class="fas fa-shield-alt text-green-400 text-xl"></i>
+                                <h4 class="font-semibold text-green-400">安全增强</h4>
+                            </div>
+                            <ul class="text-white/80 text-sm space-y-2">
+                                <li>• 默认启用TLS 1.3加密</li>
+                                <li>• 增强的身份验证机制</li>
+                                <li>• 改进的审计日志功能</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 更新日志 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-16 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                详细更新日志
+            </h2>
+            
+            <div class="space-y-8">
+                <!-- 新功能 -->
+                <div class="bg-gradient-to-r from-green-500/10 to-teal-500/10 border border-green-500/30 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-green-400 mb-6 flex items-center">
+                        <i class="fas fa-plus-circle mr-3"></i>
+                        新功能
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>云端AI引擎3.0架构</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>多云部署管理器</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>智能威胁预测系统</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>GraphQL API支持</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>实时性能监控仪表板</li>
+                        </ul>
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>自动化故障恢复机制</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>多语言客户端SDK</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>企业级SSO集成</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>容器化部署支持</li>
+                            <li class="flex items-start"><i class="fas fa-star text-green-400 mr-3 mt-1"></i>高级审计日志分析</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 性能优化 -->
+                <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/30 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-blue-400 mb-6 flex items-center">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        性能优化
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>AI推理速度提升300%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>内存使用优化40%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>数据库查询性能提升150%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>网络延迟降低70%</li>
+                        </ul>
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>启动时间缩短60%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>并发处理能力提升200%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>缓存命中率优化至95%</li>
+                            <li class="flex items-start"><i class="fas fa-rocket text-blue-400 mr-3 mt-1"></i>磁盘I/O性能提升120%</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- 错误修复 -->
+                <div class="bg-gradient-to-r from-red-500/10 to-pink-500/10 border border-red-500/30 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-red-400 mb-6 flex items-center">
+                        <i class="fas fa-bug mr-3"></i>
+                        错误修复
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>修复高负载下的内存泄漏问题</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>解决API响应超时问题</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>修复数据同步不一致问题</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>改进错误日志记录机制</li>
+                        </ul>
+                        <ul class="space-y-3 text-white/80">
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>修复配置热重载问题</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>解决WebSocket连接不稳定问题</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>修复用户权限验证漏洞</li>
+                            <li class="flex items-start"><i class="fas fa-wrench text-red-400 mr-3 mt-1"></i>改进异常处理机制</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 下载和链接 -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8 bg-white/5 backdrop-blur-sm">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8 bg-gradient-to-r from-cyber-green to-quantum-accent bg-clip-text text-transparent">
+                立即体验v5.2.0
+            </h2>
+            
+            <p class="text-xl text-white/80 mb-12">
+                下载最新版本，体验云端智能优化带来的全新性能提升
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <a href="/downloads/v5.2.0" class="p-6 bg-gradient-to-br from-cyber-green/20 to-quantum-accent/20 border border-cyber-green/30 rounded-2xl hover:shadow-lg hover:shadow-cyber-green/20 transition-all duration-300 group">
+                    <i class="fas fa-download text-3xl text-cyber-green mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">标准版下载</h3>
+                    <p class="text-white/70 text-sm">完整功能包，适合大多数企业用户</p>
+                </a>
+                
+                <a href="/docs/v5.2" class="p-6 bg-gradient-to-br from-quantum-accent/20 to-quantum-secondary/20 border border-quantum-accent/30 rounded-2xl hover:shadow-lg hover:shadow-quantum-accent/20 transition-all duration-300 group">
+                    <i class="fas fa-book text-3xl text-quantum-accent mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">技术文档</h3>
+                    <p class="text-white/70 text-sm">详细的API文档和集成指南</p>
+                </a>
+                
+                <a href="/support" class="p-6 bg-gradient-to-br from-purple-600/20 to-pink-600/20 border border-purple-600/30 rounded-2xl hover:shadow-lg hover:shadow-purple-600/20 transition-all duration-300 group">
+                    <i class="fas fa-headset text-3xl text-purple-400 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">技术支持</h3>
+                    <p class="text-white/70 text-sm">专业团队提供7×24小时支持</p>
+                </a>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+                <a href="/version-timeline.html" class="px-8 py-4 bg-gradient-to-r from-cyber-green to-quantum-accent rounded-xl text-white font-semibold hover:shadow-lg hover:shadow-cyber-green/30 transition-all duration-300">
+                    <i class="fas fa-history mr-2"></i>
+                    查看完整版本历史
+                </a>
+                <a href="/" class="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white font-semibold hover:bg-white/20 transition-all duration-300">
+                    <i class="fas fa-home mr-2"></i>
+                    返回首页
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer class="py-12 px-4 sm:px-6 lg:px-8 border-t border-white/10">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cyber-green to-quantum-accent rounded-xl flex items-center justify-center">
+                        <i class="fas fa-atom text-white"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-white">AlingAI Platform v5.2.0</div>
+                        <div class="text-sm text-white/60">云端智能优化版本</div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6 text-white/60">
+                    <a href="/privacy" class="hover:text-white transition-colors">隐私政策</a>
+                    <a href="/terms" class="hover:text-white transition-colors">服务条款</a>
+                    <a href="/support" class="hover:text-white transition-colors">技术支持</a>
+                    <span>© 2024 珑凌科技</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 注册 GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // 页面加载动画
+        window.addEventListener('load', function() {
+            // Hero区域动画
+            gsap.from('.animate-fade-scale', {
+                duration: 1,
+                scale: 0.8,
+                opacity: 0,
+                ease: "back.out(1.7)"
+            });
+            
+            gsap.from('.animate-slide-up', {
+                duration: 0.8,
+                y: 60,
+                opacity: 0,
+                stagger: 0.2,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+            
+            // 技术卡片动画
+            gsap.from('.tech-card', {
+                scrollTrigger: {
+                    trigger: '.tech-card',
+                    start: 'top 80%'
+                },
+                duration: 0.8,
+                y: 50,
+                opacity: 0,
+                stagger: 0.1,
+                ease: "power3.out"
+            });
+            
+            // 性能指标动画
+            gsap.from('.metric-fill', {
+                scrollTrigger: {
+                    trigger: '.metric-fill',
+                    start: 'top 80%'
+                },
+                duration: 2,
+                width: 0,
+                stagger: 0.2,
+                ease: "power3.out"
+            });
+            
+            // 代码块动画
+            gsap.from('.code-container', {
+                scrollTrigger: {
+                    trigger: '.code-container',
+                    start: 'top 80%'
+                },
+                duration: 1,
+                y: 30,
+                opacity: 0,
+                ease: "power3.out"
+            });
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // 代码复制功能
+        document.querySelectorAll('.code-container button').forEach(button => {
+            button.addEventListener('click', function() {
+                const codeBlock = this.closest('.code-container').querySelector('code');
+                const text = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(text).then(function() {
+                    // 显示复制成功提示
+                    const originalIcon = button.innerHTML;
+                    button.innerHTML = '<i class="fas fa-check text-green-400"></i>';
+                    setTimeout(() => {
+                        button.innerHTML = originalIcon;
+                    }, 2000);
+                });
+            });
+        });
+        
+        // 添加悬浮效果
+        document.querySelectorAll('.tech-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                gsap.to(this, {
+                    duration: 0.3,
+                    y: -8,
+                    ease: "power2.out"
+                });
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                gsap.to(this, {
+                    duration: 0.3,
+                    y: 0,
+                    ease: "power2.out"
+                });
+            });
+        });
+        
+        // 性能指标动态更新
+        function animateMetrics() {
+            const metrics = document.querySelectorAll('.metric-fill');
+            metrics.forEach(metric => {
+                const width = metric.style.width;
+                metric.style.width = '0%';
+                
+                setTimeout(() => {
+                    metric.style.width = width;
+                }, 100);
+            });
+        }
+        
+        // 每30秒更新一次性能指标动画
+        setInterval(animateMetrics, 30000);
+        
+        // 响应式菜单处理
+        const mobileMenuButton = document.querySelector('.md\\:hidden button');
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', function() {
+                // 这里可以添加移动端菜单的显示/隐藏逻辑
+                console.log('Mobile menu clicked');
+            });
+        }
+    </script>
+</body>
+</html>

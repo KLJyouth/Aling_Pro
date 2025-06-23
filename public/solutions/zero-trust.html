@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>零信任架构 - AlingAI Platform</title>
+    <meta name="description" content="永不信任，持续验证。构建全面的零信任安全框架，确保企业数字资产安全">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #00cc99;
+            --accent-color: #ff6b35;
+            --dark-color: #1a1a1a;
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .hero-section {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 120px 0 80px;
+            margin-top: 76px;
+        }
+
+        .principle-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .principle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .component-box {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn-zerotrust {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-zerotrust:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102,126,234,0.3);
+            color: white;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin: 0 auto 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-shield-alt me-2"></i>AlingAI Platform
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">首页</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/solutions">解决方案</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/docs">开发者</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/support">支持</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">零信任架构</h1>
+                    <p class="lead mb-4">
+                        永不信任，持续验证。重新定义网络安全边界，
+                        构建以身份为中心的安全防护体系，确保每一次访问都经过严格验证。
+                    </p>
+                    <div class="d-flex gap-3">
+                        <a href="#demo" class="btn btn-zerotrust">申请演示</a>
+                        <a href="#principles" class="btn btn-outline-light">了解原理</a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fas fa-network-wired" style="font-size: 12rem; opacity: 0.2;"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心原则 -->
+    <section class="py-5" id="principles">
+        <div class="container">
+            <div class="row mb-5">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="display-5 fw-bold mb-4">零信任核心原则</h2>
+                    <p class="lead text-muted">基于"永不信任，持续验证"的安全理念</p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="principle-card">
+                        <h4><i class="fas fa-user-shield me-3 text-primary"></i>身份验证优先</h4>
+                        <p>以身份为安全边界的核心，每个用户、设备和应用都必须经过严格的身份验证才能访问资源。</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="principle-card">
+                        <h4><i class="fas fa-eye me-3 text-primary"></i>持续监控验证</h4>
+                        <p>实时监控所有网络活动，持续验证访问权限，及时发现和响应异常行为。</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="principle-card">
+                        <h4><i class="fas fa-lock me-3 text-primary"></i>最小权限访问</h4>
+                        <p>仅授予完成特定任务所需的最小权限，降低潜在的安全风险和攻击面。</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="principle-card">
+                        <h4><i class="fas fa-microchip me-3 text-primary"></i>微分段网络</h4>
+                        <p>将网络划分为更小的安全区域，限制横向移动，减少安全威胁的影响范围。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 架构图 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">零信任架构模型</h2>
+            <div class="architecture-diagram">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="component-box">
+                            <h5><i class="fas fa-users text-primary"></i></h5>
+                            <h6>用户身份</h6>
+                            <p class="small">多因素认证<br>生物识别<br>行为分析</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="component-box">
+                            <h5><i class="fas fa-laptop text-success"></i></h5>
+                            <h6>设备管理</h6>
+                            <p class="small">设备信任评估<br>安全状态检查<br>合规性验证</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="component-box">
+                            <h5><i class="fas fa-cloud text-info"></i></h5>
+                            <h6>应用与数据</h6>
+                            <p class="small">应用安全策略<br>数据分类保护<br>访问控制</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="component-box">
+                            <h5><i class="fas fa-shield-alt text-warning"></i></h5>
+                            <h6>策略引擎</h6>
+                            <p class="small">动态策略执行<br>风险评估<br>访问决策</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="component-box">
+                            <h5><i class="fas fa-chart-line text-danger"></i></h5>
+                            <h6>监控分析</h6>
+                            <p class="small">实时监控<br>威胁检测<br>行为分析</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 实施步骤 -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">零信任实施路径</h2>
+            <div class="row g-4">
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number">1</div>
+                        <h5>评估现状</h5>
+                        <p>全面评估现有安全架构，识别关键资产和风险点。</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number">2</div>
+                        <h5>设计架构</h5>
+                        <p>基于零信任原则设计新的安全架构和访问策略。</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number">3</div>
+                        <h5>分阶段实施</h5>
+                        <p>采用分阶段方式逐步实施零信任架构组件。</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-center">
+                        <div class="step-number">4</div>
+                        <h5>持续优化</h5>
+                        <p>持续监控和优化安全策略，确保最佳防护效果。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心组件 -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">核心组件与功能</h2>
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-id-card text-primary me-2"></i>
+                                身份与访问管理 (IAM)
+                            </h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>单点登录 (SSO)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>多因素认证 (MFA)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>特权访问管理 (PAM)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>身份生命周期管理</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-desktop text-primary me-2"></i>
+                                设备信任管理
+                            </h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>设备注册与认证</li>
+                                <li><i class="fas fa-check text-success me-2"></i>安全状态评估</li>
+                                <li><i class="fas fa-check text-success me-2"></i>合规性检查</li>
+                                <li><i class="fas fa-check text-success me-2"></i>设备风险评分</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-sitemap text-primary me-2"></i>
+                                网络分段与控制
+                            </h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success me-2"></i>软件定义网络 (SDN)</li>
+                                <li><i class="fas fa-check text-success me-2"></i>微分段技术</li>
+                                <li><i class="fas fa-check text-success me-2"></i>东西向流量控制</li>
+                                <li><i class="fas fa-check text-success me-2"></i>动态访问控制</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 应用场景 -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">典型应用场景</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-home fa-2x"></i>
+                        </div>
+                        <h5 class="mt-3">远程办公</h5>
+                        <p>安全的远程访问解决方案，确保远程员工安全接入企业资源。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-cloud fa-2x"></i>
+                        </div>
+                        <h5 class="mt-3">云原生应用</h5>
+                        <p>保护云原生应用和容器化环境，确保多云环境的安全性。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="text-center">
+                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-handshake fa-2x"></i>
+                        </div>
+                        <h5 class="mt-3">第三方合作</h5>
+                        <p>安全的第三方访问控制，管理合作伙伴和供应商的系统访问。</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                            <i class="fas fa-database fa-2x"></i>
+                        </div>
+                        <h5 class="mt-3">数据保护</h5>
+                        <p>保护敏感数据和关键业务系统，防止数据泄露和内部威胁。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA区域 -->
+    <section class="py-5 bg-primary text-white" id="demo">
+        <div class="container text-center">
+            <h2 class="mb-4">开始您的零信任之旅</h2>
+            <p class="lead mb-4">让我们的专家帮助您设计和实施适合的零信任安全架构</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="/contact" class="btn btn-light btn-lg">联系专家</a>
+                <a href="/assessment" class="btn btn-outline-light btn-lg">安全评估</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h5 class="text-primary mb-4">AlingAI Platform</h5>
+                    <p class="text-muted">构建安全可信的零信任未来</p>
+                </div>
+                <div class="col-lg-2">
+                    <h6>解决方案</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/solutions/quantum-security" class="text-muted">量子安全</a></li>
+                        <li><a href="/solutions/zero-trust" class="text-muted">零信任</a></li>
+                        <li><a href="/solutions/ai-security" class="text-muted">AI安全</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6>支持</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="/docs" class="text-muted">文档</a></li>
+                        <li><a href="/support" class="text-muted">技术支持</a></li>
+                        <li><a href="/contact" class="text-muted">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h6>联系信息</h6>
+                    <p class="text-muted">
+                        <i class="fas fa-envelope me-2"></i>contact@alingai.com<br>
+                        <i class="fas fa-phone me-2"></i>400-800-8000
+                    </p>
+                </div>
+            </div>
+            <hr class="mt-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="text-muted">&copy; 2025 AlingAI Platform. 保留所有权利。</p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="/privacy" class="text-muted me-3">隐私政策</a>
+                    <a href="/terms" class="text-muted">服务条款</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

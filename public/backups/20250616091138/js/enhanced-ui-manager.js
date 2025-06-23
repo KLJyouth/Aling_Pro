@@ -1,0 +1,481 @@
+/**
+ * 增强的用户界面管理器
+ * 处理所有前端交互、动画和用户体验优化
+ */
+
+class EnhancedUIManager {
+    constructor() {
+        this.isInitialized = false;
+        this.components = new Map();
+        this.animations = new Map();
+        this.themes = {
+            light: 'light-theme',
+            dark: 'dark-theme',
+            quantum: 'quantum-theme',
+            highContrast: 'high-contrast-theme'
+        };
+        this.currentTheme = localStorage.getItem('preferred-theme') || 'quantum';
+        this.notifications = [];
+        this.modals = new Map();
+        
+        this.init();
+    }
+
+    async init() {
+        if (this.isInitialized) return;
+        
+        try {
+            await this.loadComponents();
+            this.setupEventListeners();
+            this.initializeTheme();
+            this.initializeAccessibility();
+            this.initializePerformanceMonitoring();
+            this.isInitialized = true;
+            
+            console.log('🎨 Enhanced UI Manager initialized successfully');
+        } catch (error) {
+            console.error('❌ Failed to initialize Enhanced UI Manager:', error);
+        }
+    }
+
+    async loadComponents() {
+        // 加载核心UI组件
+        const components = [
+            'NavigationComponent',
+            'ModalComponent', 
+            'NotificationComponent',
+            'ChatComponent',
+            'FormComponent',
+            'AnimationComponent'
+        ];
+
+        for (const componentName of components) {
+            try {
+                const component = await this.createComponent(componentName);
+                this.components.set(componentName, component);
+            } catch (error) {
+                console.warn(`⚠️ Failed to load component ${componentName}:`, error);
+            }
+        }
+    }
+
+    async createComponent(name) {
+        switch (name) {
+            case 'NavigationComponent':
+                return new NavigationComponent(this);
+            case 'ModalComponent':
+                return new ModalComponent(this);
+            case 'NotificationComponent':
+                return new NotificationComponent(this);
+            case 'ChatComponent':
+                return new ChatComponent(this);
+            case 'FormComponent':
+                return new FormComponent(this);
+            case 'AnimationComponent':
+                return new AnimationComponent(this);
+            default:
+                throw new Error(`Unknown component: ${name}`);
+        }
+    }
+
+    setupEventListeners() {
+        // 全局键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            this.handleGlobalKeyboard(e);
+        });
+
+        // 响应式设计处理
+        window.addEventListener('resize', () => {
+            this.handleResize();
+        });
+
+        // 网络状态监控
+        window.addEventListener('online', () => {
+            this.showNotification('网络连接已恢复', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            this.showNotification('网络连接已断开', 'warning');
+        });
+
+        // 页面可见性变化
+        document.addEventListener('visibilitychange', () => {
+            this.handleVisibilityChange();
+        });
+    }
+
+    handleGlobalKeyboard(event) {
+        const { key, ctrlKey, altKey, shiftKey } = event;
+        
+        // Ctrl+K - 快速搜索
+        if (ctrlKey && key === 'k') {
+            event.preventDefault();
+            this.openQuickSearch();
+        }
+        
+        // Ctrl+L - 登录模态框
+        if (ctrlKey && key === 'l') {
+            event.preventDefault();
+            this.openModal('login');
+        }
+        
+        // Ctrl+/ - 聊天窗口
+        if (ctrlKey && key === '/') {
+            event.preventDefault();
+            this.toggleChat();
+        }
+        
+        // Ctrl+Alt+T - 切换主题
+        if (ctrlKey && altKey && key === 't') {
+            event.preventDefault();
+            this.cycleTheme();
+        }
+        
+        // Ctrl+Alt+H - 高对比度模式
+        if (ctrlKey && altKey && key === 'h') {
+            event.preventDefault();
+            this.toggleHighContrast();
+        }
+        
+        // ESC - 关闭模态框
+        if (key === 'Escape') {
+            this.closeAllModals();
+        }
+        
+        // F1 - 帮助
+        if (key === 'F1') {
+            event.preventDefault();
+            this.showHelp();
+        }
+    }
+
+    handleResize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        
+        // 更新CSS变量
+        document.documentElement.style.setProperty('--viewport-width', `${width}px`);
+        document.documentElement.style.setProperty('--viewport-height', `${height}px`);
+        
+        // 通知组件响应式变化
+        this.components.forEach(component => {
+            if (component.handleResize) {
+                component.handleResize(width, height);
+            }
+        });
+        
+        // 优化移动端体验
+        if (width < 768) {
+            document.body.classList.add('mobile-view');
+            this.optimizeForMobile();
+        } else {
+            document.body.classList.remove('mobile-view');
+        }
+    }
+
+    optimizeForMobile() {
+        // 禁用某些动画以提高性能
+        if (window.DeviceMotionEvent) {
+            document.body.classList.add('mobile-device');
+        }
+        
+        // 调整触摸区域大小
+        const touchElements = document.querySelectorAll('.btn, .card, .modal-trigger');
+        touchElements.forEach(el => {
+            el.classList.add('touch-optimized');
+        });
+    }
+
+    initializeTheme() {
+        this.applyTheme(this.currentTheme);
+        
+        // 监听系统主题变化
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            mediaQuery.addListener((e) => {
+                if (this.currentTheme === 'auto') {
+                    this.applyTheme(e.matches ? 'dark' : 'light');
+                }
+            });
+        }
+    }
+
+    applyTheme(themeName) {
+        document.body.className = document.body.className.replace(/\b\w+-theme\b/g, '');
+        document.body.classList.add(this.themes[themeName] || this.themes.quantum);
+        
+        // 更新meta标签
+        const themeColor = this.getThemeColor(themeName);
+        this.updateMetaTheme(themeColor);
+        
+        this.currentTheme = themeName;
+        localStorage.setItem('preferred-theme', themeName);
+        
+        // 通知组件主题变化
+        this.components.forEach(component => {
+            if (component.onThemeChange) {
+                component.onThemeChange(themeName);
+            }
+        });
+    }
+
+    getThemeColor(theme) {
+        const colors = {
+            light: '#ffffff',
+            dark: '#000000',
+            quantum: '#0a0a23',
+            highContrast: '#000000'
+        };
+        return colors[theme] || colors.quantum;
+    }
+
+    updateMetaTheme(color) {
+        let metaTheme = document.querySelector('meta[name="theme-color"]');
+        if (!metaTheme) {
+            metaTheme = document.createElement('meta');
+            metaTheme.name = 'theme-color';
+            document.head.appendChild(metaTheme);
+        }
+        metaTheme.content = color;
+    }
+
+    cycleTheme() {
+        const themes = Object.keys(this.themes);
+        const currentIndex = themes.indexOf(this.currentTheme);
+        const nextIndex = (currentIndex + 1) % themes.length;
+        this.applyTheme(themes[nextIndex]);
+        
+        this.showNotification(`已切换到 ${themes[nextIndex]} 主题`, 'info');
+    }
+
+    toggleHighContrast() {
+        const isHighContrast = document.body.classList.contains('high-contrast');
+        document.body.classList.toggle('high-contrast', !isHighContrast);
+        
+        this.showNotification(
+            `高对比度模式已${isHighContrast ? '关闭' : '开启'}`, 
+            'info'
+        );
+    }
+
+    initializeAccessibility() {
+        // 添加ARIA标签
+        this.enhanceAccessibility();
+        
+        // 焦点管理
+        this.setupFocusManagement();
+        
+        // 屏幕阅读器支持
+        this.setupScreenReaderSupport();
+    }
+
+    enhanceAccessibility() {
+        // 为所有交互元素添加ARIA标签
+        const interactiveElements = document.querySelectorAll(
+            'button, a, input, select, textarea, [tabindex]'
+        );
+        
+        interactiveElements.forEach(el => {
+            if (!el.getAttribute('aria-label') && !el.getAttribute('aria-labelledby')) {
+                const text = el.textContent.trim() || el.value || el.placeholder;
+                if (text) {
+                    el.setAttribute('aria-label', text);
+                }
+            }
+        });
+    }
+
+    setupFocusManagement() {
+        let focusedBeforeModal = null;
+        
+        // 模态框焦点管理
+        document.addEventListener('modalOpen', (e) => {
+            focusedBeforeModal = document.activeElement;
+            const modal = e.detail.modal;
+            const firstFocusable = modal.querySelector(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (firstFocusable) {
+                firstFocusable.focus();
+            }
+        });
+        
+        document.addEventListener('modalClose', () => {
+            if (focusedBeforeModal) {
+                focusedBeforeModal.focus();
+            }
+        });
+    }
+
+    setupScreenReaderSupport() {
+        // 创建实时通知区域
+        const liveRegion = document.createElement('div');
+        liveRegion.setAttribute('aria-live', 'polite');
+        liveRegion.setAttribute('aria-atomic', 'true');
+        liveRegion.className = 'sr-only';
+        liveRegion.id = 'live-announcements';
+        document.body.appendChild(liveRegion);
+        
+        this.liveRegion = liveRegion;
+    }
+
+    announceToScreenReader(message) {
+        if (this.liveRegion) {
+            this.liveRegion.textContent = message;
+            setTimeout(() => {
+                this.liveRegion.textContent = '';
+            }, 1000);
+        }
+    }
+
+    initializePerformanceMonitoring() {
+        // 监控页面性能
+        if ('PerformanceObserver' in window) {
+            const observer = new PerformanceObserver((list) => {
+                list.getEntries().forEach(entry => {
+                    if (entry.entryType === 'largest-contentful-paint') {
+                        console.log(`LCP: ${entry.startTime}ms`);
+                    }
+                });
+            });
+            
+            observer.observe({ entryTypes: ['largest-contentful-paint'] });
+        }
+        
+        // 监控内存使用
+        if ('memory' in performance) {
+            setInterval(() => {
+                const memory = performance.memory;
+                if (memory.usedJSHeapSize > memory.jsHeapSizeLimit * 0.9) {
+                    console.warn('⚠️ Memory usage is getting high');
+                    this.optimizeMemoryUsage();
+                }
+            }, 30000);
+        }
+    }
+
+    optimizeMemoryUsage() {
+        // 清理未使用的组件
+        this.components.forEach((component, name) => {
+            if (component.cleanup && !component.isActive) {
+                component.cleanup();
+            }
+        });
+        
+        // 清理旧的通知
+        this.notifications = this.notifications.slice(-10);
+        
+        // 强制垃圾回收（如果可用）
+        if (window.gc) {
+            window.gc();
+        }
+    }
+
+    // 模态框管理
+    openModal(modalType, options = {}) {
+        const modalComponent = this.components.get('ModalComponent');
+        if (modalComponent) {
+            return modalComponent.open(modalType, options);
+        }
+    }
+
+    closeModal(modalId) {
+        const modalComponent = this.components.get('ModalComponent');
+        if (modalComponent) {
+            modalComponent.close(modalId);
+        }
+    }
+
+    closeAllModals() {
+        const modalComponent = this.components.get('ModalComponent');
+        if (modalComponent) {
+            modalComponent.closeAll();
+        }
+    }
+
+    // 通知系统
+    showNotification(message, type = 'info', duration = 5000) {
+        const notificationComponent = this.components.get('NotificationComponent');
+        if (notificationComponent) {
+            return notificationComponent.show(message, type, duration);
+        }
+    }
+
+    // 聊天功能
+    toggleChat() {
+        const chatComponent = this.components.get('ChatComponent');
+        if (chatComponent) {
+            chatComponent.toggle();
+        }
+    }
+
+    openQuickSearch() {
+        // 实现快速搜索功能
+        const searchModal = this.openModal('search', {
+            title: '快速搜索',
+            placeholder: '搜索功能、页面或内容...'
+        });
+    }
+
+    showHelp() {
+        const helpContent = `
+            <div class="help-content">
+                <h3>键盘快捷键</h3>
+                <ul>
+                    <li><kbd>Ctrl</kbd> + <kbd>K</kbd> - 快速搜索</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>L</kbd> - 登录</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>/</kbd> - 切换聊天</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd> - 切换主题</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>H</kbd> - 高对比度模式</li>
+                    <li><kbd>ESC</kbd> - 关闭模态框</li>
+                    <li><kbd>F1</kbd> - 显示帮助</li>
+                </ul>
+            </div>
+        `;
+        
+        this.openModal('help', {
+            title: '帮助与快捷键',
+            content: helpContent
+        });
+    }
+
+    handleVisibilityChange() {
+        if (document.hidden) {
+            // 页面隐藏时暂停一些操作
+            this.pauseAnimations();
+        } else {
+            // 页面显示时恢复操作
+            this.resumeAnimations();
+        }
+    }
+
+    pauseAnimations() {
+        document.body.classList.add('animations-paused');
+    }
+
+    resumeAnimations() {
+        document.body.classList.remove('animations-paused');
+    }
+
+    // 获取组件实例
+    getComponent(name) {
+        return this.components.get(name);
+    }
+
+    // 销毁管理器
+    destroy() {
+        this.components.forEach(component => {
+            if (component.destroy) {
+                component.destroy();
+            }
+        });
+        
+        this.components.clear();
+        this.animations.clear();
+        this.notifications = [];
+        this.isInitialized = false;
+    }
+}
+
+// 导出为全局变量
+window.EnhancedUIManager = EnhancedUIManager;

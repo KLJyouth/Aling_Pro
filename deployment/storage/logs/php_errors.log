@@ -1,0 +1,53 @@
+[02-Jun-2025 17:47:26 UTC] Slim Application Error
+Type: FastRoute\BadRouteException
+Code: 0
+Message: Static route &quot;/api/v1/documents/categories&quot; is shadowed by previously defined variable route &quot;/api/v1/documents/([^/]+)&quot; for method &quot;GET&quot;
+File: E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php
+Line: 95
+Trace: #0 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php(30): FastRoute\DataGenerator\RegexBasedAbstract->addStaticRoute()
+#1 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\RouteCollector.php(44): FastRoute\DataGenerator\RegexBasedAbstract->addRoute()
+#2 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(34): FastRoute\RouteCollector->addRoute()
+#3 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\functions.php(25): Slim\Routing\Dispatcher->Slim\Routing\{closure}()
+#4 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(52): FastRoute\simpleDispatcher()
+#5 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(65): Slim\Routing\Dispatcher->createDispatcher()
+#6 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\RouteResolver.php(46): Slim\Routing\Dispatcher->dispatch()
+#7 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(95): Slim\Routing\RouteResolver->computeRoutingResults()
+#8 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(61): Slim\Middleware\RoutingMiddleware->resolveRoutingResultsFromRequest()
+#9 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting()
+#10 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process()
+#11 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle()
+#12 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process()
+#13 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle()
+#14 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(199): Slim\MiddlewareDispatcher->handle()
+#15 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(183): Slim\App->handle()
+#16 E:\Code\AlingAi\AlingAi_pro\src\Core\Application.php(62): Slim\App->run()
+#17 E:\Code\AlingAi\AlingAi_pro\public\index.php(58): AlingAi\Core\Application->run()
+#18 {main}
+Tips: To display error details in HTTP response set "displayErrorDetails" to true in the ErrorHandler constructor.
+[02-Jun-2025 17:48:05 UTC] Slim Application Error
+Type: FastRoute\BadRouteException
+Code: 0
+Message: Static route &quot;/api/v1/documents/categories&quot; is shadowed by previously defined variable route &quot;/api/v1/documents/([^/]+)&quot; for method &quot;GET&quot;
+File: E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php
+Line: 95
+Trace: #0 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php(30): FastRoute\DataGenerator\RegexBasedAbstract->addStaticRoute()
+#1 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\RouteCollector.php(44): FastRoute\DataGenerator\RegexBasedAbstract->addRoute()
+#2 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(34): FastRoute\RouteCollector->addRoute()
+#3 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\functions.php(25): Slim\Routing\Dispatcher->Slim\Routing\{closure}()
+#4 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(52): FastRoute\simpleDispatcher()
+#5 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(65): Slim\Routing\Dispatcher->createDispatcher()
+#6 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\RouteResolver.php(46): Slim\Routing\Dispatcher->dispatch()
+#7 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(95): Slim\Routing\RouteResolver->computeRoutingResults()
+#8 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(61): Slim\Middleware\RoutingMiddleware->resolveRoutingResultsFromRequest()
+#9 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting()
+#10 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process()
+#11 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle()
+#12 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process()
+#13 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle()
+#14 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(199): Slim\MiddlewareDispatcher->handle()
+#15 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(183): Slim\App->handle()
+#16 E:\Code\AlingAi\AlingAi_pro\src\Core\Application.php(62): Slim\App->run()
+#17 E:\Code\AlingAi\AlingAi_pro\public\index.php(58): AlingAi\Core\Application->run()
+#18 E:\Code\AlingAi\AlingAi_pro\debug_index.php(15): include('...')
+#19 {main}
+Tips: To display error details in HTTP response set "displayErrorDetails" to true in the ErrorHandler constructor.

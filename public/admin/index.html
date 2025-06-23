@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 5.0 - Admin管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --info-color: #17a2b8;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+        }
+
+        .admin-header h1 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .admin-nav {
+            background: white;
+            padding: 1rem 0;
+            border-bottom: 1px solid #e9ecef;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-pills .nav-link {
+            border-radius: 25px;
+            margin: 0 5px;
+            padding: 12px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .nav-pills .nav-link:hover {
+            background: rgba(52, 152, 219, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .admin-content {
+            padding: 2rem;
+            min-height: 600px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--secondary-color), var(--primary-color));
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .metric-icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: rgba(52, 152, 219, 0.3);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-success {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning-color);
+            border: 1px solid rgba(243, 156, 18, 0.3);
+        }
+
+        .status-danger {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .api-test-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-custom {
+            border-radius: 25px;
+            padding: 10px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            color: white;
+        }
+
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .log-viewer {
+            background: #263238;
+            color: #a6acb0;
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 1rem 0;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            border-left: 3px solid transparent;
+        }
+
+        .log-success {
+            background: rgba(39, 174, 96, 0.1);
+            border-left-color: var(--success-color);
+            color: #a8e6cf;
+        }
+
+        .log-error {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--accent-color);
+            color: #ffaaa5;
+        }
+
+        .log-info {
+            background: rgba(23, 162, 184, 0.1);
+            border-left-color: var(--info-color);
+            color: #abd9e8;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .table th {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .table td {
+            border: none;
+            border-bottom: 1px solid #f1f3f4;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .database-status {
+            background: linear-gradient(135deg, #e8f5e8, #d4edda);
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: var(--success-color);
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.3);
+        }
+
+        .status-offline {
+            background: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- 连接状态指示器 -->
+    <div id="connectionStatus" class="connection-status status-success">
+        <i class="fas fa-wifi"></i> 系统已连接
+    </div>
+
+    <div class="admin-container">
+        <!-- 头部 -->
+        <div class="admin-header">
+            <h1><i class="fas fa-cogs"></i> AlingAi Pro 5.0 Admin</h1>
+            <p class="mb-0">智能管理系统控制中心</p>
+            <div class="database-status mt-3">
+                <div class="row text-center">
+                    <div class="col-md-3">
+                        <span class="status-indicator status-online"></span>
+                        <strong>MySQL 数据库</strong><br>
+                        <small>111.180.205.70:3306</small>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="status-indicator status-online"></span>
+                        <strong>API网关</strong><br>
+                        <small>8个模块已就绪</small>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="status-indicator" id="wsIndicator" class="status-offline"></span>
+                        <strong>WebSocket</strong><br>
+                        <small id="wsText">检查中...</small>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="status-indicator status-online"></span>
+                        <strong>数据表</strong><br>
+                        <small>15个表已创建</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导航 -->
+        <div class="admin-nav {
+            color: white;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3b82f6 100%);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 24px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3b82f6 100%);
+            color: white;
+        }
+
+        .stat-card.success {
+            background: linear-gradient(135deg, var(--success-color) 0%, #10b981 100%);
+        }
+
+        .stat-card.warning {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #f59e0b 100%);
+        }
+
+        .stat-card.danger {
+            background: linear-gradient(135deg, var(--danger-color) 0%, #ef4444 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #3b82f6 100%);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+        }
+
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background-color: var(--light-color);
+            border: none;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 16px 20px;
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            border-radius: 0 0 16px 16px;
+            margin-bottom: 24px;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-online { background-color: var(--success-color); }
+        .status-offline { background-color: var(--danger-color); }
+        .status-warning { background-color: var(--warning-color); }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+        <div class="p-4">
+            <h4 class="text-white mb-0">
+                <i class="fas fa-shield-alt me-2"></i>
+                AlingAi Admin
+            </h4>
+            <small class="text-white-50">管理控制台 v5.0</small>
+        </div>
+        
+        <nav class="nav flex-column mt-4">
+            <a class="nav-link active" href="#" data-section="dashboard">
+                <i class="fas fa-tachometer-alt me-2"></i>
+                仪表板
+            </a>
+            <a class="nav-link" href="#" data-section="api-monitoring">
+                <i class="fas fa-chart-line me-2"></i>
+                API监控
+            </a>
+            <a class="nav-link" href="#" data-section="user-management">
+                <i class="fas fa-users me-2"></i>
+                用户管理
+            </a>
+            <a class="nav-link" href="#" data-section="third-party">
+                <i class="fas fa-plug me-2"></i>
+                第三方服务
+            </a>
+            <a class="nav-link" href="#" data-section="chat-monitoring">
+                <i class="fas fa-comments me-2"></i>
+                聊天监控
+            </a>
+            <a class="nav-link" href="#" data-section="email-system">
+                <i class="fas fa-envelope me-2"></i>
+                邮件系统
+            </a>
+            <a class="nav-link" href="#" data-section="risk-control">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                风控系统
+            </a>
+            <a class="nav-link" href="#" data-section="token-management">
+                <i class="fas fa-key me-2"></i>
+                Token管理
+            </a>
+            <a class="nav-link" href="#" data-section="system-settings">
+                <i class="fas fa-cog me-2"></i>
+                系统设置
+            </a>
+        </nav>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 顶部导航 -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <span class="navbar-text">
+                                <i class="fas fa-calendar me-2"></i>
+                                <span id="current-time"></span>
+                            </span>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle me-2"></i>
+                                管理员
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>个人资料</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>设置</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" id="logout-btn"><i class="fas fa-sign-out-alt me-2"></i>退出登录</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 内容区域 -->
+        <div id="content-area">
+            <!-- 仪表板内容 -->
+            <div id="dashboard-section" class="content-section">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="mb-3">系统总览</h2>
+                        <p class="text-muted">AlingAi Pro 5.0 管理系统实时监控面板</p>
+                    </div>
+                </div>
+
+                <!-- 统计卡片 -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">总用户数</h6>
+                                        <h3 class="mb-0" id="total-users">-</h3>
+                                    </div>
+                                    <div class="ms-3">
+                                        <i class="fas fa-users fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card success">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">API调用</h6>
+                                        <h3 class="mb-0" id="api-calls">-</h3>
+                                    </div>
+                                    <div class="ms-3">
+                                        <i class="fas fa-chart-line fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card warning">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">风险事件</h6>
+                                        <h3 class="mb-0" id="risk-events">-</h3>
+                                    </div>
+                                    <div class="ms-3">
+                                        <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card stat-card danger">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1">
+                                        <h6 class="card-title mb-1">系统状态</h6>
+                                        <h6 class="mb-0" id="system-status">-</h6>
+                                    </div>
+                                    <div class="ms-3">
+                                        <i class="fas fa-server fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="row mb-4">
+                    <div class="col-lg-8 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">API调用趋势</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="api-trend-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">系统健康度</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="system-health-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 最近活动 -->
+                <div class="row">
+                    <div class="col-lg-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">最近用户活动</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="recent-activities">
+                                    <div class="loading">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">加载中...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">系统警报</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="system-alerts">
+                                    <div class="loading">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">加载中...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API监控内容 -->
+            <div id="api-monitoring-section" class="content-section" style="display: none;">
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h2 class="mb-3">API监控</h2>
+                        <div class="d-flex gap-2 mb-3">
+                            <button class="btn btn-primary" onclick="refreshApiData()">
+                                <i class="fas fa-refresh me-2"></i>刷新数据
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="exportApiData()">
+                                <i class="fas fa-download me-2"></i>导出报告
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API统计 -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">实时API统计</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="api-stats-table"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">响应时间分布</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="response-time-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 热门API端点 -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">热门API端点</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>端点</th>
+                                                <th>调用次数</th>
+                                                <th>成功率</th>
+                                                <th>平均响应时间</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="api-endpoints-table">
+                                            <tr>
+                                                <td colspan="6" class="text-center">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="visually-hidden">加载中...</span>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户管理内容 -->
+            <div id="user-management-section" class="content-section" style="display: none;">
+                <!-- 用户管理容器 -->
+                <div id="user-management-container"></div>
+            </div>
+
+            <div id="third-party-section" class="content-section" style="display: none;">
+                <h2>第三方服务管理</h2>
+                <p>第三方服务管理功能正在开发中...</p>
+            </div>
+
+            <div id="chat-monitoring-section" class="content-section" style="display: none;">
+                <h2>聊天监控</h2>
+                <p>聊天监控功能正在开发中...</p>
+            </div>
+
+            <div id="email-system-section" class="content-section" style="display: none;">
+                <h2>邮件系统</h2>
+                <p>邮件系统管理功能正在开发中...</p>
+            </div>
+
+            <div id="risk-control-section" class="content-section" style="display: none;">
+                <h2>风控系统</h2>
+                <p>风控系统管理功能正在开发中...</p>
+            </div>
+
+            <div id="token-management-section" class="content-section" style="display: none;">
+                <h2>Token管理</h2>
+                <p>Token管理功能正在开发中...</p>
+            </div>
+
+            <div id="system-settings-section" class="content-section" style="display: none;">
+                <h2>系统设置</h2>
+                <p>系统设置功能正在开发中...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.js"></script>
+    
+    <!-- 用户管理模块 -->
+    <script src="/admin/js/modules/user-management.js"></script>
+    
+    <script>
+        // 全局变量
+        let apiTrendChart, systemHealthChart, responseTimeChart;
+        let userModule; // 用户管理模块实例
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavigation();
+            initializeTime();
+            loadDashboardData();
+            initializeCharts();
+            
+            // 每30秒刷新一次数据
+            setInterval(loadDashboardData, 30000);
+        });
+
+        // 导航功能
+        function initializeNavigation() {
+            const navLinks = document.querySelectorAll('.sidebar .nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有活动状态
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    contentSections.forEach(s => s.style.display = 'none');
+                    
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    
+                    // 显示对应内容
+                    const sectionId = this.getAttribute('data-section') + '-section';
+                    const targetSection = document.getElementById(sectionId);
+                    if (targetSection) {
+                        targetSection.style.display = 'block';
+                        
+                        // 根据不同页面加载数据
+                        switch(this.getAttribute('data-section')) {
+                            case 'dashboard':
+                                loadDashboardData();
+                                break;
+                            case 'api-monitoring':
+                                loadApiMonitoringData();
+                                break;
+                            case 'user-management':
+                                if (!userModule) {
+                                    userModule = new UserManagementModule();
+                                }
+                                break;
+                            // 可以添加更多页面的数据加载
+                        }
+                    }
+                });
+            });
+        }
+
+        // 时间显示
+        function initializeTime() {
+            function updateTime() {
+                const now = new Date();
+                const timeString = now.toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+                document.getElementById('current-time').textContent = timeString;
+            }
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+        }
+
+        // 加载仪表板数据
+        async function loadDashboardData() {
+            try {
+                // 这里应该调用实际的API
+                const response = await fetch('/admin/api/dashboard');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDashboardStats(data);
+                } else {
+                    // 使用模拟数据
+                    const mockData = {
+                        totalUsers: 1234,
+                        apiCalls: 56789,
+                        riskEvents: 23,
+                        systemStatus: 'healthy'
+                    };
+                    updateDashboardStats(mockData);
+                }
+            } catch (error) {
+                console.error('加载仪表板数据失败:', error);
+                // 使用模拟数据
+                const mockData = {
+                    totalUsers: 1234,
+                    apiCalls: 56789,
+                    riskEvents: 23,
+                    systemStatus: 'healthy'
+                };
+                updateDashboardStats(mockData);
+            }
+        }
+
+        // 更新仪表板统计
+        function updateDashboardStats(data) {
+            document.getElementById('total-users').textContent = data.totalUsers || 0;
+            document.getElementById('api-calls').textContent = (data.apiCalls || 0).toLocaleString();
+            document.getElementById('risk-events').textContent = data.riskEvents || 0;
+            
+            const systemStatus = document.getElementById('system-status');
+            const statusText = data.systemStatus === 'healthy' ? '正常' : '异常';
+            systemStatus.textContent = statusText;
+            
+            // 更新最近活动
+            updateRecentActivities();
+            updateSystemAlerts();
+        }
+
+        // 更新最近活动
+        function updateRecentActivities() {
+            const container = document.getElementById('recent-activities');
+            const activities = [
+                { time: '2分钟前', action: '用户登录', user: 'admin@example.com', type: 'info' },
+                { time: '5分钟前', action: 'API调用异常', user: 'system', type: 'warning' },
+                { time: '10分钟前', action: '新用户注册', user: 'user123@example.com', type: 'success' },
+                { time: '15分钟前', action: '权限修改', user: 'admin@example.com', type: 'info' }
+            ];
+
+            let html = '';
+            activities.forEach(activity => {
+                const badgeClass = activity.type === 'warning' ? 'bg-warning' : 
+                                 activity.type === 'success' ? 'bg-success' : 'bg-primary';
+                
+                html += `
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="flex-shrink-0">
+                            <span class="badge ${badgeClass} rounded-pill">${activity.time}</span>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">${activity.action}</div>
+                            <small class="text-muted">${activity.user}</small>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 更新系统警报
+        function updateSystemAlerts() {
+            const container = document.getElementById('system-alerts');
+            const alerts = [
+                { level: 'warning', message: 'API响应时间较慢', time: '刚刚' },
+                { level: 'info', message: '系统备份已完成', time: '1小时前' },
+                { level: 'success', message: '所有服务运行正常', time: '2小时前' }
+            ];
+
+            let html = '';
+            alerts.forEach(alert => {
+                const alertClass = alert.level === 'warning' ? 'alert-warning' : 
+                                 alert.level === 'success' ? 'alert-success' : 'alert-info';
+                
+                html += `
+                    <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                        <strong>${alert.message}</strong>
+                        <small class="d-block text-muted">${alert.time}</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 初始化图表
+        function initializeCharts() {
+            initApiTrendChart();
+            initSystemHealthChart();
+        }
+
+        // API趋势图表
+        function initApiTrendChart() {
+            const ctx = document.getElementById('api-trend-chart').getContext('2d');
+            
+            apiTrendChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                    datasets: [{
+                        label: 'API调用量',
+                        data: [1200, 800, 1500, 2000, 1800, 1600],
+                        borderColor: 'rgb(37, 99, 235)',
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 系统健康度图表
+        function initSystemHealthChart() {
+            const ctx = document.getElementById('system-health-chart').getContext('2d');
+            
+            systemHealthChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['正常', '警告', '错误'],
+                    datasets: [{
+                        data: [85, 10, 5],
+                        backgroundColor: [
+                            'rgb(5, 150, 105)',
+                            'rgb(217, 119, 6)',
+                            'rgb(220, 38, 38)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // 加载API监控数据
+        function loadApiMonitoringData() {
+            loadApiEndpoints();
+            if (!responseTimeChart) {
+                initResponseTimeChart();
+            }
+        }
+
+        // 加载API端点数据
+        function loadApiEndpoints() {
+            const tbody = document.getElementById('api-endpoints-table');
+            
+            // 模拟数据
+            const endpoints = [
+                { 
+                    endpoint: '/api/chat/send', 
+                    calls: 12543, 
+                    successRate: 99.2, 
+                    avgTime: 245, 
+                    status: 'healthy' 
+                },
+                { 
+                    endpoint: '/api/user/profile', 
+                    calls: 8765, 
+                    successRate: 98.8, 
+                    avgTime: 156, 
+                    status: 'healthy' 
+                },
+                { 
+                    endpoint: '/api/auth/login', 
+                    calls: 4532, 
+                    successRate: 97.5, 
+                    avgTime: 389, 
+                    status: 'warning' 
+                }
+            ];
+
+            let html = '';
+            endpoints.forEach(endpoint => {
+                const statusBadge = endpoint.status === 'healthy' ? 
+                    '<span class="badge bg-success">正常</span>' : 
+                    '<span class="badge bg-warning">警告</span>';
+                
+                html += `
+                    <tr>
+                        <td><code>${endpoint.endpoint}</code></td>
+                        <td>${endpoint.calls.toLocaleString()}</td>
+                        <td>${endpoint.successRate}%</td>
+                        <td>${endpoint.avgTime}ms</td>
+                        <td>${statusBadge}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewEndpointDetails('${endpoint.endpoint}')">
+                                <i class="fas fa-eye"></i> 详情
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        // 响应时间图表
+        function initResponseTimeChart() {
+            const ctx = document.getElementById('response-time-chart').getContext('2d');
+            
+            responseTimeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['< 100ms', '100-300ms', '300-500ms', '500ms+'],
+                    datasets: [{
+                        label: '请求数量',
+                        data: [45, 30, 20, 5],
+                        backgroundColor: [
+                            'rgba(5, 150, 105, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(217, 119, 6, 0.8)',
+                            'rgba(220, 38, 38, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 工具函数
+        function refreshApiData() {
+            loadApiMonitoringData();
+            showToast('数据已刷新', 'success');
+        }
+
+        function exportApiData() {
+            showToast('导出功能开发中...', 'info');
+        }
+
+        function viewEndpointDetails(endpoint) {
+            showToast(`查看 ${endpoint} 详情`, 'info');
+        }
+
+        function showToast(message, type = 'info') {
+            // 简单的提示实现
+            const toast = document.createElement('div');
+            toast.className = `alert alert-${type} position-fixed top-0 end-0 m-3`;
+            toast.style.zIndex = '9999';
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // 退出登录
+        document.getElementById('logout-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('确定要退出登录吗？')) {
+                // 这里添加退出登录逻辑
+                window.location.href = '/admin/login';
+            }
+        });
+    </script>
+</body>
+</html>

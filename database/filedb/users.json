@@ -1,0 +1,11 @@
+[
+    {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@alingai.pro",
+        "password_hash": "$2y$10$BjtQ0LQKB7.tN3PL9UQ55Ouu6cEQE9GckM\/Qkatq8oLhkYB3cxqqW",
+        "role": "admin",
+        "created_at": "2025-06-11 15:49:05",
+        "updated_at": "2025-06-11 15:49:05"
+    }
+]

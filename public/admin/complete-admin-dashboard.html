@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 5.0 - Admin管理系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .admin-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 0;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link.active {
+            background: #007bff;
+            color: white;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .nav-tabs .nav-link:hover {
+            color: #007bff;
+            background: rgba(0, 123, 255, 0.1);
+        }
+
+        .content-area {
+            padding: 30px;
+            background: white;
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .stats-icon.primary { background: #007bff; }
+        .stats-icon.success { background: #28a745; }
+        .stats-icon.warning { background: #ffc107; }
+        .stats-icon.danger { background: #dc3545; }
+
+        .stats-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stats-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .data-table {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .status-active { background: #d4edda; color: #155724; }
+        .status-inactive { background: #f8d7da; color: #721c24; }
+        .status-pending { background: #fff3cd; color: #856404; }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            color: #00ff00;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .api-test-button {
+            margin: 5px;
+        }
+
+        .test-results {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .connection-status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .status-success { background: #d4edda; color: #155724; }
+        .status-danger { background: #f8d7da; color: #721c24; }
+        .status-warning { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1><i class="bi bi-gear-fill"></i> AlingAi Pro 5.0 管理系统</h1>
+            <p class="mb-0">企业级Admin管理控制台 | <span id="current-time"></span></p>
+        </div>
+
+        <!-- 导航栏 -->
+        <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab">
+                    <i class="bi bi-speedometer2"></i> 系统概览
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                    <i class="bi bi-people"></i> 用户管理
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="api-tab" data-bs-toggle="tab" data-bs-target="#api" type="button" role="tab">
+                    <i class="bi bi-diagram-3"></i> API监控
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="third-party-tab" data-bs-toggle="tab" data-bs-target="#third-party" type="button" role="tab">
+                    <i class="bi bi-link-45deg"></i> 第三方服务
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="monitoring-tab" data-bs-toggle="tab" data-bs-target="#monitoring" type="button" role="tab">
+                    <i class="bi bi-graph-up"></i> 系统监控
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="risk-control-tab" data-bs-toggle="tab" data-bs-target="#risk-control" type="button" role="tab">
+                    <i class="bi bi-shield-check"></i> 风控管理
+                </button>
+            </li>
+        </ul>
+
+        <!-- 内容区域 -->
+        <div class="tab-content" id="adminTabContent">
+            <!-- 系统概览 -->
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
+                <div class="content-area">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon primary">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div class="stats-value" id="total-users">-</div>
+                                <div class="stats-label">管理员用户</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon success">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+                                <div class="stats-value" id="api-calls">-</div>
+                                <div class="stats-label">API调用次数</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon warning">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <div class="stats-value" id="memory-usage">-</div>
+                                <div class="stats-label">内存使用(MB)</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="stats-card">
+                                <div class="stats-icon danger">
+                                    <i class="bi bi-database"></i>
+                                </div>
+                                <div class="stats-value" id="db-tables">-</div>
+                                <div class="stats-label">数据库表</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="data-table">
+                                <h5><i class="bi bi-speedometer2"></i> 系统状态</h5>
+                                <table class="table table-hover">
+                                    <tbody id="system-status">
+                                        <tr><td>PHP版本</td><td id="php-version">-</td></tr>
+                                        <tr><td>数据库状态</td><td id="db-status">-</td></tr>
+                                        <tr><td>服务器时间</td><td id="server-time">-</td></tr>
+                                        <tr><td>可用磁盘空间</td><td id="disk-space">-</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="data-table">
+                                <h5><i class="bi bi-activity"></i> 连接状态</h5>
+                                <div id="connection-status" class="connection-status status-warning">
+                                    正在连接...
+                                </div>                                <button class="btn btn-primary btn-sm" onclick="refreshData()" id="refresh-data-btn">
+                                    <i class="bi bi-arrow-clockwise"></i> 刷新数据
+                                </button>
+                                <button class="btn btn-success btn-sm ms-2" onclick="testAllApis()">
+                                    <i class="bi bi-check-circle"></i> 测试所有API
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 用户管理 -->
+            <div class="tab-pane fade" id="users" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-people"></i> 用户管理</h4>
+                        <button class="btn btn-primary" onclick="loadUsers()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <div id="users-content" class="loading">
+                            <div class="spinner"></div>
+                            <p>加载用户数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API监控 -->
+            <div class="tab-pane fade" id="api" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-diagram-3"></i> API监控</h4>
+                        <button class="btn btn-primary" onclick="loadApiStats()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <div id="api-content" class="loading">
+                            <div class="spinner"></div>
+                            <p>加载API数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 第三方服务 -->
+            <div class="tab-pane fade" id="third-party" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-link-45deg"></i> 第三方服务管理</h4>
+                        <button class="btn btn-primary" onclick="loadThirdPartyServices()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <div id="third-party-content" class="loading">
+                            <div class="spinner"></div>
+                            <p>加载第三方服务数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 系统监控 -->
+            <div class="tab-pane fade" id="monitoring" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-graph-up"></i> 系统监控</h4>
+                        <button class="btn btn-primary" onclick="loadMonitoring()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <div id="monitoring-content" class="loading">
+                            <div class="spinner"></div>
+                            <p>加载监控数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 风控管理 -->
+            <div class="tab-pane fade" id="risk-control" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-shield-check"></i> 风控管理</h4>
+                        <button class="btn btn-primary" onclick="loadRiskControl()">
+                            <i class="bi bi-arrow-clockwise"></i> 刷新
+                        </button>
+                    </div>
+                    <div class="data-table">
+                        <div id="risk-control-content" class="loading">
+                            <div class="spinner"></div>
+                            <p>加载风控数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/realtime-client.js"></script>
+    <script>
+        // 管理系统核心类
+        class AdminSystemManager {
+            constructor() {
+                this.baseURL = 'api/';
+                this.autoRefreshInterval = null;
+                this.init();
+            }
+
+            init() {
+                console.log('🚀 初始化Admin系统...');
+                this.updateCurrentTime();
+                this.loadDashboardData();
+                this.setupAutoRefresh();
+                setInterval(() => this.updateCurrentTime(), 1000);
+            }
+
+            updateCurrentTime() {
+                const now = new Date();
+                document.getElementById('current-time').textContent = now.toLocaleString('zh-CN');
+            }            async loadDashboardData() {
+                try {
+                    const response = await this.apiRequest('realtime-server.php?action=poll');
+                    
+                    if (response && response.success) {
+                        const data = response.data.data;
+                        
+                        // 更新统计卡片
+                        if (data.users) {
+                            document.getElementById('total-users').textContent = data.users.total || '0';
+                        }
+                        if (data.api) {
+                            document.getElementById('api-calls').textContent = data.api.hourly_calls || '0';
+                        }
+                        if (data.system) {
+                            document.getElementById('memory-usage').textContent = data.system.memory_usage || '0';
+                            document.getElementById('php-version').textContent = data.system.php_version || 'N/A';
+                            document.getElementById('server-time').textContent = data.server_time || 'N/A';
+                        }
+                        if (data.database) {
+                            document.getElementById('db-tables').textContent = data.database.tables || '0';
+                            document.getElementById('db-status').textContent = data.database.status === 'connected' ? '✅ 已连接' : '❌ 未连接';
+                        }
+                        
+                        document.getElementById('disk-space').textContent = 'N/A';
+                        
+                        this.updateConnectionStatus('数据加载成功', 'success');
+                    } else {
+                        this.updateConnectionStatus('数据加载失败', 'danger');
+                    }
+                } catch (error) {
+                    console.error('加载仪表板数据失败:', error);
+                    this.updateConnectionStatus('连接错误', 'danger');
+                }
+            }
+
+            updateConnectionStatus(message, type) {
+                const statusEl = document.getElementById('connection-status');
+                if (statusEl) {
+                    statusEl.textContent = message;
+                    statusEl.className = `connection-status status-${type}`;
+                }
+            }
+
+            async loadUsers() {
+                try {
+                    const response = await this.apiRequest('users/index.php');
+                    const contentEl = document.getElementById('users-content');
+                    
+                    if (response && response.success) {
+                        const users = response.data || [];
+                        contentEl.innerHTML = `
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>用户名</th>
+                                        <th>邮箱</th>
+                                        <th>角色</th>
+                                        <th>状态</th>
+                                        <th>最后登录</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${users.map(user => `
+                                        <tr>
+                                            <td>${user.id}</td>
+                                            <td>${user.username}</td>
+                                            <td>${user.email}</td>
+                                            <td><span class="badge bg-primary">${user.role}</span></td>
+                                            <td><span class="status-badge ${user.is_active ? 'status-active' : 'status-inactive'}">
+                                                ${user.is_active ? '活跃' : '禁用'}
+                                            </span></td>
+                                            <td>${user.last_login_at || '从未'}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">编辑</button>
+                                                <button class="btn btn-sm btn-outline-danger">删除</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                    } else {
+                        contentEl.innerHTML = '<p class="text-center text-muted">暂无用户数据</p>';
+                    }
+                } catch (error) {
+                    console.error('用户数据加载失败:', error);
+                    document.getElementById('users-content').innerHTML = '<p class="text-center text-danger">数据加载失败</p>';
+                }
+            }
+
+            async loadApiStats() {
+                try {
+                    const response = await this.apiRequest('realtime-data.php?action=api_stats');
+                    const contentEl = document.getElementById('api-content');
+                    
+                    if (response && response.success) {
+                        const stats = response.data;
+                        contentEl.innerHTML = `
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>API统计</h6>
+                                    <table class="table">
+                                        <tr><td>总请求数</td><td>${stats.total_requests}</td></tr>
+                                        <tr><td>成功率</td><td>${stats.success_rate}%</td></tr>
+                                        <tr><td>平均响应时间</td><td>${stats.avg_response_time}ms</td></tr>
+                                        <tr><td>今日错误数</td><td>${stats.errors_today}</td></tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>热门端点</h6>
+                                    <table class="table">
+                                        ${Object.entries(stats.top_endpoints || {}).map(([endpoint, count]) => `
+                                            <tr><td>${endpoint}</td><td>${count}</td></tr>
+                                        `).join('')}
+                                    </table>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        contentEl.innerHTML = '<p class="text-center text-muted">暂无API数据</p>';
+                    }
+                } catch (error) {
+                    console.error('API数据加载失败:', error);
+                    document.getElementById('api-content').innerHTML = '<p class="text-center text-danger">数据加载失败</p>';
+                }
+            }
+
+            async loadThirdPartyServices() {
+                try {
+                    const response = await this.apiRequest('realtime-data.php?action=third_party');
+                    const contentEl = document.getElementById('third-party-content');
+                    
+                    if (response && response.success) {
+                        const data = response.data;
+                        contentEl.innerHTML = `
+                            <div class="mb-3">
+                                <h6>服务概览</h6>
+                                <p>总计: ${data.summary.total} | 启用: ${data.summary.enabled} | 平均响应时间: ${data.summary.avg_response_time}ms</p>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>服务名称</th>
+                                        <th>类型</th>
+                                        <th>状态</th>
+                                        <th>最后测试</th>
+                                        <th>响应时间</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(data.services || []).map(service => `
+                                        <tr>
+                                            <td>${service.service_name}</td>
+                                            <td><span class="badge bg-info">${service.type}</span></td>
+                                            <td><span class="status-badge ${service.is_enabled ? 'status-active' : 'status-inactive'}">
+                                                ${service.is_enabled ? '启用' : '禁用'}
+                                            </span></td>
+                                            <td>${service.last_test_at || '未测试'}</td>
+                                            <td>${service.response_time || 0}ms</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-outline-primary">测试</button>
+                                                <button class="btn btn-sm btn-outline-secondary">配置</button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                    } else {
+                        contentEl.innerHTML = '<p class="text-center text-muted">暂无第三方服务数据</p>';
+                    }
+                } catch (error) {
+                    console.error('第三方服务数据加载失败:', error);
+                    document.getElementById('third-party-content').innerHTML = '<p class="text-center text-danger">数据加载失败</p>';
+                }
+            }
+
+            async loadMonitoring() {
+                try {
+                    const response = await this.apiRequest('realtime-data.php?action=monitoring');
+                    const contentEl = document.getElementById('monitoring-content');
+                    
+                    if (response && response.success) {
+                        const data = response.data;
+                        contentEl.innerHTML = `
+                            <div class="mb-3">
+                                <h6>监控概览</h6>
+                                <p>总计指标: ${data.summary.total_metrics} | 最后更新: ${data.summary.last_update || '未知'}</p>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>指标名称</th>
+                                        <th>数值</th>
+                                        <th>单位</th>
+                                        <th>时间戳</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(data.metrics || []).slice(0, 10).map(metric => `
+                                        <tr>
+                                            <td>${metric.metric_name}</td>
+                                            <td>${metric.metric_value}</td>
+                                            <td>${metric.metric_unit || ''}</td>
+                                            <td>${metric.timestamp}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                    } else {
+                        contentEl.innerHTML = '<p class="text-center text-muted">暂无监控数据</p>';
+                    }
+                } catch (error) {
+                    console.error('监控数据加载失败:', error);
+                    document.getElementById('monitoring-content').innerHTML = '<p class="text-center text-danger">数据加载失败</p>';
+                }
+            }
+
+            async loadRiskControl() {
+                try {
+                    const response = await this.apiRequest('realtime-data.php?action=risk_control');
+                    const contentEl = document.getElementById('risk-control-content');
+                    
+                    if (response && response.success) {
+                        const data = response.data;
+                        contentEl.innerHTML = `
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <div class="stats-card">
+                                        <div class="stats-value text-danger">${data.pending_events}</div>
+                                        <div class="stats-label">待处理事件</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <h6>风险等级分布</h6>
+                                    <div class="row">
+                                        <div class="col-3"><span class="badge bg-success">低: ${data.risk_levels.low}</span></div>
+                                        <div class="col-3"><span class="badge bg-warning">中: ${data.risk_levels.medium}</span></div>
+                                        <div class="col-3"><span class="badge bg-danger">高: ${data.risk_levels.high}</span></div>
+                                        <div class="col-3"><span class="badge bg-dark">严重: ${data.risk_levels.critical}</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>事件类型</th>
+                                        <th>风险等级</th>
+                                        <th>次数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${(data.recent_events || []).map(event => `
+                                        <tr>
+                                            <td>${event.event_type}</td>
+                                            <td><span class="badge bg-${event.risk_level === 'high' ? 'danger' : event.risk_level === 'medium' ? 'warning' : 'success'}">${event.risk_level}</span></td>
+                                            <td>${event.count}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                    } else {
+                        contentEl.innerHTML = '<p class="text-center text-muted">暂无风控数据</p>';
+                    }
+                } catch (error) {
+                    console.error('风控数据加载失败:', error);
+                    document.getElementById('risk-control-content').innerHTML = '<p class="text-center text-danger">数据加载失败</p>';
+                }
+            }
+
+            async apiRequest(endpoint, options = {}) {
+                try {
+                    const url = `${this.baseURL}${endpoint}`;
+                    const defaultOptions = {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    };
+                    
+                    const response = await fetch(url, { ...defaultOptions, ...options });
+                    const data = await response.json();
+                    return data;
+                } catch (error) {
+                    console.error(`API请求失败 ${endpoint}:`, error);
+                    throw error;
+                }
+            }
+
+            setupAutoRefresh() {
+                // 每30秒刷新仪表板数据
+                this.autoRefreshInterval = setInterval(() => {
+                    this.loadDashboardData();
+                }, 30000);
+            }
+
+            destroy() {
+                if (this.autoRefreshInterval) {
+                    clearInterval(this.autoRefreshInterval);
+                }
+            }
+        }
+
+        // 初始化系统
+        let adminSystem;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            adminSystem = new AdminSystemManager();
+            
+            // 监听标签页切换
+            const tabLinks = document.querySelectorAll('[data-bs-toggle="tab"]');
+            tabLinks.forEach(link => {
+                link.addEventListener('shown.bs.tab', function(e) {
+                    const target = e.target.getAttribute('data-bs-target');
+                    
+                    switch(target) {
+                        case '#users':
+                            adminSystem.loadUsers();
+                            break;
+                        case '#api':
+                            adminSystem.loadApiStats();
+                            break;
+                        case '#third-party':
+                            adminSystem.loadThirdPartyServices();
+                            break;
+                        case '#monitoring':
+                            adminSystem.loadMonitoring();
+                            break;
+                        case '#risk-control':
+                            adminSystem.loadRiskControl();
+                            break;
+                    }
+                });
+            });
+        });
+
+        // 全局函数
+        function refreshData() {
+            adminSystem.loadDashboardData();
+        }
+
+        function loadUsers() {
+            adminSystem.loadUsers();
+        }
+
+        function loadApiStats() {
+            adminSystem.loadApiStats();
+        }
+
+        function loadThirdPartyServices() {
+            adminSystem.loadThirdPartyServices();
+        }
+
+        function loadMonitoring() {
+            adminSystem.loadMonitoring();
+        }
+
+        function loadRiskControl() {
+            adminSystem.loadRiskControl();
+        }        async function testAllApis() {
+            const statusEl = document.getElementById('connection-status');
+            statusEl.textContent = '正在测试所有API...';
+            statusEl.className = 'connection-status status-warning';
+            
+            try {
+                // 测试各个API端点
+                const tests = [
+                    adminSystem.apiRequest('realtime-server.php?action=status'),
+                    adminSystem.apiRequest('users/index.php'),
+                    adminSystem.apiRequest('monitoring/index.php')
+                ];
+                
+                const results = await Promise.allSettled(tests);
+                const successCount = results.filter(r => r.status === 'fulfilled').length;
+                
+                statusEl.textContent = `API测试完成: ${successCount}/${tests.length} 成功`;
+                statusEl.className = `connection-status status-${successCount === tests.length ? 'success' : 'warning'}`;
+                
+            } catch (error) {
+                statusEl.textContent = 'API测试失败';
+                statusEl.className = 'connection-status status-danger';
+            }
+        }
+
+        // 页面卸载时清理
+        window.addEventListener('beforeunload', function() {
+            if (adminSystem) {
+                adminSystem.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

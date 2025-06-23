@@ -1,0 +1,56 @@
+{
+    "app": {
+        "name": "AlingAi Pro",
+        "env": "development",
+        "debug": true,
+        "url": "http:\/\/localhost:3000",
+        "timezone": "Asia\/Shanghai",
+        "locale": "zh_CN"
+    },
+    "database": {
+        "connection": "mysql",
+        "file_mode": false
+    },
+    "ai_services": {
+        "deepseek": {
+            "enabled": true,
+            "api_key": "sk-11a9c376a35e4541b1468554bf6a6e4b",
+            "base_url": "https:\/\/api.deepseek.com",
+            "model": "deepseek-chat",
+            "max_tokens": 4000,
+            "temperature": 0.7
+        }
+    },
+    "mail": {
+        "mailer": "smtp",
+        "host": "smtp.exmail.qq.com",
+        "port": "465",
+        "username": "admin@gxggm.com",
+        "password": "PALtPBCRaEDp84xr",
+        "encryption": "ssl",
+        "from_address": "admin@gxggm.com",
+        "from_name": "AlingAi Pro"
+    },
+    "cache": {
+        "driver": "redis",
+        "redis": {
+            "host": "127.0.0.1",
+            "port": "6379",
+            "password": ""
+        }
+    },
+    "monitoring": {
+        "enabled": true,
+        "interval": 60,
+        "cpu_threshold": 80,
+        "memory_threshold": 85,
+        "disk_threshold": 90
+    },
+    "features": {
+        "ai_chat": true,
+        "email_notifications": true,
+        "file_storage": true,
+        "user_management": true,
+        "system_monitoring": true
+    }
+}

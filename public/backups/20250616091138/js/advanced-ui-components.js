@@ -1,0 +1,1362 @@
+/**
+ * AlingAi Pro - 高级UI组件库
+ * 现代化、可复用的UI组件集合，支持量子主题和响应式设计
+ * 
+ * @version 2.0.0
+ * @author AlingAi Team
+ * @created 2025-06-01
+ * @features 
+ * - 量子主题效果
+ * - 响应式设计
+ * - 可访问性支持
+ * - 性能优化
+ * - 类型安全
+ * - 模块化架构
+ */
+
+/**
+ * 组件注册表
+ */
+const ComponentRegistry = {
+    components: new Map(),
+    instances: new WeakMap(),
+    
+    register(name, componentClass) {
+        this.components.set(name, componentClass);
+        console.log(`[UI] Component registered: ${name}`);
+    },
+    
+    create(name, element, options = {}) {
+        const ComponentClass = this.components.get(name);
+        if (!ComponentClass) {
+            throw new Error(`Component "${name}" not found`);
+        }
+        
+        const instance = new ComponentClass(element, options);
+        this.instances.set(element, instance);
+        return instance;
+    },
+    
+    getInstance(element) {
+        return this.instances.get(element);
+    },
+    
+    destroy(element) {
+        const instance = this.instances.get(element);
+        if (instance && typeof instance.destroy === 'function') {
+            instance.destroy();
+            this.instances.delete(element);
+        }
+    }
+};
+
+/**
+ * 基础组件类 - 所有组件的父类
+ */
+class BaseUIComponent {
+    constructor(element, options = {}) {
+        this.element = element;
+        this.options = this.mergeOptions(options);
+        this.state = {};
+        this.listeners = [];
+        this.children = [];
+        this.isInitialized = false;
+        this.isDestroyed = false;
+        
+        this.setupElement();
+        this.init();
+    }
+    
+    mergeOptions(options) {
+        return { ...this.constructor.defaultOptions, ...options };
+    }
+    
+    setupElement() {
+        if (!this.element) {
+            throw new Error('Element is required for component initialization');
+        }
+        
+        // 添加基础类名
+        this.element.classList.add('ui-component', `ui-${this.constructor.componentName}`);
+        
+        // 设置可访问性属性
+        if (this.options.ariaLabel) {
+            this.element.setAttribute('aria-label', this.options.ariaLabel);
+        }
+        
+        if (this.options.role) {
+            this.element.setAttribute('role', this.options.role);
+        }
+    }
+    
+    init() {
+        if (this.isInitialized || this.isDestroyed) return;
+        
+        this.bindEvents();
+        this.render();
+        this.applyTheme();
+        this.setupAccessibility();
+        
+        this.isInitialized = true;
+        this.emit('initialized', { instance: this });
+        
+        console.log(`[UI] Component initialized: ${this.constructor.componentName}`);
+    }
+    
+    render() {
+        // 子类实现具体渲染逻辑
+    }
+    
+    bindEvents() {
+        // 子类实现事件绑定
+    }
+    
+    applyTheme() {
+        if (this.options.theme) {
+            this.element.classList.add(`theme-${this.options.theme}`);
+        }
+        
+        if (this.options.quantumEffect) {
+            this.element.classList.add('quantum-effect');
+            this.setupQuantumEffects();
+        }
+    }
+    
+    setupQuantumEffects() {
+        // 量子效果实现
+        const quantumOverlay = document.createElement('div');
+        quantumOverlay.className = 'quantum-overlay';
+        this.element.appendChild(quantumOverlay);
+        
+        // 添加粒子效果
+        if (this.options.quantumParticles) {
+            this.createQuantumParticles();
+        }
+    }
+    
+    createQuantumParticles() {
+        const particleContainer = document.createElement('div');
+        particleContainer.className = 'quantum-particles';
+        
+        for (let i = 0; i < (this.options.particleCount || 20); i++) {
+            const particle = document.createElement('div');
+            particle.className = 'quantum-particle';
+            particle.style.cssText = `
+                left: ${Math.random() * 100}%;
+                top: ${Math.random() * 100}%;
+                animation-delay: ${Math.random() * 2}s;
+                animation-duration: ${2 + Math.random() * 3}s;
+            `;
+            particleContainer.appendChild(particle);
+        }
+        
+        this.element.appendChild(particleContainer);
+    }
+    
+    setupAccessibility() {
+        // 键盘导航支持
+        if (this.options.keyboardNavigation !== false) {
+            this.setupKeyboardNavigation();
+        }
+        
+        // 屏幕阅读器支持
+        if (this.options.screenReader !== false) {
+            this.setupScreenReader();
+        }
+    }
+    
+    setupKeyboardNavigation() {
+        this.on('keydown', (e) => {
+            switch (e.key) {
+                case 'Enter':
+                case ' ':
+                    if (this.options.activatable !== false) {
+                        e.preventDefault();
+                        this.activate();
+                    }
+                    break;
+                case 'Escape':
+                    if (this.options.escapable !== false) {
+                        this.close();
+                    }
+                    break;
+            }
+        });
+    }
+    
+    setupScreenReader() {
+        // 实时区域更新
+        if (this.options.liveRegion) {
+            this.element.setAttribute('aria-live', this.options.liveRegion);
+        }
+    }
+    
+    // 事件系统
+    on(event, handler, options = {}) {
+        this.element.addEventListener(event, handler, options);
+        this.listeners.push({ event, handler, options });
+        return this;
+    }
+    
+    off(event, handler) {
+        this.element.removeEventListener(event, handler);
+        this.listeners = this.listeners.filter(
+            l => !(l.event === event && l.handler === handler)
+        );
+        return this;
+    }
+    
+    emit(event, data = {}) {
+        const customEvent = new CustomEvent(`ui:${event}`, {
+            detail: { ...data, component: this },
+            bubbles: true,
+            cancelable: true
+        });
+        this.element.dispatchEvent(customEvent);
+        return customEvent;
+    }
+    
+    // 状态管理
+    setState(newState, shouldRender = true) {
+        const oldState = { ...this.state };
+        this.state = { ...this.state, ...newState };
+        
+        this.emit('stateChange', { oldState, newState: this.state });
+        
+        if (shouldRender) {
+            this.render();
+        }
+    }
+    
+    getState(key = null) {
+        return key ? this.state[key] : this.state;
+    }
+    
+    // 样式控制
+    addClass(className) {
+        this.element.classList.add(className);
+        return this;
+    }
+    
+    removeClass(className) {
+        this.element.classList.remove(className);
+        return this;
+    }
+    
+    toggleClass(className, force = null) {
+        if (force !== null) {
+            this.element.classList.toggle(className, force);
+        } else {
+            this.element.classList.toggle(className);
+        }
+        return this;
+    }
+    
+    // 动画控制
+    animate(keyframes, options = {}) {
+        return this.element.animate(keyframes, {
+            duration: 300,
+            easing: 'ease-out',
+            fill: 'forwards',
+            ...options
+        });
+    }
+    
+    fadeIn(duration = 300) {
+        return this.animate([
+            { opacity: 0, transform: 'translateY(-10px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+        ], { duration });
+    }
+    
+    fadeOut(duration = 300) {
+        return this.animate([
+            { opacity: 1, transform: 'translateY(0)' },
+            { opacity: 0, transform: 'translateY(-10px)' }
+        ], { duration });
+    }
+    
+    // 生命周期方法
+    activate() {
+        this.setState({ active: true });
+        this.addClass('active');
+        this.emit('activate');
+    }
+    
+    deactivate() {
+        this.setState({ active: false });
+        this.removeClass('active');
+        this.emit('deactivate');
+    }
+    
+    show() {
+        this.setState({ visible: true });
+        this.removeClass('hidden');
+        this.fadeIn();
+        this.emit('show');
+    }
+    
+    hide() {
+        this.setState({ visible: false });
+        this.fadeOut().then(() => {
+            this.addClass('hidden');
+        });
+        this.emit('hide');
+    }
+    
+    close() {
+        this.emit('close');
+        if (this.options.destroyOnClose) {
+            this.destroy();
+        } else {
+            this.hide();
+        }
+    }
+    
+    destroy() {
+        if (this.isDestroyed) return;
+        
+        this.emit('beforeDestroy');
+        
+        // 清理事件监听器
+        this.listeners.forEach(({ event, handler }) => {
+            this.element.removeEventListener(event, handler);
+        });
+        this.listeners = [];
+        
+        // 销毁子组件
+        this.children.forEach(child => {
+            if (child && typeof child.destroy === 'function') {
+                child.destroy();
+            }
+        });
+        this.children = [];
+        
+        // 清理DOM
+        if (this.element && this.element.parentNode) {
+            this.element.parentNode.removeChild(this.element);
+        }
+        
+        this.isDestroyed = true;
+        this.emit('destroyed');
+        
+        console.log(`[UI] Component destroyed: ${this.constructor.componentName}`);
+    }
+    
+    // 工具方法
+    $(selector) {
+        return this.element.querySelector(selector);
+    }
+    
+    $$(selector) {
+        return this.element.querySelectorAll(selector);
+    }
+    
+    // 静态属性
+    static componentName = 'base';
+    static defaultOptions = {
+        theme: 'quantum',
+        quantumEffect: false,
+        quantumParticles: false,
+        particleCount: 20,
+        keyboardNavigation: true,
+        screenReader: true,
+        activatable: true,
+        escapable: true,
+        destroyOnClose: false,
+        ariaLabel: null,
+        role: null,
+        liveRegion: null
+    };
+}
+
+/**
+ * 按钮组件
+ */
+class QuantumButton extends BaseUIComponent {
+    static componentName = 'button';
+    static defaultOptions = {
+        ...BaseUIComponent.defaultOptions,
+        variant: 'primary', // primary, secondary, outline, ghost, danger
+        size: 'medium', // small, medium, large
+        loading: false,
+        disabled: false,
+        ripple: true,
+        quantumEffect: true,
+        icon: null,
+        iconPosition: 'left' // left, right, only
+    };
+    
+    render() {
+        const { variant, size, loading, disabled, icon, iconPosition } = this.options;
+        const { text } = this.state;
+        
+        // 清空内容
+        this.element.innerHTML = '';
+        
+        // 添加类名
+        this.element.className = `ui-component ui-button btn-${variant} btn-${size}`;
+        
+        if (loading) this.element.classList.add('btn-loading');
+        if (disabled) this.element.classList.add('btn-disabled');
+        if (this.options.quantumEffect) this.element.classList.add('quantum-effect');
+        
+        // 创建内容结构
+        const content = document.createElement('span');
+        content.className = 'btn-content';
+        
+        // 图标
+        if (icon && iconPosition !== 'only') {
+            const iconEl = document.createElement('i');
+            iconEl.className = `btn-icon ${icon}`;
+            if (iconPosition === 'left') {
+                content.appendChild(iconEl);
+            }
+        }
+        
+        // 文本
+        if (iconPosition !== 'only') {
+            const textEl = document.createElement('span');
+            textEl.className = 'btn-text';
+            textEl.textContent = text || this.element.textContent || this.options.text || '';
+            content.appendChild(textEl);
+        }
+        
+        // 右侧图标
+        if (icon && iconPosition === 'right') {
+            const iconEl = document.createElement('i');
+            iconEl.className = `btn-icon ${icon}`;
+            content.appendChild(iconEl);
+        }
+        
+        // 只有图标
+        if (icon && iconPosition === 'only') {
+            const iconEl = document.createElement('i');
+            iconEl.className = `btn-icon ${icon}`;
+            content.appendChild(iconEl);
+        }
+        
+        this.element.appendChild(content);
+        
+        // 加载动画
+        if (loading) {
+            const loader = document.createElement('span');
+            loader.className = 'btn-loader';
+            loader.innerHTML = '<div class="spinner"></div>';
+            this.element.appendChild(loader);
+        }
+        
+        // 波纹效果容器
+        if (this.options.ripple) {
+            const rippleContainer = document.createElement('span');
+            rippleContainer.className = 'btn-ripple';
+            this.element.appendChild(rippleContainer);
+        }
+        
+        // 设置属性
+        this.element.disabled = disabled || loading;
+        this.element.setAttribute('role', 'button');
+        this.element.setAttribute('tabindex', disabled ? '-1' : '0');
+    }
+    
+    bindEvents() {
+        // 点击事件
+        this.on('click', (e) => {
+            if (this.options.disabled || this.options.loading) {
+                e.preventDefault();
+                return;
+            }
+            
+            this.createRipple(e);
+            this.emit('click', { originalEvent: e });
+        });
+        
+        // 键盘事件
+        this.on('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                this.element.click();
+            }
+        });
+        
+        // 鼠标状态
+        this.on('mouseenter', () => this.addClass('btn-hover'));
+        this.on('mouseleave', () => this.removeClass('btn-hover'));
+        this.on('mousedown', () => this.addClass('btn-active'));
+        this.on('mouseup', () => this.removeClass('btn-active'));
+    }
+    
+    createRipple(e) {
+        if (!this.options.ripple) return;
+        
+        const rippleContainer = this.$('.btn-ripple');
+        if (!rippleContainer) return;
+        
+        const rect = this.element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple-effect';
+        ripple.style.cssText = `
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x}px;
+            top: ${y}px;
+        `;
+        
+        rippleContainer.appendChild(ripple);
+        
+        // 动画完成后移除
+        setTimeout(() => {
+            ripple.remove();
+        }, 600);
+    }
+    
+    setText(text) {
+        this.setState({ text });
+        const textEl = this.$('.btn-text');
+        if (textEl) textEl.textContent = text;
+    }
+    
+    setLoading(loading) {
+        this.options.loading = loading;
+        this.render();
+    }
+    
+    setDisabled(disabled) {
+        this.options.disabled = disabled;
+        this.render();
+    }
+}
+
+/**
+ * 卡片组件
+ */
+class QuantumCard extends BaseUIComponent {
+    static componentName = 'card';
+    static defaultOptions = {
+        ...BaseUIComponent.defaultOptions,
+        variant: 'default', // default, elevated, outlined, filled
+        padding: 'medium', // none, small, medium, large
+        hoverable: true,
+        clickable: false,
+        quantumEffect: true,
+        header: null,
+        footer: null,
+        glass: false
+    };
+    
+    render() {
+        const { variant, padding, hoverable, clickable, glass } = this.options;
+        
+        // 添加类名
+        this.element.className = `ui-component ui-card card-${variant} card-padding-${padding}`;
+        
+        if (hoverable) this.element.classList.add('card-hoverable');
+        if (clickable) this.element.classList.add('card-clickable');
+        if (glass) this.element.classList.add('card-glass');
+        if (this.options.quantumEffect) this.element.classList.add('quantum-effect');
+        
+        // 保存原始内容
+        const originalContent = this.element.innerHTML;
+        this.element.innerHTML = '';
+        
+        // 创建结构
+        if (this.options.header) {
+            const header = document.createElement('div');
+            header.className = 'card-header';
+            header.innerHTML = this.options.header;
+            this.element.appendChild(header);
+        }
+        
+        const body = document.createElement('div');
+        body.className = 'card-body';
+        body.innerHTML = originalContent;
+        this.element.appendChild(body);
+        
+        if (this.options.footer) {
+            const footer = document.createElement('div');
+            footer.className = 'card-footer';
+            footer.innerHTML = this.options.footer;
+            this.element.appendChild(footer);
+        }
+        
+        // 量子效果背景
+        if (this.options.quantumEffect) {
+            const background = document.createElement('div');
+            background.className = 'card-quantum-bg';
+            this.element.appendChild(background);
+        }
+    }
+    
+    bindEvents() {
+        if (this.options.clickable) {
+            this.on('click', (e) => {
+                this.emit('cardClick', { originalEvent: e });
+            });
+            
+            this.element.setAttribute('role', 'button');
+            this.element.setAttribute('tabindex', '0');
+        }
+        
+        if (this.options.hoverable) {
+            this.on('mouseenter', () => {
+                this.addClass('card-hover');
+                this.emit('cardHover');
+            });
+            
+            this.on('mouseleave', () => {
+                this.removeClass('card-hover');
+                this.emit('cardLeave');
+            });
+        }
+    }
+    
+    setContent(content) {
+        const body = this.$('.card-body');
+        if (body) {
+            body.innerHTML = content;
+        }
+    }
+    
+    setHeader(header) {
+        this.options.header = header;
+        this.render();
+    }
+    
+    setFooter(footer) {
+        this.options.footer = footer;
+        this.render();
+    }
+}
+
+/**
+ * 模态框组件
+ */
+class QuantumModal extends BaseUIComponent {
+    static componentName = 'modal';
+    static defaultOptions = {
+        ...BaseUIComponent.defaultOptions,
+        size: 'medium', // small, medium, large, fullscreen
+        backdrop: true,
+        backdropClose: true,
+        keyboard: true,
+        focus: true,
+        animation: 'fade', // fade, slide, zoom
+        quantumEffect: true,
+        destroyOnClose: true,
+        appendTo: document.body
+    };
+    
+    constructor(element, options = {}) {
+        // 如果没有提供 element，创建一个
+        if (!element) {
+            element = document.createElement('div');
+        }
+        
+        super(element, options);
+    }
+    
+    render() {
+        const { size, backdrop, animation } = this.options;
+        
+        // 创建模态框结构
+        this.element.className = `ui-component ui-modal modal-${size} modal-${animation}`;
+        this.element.setAttribute('role', 'dialog');
+        this.element.setAttribute('aria-modal', 'true');
+        this.element.setAttribute('tabindex', '-1');
+        
+        // 清空并重建内容
+        const originalContent = this.element.innerHTML;
+        this.element.innerHTML = '';
+        
+        // 背景遮罩
+        if (backdrop) {
+            this.backdrop = document.createElement('div');
+            this.backdrop.className = 'modal-backdrop';
+            if (this.options.quantumEffect) {
+                this.backdrop.classList.add('quantum-backdrop');
+            }
+            this.element.appendChild(this.backdrop);
+        }
+        
+        // 模态框容器
+        const container = document.createElement('div');
+        container.className = 'modal-container';
+        
+        // 模态框内容
+        const content = document.createElement('div');
+        content.className = 'modal-content';
+        
+        if (this.options.quantumEffect) {
+            content.classList.add('quantum-effect');
+        }
+        
+        content.innerHTML = originalContent;
+        container.appendChild(content);
+        this.element.appendChild(container);
+        
+        // 添加到页面
+        if (!this.element.parentNode) {
+            this.options.appendTo.appendChild(this.element);
+        }
+        
+        // 初始隐藏
+        this.element.style.display = 'none';
+    }
+    
+    bindEvents() {
+        // 背景点击关闭
+        if (this.options.backdropClose && this.backdrop) {
+            this.backdrop.addEventListener('click', (e) => {
+                if (e.target === this.backdrop) {
+                    this.close();
+                }
+            });
+        }
+        
+        // 键盘事件
+        if (this.options.keyboard) {
+            this.on('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    this.close();
+                }
+            });
+        }
+        
+        // 阻止内容区域点击冒泡
+        const content = this.$('.modal-content');
+        if (content) {
+            content.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+    }
+    
+    show() {
+        this.setState({ visible: true });
+        this.element.style.display = 'flex';
+        
+        // 焦点管理
+        if (this.options.focus) {
+            this.previousActiveElement = document.activeElement;
+            this.element.focus();
+        }
+        
+        // 防止背景滚动
+        document.body.classList.add('modal-open');
+        
+        // 动画
+        requestAnimationFrame(() => {
+            this.element.classList.add('modal-show');
+        });
+        
+        this.emit('show');
+        
+        return new Promise((resolve) => {
+            setTimeout(resolve, 300); // 动画持续时间
+        });
+    }
+    
+    hide() {
+        this.setState({ visible: false });
+        this.element.classList.remove('modal-show');
+        
+        // 恢复焦点
+        if (this.previousActiveElement) {
+            this.previousActiveElement.focus();
+        }
+        
+        // 恢复背景滚动
+        document.body.classList.remove('modal-open');
+        
+        this.emit('hide');
+        
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                this.element.style.display = 'none';
+                resolve();
+            }, 300);
+        });
+    }
+    
+    setContent(content) {
+        const contentEl = this.$('.modal-content');
+        if (contentEl) {
+            contentEl.innerHTML = content;
+        }
+    }
+    
+    setTitle(title) {
+        let header = this.$('.modal-header');
+        if (!header) {
+            header = document.createElement('div');
+            header.className = 'modal-header';
+            const content = this.$('.modal-content');
+            content.insertBefore(header, content.firstChild);
+        }
+        
+        let titleEl = header.querySelector('.modal-title');
+        if (!titleEl) {
+            titleEl = document.createElement('h4');
+            titleEl.className = 'modal-title';
+            header.appendChild(titleEl);
+        }
+        
+        titleEl.textContent = title;
+    }
+}
+
+/**
+ * 输入框组件
+ */
+class QuantumInput extends BaseUIComponent {
+    static componentName = 'input';
+    static defaultOptions = {
+        ...BaseUIComponent.defaultOptions,
+        type: 'text',
+        placeholder: '',
+        label: null,
+        helpText: null,
+        validation: null,
+        required: false,
+        disabled: false,
+        readonly: false,
+        quantumEffect: true,
+        size: 'medium', // small, medium, large
+        variant: 'default' // default, filled, outlined
+    };
+    
+    render() {
+        const { type, placeholder, label, helpText, required, disabled, readonly, size, variant } = this.options;
+        
+        // 保存原始值
+        const value = this.element.value || '';
+        
+        // 创建包装器
+        const wrapper = document.createElement('div');
+        wrapper.className = `ui-component ui-input input-${size} input-${variant}`;
+        
+        if (this.options.quantumEffect) {
+            wrapper.classList.add('quantum-effect');
+        }
+        
+        // 标签
+        if (label) {
+            const labelEl = document.createElement('label');
+            labelEl.className = 'input-label';
+            labelEl.textContent = label;
+            if (required) labelEl.classList.add('required');
+            wrapper.appendChild(labelEl);
+        }
+        
+        // 输入框容器
+        const inputContainer = document.createElement('div');
+        inputContainer.className = 'input-container';
+        
+        // 输入框
+        const input = document.createElement('input');
+        input.type = type;
+        input.className = 'input-field';
+        input.placeholder = placeholder;
+        input.value = value;
+        input.disabled = disabled;
+        input.readonly = readonly;
+        input.required = required;
+        
+        inputContainer.appendChild(input);
+        
+        // 量子效果背景
+        if (this.options.quantumEffect) {
+            const quantumBg = document.createElement('div');
+            quantumBg.className = 'input-quantum-bg';
+            inputContainer.appendChild(quantumBg);
+        }
+        
+        wrapper.appendChild(inputContainer);
+        
+        // 帮助文本
+        if (helpText) {
+            const helpEl = document.createElement('div');
+            helpEl.className = 'input-help';
+            helpEl.textContent = helpText;
+            wrapper.appendChild(helpEl);
+        }
+        
+        // 验证信息容器
+        const validationEl = document.createElement('div');
+        validationEl.className = 'input-validation';
+        wrapper.appendChild(validationEl);
+        
+        // 替换原始元素
+        this.element.parentNode.replaceChild(wrapper, this.element);
+        this.element = wrapper;
+        this.inputElement = input;
+    }
+    
+    bindEvents() {
+        if (!this.inputElement) return;
+        
+        // 输入事件
+        this.inputElement.addEventListener('input', (e) => {
+            this.validateInput();
+            this.emit('input', { value: e.target.value, originalEvent: e });
+        });
+        
+        // 焦点事件
+        this.inputElement.addEventListener('focus', (e) => {
+            this.addClass('input-focused');
+            this.emit('focus', { originalEvent: e });
+        });
+        
+        this.inputElement.addEventListener('blur', (e) => {
+            this.removeClass('input-focused');
+            this.validateInput();
+            this.emit('blur', { originalEvent: e });
+        });
+        
+        // 键盘事件
+        this.inputElement.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                this.emit('enter', { value: e.target.value, originalEvent: e });
+            }
+        });
+    }
+    
+    validateInput() {
+        if (!this.options.validation || !this.inputElement) return true;
+        
+        const value = this.inputElement.value;
+        const validationResult = this.options.validation(value);
+        const validationEl = this.$('.input-validation');
+        
+        if (validationResult === true) {
+            this.removeClass('input-error input-warning');
+            this.addClass('input-valid');
+            if (validationEl) validationEl.textContent = '';
+            return true;
+        } else {
+            this.removeClass('input-valid');
+            this.addClass('input-error');
+            if (validationEl) {
+                validationEl.textContent = validationResult.message || 'Invalid input';
+            }
+            return false;
+        }
+    }
+    
+    getValue() {
+        return this.inputElement ? this.inputElement.value : '';
+    }
+    
+    setValue(value) {
+        if (this.inputElement) {
+            this.inputElement.value = value;
+            this.validateInput();
+        }
+    }
+    
+    focus() {
+        if (this.inputElement) {
+            this.inputElement.focus();
+        }
+    }
+    
+    blur() {
+        if (this.inputElement) {
+            this.inputElement.blur();
+        }
+    }
+    
+    setDisabled(disabled) {
+        this.options.disabled = disabled;
+        if (this.inputElement) {
+            this.inputElement.disabled = disabled;
+        }
+    }
+}
+
+/**
+ * 工具提示组件
+ */
+class QuantumTooltip extends BaseUIComponent {
+    static componentName = 'tooltip';
+    static defaultOptions = {
+        ...BaseUIComponent.defaultOptions,
+        content: '',
+        position: 'top', // top, bottom, left, right
+        trigger: 'hover', // hover, click, focus, manual
+        delay: 100,
+        hideDelay: 100,
+        arrow: true,
+        quantumEffect: true,
+        maxWidth: '300px'
+    };
+    
+    constructor(element, options = {}) {
+        super(element, options);
+        this.isVisible = false;
+        this.hideTimer = null;
+        this.showTimer = null;
+    }
+    
+    render() {
+        // 创建工具提示元素
+        this.tooltip = document.createElement('div');
+        this.tooltip.className = `ui-tooltip tooltip-${this.options.position}`;
+        this.tooltip.style.maxWidth = this.options.maxWidth;
+        
+        if (this.options.quantumEffect) {
+            this.tooltip.classList.add('quantum-effect');
+        }
+        
+        // 内容
+        const content = document.createElement('div');
+        content.className = 'tooltip-content';
+        content.textContent = this.options.content;
+        this.tooltip.appendChild(content);
+        
+        // 箭头
+        if (this.options.arrow) {
+            const arrow = document.createElement('div');
+            arrow.className = 'tooltip-arrow';
+            this.tooltip.appendChild(arrow);
+        }
+        
+        // 添加到页面但保持隐藏
+        document.body.appendChild(this.tooltip);
+        this.tooltip.style.display = 'none';
+    }
+    
+    bindEvents() {
+        const { trigger } = this.options;
+        
+        if (trigger === 'hover') {
+            this.on('mouseenter', () => this.scheduleShow());
+            this.on('mouseleave', () => this.scheduleHide());
+            
+            this.tooltip.addEventListener('mouseenter', () => this.cancelHide());
+            this.tooltip.addEventListener('mouseleave', () => this.scheduleHide());
+        }
+        
+        if (trigger === 'click') {
+            this.on('click', (e) => {
+                e.preventDefault();
+                this.toggle();
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!this.element.contains(e.target) && !this.tooltip.contains(e.target)) {
+                    this.hide();
+                }
+            });
+        }
+        
+        if (trigger === 'focus') {
+            this.on('focus', () => this.show());
+            this.on('blur', () => this.hide());
+        }
+    }
+    
+    scheduleShow() {
+        this.cancelHide();
+        this.showTimer = setTimeout(() => this.show(), this.options.delay);
+    }
+    
+    scheduleHide() {
+        this.cancelShow();
+        this.hideTimer = setTimeout(() => this.hide(), this.options.hideDelay);
+    }
+    
+    cancelShow() {
+        if (this.showTimer) {
+            clearTimeout(this.showTimer);
+            this.showTimer = null;
+        }
+    }
+    
+    cancelHide() {
+        if (this.hideTimer) {
+            clearTimeout(this.hideTimer);
+            this.hideTimer = null;
+        }
+    }
+    
+    show() {
+        if (this.isVisible) return;
+        
+        this.cancelShow();
+        this.cancelHide();
+        
+        this.positionTooltip();
+        this.tooltip.style.display = 'block';
+        
+        requestAnimationFrame(() => {
+            this.tooltip.classList.add('tooltip-show');
+        });
+        
+        this.isVisible = true;
+        this.emit('show');
+    }
+    
+    hide() {
+        if (!this.isVisible) return;
+        
+        this.tooltip.classList.remove('tooltip-show');
+        
+        setTimeout(() => {
+            this.tooltip.style.display = 'none';
+        }, 150);
+        
+        this.isVisible = false;
+        this.emit('hide');
+    }
+    
+    toggle() {
+        if (this.isVisible) {
+            this.hide();
+        } else {
+            this.show();
+        }
+    }
+    
+    positionTooltip() {
+        const elementRect = this.element.getBoundingClientRect();
+        const tooltipRect = this.tooltip.getBoundingClientRect();
+        const { position } = this.options;
+        
+        let top, left;
+        
+        switch (position) {
+            case 'top':
+                top = elementRect.top - tooltipRect.height - 8;
+                left = elementRect.left + (elementRect.width - tooltipRect.width) / 2;
+                break;
+            case 'bottom':
+                top = elementRect.bottom + 8;
+                left = elementRect.left + (elementRect.width - tooltipRect.width) / 2;
+                break;
+            case 'left':
+                top = elementRect.top + (elementRect.height - tooltipRect.height) / 2;
+                left = elementRect.left - tooltipRect.width - 8;
+                break;
+            case 'right':
+                top = elementRect.top + (elementRect.height - tooltipRect.height) / 2;
+                left = elementRect.right + 8;
+                break;
+        }
+        
+        // 边界检查
+        const viewport = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+        
+        if (left < 8) left = 8;
+        if (left + tooltipRect.width > viewport.width - 8) {
+            left = viewport.width - tooltipRect.width - 8;
+        }
+        
+        if (top < 8) top = 8;
+        if (top + tooltipRect.height > viewport.height - 8) {
+            top = viewport.height - tooltipRect.height - 8;
+        }
+        
+        this.tooltip.style.top = `${top + window.scrollY}px`;
+        this.tooltip.style.left = `${left + window.scrollX}px`;
+    }
+    
+    setContent(content) {
+        this.options.content = content;
+        const contentEl = this.tooltip.querySelector('.tooltip-content');
+        if (contentEl) {
+            contentEl.textContent = content;
+        }
+    }
+    
+    destroy() {
+        this.cancelShow();
+        this.cancelHide();
+        
+        if (this.tooltip && this.tooltip.parentNode) {
+            this.tooltip.parentNode.removeChild(this.tooltip);
+        }
+        
+        super.destroy();
+    }
+}
+
+// 注册所有组件
+ComponentRegistry.register('button', QuantumButton);
+ComponentRegistry.register('card', QuantumCard);
+ComponentRegistry.register('modal', QuantumModal);
+ComponentRegistry.register('input', QuantumInput);
+ComponentRegistry.register('tooltip', QuantumTooltip);
+
+/**
+ * 自动初始化函数
+ */
+function initializeQuantumComponents() {
+    // 自动初始化带有 data-component 属性的元素
+    document.querySelectorAll('[data-component]').forEach(element => {
+        const componentName = element.getAttribute('data-component');
+        const options = {};
+        
+        // 从 data- 属性中解析选项
+        Array.from(element.attributes).forEach(attr => {
+            if (attr.name.startsWith('data-') && attr.name !== 'data-component') {
+                const key = attr.name.slice(5).replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+                let value = attr.value;
+                
+                // 尝试解析 JSON 或布尔值
+                try {
+                    if (value === 'true') value = true;
+                    else if (value === 'false') value = false;
+                    else if (value.startsWith('{') || value.startsWith('[')) {
+                        value = JSON.parse(value);
+                    }
+                } catch (e) {
+                    // 保持原始字符串值
+                }
+                
+                options[key] = value;
+            }
+        });
+        
+        try {
+            ComponentRegistry.create(componentName, element, options);
+        } catch (error) {
+            console.error(`Failed to initialize component ${componentName}:`, error);
+        }
+    });
+}
+
+/**
+ * 主题切换功能
+ */
+const ThemeManager = {
+    currentTheme: 'quantum',
+    themes: ['quantum', 'classic', 'minimal', 'neon'],
+    
+    setTheme(theme) {
+        if (!this.themes.includes(theme)) {
+            console.warn(`Theme "${theme}" not found`);
+            return;
+        }
+        
+        document.documentElement.setAttribute('data-theme', theme);
+        this.currentTheme = theme;
+        
+        // 保存到本地存储
+        localStorage.setItem('ui-theme', theme);
+        
+        // 触发主题变更事件
+        document.dispatchEvent(new CustomEvent('themeChange', {
+            detail: { theme }
+        }));
+        
+        console.log(`[UI] Theme changed to: ${theme}`);
+    },
+    
+    getTheme() {
+        return this.currentTheme;
+    },
+    
+    initTheme() {
+        const savedTheme = localStorage.getItem('ui-theme');
+        if (savedTheme && this.themes.includes(savedTheme)) {
+            this.setTheme(savedTheme);
+        }
+    }
+};
+
+/**
+ * 响应式管理器
+ */
+const ResponsiveManager = {
+    breakpoints: {
+        xs: 0,
+        sm: 576,
+        md: 768,
+        lg: 992,
+        xl: 1200,
+        xxl: 1400
+    },
+    
+    currentBreakpoint: 'xl',
+    
+    init() {
+        this.updateBreakpoint();
+        window.addEventListener('resize', () => this.updateBreakpoint());
+    },
+    
+    updateBreakpoint() {
+        const width = window.innerWidth;
+        let newBreakpoint = 'xs';
+        
+        for (const [name, minWidth] of Object.entries(this.breakpoints)) {
+            if (width >= minWidth) {
+                newBreakpoint = name;
+            }
+        }
+        
+        if (newBreakpoint !== this.currentBreakpoint) {
+            this.currentBreakpoint = newBreakpoint;
+            document.documentElement.setAttribute('data-breakpoint', newBreakpoint);
+            
+            document.dispatchEvent(new CustomEvent('breakpointChange', {
+                detail: { breakpoint: newBreakpoint, width }
+            }));
+        }
+    },
+    
+    getBreakpoint() {
+        return this.currentBreakpoint;
+    },
+    
+    isBreakpoint(breakpoint) {
+        const current = this.breakpoints[this.currentBreakpoint];
+        const target = this.breakpoints[breakpoint];
+        return current >= target;
+    }
+};
+
+/**
+ * 全局 API
+ */
+window.QuantumUI = {
+    ComponentRegistry,
+    BaseUIComponent,
+    QuantumButton,
+    QuantumCard,
+    QuantumModal,
+    QuantumInput,
+    QuantumTooltip,
+    ThemeManager,
+    ResponsiveManager,
+    
+    // 便捷方法
+    init: initializeQuantumComponents,
+    component: (name, element, options) => ComponentRegistry.create(name, element, options),
+    button: (element, options) => new QuantumButton(element, options),
+    card: (element, options) => new QuantumCard(element, options),
+    modal: (element, options) => new QuantumModal(element, options),
+    input: (element, options) => new QuantumInput(element, options),
+    tooltip: (element, options) => new QuantumTooltip(element, options)
+};
+
+// 自动初始化
+document.addEventListener('DOMContentLoaded', () => {
+    ThemeManager.initTheme();
+    ResponsiveManager.init();
+    initializeQuantumComponents();
+    
+    console.log('[UI] QuantumUI Advanced Component Library initialized');
+});
+
+// 导出给模块系统使用
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.QuantumUI;
+}

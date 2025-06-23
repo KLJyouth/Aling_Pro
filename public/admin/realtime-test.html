@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 5.0 - 实时数据测试</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .test-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 1200px;
+            padding: 30px;
+        }
+        
+        .status-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease;
+        }
+        
+        .status-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background: #28a745;
+            box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+        }
+        
+        .status-offline {
+            background: #dc3545;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .log-container {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #007bff;
+            background: white;
+            border-radius: 3px;
+        }
+        
+        .btn-action {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="test-container">
+            <div class="text-center mb-4">
+                <h1><i class="bi bi-activity"></i> AlingAi Pro 5.0 实时数据测试</h1>
+                <p class="lead">长轮询实时数据系统测试页面</p>
+            </div>
+            
+            <!-- 连接状态 -->
+            <div class="status-card">
+                <h3><i class="bi bi-wifi"></i> 连接状态</h3>
+                <div id="connection-status">
+                    <span class="status-indicator status-offline"></span>
+                    <span>未连接</span>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-action" onclick="startRealtime()">
+                        <i class="bi bi-play"></i> 开始实时数据
+                    </button>
+                    <button class="btn btn-warning btn-action" onclick="stopRealtime()">
+                        <i class="bi bi-stop"></i> 停止实时数据
+                    </button>
+                    <button class="btn btn-info btn-action" onclick="refreshData()">
+                        <i class="bi bi-arrow-clockwise"></i> 手动刷新
+                    </button>
+                    <button class="btn btn-secondary btn-action" onclick="testServer()">
+                        <i class="bi bi-server"></i> 测试服务器
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 实时数据展示 -->
+            <div class="data-grid">
+                <div class="metric-card">
+                    <i class="bi bi-cpu"></i>
+                    <div>CPU使用率</div>
+                    <div class="metric-value" id="cpu-usage">--</div>
+                </div>
+                
+                <div class="metric-card">
+                    <i class="bi bi-memory"></i>
+                    <div>内存使用</div>
+                    <div class="metric-value" id="memory-usage">--</div>
+                </div>
+                
+                <div class="metric-card">
+                    <i class="bi bi-people"></i>
+                    <div>在线用户</div>
+                    <div class="metric-value" id="online-users">--</div>
+                </div>
+                
+                <div class="metric-card">
+                    <i class="bi bi-graph-up"></i>
+                    <div>API调用/小时</div>
+                    <div class="metric-value" id="api-calls">--</div>
+                </div>
+            </div>
+            
+            <!-- 详细信息 -->
+            <div class="status-card">
+                <h3><i class="bi bi-info-circle"></i> 详细信息</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>服务器时间:</strong> <span id="server-time">--</span></p>
+                        <p><strong>PHP版本:</strong> <span id="php-version">--</span></p>
+                        <p><strong>数据源:</strong> <span id="data-source">--</span></p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>最后更新:</strong> <span id="last-update">--</span></p>
+                        <p><strong>更新次数:</strong> <span id="update-count">0</span></p>
+                        <p><strong>错误次数:</strong> <span id="error-count">0</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 日志 -->
+            <div class="status-card">
+                <h3><i class="bi bi-journal-text"></i> 实时日志</h3>
+                <button class="btn btn-sm btn-outline-secondary float-end" onclick="clearLog()">
+                    <i class="bi bi-trash"></i> 清空日志
+                </button>
+                <div class="log-container" id="log-container">
+                    <!-- 日志条目将在这里显示 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        class RealtimeDataTester {
+            constructor() {
+                this.isConnected = false;
+                this.isPolling = false;
+                this.pollTimeout = null;
+                this.updateCount = 0;
+                this.errorCount = 0;
+                this.baseUrl = '/admin/api/realtime-server.php';
+                this.lastTimestamp = 0;
+                
+                this.log('🚀 实时数据测试器初始化完成');
+            }
+            
+            log(message, type = 'info') {
+                const container = document.getElementById('log-container');
+                const entry = document.createElement('div');
+                entry.className = 'log-entry';
+                entry.innerHTML = `
+                    <small class="text-muted">${new Date().toLocaleTimeString()}</small>
+                    <span class="text-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'primary'}">
+                        ${message}
+                    </span>
+                `;
+                container.appendChild(entry);
+                container.scrollTop = container.scrollHeight;
+            }
+            
+            updateConnectionStatus(connected) {
+                const indicator = document.querySelector('.status-indicator');
+                const text = document.querySelector('#connection-status span:last-child');
+                
+                if (connected) {
+                    indicator.className = 'status-indicator status-online';
+                    text.textContent = '已连接 - 长轮询模式';
+                    this.isConnected = true;
+                } else {
+                    indicator.className = 'status-indicator status-offline';
+                    text.textContent = '连接断开';
+                    this.isConnected = false;
+                }
+            }
+            
+            async startPolling() {
+                if (this.isPolling) return;
+                
+                this.isPolling = true;
+                this.log('📡 开始长轮询...', 'info');
+                this.poll();
+            }
+            
+            stopPolling() {
+                this.isPolling = false;
+                if (this.pollTimeout) {
+                    clearTimeout(this.pollTimeout);
+                    this.pollTimeout = null;
+                }
+                this.updateConnectionStatus(false);
+                this.log('⏹️ 停止长轮询', 'info');
+            }
+            
+            async poll() {
+                if (!this.isPolling) return;
+                
+                try {
+                    const url = `${this.baseUrl}?action=poll&timeout=25&timestamp=${this.lastTimestamp}`;
+                    const response = await fetch(url);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.handleSuccess(result.data);
+                    } else {
+                        this.handleError(result.error || 'Unknown error');
+                    }
+                    
+                } catch (error) {
+                    this.handleError(error.message);
+                }
+                
+                // 继续轮询
+                if (this.isPolling) {
+                    this.pollTimeout = setTimeout(() => this.poll(), 1000);
+                }
+            }
+            
+            handleSuccess(data) {
+                if (!this.isConnected) {
+                    this.updateConnectionStatus(true);
+                    this.log('✅ 连接成功', 'success');
+                }
+                
+                // 更新时间戳
+                if (data.timestamp) {
+                    this.lastTimestamp = data.timestamp;
+                }
+                
+                // 更新数据
+                if (data.data) {
+                    this.updateDisplay(data.data);
+                    this.updateCount++;
+                    document.getElementById('update-count').textContent = this.updateCount;
+                    
+                    if (data.hasUpdate !== false) {
+                        this.log(`📊 数据更新 (${data.data.data_source || 'unknown'})`, 'success');
+                    }
+                }
+            }
+            
+            handleError(error) {
+                if (this.isConnected) {
+                    this.updateConnectionStatus(false);
+                }
+                
+                this.errorCount++;
+                document.getElementById('error-count').textContent = this.errorCount;
+                this.log(`❌ 错误: ${error}`, 'error');
+            }
+            
+            updateDisplay(data) {
+                // 更新CPU使用率
+                if (data.monitoring && data.monitoring.cpu_usage !== undefined) {
+                    document.getElementById('cpu-usage').textContent = `${data.monitoring.cpu_usage}%`;
+                }
+                
+                // 更新内存使用
+                if (data.system && data.system.memory_usage !== undefined) {
+                    document.getElementById('memory-usage').textContent = `${data.system.memory_usage}MB`;
+                }
+                
+                // 更新在线用户
+                if (data.users && data.users.online !== undefined) {
+                    document.getElementById('online-users').textContent = data.users.online;
+                }
+                
+                // 更新API调用
+                if (data.api && data.api.hourly_calls !== undefined) {
+                    document.getElementById('api-calls').textContent = data.api.hourly_calls;
+                }
+                
+                // 更新详细信息
+                if (data.server_time) {
+                    document.getElementById('server-time').textContent = data.server_time;
+                }
+                
+                if (data.system && data.system.php_version) {
+                    document.getElementById('php-version').textContent = data.system.php_version;
+                }
+                
+                if (data.data_source) {
+                    document.getElementById('data-source').textContent = data.data_source;
+                }
+                
+                document.getElementById('last-update').textContent = new Date().toLocaleTimeString();
+            }
+            
+            async testServer() {
+                this.log('🧪 测试服务器状态...', 'info');
+                
+                try {
+                    const response = await fetch(`${this.baseUrl}?action=status`);
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        this.log(`✅ 服务器响应: ${result.data.server} v${result.data.version}`, 'success');
+                    } else {
+                        this.log('❌ 服务器测试失败', 'error');
+                    }
+                } catch (error) {
+                    this.log(`❌ 服务器测试错误: ${error.message}`, 'error');
+                }
+            }
+            
+            async refreshData() {
+                this.log('🔄 手动刷新数据...', 'info');
+                this.lastTimestamp = 0; // 强制获取最新数据
+                
+                try {
+                    const response = await fetch(`${this.baseUrl}?action=poll&timeout=5&timestamp=0`);
+                    const result = await response.json();
+                    
+                    if (result.success && result.data.data) {
+                        this.updateDisplay(result.data.data);
+                        this.log('✅ 数据刷新成功', 'success');
+                    }
+                } catch (error) {
+                    this.log(`❌ 刷新失败: ${error.message}`, 'error');
+                }
+            }
+        }
+        
+        // 全局实例
+        const tester = new RealtimeDataTester();
+        
+        // 全局函数
+        function startRealtime() {
+            tester.startPolling();
+        }
+        
+        function stopRealtime() {
+            tester.stopPolling();
+        }
+        
+        function refreshData() {
+            tester.refreshData();
+        }
+        
+        function testServer() {
+            tester.testServer();
+        }
+        
+        function clearLog() {
+            document.getElementById('log-container').innerHTML = '';
+            tester.log('📋 日志已清空', 'info');
+        }
+        
+        // 页面离开时清理
+        window.addEventListener('beforeunload', () => {
+            tester.stopPolling();
+        });
+    </script>
+</body>
+</html>

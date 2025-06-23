@@ -1,0 +1,441 @@
+/**
+ * 最终用户体验验证脚本
+ * 模拟真实用户操作流程，验证聊天系统的完整功能
+ */
+
+class UserExperienceValidator {
+    constructor() {
+        this.testResults = [];
+        this.userFlows = [];
+        this.currentStep = 0;
+        this.isRunning = false;
+    }
+
+    log(message, type = 'info') {
+        const timestamp = new Date().toLocaleTimeString();
+        const colors = {
+            'info': 'color: blue',
+            'success': 'color: green; font-weight: bold',
+            'error': 'color: red; font-weight: bold',
+            'warn': 'color: orange; font-weight: bold',
+            'user': 'color: purple; font-weight: bold'
+        };
+        
+        console.log(`%c👤 [UX-TEST] ${message}`, colors[type] || colors.info);
+        
+        this.testResults.push({
+            timestamp,
+            message,
+            type,
+            step: this.currentStep
+        });
+    }
+
+    async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // 测试用户流程1：首次访问
+    async testFirstTimeVisit() {
+        this.log('🚀 开始测试：首次访问用户流程', 'user');
+        this.currentStep = 1;
+        
+        try {
+            // 步骤1：页面加载检查
+            this.log('步骤1：检查页面加载状态', 'info');
+            await this.sleep(1000);
+            
+            const chatContainer = document.getElementById('chatContainer');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            if (!chatContainer || !messageInput || !sendButton) {
+                throw new Error('关键UI元素缺失');
+            }
+            
+            this.log('✅ 页面基本元素加载正常', 'success');
+            
+            // 步骤2：检查登录模态框
+            this.log('步骤2：检查登录流程', 'info');
+            await this.sleep(500);
+            
+            const loginModal = document.getElementById('loginModal');
+            const guestModeBtn = document.getElementById('guestModeBtn');
+            
+            if (loginModal && guestModeBtn) {
+                this.log('✅ 登录模态框存在', 'success');
+                
+                // 模拟点击访客模式
+                this.log('🖱️ 模拟点击访客模式按钮', 'user');
+                guestModeBtn.click();
+                await this.sleep(1000);
+                
+                const guestMode = localStorage.getItem('guestMode');
+                if (guestMode === 'true') {
+                    this.log('✅ 访客模式激活成功', 'success');
+                } else {
+                    this.log('⚠️ 访客模式可能未正确设置', 'warn');
+                }
+            } else {
+                this.log('⚠️ 登录模态框或访客按钮不存在', 'warn');
+            }
+            
+            // 步骤3：测试基本聊天功能
+            await this.testBasicChatFlow();
+            
+            return true;
+        } catch (error) {
+            this.log(`❌ 首次访问流程失败: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    // 测试基本聊天流程
+    async testBasicChatFlow() {
+        this.log('步骤3：测试基本聊天功能', 'info');
+        this.currentStep = 3;
+        
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatContainer = document.getElementById('chatContainer');
+        
+        if (!messageInput || !sendButton || !chatContainer) {
+            throw new Error('聊天组件不完整');
+        }
+        
+        // 记录初始消息数量
+        const initialMessageCount = chatContainer.querySelectorAll('.message').length;
+        this.log(`初始消息数量: ${initialMessageCount}`, 'info');
+        
+        // 测试消息1：简单文本
+        this.log('🖱️ 发送测试消息1: "你好"', 'user');
+        messageInput.value = '你好';
+        await this.sleep(500);
+        
+        sendButton.click();
+        await this.sleep(2000); // 等待响应
+        
+        let currentMessageCount = chatContainer.querySelectorAll('.message').length;
+        if (currentMessageCount > initialMessageCount) {
+            this.log('✅ 消息1发送成功，界面有更新', 'success');
+        } else {
+            this.log('⚠️ 消息1可能没有正确显示', 'warn');
+        }
+        
+        // 测试消息2：包含格式的文本
+        this.log('🖱️ 发送测试消息2: 包含**粗体**的消息', 'user');
+        messageInput.value = '这是一条包含**粗体**和`代码`的测试消息';
+        await this.sleep(500);
+        
+        sendButton.click();
+        await this.sleep(2000);
+        
+        const finalMessageCount = chatContainer.querySelectorAll('.message').length;
+        if (finalMessageCount > currentMessageCount) {
+            this.log('✅ 消息2发送成功，Markdown格式测试完成', 'success');
+        } else {
+            this.log('⚠️ 消息2可能没有正确显示', 'warn');
+        }
+        
+        // 检查消息格式
+        const messages = chatContainer.querySelectorAll('.message');
+        let formattedMessagesFound = 0;
+        
+        messages.forEach(msg => {
+            if (msg.innerHTML.includes('<strong>') || msg.innerHTML.includes('<code>')) {
+                formattedMessagesFound++;
+            }
+        });
+        
+        if (formattedMessagesFound > 0) {
+            this.log('✅ 发现格式化消息，Markdown处理正常', 'success');
+        } else {
+            this.log('⚠️ 未发现格式化消息，Markdown处理可能有问题', 'warn');
+        }
+        
+        // 测试回车发送
+        this.log('🖱️ 测试回车键发送功能', 'user');
+        messageInput.value = '回车键测试消息';
+        await this.sleep(500);
+        
+        // 模拟回车键
+        const enterEvent = new KeyboardEvent('keydown', {
+            key: 'Enter',
+            code: 'Enter',
+            which: 13,
+            keyCode: 13
+        });
+        
+        messageInput.dispatchEvent(enterEvent);
+        await this.sleep(2000);
+        
+        const afterEnterCount = chatContainer.querySelectorAll('.message').length;
+        if (afterEnterCount > finalMessageCount) {
+            this.log('✅ 回车键发送功能正常', 'success');
+        } else {
+            this.log('⚠️ 回车键发送功能可能有问题', 'warn');
+        }
+    }
+
+    // 测试UI交互功能
+    async testUIInteractions() {
+        this.log('🧪 测试UI交互功能', 'user');
+        this.currentStep = 4;
+        
+        try {
+            // 测试设置按钮
+            const settingsBtn = document.getElementById('settingsBtn');
+            if (settingsBtn) {
+                this.log('🖱️ 测试设置按钮', 'user');
+                settingsBtn.click();
+                await this.sleep(1000);
+                this.log('✅ 设置按钮可点击', 'success');
+            } else {
+                this.log('⚠️ 设置按钮不存在', 'warn');
+            }
+            
+            // 测试历史按钮
+            const historyBtn = document.getElementById('historyBtn');
+            if (historyBtn) {
+                this.log('🖱️ 测试历史按钮', 'user');
+                historyBtn.click();
+                await this.sleep(1000);
+                this.log('✅ 历史按钮可点击', 'success');
+            } else {
+                this.log('⚠️ 历史按钮不存在', 'warn');
+            }
+            
+            // 测试语言切换按钮
+            const languageBtn = document.getElementById('languageBtn');
+            if (languageBtn) {
+                this.log('🖱️ 测试语言切换按钮', 'user');
+                languageBtn.click();
+                await this.sleep(1000);
+                this.log('✅ 语言切换按钮可点击', 'success');
+            } else {
+                this.log('⚠️ 语言切换按钮不存在', 'warn');
+            }
+            
+            return true;
+        } catch (error) {
+            this.log(`❌ UI交互测试失败: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    // 测试错误处理
+    async testErrorHandling() {
+        this.log('🧪 测试错误处理机制', 'user');
+        this.currentStep = 5;
+        
+        try {
+            // 测试空消息发送
+            this.log('🖱️ 测试发送空消息', 'user');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            messageInput.value = '';
+            sendButton.click();
+            await this.sleep(1000);
+            
+            this.log('✅ 空消息处理测试完成', 'success');
+            
+            // 测试极长消息
+            this.log('🖱️ 测试发送极长消息', 'user');
+            const longMessage = 'A'.repeat(10000);
+            messageInput.value = longMessage;
+            sendButton.click();
+            await this.sleep(2000);
+            
+            this.log('✅ 长消息处理测试完成', 'success');
+            
+            return true;
+        } catch (error) {
+            this.log(`❌ 错误处理测试失败: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    // 测试响应式设计
+    async testResponsiveDesign() {
+        this.log('🧪 测试响应式设计', 'user');
+        this.currentStep = 6;
+        
+        try {
+            const originalWidth = window.innerWidth;
+            
+            // 模拟移动设备
+            this.log('📱 模拟移动设备视口', 'user');
+            window.resizeTo(375, 667);
+            await this.sleep(1000);
+            
+            // 检查元素是否仍然可见和可用
+            const chatContainer = document.getElementById('chatContainer');
+            const messageInput = document.getElementById('messageInput');
+            
+            if (chatContainer && messageInput) {
+                const containerRect = chatContainer.getBoundingClientRect();
+                const inputRect = messageInput.getBoundingClientRect();
+                
+                if (containerRect.width > 0 && inputRect.width > 0) {
+                    this.log('✅ 移动设备布局正常', 'success');
+                } else {
+                    this.log('⚠️ 移动设备布局可能有问题', 'warn');
+                }
+            }
+            
+            // 恢复原始尺寸
+            window.resizeTo(originalWidth, window.innerHeight);
+            await this.sleep(500);
+            
+            return true;
+        } catch (error) {
+            this.log(`❌ 响应式设计测试失败: ${error.message}`, 'error');
+            return false;
+        }
+    }
+
+    // 生成UX测试报告
+    generateUXReport() {
+        const report = {
+            timestamp: new Date().toISOString(),
+            totalTests: this.testResults.length,
+            successCount: this.testResults.filter(r => r.type === 'success').length,
+            errorCount: this.testResults.filter(r => r.type === 'error').length,
+            warnCount: this.testResults.filter(r => r.type === 'warn').length,
+            userScore: 0,
+            results: this.testResults
+        };
+
+        // 计算用户体验评分
+        const totalNonInfoMessages = report.successCount + report.errorCount + report.warnCount;
+        if (totalNonInfoMessages > 0) {
+            report.userScore = Math.round((report.successCount / totalNonInfoMessages) * 100);
+        }
+
+        console.log('\n' + '='.repeat(60));
+        console.log('👤 AlingAi 用户体验测试报告');
+        console.log('='.repeat(60));
+        console.log(`🕒 测试时间: ${new Date().toLocaleString()}`);
+        console.log(`📊 用户体验评分: ${report.userScore}/100`);
+        console.log(`✅ 成功测试: ${report.successCount}`);
+        console.log(`⚠️  警告事项: ${report.warnCount}`);
+        console.log(`❌ 错误测试: ${report.errorCount}`);
+        console.log(`📝 总计测试: ${report.totalTests}`);
+        
+        // 评级
+        let grade = 'F';
+        if (report.userScore >= 90) grade = 'A+';
+        else if (report.userScore >= 80) grade = 'A';
+        else if (report.userScore >= 70) grade = 'B';
+        else if (report.userScore >= 60) grade = 'C';
+        else if (report.userScore >= 50) grade = 'D';
+        
+        console.log(`🏆 用户体验等级: ${grade}`);
+        
+        if (report.errorCount > 0) {
+            console.log('\n🚨 发现的错误:');
+            this.testResults
+                .filter(r => r.type === 'error')
+                .forEach((result, index) => {
+                    console.log(`  ${index + 1}. ${result.message}`);
+                });
+        }
+        
+        if (report.warnCount > 0) {
+            console.log('\n⚠️ 需要注意的问题:');
+            this.testResults
+                .filter(r => r.type === 'warn')
+                .forEach((result, index) => {
+                    console.log(`  ${index + 1}. ${result.message}`);
+                });
+        }
+        
+        console.log('\n💡 建议:');
+        if (report.userScore >= 90) {
+            console.log('  - 用户体验非常优秀！继续保持。');
+        } else if (report.userScore >= 70) {
+            console.log('  - 用户体验良好，可以考虑优化警告项目。');
+        } else {
+            console.log('  - 需要重点关注错误和警告项目，改善用户体验。');
+            console.log('  - 建议优先修复错误，然后解决警告问题。');
+        }
+        
+        console.log('='.repeat(60));
+        
+        return report;
+    }
+
+    // 运行完整的用户体验测试
+    async runFullUXTest() {
+        if (this.isRunning) {
+            this.log('测试已在运行中...', 'warn');
+            return;
+        }
+
+        this.isRunning = true;
+        this.testResults = [];
+        this.currentStep = 0;
+
+        console.log('%c👤 AlingAi 用户体验完整测试开始', 'color: purple; font-size: 16px; font-weight: bold');
+        
+        try {
+            // 执行所有测试流程
+            await this.testFirstTimeVisit();
+            await this.sleep(1000);
+            
+            await this.testUIInteractions();
+            await this.sleep(1000);
+            
+            await this.testErrorHandling();
+            await this.sleep(1000);
+            
+            await this.testResponsiveDesign();
+            
+            // 生成最终报告
+            const report = this.generateUXReport();
+            
+            // 暴露报告到全局
+            window.uxTestReport = report;
+            
+            this.log('🏁 用户体验测试完成', 'success');
+            
+            return report;
+        } catch (error) {
+            this.log(`❌ 用户体验测试异常: ${error.message}`, 'error');
+            return null;
+        } finally {
+            this.isRunning = false;
+        }
+    }
+}
+
+// 自动执行用户体验测试
+document.addEventListener('DOMContentLoaded', async () => {
+    // 等待所有其他脚本和修复完成
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    
+    console.log('%c👤 启动AlingAi用户体验验证器', 'color: purple; font-size: 14px; font-weight: bold');
+    
+    const validator = new UserExperienceValidator();
+    await validator.runFullUXTest();
+    
+    // 暴露验证器到全局
+    window.uxValidator = validator;
+    
+    console.log('💡 提示: 使用 uxValidator.runFullUXTest() 重新运行用户体验测试');
+});
+
+// 如果页面已加载，延迟运行
+if (document.readyState !== 'loading') {
+    setTimeout(async () => {
+        console.log('%c👤 启动AlingAi用户体验验证器', 'color: purple; font-size: 14px; font-weight: bold');
+        
+        const validator = new UserExperienceValidator();
+        await validator.runFullUXTest();
+        
+        window.uxValidator = validator;
+        
+        console.log('💡 提示: 使用 uxValidator.runFullUXTest() 重新运行用户体验测试');
+    }, 5000);
+}

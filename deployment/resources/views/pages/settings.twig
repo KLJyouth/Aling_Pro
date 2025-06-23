@@ -1,0 +1,1372 @@
+{# 用户设置页面 #}
+{% extends "layouts/app.twig" %}
+
+{% block title %}{{ trans('settings') }} - {{ parent() }}{% endblock %}
+
+{% block head_styles %}
+<link href="{{ asset('css/settings.css') }}" rel="stylesheet">
+<style>
+    .settings-sidebar {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+    }
+    
+    .settings-nav {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .settings-nav-item {
+        margin-bottom: 0.5rem;
+    }
+    
+    .settings-nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #6c757d;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .settings-nav-link:hover,
+    .settings-nav-link.active {
+        background: #007bff;
+        color: white;
+        transform: translateX(5px);
+    }
+    
+    .settings-nav-link i {
+        margin-right: 0.75rem;
+        width: 16px;
+        text-align: center;
+    }
+    
+    .settings-content {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .settings-section {
+        display: none;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    .settings-section.active {
+        display: block;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .setting-group {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #007bff;
+    }
+    
+    .setting-item {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .setting-item:last-child {
+        border-bottom: none;
+    }
+    
+    .setting-label {
+        flex: 1;
+    }
+    
+    .setting-control {
+        flex-shrink: 0;
+        margin-left: 1rem;
+    }
+    
+    .theme-preview {
+        width: 60px;
+        height: 40px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .theme-preview.active {
+        border-color: #007bff;
+        transform: scale(1.05);
+    }
+    
+    .theme-preview.light {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    }
+    
+    .theme-preview.dark {
+        background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+    }
+    
+    .theme-preview.auto {
+        background: linear-gradient(45deg, #ffffff 0%, #ffffff 50%, #343a40 50%, #343a40 100%);
+    }
+    
+    .language-flag {
+        width: 24px;
+        height: 18px;
+        border-radius: 3px;
+        margin-right: 0.5rem;
+        object-fit: cover;
+    }
+    
+    .api-key-display {
+        font-family: 'Courier New', monospace;
+        background: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+        position: relative;
+    }
+    
+    .api-key-masked {
+        filter: blur(4px);
+        user-select: none;
+    }
+    
+    .usage-meter {
+        background: #e9ecef;
+        border-radius: 10px;
+        height: 8px;
+        overflow: hidden;
+        margin: 0.5rem 0;
+    }
+    
+    .usage-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+    
+    .storage-item {
+        display: flex;
+        justify-content: between;
+        align-items: center;
+        padding: 1rem;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e9ecef;
+    }
+    
+    .integration-card {
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .integration-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+    
+    .integration-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        margin-right: 1rem;
+    }
+    
+    .danger-zone {
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .backup-item {
+        background: white;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border: 1px solid #e9ecef;
+        display: flex;
+        justify-content: between;
+        align-items: center;
+    }
+    
+    @media (max-width: 768px) {
+        .settings-sidebar {
+            position: static;
+            margin-bottom: 1rem;
+        }
+        
+        .settings-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        .settings-nav-item {
+            flex-shrink: 0;
+            margin-bottom: 0;
+        }
+        
+        .settings-nav-link {
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="bi bi-gear me-2"></i>{{ trans('settings') }}
+            </h1>
+            <p class="text-muted mb-4">{{ trans('manage_account_preferences') }}</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 设置侧边栏 -->
+        <div class="col-lg-3">
+            <div class="settings-sidebar">
+                <ul class="settings-nav">
+                    <li class="settings-nav-item">
+                        <a href="#general" class="settings-nav-link active" data-section="general">
+                            <i class="bi bi-sliders"></i>
+                            {{ trans('general') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#appearance" class="settings-nav-link" data-section="appearance">
+                            <i class="bi bi-palette"></i>
+                            {{ trans('appearance') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#privacy" class="settings-nav-link" data-section="privacy">
+                            <i class="bi bi-shield-lock"></i>
+                            {{ trans('privacy') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#notifications" class="settings-nav-link" data-section="notifications">
+                            <i class="bi bi-bell"></i>
+                            {{ trans('notifications') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#api" class="settings-nav-link" data-section="api">
+                            <i class="bi bi-code-slash"></i>
+                            {{ trans('api_access') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#storage" class="settings-nav-link" data-section="storage">
+                            <i class="bi bi-hdd"></i>
+                            {{ trans('storage') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#integrations" class="settings-nav-link" data-section="integrations">
+                            <i class="bi bi-puzzle"></i>
+                            {{ trans('integrations') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#backup" class="settings-nav-link" data-section="backup">
+                            <i class="bi bi-cloud-download"></i>
+                            {{ trans('backup') }}
+                        </a>
+                    </li>
+                    <li class="settings-nav-item">
+                        <a href="#advanced" class="settings-nav-link" data-section="advanced">
+                            <i class="bi bi-tools"></i>
+                            {{ trans('advanced') }}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 设置内容 -->
+        <div class="col-lg-9">
+            <div class="settings-content">
+                <!-- 常规设置 -->
+                <div id="general" class="settings-section active">
+                    <h3 class="mb-4">{{ trans('general_settings') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('language_region') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('language') }}</strong>
+                                <div class="text-muted small">{{ trans('interface_language') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="language" name="language">
+                                    <option value="zh_CN" {{ (user.preferences.language ?? 'zh_CN') == 'zh_CN' ? 'selected' : '' }}>
+                                        <img src="{{ asset('images/flags/cn.png') }}" alt="CN" class="language-flag"> 简体中文
+                                    </option>
+                                    <option value="en_US" {{ (user.preferences.language ?? '') == 'en_US' ? 'selected' : '' }}>
+                                        <img src="{{ asset('images/flags/us.png') }}" alt="US" class="language-flag"> English
+                                    </option>
+                                    <option value="ja_JP" {{ (user.preferences.language ?? '') == 'ja_JP' ? 'selected' : '' }}>
+                                        <img src="{{ asset('images/flags/jp.png') }}" alt="JP" class="language-flag"> 日本語
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('timezone') }}</strong>
+                                <div class="text-muted small">{{ trans('your_local_timezone') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="timezone" name="timezone">
+                                    <option value="Asia/Shanghai" {{ (user.timezone ?? 'Asia/Shanghai') == 'Asia/Shanghai' ? 'selected' : '' }}>
+                                        (UTC+8) {{ trans('beijing_shanghai') }}
+                                    </option>
+                                    <option value="UTC" {{ (user.timezone ?? '') == 'UTC' ? 'selected' : '' }}>
+                                        (UTC+0) {{ trans('coordinated_universal_time') }}
+                                    </option>
+                                    <option value="America/New_York" {{ (user.timezone ?? '') == 'America/New_York' ? 'selected' : '' }}>
+                                        (UTC-5) {{ trans('new_york') }}
+                                    </option>
+                                    <option value="Europe/London" {{ (user.timezone ?? '') == 'Europe/London' ? 'selected' : '' }}>
+                                        (UTC+0) {{ trans('london') }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('date_format') }}</strong>
+                                <div class="text-muted small">{{ trans('how_dates_displayed') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="dateFormat" name="date_format">
+                                    <option value="Y-m-d" {{ (user.preferences.date_format ?? 'Y-m-d') == 'Y-m-d' ? 'selected' : '' }}>2024-01-15</option>
+                                    <option value="m/d/Y" {{ (user.preferences.date_format ?? '') == 'm/d/Y' ? 'selected' : '' }}>01/15/2024</option>
+                                    <option value="d/m/Y" {{ (user.preferences.date_format ?? '') == 'd/m/Y' ? 'selected' : '' }}>15/01/2024</option>
+                                    <option value="Y年m月d日" {{ (user.preferences.date_format ?? '') == 'Y年m月d日' ? 'selected' : '' }}>2024年01月15日</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('chat_behavior') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('auto_save_conversations') }}</strong>
+                                <div class="text-muted small">{{ trans('automatically_save_chat_history') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoSave" name="auto_save"
+                                           {{ (user.preferences.auto_save ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('message_retention_days') }}</strong>
+                                <div class="text-muted small">{{ trans('how_long_keep_messages') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="retentionDays" name="retention_days">
+                                    <option value="30" {{ (user.preferences.retention_days ?? 30) == 30 ? 'selected' : '' }}>30 {{ trans('days') }}</option>
+                                    <option value="90" {{ (user.preferences.retention_days ?? '') == 90 ? 'selected' : '' }}>90 {{ trans('days') }}</option>
+                                    <option value="365" {{ (user.preferences.retention_days ?? '') == 365 ? 'selected' : '' }}>1 {{ trans('year') }}</option>
+                                    <option value="-1" {{ (user.preferences.retention_days ?? '') == -1 ? 'selected' : '' }}>{{ trans('forever') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('typing_indicators') }}</strong>
+                                <div class="text-muted small">{{ trans('show_when_ai_typing') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="typingIndicators" name="typing_indicators"
+                                           {{ (user.preferences.typing_indicators ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 外观设置 -->
+                <div id="appearance" class="settings-section">
+                    <h3 class="mb-4">{{ trans('appearance_settings') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('theme') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('color_theme') }}</strong>
+                                <div class="text-muted small">{{ trans('choose_interface_theme') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="d-flex gap-3">
+                                    <div class="theme-preview light {{ (user.preferences.theme ?? 'light') == 'light' ? 'active' : '' }}" 
+                                         data-theme="light" title="{{ trans('light_theme') }}">
+                                    </div>
+                                    <div class="theme-preview dark {{ (user.preferences.theme ?? '') == 'dark' ? 'active' : '' }}" 
+                                         data-theme="dark" title="{{ trans('dark_theme') }}">
+                                    </div>
+                                    <div class="theme-preview auto {{ (user.preferences.theme ?? '') == 'auto' ? 'active' : '' }}" 
+                                         data-theme="auto" title="{{ trans('system_theme') }}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('font_size') }}</strong>
+                                <div class="text-muted small">{{ trans('adjust_text_size') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <input type="range" class="form-range" id="fontSize" name="font_size" 
+                                       min="12" max="20" step="1" value="{{ user.preferences.font_size ?? 14 }}">
+                                <div class="text-center mt-1">
+                                    <small id="fontSizeDisplay">{{ user.preferences.font_size ?? 14 }}px</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('chat_bubble_style') }}</strong>
+                                <div class="text-muted small">{{ trans('message_appearance') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="bubbleStyle" name="bubble_style">
+                                    <option value="rounded" {{ (user.preferences.bubble_style ?? 'rounded') == 'rounded' ? 'selected' : '' }}>{{ trans('rounded') }}</option>
+                                    <option value="square" {{ (user.preferences.bubble_style ?? '') == 'square' ? 'selected' : '' }}>{{ trans('square') }}</option>
+                                    <option value="minimal" {{ (user.preferences.bubble_style ?? '') == 'minimal' ? 'selected' : '' }}>{{ trans('minimal') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('animations') }}</strong>
+                                <div class="text-muted small">{{ trans('enable_interface_animations') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="animations" name="animations"
+                                           {{ (user.preferences.animations ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 隐私设置 -->
+                <div id="privacy" class="settings-section">
+                    <h3 class="mb-4">{{ trans('privacy_settings') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('data_collection') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('analytics_tracking') }}</strong>
+                                <div class="text-muted small">{{ trans('help_improve_service') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="analytics" name="analytics"
+                                           {{ (user.preferences.analytics ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('crash_reporting') }}</strong>
+                                <div class="text-muted small">{{ trans('send_error_reports') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="crashReporting" name="crash_reporting"
+                                           {{ (user.preferences.crash_reporting ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('personalization') }}</strong>
+                                <div class="text-muted small">{{ trans('use_data_for_recommendations') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="personalization" name="personalization"
+                                           {{ (user.preferences.personalization ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('visibility') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('profile_visibility') }}</strong>
+                                <div class="text-muted small">{{ trans('who_can_see_profile') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="profileVisibility" name="profile_visibility">
+                                    <option value="public" {{ (user.preferences.profile_visibility ?? 'public') == 'public' ? 'selected' : '' }}>{{ trans('public') }}</option>
+                                    <option value="private" {{ (user.preferences.profile_visibility ?? '') == 'private' ? 'selected' : '' }}>{{ trans('private') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('activity_status') }}</strong>
+                                <div class="text-muted small">{{ trans('show_when_online') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="activityStatus" name="activity_status"
+                                           {{ (user.preferences.activity_status ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 通知设置 -->
+                <div id="notifications" class="settings-section">
+                    <h3 class="mb-4">{{ trans('notification_settings') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('delivery_methods') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('email_notifications') }}</strong>
+                                <div class="text-muted small">{{ trans('receive_notifications_via_email') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="emailNotifications" name="email_notifications"
+                                           {{ (user.preferences.email_notifications ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('browser_notifications') }}</strong>
+                                <div class="text-muted small">{{ trans('show_desktop_notifications') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="browserNotifications" name="browser_notifications"
+                                           {{ (user.preferences.browser_notifications ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('mobile_notifications') }}</strong>
+                                <div class="text-muted small">{{ trans('push_notifications_mobile') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="mobileNotifications" name="mobile_notifications"
+                                           {{ (user.preferences.mobile_notifications ?? false) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('notification_types') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('security_alerts') }}</strong>
+                                <div class="text-muted small">{{ trans('login_attempts_changes') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="securityAlerts" name="security_alerts"
+                                           {{ (user.preferences.security_alerts ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('product_updates') }}</strong>
+                                <div class="text-muted small">{{ trans('new_features_announcements') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="productUpdates" name="product_updates"
+                                           {{ (user.preferences.product_updates ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('marketing_emails') }}</strong>
+                                <div class="text-muted small">{{ trans('promotional_content_tips') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="marketingEmails" name="marketing_emails"
+                                           {{ (user.preferences.marketing_emails ?? false) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API访问 -->
+                <div id="api" class="settings-section">
+                    <h3 class="mb-4">{{ trans('api_access') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('api_keys') }}</h5>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <label class="form-label mb-0">{{ trans('your_api_key') }}</label>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="generateNewApiKey()">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>{{ trans('regenerate') }}
+                                </button>
+                            </div>
+                            <div class="api-key-display">
+                                <span id="apiKeyDisplay" class="api-key-masked">{{ user.api_key ?? 'ak_' ~ random(32) }}</span>
+                                <button type="button" class="btn btn-sm btn-link p-0 ms-2" onclick="toggleApiKeyVisibility()">
+                                    <i class="bi bi-eye" id="apiKeyToggleIcon"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-link p-0 ms-1" onclick="copyApiKey()">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">{{ trans('keep_api_key_secure') }}</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">{{ trans('api_usage_this_month') }}</label>
+                            <div class="usage-meter">
+                                <div class="usage-fill bg-primary" style="width: {{ ((user.api_usage ?? 0) / (user.api_limit ?? 1000) * 100)|round }}%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted small">
+                                <span>{{ user.api_usage ?? 0 }} {{ trans('requests') }}</span>
+                                <span>{{ user.api_limit ?? 1000 }} {{ trans('limit') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('rate_limits') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('requests_per_minute') }}</strong>
+                                <div class="text-muted small">{{ user.rate_limit_per_minute ?? 60 }} {{ trans('requests') }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('requests_per_hour') }}</strong>
+                                <div class="text-muted small">{{ user.rate_limit_per_hour ?? 1000 }} {{ trans('requests') }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('monthly_quota') }}</strong>
+                                <div class="text-muted small">{{ user.api_limit ?? 10000 }} {{ trans('requests') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 存储设置 -->
+                <div id="storage" class="settings-section">
+                    <h3 class="mb-4">{{ trans('storage_management') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('storage_usage') }}</h5>
+                        
+                        <div class="storage-item">
+                            <div>
+                                <strong>{{ trans('total_used') }}</strong>
+                                <div class="text-muted small">{{ trans('all_your_data') }}</div>
+                            </div>
+                            <div class="text-end">
+                                <strong>{{ user.storage_used ?? '125 MB' }}</strong>
+                                <div class="text-muted small">/ {{ user.storage_limit ?? '10 GB' }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="storage-item">
+                            <div>
+                                <strong>{{ trans('conversations') }}</strong>
+                                <div class="text-muted small">{{ user.conversations_count ?? 0 }} {{ trans('conversations') }}</div>
+                            </div>
+                            <div class="text-end">
+                                <strong>{{ user.conversations_size ?? '85 MB' }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="storage-item">
+                            <div>
+                                <strong>{{ trans('uploaded_files') }}</strong>
+                                <div class="text-muted small">{{ user.files_count ?? 0 }} {{ trans('files') }}</div>
+                            </div>
+                            <div class="text-end">
+                                <strong>{{ user.files_size ?? '40 MB' }}</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-outline-danger" onclick="showCleanupModal()">
+                                <i class="bi bi-trash me-1"></i>{{ trans('cleanup_data') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 集成设置 -->
+                <div id="integrations" class="settings-section">
+                    <h3 class="mb-4">{{ trans('integrations') }}</h3>
+                    
+                    <div class="integration-card">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('images/integrations/google.png') }}" alt="Google" class="integration-logo">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Google Account</h6>
+                                <div class="text-muted small">{{ trans('sync_with_google_services') }}</div>
+                            </div>
+                            <div>
+                                {% if user.google_connected %}
+                                    <span class="badge bg-success me-2">{{ trans('connected') }}</span>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="disconnectIntegration('google')">
+                                        {{ trans('disconnect') }}
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-primary" onclick="connectIntegration('google')">
+                                        {{ trans('connect') }}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="integration-card">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('images/integrations/github.png') }}" alt="GitHub" class="integration-logo">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">GitHub</h6>
+                                <div class="text-muted small">{{ trans('code_repository_access') }}</div>
+                            </div>
+                            <div>
+                                {% if user.github_connected %}
+                                    <span class="badge bg-success me-2">{{ trans('connected') }}</span>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="disconnectIntegration('github')">
+                                        {{ trans('disconnect') }}
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-primary" onclick="connectIntegration('github')">
+                                        {{ trans('connect') }}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="integration-card">
+                        <div class="d-flex align-items-center">
+                            <img src="{{ asset('images/integrations/slack.png') }}" alt="Slack" class="integration-logo">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">Slack</h6>
+                                <div class="text-muted small">{{ trans('team_collaboration') }}</div>
+                            </div>
+                            <div>
+                                {% if user.slack_connected %}
+                                    <span class="badge bg-success me-2">{{ trans('connected') }}</span>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="disconnectIntegration('slack')">
+                                        {{ trans('disconnect') }}
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-primary" onclick="connectIntegration('slack')">
+                                        {{ trans('connect') }}
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 备份设置 -->
+                <div id="backup" class="settings-section">
+                    <h3 class="mb-4">{{ trans('backup_restore') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('automatic_backups') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('enable_auto_backup') }}</strong>
+                                <div class="text-muted small">{{ trans('backup_conversations_weekly') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoBackup" name="auto_backup"
+                                           {{ (user.preferences.auto_backup ?? true) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('backup_frequency') }}</strong>
+                                <div class="text-muted small">{{ trans('how_often_create_backups') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <select class="form-select" id="backupFrequency" name="backup_frequency">
+                                    <option value="daily" {{ (user.preferences.backup_frequency ?? 'weekly') == 'daily' ? 'selected' : '' }}>{{ trans('daily') }}</option>
+                                    <option value="weekly" {{ (user.preferences.backup_frequency ?? 'weekly') == 'weekly' ? 'selected' : '' }}>{{ trans('weekly') }}</option>
+                                    <option value="monthly" {{ (user.preferences.backup_frequency ?? '') == 'monthly' ? 'selected' : '' }}>{{ trans('monthly') }}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('manual_backup') }}</h5>
+                        
+                        <div class="mb-3">
+                            <button type="button" class="btn btn-primary" onclick="createBackup()">
+                                <i class="bi bi-cloud-arrow-down me-1"></i>{{ trans('create_backup_now') }}
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6>{{ trans('recent_backups') }}</h6>
+                            {% for backup in user.recent_backups ?? [] %}
+                            <div class="backup-item">
+                                <div>
+                                    <strong>{{ backup.name }}</strong>
+                                    <div class="text-muted small">{{ backup.created_at|date('Y-m-d H:i') }} • {{ backup.size }}</div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-1" onclick="downloadBackup('{{ backup.id }}')">
+                                        <i class="bi bi-download"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="deleteBackup('{{ backup.id }}')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            {% else %}
+                            <div class="text-muted text-center py-3">
+                                {{ trans('no_backups_available') }}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 高级设置 -->
+                <div id="advanced" class="settings-section">
+                    <h3 class="mb-4">{{ trans('advanced_settings') }}</h3>
+                    
+                    <div class="setting-group">
+                        <h5 class="mb-3">{{ trans('experimental_features') }}</h5>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('beta_features') }}</strong>
+                                <div class="text-muted small">{{ trans('try_new_features_early') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="betaFeatures" name="beta_features"
+                                           {{ (user.preferences.beta_features ?? false) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>{{ trans('debug_mode') }}</strong>
+                                <div class="text-muted small">{{ trans('show_detailed_error_info') }}</div>
+                            </div>
+                            <div class="setting-control">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="debugMode" name="debug_mode"
+                                           {{ (user.preferences.debug_mode ?? false) ? 'checked' : '' }}>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="danger-zone">
+                        <h5 class="text-danger mb-3">
+                            <i class="bi bi-exclamation-triangle me-2"></i>{{ trans('danger_zone') }}
+                        </h5>
+                        
+                        <div class="mb-3">
+                            <h6>{{ trans('export_data') }}</h6>
+                            <p class="text-muted small">{{ trans('download_all_your_data') }}</p>
+                            <button type="button" class="btn btn-outline-warning" onclick="exportAllData()">
+                                <i class="bi bi-box-arrow-down me-1"></i>{{ trans('export_data') }}
+                            </button>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h6>{{ trans('delete_all_conversations') }}</h6>
+                            <p class="text-muted small">{{ trans('permanently_delete_chat_history') }}</p>
+                            <button type="button" class="btn btn-outline-danger" onclick="deleteAllConversations()">
+                                <i class="bi bi-trash me-1"></i>{{ trans('delete_conversations') }}
+                            </button>
+                        </div>
+                        
+                        <div>
+                            <h6>{{ trans('delete_account') }}</h6>
+                            <p class="text-muted small">{{ trans('permanently_delete_account_data') }}</p>
+                            <button type="button" class="btn btn-danger" onclick="deleteAccount()">
+                                <i class="bi bi-person-x me-1"></i>{{ trans('delete_account') }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据清理模态框 -->
+<div class="modal fade" id="cleanupModal" tabindex="-1" aria-labelledby="cleanupModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cleanupModalLabel">{{ trans('cleanup_data') }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>{{ trans('select_data_to_cleanup') }}:</p>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cleanupOldConversations">
+                    <label class="form-check-label" for="cleanupOldConversations">
+                        {{ trans('conversations_older_than_90_days') }}
+                    </label>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cleanupTempFiles">
+                    <label class="form-check-label" for="cleanupTempFiles">
+                        {{ trans('temporary_files') }}
+                    </label>
+                </div>
+                
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="cleanupCache">
+                    <label class="form-check-label" for="cleanupCache">
+                        {{ trans('cached_data') }}
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ trans('cancel') }}</button>
+                <button type="button" class="btn btn-danger" onclick="performCleanup()">{{ trans('cleanup') }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 设置导航
+    const navLinks = document.querySelectorAll('.settings-nav-link');
+    const sections = document.querySelectorAll('.settings-section');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // 移除所有活跃状态
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.classList.remove('active'));
+            
+            // 添加活跃状态
+            this.classList.add('active');
+            const targetSection = document.getElementById(this.dataset.section);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+        });
+    });
+    
+    // 主题切换
+    const themePreviews = document.querySelectorAll('.theme-preview');
+    themePreviews.forEach(preview => {
+        preview.addEventListener('click', function() {
+            themePreviews.forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            
+            const theme = this.dataset.theme;
+            applyTheme(theme);
+        });
+    });
+    
+    // 字体大小滑块
+    const fontSizeSlider = document.getElementById('fontSize');
+    const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+    
+    if (fontSizeSlider && fontSizeDisplay) {
+        fontSizeSlider.addEventListener('input', function() {
+            fontSizeDisplay.textContent = this.value + 'px';
+            document.documentElement.style.setProperty('--font-size', this.value + 'px');
+        });
+    }
+    
+    // 自动保存设置
+    const settingInputs = document.querySelectorAll('input, select');
+    settingInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            saveSettingsDebounced();
+        });
+    });
+    
+    // 初始化通知权限
+    if ('Notification' in window) {
+        const browserNotificationsSwitch = document.getElementById('browserNotifications');
+        if (browserNotificationsSwitch && browserNotificationsSwitch.checked) {
+            if (Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+    }
+});
+
+// 防抖保存设置
+const saveSettingsDebounced = debounce(function() {
+    saveSettings();
+}, 1000);
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// 保存设置
+function saveSettings() {
+    const formData = new FormData();
+    
+    // 收集所有设置
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(input => {
+        if (input.type === 'checkbox') {
+            formData.append(input.name, input.checked ? '1' : '0');
+        } else {
+            formData.append(input.name, input.value);
+        }
+    });
+    
+    fetch('{{ url("settings/save") }}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('{{ trans("settings_saved") }}', 'success');
+        } else {
+            showNotification(data.message || '{{ trans("save_failed") }}', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('{{ trans("save_error") }}', 'error');
+    });
+}
+
+// 应用主题
+function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('preferred-theme', theme);
+}
+
+// API密钥相关函数
+function toggleApiKeyVisibility() {
+    const display = document.getElementById('apiKeyDisplay');
+    const icon = document.getElementById('apiKeyToggleIcon');
+    
+    if (display.classList.contains('api-key-masked')) {
+        display.classList.remove('api-key-masked');
+        icon.className = 'bi bi-eye-slash';
+    } else {
+        display.classList.add('api-key-masked');
+        icon.className = 'bi bi-eye';
+    }
+}
+
+function copyApiKey() {
+    const apiKey = document.getElementById('apiKeyDisplay').textContent;
+    navigator.clipboard.writeText(apiKey).then(() => {
+        showNotification('{{ trans("api_key_copied") }}', 'success');
+    });
+}
+
+function generateNewApiKey() {
+    if (confirm('{{ trans("confirm_regenerate_api_key") }}')) {
+        fetch('{{ url("settings/regenerate-api-key") }}', {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('apiKeyDisplay').textContent = data.api_key;
+                showNotification('{{ trans("api_key_regenerated") }}', 'success');
+            } else {
+                showNotification(data.message || '{{ trans("operation_failed") }}', 'error');
+            }
+        });
+    }
+}
+
+// 集成相关函数
+function connectIntegration(service) {
+    window.open(`{{ url("integrations/connect") }}/${service}`, '_blank', 'width=600,height=400');
+}
+
+function disconnectIntegration(service) {
+    if (confirm(`{{ trans("confirm_disconnect") }} ${service}?`)) {
+        fetch(`{{ url("integrations/disconnect") }}/${service}`, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                showNotification(data.message || '{{ trans("operation_failed") }}', 'error');
+            }
+        });
+    }
+}
+
+// 备份相关函数
+function createBackup() {
+    fetch('{{ url("settings/create-backup") }}', {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('{{ trans("backup_created") }}', 'success');
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            showNotification(data.message || '{{ trans("backup_failed") }}', 'error');
+        }
+    });
+}
+
+function downloadBackup(backupId) {
+    window.location.href = `{{ url("settings/download-backup") }}/${backupId}`;
+}
+
+function deleteBackup(backupId) {
+    if (confirm('{{ trans("confirm_delete_backup") }}')) {
+        fetch(`{{ url("settings/delete-backup") }}/${backupId}`, {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                showNotification(data.message || '{{ trans("operation_failed") }}', 'error');
+            }
+        });
+    }
+}
+
+// 危险操作函数
+function showCleanupModal() {
+    new bootstrap.Modal(document.getElementById('cleanupModal')).show();
+}
+
+function performCleanup() {
+    const cleanupOptions = [];
+    
+    if (document.getElementById('cleanupOldConversations').checked) {
+        cleanupOptions.push('old_conversations');
+    }
+    if (document.getElementById('cleanupTempFiles').checked) {
+        cleanupOptions.push('temp_files');
+    }
+    if (document.getElementById('cleanupCache').checked) {
+        cleanupOptions.push('cache');
+    }
+    
+    if (cleanupOptions.length === 0) {
+        showNotification('{{ trans("select_cleanup_options") }}', 'warning');
+        return;
+    }
+    
+    fetch('{{ url("settings/cleanup") }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({ options: cleanupOptions })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('{{ trans("cleanup_completed") }}', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('cleanupModal')).hide();
+        } else {
+            showNotification(data.message || '{{ trans("cleanup_failed") }}', 'error');
+        }
+    });
+}
+
+function exportAllData() {
+    if (confirm('{{ trans("confirm_export_data") }}')) {
+        window.location.href = '{{ url("settings/export-data") }}';
+    }
+}
+
+function deleteAllConversations() {
+    const confirmation = prompt('{{ trans("type_delete_to_confirm") }}');
+    if (confirmation === 'DELETE') {
+        fetch('{{ url("settings/delete-conversations") }}', {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('{{ trans("conversations_deleted") }}', 'success');
+            } else {
+                showNotification(data.message || '{{ trans("operation_failed") }}', 'error');
+            }
+        });
+    }
+}
+
+function deleteAccount() {
+    const confirmation = prompt('{{ trans("type_delete_account_to_confirm") }}');
+    if (confirmation === 'DELETE ACCOUNT') {
+        fetch('{{ url("settings/delete-account") }}', {
+            method: 'DELETE',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '{{ url("logout") }}';
+            } else {
+                showNotification(data.message || '{{ trans("operation_failed") }}', 'error');
+            }
+        });
+    }
+}
+
+// 显示通知
+function showNotification(message, type = 'info') {
+    const alertClass = type === 'success' ? 'alert-success' : 
+                      type === 'error' ? 'alert-danger' : 
+                      type === 'warning' ? 'alert-warning' : 'alert-info';
+    
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertClass} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.remove();
+        }
+    }, 5000);
+}
+</script>
+{% endblock %}

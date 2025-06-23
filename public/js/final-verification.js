@@ -1,0 +1,241 @@
+// 最终功能验证脚本 - 手动触发聊天测试
+// 在浏览器控制台中运行: runFinalVerification()
+
+
+
+// 延迟执行函数
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// 检查计数器
+let checkCount = 0;
+const maxChecks = 5;
+
+// 最终验证测试
+window.runFinalVerification = async function() {
+    
+    
+    let testResults = {
+        domCheck: false,
+        chatInstance: false,
+        guestMode: false,
+        messageTest: false,
+        uiResponse: false
+    };
+    
+    try {
+        // 1. DOM检查
+        
+        const coreElements = [
+            'messageInput', 'sendButton', 'chatMessages', 
+            'guestModeButton', 'userStatus'
+        ];
+        
+        const missingElements = coreElements.filter(id => !document.getElementById(id));
+        if (missingElements.length === 0) {
+            
+            testResults.domCheck = true;
+        } else {
+            
+        }
+        
+        // 2. 聊天实例检查
+        
+        if (window.chatInstance && window.chatInstance.core && window.chatInstance.ui && window.chatInstance.api) {
+            
+            testResults.chatInstance = true;
+        } else {
+            
+            console.log('   实例状态:', {
+                chatInstance: !!window.chatInstance,
+                core: !!(window.chatInstance?.core),
+                ui: !!(window.chatInstance?.ui),
+                api: !!(window.chatInstance?.api)
+            });
+        }
+        
+        // 3. 访客模式激活
+        
+        localStorage.removeItem('guestMode');
+        localStorage.removeItem('token');
+        
+        const guestBtn = document.getElementById('guestModeButton');
+        if (guestBtn) {
+            guestBtn.click();
+            await delay(500);
+            
+            const guestModeSet = localStorage.getItem('guestMode') === 'true';
+            const userStatus = document.getElementById('userStatus');
+            const statusText = userStatus ? userStatus.textContent : '';
+            
+            if (guestModeSet && statusText.includes('访客')) {
+                
+                
+                testResults.guestMode = true;
+            } else {
+                
+                console.log('   localStorage:', localStorage.getItem('guestMode'));
+                
+            }
+        } else {
+            
+        }
+        
+        // 4. 消息发送测试
+        
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const chatMessages = document.getElementById('chatMessages');
+        
+        if (messageInput && sendButton && chatMessages) {
+            const initialCount = chatMessages.children.length;
+            
+            // 输入测试消息
+            const testMessage = '你好，这是一条测试消息';
+            messageInput.value = testMessage;
+            messageInput.dispatchEvent(new Event('input'));
+            
+            
+            
+            
+            // 点击发送
+            sendButton.click();
+            
+            // 等待处理
+            await delay(2000);
+            
+            const finalCount = chatMessages.children.length;
+            const messagesAdded = finalCount > initialCount;
+            const inputCleared = messageInput.value === '';
+            
+            if (messagesAdded && inputCleared) {
+                
+                
+                testResults.messageTest = true;
+                
+                // 检查是否有访客模式回复
+                const messages = Array.from(chatMessages.children);
+                const lastMessages = messages.slice(-2); // 获取最后两条消息
+                const hasGuestResponse = lastMessages.some(msg => 
+                    msg.textContent && (
+                        msg.textContent.includes('访客模式') || 
+                        msg.textContent.includes('演示回复') ||
+                        msg.textContent.includes('登录')
+                    )
+                );
+                
+                if (hasGuestResponse) {
+                    
+                    testResults.uiResponse = true;
+                } else {
+                    
+                    console.log('   💬 最新消息内容:', lastMessages.map(m => m.textContent?.substring(0, 50)));
+                }
+            } else {
+                
+                
+            }
+        } else {
+            
+        }
+        
+        // 5. 生成最终报告
+        
+        
+        
+        const results = [
+            { name: 'DOM元素检查', status: testResults.domCheck, icon: testResults.domCheck ? '✅' : '❌' },
+            { name: '聊天实例加载', status: testResults.chatInstance, icon: testResults.chatInstance ? '✅' : '❌' },
+            { name: '访客模式激活', status: testResults.guestMode, icon: testResults.guestMode ? '✅' : '❌' },
+            { name: '消息发送功能', status: testResults.messageTest, icon: testResults.messageTest ? '✅' : '❌' },
+            { name: 'AI回复显示', status: testResults.uiResponse, icon: testResults.uiResponse ? '✅' : '❌' }
+        ];
+        
+        results.forEach((result, index) => {
+            
+        });
+        
+        const passedTests = results.filter(r => r.status).length;
+        const totalTests = results.length;
+        const successRate = Math.round((passedTests / totalTests) * 100);
+        
+        
+        console.log(`   通过: ${passedTests}/${totalTests} (${successRate}%)`);
+        
+        if (successRate >= 80) {
+            
+            
+        } else if (successRate >= 60) {
+            
+        } else {
+            
+        }
+        
+        // 返回结果供后续使用
+        return {
+            success: successRate >= 80,
+            results: testResults,
+            successRate,
+            details: results
+        };
+        
+    } catch (error) {
+        console.error('❌ 验证过程中发生错误:', error);
+        return { success: false, error: error.message };
+    }
+};
+
+// 快速测试访客模式聊天
+window.quickChatTest = function() {
+    
+    
+    // 确保访客模式
+    localStorage.setItem('guestMode', 'true');
+    
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    
+    if (messageInput && sendButton) {
+        messageInput.value = '你好，AlingAi！';
+        messageInput.dispatchEvent(new Event('input'));
+        
+        
+        sendButton.click();
+        
+        
+    } else {
+        
+    }
+};
+
+// 检查页面就绪状态
+function checkPageReady() {
+    checkCount++;
+    
+    const isReady = !!(
+        document.getElementById('messageInput') &&
+        document.getElementById('sendButton') &&
+        window.chatInstance
+    );
+    
+    if (isReady) {
+        
+        
+        console.log('   - runFinalVerification() : 完整功能验证');
+        console.log('   - quickChatTest() : 快速聊天测试');
+        checkCount = 0;
+    } else if (checkCount < maxChecks) {        console.log('⏳ 页面尚未完全加载，请稍后重试... (' + checkCount + '/' + maxChecks + ')');
+        setTimeout(checkPageReady, 2000);
+    } else {
+        
+        checkCount = 0;
+    }
+}
+
+// 页面加载完成后自动检查
+if (document.readyState === 'complete') {
+    setTimeout(checkPageReady, 500);
+} else {
+    window.addEventListener('load', () => setTimeout(checkPageReady, 500));
+}
+
+

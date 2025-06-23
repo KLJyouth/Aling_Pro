@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Platform v3.5 - 企业级增强 | 版本详情</title>
+    <meta name="description" content="AlingAI Platform v3.5企业级增强版本，引入高级权限管理、企业SSO集成、高可用性架构等企业级功能">
+    
+    <!-- 样式文件 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/quantum-styles.css" rel="stylesheet">
+    
+    <!-- GSAP动画库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-quantum-purple/20 text-white min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-quantum-primary/30">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <i class="fas fa-atom text-white text-sm"></i>
+                        </div>
+                        <span class="text-lg font-bold text-quantum-accent">AlingAI Platform</span>
+                    </a>
+                    <div class="text-quantum-primary">
+                        <i class="fas fa-chevron-right mx-2"></i>
+                    </div>
+                    <a href="/version-timeline.html" class="text-gray-400 hover:text-white transition-colors duration-300">
+                        版本时间轴
+                    </a>
+                    <div class="text-quantum-primary">
+                        <i class="fas fa-chevron-right mx-2"></i>
+                    </div>
+                    <span class="text-white font-medium">v3.5 详情</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <a href="/version-timeline.html" class="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-300">
+                        <i class="fas fa-arrow-left mr-2"></i>返回时间轴
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-24">
+        <!-- 版本头部 -->
+        <section class="py-12 bg-gradient-to-b from-transparent to-quantum-primary/10">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="inline-flex items-center space-x-3 mb-6">
+                        <div class="px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 rounded-full text-white font-bold text-lg">
+                            v3.5.0
+                        </div>
+                        <div class="px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm text-gray-300">
+                            2023年4月
+                        </div>
+                        <div class="px-4 py-2 bg-gradient-to-r from-orange-600/20 to-red-600/20 backdrop-blur-sm rounded-full text-sm text-orange-300 border border-orange-600/30">
+                            <i class="fas fa-building mr-2"></i>企业级
+                        </div>
+                    </div>
+                    
+                    <h1 class="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        企业级增强
+                    </h1>
+                    
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
+                        专为企业环境设计的增强版本，引入高级权限管理、企业SSO集成、高可用性架构等关键企业级功能，
+                        为大型组织提供更安全、更可靠的安全解决方案。
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center gap-3 mb-8">
+                        <span class="px-4 py-2 bg-orange-600/20 text-orange-300 rounded-full text-sm border border-orange-600/30">
+                            <i class="fas fa-users-cog mr-2"></i>企业权限
+                        </span>
+                        <span class="px-4 py-2 bg-red-600/20 text-red-300 rounded-full text-sm border border-red-600/30">
+                            <i class="fas fa-id-card mr-2"></i>SSO集成
+                        </span>
+                        <span class="px-4 py-2 bg-yellow-600/20 text-yellow-300 rounded-full text-sm border border-yellow-600/30">
+                            <i class="fas fa-server mr-2"></i>高可用性
+                        </span>
+                        <span class="px-4 py-2 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-600/30">
+                            <i class="fas fa-chart-line mr-2"></i>企业报告
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心特性 -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        企业级核心特性
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        专门为企业环境量身定制的安全解决方案
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+                    <!-- 高级权限管理 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-orange-600/30 hover:border-orange-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-users-cog text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">高级权限管理</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            基于角色的访问控制(RBAC)，支持细粒度权限分配，多级审批流程，满足企业复杂的权限管理需求。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-orange-400"></i>
+                                <span class="text-gray-300">角色继承机制</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-orange-400"></i>
+                                <span class="text-gray-300">动态权限调整</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-orange-400"></i>
+                                <span class="text-gray-300">权限审计追踪</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 企业SSO集成 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-red-600/30 hover:border-red-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-red-600 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-id-card text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">企业SSO集成</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            支持SAML 2.0、OAuth 2.0、OpenID Connect等主流身份认证协议，与Active Directory、LDAP等企业目录服务无缝集成。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-red-400"></i>
+                                <span class="text-gray-300">SAML 2.0支持</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-red-400"></i>
+                                <span class="text-gray-300">AD/LDAP集成</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-red-400"></i>
+                                <span class="text-gray-300">多因子认证</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 高可用性架构 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-yellow-600/30 hover:border-yellow-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-yellow-600 to-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-server text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">高可用性架构</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            集群部署、自动故障转移、数据备份恢复，确保99.9%的服务可用性，满足企业关键业务的连续性要求。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-yellow-400"></i>
+                                <span class="text-gray-300">主从热备</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-yellow-400"></i>
+                                <span class="text-gray-300">自动故障转移</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-yellow-400"></i>
+                                <span class="text-gray-300">实时数据同步</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 企业级报告 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-purple-600/30 hover:border-purple-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">企业级报告</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            丰富的报告模板，自定义报告生成，合规性报告，支持多种格式导出，满足企业管理和审计需求。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-purple-400"></i>
+                                <span class="text-gray-300">自定义报告</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-purple-400"></i>
+                                <span class="text-gray-300">合规性检查</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-purple-400"></i>
+                                <span class="text-gray-300">自动化生成</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 多租户支持 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-green-600/30 hover:border-green-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-building text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">增强多租户</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            完善的多租户架构，数据隔离、资源隔离、配置隔离，支持企业级的多部门、多子公司独立管理。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span class="text-gray-300">数据完全隔离</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span class="text-gray-300">独立配置管理</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-green-400"></i>
+                                <span class="text-gray-300">跨租户协作</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 合规性增强 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-blue-600/30 hover:border-blue-600/50 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl flex items-center justify-center mb-6">
+                            <i class="fas fa-gavel text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">合规性增强</h3>
+                        <p class="text-gray-300 mb-6 leading-relaxed">
+                            内置ISO 27001、SOC 2、GDPR等合规性框架，自动化合规检查，简化企业合规管理流程。
+                        </p>
+                        <div class="space-y-3">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-400"></i>
+                                <span class="text-gray-300">ISO 27001模板</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-400"></i>
+                                <span class="text-gray-300">GDPR支持</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-check-circle text-blue-400"></i>
+                                <span class="text-gray-300">自动合规检查</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 架构图 -->
+        <section class="py-16 bg-gradient-to-b from-quantum-primary/5 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        企业级架构设计
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        专为企业环境优化的分布式架构
+                    </p>
+                </div>
+
+                <div class="max-w-6xl mx-auto">
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-quantum-primary/30">
+                        <pre class="text-sm text-gray-300 overflow-x-auto">
+<span class="text-orange-400">                    ┌─────────────────────────────────────────┐</span>
+<span class="text-orange-400">                    │           企业级前端层                    │</span>
+<span class="text-orange-400">                    │  ┌─────────────┐  ┌─────────────┐        │</span>
+<span class="text-orange-400">                    │  │   管理界面   │  │   移动应用   │        │</span>
+<span class="text-orange-400">                    │  └─────────────┘  └─────────────┘        │</span>
+<span class="text-orange-400">                    └─────────────────┬───────────────────────┘</span>
+                                              │
+<span class="text-red-400">                    ┌─────────────────┴───────────────────────┐</span>
+<span class="text-red-400">                    │            API网关层                     │</span>
+<span class="text-red-400">                    │  ┌─────────┐ ┌─────────┐ ┌─────────┐    │</span>
+<span class="text-red-400">                    │  │负载均衡 │ │ 限流控制 │ │ SSO集成 │    │</span>
+<span class="text-red-400">                    │  └─────────┘ └─────────┘ └─────────┘    │</span>
+<span class="text-red-400">                    └─────────────────┬───────────────────────┘</span>
+                                              │
+<span class="text-yellow-400">                    ┌─────────────────┴───────────────────────┐</span>
+<span class="text-yellow-400">                    │             企业服务层                   │</span>
+<span class="text-yellow-400">                    │ ┌──────────┐ ┌──────────┐ ┌──────────┐ │</span>
+<span class="text-yellow-400">                    │ │权限管理  │ │ 报告生成 │ │ 审计服务 │ │</span>
+<span class="text-yellow-400">                    │ └──────────┘ └──────────┘ └──────────┘ │</span>
+<span class="text-yellow-400">                    │ ┌──────────┐ ┌──────────┐ ┌──────────┐ │</span>
+<span class="text-yellow-400">                    │ │安全分析  │ │ 威胁检测 │ │ 事件响应 │ │</span>
+<span class="text-yellow-400">                    │ └──────────┘ └──────────┘ └──────────┘ │</span>
+<span class="text-yellow-400">                    └─────────────────┬───────────────────────┘</span>
+                                              │
+<span class="text-purple-400">                    ┌─────────────────┴───────────────────────┐</span>
+<span class="text-purple-400">                    │             数据存储层                   │</span>
+<span class="text-purple-400">                    │ ┌──────────┐ ┌──────────┐ ┌──────────┐ │</span>
+<span class="text-purple-400">                    │ │主数据库  │ │ 缓存集群 │ │ 日志存储 │ │</span>
+<span class="text-purple-400">                    │ │(主从热备)│ │ (Redis)  │ │(ElasticSearch)│</span>
+<span class="text-purple-400">                    │ └──────────┘ └──────────┘ └──────────┘ │</span>
+<span class="text-purple-400">                    └─────────────────────────────────────────┘</span>
+
+<span class="text-green-400">                    企业级特性：</span>
+<span class="text-gray-400">                    • 99.9% SLA保证</span>
+<span class="text-gray-400">                    • 自动故障转移</span>
+<span class="text-gray-400">                    • 数据实时备份</span>
+<span class="text-gray-400">                    • 多地域部署</span>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 企业案例 -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        企业应用案例
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        真实企业环境中的成功部署案例
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+                    <!-- 大型金融机构 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-orange-600/30">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-university text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">大型金融集团</h3>
+                                <p class="text-gray-400 text-sm">员工规模：50,000+</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-orange-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">多级权限管理</div>
+                                    <div class="text-gray-400 text-sm">覆盖总行、分行、支行三级架构</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-orange-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">合规性自动检查</div>
+                                    <div class="text-gray-400 text-sm">满足银监会相关安全要求</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-orange-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">高可用性部署</div>
+                                    <div class="text-gray-400 text-sm">实现99.99%系统可用性</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-400">
+                                部署时间：6个月
+                            </div>
+                            <div class="text-sm text-orange-400 font-medium">
+                                安全事件减少85%
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 跨国制造企业 -->
+                    <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-red-600/30">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-red-600 to-pink-600 rounded-xl flex items-center justify-center">
+                                <i class="fas fa-industry text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-white">跨国制造集团</h3>
+                                <p class="text-gray-400 text-sm">全球员工：30,000+</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-red-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">全球统一认证</div>
+                                    <div class="text-gray-400 text-sm">15个国家/地区统一SSO</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-red-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">多语言支持</div>
+                                    <div class="text-gray-400 text-sm">支持12种语言本地化</div>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fas fa-check-circle text-red-400 mt-1"></i>
+                                <div>
+                                    <div class="font-medium text-white">跨时区运营</div>
+                                    <div class="text-gray-400 text-sm">24/7全球安全监控</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="text-sm text-gray-400">
+                                部署时间：8个月
+                            </div>
+                            <div class="text-sm text-red-400 font-medium">
+                                运维效率提升60%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术指标 -->
+        <section class="py-16 bg-gradient-to-b from-quantum-primary/5 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        性能与可靠性指标
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        企业级部署的关键性能指标
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-12">
+                    <div class="text-center p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-orange-600/30">
+                        <div class="text-3xl font-bold text-orange-400 mb-2">99.9%</div>
+                        <div class="text-gray-300">服务可用性</div>
+                        <div class="text-xs text-gray-500 mt-1">SLA保证</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-red-600/30">
+                        <div class="text-3xl font-bold text-red-400 mb-2">&lt;100ms</div>
+                        <div class="text-gray-300">平均响应时间</div>
+                        <div class="text-xs text-gray-500 mt-1">API调用</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-yellow-600/30">
+                        <div class="text-3xl font-bold text-yellow-400 mb-2">100K+</div>
+                        <div class="text-gray-300">并发用户</div>
+                        <div class="text-xs text-gray-500 mt-1">峰值支持</div>
+                    </div>
+                    <div class="text-center p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-purple-600/30">
+                        <div class="text-3xl font-bold text-purple-400 mb-2">&lt;30s</div>
+                        <div class="text-gray-300">故障自愈时间</div>
+                        <div class="text-xs text-gray-500 mt-1">自动恢复</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 升级指南 -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        升级部署指南
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        从v3.0升级到v3.5的详细步骤
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- 升级准备 -->
+                        <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-quantum-primary/30">
+                            <h3 class="text-2xl font-bold mb-6 text-orange-400">
+                                <i class="fas fa-clipboard-check mr-3"></i>
+                                升级准备
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">1</div>
+                                    <div>
+                                        <div class="font-medium text-white">数据备份</div>
+                                        <div class="text-gray-400 text-sm">完整备份现有数据和配置</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">2</div>
+                                    <div>
+                                        <div class="font-medium text-white">兼容性检查</div>
+                                        <div class="text-gray-400 text-sm">验证第三方集成兼容性</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">3</div>
+                                    <div>
+                                        <div class="font-medium text-white">测试环境验证</div>
+                                        <div class="text-gray-400 text-sm">在测试环境先行验证</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-orange-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">4</div>
+                                    <div>
+                                        <div class="font-medium text-white">停机窗口规划</div>
+                                        <div class="text-gray-400 text-sm">安排2-4小时维护窗口</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 升级执行 -->
+                        <div class="p-8 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-3xl border border-quantum-primary/30">
+                            <h3 class="text-2xl font-bold mb-6 text-red-400">
+                                <i class="fas fa-cogs mr-3"></i>
+                                升级执行
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">1</div>
+                                    <div>
+                                        <div class="font-medium text-white">服务停止</div>
+                                        <div class="text-gray-400 text-sm">优雅停止所有服务</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">2</div>
+                                    <div>
+                                        <div class="font-medium text-white">系统升级</div>
+                                        <div class="text-gray-400 text-sm">执行自动化升级脚本</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">3</div>
+                                    <div>
+                                        <div class="font-medium text-white">配置迁移</div>
+                                        <div class="text-gray-400 text-sm">自动迁移配置文件</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-6 h-6 bg-red-600 text-white rounded-full flex items-center justify-center text-xs font-bold mt-1">4</div>
+                                    <div>
+                                        <div class="font-medium text-white">服务验证</div>
+                                        <div class="text-gray-400 text-sm">全面功能测试验证</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 升级命令 -->
+                    <div class="mt-8 p-6 bg-gray-900 rounded-2xl border border-quantum-primary/30">
+                        <h4 class="text-lg font-bold mb-4 text-white">
+                            <i class="fas fa-terminal mr-2"></i>
+                            升级命令
+                        </h4>
+                        <pre class="text-green-400 text-sm overflow-x-auto"><code># 1. 备份当前版本
+sudo ./alingai-backup.sh --full
+
+# 2. 下载升级包
+wget https://releases.alingai.com/v3.5/alingai-v3.5-enterprise.tar.gz
+
+# 3. 执行升级
+sudo ./alingai-upgrade.sh --from=v3.0 --to=v3.5 --preserve-config
+
+# 4. 验证升级
+./alingai-verify.sh --version=v3.5</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 更新日志 -->
+        <section class="py-16 bg-gradient-to-b from-quantum-primary/5 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-400 to-red-400 bg-clip-text text-transparent">
+                        详细更新日志
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        v3.5版本的所有功能更新和改进
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-6">
+                        <!-- 新增功能 -->
+                        <div class="p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-green-600/30">
+                            <h3 class="text-xl font-bold mb-4 text-green-400">
+                                <i class="fas fa-plus-circle mr-2"></i>
+                                新增功能
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <div class="text-white">• 基于角色的访问控制(RBAC 2.0)</div>
+                                    <div class="text-white">• SAML 2.0身份认证支持</div>
+                                    <div class="text-white">• Active Directory/LDAP集成</div>
+                                    <div class="text-white">• 企业级合规性报告模板</div>
+                                    <div class="text-white">• 主从热备高可用架构</div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-white">• 多租户数据完全隔离</div>
+                                    <div class="text-white">• 自定义权限审批流程</div>
+                                    <div class="text-white">• 企业级仪表板定制</div>
+                                    <div class="text-white">• API限流和配额管理</div>
+                                    <div class="text-white">• 自动化运维脚本</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能增强 -->
+                        <div class="p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-blue-600/30">
+                            <h3 class="text-xl font-bold mb-4 text-blue-400">
+                                <i class="fas fa-arrow-up mr-2"></i>
+                                功能增强
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <div class="text-white">• 安全分析引擎性能提升60%</div>
+                                    <div class="text-white">• 报告生成速度优化3倍</div>
+                                    <div class="text-white">• 用户界面响应时间减少40%</div>
+                                    <div class="text-white">• 数据库查询优化</div>
+                                    <div class="text-white">• 内存使用效率提升</div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-white">• 增强的威胁检测算法</div>
+                                    <div class="text-white">• 改进的事件关联分析</div>
+                                    <div class="text-white">• 更智能的异常检测</div>
+                                    <div class="text-white">• 扩展的日志分析能力</div>
+                                    <div class="text-white">• 优化的告警去重机制</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 问题修复 -->
+                        <div class="p-6 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm rounded-2xl border border-yellow-600/30">
+                            <h3 class="text-xl font-bold mb-4 text-yellow-400">
+                                <i class="fas fa-bug mr-2"></i>
+                                问题修复
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div class="space-y-2">
+                                    <div class="text-white">• 修复高并发下的数据竞争问题</div>
+                                    <div class="text-white">• 解决内存泄漏导致的性能下降</div>
+                                    <div class="text-white">• 修复特定条件下的权限检查绕过</div>
+                                    <div class="text-white">• 纠正报告数据统计错误</div>
+                                    <div class="text-white">• 修复API返回数据格式不一致</div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="text-white">• 解决集群环境下的配置同步问题</div>
+                                    <div class="text-white">• 修复某些浏览器兼容性问题</div>
+                                    <div class="text-white">• 纠正时区处理异常</div>
+                                    <div class="text-white">• 修复文件上传大小限制问题</div>
+                                    <div class="text-white">• 解决定时任务重复执行问题</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-12">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-6">
+                    <div class="w-8 h-8 bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-sm"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-quantum-accent">AlingAI Platform</h3>
+                </div>
+                
+                <p class="text-gray-400 text-sm mb-6 max-w-2xl mx-auto">
+                    v3.5企业级增强版本 - 专为大型企业环境设计的安全解决方案
+                </p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="/" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-home mr-2"></i>返回首页
+                    </a>
+                    <a href="/version-timeline.html" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-history mr-2"></i>版本时间轴
+                    </a>
+                    <a href="/api" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-code mr-2"></i>API文档
+                    </a>
+                </div>
+                
+                <div class="border-t border-quantum-primary/20 pt-8">
+                    <p class="text-gray-400 text-sm">
+                        © 2024 珑凌科技. 保留所有权利. | v3.5.0 企业级增强版本
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 注册GSAP插件
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 页面加载动画
+            gsap.from('.version-badge', {
+                scale: 0,
+                rotation: -180,
+                duration: 1,
+                ease: "back.out(1.7)"
+            });
+
+            gsap.from('h1', {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.3,
+                ease: "power3.out"
+            });
+
+            // 特性卡片动画
+            gsap.from('.grid > div', {
+                y: 100,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '.grid',
+                    start: "top 80%"
+                }
+            });
+
+            // 统计数字动画
+            const stats = document.querySelectorAll('.text-3xl');
+            stats.forEach(stat => {
+                const value = stat.textContent;
+                if (value.includes('%') || value.includes('ms') || value.includes('s') || value.includes('K+')) {
+                    const numValue = parseInt(value);
+                    if (!isNaN(numValue)) {
+                        gsap.fromTo(stat, {
+                            textContent: 0
+                        }, {
+                            textContent: numValue,
+                            duration: 2,
+                            ease: "power2.out",
+                            snap: { textContent: 1 },
+                            scrollTrigger: {
+                                trigger: stat,
+                                start: "top 80%"
+                            },
+                            onUpdate: function() {
+                                if (value.includes('%')) {
+                                    stat.textContent = Math.round(this.targets()[0].textContent) + '%';
+                                } else if (value.includes('ms')) {
+                                    stat.textContent = '<' + Math.round(this.targets()[0].textContent) + 'ms';
+                                } else if (value.includes('s')) {
+                                    stat.textContent = '<' + Math.round(this.targets()[0].textContent) + 's';
+                                } else if (value.includes('K+')) {
+                                    stat.textContent = Math.round(this.targets()[0].textContent) + 'K+';
+                                }
+                            }
+                        });
+                    }
+                }
+            });
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        gsap.to(window, {
+                            duration: 1,
+                            scrollTo: {
+                                y: target,
+                                offsetY: 100
+                            },
+                            ease: "power2.inOut"
+                        });
+                    }
+                });
+            });
+
+            console.log('🏢 AlingAI Platform v3.5 企业级增强版本页面已加载');
+        });
+    </script>
+</body>
+</html>

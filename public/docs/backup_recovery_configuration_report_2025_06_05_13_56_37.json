@@ -1,0 +1,229 @@
+{
+    "timestamp": "2025-06-05 13:56:37",
+    "backup_config": {
+        "NODE_ENV": "development",
+        "PORT": "3000",
+        "MYSQL_HOST": "111.180.205.70",
+        "MYSQL_USER": "AlingAi",
+        "MYSQL_PASSWORD": "e5bjzeWCr7k38TrZ",
+        "MYSQL_DATABASE": "alingai",
+        "MYSQL_PORT": "3306",
+        "MONGODB_URI": "mongodb:\/\/Ai:168KLJyouth.@111.180.205.70:27017\/Ai",
+        "JWT_SECRET": "3f8d!@^kLz9$2xQw7pL0vB1nM4rT6yUe",
+        "JWT_EXPIRE": "7d",
+        "RATE_LIMIT_WINDOW": "15",
+        "RATE_LIMIT_MAX": "100",
+        "DEEPSEEK_API_KEY": "sk-11a9c376a35e4541b1468554bf6a6e4b",
+        "MCP_ENDPOINT": "https:\/\/aip.baidubce.com\/rpc\/2.0\/ai_custom\/v1\/wenxinworkshop\/agent",
+        "AGENT_AUTH_TOKEN": "MPxrokVoaHPkDno8UK7GUgB3UiF33Mll",
+        "API_ID": "6pTSQx7eHDFHkFCSQKlwdzG2EwqjgJD2",
+        "BAIDU_APP_ID": "6pTSQx7eHDFHkFCSQKlwdzG2EwqjgJD2",
+        "BAIDU_SECRET_KEY": "MPxrokVoaHPkDno8UK7GUgB3UiF33Mll",
+        "BAIDU_API_KEY": "MPxrokVoaHPkDno8UK7GUgB3UiF33Mll",
+        "LOG_LEVEL": "info",
+        "LOG_FILE_PATH": ".\/logs\/app.log",
+        "MEMORY_DB_PATH": ".\/agents\/memory.db",
+        "MEMORY_CLEAN_THRESHOLD": "1000",
+        "HEALTH_CHECK_FREQUENCY": "300000",
+        "RESOURCE_CHECK_INTERVAL": "60000",
+        "METRICS_RETENTION_DAYS": "30",
+        "DB_MONITOR_INTERVAL": "60000",
+        "CPU_WARNING_THRESHOLD": "70",
+        "CPU_CRITICAL_THRESHOLD": "90",
+        "MEMORY_WARNING_THRESHOLD": "80",
+        "MEMORY_CRITICAL_THRESHOLD": "90",
+        "DISK_WARNING_THRESHOLD": "85",
+        "DISK_CRITICAL_THRESHOLD": "95",
+        "RESPONSE_TIME_WARNING": "1000",
+        "RESPONSE_TIME_CRITICAL": "5000",
+        "SMTP_HOST": "smtp.exmail.qq.com",
+        "SMTP_PORT": "465",
+        "SMTP_SECURE": "SSL",
+        "SMTP_USER": "admin@gxggm.com",
+        "SMTP_PASS": "PALtPBCRaEDp84xr",
+        "SMTP_FROM": "admin@gxggm.com",
+        "ALERT_EMAIL": "admin@gxggm.com",
+        "EMAIL_THROTTLE_INTERVAL": "300000",
+        "backup": {
+            "base_path": "E:\/Backups\/AlingAi_Pro",
+            "retention_days": 30,
+            "max_backups": 50,
+            "compression": true,
+            "encryption": true,
+            "remote_storage": false
+        }
+    },
+    "backup_paths": {
+        "database": "E:\/Backups\/AlingAi_Pro\/database",
+        "files": "E:\/Backups\/AlingAi_Pro\/files",
+        "config": "E:\/Backups\/AlingAi_Pro\/config",
+        "logs": "E:\/Backups\/AlingAi_Pro\/logs",
+        "incremental": "E:\/Backups\/AlingAi_Pro\/incremental",
+        "full": "E:\/Backups\/AlingAi_Pro\/full"
+    },
+    "schedules": {
+        "database": {
+            "full_backup": {
+                "schedule": "0 2 * * 0",
+                "retention": 4,
+                "compression": true,
+                "includes": [
+                    "structure",
+                    "data",
+                    "triggers",
+                    "procedures"
+                ]
+            },
+            "incremental_backup": {
+                "schedule": "0 2 * * 1-6",
+                "retention": 7,
+                "method": "binlog",
+                "compression": true
+            },
+            "transaction_log_backup": {
+                "schedule": "*\/15 * * * *",
+                "retention": 24,
+                "path": "E:\/Backups\/AlingAi_Pro\/database\/transaction_logs"
+            }
+        },
+        "files": {
+            "application_files": {
+                "schedule": "0 1 * * 0",
+                "paths": [
+                    "..\/app",
+                    "..\/public",
+                    "..\/vendor",
+                    "..\/composer.json",
+                    "..\/composer.lock"
+                ],
+                "exclude": [
+                    "cache\/*",
+                    "logs\/*",
+                    "temp\/*",
+                    ".git\/*"
+                ]
+            },
+            "user_uploads": {
+                "schedule": "0 3 * * *",
+                "paths": [
+                    "..\/storage\/uploads",
+                    "..\/storage\/avatars"
+                ],
+                "incremental": true,
+                "retention": 30
+            },
+            "configuration_files": {
+                "schedule": "0 0 * * *",
+                "paths": [
+                    "..\/.env",
+                    "..\/config",
+                    "..\/docs"
+                ],
+                "encryption": true,
+                "retention": 90
+            }
+        },
+        "config": {
+            "system_config": {
+                "nginx_config": "\/etc\/nginx\/sites-available\/alingai-pro",
+                "php_config": "\/etc\/php\/8.1\/fpm\/php.ini",
+                "redis_config": "\/etc\/redis\/redis.conf",
+                "mysql_config": "\/etc\/mysql\/my.cnf"
+            },
+            "ssl_certificates": {
+                "cert_path": "\/etc\/letsencrypt\/live\/your-domain.com\/",
+                "backup_schedule": "0 4 1 * *"
+            },
+            "cron_jobs": {
+                "backup_command": "crontab -l",
+                "schedule": "0 5 * * 0"
+            }
+        },
+        "incremental": {
+            "file_sync": {
+                "method": "rsync",
+                "schedule": "*\/30 * * * *",
+                "source_paths": [
+                    "..\/storage\/uploads",
+                    "..\/storage\/avatars",
+                    "..\/logs"
+                ],
+                "options": {
+                    "delete": false,
+                    "compress": true,
+                    "checksum": true
+                }
+            },
+            "database_changes": {
+                "method": "binlog_tracking",
+                "schedule": "*\/5 * * * *",
+                "retention": 7,
+                "auto_recovery_point": true
+            }
+        },
+        "schedule": {
+            "daily_tasks": {
+                "00:00": "config_backup",
+                "01:00": "log_rotation",
+                "02:00": "database_incremental",
+                "03:00": "user_files_backup",
+                "04:00": "cleanup_old_backups"
+            },
+            "weekly_tasks": {
+                "sunday_01:00": "full_application_backup",
+                "sunday_02:00": "full_database_backup",
+                "sunday_05:00": "system_config_backup"
+            },
+            "monthly_tasks": {
+                "first_sunday_06:00": "full_system_backup",
+                "first_day_04:00": "ssl_certificate_backup"
+            },
+            "maintenance_windows": {
+                "daily": "01:00-05:00",
+                "weekly": "Sunday 01:00-07:00",
+                "monthly": "First Sunday 01:00-08:00"
+            }
+        },
+        "recovery": {
+            "rto_targets": {
+                "critical_data": "15 minutes",
+                "application_files": "30 minutes",
+                "full_system": "2 hours"
+            },
+            "rpo_targets": {
+                "transaction_data": "5 minutes",
+                "user_uploads": "30 minutes",
+                "configuration": "24 hours"
+            },
+            "recovery_levels": {
+                "level_1_quick": {
+                    "scope": "Database point-in-time recovery",
+                    "time_estimate": "15 minutes",
+                    "automation": "full"
+                },
+                "level_2_partial": {
+                    "scope": "Application + Database recovery",
+                    "time_estimate": "45 minutes",
+                    "automation": "semi"
+                },
+                "level_3_full": {
+                    "scope": "Complete system rebuild",
+                    "time_estimate": "4 hours",
+                    "automation": "manual"
+                }
+            },
+            "testing_schedule": {
+                "recovery_test": "monthly",
+                "backup_verification": "weekly",
+                "disaster_simulation": "quarterly"
+            }
+        }
+    },
+    "generated_files": [
+        "database_backup.php",
+        "file_backup.bat",
+        "disaster_recovery.php",
+        "backup_monitor.php",
+        "setup_backup_schedule.bat"
+    ]
+}

@@ -1,0 +1,26 @@
+{
+    "status": "valid",
+    "timestamp": "2025-06-07 15:30:19",
+    "checks": {
+        "display_errors": {
+            "value": "0",
+            "valid": true,
+            "requirement": "Should be Off in production"
+        },
+        "log_errors": {
+            "value": "1",
+            "valid": true,
+            "requirement": "Should be On"
+        },
+        "error_log": {
+            "value": "E:\\Code\\AlingAi\\AlingAi_pro\/logs\/php_errors.log",
+            "valid": true,
+            "requirement": "Should be configured"
+        },
+        "error_reporting": {
+            "value": "32767",
+            "valid": true,
+            "requirement": "Should report all errors"
+        }
+    }
+}

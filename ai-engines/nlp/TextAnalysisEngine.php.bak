@@ -1,0 +1,516 @@
+<?php
+/**
+ * 文件名：TextAnalysisEngine.php
+ * 功能描述：文本分析引擎 - 提供文本分析的核心功能
+ * 创建时间：2025-01-XX
+ * 最后修改：2025-01-XX
+ * 版本：1.0.0
+ * 
+ * @package AlingAi\AI\Engines\NLP
+ * @author AlingAi Team
+ * @license MIT
+ */
+
+declare(strict_types=1);
+
+namespace AlingAi\AI\Engines\NLP;
+
+use Exception;
+use InvalidArgumentException;
+use AlingAi\Core\Logger\LoggerInterface;
+use AlingAi\Utils\CacheManager;
+use AlingAi\Utils\PerformanceMonitor;
+
+/**
+ * 文本分析引擎
+ * 
+ * 提供文本分析的核心功能，包括分词、词性标注、命名实体识别、情感分析等
+ * 支持多种语言和文本处理任务
+ */
+class TextAnalysisEngine
+{
+    private LoggerInterface $logger;
+    private CacheManager $cache;
+    private PerformanceMonitor $monitor;
+    
+    // 配置参数
+    private array $config;
+    private array $supportedLanguages;
+    
+    // 组件实例
+    private array $tokenizers = [];
+    private ?POSTagger $posTagger = null;
+    private ?NERModel $nerModel = null;
+    
+    /**
+     * 构造函数
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        CacheManager $cache,
+        PerformanceMonitor $monitor,
+        array $config = []
+    ) {
+        $this->logger = $logger;
+        $this->cache = $cache;
+        $this->monitor = $monitor;
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        
+        $this->initializeComponents();
+        $this->loadSupportedLanguages();
+    }
+    
+    /**
+     * 获取默认配置
+     */
+    private function getDefaultConfig(): array
+    {
+        return [
+            'default_language' => 'en',
+            'cache_enabled' => true,
+            'cache_ttl' => 3600,
+            'performance_monitoring' => true,
+            'max_text_length' => 100000,
+            'min_confidence' => 0.6,
+            'tokenization' => [
+                'preserve_case' => true,
+                'preserve_whitespace' => false,
+                'split_on_punctuation' => true
+            ],
+            'pos_tagging' => [
+                'enabled' => true,
+                'model' => 'default'
+            ],
+            'ner' => [
+                'enabled' => true,
+                'model' => 'default',
+                'entity_types' => ['PERSON', 'ORGANIZATION', 'LOCATION', 'DATE', 'TIME', 'MONEY', 'PERCENT']
+            ],
+            'sentiment_analysis' => [
+                'enabled' => true,
+                'model' => 'default'
+            ]
+        ];
+    }
+    
+    /**
+     * 初始化组件
+     */
+    private function initializeComponents(): void
+    {
+        try {
+            // 初始化词性标注器
+            if ($this->config['pos_tagging']['enabled']) {
+                $this->posTagger = new POSTagger($this->config['pos_tagging']);
+            }
+            
+            // 初始化命名实体识别模型
+            if ($this->config['ner']['enabled']) {
+                $this->nerModel = new NERModel($this->config['ner']);
+            }
+            
+            $this->logger->info('TextAnalysisEngine components initialized successfully');
+        } catch (Exception $e) {
+            $this->logger->error('Failed to initialize TextAnalysisEngine components: ' . $e->getMessage());
+            throw new Exception('组件初始化失败: ' . $e->getMessage());
+        }
+    }
+    
+    /**
+     * 加载支持的语言
+     */
+    private function loadSupportedLanguages(): void
+    {
+        $this->supportedLanguages = [
+            'en' => [
+                'name' => 'English',
+                'tokenizer' => 'english'
+            ],
+            'zh' => [
+                'name' => 'Chinese',
+                'tokenizer' => 'chinese'
+            ],
+            'universal' => [
+                'name' => 'Universal',
+                'tokenizer' => 'universal'
+            ]
+        ];
+    }
+    
+    /**
+     * 获取分词器
+     * 
+     * @param string $language 语言代码
+     * @return TokenizerInterface 分词器实例
+     * @throws InvalidArgumentException
+     */
+    private function getTokenizer(string $language): TokenizerInterface
+    {
+        // 检查语言是否支持
+        if (!isset($this->supportedLanguages[$language])) {
+            $language = 'universal';
+        }
+        
+        // 检查分词器是否已实例化
+        if (!isset($this->tokenizers[$language])) {
+            $tokenizerType = $this->supportedLanguages[$language]['tokenizer'];
+            
+            // 创建对应的分词器
+            switch ($tokenizerType) {
+                case 'english':
+                    $this->tokenizers[$language] = new EnglishTokenizer($this->config['tokenization']);
+                    break;
+                case 'chinese':
+                    $this->tokenizers[$language] = new ChineseTokenizer($this->config['tokenization']);
+                    break;
+                case 'universal':
+                default:
+                    $this->tokenizers[$language] = new UniversalTokenizer($this->config['tokenization']);
+            }
+        }
+        
+        return $this->tokenizers[$language];
+    }
+    
+    /**
+     * 分析文本
+     * 
+     * @param string $text 输入文本
+     * @param array $options 分析选项
+     * @return array 分析结果
+     * @throws InvalidArgumentException
+     */
+    public function analyze(string $text, array $options = []): array
+    {
+        $this->monitor->start('text_analysis');
+        
+        try {
+            // 验证文本
+            $this->validateText($text);
+            
+            // 处理选项
+            $options = array_merge($this->getDefaultOptions(), $options);
+            
+            // 生成缓存键
+            $cacheKey = 'analyze_' . md5($text . json_encode($options));
+            
+            // 检查缓存
+            if ($this->config['cache_enabled'] && $options['use_cache']) {
+                $cached = $this->cache->get($cacheKey);
+                if ($cached !== null) {
+                    $this->monitor->end('text_analysis');
+                    return $cached;
+                }
+            }
+            
+            // 检测语言
+            $language = $options['language'] ?? $this->detectLanguage($text);
+            
+            // 获取分词器
+            $tokenizer = $this->getTokenizer($language);
+            
+            // 分词
+            $tokens = $tokenizer->tokenize($text);
+            
+            // 初始化结果
+            $result = [
+                'text' => $text,
+                'language' => $language,
+                'tokens' => $tokens,
+                'processing_time' => 0
+            ];
+            
+            // 词性标注
+            if ($options['pos_tagging'] && $this->posTagger !== null) {
+                $result['pos_tags'] = $this->posTagger->tag($tokens, $language);
+            }
+            
+            // 命名实体识别
+            if ($options['ner'] && $this->nerModel !== null) {
+                $result['entities'] = $this->nerModel->recognize($text, $tokens, $language);
+            }
+            
+            // 情感分析
+            if ($options['sentiment_analysis']) {
+                $result['sentiment'] = $this->analyzeSentiment($text, $language);
+            }
+            
+            // 关键词提取
+            if ($options['keyword_extraction']) {
+                $result['keywords'] = $this->extractKeywords($text, $tokens, $language);
+            }
+            
+            // 文本分类
+            if ($options['text_classification']) {
+                $result['categories'] = $this->classifyText($text, $language);
+            }
+            
+            // 缓存结果
+            if ($this->config['cache_enabled'] && $options['use_cache']) {
+                $this->cache->set($cacheKey, $result, $this->config['cache_ttl']);
+            }
+            
+            $this->monitor->end('text_analysis');
+            $result['processing_time'] = $this->monitor->getDuration('text_analysis');
+            
+            $this->logger->info('Text analysis completed', [
+                'text_length' => strlen($text),
+                'language' => $language,
+                'processing_time' => $result['processing_time']
+            ]);
+            
+            return $result;
+            
+        } catch (Exception $e) {
+            $this->monitor->end('text_analysis');
+            $this->logger->error('Text analysis failed: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+    
+    /**
+     * 获取默认选项
+     */
+    private function getDefaultOptions(): array
+    {
+        return [
+            'language' => null,
+            'use_cache' => true,
+            'pos_tagging' => $this->config['pos_tagging']['enabled'],
+            'ner' => $this->config['ner']['enabled'],
+            'sentiment_analysis' => $this->config['sentiment_analysis']['enabled'],
+            'keyword_extraction' => false,
+            'text_classification' => false,
+            'min_confidence' => $this->config['min_confidence']
+        ];
+    }
+    
+    /**
+     * 验证文本
+     */
+    private function validateText(string $text): void
+    {
+        if (empty($text)) {
+            throw new InvalidArgumentException('文本不能为空');
+        }
+        
+        if (strlen($text) > $this->config['max_text_length']) {
+            throw new InvalidArgumentException('文本长度超过限制: ' . strlen($text) . ' > ' . $this->config['max_text_length']);
+        }
+    }
+    
+    /**
+     * 检测语言
+     */
+    private function detectLanguage(string $text): string
+    {
+        // 简单的语言检测逻辑
+        // 在实际应用中，应使用更复杂的语言检测算法
+        
+        // 检查是否包含中文字符
+        if (preg_match('/\p{Han}+/u', $text)) {
+            return 'zh';
+        }
+        
+        // 默认返回英语
+        return 'en';
+    }
+    
+    /**
+     * 情感分析
+     */
+    private function analyzeSentiment(string $text, string $language): array
+    {
+        // 模拟情感分析
+        // 在实际应用中，应使用情感分析模型
+        
+        // 简单的基于关键词的情感分析
+        $positiveWords = [
+            'en' => ['good', 'great', 'excellent', 'happy', 'love', 'like', 'best'],
+            'zh' => ['好', '优秀', '喜欢', '爱', '棒', '赞', '满意']
+        ];
+        
+        $negativeWords = [
+            'en' => ['bad', 'poor', 'terrible', 'hate', 'dislike', 'worst'],
+            'zh' => ['差', '糟糕', '讨厌', '恨', '不好', '不满意']
+        ];
+        
+        $lang = isset($positiveWords[$language]) ? $language : 'en';
+        
+        $positiveCount = 0;
+        $negativeCount = 0;
+        
+        // 计算正面词汇出现次数
+        foreach ($positiveWords[$lang] as $word) {
+            $positiveCount += substr_count(strtolower($text), $word);
+        }
+        
+        // 计算负面词汇出现次数
+        foreach ($negativeWords[$lang] as $word) {
+            $negativeCount += substr_count(strtolower($text), $word);
+        }
+        
+        // 计算情感得分 (-1 到 1)
+        $total = $positiveCount + $negativeCount;
+        $score = $total > 0 ? ($positiveCount - $negativeCount) / $total : 0;
+        
+        // 确定情感标签
+        $label = 'neutral';
+        if ($score > 0.25) {
+            $label = 'positive';
+        } elseif ($score < -0.25) {
+            $label = 'negative';
+        }
+        
+        return [
+            'score' => $score,
+            'label' => $label,
+            'confidence' => abs($score) * 0.8 + 0.1 // 简单的置信度计算
+        ];
+    }
+    
+    /**
+     * 提取关键词
+     */
+    private function extractKeywords(string $text, array $tokens, string $language): array
+    {
+        // 模拟关键词提取
+        // 在实际应用中，应使用TF-IDF或TextRank等算法
+        
+        // 简单的基于词频的关键词提取
+        $wordCounts = [];
+        $stopWords = $this->getStopWords($language);
+        
+        foreach ($tokens as $token) {
+            $word = strtolower($token['text']);
+            
+            // 跳过停用词和非字母数字词
+            if (in_array($word, $stopWords) || strlen($word) < 3 || !preg_match('/^[\p{L}\p{N}]+$/u', $word)) {
+                continue;
+            }
+            
+            if (!isset($wordCounts[$word])) {
+                $wordCounts[$word] = 0;
+            }
+            
+            $wordCounts[$word]++;
+        }
+        
+        // 按出现频率排序
+        arsort($wordCounts);
+        
+        // 取前10个关键词
+        $keywords = [];
+        $i = 0;
+        foreach ($wordCounts as $word => $count) {
+            if ($i >= 10) break;
+            
+            $keywords[] = [
+                'text' => $word,
+                'count' => $count,
+                'score' => $count / count($tokens)
+            ];
+            
+            $i++;
+        }
+        
+        return $keywords;
+    }
+    
+    /**
+     * 获取停用词
+     */
+    private function getStopWords(string $language): array
+    {
+        // 简单的停用词列表
+        $stopWords = [
+            'en' => ['a', 'an', 'the', 'and', 'or', 'but', 'if', 'then', 'else', 'when', 'at', 'from', 'by', 'for', 'with', 'about', 'to', 'in', 'on', 'of'],
+            'zh' => ['的', '了', '和', '是', '就', '都', '而', '及', '与', '着', '或', '一个', '没有', '我们', '你们', '他们']
+        ];
+        
+        return $stopWords[$language] ?? $stopWords['en'];
+    }
+    
+    /**
+     * 文本分类
+     */
+    private function classifyText(string $text, string $language): array
+    {
+        // 模拟文本分类
+        // 在实际应用中，应使用文本分类模型
+        
+        // 简单的基于关键词的分类
+        $categories = [
+            'technology' => ['computer', 'software', 'hardware', 'internet', 'app', 'digital', 'tech', 'programming', 'code', 'data'],
+            'business' => ['company', 'market', 'finance', 'investment', 'stock', 'economy', 'trade', 'business', 'profit', 'revenue'],
+            'sports' => ['football', 'basketball', 'tennis', 'game', 'player', 'team', 'win', 'league', 'score', 'match'],
+            'entertainment' => ['movie', 'film', 'music', 'actor', 'actress', 'director', 'song', 'show', 'celebrity', 'star'],
+            'health' => ['health', 'medical', 'doctor', 'patient', 'disease', 'treatment', 'hospital', 'medicine', 'symptom', 'cure']
+        ];
+        
+        $scores = [];
+        $lowerText = strtolower($text);
+        
+        foreach ($categories as $category => $keywords) {
+            $score = 0;
+            foreach ($keywords as $keyword) {
+                $count = substr_count($lowerText, $keyword);
+                $score += $count;
+            }
+            $scores[$category] = $score;
+        }
+        
+        // 归一化分数
+        $total = array_sum($scores);
+        if ($total > 0) {
+            foreach ($scores as &$score) {
+                $score = $score / $total;
+            }
+        }
+        
+        // 按分数排序
+        arsort($scores);
+        
+        // 转换为结果格式
+        $result = [];
+        foreach ($scores as $category => $score) {
+            if ($score > 0) {
+                $result[] = [
+                    'category' => $category,
+                    'score' => $score,
+                    'confidence' => $score * 0.8 + 0.1 // 简单的置信度计算
+                ];
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * 获取支持的语言
+     */
+    public function getSupportedLanguages(): array
+    {
+        return array_keys($this->supportedLanguages);
+    }
+    
+    /**
+     * 获取性能统计
+     */
+    public function getPerformanceStats(): array
+    {
+        return $this->monitor->getStats();
+    }
+    
+    /**
+     * 清理缓存
+     */
+    public function clearCache(): void
+    {
+        if ($this->config['cache_enabled']) {
+            $this->cache->clear();
+            $this->logger->info('TextAnalysisEngine cache cleared');
+        }
+    }
+}
+

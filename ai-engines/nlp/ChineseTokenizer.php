@@ -1,0 +1,501 @@
+<?php
+/**
+ * 文件名：ChineseTokenizer.php
+ * 功能描述：中文分词器 - 实现中文文本分词功能
+ * 创建时间：2025-01-XX
+ * 最后修改：2025-01-XX
+ * 版本：1.0.0
+ *
+ * @package AlingAi\AI\Engines\NLP
+ * @author AlingAi Team
+ * @license MIT
+ */
+
+declare(strict_types=1);
+
+namespace AlingAi\AI\Engines\NLP;
+
+use Exception;
+use InvalidArgumentException;
+
+/**
+ * 中文分词器
+ *
+ * 实现中文文本的分词功能，支持多种分词算法
+ */
+class ChineseTokenizer implements TokenizerInterface
+{
+    private array $config;
+    private array $dictionary;
+    private array $stopWords;
+
+    /**
+     * 构造函数
+     *
+     * @param array $config 分词器配置
+     */
+    public function __construct(array $config = [])
+    {
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->loadResources();
+    }
+
+    /**
+     * 加载资源
+     */
+    private function loadResources(): void
+    {
+        $this->loadDictionary();
+        $this->loadStopWords();
+    }
+
+    /**
+     * 加载词典
+     */
+    private function loadDictionary(): void
+    {
+        $dictFile = __DIR__ . '/resources/chinese_dict.txt';
+
+        if (!file_exists($dictFile)) {
+            $this->dictionary = $this->getBasicDictionary();
+        } else {
+            $content = file_get_contents($dictFile);
+            $this->dictionary = array_filter(explode("\n", $content));
+        }
+    }
+
+    /**
+     * 获取基础词典
+     */
+    private function getBasicDictionary(): array
+    {
+        return [
+            '中国', '北京', '上海', '广州', '深圳', '杭州', '南京', '武汉', '成都', '西安',
+            '天津', '重庆', '苏州', '无锡', '宁波', '青岛', '大连', '厦门', '福州',
+            '政府', '企业', '学校', '医院', '银行', '公司', '机构', '组织', '部门',
+            '研究', '发展', '建设', '改革', '创新', '进步', '提高', '改善', '优化',
+            '技术', '科技', '经济', '文化', '教育', '医疗', '金融', '市场', '产品',
+            '互联网', '人工智能', '大数据', '云计算', '区块链', '物联网', '5G', '数字化',
+            '软件', '硬件', '系统', '平台', '服务', '解决方案', '应用', '工具', '框架',
+            '开发', '设计', '测试', '部署', '运维', '管理', '监控', '分析', '处理'
+        ];
+    }
+
+    /**
+     * 加载停用词
+     */
+    private function loadStopWords(): void
+    {
+        $this->stopWords = [
+            '的', '了', '和', '是', '就', '都', '而', '及', '与', '着',
+            '或', '一个', '没有', '我们', '你们', '他们', '她们', '它们',
+            '这', '那', '这些', '那些', '这个', '那个', '什么', '怎么',
+            '如何', '为什么', '因为', '所以', '但是', '然而', '虽然', '如果'
+        ];
+    }
+
+    /**
+     * 获取默认配置
+     *
+     * @return array 默认配置
+     */
+    private function getDefaultConfig(): array
+    {
+        return [
+            'algorithm' => 'hmm', // hmm, max_match, mixed
+            'preserve_whitespace' => false,
+            'remove_stop_words' => false,
+            'min_token_length' => 1,
+            'max_match_direction' => 'forward', // forward, backward, bidirectional
+            'max_word_length' => 10
+        ];
+    }
+
+    /**
+     * 对文本进行分词
+     *
+     * @param string $text 输入文本
+     * @return array 分词结果
+     */
+    public function tokenize(string $text): array
+    {
+        if (empty($text)) {
+            return [];
+        }
+
+        // 预处理文本
+        $text = $this->preprocessText($text);
+
+        // 根据算法选择分词方法
+        switch ($this->config['algorithm']) {
+            case 'max_match':
+                $tokens = $this->maxMatchTokenize($text);
+                break;
+            case 'hmm':
+                $tokens = $this->hmmTokenize($text);
+                break;
+            case 'mixed':
+                $tokens = $this->mixedTokenize($text);
+                break;
+            default:
+                $tokens = $this->maxMatchTokenize($text);
+        }
+
+        // 后处理
+        $tokens = $this->postprocessTokens($tokens);
+
+        return $tokens;
+    }
+
+    /**
+     * 预处理文本
+     *
+     * @param string $text 输入文本
+     * @return string 预处理后的文本
+     */
+    private function preprocessText(string $text): string
+    {
+        // 去除多余空白
+        if (!$this->config['preserve_whitespace']) {
+            $text = preg_replace('/\s+/u', '', $text);
+        }
+
+        return $text;
+    }
+
+    /**
+     * 最大匹配分词
+     *
+     * @param string $text 预处理后的文本
+     * @return array 分词结果
+     */
+    private function maxMatchTokenize(string $text): array
+    {
+        $tokens = [];
+        $position = 0;
+        $textLength = mb_strlen($text, 'UTF-8');
+
+        while ($position < $textLength) {
+            // 获取最大匹配词
+            $match = $this->findMaxMatch($text, $position);
+            $matchLength = mb_strlen($match, 'UTF-8');
+
+            // 如果没有匹配到词典中的词，则单字切分
+            if ($matchLength === 0) {
+                $match = mb_substr($text, $position, 1, 'UTF-8');
+                $matchLength = 1;
+            }
+
+            // 跳过停用词
+            if ($this->config['remove_stop_words'] && in_array($match, $this->stopWords)) {
+                $position += $matchLength;
+                continue;
+            }
+
+            // 添加到结果
+            $tokens[] = [
+                'text' => $match,
+                'start' => $position,
+                'end' => $position + $matchLength - 1,
+                'length' => $matchLength,
+                'type' => $this->getTokenType($match),
+                'is_stop_word' => in_array($match, $this->stopWords)
+            ];
+
+            $position += $matchLength;
+        }
+
+        return $tokens;
+    }
+
+    /**
+     * 查找最大匹配词
+     *
+     * @param string $text 文本
+     * @param int $position 当前位置
+     * @return string 最大匹配词
+     */
+    private function findMaxMatch(string $text, int $position): string
+    {
+        $textLength = mb_strlen($text, 'UTF-8');
+        $maxLength = min($this->config['max_word_length'], $textLength - $position);
+        $match = '';
+
+        if ($this->config['max_match_direction'] === 'forward') {
+            // 正向最大匹配
+            for ($i = $maxLength; $i >= 1; $i--) {
+                $word = mb_substr($text, $position, $i, 'UTF-8');
+                if (in_array($word, $this->dictionary)) {
+                    return $word;
+                }
+            }
+        } else if ($this->config['max_match_direction'] === 'backward') {
+            // 逆向最大匹配
+            for ($i = 1; $i <= $maxLength; $i++) {
+                $word = mb_substr($text, $position, $i, 'UTF-8');
+                if (in_array($word, $this->dictionary)) {
+                    $match = $word;
+                }
+            }
+        } else {
+            // 双向最大匹配
+            $forward = $this->findForwardMaxMatch($text, $position);
+            $backward = $this->findBackwardMaxMatch($text, $position);
+            
+            // 比较正向和逆向结果，选择更好的
+            if (mb_strlen($forward, 'UTF-8') >= mb_strlen($backward, 'UTF-8')) {
+                $match = $forward;
+            } else {
+                $match = $backward;
+            }
+        }
+
+        return $match;
+    }
+
+    /**
+     * 正向最大匹配
+     */
+    private function findForwardMaxMatch(string $text, int $position): string
+    {
+        $textLength = mb_strlen($text, 'UTF-8');
+        $maxLength = min($this->config['max_word_length'], $textLength - $position);
+
+        for ($i = $maxLength; $i >= 1; $i--) {
+            $word = mb_substr($text, $position, $i, 'UTF-8');
+            if (in_array($word, $this->dictionary)) {
+                return $word;
+            }
+        }
+
+        return mb_substr($text, $position, 1, 'UTF-8');
+    }
+
+    /**
+     * 逆向最大匹配
+     */
+    private function findBackwardMaxMatch(string $text, int $position): string
+    {
+        $textLength = mb_strlen($text, 'UTF-8');
+        $maxLength = min($this->config['max_word_length'], $textLength - $position);
+        $match = '';
+
+        for ($i = 1; $i <= $maxLength; $i++) {
+            $word = mb_substr($text, $position, $i, 'UTF-8');
+            if (in_array($word, $this->dictionary)) {
+                $match = $word;
+            }
+        }
+
+        if (empty($match)) {
+            $match = mb_substr($text, $position, 1, 'UTF-8');
+        }
+
+        return $match;
+    }
+
+    /**
+     * 基于HMM的分词
+     *
+     * @param string $text 预处理后的文本
+     * @return array 分词结果
+     */
+    private function hmmTokenize(string $text): array
+    {
+        // 简化版HMM分词，实际应用中应使用完整的HMM模型
+        // 这里仅作为示例，使用最大匹配作为后备
+        $tokens = [];
+        $position = 0;
+        $textLength = mb_strlen($text, 'UTF-8');
+        
+        while ($position < $textLength) {
+            // 尝试使用词典匹配
+            $match = $this->findMaxMatch($text, $position);
+            $matchLength = mb_strlen($match, 'UTF-8');
+            
+            // 如果没有匹配到，使用单字切分
+            if ($matchLength === 0) {
+                $match = mb_substr($text, $position, 1, 'UTF-8');
+                $matchLength = 1;
+            }
+            
+            // 跳过停用词
+            if ($this->config['remove_stop_words'] && in_array($match, $this->stopWords)) {
+                $position += $matchLength;
+                continue;
+            }
+            
+            // 添加到结果
+            $tokens[] = [
+                'text' => $match,
+                'start' => $position,
+                'end' => $position + $matchLength - 1,
+                'length' => $matchLength,
+                'type' => $this->getTokenType($match),
+                'is_stop_word' => in_array($match, $this->stopWords)
+            ];
+            
+            $position += $matchLength;
+        }
+        
+        return $tokens;
+    }
+
+    /**
+     * 混合分词算法
+     *
+     * @param string $text 预处理后的文本
+     * @return array 分词结果
+     */
+    private function mixedTokenize(string $text): array
+    {
+        // 先使用最大匹配
+        $maxMatchTokens = $this->maxMatchTokenize($text);
+        
+        // 再使用HMM处理未登录词
+        $finalTokens = [];
+        foreach ($maxMatchTokens as $token) {
+            if ($token['length'] === 1 && !$this->isCommonChar($token['text'])) {
+                // 对单字且非常见字符进行HMM处理
+                $subText = $token['text'];
+                $subTokens = $this->hmmTokenize($subText);
+                
+                // 调整位置信息
+                foreach ($subTokens as &$subToken) {
+                    $subToken['start'] += $token['start'];
+                    $subToken['end'] += $token['start'];
+                }
+                
+                $finalTokens = array_merge($finalTokens, $subTokens);
+            } else {
+                $finalTokens[] = $token;
+            }
+        }
+        
+        return $finalTokens;
+    }
+
+    /**
+     * 判断是否为常见字符
+     */
+    private function isCommonChar(string $char): bool
+    {
+        $commonChars = ['的', '了', '和', '是', '在', '有', '我', '你', '他', '她', '它', '们'];
+        return in_array($char, $commonChars);
+    }
+
+    /**
+     * 后处理tokens
+     *
+     * @param array $tokens 分词结果
+     * @return array 后处理后的分词结果
+     */
+    private function postprocessTokens(array $tokens): array
+    {
+        // 添加token索引
+        foreach ($tokens as $i => &$token) {
+            $token['index'] = $i;
+        }
+
+        return $tokens;
+    }
+
+    /**
+     * 获取token类型
+     *
+     * @param string $token token文本
+     * @return string token类型
+     */
+    private function getTokenType(string $token): string
+    {
+        // 检查是否为数字
+        if (preg_match('/^[\d]+$/u', $token)) {
+            return 'number';
+        }
+
+        // 检查是否为英文
+        if (preg_match('/^[a-zA-Z]+$/u', $token)) {
+            return 'english';
+        }
+
+        // 检查是否为标点符号
+        if (preg_match('/^[，。！？：；、（）【】《》""'']+$/u', $token)) {
+            return 'punctuation';
+        }
+
+        // 检查是否为日期或时间
+        if (preg_match('/^[\d年月日时分秒]+$/u', $token)) {
+            return 'datetime';
+        }
+
+        // 默认为中文词
+        return 'chinese';
+    }
+
+    /**
+     * 获取分词器配置
+     *
+     * @return array 分词器配置
+     */
+    public function getConfig(): array
+    {
+        return $this->config;
+    }
+
+    /**
+     * 设置分词器配置
+     *
+     * @param array $config 分词器配置
+     * @return void
+     */
+    public function setConfig(array $config): void
+    {
+        $this->config = array_merge($this->config, $config);
+    }
+
+    /**
+     * 获取词典
+     *
+     * @return array 词典
+     */
+    public function getDictionary(): array
+    {
+        return $this->dictionary;
+    }
+
+    /**
+     * 添加词到词典
+     *
+     * @param string $word 词
+     * @return void
+     */
+    public function addWord(string $word): void
+    {
+        if (!in_array($word, $this->dictionary)) {
+            $this->dictionary[] = $word;
+        }
+    }
+
+    /**
+     * 获取停用词列表
+     *
+     * @return array 停用词列表
+     */
+    public function getStopWords(): array
+    {
+        return $this->stopWords;
+    }
+
+    /**
+     * 添加停用词
+     *
+     * @param string $word 停用词
+     * @return void
+     */
+    public function addStopWord(string $word): void
+    {
+        if (!in_array($word, $this->stopWords)) {
+            $this->stopWords[] = $word;
+        }
+    }
+}

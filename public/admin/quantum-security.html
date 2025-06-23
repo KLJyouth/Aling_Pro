@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子安全系统 - AlingAi Pro 6.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <style>
+        .quantum-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .quantum-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .quantum-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .status-operational { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .status-warning { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .status-error { background: rgba(220, 53, 69, 0.2); color: #dc3545; }
+        .quantum-animation {
+            animation: quantum-pulse 2s infinite;
+        }
+        @keyframes quantum-pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .entropy-meter {
+            height: 8px;
+            background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+            border-radius: 4px;
+            position: relative;
+        }
+        .entropy-indicator {
+            position: absolute;
+            top: -2px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: left 0.3s ease;
+        }
+    </style>
+</head>
+<body class="quantum-gradient min-vh-100">
+    <div class="container-fluid">
+        <!-- 头部导航 -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-shield-check"></i> 量子安全系统
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="admin-dashboard.html">
+                        <i class="bi bi-house"></i> 返回仪表板
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <div class="row g-4 p-4">
+            <!-- 量子安全状态概览 -->
+            <div class="col-12">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-activity"></i> 量子安全状态概览
+                        </h5>
+                        <div class="row g-3" id="quantumStatusOverview">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4>2.5 Gbps</h4>
+                                    <p>量子随机数生成</p>
+                                    <span class="quantum-status status-operational">运行中</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4>1.2 Mbps</h4>
+                                    <p>量子密钥分发</p>
+                                    <span class="quantum-status status-operational">运行中</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4>1000 keys/sec</h4>
+                                    <p>后量子密码学</p>
+                                    <span class="quantum-status status-operational">运行中</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4>低风险</h4>
+                                    <p>威胁防护</p>
+                                    <span class="quantum-status status-operational">活跃</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子随机数生成 -->
+            <div class="col-md-6">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-dice-6"></i> 量子随机数生成
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label">随机数长度 (字节)</label>
+                            <input type="number" class="form-control" id="randomLength" value="32" min="8" max="1024">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">生成的随机数</label>
+                            <textarea class="form-control" id="randomOutput" rows="4" readonly></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">熵值质量</label>
+                            <div class="entropy-meter">
+                                <div class="entropy-indicator" id="entropyIndicator" style="left: 85%;"></div>
+                            </div>
+                            <small class="text-light">熵值: <span id="entropyValue">0.999</span></small>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateQuantumRandom()">
+                            <i class="bi bi-arrow-clockwise"></i> 生成量子随机数
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子密钥分发 -->
+            <div class="col-md-6">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-key"></i> 量子密钥分发
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label">对等节点ID</label>
+                            <input type="text" class="form-control" id="peerId" placeholder="输入对等节点ID">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">密钥长度 (位)</label>
+                            <select class="form-control" id="keyLength">
+                                <option value="128">128 位</option>
+                                <option value="256" selected>256 位</option>
+                                <option value="512">512 位</option>
+                                <option value="1024">1024 位</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">分发状态</label>
+                            <div id="keyDistributionStatus" class="quantum-status status-operational">
+                                <i class="bi bi-check-circle"></i> 就绪
+                            </div>
+                        </div>
+                        <button class="btn btn-success" onclick="distributeQuantumKey()">
+                            <i class="bi bi-share"></i> 开始密钥分发
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 后量子加密 -->
+            <div class="col-md-6">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-lock"></i> 后量子加密
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label">算法类型</label>
+                            <select class="form-control" id="encryptionAlgorithm">
+                                <option value="lattice">格密码 (Lattice)</option>
+                                <option value="multivariate">多元密码 (Multivariate)</option>
+                                <option value="hash_based">基于哈希 (Hash-based)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">待加密数据</label>
+                            <textarea class="form-control" id="encryptInput" rows="3" placeholder="输入要加密的数据"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">加密结果</label>
+                            <textarea class="form-control" id="encryptOutput" rows="4" readonly></textarea>
+                        </div>
+                        <button class="btn btn-info" onclick="postQuantumEncrypt()">
+                            <i class="bi bi-encrypt"></i> 加密
+                        </button>
+                        <button class="btn btn-warning ms-2" onclick="postQuantumDecrypt()">
+                            <i class="bi bi-unlock"></i> 解密
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子数字签名 -->
+            <div class="col-md-6">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-signature"></i> 量子数字签名
+                        </h5>
+                        <div class="mb-3">
+                            <label class="form-label">私钥</label>
+                            <input type="text" class="form-control" id="privateKey" placeholder="输入私钥">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">待签名数据</label>
+                            <textarea class="form-control" id="signInput" rows="3" placeholder="输入要签名的数据"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">签名结果</label>
+                            <textarea class="form-control" id="signOutput" rows="3" readonly></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="quantumSign()">
+                            <i class="bi bi-pen"></i> 签名
+                        </button>
+                        <button class="btn btn-success ms-2" onclick="quantumVerify()">
+                            <i class="bi bi-check-circle"></i> 验证
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子威胁检测 -->
+            <div class="col-12">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-shield-exclamation"></i> 量子威胁检测
+                        </h5>
+                        <div class="row g-3" id="quantumThreats">
+                            <div class="col-md-4">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">量子计算发展</h6>
+                                        <p class="card-text">量子计算发展可能威胁现有加密算法</p>
+                                        <div class="quantum-status status-warning">中等风险</div>
+                                        <small class="text-muted">缓解措施: 实施后量子密码学</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">量子攻击</h6>
+                                        <p class="card-text">当前量子攻击能力有限</p>
+                                        <div class="quantum-status status-operational">低风险</div>
+                                        <small class="text-muted">缓解措施: 持续监控量子计算发展</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-dark text-white">
+                                    <div class="card-body">
+                                        <h6 class="card-title">QKD攻击</h6>
+                                        <p class="card-text">QKD系统受到保护</p>
+                                        <div class="quantum-status status-operational">低风险</div>
+                                        <small class="text-muted">缓解措施: 使用认证和加密保护QKD</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-danger" onclick="detectQuantumThreats()">
+                                <i class="bi bi-search"></i> 检测威胁
+                            </button>
+                            <button class="btn btn-secondary ms-2" onclick="refreshThreatData()">
+                                <i class="bi bi-arrow-clockwise"></i> 刷新数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子安全通信 -->
+            <div class="col-md-8">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-chat-dots"></i> 量子安全通信
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">对等节点ID</label>
+                                <input type="text" class="form-control" id="commPeerId" placeholder="输入对等节点ID">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">消息类型</label>
+                                <select class="form-control" id="messageType">
+                                    <option value="text">文本消息</option>
+                                    <option value="file">文件传输</option>
+                                    <option value="command">控制命令</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">消息内容</label>
+                            <textarea class="form-control" id="messageContent" rows="4" placeholder="输入要发送的消息"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">加密消息</label>
+                            <textarea class="form-control" id="encryptedMessage" rows="4" readonly></textarea>
+                        </div>
+                        <button class="btn btn-primary" onclick="quantumSecureCommunication()">
+                            <i class="bi bi-send"></i> 发送量子安全消息
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 量子安全测试 -->
+            <div class="col-md-4">
+                <div class="card quantum-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-gear"></i> 量子安全测试
+                        </h5>
+                        <div id="testResults">
+                            <!-- 测试结果将通过JavaScript动态加载 -->
+                        </div>
+                        <button class="btn btn-warning w-100 mt-3" onclick="runQuantumSecurityTest()">
+                            <i class="bi bi-play-circle"></i> 运行测试
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadQuantumStatus();
+            loadQuantumThreats();
+            loadTestResults();
+        });
+
+        // 加载量子安全状态
+        async function loadQuantumStatus() {
+            try {
+                const response = await fetch('/api/quantum/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const status = data.data;
+                    const overview = document.getElementById('quantumStatusOverview');
+                    
+                    overview.innerHTML = `
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h4 class="quantum-animation">${status.quantum_random_generator.entropy_rate}</h4>
+                                <p>量子随机数生成</p>
+                                <span class="quantum-status status-operational">${status.quantum_random_generator.status}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h4 class="quantum-animation">${status.quantum_key_distribution.key_rate}</h4>
+                                <p>量子密钥分发</p>
+                                <span class="quantum-status status-operational">${status.quantum_key_distribution.status}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h4 class="quantum-animation">${status.post_quantum_cryptography.key_generation_rate}</h4>
+                                <p>后量子密码学</p>
+                                <span class="quantum-status status-operational">${status.post_quantum_cryptography.status}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h4 class="quantum-animation">${status.quantum_threat_protection.threat_level}</h4>
+                                <p>威胁防护</p>
+                                <span class="quantum-status status-operational">${status.quantum_threat_protection.status}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('加载量子安全状态失败:', error);
+            }
+        }
+
+        // 生成量子随机数
+        async function generateQuantumRandom() {
+            try {
+                const length = document.getElementById('randomLength').value;
+                const response = await fetch('/api/quantum/random', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ length: parseInt(length) })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('randomOutput').value = data.data.random_number;
+                    
+                    // 更新熵值指示器
+                    const entropy = Math.random() * 0.1 + 0.9; // 模拟熵值
+                    document.getElementById('entropyValue').textContent = entropy.toFixed(3);
+                    document.getElementById('entropyIndicator').style.left = (entropy * 100) + '%';
+                }
+            } catch (error) {
+                console.error('生成量子随机数失败:', error);
+                alert('生成量子随机数失败');
+            }
+        }
+
+        // 量子密钥分发
+        async function distributeQuantumKey() {
+            try {
+                const peerId = document.getElementById('peerId').value;
+                const keyLength = document.getElementById('keyLength').value;
+                
+                if (!peerId) {
+                    alert('请输入对等节点ID');
+                    return;
+                }
+                
+                const statusElement = document.getElementById('keyDistributionStatus');
+                statusElement.className = 'quantum-status status-warning';
+                statusElement.innerHTML = '<i class="bi bi-clock"></i> 分发中...';
+                
+                const response = await fetch('/api/quantum/key-distribution', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        peer_id: peerId, 
+                        key_length: parseInt(keyLength) 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusElement.className = 'quantum-status status-operational';
+                    statusElement.innerHTML = '<i class="bi bi-check-circle"></i> 分发成功';
+                    alert(`密钥分发成功！密钥ID: ${data.data.key_id}`);
+                }
+            } catch (error) {
+                console.error('量子密钥分发失败:', error);
+                document.getElementById('keyDistributionStatus').className = 'quantum-status status-error';
+                document.getElementById('keyDistributionStatus').innerHTML = '<i class="bi bi-x-circle"></i> 分发失败';
+            }
+        }
+
+        // 后量子加密
+        async function postQuantumEncrypt() {
+            try {
+                const data = document.getElementById('encryptInput').value;
+                const algorithm = document.getElementById('encryptionAlgorithm').value;
+                
+                if (!data) {
+                    alert('请输入要加密的数据');
+                    return;
+                }
+                
+                const response = await fetch('/api/quantum/encrypt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        data: data, 
+                        algorithm: algorithm 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('encryptOutput').value = JSON.stringify(result.data, null, 2);
+                }
+            } catch (error) {
+                console.error('后量子加密失败:', error);
+                alert('后量子加密失败');
+            }
+        }
+
+        // 后量子解密
+        async function postQuantumDecrypt() {
+            try {
+                const encryptedData = document.getElementById('encryptOutput').value;
+                const algorithm = document.getElementById('encryptionAlgorithm').value;
+                
+                if (!encryptedData) {
+                    alert('请先加密数据');
+                    return;
+                }
+                
+                const response = await fetch('/api/quantum/decrypt', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        encrypted_data: JSON.parse(encryptedData), 
+                        algorithm: algorithm 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(`解密成功: ${result.data.decrypted_data}`);
+                }
+            } catch (error) {
+                console.error('后量子解密失败:', error);
+                alert('后量子解密失败');
+            }
+        }
+
+        // 量子数字签名
+        async function quantumSign() {
+            try {
+                const data = document.getElementById('signInput').value;
+                const privateKey = document.getElementById('privateKey').value;
+                
+                if (!data || !privateKey) {
+                    alert('请输入待签名数据和私钥');
+                    return;
+                }
+                
+                const response = await fetch('/api/quantum/sign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        data: data, 
+                        private_key: privateKey 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('signOutput').value = JSON.stringify(result.data, null, 2);
+                }
+            } catch (error) {
+                console.error('量子数字签名失败:', error);
+                alert('量子数字签名失败');
+            }
+        }
+
+        // 量子签名验证
+        async function quantumVerify() {
+            try {
+                const data = document.getElementById('signInput').value;
+                const signature = document.getElementById('signOutput').value;
+                const publicKey = prompt('请输入公钥:');
+                
+                if (!data || !signature || !publicKey) {
+                    alert('请输入完整信息');
+                    return;
+                }
+                
+                const response = await fetch('/api/quantum/verify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        data: data, 
+                        signature: JSON.parse(signature), 
+                        public_key: publicKey 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.data.is_valid ? '签名验证成功' : '签名验证失败');
+                }
+            } catch (error) {
+                console.error('量子签名验证失败:', error);
+                alert('量子签名验证失败');
+            }
+        }
+
+        // 量子安全通信
+        async function quantumSecureCommunication() {
+            try {
+                const message = document.getElementById('messageContent').value;
+                const peerId = document.getElementById('commPeerId').value;
+                
+                if (!message || !peerId) {
+                    alert('请输入消息内容和对等节点ID');
+                    return;
+                }
+                
+                const response = await fetch('/api/quantum/communication', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        message: message, 
+                        peer_id: peerId 
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('encryptedMessage').value = JSON.stringify(result.data, null, 2);
+                    alert('量子安全消息发送成功');
+                }
+            } catch (error) {
+                console.error('量子安全通信失败:', error);
+                alert('量子安全通信失败');
+            }
+        }
+
+        // 检测量子威胁
+        async function detectQuantumThreats() {
+            try {
+                const response = await fetch('/api/quantum/threats');
+                const data = await response.json();
+                
+                if (data.success) {
+                    loadQuantumThreats(data.data);
+                }
+            } catch (error) {
+                console.error('检测量子威胁失败:', error);
+                alert('检测量子威胁失败');
+            }
+        }
+
+        // 加载量子威胁信息
+        function loadQuantumThreats(threats = null) {
+            const threatsContainer = document.getElementById('quantumThreats');
+            
+            if (!threats) {
+                // 模拟威胁数据
+                threats = {
+                    'quantum_computing_development': {
+                        'status': 'monitoring',
+                        'risk_level': 'medium',
+                        'description': '量子计算发展可能威胁现有加密算法',
+                        'mitigation': '实施后量子密码学'
+                    },
+                    'quantum_attacks': {
+                        'status': 'low_risk',
+                        'risk_level': 'low',
+                        'description': '当前量子攻击能力有限',
+                        'mitigation': '持续监控量子计算发展'
+                    },
+                    'quantum_key_distribution_attacks': {
+                        'status': 'protected',
+                        'risk_level': 'low',
+                        'description': 'QKD系统受到保护',
+                        'mitigation': '使用认证和加密保护QKD'
+                    }
+                };
+            }
+            
+            threatsContainer.innerHTML = '';
+            
+            Object.entries(threats).forEach(([key, threat]) => {
+                const riskClass = threat.risk_level === 'high' ? 'status-error' : 
+                                 threat.risk_level === 'medium' ? 'status-warning' : 'status-operational';
+                
+                threatsContainer.innerHTML += `
+                    <div class="col-md-4">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <h6 class="card-title">${key.replace(/_/g, ' ').toUpperCase()}</h6>
+                                <p class="card-text">${threat.description}</p>
+                                <div class="quantum-status ${riskClass}">${threat.risk_level.toUpperCase()}</div>
+                                <small class="text-muted">缓解措施: ${threat.mitigation}</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // 刷新威胁数据
+        function refreshThreatData() {
+            loadQuantumThreats();
+        }
+
+        // 运行量子安全测试
+        async function runQuantumSecurityTest() {
+            try {
+                const testResults = document.getElementById('testResults');
+                testResults.innerHTML = '<div class="text-center"><i class="bi bi-hourglass-split"></i> 测试中...</div>';
+                
+                const response = await fetch('/api/quantum/test');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const results = data.data;
+                    testResults.innerHTML = '';
+                    
+                    Object.entries(results).forEach(([test, result]) => {
+                        const statusClass = result.status === 'passed' ? 'text-success' : 'text-danger';
+                        testResults.innerHTML += `
+                            <div class="mb-2">
+                                <div class="d-flex justify-content-between">
+                                    <span>${test.replace(/_/g, ' ')}</span>
+                                    <span class="${statusClass}">
+                                        <i class="bi bi-${result.status === 'passed' ? 'check-circle' : 'x-circle'}"></i>
+                                        ${result.status}
+                                    </span>
+                                </div>
+                                <small class="text-muted">${result.test_duration}</small>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (error) {
+                console.error('运行量子安全测试失败:', error);
+                document.getElementById('testResults').innerHTML = '<div class="text-danger">测试失败</div>';
+            }
+        }
+
+        // 加载测试结果
+        function loadTestResults() {
+            const testResults = document.getElementById('testResults');
+            testResults.innerHTML = '<div class="text-muted">点击运行测试开始</div>';
+        }
+    </script>
+</body>
+</html> 

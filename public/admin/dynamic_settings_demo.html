@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态系统配置演示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .config-key {
+            font-family: 'Fira Code', monospace;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+<div class="container mx-auto p-8">
+    <div class="bg-white rounded-lg shadow-xl p-8">
+        <h1 class="text-3xl font-bold mb-2 text-gray-900">动态系统配置演示</h1>
+        <p class="text-gray-600 mb-6">此页面演示如何通过安全的API端点从数据库实时获取系统配置。</p>
+
+        <div class="mb-6">
+            <label for="authToken" class="block text-sm font-medium text-gray-700 mb-2">API认证令牌 (Auth Token)</label>
+            <div class="flex">
+                <input type="password" id="authToken" class="flex-grow shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-l-md" placeholder="在此输入您的Bearer Token">
+                <button id="fetchButton" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-r-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    获取配置
+                </button>
+            </div>
+             <p class="text-xs text-gray-500 mt-2">注意: 由于我无法直接生成有效的认证令牌，您需要使用您系统中的有效令牌。这是一个演示安全端点调用的必要步骤。</p>
+        </div>
+
+        <div id="status" class="mb-6"></div>
+
+        <div id="results" class="hidden">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">实时配置数据</h2>
+            <div class="bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <pre id="configOutput" class="text-sm text-gray-800 whitespace-pre-wrap break-all"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('fetchButton').addEventListener('click', async () => {
+        const token = document.getElementById('authToken').value;
+        const statusEl = document.getElementById('status');
+        const resultsEl = document.getElementById('results');
+        const outputEl = document.getElementById('configOutput');
+
+        // Reset UI
+        statusEl.innerHTML = '';
+        resultsEl.classList.add('hidden');
+        outputEl.textContent = '';
+
+        if (!token) {
+            statusEl.innerHTML = `<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">请输入API认证令牌。</div>`;
+            return;
+        }
+
+        statusEl.innerHTML = `<div class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg" role="alert">正在从 /api/v1/settings 获取配置...</div>`;
+
+        try {
+            // NOTE: In a real production app, you would not hardcode the API URL.
+            const response = await fetch('/api/v1/settings', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': \`Bearer \${token}\`,
+                    'Accept': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || \`HTTP \${response.status} - \${response.statusText}\`);
+            }
+            
+            if (data.status === 'success') {
+                statusEl.innerHTML = `<div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg" role="alert">成功获取配置！</div>`;
+                outputEl.textContent = JSON.stringify(data.data, null, 2);
+                resultsEl.classList.remove('hidden');
+            } else {
+                throw new Error(data.message || '获取配置失败，但未返回明确错误信息。');
+            }
+
+        } catch (error) {
+            console.error('获取配置时出错:', error);
+            statusEl.innerHTML = `<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert"><strong>错误:</strong> \${error.message}</div>`;
+        }
+    });
+</script>
+
+</body>
+</html> 

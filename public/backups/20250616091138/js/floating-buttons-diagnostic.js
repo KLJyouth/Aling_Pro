@@ -1,0 +1,277 @@
+/**
+ * 浮动按钮系统诊断工具
+ * 用于检测和诊断浮动按钮系统的状态
+ */
+
+class FloatingButtonsDiagnostic {
+    constructor() {
+        this.diagnosticResults = {};
+        this.issues = [];
+        this.recommendations = [];
+        
+        this.runDiagnostic();
+    }
+    
+    runDiagnostic() {
+        console.log('🔍 开始浮动按钮系统诊断...');
+        
+        this.checkManagerAvailability();
+        this.checkButtonPositions();
+        this.checkZIndexHierarchy();
+        this.checkButtonOverlaps();
+        this.checkResponsiveDesign();
+        this.checkPerformance();
+        
+        this.generateReport();
+    }
+    
+    checkManagerAvailability() {
+        const managerExists = window.FloatingButtonManager !== undefined;
+        const managerInstance = window.floatingButtonManager !== undefined;
+        
+        this.diagnosticResults.manager = {
+            classAvailable: managerExists,
+            instanceAvailable: managerInstance,
+            status: managerExists && managerInstance ? '✅ 正常' : '❌ 异常'
+        };
+        
+        if (!managerExists || !managerInstance) {
+            this.issues.push('浮动按钮管理器未正确加载');
+            this.recommendations.push('确保 floating-buttons-manager.js 正确加载');
+        }
+    }
+    
+    checkButtonPositions() {
+        const buttons = document.querySelectorAll('.floating-button, [data-floating-button]');
+        const positions = [];
+        
+        buttons.forEach(button => {
+            const rect = button.getBoundingClientRect();
+            const style = window.getComputedStyle(button);
+            
+            positions.push({
+                element: button.id || button.className,
+                position: style.position,
+                top: style.top,
+                right: style.right,
+                bottom: style.bottom,
+                left: style.left,
+                zIndex: style.zIndex,
+                rect: {
+                    x: rect.x,
+                    y: rect.y,
+                    width: rect.width,
+                    height: rect.height
+                }
+            });
+        });
+        
+        this.diagnosticResults.positions = positions;
+        
+        // 检查是否有按钮位置冲突
+        this.checkPositionConflicts(positions);
+    }
+    
+    checkPositionConflicts(positions) {
+        const conflicts = [];
+        
+        for (let i = 0; i < positions.length; i++) {
+            for (let j = i + 1; j < positions.length; j++) {
+                const button1 = positions[i];
+                const button2 = positions[j];
+                
+                // 检查是否重叠
+                if (this.isOverlapping(button1.rect, button2.rect)) {
+                    conflicts.push({
+                        button1: button1.element,
+                        button2: button2.element,
+                        overlap: this.calculateOverlapArea(button1.rect, button2.rect)
+                    });
+                }
+            }
+        }
+        
+        if (conflicts.length > 0) {
+            this.issues.push(`发现 ${conflicts.length} 个按钮位置冲突`);
+            this.diagnosticResults.conflicts = conflicts;
+        }
+    }
+    
+    isOverlapping(rect1, rect2) {
+        return !(rect1.x + rect1.width <= rect2.x || 
+                rect2.x + rect2.width <= rect1.x || 
+                rect1.y + rect1.height <= rect2.y || 
+                rect2.y + rect2.height <= rect1.y);
+    }
+    
+    calculateOverlapArea(rect1, rect2) {
+        const left = Math.max(rect1.x, rect2.x);
+        const right = Math.min(rect1.x + rect1.width, rect2.x + rect2.width);
+        const top = Math.max(rect1.y, rect2.y);
+        const bottom = Math.min(rect1.y + rect1.height, rect2.y + rect2.height);
+        
+        if (right > left && bottom > top) {
+            return (right - left) * (bottom - top);
+        }
+        return 0;
+    }
+    
+    checkZIndexHierarchy() {
+        const buttons = document.querySelectorAll('.floating-button, [data-floating-button]');
+        const zIndexValues = [];
+        
+        buttons.forEach(button => {
+            const zIndex = parseInt(window.getComputedStyle(button).zIndex) || 0;
+            zIndexValues.push({
+                element: button.id || button.className,
+                zIndex: zIndex
+            });
+        });
+        
+        // 检查是否有重复的 z-index
+        const duplicates = zIndexValues.filter((item, index, arr) => 
+            arr.findIndex(other => other.zIndex === item.zIndex && other.element !== item.element) !== -1
+        );
+        
+        if (duplicates.length > 0) {
+            this.issues.push(`发现重复的 z-index 值: ${duplicates.map(d => `${d.element}(${d.zIndex})`).join(', ')}`);
+        }
+        
+        this.diagnosticResults.zIndexHierarchy = zIndexValues.sort((a, b) => b.zIndex - a.zIndex);
+    }
+    
+    checkButtonOverlaps() {
+        const buttons = document.querySelectorAll('.floating-button, [data-floating-button]');
+        let overlappingButtons = 0;
+        
+        buttons.forEach(button => {
+            const rect = button.getBoundingClientRect();
+            const isOutOfViewport = rect.right > window.innerWidth || 
+                                   rect.bottom > window.innerHeight ||
+                                   rect.left < 0 || 
+                                   rect.top < 0;
+            
+            if (isOutOfViewport) {
+                overlappingButtons++;
+                this.issues.push(`按钮 ${button.id || button.className} 超出了视窗范围`);
+            }
+        });
+        
+        this.diagnosticResults.viewportOverlaps = overlappingButtons;
+    }
+    
+    checkResponsiveDesign() {
+        const breakpoints = [
+            { name: 'mobile', width: 480 },
+            { name: 'tablet', width: 768 },
+            { name: 'desktop', width: 1024 }
+        ];
+        
+        const responsiveTests = [];
+        
+        breakpoints.forEach(bp => {
+            // 模拟不同屏幕尺寸
+            const originalWidth = window.innerWidth;
+            
+            // 这里应该测试响应式行为，但由于浏览器限制，我们只能检查CSS
+            const mediaQuery = window.matchMedia(`(max-width: ${bp.width}px)`);
+            responsiveTests.push({
+                breakpoint: bp.name,
+                matches: mediaQuery.matches,
+                width: bp.width
+            });
+        });
+        
+        this.diagnosticResults.responsive = responsiveTests;
+    }
+    
+    checkPerformance() {
+        const startTime = performance.now();
+        
+        // 测试浮动按钮管理器的性能
+        if (window.floatingButtonManager) {
+            const testOperations = 100;
+            const performanceStart = performance.now();
+            
+            for (let i = 0; i < testOperations; i++) {
+                // 模拟频繁的操作
+                window.floatingButtonManager.getAvailableSlots();
+            }
+            
+            const performanceEnd = performance.now();
+            const avgOperationTime = (performanceEnd - performanceStart) / testOperations;
+            
+            this.diagnosticResults.performance = {
+                averageOperationTime: avgOperationTime,
+                totalTestTime: performanceEnd - performanceStart,
+                operationsPerSecond: 1000 / avgOperationTime
+            };
+            
+            if (avgOperationTime > 1) {
+                this.issues.push(`浮动按钮管理器性能较低，平均操作时间: ${avgOperationTime.toFixed(2)}ms`);
+            }
+        }
+        
+        const endTime = performance.now();
+        this.diagnosticResults.diagnosticTime = endTime - startTime;
+    }
+    
+    generateReport() {
+        const report = {
+            timestamp: new Date().toISOString(),
+            summary: {
+                totalIssues: this.issues.length,
+                systemStatus: this.issues.length === 0 ? '✅ 健康' : '⚠️ 需要关注',
+                buttonsDetected: document.querySelectorAll('.floating-button, [data-floating-button]').length
+            },
+            details: this.diagnosticResults,
+            issues: this.issues,
+            recommendations: this.recommendations
+        };
+        
+        console.log('📊 浮动按钮系统诊断报告:', report);
+        
+        // 在页面上显示报告
+        this.displayReport(report);
+        
+        return report;
+    }
+    
+    displayReport(report) {
+        let reportElement = document.getElementById('diagnosticReport');
+        if (!reportElement) {
+            reportElement = document.createElement('div');
+            reportElement.id = 'diagnosticReport';
+            reportElement.className = 'fixed top-4 left-4 bg-gray-900 text-white p-4 rounded-lg shadow-lg max-w-md z-50';
+            document.body.appendChild(reportElement);
+        }
+        
+        reportElement.innerHTML = `
+            <div class="mb-2 font-bold">🔍 系统诊断报告</div>
+            <div class="text-sm space-y-1">
+                <div>状态: ${report.summary.systemStatus}</div>
+                <div>按钮数量: ${report.summary.buttonsDetected}</div>
+                <div>问题数量: ${report.summary.totalIssues}</div>
+                ${report.issues.length > 0 ? `
+                    <div class="mt-2">
+                        <div class="font-semibold">问题:</div>
+                        <ul class="text-xs">
+                            ${report.issues.map(issue => `<li>• ${issue}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+            </div>
+            <button onclick="this.parentElement.remove()" class="mt-2 text-xs bg-red-600 px-2 py-1 rounded">
+                关闭
+            </button>
+        `;
+    }
+}
+
+// 自动运行诊断（延迟执行确保所有组件加载完成）
+setTimeout(() => {
+    window.floatingButtonsDiagnostic = new FloatingButtonsDiagnostic();
+}, 2000);
+
+// 提供全局访问
+window.FloatingButtonsDiagnostic = FloatingButtonsDiagnostic;

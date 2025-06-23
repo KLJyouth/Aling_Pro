@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <!-- 渐变定义 -->
+        <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#6C13FF;stop-opacity:0.2"/>
+            <stop offset="100%" style="stop-color:#00D4FF;stop-opacity:0.2"/>
+        </linearGradient>
+        
+        <!-- 箭头标记 -->
+        <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#6C13FF"/>
+        </marker>
+    </defs>
+
+    <!-- 背景 -->
+    <rect x="0" y="0" width="800" height="600" fill="#0A0016"/>
+
+    <!-- 标题 -->
+    <text x="400" y="50" font-family="Arial" font-size="24" fill="#FFFFFF" text-anchor="middle">
+        量子安全架构
+    </text>
+
+    <!-- 核心安全层 -->
+    <g transform="translate(100,100)">
+        <rect x="0" y="0" width="600" height="120" rx="10" 
+            fill="url(#headerGrad)" stroke="#6C13FF" stroke-width="2"/>
+        <text x="300" y="40" font-family="Arial" font-size="20" fill="#FFFFFF" text-anchor="middle">
+            后量子密码算法层
+        </text>
+        <!-- 算法图标 -->
+        <g transform="translate(50,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(108,19,255,0.2)" stroke="#6C13FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                Kyber1024
+            </text>
+        </g>
+        <g transform="translate(240,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(108,19,255,0.2)" stroke="#6C13FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                NTRU
+            </text>
+        </g>
+        <g transform="translate(430,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(108,19,255,0.2)" stroke="#6C13FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                Dilithium
+            </text>
+        </g>
+    </g>
+
+    <!-- 应用安全层 -->
+    <g transform="translate(100,260)">
+        <rect x="0" y="0" width="600" height="120" rx="10" 
+            fill="url(#headerGrad)" stroke="#6C13FF" stroke-width="2"/>
+        <text x="300" y="40" font-family="Arial" font-size="20" fill="#FFFFFF" text-anchor="middle">
+            应用安全层
+        </text>
+        <!-- 应用图标 -->
+        <g transform="translate(50,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(0,212,255,0.2)" stroke="#00D4FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                电子签约
+            </text>
+        </g>
+        <g transform="translate(240,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(0,212,255,0.2)" stroke="#00D4FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                数据加密
+            </text>
+        </g>
+        <g transform="translate(430,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(0,212,255,0.2)" stroke="#00D4FF" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                身份认证
+            </text>
+        </g>
+    </g>
+
+    <!-- 基础设施层 -->
+    <g transform="translate(100,420)">
+        <rect x="0" y="0" width="600" height="120" rx="10" 
+            fill="url(#headerGrad)" stroke="#6C13FF" stroke-width="2"/>
+        <text x="300" y="40" font-family="Arial" font-size="20" fill="#FFFFFF" text-anchor="middle">
+            基础设施层
+        </text>
+        <!-- 基础设施图标 -->
+        <g transform="translate(50,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(255,43,117,0.2)" stroke="#FF2B75" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                密钥管理
+            </text>
+        </g>
+        <g transform="translate(240,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(255,43,117,0.2)" stroke="#FF2B75" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                区块链存证
+            </text>
+        </g>
+        <g transform="translate(430,60)">
+            <rect x="0" y="0" width="120" height="40" rx="5" 
+                fill="rgba(255,43,117,0.2)" stroke="#FF2B75" stroke-width="1"/>
+            <text x="60" y="25" font-family="Arial" font-size="14" fill="#FFFFFF" text-anchor="middle">
+                审计日志
+            </text>
+        </g>
+    </g>
+
+    <!-- 连接线 -->
+    <g stroke="#6C13FF" stroke-width="2" marker-end="url(#arrow)">
+        <!-- 算法层到应用层的连接 -->
+        <path d="M 400 220 L 400 260" fill="none"/>
+        <!-- 应用层到基础设施层的连接 -->
+        <path d="M 400 380 L 400 420" fill="none"/>
+    </g>
+</svg>

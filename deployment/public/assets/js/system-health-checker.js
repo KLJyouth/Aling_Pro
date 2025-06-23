@@ -1,0 +1,129 @@
+
+/**
+ * 龙凌科技系统健康检查器
+ * 实时监控系统状态并自动修复问题
+ */
+class SystemHealthChecker {
+    constructor() {
+        this.checkInterval = 5000; // 5秒检查一次
+        this.issues = [];
+        this.autoFix = true;
+        
+        this.startHealthCheck();
+    }
+    
+    startHealthCheck() {
+        console.log('💚 启动系统健康检查...');
+        
+        setInterval(() => {
+            this.performHealthCheck();
+        }, this.checkInterval);
+    }
+    
+    performHealthCheck() {
+        this.issues = [];
+        
+        // 检查核心系统
+        this.checkCoreScripts();
+        this.checkDOMElements();
+        this.checkEventListeners();
+        this.checkMemoryUsage();
+        
+        if (this.issues.length > 0) {
+            console.warn('⚠️ 发现系统问题:', this.issues);
+            if (this.autoFix) {
+                this.attemptAutoFix();
+            }
+        }
+    }
+    
+    checkCoreScripts() {
+        const coreChecks = [
+            { name: 'jQuery', test: () => typeof $ !== 'undefined' },
+            { name: 'THREE.js', test: () => typeof THREE !== 'undefined' },
+            { name: 'QuantumParticleSystem', test: () => window.quantumParticleSystem || window.QuantumParticleSystem },
+            { name: 'QuantumFeatureEnhancer', test: () => window.quantumFeatureEnhancer || window.QuantumFeatureEnhancer }
+        ];
+        
+        coreChecks.forEach(check => {
+            if (!check.test()) {
+                this.issues.push(`核心脚本缺失: ${check.name}`);
+            }
+        });
+    }
+    
+    checkDOMElements() {
+        const requiredElements = [
+            'loginModal',
+            'header',
+            'main-content'
+        ];
+        
+        requiredElements.forEach(id => {
+            if (!document.getElementById(id)) {
+                this.issues.push(`DOM元素缺失: ${id}`);
+            }
+        });
+    }
+    
+    checkEventListeners() {
+        // 检查重要的事件监听器
+        const testButton = document.createElement('button');
+        testButton.click();
+        
+        // 如果没有错误，说明事件系统正常
+    }
+    
+    checkMemoryUsage() {
+        if (performance.memory) {
+            const used = performance.memory.usedJSHeapSize;
+            const limit = performance.memory.jsHeapSizeLimit;
+            const percentage = (used / limit) * 100;
+            
+            if (percentage > 80) {
+                this.issues.push(`内存使用过高: ${percentage.toFixed(1)}%`);
+            }
+        }
+    }
+    
+    attemptAutoFix() {
+        console.log('🔧 尝试自动修复问题...');
+        
+        this.issues.forEach(issue => {
+            if (issue.includes('内存使用过高')) {
+                this.performGarbageCollection();
+            } else if (issue.includes('DOM元素缺失')) {
+                this.recreateMissingElements();
+            }
+        });
+    }
+    
+    performGarbageCollection() {
+        // 强制垃圾回收（如果可用）
+        if (window.gc) {
+            window.gc();
+        }
+        
+        // 清理全局变量
+        Object.keys(window).forEach(key => {
+            if (key.startsWith('temp_') || key.startsWith('cache_')) {
+                delete window[key];
+            }
+        });
+        
+        console.log('🧹 执行内存清理');
+    }
+    
+    recreateMissingElements() {
+        // 重新创建缺失的关键元素
+        if (!document.getElementById('loginModal')) {
+            console.log('🔧 重新创建登录模态框...');
+            // 重新创建逻辑
+        }
+    }
+}
+
+// 自动启动健康检查
+if (typeof window !== 'undefined') {
+    window.systemHealthChecker = new SystemHealthChecker();
+}

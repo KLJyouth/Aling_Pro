@@ -1,0 +1,1 @@
+[2025-06-02T18:01:27.951184+00:00] alingai.ERROR: Database connection failed {"error":"SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。"} []

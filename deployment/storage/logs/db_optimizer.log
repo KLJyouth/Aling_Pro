@@ -1,0 +1,4 @@
+[2025-06-04T03:18:15.201136+00:00] db_optimizer.WARNING: Database connection failed, falling back to file system storage {"connection":"mysql","error":"SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。"} []
+[2025-06-04T03:18:15.204600+00:00] db_optimizer.INFO: File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services/../../storage/data"} []
+[2025-06-04T03:23:08.621267+00:00] db_optimizer.WARNING: Database connection failed, falling back to file system storage {"connection":"mysql","error":"SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。"} []
+[2025-06-04T03:23:08.624017+00:00] db_optimizer.INFO: File system database initialized {"path":"E:\\Code\\AlingAi\\AlingAi_pro\\src\\Services/../../storage/data"} []

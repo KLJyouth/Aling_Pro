@@ -1,0 +1,928 @@
+/**
+ * AlingAi Pro - Utilities Library
+ * 
+ * Comprehensive utility functions for common operations,
+ * performance optimization, and developer productivity
+ * 
+ * @package AlingAi\Frontend\Utils
+ * @author AlingAi Team
+ * @version 2.0.0
+ */
+
+// Performance utilities
+const PerformanceUtils = {
+    // Debounce function execution
+    debounce(func, wait, immediate = false) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                timeout = null;
+                if (!immediate) func(...args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func(...args);
+        };
+    },
+
+    // Throttle function execution
+    throttle(func, limit) {
+        let inThrottle;
+        return function(...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    },
+
+    // Memoize function results
+    memoize(func, resolver) {
+        const cache = new Map();
+        const memoized = function(...args) {
+            const key = resolver ? resolver(...args) : JSON.stringify(args);
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
+            const result = func.apply(this, args);
+            cache.set(key, result);
+            return result;
+        };
+        memoized.cache = cache;
+        return memoized;
+    },
+
+    // Request animation frame with fallback
+    requestFrame(callback) {
+        return (window.requestAnimationFrame ||
+                window.webkitRequestAnimationFrame ||
+                window.mozRequestAnimationFrame ||
+                function(callback) { setTimeout(callback, 16); })(callback);
+    },
+
+    // Cancel animation frame
+    cancelFrame(id) {
+        return (window.cancelAnimationFrame ||
+                window.webkitCancelAnimationFrame ||
+                window.mozCancelAnimationFrame ||
+                clearTimeout)(id);
+    },
+
+    // Measure execution time
+    measureTime(name, func) {
+        const start = performance.now();
+        const result = func();
+        const end = performance.now();
+        console.log(`${name} took ${end - start} milliseconds`);
+        return result;
+    },
+
+    // Check if function is expensive and should be optimized
+    isExpensive(func, threshold = 16) {
+        const start = performance.now();
+        func();
+        const duration = performance.now() - start;
+        return duration > threshold;
+    }
+};
+
+// DOM utilities
+const DOMUtils = {
+    // Enhanced element selector with caching
+    $(selector, context = document) {
+        if (typeof selector === 'string') {
+            return context.querySelector(selector);
+        }
+        return selector;
+    },
+
+    // Select all elements with caching
+    $$(selector, context = document) {
+        if (typeof selector === 'string') {
+            return Array.from(context.querySelectorAll(selector));
+        }
+        return Array.isArray(selector) ? selector : [selector];
+    },
+
+    // Create element with attributes and content
+    createElement(tag, attributes = {}, content = '') {
+        const element = document.createElement(tag);
+        
+        Object.keys(attributes).forEach(key => {
+            if (key === 'className') {
+                element.className = attributes[key];
+            } else if (key === 'dataset') {
+                Object.assign(element.dataset, attributes[key]);
+            } else if (key.startsWith('on') && typeof attributes[key] === 'function') {
+                element.addEventListener(key.slice(2).toLowerCase(), attributes[key]);
+            } else {
+                element.setAttribute(key, attributes[key]);
+            }
+        });
+        
+        if (content) {
+            if (typeof content === 'string') {
+                element.innerHTML = content;
+            } else if (content instanceof Node) {
+                element.appendChild(content);
+            } else if (Array.isArray(content)) {
+                content.forEach(child => {
+                    if (typeof child === 'string') {
+                        element.appendChild(document.createTextNode(child));
+                    } else if (child instanceof Node) {
+                        element.appendChild(child);
+                    }
+                });
+            }
+        }
+        
+        return element;
+    },
+
+    // Check if element is in viewport
+    isInViewport(element, threshold = 0) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        const windowWidth = window.innerWidth || document.documentElement.clientWidth;
+        
+        return (
+            rect.top >= -threshold &&
+            rect.left >= -threshold &&
+            rect.bottom <= windowHeight + threshold &&
+            rect.right <= windowWidth + threshold
+        );
+    },
+
+    // Get element position relative to document
+    getPosition(element) {
+        const rect = element.getBoundingClientRect();
+        const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        return {
+            top: rect.top + scrollTop,
+            left: rect.left + scrollLeft,
+            width: rect.width,
+            height: rect.height
+        };
+    },
+
+    // Smooth scroll to element
+    scrollTo(element, options = {}) {
+        const target = this.$(element);
+        if (!target) return;
+        
+        const defaultOptions = {
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+            offset: 0
+        };
+        
+        const config = { ...defaultOptions, ...options };
+        
+        if (config.offset) {
+            const targetPosition = this.getPosition(target);
+            window.scrollTo({
+                top: targetPosition.top - config.offset,
+                behavior: config.behavior
+            });
+        } else {
+            target.scrollIntoView({
+                behavior: config.behavior,
+                block: config.block,
+                inline: config.inline
+            });
+        }
+    },
+
+    // Add multiple event listeners
+    on(element, events, handler, options = {}) {
+        const target = this.$(element);
+        if (!target) return;
+        
+        if (typeof events === 'string') {
+            events = events.split(' ');
+        }
+        
+        events.forEach(event => {
+            target.addEventListener(event, handler, options);
+        });
+        
+        // Return cleanup function
+        return () => {
+            events.forEach(event => {
+                target.removeEventListener(event, handler, options);
+            });
+        };
+    },
+
+    // Delegate event handling
+    delegate(parent, selector, event, handler) {
+        const parentElement = this.$(parent);
+        if (!parentElement) return;
+        
+        const delegatedHandler = (e) => {
+            const target = e.target.closest(selector);
+            if (target && parentElement.contains(target)) {
+                handler.call(target, e);
+            }
+        };
+        
+        parentElement.addEventListener(event, delegatedHandler);
+        
+        return () => {
+            parentElement.removeEventListener(event, delegatedHandler);
+        };
+    },
+
+    // Wait for element to exist
+    waitForElement(selector, timeout = 10000) {
+        return new Promise((resolve, reject) => {
+            const element = this.$(selector);
+            if (element) {
+                resolve(element);
+                return;
+            }
+            
+            const observer = new MutationObserver((mutations, obs) => {
+                const element = this.$(selector);
+                if (element) {
+                    obs.disconnect();
+                    resolve(element);
+                }
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            
+            setTimeout(() => {
+                observer.disconnect();
+                reject(new Error(`Element ${selector} not found within timeout`));
+            }, timeout);
+        });
+    }
+};
+
+// String utilities
+const StringUtils = {
+    // Capitalize first letter
+    capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    },
+
+    // Convert to camelCase
+    camelCase(str) {
+        return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) => {
+            return index === 0 ? word.toLowerCase() : word.toUpperCase();
+        }).replace(/\s+/g, '');
+    },
+
+    // Convert to kebab-case
+    kebabCase(str) {
+        return str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+    },
+
+    // Convert to snake_case
+    snakeCase(str) {
+        return str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
+    },
+
+    // Truncate string with ellipsis
+    truncate(str, length, suffix = '...') {
+        if (str.length <= length) return str;
+        return str.substring(0, length - suffix.length) + suffix;
+    },
+
+    // Generate random string
+    random(length = 8, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    },
+
+    // Generate UUID v4
+    uuid() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    },
+
+    // Escape HTML entities
+    escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    },
+
+    // Unescape HTML entities
+    unescapeHtml(str) {
+        const div = document.createElement('div');
+        div.innerHTML = str;
+        return div.textContent || div.innerText || '';
+    },
+
+    // Format file size
+    formatBytes(bytes, decimals = 2) {
+        if (bytes === 0) return '0 Bytes';
+        
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+};
+
+// Array utilities
+const ArrayUtils = {
+    // Remove duplicates
+    unique(array, key) {
+        if (key) {
+            const seen = new Set();
+            return array.filter(item => {
+                const value = typeof key === 'function' ? key(item) : item[key];
+                if (seen.has(value)) {
+                    return false;
+                }
+                seen.add(value);
+                return true;
+            });
+        }
+        return [...new Set(array)];
+    },
+
+    // Group array by key
+    groupBy(array, key) {
+        return array.reduce((groups, item) => {
+            const group = typeof key === 'function' ? key(item) : item[key];
+            groups[group] = groups[group] || [];
+            groups[group].push(item);
+            return groups;
+        }, {});
+    },
+
+    // Chunk array into smaller arrays
+    chunk(array, size) {
+        const chunks = [];
+        for (let i = 0; i < array.length; i += size) {
+            chunks.push(array.slice(i, i + size));
+        }
+        return chunks;
+    },
+
+    // Flatten nested array
+    flatten(array, depth = 1) {
+        return depth > 0 ? array.reduce((acc, val) => {
+            return acc.concat(Array.isArray(val) ? this.flatten(val, depth - 1) : val);
+        }, []) : array.slice();
+    },
+
+    // Sort array by multiple criteria
+    sortBy(array, ...criteria) {
+        return array.sort((a, b) => {
+            for (const criterion of criteria) {
+                let aVal, bVal;
+                if (typeof criterion === 'function') {
+                    aVal = criterion(a);
+                    bVal = criterion(b);
+                } else {
+                    aVal = a[criterion];
+                    bVal = b[criterion];
+                }
+                
+                if (aVal < bVal) return -1;
+                if (aVal > bVal) return 1;
+            }
+            return 0;
+        });
+    },
+
+    // Shuffle array
+    shuffle(array) {
+        const shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    },
+
+    // Random sample from array
+    sample(array, count = 1) {
+        const shuffled = this.shuffle(array);
+        return count === 1 ? shuffled[0] : shuffled.slice(0, count);
+    }
+};
+
+// Object utilities
+const ObjectUtils = {
+    // Deep clone object
+    deepClone(obj) {
+        if (obj === null || typeof obj !== 'object') return obj;
+        if (obj instanceof Date) return new Date(obj.getTime());
+        if (obj instanceof Array) return obj.map(item => this.deepClone(item));
+        if (typeof obj === 'object') {
+            const cloned = {};
+            Object.keys(obj).forEach(key => {
+                cloned[key] = this.deepClone(obj[key]);
+            });
+            return cloned;
+        }
+    },
+
+    // Deep merge objects
+    deepMerge(...objects) {
+        if (objects.length < 2) return objects[0] || {};
+        
+        return objects.reduce((merged, obj) => {
+            Object.keys(obj).forEach(key => {
+                if (obj[key] && typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                    merged[key] = this.deepMerge(merged[key] || {}, obj[key]);
+                } else {
+                    merged[key] = obj[key];
+                }
+            });
+            return merged;
+        }, {});
+    },
+
+    // Get nested property safely
+    get(obj, path, defaultValue) {
+        const keys = Array.isArray(path) ? path : path.split('.');
+        let result = obj;
+        
+        for (const key of keys) {
+            if (result == null || typeof result !== 'object') {
+                return defaultValue;
+            }
+            result = result[key];
+        }
+        
+        return result !== undefined ? result : defaultValue;
+    },
+
+    // Set nested property
+    set(obj, path, value) {
+        const keys = Array.isArray(path) ? path : path.split('.');
+        const lastKey = keys.pop();
+        
+        let current = obj;
+        for (const key of keys) {
+            if (current[key] == null || typeof current[key] !== 'object') {
+                current[key] = {};
+            }
+            current = current[key];
+        }
+        
+        current[lastKey] = value;
+        return obj;
+    },
+
+    // Check if object has nested property
+    has(obj, path) {
+        const keys = Array.isArray(path) ? path : path.split('.');
+        let current = obj;
+        
+        for (const key of keys) {
+            if (current == null || typeof current !== 'object' || !(key in current)) {
+                return false;
+            }
+            current = current[key];
+        }
+        
+        return true;
+    },
+
+    // Omit properties from object
+    omit(obj, keys) {
+        const result = { ...obj };
+        keys.forEach(key => delete result[key]);
+        return result;
+    },
+
+    // Pick properties from object
+    pick(obj, keys) {
+        const result = {};
+        keys.forEach(key => {
+            if (key in obj) {
+                result[key] = obj[key];
+            }
+        });
+        return result;
+    }
+};
+
+// Date utilities
+const DateUtils = {
+    // Format date
+    format(date, format = 'YYYY-MM-DD') {
+        const d = new Date(date);
+        const formats = {
+            YYYY: d.getFullYear(),
+            MM: String(d.getMonth() + 1).padStart(2, '0'),
+            DD: String(d.getDate()).padStart(2, '0'),
+            HH: String(d.getHours()).padStart(2, '0'),
+            mm: String(d.getMinutes()).padStart(2, '0'),
+            ss: String(d.getSeconds()).padStart(2, '0')
+        };
+        
+        return format.replace(/YYYY|MM|DD|HH|mm|ss/g, match => formats[match]);
+    },
+
+    // Get relative time
+    timeAgo(date) {
+        const now = new Date();
+        const diff = now - new Date(date);
+        const seconds = Math.floor(diff / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        const days = Math.floor(hours / 24);
+        
+        if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+        if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+        if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+        return 'Just now';
+    },
+
+    // Check if date is today
+    isToday(date) {
+        const today = new Date();
+        const checkDate = new Date(date);
+        return checkDate.toDateString() === today.toDateString();
+    },
+
+    // Check if date is this week
+    isThisWeek(date) {
+        const now = new Date();
+        const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
+        const weekEnd = new Date(now.setDate(now.getDate() - now.getDay() + 6));
+        const checkDate = new Date(date);
+        return checkDate >= weekStart && checkDate <= weekEnd;
+    }
+};
+
+// Storage utilities
+const StorageUtils = {
+    // Enhanced localStorage with expiration
+    local: {
+        set(key, value, expiration) {
+            const item = {
+                value,
+                timestamp: Date.now(),
+                expiration: expiration ? Date.now() + expiration : null
+            };
+            localStorage.setItem(key, JSON.stringify(item));
+        },
+        
+        get(key) {
+            try {
+                const item = JSON.parse(localStorage.getItem(key));
+                if (!item) return null;
+                
+                if (item.expiration && Date.now() > item.expiration) {
+                    localStorage.removeItem(key);
+                    return null;
+                }
+                
+                return item.value;
+            } catch (error) {
+                return null;
+            }
+        },
+        
+        remove(key) {
+            localStorage.removeItem(key);
+        },
+        
+        clear() {
+            localStorage.clear();
+        }
+    },
+
+    // Enhanced sessionStorage
+    session: {
+        set(key, value) {
+            sessionStorage.setItem(key, JSON.stringify(value));
+        },
+        
+        get(key) {
+            try {
+                return JSON.parse(sessionStorage.getItem(key));
+            } catch (error) {
+                return null;
+            }
+        },
+        
+        remove(key) {
+            sessionStorage.removeItem(key);
+        },
+        
+        clear() {
+            sessionStorage.clear();
+        }
+    }
+};
+
+// URL utilities
+const URLUtils = {
+    // Parse query string
+    parseQuery(query = window.location.search) {
+        const params = new URLSearchParams(query);
+        const result = {};
+        for (const [key, value] of params) {
+            result[key] = value;
+        }
+        return result;
+    },
+
+    // Build query string
+    buildQuery(params) {
+        const searchParams = new URLSearchParams();
+        Object.keys(params).forEach(key => {
+            if (params[key] !== null && params[key] !== undefined) {
+                searchParams.append(key, params[key]);
+            }
+        });
+        return searchParams.toString();
+    },
+
+    // Update URL without page reload
+    updateQuery(params, replace = false) {
+        const current = this.parseQuery();
+        const updated = { ...current, ...params };
+        const query = this.buildQuery(updated);
+        const url = `${window.location.pathname}${query ? '?' + query : ''}`;
+        
+        if (replace) {
+            history.replaceState(null, '', url);
+        } else {
+            history.pushState(null, '', url);
+        }
+    }
+};
+
+// Validation utilities
+const ValidationUtils = {
+    // Email validation
+    isEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    },
+
+    // URL validation
+    isURL(url) {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    },
+
+    // Phone number validation (basic)
+    isPhone(phone) {
+        const regex = /^\+?[\d\s\-\(\)]{10,}$/;
+        return regex.test(phone);
+    },
+
+    // Strong password validation
+    isStrongPassword(password) {
+        const minLength = 8;
+        const hasUpperCase = /[A-Z]/.test(password);
+        const hasLowerCase = /[a-z]/.test(password);
+        const hasNumbers = /\d/.test(password);
+        const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        
+        return password.length >= minLength && hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChar;
+    },
+
+    // Credit card validation (Luhn algorithm)
+    isCreditCard(number) {
+        const cleaned = number.replace(/\D/g, '');
+        let sum = 0;
+        let shouldDouble = false;
+        
+        for (let i = cleaned.length - 1; i >= 0; i--) {
+            let digit = parseInt(cleaned.charAt(i));
+            
+            if (shouldDouble) {
+                if ((digit *= 2) > 9) digit -= 9;
+            }
+            
+            sum += digit;
+            shouldDouble = !shouldDouble;
+        }
+        
+        return (sum % 10) === 0;
+    }
+};
+
+// Math utilities
+const MathUtils = {
+    // Clamp number between min and max
+    clamp(num, min, max) {
+        return Math.min(Math.max(num, min), max);
+    },
+
+    // Linear interpolation
+    lerp(start, end, factor) {
+        return start + (end - start) * factor;
+    },
+
+    // Map number from one range to another
+    map(value, fromMin, fromMax, toMin, toMax) {
+        return (value - fromMin) * (toMax - toMin) / (fromMax - fromMin) + toMin;
+    },
+
+    // Round to decimal places
+    round(num, decimals = 0) {
+        return Math.round(num * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    },
+
+    // Generate random number between min and max
+    random(min = 0, max = 1) {
+        return Math.random() * (max - min) + min;
+    },
+
+    // Random integer between min and max (inclusive)
+    randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+};
+
+// Device utilities
+const DeviceUtils = {
+    // Check if mobile device
+    isMobile() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    },
+
+    // Check if tablet
+    isTablet() {
+        return /iPad|Android/i.test(navigator.userAgent) && !this.isMobile();
+    },
+
+    // Check if desktop
+    isDesktop() {
+        return !this.isMobile() && !this.isTablet();
+    },
+
+    // Check if iOS
+    isIOS() {
+        return /iPad|iPhone|iPod/.test(navigator.userAgent);
+    },
+
+    // Check if Android
+    isAndroid() {
+        return /Android/.test(navigator.userAgent);
+    },
+
+    // Get device type
+    getDeviceType() {
+        if (this.isMobile()) return 'mobile';
+        if (this.isTablet()) return 'tablet';
+        return 'desktop';
+    },
+
+    // Check if touch device
+    isTouchDevice() {
+        return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    }
+};
+
+// Main Utils object combining all utilities
+const Utils = {
+    performance: PerformanceUtils,
+    dom: DOMUtils,
+    string: StringUtils,
+    array: ArrayUtils,
+    object: ObjectUtils,
+    date: DateUtils,
+    storage: StorageUtils,
+    url: URLUtils,
+    validation: ValidationUtils,
+    math: MathUtils,
+    device: DeviceUtils,
+
+    // Global utilities
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    },
+
+    // Copy text to clipboard
+    async copyToClipboard(text) {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (error) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                textArea.remove();
+                return true;
+            } catch (err) {
+                textArea.remove();
+                return false;
+            }
+        }
+    },
+
+    // Download file
+    downloadFile(content, filename, type = 'text/plain') {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    },
+
+    // Load script dynamically
+    loadScript(src, async = true) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = async;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
+        });
+    },
+
+    // Load CSS dynamically
+    loadCSS(href) {
+        return new Promise((resolve, reject) => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = href;
+            link.onload = resolve;
+            link.onerror = reject;
+            document.head.appendChild(link);
+        });
+    },
+
+    // Check if variable is empty
+    isEmpty(value) {
+        if (value == null) return true;
+        if (typeof value === 'string') return value.trim() === '';
+        if (Array.isArray(value)) return value.length === 0;
+        if (typeof value === 'object') return Object.keys(value).length === 0;
+        return false;
+    },
+
+    // Type checking utilities
+    isFunction(value) {
+        return typeof value === 'function';
+    },
+
+    isObject(value) {
+        return value !== null && typeof value === 'object' && !Array.isArray(value);
+    },
+
+    isArray(value) {
+        return Array.isArray(value);
+    },
+
+    isString(value) {
+        return typeof value === 'string';
+    },
+
+    isNumber(value) {
+        return typeof value === 'number' && !isNaN(value);
+    },
+
+    isBoolean(value) {
+        return typeof value === 'boolean';
+    }
+};
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Utils;
+}
+
+// Global access
+window.Utils = Utils;

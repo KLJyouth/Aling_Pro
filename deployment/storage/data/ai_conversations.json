@@ -1,0 +1,31 @@
+{
+    "meta": {
+        "table": "ai_conversations",
+        "schema": {
+            "id": "integer",
+            "user_id": "integer",
+            "model_name": "string",
+            "prompt": "text",
+            "response": "text",
+            "tokens_used": "integer",
+            "response_time": "float",
+            "created_at": "datetime"
+        },
+        "auto_increment": 2,
+        "created_at": "2025-06-03 12:53:38",
+        "updated_at": "2025-06-03 12:53:38"
+    },
+    "data": [
+        {
+            "user_id": null,
+            "model_name": "deepseek-chat",
+            "prompt": "请介绍一下人工智能",
+            "response": "人工智能是计算机科学的一个分支...",
+            "tokens_used": 50,
+            "response_time": 1.23,
+            "id": 1,
+            "created_at": "2025-06-03 12:53:38",
+            "updated_at": "2025-06-03 12:53:38"
+        }
+    ]
+}

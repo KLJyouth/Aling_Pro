@@ -1,0 +1,7 @@
+[2025-06-11 13:49:33] WARNING | User: admin | IP: 127.0.0.1 | Event: FAILED_LOGIN - 零信任验证失败 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 14:20:29] SUCCESS | User: admin | IP: 127.0.0.1 | Event: 零信任量子登录成功 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 14:21:37] SUCCESS | User: admin | IP: 127.0.0.1 | Event: 零信任量子登录成功 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 14:25:04] WARNING | User: admin | IP: 127.0.0.1 | Event: FAILED_LOGIN - 零信任验证失败 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 14:25:17] SUCCESS | User: admin | IP: 127.0.0.1 | Event: 零信任量子登录成功 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 16:34:54] SUCCESS | User: admin | IP: 127.0.0.1 | Event: 零信任量子登录成功 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9
+[2025-06-11 18:57:32] SUCCESS | User: admin | IP: 127.0.0.1 | Event: 零信任量子登录成功 | UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5845.9

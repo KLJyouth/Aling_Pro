@@ -1,0 +1,15 @@
+{
+    "all_passed": false,
+    "details": {
+        "display_errors": true,
+        "log_errors": true,
+        "error_reporting": true,
+        "log_directory_exists": true,
+        "log_directory_writable": true,
+        "error_log_exists": true,
+        "error_log_writable": true,
+        "app_env": false
+    },
+    "summary": "7\/8 检查通过",
+    "timestamp": "2025-06-07 15:36:13"
+}

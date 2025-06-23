@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端API集成测试</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #0056b3; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 4px; background: #f8f9fa; border: 1px solid #e9ecef; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 前端-后端API集成测试</h1>
+        <p class="info">测试前端JavaScript能否正确调用后端PHP API端点</p>
+        
+        <div class="test-section">
+            <h3>📡 历史记录API测试</h3>
+            <button onclick="testHistorySessions()">测试获取历史会话</button>
+            <button onclick="testHistoryMessages()">测试获取历史消息</button>
+            <button onclick="testSaveHistory()">测试保存历史记录</button>
+            <div id="historyResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔐 认证API测试</h3>
+            <button onclick="testAuth()">测试认证端点</button>
+            <div id="authResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>💬 聊天API测试</h3>
+            <button onclick="testChat()">测试聊天端点</button>
+            <div id="chatResults"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 测试总结</h3>
+            <div id="summary" class="info">点击上方按钮开始测试...</div>
+        </div>
+    </div>
+
+    <!-- 引入API配置 -->
+    <script src="/assets/js/assets/js/apiConfig.js"></script>
+    
+    <script>
+        let testResults = [];
+
+        async function makeApiCall(url, options = {}) {
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                const data = await response.json();
+                return {
+                    success: response.ok,
+                    status: response.status,
+                    data: data
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    status: 0,
+                    error: error.message
+                };
+            }
+        }
+
+        async function testHistorySessions() {
+            const result = await makeApiCall(API_ENDPOINTS.HISTORY_SESSIONS);
+            displayResult('historyResults', '获取历史会话', result);
+            testResults.push({name: 'History Sessions', success: result.success});
+            updateSummary();
+        }
+
+        async function testHistoryMessages() {
+            const result = await makeApiCall(API_ENDPOINTS.HISTORY_MESSAGES);
+            displayResult('historyResults', '获取历史消息', result);
+            testResults.push({name: 'History Messages', success: result.success});
+            updateSummary();
+        }
+
+        async function testSaveHistory() {
+            const testData = {
+                session_id: 'test_session_' + Date.now(),
+                title: '前端测试对话',
+                messages: [
+                    {type: 'user', content: '前端测试消息', timestamp: new Date().toISOString()},
+                    {type: 'assistant', content: '后端响应测试', timestamp: new Date().toISOString()}
+                ]
+            };
+            
+            const result = await makeApiCall(API_ENDPOINTS.SAVE_HISTORY, {
+                method: 'POST',
+                body: JSON.stringify(testData)
+            });
+            displayResult('historyResults', '保存历史记录', result);
+            testResults.push({name: 'Save History', success: result.success});
+            updateSummary();
+        }
+
+        async function testAuth() {
+            const result = await makeApiCall(API_ENDPOINTS.LOGIN.replace('/login', '/test'));
+            displayResult('authResults', '认证API测试', result);
+            testResults.push({name: 'Auth Test', success: result.success});
+            updateSummary();
+        }
+
+        async function testChat() {
+            const result = await makeApiCall(API_ENDPOINTS.CHAT_DEEPSEEK.replace('/chat', '/test'));
+            displayResult('chatResults', '聊天API测试', result);
+            testResults.push({name: 'Chat Test', success: result.success});
+            updateSummary();
+        }
+
+        function displayResult(containerId, testName, result) {
+            const container = document.getElementById(containerId);
+            const resultDiv = document.createElement('div');
+            resultDiv.className = result.success ? 'result success' : 'result error';
+            
+            let content = `<strong>${testName}</strong><br>`;
+            content += `状态: ${result.success ? '✅ 成功' : '❌ 失败'}<br>`;
+            content += `HTTP状态码: ${result.status}<br>`;
+            
+            if (result.data) {
+                content += `<details><summary>响应数据</summary><pre>${JSON.stringify(result.data, null, 2)}</pre></details>`;
+            }
+            if (result.error) {
+                content += `错误: ${result.error}<br>`;
+            }
+            
+            resultDiv.innerHTML = content;
+            container.appendChild(resultDiv);
+        }
+
+        function updateSummary() {
+            const total = testResults.length;
+            const successful = testResults.filter(r => r.success).length;
+            const failed = total - successful;
+            
+            let summaryHtml = `<h4>📊 测试统计</h4>`;
+            summaryHtml += `总测试数: ${total} | ✅ 成功: ${successful} | ❌ 失败: ${failed}<br><br>`;
+            
+            if (total > 0) {
+                summaryHtml += `<strong>测试详情:</strong><br>`;
+                testResults.forEach(test => {
+                    summaryHtml += `${test.success ? '✅' : '❌'} ${test.name}<br>`;
+                });
+            }
+            
+            if (total > 0 && failed === 0) {
+                summaryHtml += `<br><div class="success">🎉 所有API测试通过！前端-后端集成成功！</div>`;
+            }
+            
+            document.getElementById('summary').innerHTML = summaryHtml;
+        }
+
+        // 页面加载时显示API配置信息
+        window.onload = function() {
+            console.log('API配置加载完成:', API_ENDPOINTS);
+            console.log('API基础URL:', API_BASE_URL);
+        }
+    </script>
+</body>
+</html>

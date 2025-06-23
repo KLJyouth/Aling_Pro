@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珑凌科技合作伙伴手册 - PDF版本</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+    <style>
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white !important; color: black !important; }
+            .print-page { page-break-after: always; }
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+    <!-- 导航栏 (不打印) -->
+    <nav class="no-print fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            珑凌科技
+                        </h1>
+                        <p class="text-xs text-gray-400">合作伙伴手册</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-4 py-2 text-quantum-accent hover:text-white transition-colors duration-300">返回首页</a>
+                    <button onclick="window.print()" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg transition-all duration-300">
+                        <i class="fas fa-print mr-2"></i>打印/下载PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PDF内容开始 -->
+    <div class="max-w-4xl mx-auto py-8 px-6 no-print:pt-24">
+        
+        <!-- 封面页 -->
+        <div class="text-center mb-16 print-page">
+            <div class="mb-12">
+                <div class="w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-8">
+                    <i class="fas fa-atom text-white text-4xl"></i>
+                </div>
+                <h1 class="text-6xl font-bold mb-4 text-gray-800">珑凌科技</h1>
+                <p class="text-2xl text-gray-600 mb-8">合作伙伴手册</p>
+                <div class="w-32 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+                <p class="text-lg text-gray-500">Partnership Handbook</p>
+            </div>
+            
+            <div class="mt-20">
+                <p class="text-xl text-gray-700 mb-4">量子安全·智能未来</p>
+                <p class="text-lg text-gray-500">构建开放协作的生态系统</p>
+            </div>
+            
+            <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+                <p class="text-gray-500">版本 2.0 | 2024年6月</p>
+            </div>
+        </div>
+
+        <!-- 目录页 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">目录</h2>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">1. 公司介绍</span>
+                    <span class="text-gray-500">3</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">2. 合作伙伴计划概述</span>
+                    <span class="text-gray-500">4</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">3. 合作伙伴类型</span>
+                    <span class="text-gray-500">5</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">4. 权益与支持</span>
+                    <span class="text-gray-500">7</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">5. 申请流程</span>
+                    <span class="text-gray-500">9</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">6. 成功案例</span>
+                    <span class="text-gray-500">10</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    <span class="text-lg">7. 联系方式</span>
+                    <span class="text-gray-500">11</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第1章：公司介绍 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">1. 公司介绍</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">关于珑凌科技</h3>
+                <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                    珑凌科技是全球领先的量子安全基础设施提供商，专注于为企业级客户提供从底层加密到智能决策的全栈安全解决方案。我们致力于通过前沿的量子安全技术、零信任架构和AI智能助手，为数字化时代的企业构建坚不可摧的安全防线。
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">核心技术优势</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold mb-2 text-blue-600">量子安全技术</h4>
+                        <p class="text-gray-600">基于量子力学原理的新一代加密技术，抵御未来量子计算机攻击</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold mb-2 text-purple-600">零信任架构</h4>
+                        <p class="text-gray-600">Never Trust, Always Verify的安全理念，全方位身份验证</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold mb-2 text-green-600">AI安全助手</h4>
+                        <p class="text-gray-600">智能威胁检测和自动化响应，24/7安全监控</p>
+                    </div>
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h4 class="font-bold mb-2 text-red-600">企业级服务</h4>
+                        <p class="text-gray-600">专业的技术支持和定制化解决方案</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">发展历程</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-blue-600 rounded-full mr-4"></div>
+                        <div>
+                            <span class="font-bold">2020年</span> - 公司成立，专注量子安全技术研发
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-600 rounded-full mr-4"></div>
+                        <div>
+                            <span class="font-bold">2021年</span> - 推出首个量子安全平台，获得天使轮融资
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-green-600 rounded-full mr-4"></div>
+                        <div>
+                            <span class="font-bold">2022年</span> - 完成A轮融资，与多家知名企业建立合作
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-red-600 rounded-full mr-4"></div>
+                        <div>
+                            <span class="font-bold">2023年</span> - 国际化拓展，在美国、欧洲设立分支机构
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-yellow-600 rounded-full mr-4"></div>
+                        <div>
+                            <span class="font-bold">2024年</span> - 推出合作伙伴生态计划，构建开放平台
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第2章：合作伙伴计划概述 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">2. 合作伙伴计划概述</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">计划愿景</h3>
+                <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                    构建开放、协作的量子安全生态圈，与全球合作伙伴共同推动量子安全技术的创新与应用，为数字化世界提供可信、可靠的安全保障。
+                </p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">合作价值</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-3 text-blue-600">对合作伙伴的价值</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• 获得前沿量子安全技术支持</li>
+                            <li>• 丰厚的商业回报和奖励机制</li>
+                            <li>• 专业的技术培训和认证</li>
+                            <li>• 全方位的市场推广支持</li>
+                            <li>• 优先获得新产品和新技术</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-3 text-purple-600">对客户的价值</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• 更丰富的解决方案选择</li>
+                            <li>• 本地化的专业服务支持</li>
+                            <li>• 更快的响应速度和交付</li>
+                            <li>• 定制化的行业解决方案</li>
+                            <li>• 降低的技术应用门槛</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">生态规模</h3>
+                <div class="grid md:grid-cols-4 gap-6 text-center">
+                    <div class="p-4 bg-blue-50 rounded-lg">
+                        <div class="text-3xl font-bold text-blue-600 mb-2">500+</div>
+                        <p class="text-gray-600">合作伙伴</p>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg">
+                        <div class="text-3xl font-bold text-purple-600 mb-2">50+</div>
+                        <p class="text-gray-600">国家地区</p>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <div class="text-3xl font-bold text-green-600 mb-2">1000+</div>
+                        <p class="text-gray-600">企业客户</p>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <div class="text-3xl font-bold text-red-600 mb-2">99.9%</div>
+                        <p class="text-gray-600">服务可用性</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第3章：合作伙伴类型 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">3. 合作伙伴类型</h2>
+            
+            <div class="space-y-8">
+                <div class="p-6 border-l-4 border-blue-600 bg-gray-50">
+                    <h3 class="text-xl font-bold mb-3 text-blue-600">技术合作伙伴</h3>
+                    <p class="text-gray-600 mb-4">集成我们的技术，为您的客户提供量子安全解决方案</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-bold mb-2">合作内容</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• API和SDK集成</li>
+                                <li>• 联合产品开发</li>
+                                <li>• 白标解决方案</li>
+                                <li>• 技术架构咨询</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">支持服务</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 专业技术培训</li>
+                                <li>• 开发工具支持</li>
+                                <li>• 技术认证体系</li>
+                                <li>• 优先技术支持</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 border-l-4 border-purple-600 bg-gray-50">
+                    <h3 class="text-xl font-bold mb-3 text-purple-600">渠道合作伙伴</h3>
+                    <p class="text-gray-600 mb-4">销售我们的产品，获得丰厚的佣金回报</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-bold mb-2">合作内容</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 产品销售代理</li>
+                                <li>• 客户资源共享</li>
+                                <li>• 市场推广合作</li>
+                                <li>• 品牌联合营销</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">支持服务</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 销售培训认证</li>
+                                <li>• 营销材料支持</li>
+                                <li>• 专属销售工具</li>
+                                <li>• 竞争性佣金</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 border-l-4 border-green-600 bg-gray-50">
+                    <h3 class="text-xl font-bold mb-3 text-green-600">解决方案合作伙伴</h3>
+                    <p class="text-gray-600 mb-4">基于我们的平台为客户提供定制化解决方案</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-bold mb-2">合作内容</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 咨询和实施服务</li>
+                                <li>• 定制化开发</li>
+                                <li>• 系统集成服务</li>
+                                <li>• 运维管理服务</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2">支持服务</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• 解决方案培训</li>
+                                <li>• 项目管理工具</li>
+                                <li>• 客户成功支持</li>
+                                <li>• 技术专家支持</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第4章：权益与支持 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">4. 权益与支持</h2>
+            
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">合作伙伴等级</h3>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="p-6 bg-gray-100 rounded-lg border-2 border-gray-300">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-gray-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-medal text-white text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-600">银牌合作伙伴</h4>
+                            <p class="text-sm text-gray-500">年销售额：10万-50万</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 基础技术支持</li>
+                            <li>• 标准培训资源</li>
+                            <li>• 15% 佣金比例</li>
+                            <li>• 季度结算</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-6 bg-yellow-50 rounded-lg border-2 border-yellow-400">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-trophy text-white text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-yellow-600">金牌合作伙伴</h4>
+                            <p class="text-sm text-yellow-500">年销售额：50万-200万</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 优先技术支持</li>
+                            <li>• 专属培训课程</li>
+                            <li>• 20% 佣金比例</li>
+                            <li>• 月度结算</li>
+                            <li>• 市场推广支持</li>
+                        </ul>
+                    </div>
+
+                    <div class="p-6 bg-blue-50 rounded-lg border-2 border-blue-400">
+                        <div class="text-center mb-4">
+                            <div class="w-16 h-16 bg-blue-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <i class="fas fa-gem text-white text-xl"></i>
+                            </div>
+                            <h4 class="text-xl font-bold text-blue-600">钻石合作伙伴</h4>
+                            <p class="text-sm text-blue-500">年销售额：200万以上</p>
+                        </div>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 专属客户经理</li>
+                            <li>• 定制化培训</li>
+                            <li>• 25% 佣金比例</li>
+                            <li>• 实时结算</li>
+                            <li>• 联合营销</li>
+                            <li>• 战略合作</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-2xl font-bold mb-4 text-gray-700">支持体系</h3>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-bold mb-3 text-blue-600">技术支持</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• 7×24专业技术支持</li>
+                            <li>• 专属技术专家团队</li>
+                            <li>• 在线技术文档库</li>
+                            <li>• 开发者社区论坛</li>
+                            <li>• 定期技术培训</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold mb-3 text-purple-600">市场支持</h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• 联合市场推广活动</li>
+                            <li>• 专业营销材料提供</li>
+                            <li>• 品牌授权使用</li>
+                            <li>• 客户案例分享</li>
+                            <li>• 行业展会支持</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第5章：申请流程 -->
+        <div class="mb-16 print-page">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">5. 申请流程</h2>
+            
+            <div class="space-y-8">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center mr-6">
+                        <span class="text-white text-lg font-bold">1</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">提交申请</h3>
+                        <p class="text-gray-600 mb-3">填写在线申请表格，提供公司基本信息和合作意向</p>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• 公司营业执照</li>
+                            <li>• 业务介绍资料</li>
+                            <li>• 团队技术能力说明</li>
+                            <li>• 市场覆盖情况</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center mr-6">
+                        <span class="text-white text-lg font-bold">2</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">资质审核</h3>
+                        <p class="text-gray-600 mb-3">我们的专业团队将评估您的技术能力和商务资质</p>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• 技术能力评估（5-7个工作日）</li>
+                            <li>• 商务资质审查</li>
+                            <li>• 市场匹配度分析</li>
+                            <li>• 合作潜力评估</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mr-6">
+                        <span class="text-white text-lg font-bold">3</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">签署协议</h3>
+                        <p class="text-gray-600 mb-3">确定合作模式和具体条款，签署正式合作协议</p>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• 合作模式确定</li>
+                            <li>• 权益条款协商</li>
+                            <li>• 法务审核</li>
+                            <li>• 正式签约</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 w-12 h-12 bg-red-600 rounded-full flex items-center justify-center mr-6">
+                        <span class="text-white text-lg font-bold">4</span>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">开始合作</h3>
+                        <p class="text-gray-600 mb-3">获得合作伙伴授权，开始享受各项权益和支持服务</p>
+                        <ul class="text-sm text-gray-500 space-y-1">
+                            <li>• 合作伙伴账户开通</li>
+                            <li>• 培训和认证</li>
+                            <li>• 资源对接</li>
+                            <li>• 业务启动</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 第6章：联系方式 -->
+        <div class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 border-b-2 border-blue-600 pb-4">6. 联系方式</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-700">合作伙伴专线</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-blue-600 mr-3"></i>
+                            <div>
+                                <p class="font-bold">邮箱</p>
+                                <p class="text-gray-600">partners@gxggm.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-purple-600 mr-3"></i>
+                            <div>
+                                <p class="font-bold">电话</p>
+                                <p class="text-gray-600">400-999-8888</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-globe text-green-600 mr-3"></i>
+                            <div>
+                                <p class="font-bold">网站</p>
+                                <p class="text-gray-600">https://gxggm.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-gray-700">办公地址</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-bold text-blue-600">总部</p>
+                            <p class="text-gray-600">中国北京市海淀区中关村科技园</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-purple-600">上海分公司</p>
+                            <p class="text-gray-600">中国上海市浦东新区陆家嘴金融区</p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-green-600">深圳分公司</p>
+                            <p class="text-gray-600">中国深圳市南山区科技园</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-blue-50 rounded-lg">
+                <h3 class="text-xl font-bold mb-4 text-blue-600">扫码关注</h3>
+                <div class="flex items-center space-x-8">
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gray-300 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-qrcode text-gray-500 text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-600">微信公众号</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-24 h-24 bg-gray-300 rounded-lg flex items-center justify-center mb-2">
+                            <i class="fas fa-qrcode text-gray-500 text-2xl"></i>
+                        </div>
+                        <p class="text-sm text-gray-600">企业微信</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <div class="text-center py-8 border-t border-gray-200">
+            <p class="text-gray-500 mb-2">© 2024 珑凌科技. 保留所有权利.</p>
+            <p class="text-gray-400 text-sm">本手册内容受知识产权保护，未经授权不得复制或传播</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 高级人工智能平台，提供智能对话、数据分析和创新AI解决方案">
+    <meta name="keywords" content="人工智能,AI,智能对话,数据分析,机器学习">
+    <title>AlingAi Pro - 高级人工智能平台</title>
+    
+    <!-- CSS文件 -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/quantum-animations.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    
+    <!-- 图标 -->
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    <!-- PWA支持 -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2196F3">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>AlingAi Pro</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">功能</a>
+                <a href="#about" class="nav-link">关于</a>
+                <a href="chat.html" class="nav-link">智能对话</a>
+                <a href="login.html" class="nav-link">登录</a>
+                <a href="register.html" class="nav-link">注册</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="quantum-background" id="quantumParticles"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">欢迎来到 AlingAi Pro</h1>
+            <p class="hero-subtitle">体验下一代人工智能平台，让AI为您的业务赋能</p>
+            <div class="hero-buttons">
+                <a href="chat.html" class="btn btn-primary">开始对话</a>
+                <a href="register.html" class="btn btn-secondary">立即注册</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能展示 -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>智能对话</h3>
+                    <p>基于先进的自然语言处理技术，提供智能、自然的对话体验</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>数据分析</h3>
+                    <p>强大的数据处理和分析能力，洞察隐藏在数据中的价值</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>实时响应</h3>
+                    <p>毫秒级响应速度，WebSocket实时通信，带来流畅体验</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>安全可靠</h3>
+                    <p>企业级安全标准，保护您的数据隐私和系统安全</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>关于 AlingAi Pro</h2>
+                    <p>AlingAi Pro是一个基于PHP 7.4+构建的高级人工智能平台，采用现代化的架构设计，支持Nginx 1.20.2+、MySQL 5.7.43+，并在CentOS 8.0+ x64环境下完美运行。</p>
+                    <p>我们致力于提供最先进的AI技术解决方案，帮助企业和个人用户提高工作效率，实现智能化转型。</p>
+                    <div class="tech-stack">
+                        <span class="tech-tag">PHP 7.4+</span>
+                        <span class="tech-tag">Nginx 1.20.2+</span>
+                        <span class="tech-tag">MySQL 5.7.43+</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">AI/ML</span>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="visualization-container" id="aiVisualization"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AlingAi Pro</h3>
+                    <p>下一代人工智能平台</p>
+                </div>
+                <div class="footer-section">
+                    <h4>快速链接</h4>
+                    <ul>
+                        <li><a href="chat.html">智能对话</a></li>
+                        <li><a href="dashboard.html">控制台</a></li>
+                        <li><a href="profile.html">个人中心</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>帮助</h4>
+                    <ul>
+                        <li><a href="contact.html">联系我们</a></li>
+                        <li><a href="privacy.html">隐私政策</a></li>
+                        <li><a href="terms.html">服务条款</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AlingAi Pro. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript文件 -->
+    <script type="module" src="assets/js/main.js"></script>
+    <script type="module" src="assets/js/quantum-particles.js"></script>
+    <script type="module" src="assets/js/visualization-dashboard.js"></script>
+    <script type="module" src="assets/js/auth.js"></script>
+    
+    <!-- 初始化脚本 -->
+    <script>
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化量子粒子动画
+            if (window.QuantumParticles) {
+                const particles = new QuantumParticles('quantumParticles');
+                particles.init();
+            }
+            
+            // 初始化AI可视化
+            if (window.VisualizationDashboard) {
+                const visualization = new VisualizationDashboard('aiVisualization');
+                visualization.initHome();
+            }
+            
+            // 初始化认证状态
+            if (window.auth) {
+                window.auth.init();
+            }
+        });
+    </script>
+</body>
+</html>

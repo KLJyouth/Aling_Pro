@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro - 完整系统测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #007bff;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.success { background: #28a745; }
+        .status-indicator.error { background: #dc3545; }
+        .status-indicator.pending { background: #ffc107; }
+        .status-indicator.info { background: #17a2b8; }
+        
+        .btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .btn:hover {
+            background: #0056b3;
+        }
+        
+        .btn.danger {
+            background: #dc3545;
+        }
+        
+        .btn.danger:hover {
+            background: #c82333;
+        }
+        
+        .btn.success {
+            background: #28a745;
+        }
+        
+        .btn.success:hover {
+            background: #218838;
+        }
+        
+        .log-area {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            height: 200px;
+            overflow-y: auto;
+            margin-top: 10px;
+            font-size: 12px;
+        }
+        
+        .chat-test {
+            grid-column: 1 / -1;
+            background: #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .message-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        
+        .messages {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            max-width: 70%;
+        }
+        
+        .message.user {
+            background: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+        
+        .message.ai {
+            background: #f1f3f4;
+            color: #333;
+        }
+        
+        .message.system {
+            background: #fff3cd;
+            color: #856404;
+            text-align: center;
+            max-width: 100%;
+        }
+        
+        .api-tests {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .api-test-btn {
+            padding: 12px;
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 AlingAi Pro 完整系统测试</h1>
+        
+        <div class="test-grid">
+            <!-- WebSocket 连接测试 -->
+            <div class="test-section">
+                <h2><span class="status-indicator pending" id="ws-status"></span>WebSocket 连接测试</h2>
+                <div>
+                    <p>服务器地址: <code>ws://127.0.0.1:8080/ws</code></p>
+                    <p>连接状态: <span id="ws-connection-status">未连接</span></p>
+                    <p>消息统计: 发送 <span id="msg-sent">0</span> / 接收 <span id="msg-received">0</span></p>
+                </div>
+                <div>
+                    <button class="btn" onclick="connectWebSocket()">连接 WebSocket</button>
+                    <button class="btn danger" onclick="disconnectWebSocket()">断开连接</button>
+                    <button class="btn" onclick="sendTestMessage()">发送测试消息</button>
+                    <button class="btn" onclick="sendHeartbeat()">发送心跳</button>
+                </div>
+                <div class="log-area" id="ws-log"></div>
+            </div>
+            
+            <!-- 系统状态检查 -->
+            <div class="test-section">
+                <h2><span class="status-indicator pending" id="system-status"></span>系统状态检查</h2>
+                <div>
+                    <p>数据库: <span id="db-status">检查中...</span></p>
+                    <p>AI服务: <span id="ai-status">检查中...</span></p>
+                    <p>邮件服务: <span id="mail-status">检查中...</span></p>
+                    <p>存储目录: <span id="storage-status">检查中...</span></p>
+                </div>
+                <div>
+                    <button class="btn" onclick="checkSystemStatus()">检查系统状态</button>
+                    <button class="btn" onclick="checkDatabaseConnection()">测试数据库</button>
+                    <button class="btn" onclick="testAIService()">测试AI服务</button>
+                </div>
+                <div class="log-area" id="system-log"></div>
+            </div>
+            
+            <!-- API 端点测试 -->
+            <div class="test-section">
+                <h2><span class="status-indicator pending" id="api-status"></span>API 端点测试</h2>
+                <div>
+                    <p>API服务器: <code>http://localhost:3000</code></p>
+                    <p>测试结果: <span id="api-test-results">等待测试</span></p>
+                </div>
+                <div class="api-tests">
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.CHAT_SEND)">聊天API</button>
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.USER_INFO)">用户信息</button>
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.SYSTEM_HEALTH)">系统健康</button>
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.AI_MODELS)">AI模型</button>
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.SETTINGS)">系统设置</button>
+                    <button class="btn api-test-btn" onclick="testAPI(API_ENDPOINTS.UPLOAD)">文件上传</button>
+                </div>
+                <div class="log-area" id="api-log"></div>
+            </div>
+            
+            <!-- 性能测试 -->
+            <div class="test-section">
+                <h2><span class="status-indicator pending" id="perf-status"></span>性能测试</h2>
+                <div>
+                    <p>并发连接数: <span id="concurrent-connections">0</span></p>
+                    <p>消息延迟: <span id="message-latency">N/A</span></p>
+                    <p>内存使用: <span id="memory-usage">检查中...</span></p>
+                </div>
+                <div>
+                    <button class="btn" onclick="performStressTest()">压力测试</button>
+                    <button class="btn" onclick="measureLatency()">延迟测试</button>
+                    <button class="btn" onclick="checkMemoryUsage()">内存检查</button>
+                </div>
+                <div class="log-area" id="perf-log"></div>
+            </div>
+        </div>
+        
+        <!-- 聊天系统集成测试 -->
+        <div class="test-section chat-test">
+            <h2><span class="status-indicator pending" id="chat-status"></span>聊天系统集成测试</h2>
+            <div style="display: flex; gap: 20px;">
+                <div style="flex: 1;">
+                    <h3>消息测试</h3>
+                    <input type="text" class="message-input" id="chat-input" placeholder="输入测试消息..." onkeypress="handleChatKeyPress(event)">
+                    <div>
+                        <button class="btn" onclick="sendChatMessage()">发送消息</button>
+                        <button class="btn" onclick="sendAIRequest()">发送AI请求</button>
+                        <button class="btn" onclick="clearMessages()">清空消息</button>
+                    </div>
+                    <div class="messages" id="chat-messages"></div>
+                </div>
+                <div style="flex: 1;">
+                    <h3>自动化测试</h3>
+                    <div>
+                        <button class="btn success" onclick="runFullSystemTest()">运行完整测试</button>
+                        <button class="btn" onclick="simulateMultipleUsers()">模拟多用户</button>
+                        <button class="btn" onclick="testErrorScenarios()">错误场景测试</button>
+                    </div>
+                    <div class="log-area" id="auto-test-log"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let ws = null;
+        let messagesSent = 0;
+        let messagesReceived = 0;
+        let testResults = {};
+        
+        // WebSocket 相关函数
+        function connectWebSocket() {
+            try {
+                ws = new WebSocket('ws://127.0.0.1:8080/ws');
+                
+                ws.onopen = function() {
+                    updateWSStatus('success', '已连接');
+                    logWS('WebSocket 连接成功');
+                };
+                
+                ws.onmessage = function(event) {
+                    messagesReceived++;
+                    updateMessageStats();
+                    
+                    try {
+                        const data = JSON.parse(event.data);
+                        logWS(`收到消息: ${JSON.stringify(data)}`);
+                        
+                        if (data.type === 'chat') {
+                            addChatMessage('ai', data.message);
+                        }
+                    } catch (e) {
+                        logWS(`收到文本消息: ${event.data}`);
+                    }
+                };
+                
+                ws.onclose = function() {
+                    updateWSStatus('error', '连接关闭');
+                    logWS('WebSocket 连接关闭');
+                };
+                
+                ws.onerror = function(error) {
+                    updateWSStatus('error', '连接错误');
+                    logWS('WebSocket 错误: ' + error);
+                };
+                
+            } catch (error) {
+                updateWSStatus('error', '连接失败');
+                logWS('连接失败: ' + error.message);
+            }
+        }
+        
+        function disconnectWebSocket() {
+            if (ws) {
+                ws.close();
+                ws = null;
+                updateWSStatus('pending', '未连接');
+                logWS('手动断开连接');
+            }
+        }
+        
+        function sendTestMessage() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const message = {
+                    type: 'test',
+                    message: '这是一条测试消息',
+                    timestamp: new Date().toISOString()
+                };
+                
+                ws.send(JSON.stringify(message));
+                messagesSent++;
+                updateMessageStats();
+                logWS(`发送测试消息: ${JSON.stringify(message)}`);
+            } else {
+                logWS('WebSocket 未连接，无法发送消息');
+            }
+        }
+        
+        function sendHeartbeat() {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const ping = JSON.stringify({type: 'ping'});
+                ws.send(ping);
+                messagesSent++;
+                updateMessageStats();
+                logWS('发送心跳包');
+            } else {
+                logWS('WebSocket 未连接，无法发送心跳');
+            }
+        }
+        
+        function updateWSStatus(status, text) {
+            const indicator = document.getElementById('ws-status');
+            const statusText = document.getElementById('ws-connection-status');
+            
+            indicator.className = `status-indicator ${status}`;
+            statusText.textContent = text;
+        }
+        
+        function updateMessageStats() {
+            document.getElementById('msg-sent').textContent = messagesSent;
+            document.getElementById('msg-received').textContent = messagesReceived;
+        }
+        
+        function logWS(message) {
+            const log = document.getElementById('ws-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // 系统状态检查函数
+        async function checkSystemStatus() {
+            logSystem('开始检查系统状态...');
+            
+            try {
+                const response = await fetch('/api/system/status');
+                if (response.ok) {
+                    const data = await response.json();
+                    logSystem('系统状态检查成功: ' + JSON.stringify(data));
+                    
+                    // 更新状态显示
+                    document.getElementById('db-status').textContent = data.database ? '正常' : '异常';
+                    document.getElementById('ai-status').textContent = data.ai_services ? '正常' : '异常';
+                    document.getElementById('mail-status').textContent = data.mail_service ? '正常' : '异常';
+                    document.getElementById('storage-status').textContent = data.storage ? '正常' : '异常';
+                    
+                    updateSystemStatus('success');
+                } else {
+                    logSystem('系统状态检查失败: HTTP ' + response.status);
+                    updateSystemStatus('error');
+                }
+            } catch (error) {
+                logSystem('系统状态检查错误: ' + error.message);
+                updateSystemStatus('error');
+            }
+        }
+        
+        async function checkDatabaseConnection() {
+            logSystem('测试数据库连接...');
+            
+            try {
+                const response = await fetch('/api/database/test');
+                if (response.ok) {
+                    const data = await response.json();
+                    logSystem('数据库测试成功: ' + JSON.stringify(data));
+                } else {
+                    logSystem('数据库测试失败: HTTP ' + response.status);
+                }
+            } catch (error) {
+                logSystem('数据库测试错误: ' + error.message);
+            }
+        }
+        
+        async function testAIService() {
+            logSystem('测试AI服务...');
+            
+            try {
+                const response = await fetch('/api/ai/test', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: '这是一个AI服务测试'})
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    logSystem('AI服务测试成功: ' + JSON.stringify(data));
+                } else {
+                    logSystem('AI服务测试失败: HTTP ' + response.status);
+                }
+            } catch (error) {
+                logSystem('AI服务测试错误: ' + error.message);
+            }
+        }
+        
+        function updateSystemStatus(status) {
+            const indicator = document.getElementById('system-status');
+            indicator.className = `status-indicator ${status}`;
+        }
+        
+        function logSystem(message) {
+            const log = document.getElementById('system-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // API 测试函数
+        async function testAPI(endpoint) {
+            logAPI(`测试 API: ${endpoint}`);
+            
+            try {
+                const response = await fetch(`http://localhost:3000${endpoint}`);
+                
+                logAPI(`${endpoint}: HTTP ${response.status} ${response.statusText}`);
+                
+                if (response.ok) {
+                    try {
+                        const data = await response.json();
+                        logAPI(`${endpoint}: 响应数据 - ${JSON.stringify(data).substring(0, 100)}...`);
+                    } catch (e) {
+                        const text = await response.text();
+                        logAPI(`${endpoint}: 响应文本 - ${text.substring(0, 100)}...`);
+                    }
+                    
+                    testResults[endpoint] = 'success';
+                } else {
+                    testResults[endpoint] = 'error';
+                }
+                
+                updateAPIStatus();
+                
+            } catch (error) {
+                logAPI(`${endpoint}: 错误 - ${error.message}`);
+                testResults[endpoint] = 'error';
+                updateAPIStatus();
+            }
+        }
+        
+        function updateAPIStatus() {
+            const results = Object.values(testResults);
+            const successCount = results.filter(r => r === 'success').length;
+            const totalCount = results.length;
+            
+            document.getElementById('api-test-results').textContent = 
+                `${successCount}/${totalCount} 成功`;
+            
+            const indicator = document.getElementById('api-status');
+            if (totalCount === 0) {
+                indicator.className = 'status-indicator pending';
+            } else if (successCount === totalCount) {
+                indicator.className = 'status-indicator success';
+            } else if (successCount > 0) {
+                indicator.className = 'status-indicator info';
+            } else {
+                indicator.className = 'status-indicator error';
+            }
+        }
+        
+        function logAPI(message) {
+            const log = document.getElementById('api-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // 性能测试函数
+        function performStressTest() {
+            logPerf('开始压力测试...');
+            
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                logPerf('请先连接 WebSocket');
+                return;
+            }
+            
+            const messageCount = 100;
+            const startTime = Date.now();
+            
+            for (let i = 0; i < messageCount; i++) {
+                setTimeout(() => {
+                    const message = {
+                        type: 'stress_test',
+                        id: i,
+                        timestamp: Date.now()
+                    };
+                    ws.send(JSON.stringify(message));
+                }, i * 10);
+            }
+            
+            setTimeout(() => {
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                logPerf(`压力测试完成: 发送 ${messageCount} 条消息，耗时 ${duration}ms`);
+            }, messageCount * 10 + 1000);
+        }
+        
+        function measureLatency() {
+            if (!ws || ws.readyState !== WebSocket.OPEN) {
+                logPerf('请先连接 WebSocket');
+                return;
+            }
+            
+            const startTime = Date.now();
+            
+            const originalOnMessage = ws.onmessage;
+            ws.onmessage = function(event) {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'latency_test') {
+                        const latency = Date.now() - startTime;
+                        document.getElementById('message-latency').textContent = `${latency}ms`;
+                        logPerf(`消息延迟: ${latency}ms`);
+                        
+                        // 恢复原来的消息处理
+                        ws.onmessage = originalOnMessage;
+                        return;
+                    }
+                } catch (e) {}
+                
+                // 调用原来的消息处理
+                if (originalOnMessage) {
+                    originalOnMessage.call(this, event);
+                }
+            };
+            
+            ws.send(JSON.stringify({type: 'latency_test', timestamp: startTime}));
+            logPerf('开始延迟测试...');
+        }
+        
+        function checkMemoryUsage() {
+            logPerf('检查内存使用情况...');
+            
+            if (performance.memory) {
+                const memory = performance.memory;
+                const used = Math.round(memory.usedJSHeapSize / 1024 / 1024);
+                const total = Math.round(memory.totalJSHeapSize / 1024 / 1024);
+                const limit = Math.round(memory.jsHeapSizeLimit / 1024 / 1024);
+                
+                document.getElementById('memory-usage').textContent = 
+                    `${used}MB / ${total}MB (限制: ${limit}MB)`;
+                    
+                logPerf(`内存使用: ${used}MB / ${total}MB (限制: ${limit}MB)`);
+            } else {
+                logPerf('浏览器不支持内存监控');
+            }
+        }
+        
+        function logPerf(message) {
+            const log = document.getElementById('perf-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // 聊天系统函数
+        function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage('user', message);
+            
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({
+                    type: 'chat',
+                    message: message,
+                    timestamp: new Date().toISOString()
+                }));
+            }
+            
+            input.value = '';
+        }
+        
+        function sendAIRequest() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage('user', message);
+            addChatMessage('system', '正在处理AI请求...');
+            
+            // 模拟AI响应
+            setTimeout(() => {
+                const aiResponse = `AI回复: 我收到了您的消息"${message}"，这是一个测试响应。`;
+                addChatMessage('ai', aiResponse);
+            }, 1000);
+            
+            input.value = '';
+        }
+        
+        function addChatMessage(type, content) {
+            const messages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const timestamp = new Date().toLocaleTimeString();
+            messageDiv.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">
+                    ${type === 'user' ? '用户' : type === 'ai' ? 'AI助手' : '系统'} (${timestamp})
+                </div>
+                <div>${content}</div>
+            `;
+            
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function clearMessages() {
+            document.getElementById('chat-messages').innerHTML = '';
+        }
+        
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+        
+        // 自动化测试函数
+        async function runFullSystemTest() {
+            logAutoTest('开始运行完整系统测试...');
+            
+            // 1. 连接 WebSocket
+            logAutoTest('1. 连接 WebSocket...');
+            connectWebSocket();
+            
+            await sleep(2000);
+            
+            // 2. 检查系统状态
+            logAutoTest('2. 检查系统状态...');
+            await checkSystemStatus();
+            
+            await sleep(1000);
+            
+            // 3. 测试所有 API 端点
+            logAutoTest('3. 测试 API 端点...');
+            const endpoints = ['/api/system/health', '/api/user/info', '/api/settings'];
+            for (const endpoint of endpoints) {
+                await testAPI(endpoint);
+                await sleep(500);
+            }
+            
+            // 4. 发送测试消息
+            logAutoTest('4. 发送测试消息...');
+            sendTestMessage();
+            
+            await sleep(1000);
+            
+            // 5. 性能测试
+            logAutoTest('5. 性能测试...');
+            measureLatency();
+            checkMemoryUsage();
+            
+            await sleep(2000);
+            
+            logAutoTest('✅ 完整系统测试完成！');
+            updateChatStatus('success');
+        }
+        
+        function simulateMultipleUsers() {
+            logAutoTest('模拟多用户连接...');
+            
+            // 这里可以创建多个 WebSocket 连接来模拟多用户
+            logAutoTest('注意：多用户模拟需要服务器支持多连接');
+        }
+        
+        function testErrorScenarios() {
+            logAutoTest('测试错误场景...');
+            
+            // 测试无效消息
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send('invalid json message');
+                logAutoTest('发送无效 JSON 消息');
+            }
+            
+            // 测试不存在的 API
+            testAPI('/api/nonexistent');
+        }
+        
+        function updateChatStatus(status) {
+            const indicator = document.getElementById('chat-status');
+            indicator.className = `status-indicator ${status}`;
+        }
+        
+        function logAutoTest(message) {
+            const log = document.getElementById('auto-test-log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // 页面加载完成后自动开始测试
+        document.addEventListener('DOMContentLoaded', function() {
+            // 自动连接 WebSocket
+            setTimeout(connectWebSocket, 1000);
+            
+            // 自动检查系统状态
+            setTimeout(checkSystemStatus, 2000);
+        });
+    </script>
+</body>
+</html>

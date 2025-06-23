@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Pro 5.0 - 系统访问中心</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 25%, #16213e 50%, #533483 75%, #7209b7 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .access-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .access-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .access-title {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: title-gradient 3s infinite;
+            margin-bottom: 15px;
+        }
+
+        @keyframes title-gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .access-subtitle {
+            color: #a0a0ff;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .system-status {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .access-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+            color: #00ffff;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .card-description {
+            color: #a0a0ff;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .access-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            color: #000000;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00ffff;
+            border: 1px solid #00ffff;
+        }
+
+        .btn-dev {
+            background: rgba(255, 165, 0, 0.2);
+            color: #ffa500;
+            border: 1px solid #ffa500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 255, 0.3);
+        }
+
+        .quick-access {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .quick-access h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .footer-info {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="access-container">
+        <div class="access-header">
+            <h1 class="access-title">
+                <i class="fas fa-rocket"></i> 
+                AlingAI Pro 5.0
+            </h1>
+            <p class="access-subtitle">零信任量子登录系统 - 统一访问中心</p>
+            
+            <div class="system-status">
+                <span class="status-indicator"></span>
+                系统运行正常 | PHP <?= phpversion() ?> | 开发服务器端口 8000
+            </div>
+        </div>
+
+        <div class="access-grid">
+            <!-- 零信任登录系统 -->
+            <div class="access-card">
+                <div class="card-header">
+                    <i class="fas fa-atom card-icon"></i>
+                    <div class="card-title">零信任量子登录</div>
+                </div>
+                <div class="card-description">
+                    基于图片科技感设计的创新登录界面，融合全息环、量子球体、粒子系统等元素
+                </div>
+                <div class="access-buttons">
+                    <a href="login.php" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i>
+                        进入登录系统
+                    </a>
+                    <a href="quantum_dashboard.html" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-chart-line"></i>
+                        监控仪表板
+                    </a>
+                </div>
+            </div>
+
+            <!-- 工具管理器 -->
+            <div class="access-card">
+                <div class="card-header">
+                    <i class="fas fa-tools card-icon"></i>
+                    <div class="card-title">工具管理中心</div>
+                </div>
+                <div class="card-description">
+                    集成系统优化器、性能监控、数据库管理等核心工具的统一管理平台
+                </div>
+                <div class="access-buttons">
+                    <a href="tools_manager.php" class="btn btn-primary">
+                        <i class="fas fa-cog"></i>
+                        正常访问 (需登录)
+                    </a>
+                    <a href="tools_manager.php?dev_access=true" class="btn btn-dev">
+                        <i class="fas fa-code"></i>
+                        开发模式访问
+                    </a>
+                    <a href="temp_access.php" class="btn btn-secondary">
+                        <i class="fas fa-key"></i>
+                        临时访问入口
+                    </a>
+                </div>
+            </div>
+
+            <!-- 系统测试 -->
+            <div class="access-card">
+                <div class="card-header">
+                    <i class="fas fa-vial card-icon"></i>
+                    <div class="card-title">功能测试套件</div>
+                </div>
+                <div class="card-description">
+                    完整的系统功能验证工具，包括安全测试、性能测试、UI测试等
+                </div>
+                <div class="access-buttons">
+                    <a href="test_suite.html" class="btn btn-primary">
+                        <i class="fas fa-play"></i>
+                        运行测试套件
+                    </a>
+                    <a href="quantum_status_api.php?endpoint=status" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-api"></i>
+                        API状态检查
+                    </a>
+                </div>
+            </div>
+
+            <!-- 系统文档 -->
+            <div class="access-card">
+                <div class="card-header">
+                    <i class="fas fa-book card-icon"></i>
+                    <div class="card-title">系统文档</div>
+                </div>
+                <div class="card-description">
+                    完整的部署指南、使用手册、技术文档和故障排除指南
+                </div>
+                <div class="access-buttons">
+                    <a href="../零信任量子登录系统完整指南.md" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-file-alt"></i>
+                        完整指南
+                    </a>
+                    <a href="../修复报告_首页资源加载错误.md" class="btn btn-secondary" target="_blank">
+                        <i class="fas fa-bug"></i>
+                        修复报告
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-access">
+            <h3><i class="fas fa-lightning-bolt"></i> 快速访问</h3>
+            <div class="quick-buttons">
+                <a href="../" class="btn btn-secondary">
+                    <i class="fas fa-home"></i>
+                    网站首页
+                </a>
+                <a href="login.php" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    量子登录
+                </a>
+                <a href="tools_manager.php?dev_access=true" class="btn btn-secondary">
+                    <i class="fas fa-tools"></i>
+                    工具管理器
+                </a>
+                <a href="quantum_dashboard.html" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-chart-area"></i>
+                    监控仪表板
+                </a>
+                <a href="test_suite.html" class="btn btn-secondary">
+                    <i class="fas fa-vial"></i>
+                    测试套件
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-info">
+            <p><i class="fas fa-info-circle"></i> AlingAI Pro 5.0 零信任量子登录系统</p>
+            <p>开发模式 | 支持快速访问和功能测试</p>
+            <p>服务器地址: <code>http://localhost:8000</code></p>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时检查系统状态
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查API状态
+            fetch('quantum_status_api.php?endpoint=health_check')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('系统健康检查:', data);
+                    if (data.status === 'healthy') {
+                        console.log('✅ 所有系统组件运行正常');
+                    }
+                })
+                .catch(error => {
+                    console.warn('API状态检查失败:', error);
+                });
+
+            // 快捷键支持
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey) {
+                    switch (e.key) {
+                        case '1':
+                            e.preventDefault();
+                            window.location.href = 'login.php';
+                            break;
+                        case '2':
+                            e.preventDefault();
+                            window.location.href = 'tools_manager.php?dev_access=true';
+                            break;
+                        case '3':
+                            e.preventDefault();
+                            window.location.href = 'test_suite.html';
+                            break;
+                        case '4':
+                            e.preventDefault();
+                            window.open('quantum_dashboard.html', '_blank');
+                            break;
+                    }
+                }
+            });
+
+            console.log('🚀 AlingAI Pro 5.0 系统访问中心已启动');
+            console.log('⌨️  快捷键: Ctrl+1(登录) Ctrl+2(工具) Ctrl+3(测试) Ctrl+4(监控)');
+        });
+    </script>
+</body>
+</html>

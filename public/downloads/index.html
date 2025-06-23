@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载中心 - AlingAI | 珑凌科技</title>
+    
+    <!-- SEO 优化 -->
+    <meta name="description" content="AlingAI 下载中心 - 获取官方SDK、开发工具、文档和资源，支持多种编程语言和平台">
+    <meta name="keywords" content="AlingAI,下载,SDK,开发工具,API客户端,文档,资源">
+    
+    <!-- 核心样式和字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'quantum': {
+                            50: '#f0f0ff',
+                            100: '#e0e0ff',
+                            500: '#6C13FF',
+                            600: '#5A0FD9',
+                            700: '#480BB3',
+                            800: '#36078D',
+                            900: '#240367'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'slideInUp': 'slideInUp 0.8s ease-out',
+                        'slideInLeft': 'slideInLeft 0.8s ease-out',
+                        'slideInRight': 'slideInRight 0.8s ease-out',
+                        'fadeIn': 'fadeIn 0.6s ease-out',
+                        'bounce-soft': 'bounce-soft 2s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes bounce-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .quantum-gradient {
+            background: linear-gradient(135deg, #6C13FF 0%, #FF6B9D 50%, #4ECDC4 100%);
+        }
+        
+        .download-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .download-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 19, 255, 0.3);
+        }
+        
+        .resource-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(108, 19, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .download-btn {
+            background: linear-gradient(135deg, #6C13FF 0%, #5A0FD9 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background: linear-gradient(135deg, #5A0FD9 0%, #480BB3 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(108, 19, 255, 0.3);
+        }
+        
+        .version-badge {
+            background: rgba(108, 19, 255, 0.1);
+            color: #6C13FF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .platform-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #6C13FF;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-x-hidden">
+    <!-- 动态背景 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="relative z-50 glassmorphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent">
+                        AlingAI
+                    </a>
+                    <span class="ml-2 text-sm text-gray-300">下载中心</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/developers" class="nav-link px-3 py-2 rounded-md text-sm font-medium">开发者</a>
+                        <a href="/docs" class="nav-link px-3 py-2 rounded-md text-sm font-medium">文档</a>
+                        <a href="/api-docs.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">API</a>
+                        <a href="/examples" class="nav-link px-3 py-2 rounded-md text-sm font-medium">示例</a>
+                        <a href="/support" class="nav-link px-3 py-2 rounded-md text-sm font-medium">支持</a>
+                        <a href="/dashboard.html" class="bg-quantum-500 hover:bg-quantum-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
+                            控制台
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden glassmorphism border-t border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/developers" class="block px-3 py-2 rounded-md text-base font-medium">开发者</a>
+                <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium">文档</a>
+                <a href="/api-docs.html" class="block px-3 py-2 rounded-md text-base font-medium">API</a>
+                <a href="/examples" class="block px-3 py-2 rounded-md text-base font-medium">示例</a>
+                <a href="/support" class="block px-3 py-2 rounded-md text-base font-medium">支持</a>
+                <a href="/dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium bg-quantum-500">控制台</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="relative z-10 pt-20 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">下载中心</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    获取官方SDK、开发工具和资源，快速构建您的AI应用
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slideInUp" style="animation-delay: 0.4s;">
+                    <a href="#sdks" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-download mr-2"></i>下载 SDK
+                    </a>
+                    <a href="#tools" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-tools mr-2"></i>开发工具
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="relative z-10 mb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glassmorphism rounded-2xl p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.1s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">8</div>
+                        <div class="text-gray-300">支持语言</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.2s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">100K+</div>
+                        <div class="text-gray-300">月下载量</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.3s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">v2.5.0</div>
+                        <div class="text-gray-300">最新版本</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.4s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">99.9%</div>
+                        <div class="text-gray-300">稳定性</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SDK 下载 -->
+    <section id="sdks" class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">官方 SDK</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    为您喜爱的编程语言下载官方SDK，快速集成AlingAI功能
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <!-- JavaScript SDK -->
+                <div class="download-card p-6 animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-yellow-500 mx-auto">
+                            <i class="fab fa-js-square"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">JavaScript</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">适用于浏览器和Node.js环境</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('javascript')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                NPM: npm install @alingai/sdk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Python SDK -->
+                <div class="download-card p-6 animate-slideInLeft" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-blue-500 mx-auto">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Python</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持Python 3.7+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('python')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                PIP: pip install alingai
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Java SDK -->
+                <div class="download-card p-6 animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-red-500 mx-auto">
+                            <i class="fab fa-java"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Java</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持Java 8+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('java')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                Maven/Gradle 依赖
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Go SDK -->
+                <div class="download-card p-6 animate-slideInRight" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-cyan-500 mx-auto">
+                            <i class="fab fa-golang"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Go</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持Go 1.18+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('go')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                go get github.com/alingai/go-sdk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- PHP SDK -->
+                <div class="download-card p-6 animate-slideInLeft" style="animation-delay: 0.5s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-purple-500 mx-auto">
+                            <i class="fab fa-php"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">PHP</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持PHP 7.4+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('php')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                Composer: alingai/php-sdk
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- C# SDK -->
+                <div class="download-card p-6 animate-slideInLeft" style="animation-delay: 0.6s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-green-500 mx-auto">
+                            <i class="fab fa-microsoft"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">C#</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持.NET 6+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('csharp')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                NuGet: AlingAI.SDK
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ruby SDK -->
+                <div class="download-card p-6 animate-slideInRight" style="animation-delay: 0.7s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-red-600 mx-auto">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Ruby</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持Ruby 2.7+</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('ruby')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                Gem: gem install alingai
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Swift SDK -->
+                <div class="download-card p-6 animate-slideInRight" style="animation-delay: 0.8s;">
+                    <div class="text-center">
+                        <div class="platform-icon bg-orange-500 mx-auto">
+                            <i class="fab fa-swift"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Swift</h3>
+                        <div class="version-badge mb-4">v2.5.0</div>
+                        <p class="text-gray-300 text-sm mb-6">支持iOS/macOS</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadSDK('swift')">
+                                <i class="fas fa-download mr-2"></i>下载 SDK
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                Swift Package Manager
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 全平台下载 -->
+            <div class="text-center">
+                <a href="/downloads/sdk.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 inline-block">
+                    <i class="fas fa-list mr-2"></i>查看所有SDK版本
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发工具 -->
+    <section id="tools" class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">开发工具</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    专业的开发工具和IDE插件，提升您的开发效率
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- CLI 工具 -->
+                <div class="resource-card p-8 animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-terminal text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">AlingAI CLI</h3>
+                        <p class="text-gray-300 mb-6">命令行工具，快速管理API密钥、部署模型和调试接口</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadTool('cli')">
+                                <i class="fas fa-download mr-2"></i>下载 CLI
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                支持 Windows, macOS, Linux
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- VS Code 插件 -->
+                <div class="resource-card p-8 animate-slideInUp" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-code text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">VS Code 插件</h3>
+                        <p class="text-gray-300 mb-6">集成AI代码提示、API测试和文档查看功能</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadTool('vscode')">
+                                <i class="fas fa-download mr-2"></i>安装插件
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                或在VS Code中搜索"AlingAI"
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Postman Collection -->
+                <div class="resource-card p-8 animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-satellite-dish text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Postman 集合</h3>
+                        <p class="text-gray-300 mb-6">完整的API接口集合，包含示例请求和响应</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadTool('postman')">
+                                <i class="fas fa-download mr-2"></i>导入集合
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                支持Postman和Insomnia
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Docker 镜像 -->
+                <div class="resource-card p-8 animate-slideInLeft" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fab fa-docker text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">Docker 镜像</h3>
+                        <p class="text-gray-300 mb-6">预配置的开发环境，快速启动本地测试</p>
+                        <div class="space-y-3">
+                            <button class="download-btn w-full py-3 rounded-lg font-semibold" onclick="downloadTool('docker')">
+                                <i class="fas fa-download mr-2"></i>拉取镜像
+                            </button>
+                            <div class="text-xs text-gray-400">
+                                docker pull alingai/dev-env
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API 测试工具 -->
+                <div class="resource-card p-8 animate-slideInUp" style="animation-delay: 0.5s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-flask text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">API 测试工具</h3>
+                        <p class="text-gray-300 mb-6">在线API测试平台，无需编码即可测试接口</p>
+                        <div class="space-y-3">
+                            <a href="/api-test.html" class="download-btn w-full py-3 rounded-lg font-semibold inline-block">
+                                <i class="fas fa-external-link-alt mr-2"></i>在线测试
+                            </a>
+                            <div class="text-xs text-gray-400">
+                                支持实时调试和结果预览
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 代码生成器 -->
+                <div class="resource-card p-8 animate-slideInRight" style="animation-delay: 0.6s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-magic text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">代码生成器</h3>
+                        <p class="text-gray-300 mb-6">自动生成API调用代码，支持多种编程语言</p>
+                        <div class="space-y-3">
+                            <a href="/tools/codegen" class="download-btn w-full py-3 rounded-lg font-semibold inline-block">
+                                <i class="fas fa-external-link-alt mr-2"></i>立即使用
+                            </a>
+                            <div class="text-xs text-gray-400">
+                                支持8种编程语言
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 文档和资源 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">文档与资源</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    全面的学习资料，助您快速上手AlingAI平台
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/docs" class="resource-card p-6 block group animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-book text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">开发文档</h3>
+                        <p class="text-gray-300 text-sm">完整的API文档和集成指南</p>
+                    </div>
+                </a>
+                
+                <a href="/examples" class="resource-card p-6 block group animate-slideInLeft" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-code text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">示例代码</h3>
+                        <p class="text-gray-300 text-sm">丰富的代码示例和最佳实践</p>
+                    </div>
+                </a>
+                
+                <a href="/tutorials" class="resource-card p-6 block group animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-graduation-cap text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">教程指南</h3>
+                        <p class="text-gray-300 text-sm">详细的教程和学习路径</p>
+                    </div>
+                </a>
+                
+                <a href="/community" class="resource-card p-6 block group animate-slideInRight" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-users text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">开发者社区</h3>
+                        <p class="text-gray-300 text-sm">与其他开发者交流和分享</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 区域 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glassmorphism rounded-2xl p-12 animate-slideInUp">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <span class="quantum-gradient bg-clip-text text-transparent">需要帮助？</span>
+                </h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    如果您在集成过程中遇到问题，我们的技术团队随时为您提供支持
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/support" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-life-ring mr-2"></i>获取支持
+                    </a>
+                    <a href="/contact.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-phone mr-2"></i>联系我们
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="relative z-10 border-t border-white/10 bg-black/20 backdrop-filter backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <h3 class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent mb-4">AlingAI</h3>
+                    <p class="text-gray-300 mb-4">领先的人工智能平台，为开发者提供强大的 AI 能力和完整的开发工具。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">下载</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#sdks" class="text-gray-300 hover:text-white transition-colors">官方SDK</a></li>
+                        <li><a href="#tools" class="text-gray-300 hover:text-white transition-colors">开发工具</a></li>
+                        <li><a href="/downloads/sdk.html" class="text-gray-300 hover:text-white transition-colors">所有版本</a></li>
+                        <li><a href="/changelog" class="text-gray-300 hover:text-white transition-colors">更新日志</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">资源</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/docs" class="text-gray-300 hover:text-white transition-colors">开发文档</a></li>
+                        <li><a href="/examples" class="text-gray-300 hover:text-white transition-colors">示例代码</a></li>
+                        <li><a href="/tutorials" class="text-gray-300 hover:text-white transition-colors">教程指南</a></li>
+                        <li><a href="/community" class="text-gray-300 hover:text-white transition-colors">开发者社区</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/support" class="text-gray-300 hover:text-white transition-colors">技术支持</a></li>
+                        <li><a href="/contact.html" class="text-gray-300 hover:text-white transition-colors">联系我们</a></li>
+                        <li><a href="/status" class="text-gray-300 hover:text-white transition-colors">系统状态</a></li>
+                        <li><a href="/feedback" class="text-gray-300 hover:text-white transition-colors">意见反馈</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-8 pt-8 text-center">
+                <p class="text-gray-300">
+                    © 2025 AlingAI | 珑凌科技. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 下载SDK功能
+        function downloadSDK(platform) {
+            // 显示下载模态框或直接下载
+            const downloadUrls = {
+                'javascript': '/downloads/alingai-javascript-sdk-v2.5.0.zip',
+                'python': '/downloads/alingai-python-sdk-v2.5.0.zip',
+                'java': '/downloads/alingai-java-sdk-v2.5.0.zip',
+                'go': '/downloads/alingai-go-sdk-v2.5.0.zip',
+                'php': '/downloads/alingai-php-sdk-v2.5.0.zip',
+                'csharp': '/downloads/alingai-csharp-sdk-v2.5.0.zip',
+                'ruby': '/downloads/alingai-ruby-sdk-v2.5.0.zip',
+                'swift': '/downloads/alingai-swift-sdk-v2.5.0.zip'
+            };
+            
+            // 模拟下载（实际应用中会触发真实下载）
+            showNotification(`正在下载 ${platform.toUpperCase()} SDK...`, 'info');
+            
+            setTimeout(() => {
+                showNotification(`${platform.toUpperCase()} SDK 下载完成！`, 'success');
+            }, 2000);
+        }
+        
+        // 下载工具功能
+        function downloadTool(tool) {
+            const toolUrls = {
+                'cli': '/downloads/alingai-cli-latest.zip',
+                'vscode': 'vscode:extension/alingai.vscode-extension',
+                'postman': '/downloads/alingai-postman-collection.json',
+                'docker': 'https://hub.docker.com/r/alingai/dev-env'
+            };
+            
+            showNotification(`正在${tool === 'vscode' ? '安装' : '下载'} ${tool.toUpperCase()}...`, 'info');
+            
+            if (tool === 'vscode') {
+                // 打开VS Code扩展页面
+                window.open(toolUrls[tool], '_blank');
+            } else if (tool === 'docker') {
+                // 打开Docker Hub页面
+                window.open(toolUrls[tool], '_blank');
+            }
+            
+            setTimeout(() => {
+                showNotification(`${tool.toUpperCase()} ${tool === 'vscode' ? '安装' : '下载'}完成！`, 'success');
+            }, 2000);
+        }
+        
+        // 通知系统
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg text-white font-semibold transition-all duration-300 transform translate-x-full`;
+            
+            const bgColor = {
+                'info': 'bg-blue-500',
+                'success': 'bg-green-500',
+                'warning': 'bg-yellow-500',
+                'error': 'bg-red-500'
+            }[type] || 'bg-blue-500';
+            
+            notification.className += ` ${bgColor}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 动画显示
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+        
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // 滚动动画
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+            
+            // 观察所有动画元素
+            document.querySelectorAll('[class*="animate-"]').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        }
+        
+        // 平滑滚动
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            setupScrollAnimations();
+            setupSmoothScrolling();
+        });
+        
+        // 页面性能优化
+        window.addEventListener('load', () => {
+            // 预加载关键资源
+            const preloadLinks = [
+                '/docs',
+                '/examples',
+                '/support',
+                '/api-docs.html'
+            ];
+            
+            preloadLinks.forEach(href => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        });
+    </script>
+</body>
+</html>

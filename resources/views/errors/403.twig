@@ -1,0 +1,714 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}访问被拒绝 - {{ parent() }}{% endblock %}
+{% block description %}您没有权限访问此页面{% endblock %}
+
+{% block body_class %}error-page error-403{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <!-- 安全背景效果 -->
+    <div class="security-bg">
+        <canvas id="error-canvas"></canvas>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="error-content text-center">
+                    <!-- 403错误图标 -->
+                    <div class="error-icon mb-4">
+                        <div class="security-visual">
+                            <div class="error-code">403</div>
+                            <div class="shield-icon">
+                                <div class="shield-body">
+                                    <div class="shield-lock">
+                                        <i class="bi bi-lock-fill"></i>
+                                    </div>
+                                </div>
+                                <div class="security-waves">
+                                    <div class="wave wave-1"></div>
+                                    <div class="wave wave-2"></div>
+                                    <div class="wave wave-3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 错误标题 -->
+                    <h1 class="error-title mb-3">
+                        <span class="security-text">访问被拒绝</span>
+                    </h1>
+                    
+                    <!-- 错误描述 -->
+                    <p class="error-description mb-4">
+                        抱歉，您没有足够的权限访问此页面。<br>
+                        请联系管理员或登录具有适当权限的账户。
+                    </p>
+
+                    <!-- 权限信息 -->
+                    <div class="permission-info mb-4">
+                        <div class="permission-card">
+                            <div class="permission-header">
+                                <i class="bi bi-person-badge"></i>
+                                <h6>当前身份</h6>
+                            </div>
+                            <div class="permission-content">
+                                {% if auth_check() %}
+                                    <div class="user-info">
+                                        <span class="user-name">{{ auth_user().username }}</span>
+                                        <span class="user-role">{{ auth_user().role }}</span>
+                                    </div>
+                                {% else %}
+                                    <div class="guest-info">
+                                        <span class="guest-label">访客用户</span>
+                                        <small>未登录状态</small>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="permission-card">
+                            <div class="permission-header">
+                                <i class="bi bi-key"></i>
+                                <h6>所需权限</h6>
+                            </div>
+                            <div class="permission-content">
+                                <div class="required-permissions">
+                                    <div class="permission-item">
+                                        <i class="bi bi-check-circle text-success"></i>
+                                        <span>基础访问权限</span>
+                                    </div>
+                                    <div class="permission-item missing">
+                                        <i class="bi bi-x-circle text-danger"></i>
+                                        <span>特定资源权限</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 解决方案 -->
+                    <div class="solutions mb-4">
+                        <h6 class="solutions-title">可能的解决方案：</h6>
+                        <div class="solutions-grid">
+                            {% if not auth_check() %}
+                            <div class="solution-item">
+                                <div class="solution-icon">
+                                    <i class="bi bi-box-arrow-in-right"></i>
+                                </div>
+                                <div class="solution-content">
+                                    <h6>登录账户</h6>
+                                    <p>使用有效账户登录以获取访问权限</p>
+                                    <a href="{{ url('login') }}" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-box-arrow-in-right"></i>
+                                        立即登录
+                                    </a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="solution-item">
+                                <div class="solution-icon">
+                                    <i class="bi bi-person-plus"></i>
+                                </div>
+                                <div class="solution-content">
+                                    <h6>联系管理员</h6>
+                                    <p>请求管理员为您分配相应的访问权限</p>
+                                    <a href="mailto:admin@alingai.com" class="btn btn-sm btn-outline-light">
+                                        <i class="bi bi-envelope"></i>
+                                        发送邮件
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <div class="solution-item">
+                                <div class="solution-icon">
+                                    <i class="bi bi-arrow-left"></i>
+                                </div>
+                                <div class="solution-content">
+                                    <h6>返回上页</h6>
+                                    <p>回到您有权限访问的页面</p>
+                                    <button class="btn btn-sm btn-secondary" onclick="history.back()">
+                                        <i class="bi bi-arrow-left"></i>
+                                        返回上页
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 快速导航 -->
+                    <div class="quick-navigation">
+                        <h6 class="navigation-title">您可以访问的页面：</h6>
+                        <div class="navigation-links">
+                            <a href="{{ url('home') }}" class="nav-link">
+                                <i class="bi bi-house"></i>
+                                <span>首页</span>
+                            </a>
+                            {% if auth_check() %}
+                            <a href="{{ url('dashboard') }}" class="nav-link">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>仪表盘</span>
+                            </a>
+                            <a href="{{ url('profile') }}" class="nav-link">
+                                <i class="bi bi-person"></i>
+                                <span>个人中心</span>
+                            </a>
+                            {% endif %}
+                            <a href="{{ url('help') }}" class="nav-link">
+                                <i class="bi bi-question-circle"></i>
+                                <span>帮助中心</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 技术支持信息 -->
+                    <div class="support-info mt-5">
+                        <p class="text-muted small">
+                            如果您认为这是一个错误，请 
+                            <a href="mailto:support@alingai.com" class="text-decoration-none">联系技术支持</a>
+                        </p>
+                        <p class="text-muted small">
+                            错误代码: <code>403_FORBIDDEN</code> | 
+                            请求ID: <code id="request-id"></code> | 
+                            时间: <span id="error-time"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.error-403 {
+    background: linear-gradient(135deg, #8e44ad 0%, #3498db 50%, #2c3e50 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.security-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#error-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.error-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.error-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.security-visual {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto 2rem;
+}
+
+.error-code {
+    font-size: 6rem;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    color: #e74c3c;
+    text-shadow: 0 0 30px #e74c3c;
+    margin-bottom: 1rem;
+    animation: securityPulse 2s infinite;
+}
+
+.shield-icon {
+    position: relative;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.shield-body {
+    width: 80px;
+    height: 100px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 40px 40px 20px 20px;
+    position: relative;
+    margin: 0 auto;
+    border: 3px solid #ecf0f1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
+}
+
+.shield-lock {
+    font-size: 2rem;
+    color: white;
+    animation: lockShake 3s infinite;
+}
+
+.security-waves {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+}
+
+.wave {
+    position: absolute;
+    border: 2px solid rgba(52, 152, 219, 0.3);
+    border-radius: 50%;
+    animation: waveExpand 3s infinite;
+}
+
+.wave-1 {
+    width: 100%;
+    height: 100%;
+    animation-delay: 0s;
+}
+
+.wave-2 {
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    animation-delay: 1s;
+}
+
+.wave-3 {
+    width: 60%;
+    height: 60%;
+    top: 20%;
+    left: 20%;
+    animation-delay: 2s;
+}
+
+.security-text {
+    background: linear-gradient(45deg, #fff, #ecf0f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.error-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.error-description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+.permission-info {
+    max-width: 600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.permission-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: left;
+}
+
+.permission-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #3498db;
+}
+
+.permission-header i {
+    font-size: 1.2rem;
+}
+
+.permission-header h6 {
+    margin: 0;
+    color: white;
+    font-weight: 600;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.user-name {
+    font-weight: 600;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.user-role {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+.guest-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.guest-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.required-permissions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.permission-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.permission-item.missing {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.solutions {
+    margin: 2rem 0;
+}
+
+.solutions-title {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.solution-item {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.solution-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+}
+
+.solution-icon {
+    font-size: 2rem;
+    color: #3498db;
+    margin-bottom: 1rem;
+}
+
+.solution-content h6 {
+    color: white;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.solution-content p {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    border: none;
+}
+
+.btn-outline-light {
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+    color: white;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+}
+
+.quick-navigation {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.navigation-title {
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.navigation-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    color: white;
+}
+
+.nav-link i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.support-info {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1.5rem;
+}
+
+.support-info a {
+    color: #3498db;
+}
+
+.support-info a:hover {
+    color: #2980b9;
+}
+
+/* 动画 */
+@keyframes securityPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes lockShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-5deg); }
+    75% { transform: rotate(5deg); }
+}
+
+@keyframes waveExpand {
+    0% {
+        transform: scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .error-code {
+        font-size: 4rem;
+    }
+    
+    .error-title {
+        font-size: 2rem;
+    }
+    
+    .error-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .permission-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .solutions-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .navigation-links {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 显示当前时间和请求ID
+    const errorTime = document.getElementById('error-time');
+    const requestId = document.getElementById('request-id');
+    
+    if (errorTime) {
+        errorTime.textContent = new Date().toLocaleString('zh-CN');
+    }
+    
+    if (requestId) {
+        // 生成随机请求ID
+        const id = Math.random().toString(36).substr(2, 9).toUpperCase();
+        requestId.textContent = id;
+    }
+
+    // 创建安全防护背景效果
+    const canvas = document.getElementById('error-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        const shields = [];
+        const shieldCount = 8;
+        
+        // 创建防护盾效果
+        for (let i = 0; i < shieldCount; i++) {
+            shields.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 30 + 20,
+                opacity: Math.random() * 0.3 + 0.1,
+                rotation: Math.random() * 360,
+                rotationSpeed: Math.random() * 2 + 0.5
+            });
+        }
+        
+        function drawShield(shield) {
+            ctx.save();
+            ctx.translate(shield.x, shield.y);
+            ctx.rotate(shield.rotation * Math.PI / 180);
+            
+            // 绘制六边形防护盾
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * 60) * Math.PI / 180;
+                const x = Math.cos(angle) * shield.radius;
+                const y = Math.sin(angle) * shield.radius;
+                
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+            
+            ctx.strokeStyle = `rgba(52, 152, 219, ${shield.opacity})`;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // 添加内部光效
+            ctx.fillStyle = `rgba(52, 152, 219, ${shield.opacity * 0.3})`;
+            ctx.fill();
+            
+            ctx.restore();
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            shields.forEach(shield => {
+                // 更新旋转
+                shield.rotation += shield.rotationSpeed;
+                
+                // 缓慢移动
+                shield.x += Math.sin(shield.rotation * 0.01) * 0.5;
+                shield.y += Math.cos(shield.rotation * 0.01) * 0.5;
+                
+                // 边界检查
+                if (shield.x < -shield.radius) shield.x = canvas.width + shield.radius;
+                if (shield.x > canvas.width + shield.radius) shield.x = -shield.radius;
+                if (shield.y < -shield.radius) shield.y = canvas.height + shield.radius;
+                if (shield.y > canvas.height + shield.radius) shield.y = -shield.radius;
+                
+                drawShield(shield);
+                
+                // 添加连接线
+                shields.forEach(otherShield => {
+                    const dx = shield.x - otherShield.x;
+                    const dy = shield.y - otherShield.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150 && distance > 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(shield.x, shield.y);
+                        ctx.lineTo(otherShield.x, otherShield.y);
+                        ctx.strokeStyle = `rgba(52, 152, 219, ${0.1 * (150 - distance) / 150})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    }
+});
+</script>
+{% endblock %}

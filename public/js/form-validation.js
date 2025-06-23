@@ -1,0 +1,724 @@
+/**
+ * AlingAi Pro - Form Validation System
+ * 
+ * Advanced form validation with real-time feedback,
+ * quantum-themed animations, and comprehensive security features
+ * 
+ * @package AlingAi\Frontend\Forms
+ * @author AlingAi Team
+ * @version 2.0.0
+ */
+
+class FormValidator {
+    constructor(form, options = {}) {
+        this.form = typeof form === 'string' ? document.querySelector(form) : form;
+        this.options = {
+            realTimeValidation: true,
+            quantumEffects: true,
+            showProgress: true,
+            customMessages: {},
+            debounceDelay: 300,
+            animationDuration: 300,
+            ...options
+        };
+        
+        this.validators = new Map();
+        this.fieldStates = new Map();
+        this.validationQueue = new Map();
+        this.isSubmitting = false;
+        
+        this.init();
+    }
+
+    init() {
+        if (!this.form) {
+            console.warn('FormValidator: Form element not found');
+            return;
+        }
+
+        this.setupEventListeners();
+        this.initializeFields();
+        this.createProgressIndicator();
+        
+        if (this.options.quantumEffects) {
+            this.initQuantumEffects();
+        }
+    }
+
+    setupEventListeners() {
+        // Form submission
+        this.form.addEventListener('submit', this.handleSubmit.bind(this));
+        
+        // Field validation events
+        const fields = this.form.querySelectorAll('input, textarea, select');
+        fields.forEach(field => {
+            field.addEventListener('blur', this.handleFieldBlur.bind(this));
+            field.addEventListener('focus', this.handleFieldFocus.bind(this));
+            
+            if (this.options.realTimeValidation) {
+                field.addEventListener('input', this.debounce(
+                    this.handleFieldInput.bind(this),
+                    this.options.debounceDelay
+                ));
+            }
+        });
+    }
+
+    initializeFields() {
+        const fields = this.form.querySelectorAll('[data-validate]');
+        fields.forEach(field => {
+            const rules = field.dataset.validate.split('|');
+            this.validators.set(field.name || field.id, rules);
+            this.fieldStates.set(field.name || field.id, {
+                isValid: null,
+                errors: [],
+                touched: false
+            });
+            
+            this.createFieldFeedback(field);
+        });
+    }
+
+    createFieldFeedback(field) {
+        const container = field.closest('.form-group') || field.parentElement;
+        
+        // Error message container
+        if (!container.querySelector('.validation-message')) {
+            const messageEl = document.createElement('div');
+            messageEl.className = 'validation-message hidden';
+            messageEl.setAttribute('aria-live', 'polite');
+            container.appendChild(messageEl);
+        }
+        
+        // Success indicator
+        if (!container.querySelector('.validation-icon')) {
+            const iconEl = document.createElement('div');
+            iconEl.className = 'validation-icon hidden';
+            container.appendChild(iconEl);
+        }
+    }
+
+    createProgressIndicator() {
+        if (!this.options.showProgress) return;
+        
+        const existingProgress = this.form.querySelector('.validation-progress');
+        if (existingProgress) return;
+        
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'validation-progress';
+        progressContainer.innerHTML = `
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+                <div class="progress-particles"></div>
+            </div>
+            <div class="progress-text">Form completion: 0%</div>
+        `;
+        
+        this.form.insertBefore(progressContainer, this.form.firstChild);
+    }
+
+    initQuantumEffects() {
+        // Create quantum particle container for form effects
+        if (!document.querySelector('.form-quantum-container')) {
+            const quantumContainer = document.createElement('div');
+            quantumContainer.className = 'form-quantum-container';
+            document.body.appendChild(quantumContainer);
+        }
+    }
+
+    async handleSubmit(event) {
+        event.preventDefault();
+        
+        if (this.isSubmitting) return;
+        this.isSubmitting = true;
+        
+        try {
+            const isValid = await this.validateForm();
+            
+            if (isValid) {
+                await this.processSubmission();
+            } else {
+                this.showValidationSummary();
+            }
+        } catch (error) {
+            console.error('Form submission error:', error);
+            this.showError('An unexpected error occurred. Please try again.');
+        } finally {
+            this.isSubmitting = false;
+        }
+    }
+
+    async handleFieldBlur(event) {
+        const field = event.target;
+        const fieldName = field.name || field.id;
+        
+        if (this.fieldStates.has(fieldName)) {
+            const state = this.fieldStates.get(fieldName);
+            state.touched = true;
+            this.fieldStates.set(fieldName, state);
+        }
+        
+        await this.validateField(field);
+    }
+
+    handleFieldFocus(event) {
+        const field = event.target;
+        this.clearFieldErrors(field);
+        
+        if (this.options.quantumEffects) {
+            this.addQuantumFocus(field);
+        }
+    }
+
+    async handleFieldInput(event) {
+        const field = event.target;
+        const fieldName = field.name || field.id;
+        
+        // Cancel any pending validation for this field
+        if (this.validationQueue.has(fieldName)) {
+            clearTimeout(this.validationQueue.get(fieldName));
+        }
+        
+        // Queue new validation
+        const timeoutId = setTimeout(async () => {
+            await this.validateField(field);
+            this.updateProgress();
+        }, 100);
+        
+        this.validationQueue.set(fieldName, timeoutId);
+    }
+
+    async validateField(field) {
+        const fieldName = field.name || field.id;
+        const rules = this.validators.get(fieldName);
+        
+        if (!rules) return true;
+        
+        const errors = [];
+        const value = field.value.trim();
+        
+        for (const rule of rules) {
+            const error = await this.applyRule(field, value, rule);
+            if (error) {
+                errors.push(error);
+            }
+        }
+        
+        const isValid = errors.length === 0;
+        
+        // Update field state
+        this.fieldStates.set(fieldName, {
+            isValid,
+            errors,
+            touched: true
+        });
+        
+        // Update UI
+        this.updateFieldUI(field, isValid, errors);
+        
+        return isValid;
+    }
+
+    async applyRule(field, value, rule) {
+        const [ruleName, ...params] = rule.split(':');
+        const param = params.join(':');
+        
+        switch (ruleName) {
+            case 'required':
+                if (!value) {
+                    return this.getMessage(field, 'required', 'This field is required');
+                }
+                break;
+                
+            case 'email':
+                if (value && !this.isValidEmail(value)) {
+                    return this.getMessage(field, 'email', 'Please enter a valid email address');
+                }
+                break;
+                
+            case 'min':
+                if (value && value.length < parseInt(param)) {
+                    return this.getMessage(field, 'min', `Minimum ${param} characters required`);
+                }
+                break;
+                
+            case 'max':
+                if (value && value.length > parseInt(param)) {
+                    return this.getMessage(field, 'max', `Maximum ${param} characters allowed`);
+                }
+                break;
+                
+            case 'password':
+                if (value) {
+                    const strength = this.checkPasswordStrength(value);
+                    if (strength.score < 3) {
+                        return this.getMessage(field, 'password', strength.feedback);
+                    }
+                }
+                break;
+                
+            case 'match':
+                const matchField = this.form.querySelector(`[name="${param}"]`);
+                if (value && matchField && value !== matchField.value) {
+                    return this.getMessage(field, 'match', 'Fields do not match');
+                }
+                break;
+                
+            case 'unique':
+                if (value) {
+                    const isUnique = await this.checkUniqueness(field, value);
+                    if (!isUnique) {
+                        return this.getMessage(field, 'unique', 'This value is already taken');
+                    }
+                }
+                break;
+                
+            case 'custom':
+                if (value && this.options.customValidators && this.options.customValidators[param]) {
+                    const result = await this.options.customValidators[param](value, field);
+                    if (result !== true) {
+                        return result || 'Invalid value';
+                    }
+                }
+                break;
+        }
+        
+        return null;
+    }
+
+    updateFieldUI(field, isValid, errors) {
+        const container = field.closest('.form-group') || field.parentElement;
+        const messageEl = container.querySelector('.validation-message');
+        const iconEl = container.querySelector('.validation-icon');
+        
+        // Update field classes
+        field.classList.remove('field-valid', 'field-invalid', 'field-validating');
+        
+        if (isValid === null) {
+            // Validation in progress
+            field.classList.add('field-validating');
+            if (iconEl) {
+                iconEl.className = 'validation-icon validating';
+                iconEl.innerHTML = '<div class="spinner"></div>';
+            }
+        } else if (isValid) {
+            field.classList.add('field-valid');
+            if (iconEl) {
+                iconEl.className = 'validation-icon valid';
+                iconEl.innerHTML = '<svg class="check-icon"><use href="#icon-check"></use></svg>';
+            }
+            if (messageEl) {
+                messageEl.classList.add('hidden');
+            }
+            
+            if (this.options.quantumEffects) {
+                this.addQuantumSuccess(field);
+            }
+        } else {
+            field.classList.add('field-invalid');
+            if (iconEl) {
+                iconEl.className = 'validation-icon invalid';
+                iconEl.innerHTML = '<svg class="error-icon"><use href="#icon-error"></use></svg>';
+            }
+            if (messageEl && errors.length > 0) {
+                messageEl.textContent = errors[0];
+                messageEl.classList.remove('hidden');
+            }
+            
+            if (this.options.quantumEffects) {
+                this.addQuantumError(field);
+            }
+        }
+    }
+
+    async validateForm() {
+        const fields = this.form.querySelectorAll('[data-validate]');
+        const validationPromises = Array.from(fields).map(field => this.validateField(field));
+        
+        const results = await Promise.all(validationPromises);
+        return results.every(result => result === true);
+    }
+
+    async processSubmission() {
+        // Show submission loading state
+        this.showSubmissionLoading();
+        
+        try {
+            const formData = new FormData(this.form);
+            const data = Object.fromEntries(formData.entries());
+            
+            // Call custom submission handler if provided
+            if (this.options.onSubmit) {
+                const result = await this.options.onSubmit(data, this.form);
+                if (result === false) {
+                    this.hideSubmissionLoading();
+                    return;
+                }
+            }
+            
+            // Default submission behavior
+            await this.submitToServer(data);
+            
+        } catch (error) {
+            this.showError('Submission failed. Please try again.');
+            console.error('Submission error:', error);
+        } finally {
+            this.hideSubmissionLoading();
+        }
+    }
+
+    async submitToServer(data) {
+        const action = this.form.action || window.location.href;
+        const method = this.form.method || 'POST';
+        
+        const response = await fetch(action, {
+            method: method.toUpperCase(),
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-Token': this.getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            this.showSuccess(result.message || 'Form submitted successfully');
+            if (result.redirect) {
+                setTimeout(() => {
+                    window.location.href = result.redirect;
+                }, 1500);
+            }
+        } else {
+            this.showError(result.message || 'Submission failed');
+            if (result.errors) {
+                this.showFieldErrors(result.errors);
+            }
+        }
+    }
+
+    updateProgress() {
+        if (!this.options.showProgress) return;
+        
+        const progressFill = this.form.querySelector('.progress-fill');
+        const progressText = this.form.querySelector('.progress-text');
+        
+        if (!progressFill || !progressText) return;
+        
+        const totalFields = this.fieldStates.size;
+        const validFields = Array.from(this.fieldStates.values())
+            .filter(state => state.isValid === true).length;
+        
+        const percentage = totalFields > 0 ? Math.round((validFields / totalFields) * 100) : 0;
+        
+        progressFill.style.width = `${percentage}%`;
+        progressText.textContent = `Form completion: ${percentage}%`;
+        
+        // Add quantum particles to progress bar
+        if (this.options.quantumEffects && percentage > 0) {
+            this.addProgressParticles(progressFill, percentage);
+        }
+    }
+
+    // Utility methods
+    isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    checkPasswordStrength(password) {
+        let score = 0;
+        const feedback = [];
+        
+        if (password.length >= 8) score++;
+        else feedback.push('Use at least 8 characters');
+        
+        if (/[a-z]/.test(password)) score++;
+        else feedback.push('Include lowercase letters');
+        
+        if (/[A-Z]/.test(password)) score++;
+        else feedback.push('Include uppercase letters');
+        
+        if (/\d/.test(password)) score++;
+        else feedback.push('Include numbers');
+        
+        if (/[^a-zA-Z0-9]/.test(password)) score++;
+        else feedback.push('Include special characters');
+        
+        return {
+            score,
+            feedback: feedback.join(', ')
+        };
+    }
+
+    async checkUniqueness(field, value) {
+        // Simulated uniqueness check - replace with actual API call
+        const endpoint = field.dataset.uniqueEndpoint || API_ENDPOINTS.CHECK_UNIQUE;
+        const fieldName = field.name || field.id;
+        
+        try {
+            const response = await fetch(`${endpoint}?field=${fieldName}&value=${encodeURIComponent(value)}`);
+            const result = await response.json();
+            return result.available === true;
+        } catch (error) {
+            console.warn('Uniqueness check failed:', error);
+            return true; // Assume unique if check fails
+        }
+    }
+
+    getMessage(field, rule, defaultMessage) {
+        const fieldName = field.name || field.id;
+        const customMessages = this.options.customMessages;
+        
+        return customMessages[`${fieldName}.${rule}`] || 
+               customMessages[rule] || 
+               defaultMessage;
+    }
+
+    getCSRFToken() {
+        const metaTag = document.querySelector('meta[name="csrf-token"]');
+        return metaTag ? metaTag.getAttribute('content') : '';
+    }
+
+    // Quantum effects methods
+    addQuantumFocus(field) {
+        const rect = field.getBoundingClientRect();
+        this.createQuantumRing(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    }
+
+    addQuantumSuccess(field) {
+        const rect = field.getBoundingClientRect();
+        this.createQuantumBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 'success');
+    }
+
+    addQuantumError(field) {
+        const rect = field.getBoundingClientRect();
+        this.createQuantumShake(field);
+        this.createQuantumBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 'error');
+    }
+
+    createQuantumRing(x, y) {
+        const ring = document.createElement('div');
+        ring.className = 'quantum-focus-ring';
+        ring.style.left = `${x}px`;
+        ring.style.top = `${y}px`;
+        
+        document.body.appendChild(ring);
+        
+        setTimeout(() => {
+            ring.remove();
+        }, 1000);
+    }
+
+    createQuantumBurst(x, y, type) {
+        const burst = document.createElement('div');
+        burst.className = `quantum-burst quantum-burst-${type}`;
+        burst.style.left = `${x}px`;
+        burst.style.top = `${y}px`;
+        
+        // Create particles
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'quantum-particle';
+            particle.style.transform = `rotate(${i * 45}deg)`;
+            burst.appendChild(particle);
+        }
+        
+        document.body.appendChild(burst);
+        
+        setTimeout(() => {
+            burst.remove();
+        }, 800);
+    }
+
+    createQuantumShake(element) {
+        element.classList.add('quantum-shake');
+        setTimeout(() => {
+            element.classList.remove('quantum-shake');
+        }, 600);
+    }
+
+    addProgressParticles(progressBar, percentage) {
+        const particlesContainer = progressBar.querySelector('.progress-particles');
+        if (!particlesContainer) return;
+        
+        // Clear existing particles
+        particlesContainer.innerHTML = '';
+        
+        // Add new particles based on progress
+        const particleCount = Math.floor(percentage / 10);
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'progress-particle';
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 2}s`;
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    // UI feedback methods
+    showSubmissionLoading() {
+        const submitButton = this.form.querySelector('[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.dataset.originalText = submitButton.textContent;
+            submitButton.innerHTML = '<span class="spinner"></span> Submitting...';
+        }
+    }
+
+    hideSubmissionLoading() {
+        const submitButton = this.form.querySelector('[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = submitButton.dataset.originalText || 'Submit';
+        }
+    }
+
+    showSuccess(message) {
+        this.showNotification(message, 'success');
+    }
+
+    showError(message) {
+        this.showNotification(message, 'error');
+    }
+
+    showNotification(message, type) {
+        if (window.UIManager && window.UIManager.showNotification) {
+            window.UIManager.showNotification(message, type);
+        } else {
+            alert(message);
+        }
+    }
+
+    showValidationSummary() {
+        const errors = [];
+        this.fieldStates.forEach((state, fieldName) => {
+            if (!state.isValid && state.errors.length > 0) {
+                errors.push(`${fieldName}: ${state.errors[0]}`);
+            }
+        });
+        
+        if (errors.length > 0) {
+            this.showError('Please correct the following errors:\n' + errors.join('\n'));
+        }
+    }
+
+    showFieldErrors(errors) {
+        Object.keys(errors).forEach(fieldName => {
+            const field = this.form.querySelector(`[name="${fieldName}"]`);
+            if (field) {
+                this.updateFieldUI(field, false, [errors[fieldName]]);
+            }
+        });
+    }
+
+    clearFieldErrors(field) {
+        this.updateFieldUI(field, null, []);
+    }
+
+    // Utility functions
+    debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Public API methods
+    validate() {
+        return this.validateForm();
+    }
+
+    reset() {
+        this.form.reset();
+        this.fieldStates.clear();
+        this.form.querySelectorAll('.field-valid, .field-invalid, .field-validating')
+            .forEach(field => {
+                field.classList.remove('field-valid', 'field-invalid', 'field-validating');
+            });
+        this.form.querySelectorAll('.validation-message')
+            .forEach(msg => msg.classList.add('hidden'));
+        this.updateProgress();
+    }
+
+    destroy() {
+        // Clean up event listeners and resources
+        this.validationQueue.forEach(timeoutId => clearTimeout(timeoutId));
+        this.validationQueue.clear();
+        this.fieldStates.clear();
+        this.validators.clear();
+    }
+}
+
+// Form validation utility functions
+const FormUtils = {
+    // Auto-initialize forms with data-validate-form attribute
+    autoInit() {
+        document.addEventListener('DOMContentLoaded', () => {
+            const forms = document.querySelectorAll('[data-validate-form]');
+            forms.forEach(form => {
+                const options = this.parseFormOptions(form);
+                new FormValidator(form, options);
+            });
+        });
+    },
+
+    parseFormOptions(form) {
+        const dataset = form.dataset;
+        const options = {};
+        
+        if (dataset.validateRealtime !== undefined) {
+            options.realTimeValidation = dataset.validateRealtime !== 'false';
+        }
+        
+        if (dataset.validateQuantum !== undefined) {
+            options.quantumEffects = dataset.validateQuantum !== 'false';
+        }
+        
+        if (dataset.validateProgress !== undefined) {
+            options.showProgress = dataset.validateProgress !== 'false';
+        }
+        
+        if (dataset.validateDebounce) {
+            options.debounceDelay = parseInt(dataset.validateDebounce);
+        }
+        
+        return options;
+    },
+
+    // Create validation rules helper
+    createRules(rules) {
+        return rules;
+    },
+
+    // Common validation patterns
+    patterns: {
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+        phone: /^[\+]?[1-9][\d]{0,15}$/,
+        url: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/,
+        alphanumeric: /^[a-zA-Z0-9]+$/,
+        username: /^[a-zA-Z0-9_]{3,20}$/
+    }
+};
+
+// Auto-initialize forms
+FormUtils.autoInit();
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { FormValidator, FormUtils };
+}
+
+// Global access
+window.FormValidator = FormValidator;
+window.FormUtils = FormUtils;

@@ -1,0 +1,1773 @@
+/**
+ * AlingAi Pro - 多媒体处理系统
+ * 提供图片、视频、音频的上传、预览、编辑和优化功能
+ * @version 1.0.0
+ * @author AlingAi Team
+ */
+
+class MediaProcessingSystem {
+    constructor(options = {}) {
+        this.options = {
+            // 基础配置
+            container: options.container || '.media-processor',
+            uploadEndpoint: options.uploadEndpoint || '/api/upload',
+            
+            // 文件类型限制
+            allowedTypes: options.allowedTypes || {
+                image: ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'],
+                video: ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'],
+                audio: ['mp3', 'wav', 'ogg', 'aac', 'flac']
+            },
+            
+            // 大小限制 (bytes)
+            maxFileSize: options.maxFileSize || 50 * 1024 * 1024, // 50MB
+            maxImageSize: options.maxImageSize || 10 * 1024 * 1024, // 10MB
+            maxVideoSize: options.maxVideoSize || 100 * 1024 * 1024, // 100MB
+            maxAudioSize: options.maxAudioSize || 20 * 1024 * 1024, // 20MB
+            
+            // 功能开关
+            enableDragDrop: options.enableDragDrop !== false,
+            enablePreview: options.enablePreview !== false,
+            enableEdit: options.enableEdit !== false,
+            enableCompress: options.enableCompress !== false,
+            enableMetadata: options.enableMetadata !== false,
+            enableThumbnail: options.enableThumbnail !== false,
+            enableWatermark: options.enableWatermark || false,
+            
+            // 压缩设置
+            imageQuality: options.imageQuality || 0.8,
+            thumbnailSize: options.thumbnailSize || 200,
+            videoQuality: options.videoQuality || 'medium',
+            
+            // 回调函数
+            onUpload: options.onUpload || null,
+            onProgress: options.onProgress || null,
+            onComplete: options.onComplete || null,
+            onError: options.onError || null,
+            
+            ...options
+        };
+
+        this.activeUploads = new Map();
+        this.mediaCache = new Map();
+        this.isInitialized = false;
+        this.canvas = null;
+        this.context = null;
+
+        this.init();
+    }
+
+    /**
+     * 初始化媒体处理系统
+     */
+    init() {
+        this.createInterface();
+        this.setupEventListeners();
+        this.setupGlobalStyles();
+        this.createCanvas();
+        this.isInitialized = true;
+    }
+
+    /**
+     * 创建用户界面
+     */
+    createInterface() {
+        const container = typeof this.options.container === 'string' 
+            ? document.querySelector(this.options.container) 
+            : this.options.container;
+
+        if (!container) {
+            console.error('Media processor container not found');
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="media-processor">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">
+                            <h3>拖拽文件到此处或点击上传</h3>
+                            <p>支持图片、视频、音频文件</p>
+                        </div>
+                        <input type="file" 
+                               id="fileInput" 
+                               multiple 
+                               accept="image/*,video/*,audio/*" 
+                               style="display: none;">
+                        <button class="upload-btn" id="uploadBtn">选择文件</button>
+                    </div>
+                </div>
+
+                <div class="processing-queue" id="processingQueue" style="display: none;">
+                    <h4>处理队列</h4>
+                    <div class="queue-list" id="queueList"></div>
+                </div>
+
+                <div class="media-preview" id="mediaPreview" style="display: none;">
+                    <div class="preview-header">
+                        <h4>文件预览</h4>
+                        <div class="preview-actions">
+                            <button class="btn btn-secondary" id="editBtn">编辑</button>
+                            <button class="btn btn-primary" id="downloadBtn">下载</button>
+                            <button class="btn btn-danger" id="deleteBtn">删除</button>
+                        </div>
+                    </div>
+                    <div class="preview-content" id="previewContent"></div>
+                    <div class="preview-info" id="previewInfo"></div>
+                </div>
+
+                <div class="media-editor" id="mediaEditor" style="display: none;">
+                    <div class="editor-header">
+                        <h4>媒体编辑器</h4>
+                        <div class="editor-actions">
+                            <button class="btn btn-secondary" id="cancelEditBtn">取消</button>
+                            <button class="btn btn-primary" id="saveEditBtn">保存</button>
+                        </div>
+                    </div>
+                    <div class="editor-content">
+                        <div class="editor-tools" id="editorTools"></div>
+                        <div class="editor-canvas" id="editorCanvas"></div>
+                    </div>
+                </div>
+
+                <div class="media-gallery" id="mediaGallery">
+                    <div class="gallery-header">
+                        <h4>媒体库</h4>
+                        <div class="gallery-controls">
+                            <select id="filterType">
+                                <option value="all">全部</option>
+                                <option value="image">图片</option>
+                                <option value="video">视频</option>
+                                <option value="audio">音频</option>
+                            </select>
+                            <select id="sortBy">
+                                <option value="date">按日期</option>
+                                <option value="name">按名称</option>
+                                <option value="size">按大小</option>
+                                <option value="type">按类型</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="gallery-grid" id="galleryGrid"></div>
+                </div>
+            </div>
+        `;
+
+        this.elements = {
+            container: container.querySelector('.media-processor'),
+            uploadArea: container.querySelector('#uploadArea'),
+            fileInput: container.querySelector('#fileInput'),
+            uploadBtn: container.querySelector('#uploadBtn'),
+            processingQueue: container.querySelector('#processingQueue'),
+            queueList: container.querySelector('#queueList'),
+            mediaPreview: container.querySelector('#mediaPreview'),
+            previewContent: container.querySelector('#previewContent'),
+            previewInfo: container.querySelector('#previewInfo'),
+            mediaEditor: container.querySelector('#mediaEditor'),
+            editorTools: container.querySelector('#editorTools'),
+            editorCanvas: container.querySelector('#editorCanvas'),
+            mediaGallery: container.querySelector('#mediaGallery'),
+            galleryGrid: container.querySelector('#galleryGrid'),
+            filterType: container.querySelector('#filterType'),
+            sortBy: container.querySelector('#sortBy')
+        };
+    }
+
+    /**
+     * 设置全局样式
+     */
+    setupGlobalStyles() {
+        if (document.getElementById('media-processor-styles')) return;
+
+        const styles = document.createElement('style');
+        styles.id = 'media-processor-styles';
+        styles.textContent = `
+            .media-processor {
+                width: 100%;
+                max-width: 1200px;
+                margin: 0 auto;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            }
+
+            .upload-area {
+                border: 2px dashed rgba(100, 200, 255, 0.5);
+                border-radius: 12px;
+                padding: 40px 20px;
+                text-align: center;
+                background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                margin-bottom: 24px;
+            }
+
+            .upload-area:hover,
+            .upload-area.drag-over {
+                border-color: rgba(100, 200, 255, 0.8);
+                background: linear-gradient(135deg, rgba(100, 200, 255, 0.1), rgba(100, 200, 255, 0.05));
+                transform: translateY(-2px);
+            }
+
+            .upload-content {
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .upload-icon {
+                font-size: 48px;
+                margin-bottom: 16px;
+                opacity: 0.6;
+            }
+
+            .upload-text h3 {
+                margin: 0 0 8px 0;
+                color: #333;
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .upload-text p {
+                margin: 0 0 20px 0;
+                color: #666;
+                font-size: 14px;
+            }
+
+            .upload-btn {
+                background: linear-gradient(135deg, #3b82f6, #2563eb);
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .upload-btn:hover {
+                background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+            }
+
+            .processing-queue {
+                background: white;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .processing-queue h4 {
+                margin: 0 0 16px 0;
+                color: #333;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .queue-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 8px;
+                margin-bottom: 8px;
+                background: #f8f9fa;
+            }
+
+            .queue-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .queue-file-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .queue-file-name {
+                font-weight: 600;
+                color: #333;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .queue-file-size {
+                font-size: 12px;
+                color: #666;
+            }
+
+            .queue-progress {
+                width: 200px;
+                height: 6px;
+                background: #e5e7eb;
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+            .queue-progress-bar {
+                height: 100%;
+                background: linear-gradient(90deg, #10b981, #059669);
+                border-radius: 3px;
+                transition: width 0.3s ease;
+            }
+
+            .queue-status {
+                font-size: 12px;
+                color: #666;
+                width: 80px;
+                text-align: right;
+            }
+
+            .media-preview,
+            .media-editor {
+                background: white;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 12px;
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .preview-header,
+            .editor-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .preview-header h4,
+            .editor-header h4 {
+                margin: 0;
+                color: #333;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .preview-actions,
+            .editor-actions {
+                display: flex;
+                gap: 8px;
+            }
+
+            .btn {
+                padding: 8px 16px;
+                border-radius: 6px;
+                border: none;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                font-weight: 500;
+            }
+
+            .btn-primary {
+                background: #3b82f6;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #2563eb;
+            }
+
+            .btn-secondary {
+                background: #6b7280;
+                color: white;
+            }
+
+            .btn-secondary:hover {
+                background: #4b5563;
+            }
+
+            .btn-danger {
+                background: #ef4444;
+                color: white;
+            }
+
+            .btn-danger:hover {
+                background: #dc2626;
+            }
+
+            .preview-content {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .preview-image {
+                max-width: 100%;
+                max-height: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            }
+
+            .preview-video {
+                max-width: 100%;
+                max-height: 400px;
+                border-radius: 8px;
+            }
+
+            .preview-audio {
+                width: 100%;
+                max-width: 400px;
+            }
+
+            .preview-info {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 16px;
+                background: #f8f9fa;
+                padding: 16px;
+                border-radius: 8px;
+            }
+
+            .info-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .info-label {
+                font-weight: 600;
+                color: #374151;
+            }
+
+            .info-value {
+                color: #6b7280;
+                text-align: right;
+            }
+
+            .editor-tools {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 20px;
+                padding: 16px;
+                background: #f8f9fa;
+                border-radius: 8px;
+            }
+
+            .tool-group {
+                display: flex;
+                gap: 4px;
+                padding: 4px;
+                background: white;
+                border-radius: 6px;
+                border: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .tool-btn {
+                width: 36px;
+                height: 36px;
+                border: none;
+                background: transparent;
+                border-radius: 4px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s ease;
+                font-size: 16px;
+            }
+
+            .tool-btn:hover {
+                background: #f3f4f6;
+            }
+
+            .tool-btn.active {
+                background: #dbeafe;
+                color: #2563eb;
+            }
+
+            .editor-canvas {
+                text-align: center;
+                background: #f8f9fa;
+                border-radius: 8px;
+                padding: 20px;
+                min-height: 300px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .media-gallery {
+                background: white;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 12px;
+                padding: 20px;
+            }
+
+            .gallery-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 20px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid rgba(0,0,0,0.1);
+            }
+
+            .gallery-header h4 {
+                margin: 0;
+                color: #333;
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .gallery-controls {
+                display: flex;
+                gap: 12px;
+            }
+
+            .gallery-controls select {
+                padding: 6px 12px;
+                border: 1px solid rgba(0,0,0,0.2);
+                border-radius: 6px;
+                background: white;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            .gallery-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 16px;
+            }
+
+            .gallery-item {
+                background: #f8f9fa;
+                border: 1px solid rgba(0,0,0,0.1);
+                border-radius: 8px;
+                padding: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .gallery-item:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            }
+
+            .gallery-thumbnail {
+                width: 100%;
+                height: 120px;
+                background: #e5e7eb;
+                border-radius: 6px;
+                margin-bottom: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+
+            .gallery-thumbnail img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+
+            .gallery-thumbnail-icon {
+                font-size: 32px;
+                color: #9ca3af;
+            }
+
+            .gallery-item-name {
+                font-weight: 600;
+                color: #333;
+                font-size: 14px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 4px;
+            }
+
+            .gallery-item-info {
+                font-size: 12px;
+                color: #6b7280;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            /* 响应式设计 */
+            @media (max-width: 768px) {
+                .media-processor {
+                    padding: 0 16px;
+                }
+
+                .preview-actions,
+                .editor-actions,
+                .gallery-controls {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .gallery-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                }
+
+                .preview-info {
+                    grid-template-columns: 1fr;
+                }
+            }
+
+            /* 量子主题 */
+            .media-processor.quantum-theme .upload-area {
+                background: linear-gradient(135deg, 
+                    rgba(20, 50, 120, 0.1), 
+                    rgba(50, 20, 120, 0.1),
+                    rgba(120, 20, 80, 0.1)
+                );
+                border-color: rgba(100, 200, 255, 0.4);
+            }
+
+            .media-processor.quantum-theme .queue-progress-bar {
+                background: linear-gradient(90deg, 
+                    rgba(100, 200, 255, 0.8), 
+                    rgba(150, 100, 255, 0.8)
+                );
+            }
+        `;
+        
+        document.head.appendChild(styles);
+    }
+
+    /**
+     * 设置事件监听器
+     */
+    setupEventListeners() {
+        if (!this.elements.container) return;
+
+        // 文件选择
+        this.elements.uploadBtn.addEventListener('click', () => {
+            this.elements.fileInput.click();
+        });
+
+        this.elements.fileInput.addEventListener('change', (e) => {
+            this.handleFiles(Array.from(e.target.files));
+        });
+
+        // 拖拽上传
+        if (this.options.enableDragDrop) {
+            this.setupDragAndDrop();
+        }
+
+        // 预览操作
+        this.elements.container.addEventListener('click', (e) => {
+            if (e.target.id === 'editBtn') {
+                this.openEditor();
+            } else if (e.target.id === 'downloadBtn') {
+                this.downloadCurrentFile();
+            } else if (e.target.id === 'deleteBtn') {
+                this.deleteCurrentFile();
+            } else if (e.target.id === 'cancelEditBtn') {
+                this.closeEditor();
+            } else if (e.target.id === 'saveEditBtn') {
+                this.saveEditorChanges();
+            }
+        });
+
+        // 画廊过滤和排序
+        this.elements.filterType.addEventListener('change', () => {
+            this.filterGallery();
+        });
+
+        this.elements.sortBy.addEventListener('change', () => {
+            this.sortGallery();
+        });
+
+        // 画廊项目点击
+        this.elements.galleryGrid.addEventListener('click', (e) => {
+            const galleryItem = e.target.closest('.gallery-item');
+            if (galleryItem) {
+                this.previewFile(galleryItem.dataset.fileId);
+            }
+        });
+    }
+
+    /**
+     * 设置拖拽上传
+     */
+    setupDragAndDrop() {
+        const uploadArea = this.elements.uploadArea;
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, this.preventDefaults, false);
+            document.body.addEventListener(eventName, this.preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.add('drag-over');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadArea.addEventListener(eventName, () => {
+                uploadArea.classList.remove('drag-over');
+            }, false);
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            const files = Array.from(e.dataTransfer.files);
+            this.handleFiles(files);
+        }, false);
+    }
+
+    /**
+     * 阻止默认事件
+     */
+    preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    /**
+     * 创建画布
+     */
+    createCanvas() {
+        this.canvas = document.createElement('canvas');
+        this.context = this.canvas.getContext('2d');
+    }
+
+    /**
+     * 处理文件上传
+     */
+    async handleFiles(files) {
+        if (!files || files.length === 0) return;
+
+        // 验证文件
+        const validFiles = this.validateFiles(files);
+        if (validFiles.length === 0) return;
+
+        // 显示处理队列
+        this.elements.processingQueue.style.display = 'block';
+
+        // 处理每个文件
+        for (const file of validFiles) {
+            await this.processFile(file);
+        }
+    }
+
+    /**
+     * 验证文件
+     */
+    validateFiles(files) {
+        const validFiles = [];
+        
+        for (const file of files) {
+            const fileType = this.getFileType(file);
+            const fileExtension = this.getFileExtension(file.name);
+            
+            // 检查文件类型
+            if (!this.isAllowedType(fileType, fileExtension)) {
+                this.showError(`不支持的文件类型: ${file.name}`);
+                continue;
+            }
+            
+            // 检查文件大小
+            if (!this.isAllowedSize(file, fileType)) {
+                this.showError(`文件过大: ${file.name}`);
+                continue;
+            }
+            
+            validFiles.push(file);
+        }
+        
+        return validFiles;
+    }
+
+    /**
+     * 处理单个文件
+     */
+    async processFile(file) {
+        const fileId = this.generateFileId();
+        const fileType = this.getFileType(file);
+        
+        // 创建队列项
+        const queueItem = this.createQueueItem(fileId, file);
+        this.elements.queueList.appendChild(queueItem);
+        
+        // 存储活动上传
+        this.activeUploads.set(fileId, {
+            file,
+            type: fileType,
+            queueItem,
+            progress: 0
+        });
+
+        try {
+            // 读取文件数据
+            const fileData = await this.readFile(file);
+            
+            // 生成缩略图
+            let thumbnail = null;
+            if (this.options.enableThumbnail && fileType === 'image') {
+                thumbnail = await this.generateThumbnail(fileData, file);
+            }
+            
+            // 压缩文件
+            let processedData = fileData;
+            if (this.options.enableCompress) {
+                processedData = await this.compressFile(fileData, file, fileType);
+            }
+            
+            // 提取元数据
+            let metadata = null;
+            if (this.options.enableMetadata) {
+                metadata = await this.extractMetadata(file, fileType);
+            }
+            
+            // 上传文件
+            const uploadResult = await this.uploadFile(fileId, processedData, file, metadata, thumbnail);
+            
+            // 更新媒体库
+            this.addToMediaLibrary({
+                id: fileId,
+                name: file.name,
+                type: fileType,
+                size: file.size,
+                url: uploadResult.url,
+                thumbnail: thumbnail,
+                metadata: metadata,
+                uploadDate: new Date()
+            });
+            
+            // 完成处理
+            this.completeFileProcessing(fileId, uploadResult);
+            
+        } catch (error) {
+            console.error('File processing error:', error);
+            this.failFileProcessing(fileId, error.message);
+        }
+    }
+
+    /**
+     * 创建队列项
+     */
+    createQueueItem(fileId, file) {
+        const div = document.createElement('div');
+        div.className = 'queue-item';
+        div.dataset.fileId = fileId;
+        
+        div.innerHTML = `
+            <div class="queue-file-info">
+                <div class="queue-file-name">${file.name}</div>
+                <div class="queue-file-size">${this.formatFileSize(file.size)}</div>
+            </div>
+            <div class="queue-progress">
+                <div class="queue-progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="queue-status">等待中</div>
+        `;
+        
+        return div;
+    }
+
+    /**
+     * 读取文件
+     */
+    readFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => reject(new Error('文件读取失败'));
+            reader.readAsDataURL(file);
+        });
+    }
+
+    /**
+     * 生成缩略图
+     */
+    async generateThumbnail(imageData, file) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                const size = this.options.thumbnailSize;
+                const scale = Math.min(size / img.width, size / img.height);
+                
+                this.canvas.width = img.width * scale;
+                this.canvas.height = img.height * scale;
+                
+                this.context.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+                
+                this.canvas.toBlob((blob) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(blob);
+                }, 'image/jpeg', 0.7);
+            };
+            img.src = imageData;
+        });
+    }
+
+    /**
+     * 压缩文件
+     */
+    async compressFile(fileData, file, fileType) {
+        if (fileType === 'image') {
+            return await this.compressImage(fileData, file);
+        }
+        
+        // 其他类型暂时返回原数据
+        return fileData;
+    }
+
+    /**
+     * 压缩图片
+     */
+    async compressImage(imageData, file) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => {
+                // 计算压缩后的尺寸
+                let { width, height } = img;
+                const maxDimension = 1920;
+                
+                if (width > maxDimension || height > maxDimension) {
+                    const scale = Math.min(maxDimension / width, maxDimension / height);
+                    width *= scale;
+                    height *= scale;
+                }
+                
+                this.canvas.width = width;
+                this.canvas.height = height;
+                
+                this.context.drawImage(img, 0, 0, width, height);
+                
+                this.canvas.toBlob((blob) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.readAsDataURL(blob);
+                }, 'image/jpeg', this.options.imageQuality);
+            };
+            img.src = imageData;
+        });
+    }
+
+    /**
+     * 提取元数据
+     */
+    async extractMetadata(file, fileType) {
+        const metadata = {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: new Date(file.lastModified)
+        };
+
+        if (fileType === 'image') {
+            // 提取图片元数据
+            const imageData = await this.readFile(file);
+            const img = new Image();
+            
+            return new Promise((resolve) => {
+                img.onload = () => {
+                    metadata.width = img.width;
+                    metadata.height = img.height;
+                    metadata.aspectRatio = (img.width / img.height).toFixed(2);
+                    resolve(metadata);
+                };
+                img.src = imageData;
+            });
+        }
+
+        if (fileType === 'video') {
+            // 提取视频元数据
+            const video = document.createElement('video');
+            video.preload = 'metadata';
+            
+            return new Promise((resolve) => {
+                video.onloadedmetadata = () => {
+                    metadata.duration = video.duration;
+                    metadata.width = video.videoWidth;
+                    metadata.height = video.videoHeight;
+                    metadata.aspectRatio = (video.videoWidth / video.videoHeight).toFixed(2);
+                    resolve(metadata);
+                };
+                video.src = URL.createObjectURL(file);
+            });
+        }
+
+        if (fileType === 'audio') {
+            // 提取音频元数据
+            const audio = document.createElement('audio');
+            audio.preload = 'metadata';
+            
+            return new Promise((resolve) => {
+                audio.onloadedmetadata = () => {
+                    metadata.duration = audio.duration;
+                    resolve(metadata);
+                };
+                audio.src = URL.createObjectURL(file);
+            });
+        }
+
+        return metadata;
+    }
+
+    /**
+     * 上传文件
+     */
+    async uploadFile(fileId, fileData, originalFile, metadata, thumbnail) {
+        const formData = new FormData();
+        
+        // 将base64转换为Blob
+        const blob = this.dataURLtoBlob(fileData);
+        formData.append('file', blob, originalFile.name);
+        
+        if (metadata) {
+            formData.append('metadata', JSON.stringify(metadata));
+        }
+        
+        if (thumbnail) {
+            const thumbnailBlob = this.dataURLtoBlob(thumbnail);
+            formData.append('thumbnail', thumbnailBlob, `thumb_${originalFile.name}`);
+        }
+
+        const xhr = new XMLHttpRequest();
+        
+        return new Promise((resolve, reject) => {
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const progress = (e.loaded / e.total) * 100;
+                    this.updateProgress(fileId, progress);
+                }
+            });
+
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        resolve(response);
+                    } catch (error) {
+                        reject(new Error('无效的服务器响应'));
+                    }
+                } else {
+                    reject(new Error(`上传失败: ${xhr.status}`));
+                }
+            });
+
+            xhr.addEventListener('error', () => {
+                reject(new Error('网络错误'));
+            });
+
+            xhr.open('POST', this.options.uploadEndpoint);
+            xhr.send(formData);
+        });
+    }
+
+    /**
+     * 更新进度
+     */
+    updateProgress(fileId, progress) {
+        const upload = this.activeUploads.get(fileId);
+        if (!upload) return;
+
+        upload.progress = progress;
+        
+        const progressBar = upload.queueItem.querySelector('.queue-progress-bar');
+        const statusElement = upload.queueItem.querySelector('.queue-status');
+        
+        if (progressBar) {
+            progressBar.style.width = `${progress}%`;
+        }
+        
+        if (statusElement) {
+            statusElement.textContent = `${Math.round(progress)}%`;
+        }
+
+        // 触发进度回调
+        if (this.options.onProgress) {
+            this.options.onProgress(fileId, progress, upload);
+        }
+    }
+
+    /**
+     * 完成文件处理
+     */
+    completeFileProcessing(fileId, uploadResult) {
+        const upload = this.activeUploads.get(fileId);
+        if (!upload) return;
+
+        const statusElement = upload.queueItem.querySelector('.queue-status');
+        if (statusElement) {
+            statusElement.textContent = '完成';
+            statusElement.style.color = '#10b981';
+        }
+
+        // 移除处理队列中的项目
+        setTimeout(() => {
+            if (upload.queueItem.parentNode) {
+                upload.queueItem.parentNode.removeChild(upload.queueItem);
+            }
+            this.activeUploads.delete(fileId);
+            
+            // 如果没有更多处理项目，隐藏队列
+            if (this.activeUploads.size === 0) {
+                this.elements.processingQueue.style.display = 'none';
+            }
+        }, 2000);
+
+        // 触发完成回调
+        if (this.options.onComplete) {
+            this.options.onComplete(fileId, uploadResult, upload);
+        }
+    }
+
+    /**
+     * 处理失败
+     */
+    failFileProcessing(fileId, errorMessage) {
+        const upload = this.activeUploads.get(fileId);
+        if (!upload) return;
+
+        const statusElement = upload.queueItem.querySelector('.queue-status');
+        if (statusElement) {
+            statusElement.textContent = '失败';
+            statusElement.style.color = '#ef4444';
+        }
+
+        // 触发错误回调
+        if (this.options.onError) {
+            this.options.onError(fileId, errorMessage, upload);
+        }
+
+        this.showError(`文件处理失败: ${upload.file.name} - ${errorMessage}`);
+    }
+
+    /**
+     * 添加到媒体库
+     */
+    addToMediaLibrary(mediaItem) {
+        this.mediaCache.set(mediaItem.id, mediaItem);
+        this.renderGallery();
+    }
+
+    /**
+     * 渲染画廊
+     */
+    renderGallery() {
+        const items = Array.from(this.mediaCache.values());
+        const filteredItems = this.applyGalleryFilters(items);
+        const sortedItems = this.sortGalleryItems(filteredItems);
+
+        const html = sortedItems.map(item => this.createGalleryItemHTML(item)).join('');
+        this.elements.galleryGrid.innerHTML = html;
+    }
+
+    /**
+     * 创建画廊项HTML
+     */
+    createGalleryItemHTML(item) {
+        const thumbnailContent = item.thumbnail 
+            ? `<img src="${item.thumbnail}" alt="${item.name}">`
+            : `<div class="gallery-thumbnail-icon">${this.getTypeIcon(item.type)}</div>`;
+
+        return `
+            <div class="gallery-item" data-file-id="${item.id}">
+                <div class="gallery-thumbnail">
+                    ${thumbnailContent}
+                </div>
+                <div class="gallery-item-name">${item.name}</div>
+                <div class="gallery-item-info">
+                    <span>${item.type}</span>
+                    <span>${this.formatFileSize(item.size)}</span>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * 预览文件
+     */
+    previewFile(fileId) {
+        const item = this.mediaCache.get(fileId);
+        if (!item) return;
+
+        this.currentPreviewItem = item;
+        
+        // 生成预览内容
+        const previewContent = this.generatePreviewContent(item);
+        this.elements.previewContent.innerHTML = previewContent;
+        
+        // 生成信息面板
+        const infoContent = this.generateInfoContent(item);
+        this.elements.previewInfo.innerHTML = infoContent;
+        
+        // 显示预览
+        this.elements.mediaPreview.style.display = 'block';
+        this.elements.mediaPreview.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /**
+     * 生成预览内容
+     */
+    generatePreviewContent(item) {
+        switch (item.type) {
+            case 'image':
+                return `<img src="${item.url}" alt="${item.name}" class="preview-image">`;
+            
+            case 'video':
+                return `
+                    <video controls class="preview-video">
+                        <source src="${item.url}" type="${item.metadata?.type || 'video/mp4'}">
+                        您的浏览器不支持视频播放
+                    </video>
+                `;
+            
+            case 'audio':
+                return `
+                    <audio controls class="preview-audio">
+                        <source src="${item.url}" type="${item.metadata?.type || 'audio/mpeg'}">
+                        您的浏览器不支持音频播放
+                    </audio>
+                `;
+            
+            default:
+                return `<div class="preview-default">无法预览此文件类型</div>`;
+        }
+    }
+
+    /**
+     * 生成信息内容
+     */
+    generateInfoContent(item) {
+        const metadata = item.metadata || {};
+        const infoItems = [
+            { label: '文件名', value: item.name },
+            { label: '类型', value: item.type },
+            { label: '大小', value: this.formatFileSize(item.size) },
+            { label: '上传时间', value: this.formatDate(item.uploadDate) }
+        ];
+
+        if (metadata.width && metadata.height) {
+            infoItems.push({ label: '尺寸', value: `${metadata.width} × ${metadata.height}` });
+        }
+
+        if (metadata.duration) {
+            infoItems.push({ label: '时长', value: this.formatDuration(metadata.duration) });
+        }
+
+        return infoItems.map(item => `
+            <div class="info-item">
+                <span class="info-label">${item.label}:</span>
+                <span class="info-value">${item.value}</span>
+            </div>
+        `).join('');
+    }
+
+    /**
+     * 工具方法
+     */
+    getFileType(file) {
+        const extension = this.getFileExtension(file.name).toLowerCase();
+        
+        if (this.options.allowedTypes.image.includes(extension)) return 'image';
+        if (this.options.allowedTypes.video.includes(extension)) return 'video';
+        if (this.options.allowedTypes.audio.includes(extension)) return 'audio';
+        
+        return 'unknown';
+    }
+
+    getFileExtension(filename) {
+        return filename.split('.').pop().toLowerCase();
+    }
+
+    isAllowedType(fileType, extension) {
+        return this.options.allowedTypes[fileType]?.includes(extension) || false;
+    }
+
+    isAllowedSize(file, fileType) {
+        const maxSize = {
+            image: this.options.maxImageSize,
+            video: this.options.maxVideoSize,
+            audio: this.options.maxAudioSize
+        }[fileType] || this.options.maxFileSize;
+
+        return file.size <= maxSize;
+    }
+
+    formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    formatDate(date) {
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+    }
+
+    formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = Math.floor(seconds % 60);
+        
+        if (hours > 0) {
+            return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        return `${minutes}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    getTypeIcon(type) {
+        const icons = {
+            image: '🖼️',
+            video: '🎥',
+            audio: '🎵',
+            unknown: '📄'
+        };
+        return icons[type] || icons.unknown;
+    }
+
+    dataURLtoBlob(dataURL) {
+        const arr = dataURL.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        
+        return new Blob([u8arr], { type: mime });
+    }
+
+    generateFileId() {
+        return 'media_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    applyGalleryFilters(items) {
+        const filterType = this.elements.filterType.value;
+        if (filterType === 'all') return items;
+        return items.filter(item => item.type === filterType);
+    }
+
+    sortGalleryItems(items) {
+        const sortBy = this.elements.sortBy.value;
+        
+        return items.sort((a, b) => {
+            switch (sortBy) {
+                case 'date':
+                    return new Date(b.uploadDate) - new Date(a.uploadDate);
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'size':
+                    return b.size - a.size;
+                case 'type':
+                    return a.type.localeCompare(b.type);
+                default:
+                    return 0;
+            }
+        });
+    }
+
+    filterGallery() {
+        this.renderGallery();
+    }
+
+    sortGallery() {
+        this.renderGallery();
+    }
+
+    showError(message) {
+        if (window.notifications) {
+            window.notifications.error(message);
+        } else {
+            console.error(message);
+            alert(message);
+        }
+    }    // 编辑器相关方法（占位符，可扩展）
+    openEditor() {
+        this.elements.mediaEditor.style.display = 'block';
+        this.elements.mediaPreview.style.display = 'none';
+        
+        // 实现编辑器功能
+        if (this.currentPreviewItem) {
+            const fileType = this.getFileType(this.currentPreviewItem.name);
+            const editorContent = this.elements.mediaEditor.querySelector('.editor-content');
+            
+            switch (fileType) {
+                case 'text':
+                case 'code':
+                    this.initTextEditor(editorContent);
+                    break;
+                case 'image':
+                    this.initImageEditor(editorContent);
+                    break;
+                case 'video':
+                    this.initVideoEditor(editorContent);
+                    break;
+                case 'audio':
+                    this.initAudioEditor(editorContent);
+                    break;
+                default:
+                    this.showMessage('该文件类型暂不支持编辑', 'warning');
+                    this.closeEditor();
+                    return;
+            }
+            
+            this.showMessage('编辑器已启动', 'success');
+        }
+    }
+
+    closeEditor() {
+        this.elements.mediaEditor.style.display = 'none';
+        this.elements.mediaPreview.style.display = 'block';
+        
+        // 清理编辑器资源
+        this.cleanupEditor();
+    }
+
+    saveEditorChanges() {
+        // 实现保存编辑功能
+        try {
+            const editorContent = this.elements.mediaEditor.querySelector('.editor-content');
+            const fileType = this.getFileType(this.currentPreviewItem.name);
+            
+            let savedData = null;
+            
+            switch (fileType) {
+                case 'text':
+                case 'code':
+                    savedData = this.saveTextEditorChanges(editorContent);
+                    break;
+                case 'image':
+                    savedData = this.saveImageEditorChanges(editorContent);
+                    break;
+                case 'video':
+                    savedData = this.saveVideoEditorChanges(editorContent);
+                    break;
+                case 'audio':
+                    savedData = this.saveAudioEditorChanges(editorContent);
+                    break;
+            }
+            
+            if (savedData) {
+                // 更新文件数据
+                this.updateFileData(this.currentPreviewItem.id, savedData);
+                this.showMessage('文件保存成功', 'success');
+                
+                // 刷新预览
+                this.refreshPreview();
+            }
+            
+            this.closeEditor();
+        } catch (error) {
+            console.error('保存编辑失败:', error);
+            this.showMessage('保存失败: ' + error.message, 'error');
+        }
+    }
+
+    // 编辑器初始化方法
+    initTextEditor(container) {
+        container.innerHTML = `
+            <div class="text-editor">
+                <div class="editor-toolbar">
+                    <button class="btn btn-sm btn-outline-primary" onclick="document.execCommand('bold')">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="document.execCommand('italic')">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="document.execCommand('underline')">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.parentElement.nextElementSibling.focus()">
+                        焦点
+                    </button>
+                </div>
+                <textarea class="form-control editor-textarea" rows="20" placeholder="在此编辑文本内容..."></textarea>
+            </div>
+        `;
+        
+        // 如果是文本文件，加载内容
+        if (this.currentPreviewItem.content) {
+            container.querySelector('.editor-textarea').value = this.currentPreviewItem.content;
+        }
+    }
+
+    initImageEditor(container) {
+        container.innerHTML = `
+            <div class="image-editor">
+                <div class="editor-toolbar">
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.applyImageFilter('brightness')">
+                        <i class="fas fa-sun"></i> 亮度
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.applyImageFilter('contrast')">
+                        <i class="fas fa-adjust"></i> 对比度
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.applyImageFilter('blur')">
+                        <i class="fas fa-eye-slash"></i> 模糊
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.rotateImage()">
+                        <i class="fas fa-undo"></i> 旋转
+                    </button>
+                </div>
+                <canvas class="image-canvas" style="max-width: 100%; border: 1px solid #ccc;"></canvas>
+                <div class="filter-controls mt-3">
+                    <label>亮度: <input type="range" min="0" max="200" value="100" class="brightness-slider"></label>
+                    <label>对比度: <input type="range" min="0" max="200" value="100" class="contrast-slider"></label>
+                    <label>模糊: <input type="range" min="0" max="10" value="0" class="blur-slider"></label>
+                </div>
+            </div>
+        `;
+        
+        this.loadImageToCanvas(container.querySelector('.image-canvas'));
+    }
+
+    initVideoEditor(container) {
+        container.innerHTML = `
+            <div class="video-editor">
+                <div class="editor-toolbar">
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.trimVideo()">
+                        <i class="fas fa-cut"></i> 剪切
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.addVideoFilter()">
+                        <i class="fas fa-magic"></i> 滤镜
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.extractAudio()">
+                        <i class="fas fa-volume-up"></i> 提取音频
+                    </button>
+                </div>
+                <video class="video-preview" controls style="width: 100%; max-height: 400px;">
+                    <source src="${this.currentPreviewItem.url}" type="video/mp4">
+                </video>
+                <div class="video-controls mt-3">
+                    <label>开始时间: <input type="number" min="0" step="0.1" class="start-time" placeholder="秒"></label>
+                    <label>结束时间: <input type="number" min="0" step="0.1" class="end-time" placeholder="秒"></label>
+                    <label>音量: <input type="range" min="0" max="100" value="50" class="volume-slider"></label>
+                </div>
+            </div>
+        `;
+    }
+
+    initAudioEditor(container) {
+        container.innerHTML = `
+            <div class="audio-editor">
+                <div class="editor-toolbar">
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.trimAudio()">
+                        <i class="fas fa-cut"></i> 剪切
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.changeAudioSpeed()">
+                        <i class="fas fa-tachometer-alt"></i> 变速
+                    </button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="this.closest('.media-processing-system').mediaProcessor.normalizeAudio()">
+                        <i class="fas fa-balance-scale"></i> 标准化
+                    </button>
+                </div>
+                <audio class="audio-preview" controls style="width: 100%;">
+                    <source src="${this.currentPreviewItem.url}" type="audio/mpeg">
+                </audio>
+                <div class="audio-controls mt-3">
+                    <label>开始时间: <input type="number" min="0" step="0.1" class="start-time" placeholder="秒"></label>
+                    <label>结束时间: <input type="number" min="0" step="0.1" class="end-time" placeholder="秒"></label>
+                    <label>音量增益: <input type="range" min="-20" max="20" value="0" class="gain-slider"></label>
+                    <label>播放速度: <input type="range" min="0.5" max="2" step="0.1" value="1" class="speed-slider"></label>
+                </div>
+            </div>
+        `;
+    }
+
+    // 编辑器保存方法
+    saveTextEditorChanges(container) {
+        const textarea = container.querySelector('.editor-textarea');
+        return {
+            content: textarea.value,
+            lastModified: new Date().toISOString()
+        };
+    }
+
+    saveImageEditorChanges(container) {
+        const canvas = container.querySelector('.image-canvas');
+        return {
+            dataUrl: canvas.toDataURL(),
+            lastModified: new Date().toISOString()
+        };
+    }
+
+    saveVideoEditorChanges(container) {
+        const startTime = container.querySelector('.start-time').value;
+        const endTime = container.querySelector('.end-time').value;
+        const volume = container.querySelector('.volume-slider').value;
+        
+        return {
+            trimData: { startTime, endTime },
+            volume: volume,
+            lastModified: new Date().toISOString()
+        };
+    }
+
+    saveAudioEditorChanges(container) {
+        const startTime = container.querySelector('.start-time').value;
+        const endTime = container.querySelector('.end-time').value;
+        const gain = container.querySelector('.gain-slider').value;
+        const speed = container.querySelector('.speed-slider').value;
+        
+        return {
+            trimData: { startTime, endTime },
+            gain: gain,
+            speed: speed,
+            lastModified: new Date().toISOString()
+        };
+    }
+
+    // 辅助方法
+    cleanupEditor() {
+        const editorContent = this.elements.mediaEditor.querySelector('.editor-content');
+        if (editorContent) {
+            editorContent.innerHTML = '';
+        }
+    }
+
+    updateFileData(fileId, newData) {
+        // 更新文件数据（这里可以发送到服务器）
+        console.log('更新文件数据:', fileId, newData);
+        
+        // 本地存储更新
+        const storageKey = `media_file_${fileId}`;
+        localStorage.setItem(storageKey, JSON.stringify(newData));
+    }
+
+    refreshPreview() {
+        // 刷新预览内容
+        if (this.currentPreviewItem) {
+            this.showPreview(this.currentPreviewItem);
+        }
+    }
+
+    loadImageToCanvas(canvas) {
+        const img = new Image();
+        img.onload = () => {
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = this.currentPreviewItem.url;
+    }
+
+    // 图像处理方法
+    applyImageFilter(filterType) {
+        const canvas = this.elements.mediaEditor.querySelector('.image-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        switch (filterType) {
+            case 'brightness':
+                this.applyBrightnessFilter(ctx, canvas);
+                break;
+            case 'contrast':
+                this.applyContrastFilter(ctx, canvas);
+                break;
+            case 'blur':
+                this.applyBlurFilter(ctx, canvas);
+                break;
+        }
+    }
+
+    applyBrightnessFilter(ctx, canvas) {
+        const slider = this.elements.mediaEditor.querySelector('.brightness-slider');
+        const brightness = parseInt(slider.value);
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = Math.min(255, data[i] * (brightness / 100));     // Red
+            data[i + 1] = Math.min(255, data[i + 1] * (brightness / 100)); // Green
+            data[i + 2] = Math.min(255, data[i + 2] * (brightness / 100)); // Blue
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    applyContrastFilter(ctx, canvas) {
+        const slider = this.elements.mediaEditor.querySelector('.contrast-slider');
+        const contrast = parseInt(slider.value);
+        const factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+            data[i] = Math.min(255, Math.max(0, factor * (data[i] - 128) + 128));
+            data[i + 1] = Math.min(255, Math.max(0, factor * (data[i + 1] - 128) + 128));
+            data[i + 2] = Math.min(255, Math.max(0, factor * (data[i + 2] - 128) + 128));
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    applyBlurFilter(ctx, canvas) {
+        const slider = this.elements.mediaEditor.querySelector('.blur-slider');
+        const blurAmount = parseInt(slider.value);
+        
+        if (blurAmount > 0) {
+            ctx.filter = `blur(${blurAmount}px)`;
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            ctx.putImageData(imageData, 0, 0);
+            ctx.filter = 'none';
+        }
+    }
+
+    rotateImage() {
+        const canvas = this.elements.mediaEditor.querySelector('.image-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // 保存当前图像
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        
+        // 交换宽高
+        const tempWidth = canvas.width;
+        canvas.width = canvas.height;
+        canvas.height = tempWidth;
+        
+        // 旋转并重绘
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI / 2);
+        ctx.translate(-canvas.height / 2, -canvas.width / 2);
+        ctx.putImageData(imageData, 0, 0);
+        ctx.restore();
+    }
+
+    downloadCurrentFile() {
+        if (this.currentPreviewItem) {
+            const link = document.createElement('a');
+            link.href = this.currentPreviewItem.url;
+            link.download = this.currentPreviewItem.name;
+            link.click();
+        }
+    }
+
+    deleteCurrentFile() {
+        if (this.currentPreviewItem && confirm('确定要删除这个文件吗？')) {
+            this.mediaCache.delete(this.currentPreviewItem.id);
+            this.renderGallery();
+            this.elements.mediaPreview.style.display = 'none';
+        }
+    }
+
+    /**
+     * 公共API
+     */
+    destroy() {
+        this.activeUploads.clear();
+        this.mediaCache.clear();
+        
+        if (this.elements.container) {
+            this.elements.container.innerHTML = '';
+        }
+    }
+}
+
+// 全局导出
+window.MediaProcessingSystem = MediaProcessingSystem;
+
+// 导出模块
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MediaProcessingSystem;
+}

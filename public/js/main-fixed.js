@@ -1,0 +1,593 @@
+// 量子动画系统类 - 首先定义
+class QuantumAnimationSystem {
+    constructor() {
+        this.container = document.getElementById('quantumLoader');
+        this.ballsContainer = document.getElementById('quantumBalls');
+        this.validationText = document.getElementById('validationText');
+        this.particles = [];
+        
+        // 检查DOM元素是否存在
+        this.isInitialized = !!(this.container && this.ballsContainer && this.validationText);
+        
+        if (!this.isInitialized) {
+            console.warn('QuantumAnimationSystem: 部分DOM元素未找到', {
+                container: !!this.container,
+                ballsContainer: !!this.ballsContainer,
+                validationText: !!this.validationText
+            });
+        } else {
+            
+        }
+    }
+    
+    async simulateValidation(duration = 2000) {
+        if (!this.isInitialized || !this.container) {
+            console.warn('QuantumAnimationSystem: 系统未正确初始化，跳过动画');
+            return;
+        }
+        
+        this.container.style.display = 'block';
+        this.createQuantumBalls();
+        
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, duration);
+        });
+    }
+    
+    createQuantumBalls() {
+        if (!this.ballsContainer) return;
+        
+        this.ballsContainer.innerHTML = '';
+        
+        for (let i = 0; i < 8; i++) {
+            const ball = document.createElement('div');
+            ball.className = 'quantum-ball w-4 h-4 bg-blue-500 rounded-full animate-bounce';
+            
+            const angle = (i / 8) * 2 * Math.PI;
+            const radius = 50;
+            const x = Math.cos(angle) * radius + 60;
+            const y = Math.sin(angle) * radius + 60;
+            
+            ball.style.position = 'absolute';
+            ball.style.left = x + 'px';
+            ball.style.top = y + 'px';
+            ball.style.animationDelay = (i * 0.2) + 's';
+            
+            this.ballsContainer.appendChild(ball);
+        }
+    }
+    
+    animateSuccess(message = '验证成功！') {
+        if (!this.isInitialized) return;
+        
+        if (this.validationText) {
+            this.validationText.textContent = message;
+            this.validationText.className = 'text-green-500 font-bold text-center';
+        }
+        
+        const balls = this.ballsContainer?.querySelectorAll('.quantum-ball');
+        balls?.forEach(ball => {
+            ball.classList.add('bg-green-500');
+            ball.classList.remove('bg-blue-500');
+        });
+        
+        setTimeout(() => {
+            this.hide();
+        }, 1500);
+    }
+    
+    animateError(message = '验证失败！') {
+        if (!this.isInitialized) return;
+        
+        if (this.validationText) {
+            this.validationText.textContent = message;
+            this.validationText.className = 'text-red-500 font-bold text-center';
+        }
+        
+        const balls = this.ballsContainer?.querySelectorAll('.quantum-ball');
+        balls?.forEach(ball => {
+            ball.classList.add('bg-red-500');
+            ball.classList.remove('bg-blue-500');
+        });
+        
+        setTimeout(() => {
+            this.hide();
+        }, 1500);
+    }
+    
+    hide() {
+        if (this.container) {
+            this.container.style.display = 'none';
+        }
+    }
+}
+
+// 主应用脚本 - 页面初始化
+import { ChatUI } from './chat/ui.js';
+import { ChatAPI } from './chat/api.js';
+import { ChatCore } from './chat/core.js';
+import { HistoryRenderer } from './history/render.js';
+import { HistoryManager } from './history/manager.js';
+
+// 全局实例
+let ui, api, historyRenderer, historyManager, chatCore;
+
+// 全局量子动画系统实例
+window.quantumAnimation = null;
+
+// DOM准备就绪后初始化量子动画系统
+function initializeQuantumAnimationSystem() {
+    // 检查DOM元素是否存在
+    const quantumLoader = document.getElementById('quantumLoader');
+    const quantumBalls = document.getElementById('quantumBalls');
+    const validationText = document.getElementById('validationText');
+    
+    if (quantumLoader && quantumBalls && validationText) {
+        window.quantumAnimation = new QuantumAnimationSystem();
+        
+        return true;
+    } else {
+        console.warn('QuantumAnimationSystem 初始化失败: DOM元素不存在', {
+            quantumLoader: !!quantumLoader,
+            quantumBalls: !!quantumBalls,
+            validationText: !!validationText
+        });
+        return false;
+    }
+}
+
+// 页面初始化主函数
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    
+    try {
+        // 初始化量子动画系统
+        initializeQuantumAnimationSystem();
+        
+        // 初始化模块
+        if (typeof ChatUI !== 'undefined') {
+            ui = new ChatUI();
+            api = new ChatAPI();
+            chatCore = new ChatCore();
+            historyManager = new HistoryManager();
+            historyRenderer = new HistoryRenderer(historyManager);
+        }
+        
+        // 初始化页面功能
+        initPage();
+        
+        // 检查用户登录状态
+        if (localStorage.getItem('token')) {
+            updateUserInterface(true);
+        } else {
+            updateUserInterface(false);
+        }
+        
+        // 设置UI回调（如果模块已加载）
+        if (ui) {
+            setupUICallbacks();
+        }
+        
+        // 初始化WebSocket连接
+        initializeWebSocket();
+        
+        // 初始化页面增强功能
+        initializePageFeatures();
+        
+        
+        
+    } catch (error) {
+        console.error('页面初始化失败:', error);
+    }
+});
+
+// 设置UI回调
+function setupUICallbacks() {
+    if (!ui) return;
+    
+    ui.setCallback('onLogin', async (credentials) => {
+        try {
+            ui.showLoading();
+            const response = await api.login(credentials.email, credentials.password);
+            if (response.success) {
+                const sessions = await api.getSessions();
+                historyRenderer.renderSessions(sessions);
+                ui.hideLoginModal();
+                document.getElementById('userName').value = credentials.email;
+            } else {
+                ui.showError('登录失败: ' + response.error);
+            }
+        } catch (error) {
+            ui.showError(error.message);
+        } finally {
+            ui.hideLoading();
+        }
+    });
+
+    ui.setCallback('onSendMessage', async (message) => {
+        try {
+            ui.addMessage({
+                type: 'user',
+                content: message,
+                timestamp: new Date()
+            });
+
+            const response = await api.sendMessage(message);
+            
+            if (response.success) {
+                ui.addMessage({
+                    type: 'ai',
+                    content: response.data.content,
+                    timestamp: new Date(response.data.timestamp)
+                });
+                historyManager.addMessage(response.data);
+            } else {
+                throw new Error(response.error);
+            }
+        } catch (error) {
+            ui.showError('发送消息失败: ' + error.message);
+        }
+    });
+}
+
+// 页面初始化函数
+function initPage() {
+    
+    
+    // 设置动态背景
+    setupDynamicBackground();
+    
+    // 设置AI助手
+    setupAiAssistant();
+    
+    // 设置滚动动画
+    setupScrollAnimations();
+    
+    // 初始化密码切换功能
+    initPasswordToggle();
+    
+    // 设置导航交互
+    setupNavigation();
+}
+
+// 更新用户界面状态
+function updateUserInterface(isLoggedIn) {
+    const loginBtn = document.getElementById('loginBtn');
+    const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+    
+    if (loginBtn) {
+        if (isLoggedIn) {
+            loginBtn.textContent = '控制台';
+            loginBtn.onclick = () => window.location.href = '/dashboard.html';
+        } else {
+            loginBtn.textContent = '登录';
+            loginBtn.onclick = () => showLoginModal();
+        }
+    }
+    
+    if (mobileLoginBtn) {
+        if (isLoggedIn) {
+            mobileLoginBtn.textContent = '控制台';
+            mobileLoginBtn.onclick = () => window.location.href = '/dashboard.html';
+        } else {
+            mobileLoginBtn.textContent = '登录';
+            mobileLoginBtn.onclick = () => showLoginModal();
+        }
+    }
+}
+
+// 显示登录模态框
+function showLoginModal() {
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        if (loginModal.classList.contains('modal')) {
+            const modal = new bootstrap.Modal(loginModal);
+            modal.show();
+        } else {
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
+        }
+    }
+}
+
+// 设置动态背景
+function setupDynamicBackground() {
+    const container = document.getElementById('backgroundContainer');
+    if (!container) return;
+    
+    try {
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('absolute', 'rounded-full', 'bg-tech-blue', 'opacity-20');
+            
+            const size = Math.random() * 6 + 2;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            
+            const duration = Math.random() * 20 + 10;
+            particle.style.animation = `quantum-flicker ${duration}s infinite ease-in-out`;
+            
+            container.appendChild(particle);
+        }
+    } catch (error) {
+        console.error('背景初始化失败:', error);
+    }
+}
+
+// 设置AI助手按钮
+function setupAiAssistant() {
+    const aiButton = document.getElementById('xiaoDun');
+    if (aiButton) {
+        aiButton.onclick = () => window.location.href = '/chat.html';
+    }
+}
+
+// 设置滚动动画
+function setupScrollAnimations() {
+    const scrollItems = document.querySelectorAll('.scroll-reveal');
+    
+    if (scrollItems.length > 0) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+        
+        scrollItems.forEach(item => {
+            observer.observe(item);
+        });
+    }
+}
+
+// 设置导航交互
+function setupNavigation() {
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn && mobileMenu) {
+        mobileMenuBtn.onclick = () => mobileMenu.classList.toggle('hidden');
+    }
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            }
+        });
+    });
+}
+
+// 初始化密码可见性切换
+function initPasswordToggle() {
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.onclick = () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            
+            const icon = togglePassword.querySelector('i');
+            if (icon) {
+                icon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+            }
+        };
+    }
+}
+
+// WebSocket连接管理
+let wsConnection = null;
+let wsReconnectAttempts = 0;
+const MAX_RECONNECT_ATTEMPTS = 5;
+
+// 初始化WebSocket连接
+function initializeWebSocket() {
+    const wsUrl = `ws://${window.location.host}/ws`;
+    
+    
+    try {
+        wsConnection = new WebSocket(wsUrl);
+        
+        wsConnection.onopen = function(event) {
+            
+            updateWebSocketStatus('connected', '已连接');
+            wsReconnectAttempts = 0;
+            
+            wsConnection.send(JSON.stringify({ 
+                type: 'test', 
+                message: 'Hello from AlingAi frontend' 
+            }));
+            
+            setInterval(() => {
+                if (wsConnection && wsConnection.readyState === WebSocket.OPEN) {
+                    wsConnection.send(JSON.stringify({ type: 'ping' }));
+                }
+            }, 30000);
+        };
+        
+        wsConnection.onmessage = function(event) {
+            handleWebSocketMessage(event);
+        };
+        
+        wsConnection.onclose = function(event) {
+            
+            updateWebSocketStatus('disconnected', '连接断开');
+            
+            if (wsReconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+                wsReconnectAttempts++;
+                
+                setTimeout(() => {
+                    initializeWebSocket();
+                }, 3000 * wsReconnectAttempts);
+            }
+        };
+        
+        wsConnection.onerror = function(error) {
+            console.error('WebSocket错误:', error);
+            updateWebSocketStatus('error', '连接错误');
+        };
+        
+    } catch (error) {
+        console.error('WebSocket连接失败:', error);
+        updateWebSocketStatus('error', '连接失败');
+    }
+}
+
+// 更新WebSocket状态指示器
+function updateWebSocketStatus(status, message) {
+    const wsStatus = document.getElementById('wsStatus');
+    const wsIndicator = document.getElementById('wsIndicator');
+    const wsStatusText = document.getElementById('wsStatusText');
+    
+    if (!wsStatus || !wsIndicator || !wsStatusText) {
+        
+        return;
+    }
+    
+    wsStatusText.textContent = message;
+    wsIndicator.className = 'ws-indicator';
+    wsStatus.className = 'ws-status';
+    
+    switch (status) {
+        case 'connected':
+            wsIndicator.classList.add('connected');
+            wsStatus.classList.add('connected');
+            break;
+        case 'disconnected':
+            wsIndicator.classList.add('disconnected');
+            wsStatus.classList.add('disconnected');
+            break;
+        case 'error':
+            wsIndicator.classList.add('error');
+            wsStatus.classList.add('error');
+            break;
+        case 'connecting':
+            wsIndicator.classList.add('connecting');
+            wsStatus.classList.add('connecting');
+            break;
+    }
+    
+    
+}
+
+// 处理WebSocket消息
+function handleWebSocketMessage(event) {
+    try {
+        const data = JSON.parse(event.data);
+        
+        
+        switch (data.type) {
+            case 'welcome':
+                
+                break;
+            case 'test_response':
+                
+                break;
+            case 'chat_message':
+                if (ui && ui.addMessage) {
+                    ui.addMessage({
+                        type: 'ai',
+                        content: data.content,
+                        timestamp: new Date(data.timestamp)
+                    });
+                }
+                break;
+            default:
+                
+        }
+    } catch (error) {
+        console.error('处理WebSocket消息失败:', error);
+    }
+}
+
+// 初始化页面功能
+function initializePageFeatures() {
+    
+    
+    // 等待PageEnhancements类加载完成后再创建实例
+    if (typeof PageEnhancements !== 'undefined') {
+        window.pageEnhancements = new PageEnhancements();
+    } else {
+        setTimeout(() => {
+            if (typeof PageEnhancements !== 'undefined') {
+                window.pageEnhancements = new PageEnhancements();
+            }
+        }, 100);
+    }
+    
+    // 初始化量子动画
+    initializeQuantumAnimations();
+    
+    
+}
+
+// 初始化量子动画
+function initializeQuantumAnimations() {
+    createQuantumParticles();
+    
+}
+
+// 创建量子粒子效果
+function createQuantumParticles() {
+    const container = document.getElementById('quantumParticles');
+    if (!container) return;
+
+    for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'absolute w-2 h-2 rounded-full bg-blue-400 opacity-30';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animation = `quantumFloat ${3 + Math.random() * 4}s ease-in-out infinite`;
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        
+        container.appendChild(particle);
+    }
+}
+
+// 添加验证功能的示例函数
+window.validateWithQuantumAnimation = async function(validationFunction, successMessage, errorMessage) {
+    try {
+        if (window.quantumAnimation) {
+            await window.quantumAnimation.simulateValidation(2000);
+        }
+        
+        const result = await validationFunction();
+        
+        if (result.success) {
+            if (window.quantumAnimation) {
+                window.quantumAnimation.animateSuccess(successMessage || '验证成功！');
+            }
+        } else {
+            if (window.quantumAnimation) {
+                window.quantumAnimation.animateError(errorMessage || '验证失败！');
+            }
+        }
+        
+        return result;
+    } catch (error) {
+        if (window.quantumAnimation) {
+            window.quantumAnimation.animateError(errorMessage || '验证失败！');
+        }
+        throw error;
+    }
+};

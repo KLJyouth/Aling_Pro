@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
+    <title>{% block title %}{{ app.name }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}AI智能助手平台 - 提供智能对话、文档处理、数据分析等服务{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}AI,人工智能,智能助手,对话系统,文档处理{% endblock %}">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ app.name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}AI智能助手平台{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url() }}">
+    <meta property="og:image" content="{{ asset('images/logo-og.png') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    
+    <!-- CSS 样式 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('css/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/quantum.css') }}" rel="stylesheet">
+    
+    {% block styles %}{% endblock %}
+    
+    <!-- 全局配置 -->
+    <script>
+        window.APP_CONFIG = {
+            name: '{{ app.name }}',
+            url: '{{ app.url }}',
+            debug: {{ app.debug ? 'true' : 'false' }},
+            csrfToken: '{{ csrf_token() }}',
+            user: {{ auth_check() ? auth_user()|json_encode|raw : 'null' }},
+            apiUrl: '{{ url("api") }}',
+            assetsUrl: '{{ asset("") }}'
+        };
+    </script>
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <!-- 页面加载器 -->
+    <div id="page-loader" class="page-loader">
+        <div class="loader-content">
+            <div class="quantum-spinner"></div>
+            <div class="loader-text">{{ trans('loading') }}...</div>
+        </div>
+    </div>
+
+    <!-- 主导航 -->
+    {% block navigation %}
+        {% include 'components/navigation.twig' %}
+    {% endblock %}
+
+    <!-- 主要内容区 -->
+    <main class="main-content">
+        <!-- 系统通知 -->
+        {% include 'components/notifications.twig' %}
+        
+        <!-- 页面内容 -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 侧边栏 -->
+    {% block sidebar %}{% endblock %}
+
+    <!-- 页脚 -->
+    {% block footer %}
+        {% include 'components/footer.twig' %}
+    {% endblock %}
+
+    <!-- 模态框容器 -->
+    <div id="modal-container"></div>
+
+    <!-- JavaScript 脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('js/utils/utils.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/quantum-particles.js') }}"></script>
+    
+    {% block scripts %}{% endblock %}
+
+    <!-- 页面就绪脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 隐藏页面加载器
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => loader.style.display = 'none', 300);
+                }, 500);
+            }
+
+            // 初始化量子粒子效果
+            if (typeof QuantumParticles !== 'undefined') {
+                new QuantumParticles();
+            }
+
+            // 初始化主应用
+            if (typeof MainApp !== 'undefined') {
+                new MainApp();
+            }
+
+            {% block ready_script %}{% endblock %}
+        });
+    </script>
+
+    <!-- 错误处理脚本 -->
+    <script>
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            if (window.APP_CONFIG.debug) {
+                console.error('Global Error:', e.error);
+            }
+        });
+
+        // 未处理的 Promise 拒绝
+        window.addEventListener('unhandledrejection', function(e) {
+            if (window.APP_CONFIG.debug) {
+                console.error('Unhandled Promise Rejection:', e.reason);
+            }
+        });
+    </script>    {% if app.debug and app.environment == 'development' %}
+    <!-- 开发模式调试工具 -->
+    <div id="debug-panel" class="debug-panel">
+        <div class="debug-toggle" onclick="toggleDebugPanel()">
+            <i class="bi bi-bug"></i>
+        </div>
+        <div class="debug-content">
+            <h6>调试信息</h6>
+            <div class="debug-info">
+                <strong>模板:</strong> {% block debug_template %}{{ _self }}{% endblock %}<br>
+                <strong>用户:</strong> {{ auth_check() ? auth_user().username : '未登录' }}<br>
+                <strong>内存使用:</strong> <span id="memory-usage"></span><br>
+                <strong>执行时间:</strong> <span id="execution-time"></span>ms
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debug-panel');
+            panel.classList.toggle('active');
+        }
+        
+        // 更新调试信息
+        setInterval(() => {
+            if (performance.memory) {
+                document.getElementById('memory-usage').textContent = 
+                    Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + ' MB';
+            }
+            document.getElementById('execution-time').textContent = 
+                Math.round(performance.now());
+        }, 1000);
+    </script>
+    {% endif %}
+</body>
+</html>

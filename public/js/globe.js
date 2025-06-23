@@ -1,0 +1,80 @@
+try {
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+// 初始化场景、相机和渲染器
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x1a1a1a);
+document.body.appendChild(renderer.domElement);
+
+// 添加地球模型
+const geometry = new THREE.SphereGeometry(5, 32, 32);
+const textureLoader = new THREE.TextureLoader();
+const material = new THREE.MeshPhongMaterial({ map: textureLoader.load('/assets/textures/earth.jpg') });
+const earth = new THREE.Mesh(geometry, material);
+scene.add(earth);
+
+// 添加灯光
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+const pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(10, 10, 10);
+scene.add(pointLight);
+
+// 添加轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement);
+camera.position.z = 15;
+
+// 量子动画效果
+let animationActive = false;
+let animationProgress = 0;
+
+function startQuantumAnimation() {
+    animationActive = true;
+    animationProgress = 0;
+}
+
+function updateQuantumAnimation(delta) {
+    if (!animationActive) return;
+    animationProgress += delta * 0.5;
+    if (animationProgress > 1) {
+        animationProgress = 1;
+        animationActive = false;
+    }
+    earth.rotation.y = Math.PI * 2 * animationProgress;
+    earth.scale.set(1 + 0.2 * Math.sin(animationProgress * Math.PI), 1 + 0.2 * Math.sin(animationProgress * Math.PI), 1 + 0.2 * Math.sin(animationProgress * Math.PI));
+}
+
+// WebSocket消息监听（与实时通信集成）
+const ws = new WebSocket('ws://' + window.location.host + '/ws');
+ws.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    if (data.type === 'quantum_animation') {
+        startQuantumAnimation();
+    }
+};
+
+// 动画循环
+let clock = new THREE.Clock();
+function animate() {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+    updateQuantumAnimation(delta);
+    controls.update();
+    renderer.render(scene, camera);
+};
+animate();
+
+// 窗口大小调整
+window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+});
+} catch (error) {
+    console.error(error);
+    // 处理错误
+}

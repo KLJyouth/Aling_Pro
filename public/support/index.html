@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术支持 - AlingAI | 珑凌科技</title>
+    
+    <!-- SEO 优化 -->
+    <meta name="description" content="AlingAI 技术支持中心 - 获取专业的技术支持、常见问题解答、文档指南和社区帮助">
+    <meta name="keywords" content="AlingAI,技术支持,客服,帮助中心,FAQ,问题解答,技术文档">
+    
+    <!-- 核心样式和字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'quantum': {
+                            50: '#f0f0ff',
+                            100: '#e0e0ff',
+                            500: '#6C13FF',
+                            600: '#5A0FD9',
+                            700: '#480BB3',
+                            800: '#36078D',
+                            900: '#240367'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'slideInUp': 'slideInUp 0.8s ease-out',
+                        'slideInLeft': 'slideInLeft 0.8s ease-out',
+                        'slideInRight': 'slideInRight 0.8s ease-out',
+                        'fadeIn': 'fadeIn 0.6s ease-out',
+                        'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .quantum-gradient {
+            background: linear-gradient(135deg, #6C13FF 0%, #FF6B9D 50%, #4ECDC4 100%);
+        }
+        
+        .support-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .support-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 19, 255, 0.3);
+        }
+        
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            border-color: rgba(108, 19, 255, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .faq-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .faq-content.active {
+            max-height: 200px;
+        }
+        
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #6C13FF;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(108, 19, 255, 0.2);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #6C13FF;
+            transform: translateY(-2px);
+        }
+        
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background: #10b981;
+            animation: pulse-soft 2s ease-in-out infinite;
+        }
+        
+        .status-busy {
+            background: #f59e0b;
+        }
+        
+        .status-offline {
+            background: #6b7280;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-x-hidden">
+    <!-- 动态背景 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="relative z-50 glassmorphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent">
+                        AlingAI
+                    </a>
+                    <span class="ml-2 text-sm text-gray-300">技术支持</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/developers" class="nav-link px-3 py-2 rounded-md text-sm font-medium">开发者</a>
+                        <a href="/docs" class="nav-link px-3 py-2 rounded-md text-sm font-medium">文档</a>
+                        <a href="/api-docs.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">API</a>
+                        <a href="/downloads" class="nav-link px-3 py-2 rounded-md text-sm font-medium">下载</a>
+                        <a href="/community" class="nav-link px-3 py-2 rounded-md text-sm font-medium">社区</a>
+                        <a href="/dashboard.html" class="bg-quantum-500 hover:bg-quantum-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
+                            控制台
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden glassmorphism border-t border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/developers" class="block px-3 py-2 rounded-md text-base font-medium">开发者</a>
+                <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium">文档</a>
+                <a href="/api-docs.html" class="block px-3 py-2 rounded-md text-base font-medium">API</a>
+                <a href="/downloads" class="block px-3 py-2 rounded-md text-base font-medium">下载</a>
+                <a href="/community" class="block px-3 py-2 rounded-md text-base font-medium">社区</a>
+                <a href="/dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium bg-quantum-500">控制台</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="relative z-10 pt-20 pb-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">技术支持</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    专业的技术支持团队，24/7 为您提供全方位的服务支持
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slideInUp" style="animation-delay: 0.4s;">
+                    <a href="#contact" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-headset mr-2"></i>联系客服
+                    </a>
+                    <a href="#faq" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-question-circle mr-2"></i>常见问题
+                    </a>
+                    <a href="/support/help-center.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-book mr-2"></i>帮助中心
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支持状态 -->
+    <section class="relative z-10 mb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glassmorphism rounded-2xl p-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.1s;">
+                        <div class="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center">
+                            <span class="status-indicator status-online"></span>
+                            <span class="quantum-gradient bg-clip-text text-transparent">系统正常</span>
+                        </div>
+                        <div class="text-gray-300">所有服务运行正常</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.2s;">
+                        <div class="text-2xl md:text-3xl font-bold mb-2 flex items-center justify-center">
+                            <span class="status-indicator status-online"></span>
+                            <span class="quantum-gradient bg-clip-text text-transparent">在线客服</span>
+                        </div>
+                        <div class="text-gray-300">平均响应时间 < 2分钟</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.3s;">
+                        <div class="text-2xl md:text-3xl font-bold mb-2">
+                            <span class="quantum-gradient bg-clip-text text-transparent">99.9%</span>
+                        </div>
+                        <div class="text-gray-300">服务可用性</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 支持方式 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">获取帮助</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    多种方式联系我们，选择最适合您的支持渠道
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 在线客服 -->
+                <div class="support-card p-8 animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-comments text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">在线客服</h3>
+                        <p class="text-gray-300 mb-6">实时聊天支持，即时解决问题</p>
+                        <div class="mb-4">
+                            <span class="status-indicator status-online"></span>
+                            <span class="text-sm text-gray-300">现在在线</span>
+                        </div>
+                        <button onclick="openChat()" class="bg-quantum-500 hover:bg-quantum-600 w-full py-3 rounded-lg font-semibold transition-all duration-300">
+                            开始对话
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 工单系统 -->
+                <div class="support-card p-8 animate-slideInLeft" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-ticket-alt text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">工单系统</h3>
+                        <p class="text-gray-300 mb-6">提交技术问题，专业团队跟进</p>
+                        <div class="mb-4">
+                            <span class="text-sm text-gray-300">24小时内响应</span>
+                        </div>
+                        <a href="#contact" class="bg-quantum-500 hover:bg-quantum-600 w-full py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            提交工单
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 电话支持 -->
+                <div class="support-card p-8 animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-phone text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">电话支持</h3>
+                        <p class="text-gray-300 mb-6">紧急问题可直接电话联系</p>
+                        <div class="mb-4">
+                            <span class="text-sm text-gray-300">工作日 9:00-18:00</span>
+                        </div>
+                        <a href="tel:400-8888-888" class="bg-quantum-500 hover:bg-quantum-600 w-full py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            400-8888-888
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 邮件支持 -->
+                <div class="support-card p-8 animate-slideInRight" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-envelope text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">邮件支持</h3>
+                        <p class="text-gray-300 mb-6">详细问题描述，专业回复</p>
+                        <div class="mb-4">
+                            <span class="text-sm text-gray-300">12小时内回复</span>
+                        </div>
+                        <a href="mailto:support@alingai.com" class="bg-quantum-500 hover:bg-quantum-600 w-full py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            发送邮件
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 常见问题 -->
+    <section id="faq" class="relative z-10 py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">常见问题</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    快速找到您需要的答案
+                </p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- FAQ 项目 -->
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.1s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">如何获取API密钥？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            注册AlingAI账户后，登录控制台，在"API管理"页面可以生成和管理您的API密钥。每个密钥都有独立的权限控制和使用限制。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.2s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">支持哪些编程语言？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            我们提供官方SDK支持JavaScript、Python、Java、Go、PHP、C#、Ruby、Swift等主流编程语言。同时提供RESTful API，支持任何能发送HTTP请求的语言。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.3s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">API有请求频率限制吗？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            是的，根据您的订阅计划，有不同的请求频率限制。免费用户每分钟最多100次请求，付费用户可获得更高的请求限制。详情请查看定价页面。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.4s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">如何处理API错误？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            API返回标准的HTTP状态码和错误信息。建议在代码中添加错误处理机制，包括重试逻辑、超时处理等。详细的错误码说明请参考API文档。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.5s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">数据安全如何保障？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            我们采用零信任安全架构和量子加密技术，确保数据传输和存储的安全性。所有API调用都使用HTTPS加密，用户数据严格按照隐私政策处理。
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="faq-item p-6 animate-slideInUp" style="animation-delay: 0.6s;">
+                    <div class="faq-toggle flex items-center justify-between" onclick="toggleFAQ(this)">
+                        <h3 class="text-lg font-semibold">如何升级订阅计划？</h3>
+                        <i class="fas fa-chevron-down transition-transform duration-300"></i>
+                    </div>
+                    <div class="faq-content pt-4">
+                        <p class="text-gray-300">
+                            在控制台的"订阅管理"页面可以随时升级您的计划。升级会立即生效，费用按比例计算。如需帮助，请联系我们的客服团队。
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="/support/help-center.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 inline-block">
+                    <i class="fas fa-search mr-2"></i>查看更多问题
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系表单 -->
+    <section id="contact" class="relative z-10 py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">联系我们</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    填写表单提交您的问题，我们会尽快回复您
+                </p>
+            </div>
+            
+            <div class="contact-form p-8 animate-slideInUp" style="animation-delay: 0.3s;">
+                <form id="contactForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">姓名 *</label>
+                            <input type="text" name="name" required class="form-input w-full" placeholder="请输入您的姓名">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">邮箱 *</label>
+                            <input type="email" name="email" required class="form-input w-full" placeholder="请输入您的邮箱">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">电话</label>
+                            <input type="tel" name="phone" class="form-input w-full" placeholder="请输入您的电话">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">问题类型 *</label>
+                            <select name="type" required class="form-input w-full">
+                                <option value="">请选择问题类型</option>
+                                <option value="technical">技术问题</option>
+                                <option value="billing">计费问题</option>
+                                <option value="account">账户问题</option>
+                                <option value="feature">功能建议</option>
+                                <option value="other">其他问题</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">问题描述 *</label>
+                        <textarea name="message" required rows="6" class="form-input w-full" placeholder="请详细描述您遇到的问题..."></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">优先级</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center">
+                                <input type="radio" name="priority" value="low" class="mr-2" checked>
+                                <span class="text-sm">低</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="priority" value="medium" class="mr-2">
+                                <span class="text-sm">中</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="priority" value="high" class="mr-2">
+                                <span class="text-sm">高</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="priority" value="urgent" class="mr-2">
+                                <span class="text-sm">紧急</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                            <i class="fas fa-paper-plane mr-2"></i>提交工单
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 知识库推荐 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">推荐资源</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    探索更多学习资源和开发工具
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/docs" class="support-card p-6 block group animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-book text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">开发文档</h3>
+                        <p class="text-gray-300 text-sm">完整的API文档和集成指南</p>
+                    </div>
+                </a>
+                
+                <a href="/examples" class="support-card p-6 block group animate-slideInLeft" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-code text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">示例代码</h3>
+                        <p class="text-gray-300 text-sm">多语言示例和最佳实践</p>
+                    </div>
+                </a>
+                
+                <a href="/community" class="support-card p-6 block group animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-users text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">开发者社区</h3>
+                        <p class="text-gray-300 text-sm">与其他开发者交流讨论</p>
+                    </div>
+                </a>
+                
+                <a href="/status" class="support-card p-6 block group animate-slideInRight" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-chart-line text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">系统状态</h3>
+                        <p class="text-gray-300 text-sm">实时查看服务运行状态</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="relative z-10 border-t border-white/10 bg-black/20 backdrop-filter backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <h3 class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent mb-4">AlingAI</h3>
+                    <p class="text-gray-300 mb-4">7×24小时技术支持，让您的AI应用稳定运行。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">支持渠道</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">在线客服</a></li>
+                        <li><a href="#contact" class="text-gray-300 hover:text-white transition-colors">工单系统</a></li>
+                        <li><a href="tel:400-8888-888" class="text-gray-300 hover:text-white transition-colors">电话支持</a></li>
+                        <li><a href="mailto:support@alingai.com" class="text-gray-300 hover:text-white transition-colors">邮件支持</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">帮助资源</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/support/help-center.html" class="text-gray-300 hover:text-white transition-colors">帮助中心</a></li>
+                        <li><a href="#faq" class="text-gray-300 hover:text-white transition-colors">常见问题</a></li>
+                        <li><a href="/docs" class="text-gray-300 hover:text-white transition-colors">开发文档</a></li>
+                        <li><a href="/status" class="text-gray-300 hover:text-white transition-colors">系统状态</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">联系信息</h4>
+                    <ul class="space-y-2">
+                        <li class="text-gray-300"><i class="fas fa-phone mr-2"></i>400-8888-888</li>
+                        <li class="text-gray-300"><i class="fas fa-envelope mr-2"></i>support@alingai.com</li>
+                        <li class="text-gray-300"><i class="fas fa-clock mr-2"></i>7×24小时在线</li>
+                        <li class="text-gray-300"><i class="fas fa-map-marker-alt mr-2"></i>北京市朝阳区</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-8 pt-8 text-center">
+                <p class="text-gray-300">
+                    © 2025 AlingAI | 珑凌科技. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ 切换功能
+        function toggleFAQ(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('i');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // 关闭其他已打开的FAQ
+                document.querySelectorAll('.faq-content.active').forEach(activeContent => {
+                    activeContent.classList.remove('active');
+                    activeContent.previousElementSibling.querySelector('i').style.transform = 'rotate(0deg)';
+                });
+                
+                content.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+        
+        // 在线客服功能
+        function openChat() {
+            // 这里可以集成第三方客服系统，如智齿客服、环信等
+            showNotification('正在连接客服，请稍候...', 'info');
+            
+            setTimeout(() => {
+                showNotification('客服已连接，欢迎咨询！', 'success');
+                // 实际应用中这里会打开客服窗口
+            }, 1500);
+        }
+        
+        // 表单提交
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // 简单验证
+            if (!data.name || !data.email || !data.type || !data.message) {
+                showNotification('请填写所有必填字段', 'error');
+                return;
+            }
+            
+            if (!isValidEmail(data.email)) {
+                showNotification('请输入有效的邮箱地址', 'error');
+                return;
+            }
+            
+            showNotification('正在提交工单...', 'info');
+            
+            // 模拟API调用
+            setTimeout(() => {
+                showNotification('工单提交成功！我们会在24小时内回复您。', 'success');
+                this.reset();
+            }, 2000);
+        });
+        
+        // 邮箱验证
+        function isValidEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+        
+        // 通知系统
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-4 rounded-lg text-white font-semibold transition-all duration-300 transform translate-x-full`;
+            
+            const bgColor = {
+                'info': 'bg-blue-500',
+                'success': 'bg-green-500',
+                'warning': 'bg-yellow-500',
+                'error': 'bg-red-500'
+            }[type] || 'bg-blue-500';
+            
+            notification.className += ` ${bgColor}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // 动画显示
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // 自动隐藏
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 4000);
+        }
+        
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // 滚动动画
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+            
+            // 观察所有动画元素
+            document.querySelectorAll('[class*="animate-"]').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        }
+        
+        // 平滑滚动
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            setupScrollAnimations();
+            setupSmoothScrolling();
+        });
+        
+        // 实时客服状态更新（示例）
+        function updateSupportStatus() {
+            const statusElements = document.querySelectorAll('.status-indicator');
+            const now = new Date();
+            const hour = now.getHours();
+            
+            // 模拟客服在线状态（9:00-22:00为在线时间）
+            const isOnline = hour >= 9 && hour < 22;
+            
+            statusElements.forEach(el => {
+                if (el.classList.contains('status-online')) {
+                    if (!isOnline) {
+                        el.classList.remove('status-online');
+                        el.classList.add('status-busy');
+                    }
+                }
+            });
+        }
+        
+        // 定期更新状态
+        setInterval(updateSupportStatus, 60000); // 每分钟更新一次
+    </script>
+</body>
+</html>

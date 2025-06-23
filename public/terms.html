@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>服务条款 - AlingAi 珑凌AI智能平台</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-pink': '#FF2B75',
+                        'longling': '#6C13FF',
+                        'electric-blue': '#00D4FF'
+                    },
+                    fontFamily: {
+                        'heading': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .quantum-text {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF, #00D4FF);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: quantum-flow 3s ease-in-out infinite;
+        }
+
+        @keyframes quantum-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .terms-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .terms-content h2 {
+            color: #00D4FF;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+        }
+
+        .terms-content h3 {
+            color: #FF2B75;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 500;
+        }
+
+        .terms-content p {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .terms-content ul, .terms-content ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .terms-content li {
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .highlight-box {
+            background: rgba(255, 43, 117, 0.1);
+            border: 1px solid rgba(255, 43, 117, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .warning-box {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00D4FF;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 43, 117, 0.3);
+        }
+
+        .last-updated {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .terms-content {
+                padding: 0 1rem;
+            }
+            
+            .terms-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .terms-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-body">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full z-50 glass-card bg-opacity-80 backdrop-blur-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <img src="/assets/images/assets/images/logo.svg" alt="AlingAi" class="h-8 w-auto" alt="">
+                    <span class="quantum-text text-xl font-heading">AlingAi</span>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="nav-link">首页</a>
+                    <a href="/docs/template.html" class="nav-link">文档</a>
+                    <a href="/dashboard.html" class="nav-link">控制台</a>
+                    <a href="/contact.html" class="nav-link">联系我们</a>
+                    <a href="/privacy.html" class="nav-link">隐私政策</a>
+                    <a href="/terms.html" class="nav-link text-electric-blue">服务条款</a>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="glass-card m-4 mt-20 p-6">
+            <div class="flex flex-col space-y-4">
+                <a href="/" class="nav-link">首页</a>
+                <a href="/docs/template.html" class="nav-link">文档</a>
+                <a href="/dashboard.html" class="nav-link">控制台</a>
+                <a href="/contact.html" class="nav-link">联系我们</a>
+                <a href="/privacy.html" class="nav-link">隐私政策</a>
+                <a href="/terms.html" class="nav-link text-electric-blue">服务条款</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <main class="pt-24 pb-16">
+        <div class="container mx-auto px-4">
+            <!-- 页面标题 -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-heading quantum-text mb-4">服务条款</h1>
+                <p class="text-lg text-gray-300">使用AlingAi服务前请仔细阅读以下条款</p>
+            </div>
+
+            <!-- 服务条款内容 -->
+            <div class="glass-card p-8 terms-content">
+                <div class="highlight-box">
+                    <h4 class="text-lg font-semibold quantum-text mb-2">生效日期</h4>
+                    <p>本服务条款于 2025年5月29日 生效，最后更新时间为 2025年5月29日。</p>
+                    <p><strong>重要提示：</strong>请在使用我们的服务前仔细阅读并理解本服务条款。使用我们的服务即表示您同意受本条款约束。</p>
+                </div>
+
+                <h2>1. 服务概述</h2>
+                <p>
+                    AlingAi（珑凌AI智能平台）是由珑凌科技提供的人工智能服务平台，包括但不限于：
+                </p>
+                <ul>
+                    <li>智能对话和问答服务</li>
+                    <li>文档处理和知识管理</li>
+                    <li>数据分析和洞察</li>
+                    <li>API接口和开发工具</li>
+                    <li>其他相关的AI技术服务</li>
+                </ul>
+
+                <h2>2. 用户资格与账户</h2>
+                
+                <h3>2.1 用户资格</h3>
+                <ul>
+                    <li>您必须年满18周岁或在当地司法管辖区内达到法定年龄</li>
+                    <li>您必须具有完全民事行为能力</li>
+                    <li>您不得是我们服务被禁止使用的地区的居民</li>
+                </ul>
+
+                <h3>2.2 账户责任</h3>
+                <ul>
+                    <li>您负责维护账户信息的准确性和安全性</li>
+                    <li>您不得与他人共享账户凭据</li>
+                    <li>您必须立即通知我们任何未经授权的账户使用</li>
+                    <li>您对通过您账户进行的所有活动承担责任</li>
+                </ul>
+
+                <h2>3. 服务使用规则</h2>
+                
+                <h3>3.1 允许的使用</h3>
+                <p>您可以将我们的服务用于：</p>
+                <ul>
+                    <li>合法的商业和个人用途</li>
+                    <li>学习、研究和教育目的</li>
+                    <li>创意和内容创作</li>
+                    <li>数据分析和洞察获取</li>
+                </ul>
+
+                <h3>3.2 禁止的使用</h3>
+                <div class="warning-box">
+                    <h4 class="text-lg font-semibold text-orange-400 mb-2">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        严格禁止的行为
+                    </h4>
+                    <p>您不得将我们的服务用于：</p>
+                    <ul>
+                        <li>任何非法活动或违反法律法规的行为</li>
+                        <li>生成有害、诽谤、骚扰或威胁性内容</li>
+                        <li>创建虚假信息或误导性内容</li>
+                        <li>侵犯他人知识产权或隐私权</li>
+                        <li>进行欺诈、垃圾邮件或恶意软件传播</li>
+                        <li>尝试破坏或干扰我们的服务</li>
+                        <li>绕过或违反我们的安全措施</li>
+                        <li>未经授权获取其他用户的数据</li>
+                    </ul>
+                </div>
+
+                <h2>4. 内容与知识产权</h2>
+                
+                <h3>4.1 您的内容</h3>
+                <ul>
+                    <li>您保留对您提供内容的所有权</li>
+                    <li>您授予我们处理您的内容以提供服务的必要许可</li>
+                    <li>您确保您有权提供这些内容</li>
+                    <li>您对您的内容承担全部责任</li>
+                </ul>
+
+                <h3>4.2 我们的知识产权</h3>
+                <ul>
+                    <li>AlingAi平台及其所有组件受知识产权法保护</li>
+                    <li>您不得复制、修改或分发我们的软件或技术</li>
+                    <li>我们的商标和品牌标识受商标法保护</li>
+                    <li>AI生成的内容的知识产权归属按照适用法律确定</li>
+                </ul>
+
+                <h2>5. 付费服务与计费</h2>
+                
+                <h3>5.1 服务计划</h3>
+                <ul>
+                    <li>我们提供免费和付费服务计划</li>
+                    <li>付费计划的具体功能和限制在购买时明确说明</li>
+                    <li>价格可能会发生变化，但会提前通知现有用户</li>
+                </ul>
+
+                <h3>5.2 计费政策</h3>
+                <ul>
+                    <li>付费服务按月或按年收费</li>
+                    <li>费用在每个计费周期开始时预先收取</li>
+                    <li>逾期付款可能导致服务暂停</li>
+                    <li>退款政策详见我们的退款条款</li>
+                </ul>
+
+                <h2>6. 服务可用性与变更</h2>
+                
+                <h3>6.1 服务可用性</h3>
+                <ul>
+                    <li>我们努力保持99.9%的服务可用性</li>
+                    <li>定期维护时间会提前通知</li>
+                    <li>紧急维护可能无法提前通知</li>
+                </ul>
+
+                <h3>6.2 服务变更</h3>
+                <ul>
+                    <li>我们可能会更新或修改我们的服务</li>
+                    <li>重大变更会提前30天通知</li>
+                    <li>您有权在重大变更前终止服务</li>
+                </ul>
+
+                <h2>7. 隐私与数据保护</h2>
+                <p>
+                    您的隐私对我们非常重要。请查看我们的
+                    <a href="/privacy.html" class="text-electric-blue hover:underline">隐私政策</a>
+                    了解我们如何收集、使用和保护您的信息。
+                </p>
+
+                <h2>8. 责任限制</h2>
+                
+                <div class="warning-box">
+                    <h4 class="text-lg font-semibold text-orange-400 mb-2">重要免责声明</h4>
+                    <ul>
+                        <li>我们的服务按"原样"提供，不提供任何明示或暗示的担保</li>
+                        <li>我们不对因使用我们服务而产生的任何损失承担责任</li>
+                        <li>在法律允许的最大范围内，我们的责任限于您支付的服务费用</li>
+                        <li>我们不对第三方内容或服务承担责任</li>
+                    </ul>
+                </div>
+
+                <h2>9. 终止服务</h2>
+                
+                <h3>9.1 您的终止权</h3>
+                <ul>
+                    <li>您可以随时终止您的账户</li>
+                    <li>终止后，您将无法访问您的数据</li>
+                    <li>我们会根据我们的数据保留政策处理您的数据</li>
+                </ul>
+
+                <h3>9.2 我们的终止权</h3>
+                <ul>
+                    <li>我们可能因违反条款而暂停或终止您的账户</li>
+                    <li>我们可能因商业原因停止提供服务</li>
+                    <li>终止前会尽可能提供合理通知</li>
+                </ul>
+
+                <h2>10. 争议解决</h2>
+                
+                <h3>10.1 适用法律</h3>
+                <p>本协议受中华人民共和国法律管辖。</p>
+
+                <h3>10.2 争议解决程序</h3>
+                <ol>
+                    <li><strong>友好协商：</strong>争议发生时，双方应首先通过友好协商解决</li>
+                    <li><strong>仲裁：</strong>协商不成的，提交上海仲裁委员会仲裁</li>
+                    <li><strong>管辖法院：</strong>仲裁不适用的争议由上海市浦东新区人民法院管辖</li>
+                </ol>
+
+                <h2>11. 联系信息</h2>
+                <div class="highlight-box">
+                    <p>如果您对本服务条款有任何疑问，请联系我们：</p>
+                    <ul>
+                        <li><strong>邮箱：</strong> legal@alingai.com</li>
+                        <li><strong>地址：</strong> 中国上海市浦东新区张江高科技园区</li>
+                        <li><strong>电话：</strong> +86 21-12345678</li>
+                        <li><strong>在线客服：</strong> <a href="/contact.html" class="text-electric-blue hover:underline">联系我们页面</a></li>
+                    </ul>
+                </div>
+
+                <h2>12. 条款更新</h2>
+                <p>
+                    我们可能会定期更新这些服务条款。重大更改会通过以下方式通知您：
+                </p>
+                <ul>
+                    <li>在网站上发布通知</li>
+                    <li>发送电子邮件通知</li>
+                    <li>在应用程序中显示通知</li>
+                </ul>
+                <p>
+                    继续使用我们的服务即表示您接受修订后的条款。
+                </p>
+
+                <div class="last-updated">
+                    <p>本服务条款最后更新时间：2025年5月29日</p>
+                    <p>© 2025 珑凌科技 AlingAi. 保留所有权利。</p>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="text-center mt-8">
+                <a href="/" class="btn-primary mr-4">
+                    <i class="fas fa-home mr-2"></i>
+                    返回首页
+                </a>
+                <a href="/privacy.html" class="btn-primary mr-4">
+                    <i class="fas fa-shield-alt mr-2"></i>
+                    隐私政策
+                </a>
+                <a href="/contact.html" class="btn-primary">
+                    <i class="fas fa-envelope mr-2"></i>
+                    联系我们
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // 关闭移动菜单当点击外部区域
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = e.target.closest('button');
+            
+            if (!mobileMenu.contains(e.target) && !menuButton) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('服务条款页面加载完成');
+        });
+    </script>
+</body>
+</html>

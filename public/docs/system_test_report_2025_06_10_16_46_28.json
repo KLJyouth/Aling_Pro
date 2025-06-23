@@ -1,0 +1,113 @@
+{
+    "test_summary": {
+        "total_time": 188.96077799797058,
+        "total_tests": 34,
+        "passed_tests": 0,
+        "success_rate": 0,
+        "timestamp": "2025-06-10T16:46:28+00:00"
+    },
+    "detailed_results": {
+        "initialization": {
+            "core_architecture_status": {
+                "status": false,
+                "response_time": 2.232651,
+                "data": false
+            },
+            "production_status": {
+                "status": false,
+                "response_time": 2.234698,
+                "data": false
+            },
+            "deepseek_status": {
+                "status": false,
+                "response_time": 2.230061,
+                "data": false
+            }
+        },
+        "production": {
+            "optimize": {
+                "status": false,
+                "response_time": 2.219938
+            },
+            "benchmark": {
+                "status": false,
+                "response_time": 2.234397,
+                "data": false
+            }
+        },
+        "cache": {
+            "stats": {
+                "status": false,
+                "data": false
+            }
+        },
+        "loadbalancer": {
+            "stats": {
+                "status": false,
+                "data": false
+            }
+        },
+        "quantum_crypto": {
+            "validation": {
+                "status": false,
+                "algorithm_test": false
+            }
+        },
+        "security": {
+            "key_security": false,
+            "encryption_strength": false,
+            "threat_detection": false,
+            "situational_awareness": false,
+            "visualization": false
+        },
+        "deepseek": {
+            "initialization": false,
+            "agent_creation": false,
+            "code_generation": false,
+            "reasoning": false,
+            "math_solving": false,
+            "collaborative": false
+        },
+        "agent_scheduler": {
+            "task_creation": false,
+            "status": false,
+            "statistics": false
+        },
+        "configuration": {
+            "get_config": false,
+            "update_config": false,
+            "history": false
+        },
+        "system_integration": {
+            "health": false,
+            "components": false,
+            "metrics": false,
+            "diagnostics": false
+        },
+        "performance": {
+            "avg_api_response_time": 2.239092206954956,
+            "concurrent_test": {
+                "total_time": 11.197870016098022,
+                "avg_time": 2.2395706176757812,
+                "success_rate": 0,
+                "requests": 5
+            },
+            "memory_usage": 2097152
+        },
+        "stress_test": {
+            "high_concurrency": {
+                "total_time": 44.60442113876343,
+                "avg_time": 2.2302185177803038,
+                "success_rate": 0,
+                "requests": 20
+            },
+            "long_running": {
+                "duration": 30.409670114517212,
+                "total_requests": 13,
+                "successful_requests": 0,
+                "avg_rps": 0.42749559436338497,
+                "success_rate": 0
+            }
+        }
+    }
+}

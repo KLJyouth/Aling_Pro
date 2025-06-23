@@ -1,0 +1,500 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}页面未找到 - {{ parent() }}{% endblock %}
+{% block description %}您访问的页面不存在{% endblock %}
+
+{% block body_class %}error-page error-404{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <!-- 量子背景效果 -->
+    <div class="quantum-bg">
+        <canvas id="error-canvas"></canvas>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="error-content text-center">
+                    <!-- 404动画图标 -->
+                    <div class="error-icon mb-4">
+                        <div class="number-404">
+                            <span class="num-4" data-number="4">4</span>
+                            <span class="num-0" data-number="0">0</span>
+                            <span class="num-4" data-number="4">4</span>
+                        </div>
+                        <div class="quantum-orbit">
+                            <div class="orbit-ring orbit-1"></div>
+                            <div class="orbit-ring orbit-2"></div>
+                            <div class="orbit-ring orbit-3"></div>
+                            <div class="quantum-particle particle-1"></div>
+                            <div class="quantum-particle particle-2"></div>
+                            <div class="quantum-particle particle-3"></div>
+                        </div>
+                    </div>
+
+                    <!-- 错误标题 -->
+                    <h1 class="error-title mb-3">
+                        <span class="gradient-text">页面走丢了</span>
+                    </h1>
+                    
+                    <!-- 错误描述 -->
+                    <p class="error-description mb-4">
+                        您要找的页面可能已被移动、删除或者从未存在过。<br>
+                        让我们帮您找到正确的路径。
+                    </p>
+
+                    <!-- 搜索框 -->
+                    <div class="error-search mb-4">
+                        <form action="{{ url('search') }}" method="GET" class="search-form">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control search-input" 
+                                       placeholder="搜索您想要的内容..." value="{{ request.query.q ?? '' }}">
+                                <button class="btn btn-primary search-btn" type="submit">
+                                    <i class="bi bi-search"></i>
+                                    <span>搜索</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- 快速导航 -->
+                    <div class="quick-links">
+                        <h6 class="quick-links-title">或者前往：</h6>
+                        <div class="links-grid">
+                            <a href="{{ url('home') }}" class="quick-link">
+                                <i class="bi bi-house"></i>
+                                <span>首页</span>
+                            </a>
+                            <a href="{{ url('chat') }}" class="quick-link">
+                                <i class="bi bi-chat-dots"></i>
+                                <span>AI聊天</span>
+                            </a>
+                            {% if auth_check() %}
+                            <a href="{{ url('dashboard') }}" class="quick-link">
+                                <i class="bi bi-speedometer2"></i>
+                                <span>仪表盘</span>
+                            </a>
+                            <a href="{{ url('profile') }}" class="quick-link">
+                                <i class="bi bi-person"></i>
+                                <span>个人中心</span>
+                            </a>
+                            {% else %}
+                            <a href="{{ url('login') }}" class="quick-link">
+                                <i class="bi bi-box-arrow-in-right"></i>
+                                <span>登录</span>
+                            </a>
+                            <a href="{{ url('register') }}" class="quick-link">
+                                <i class="bi bi-person-plus"></i>
+                                <span>注册</span>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- 技术支持信息 -->
+                    <div class="support-info mt-5">
+                        <p class="text-muted small">
+                            如果您认为这是一个错误，请 
+                            <a href="mailto:support@alingai.com" class="text-decoration-none">联系技术支持</a>
+                        </p>
+                        <p class="text-muted small">
+                            错误代码: <code>404_PAGE_NOT_FOUND</code> | 
+                            时间: <span id="error-time"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block styles %}
+<style>
+.error-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.quantum-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+#error-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.error-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.error-content {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 3rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.error-icon {
+    position: relative;
+    display: inline-block;
+    margin: 0 auto 2rem;
+}
+
+.number-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 3;
+}
+
+.number-404 span {
+    font-size: 8rem;
+    font-weight: 900;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #f39c12);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientShift 3s ease-in-out infinite;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+}
+
+.quantum-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    z-index: 1;
+}
+
+.orbit-ring {
+    position: absolute;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    animation: rotateOrbit 10s linear infinite;
+}
+
+.orbit-1 {
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.orbit-2 {
+    width: 80%;
+    height: 80%;
+    top: 10%;
+    left: 10%;
+    animation-duration: 8s;
+    animation-direction: reverse;
+}
+
+.orbit-3 {
+    width: 60%;
+    height: 60%;
+    top: 20%;
+    left: 20%;
+    animation-duration: 6s;
+}
+
+.quantum-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #4ecdc4, #45b7d1);
+    border-radius: 50%;
+    box-shadow: 0 0 15px currentColor;
+}
+
+.particle-1 {
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: orbitParticle1 10s linear infinite;
+}
+
+.particle-2 {
+    top: 10%;
+    right: -4px;
+    animation: orbitParticle2 8s linear infinite;
+}
+
+.particle-3 {
+    bottom: 20%;
+    left: -4px;
+    animation: orbitParticle3 6s linear infinite;
+}
+
+.error-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, #fff, #f0f0f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.error-description {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+.error-search {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.search-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    backdrop-filter: blur(10px);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: #4ecdc4;
+    box-shadow: 0 0 0 0.2rem rgba(78, 205, 196, 0.25);
+    color: white;
+}
+
+.search-btn {
+    background: linear-gradient(45deg, #4ecdc4, #45b7d1);
+    border: none;
+    padding: 0.75rem 1.5rem;
+}
+
+.search-btn:hover {
+    background: linear-gradient(45deg, #45b7d1, #4ecdc4);
+    transform: translateY(-2px);
+}
+
+.quick-links {
+    margin-top: 2rem;
+}
+
+.quick-links-title {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.quick-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.quick-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+    color: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.quick-link i {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.support-info {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1.5rem;
+}
+
+.support-info a {
+    color: #4ecdc4;
+}
+
+.support-info a:hover {
+    color: #45b7d1;
+}
+
+/* 动画 */
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+@keyframes rotateOrbit {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes orbitParticle1 {
+    from { transform: translateX(-50%) rotate(0deg) translateX(150px) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(-360deg) translateX(150px) rotate(360deg); }
+}
+
+@keyframes orbitParticle2 {
+    from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+    to { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+}
+
+@keyframes orbitParticle3 {
+    from { transform: rotate(0deg) translateX(90px) rotate(0deg); }
+    to { transform: rotate(-360deg) translateX(90px) rotate(360deg); }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .number-404 span {
+        font-size: 4rem;
+    }
+    
+    .quantum-orbit {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .error-title {
+        font-size: 2rem;
+    }
+    
+    .error-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .links-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 显示当前时间
+    const errorTime = document.getElementById('error-time');
+    if (errorTime) {
+        errorTime.textContent = new Date().toLocaleString('zh-CN');
+    }
+
+    // 创建量子粒子背景效果
+    const canvas = document.getElementById('error-canvas');
+    if (canvas) {
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        
+        const particles = [];
+        const particleCount = 50;
+        
+        // 创建粒子
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 3 + 1,
+                opacity: Math.random() * 0.5 + 0.2
+            });
+        }
+        
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                // 更新位置
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                
+                // 边界检查
+                if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                
+                // 绘制粒子
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+                ctx.fill();
+                
+                // 粒子连线
+                particles.forEach(otherParticle => {
+                    const dx = particle.x - otherParticle.x;
+                    const dy = particle.y - otherParticle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(otherParticle.x, otherParticle.y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.1 * (100 - distance) / 100})`;
+                        ctx.stroke();
+                    }
+                });
+            });
+            
+            requestAnimationFrame(animate);
+        }
+        
+        animate();
+    }
+
+    // 添加搜索建议功能
+    const searchInput = document.querySelector('.search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            // 这里可以添加搜索建议逻辑
+            console.log('搜索:', this.value);
+        });
+    }
+});
+</script>
+{% endblock %}

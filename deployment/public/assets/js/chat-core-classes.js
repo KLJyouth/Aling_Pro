@@ -1,0 +1,395 @@
+// 聊天核心类定义 - 修复缺失的类和全局对象
+// 创建时间: 2025-05-30
+
+console.log('🔧 加载聊天核心类模块...');
+
+// MessageProcessor 类 - 处理消息
+class MessageProcessor {
+    constructor() {
+        this.messageHistory = [];
+        this.filters = [];
+        this.processors = new Map();
+        
+        this.initializeDefaultProcessors();
+        console.log('📨 MessageProcessor 初始化完成');
+    }
+    
+    initializeDefaultProcessors() {
+        // 默认处理器
+        this.processors.set('text', this.processTextMessage.bind(this));
+        this.processors.set('emoji', this.processEmojiMessage.bind(this));
+        this.processors.set('link', this.processLinkMessage.bind(this));
+        this.processors.set('file', this.processFileMessage.bind(this));
+    }
+    
+    processMessage(message, type = 'text') {
+        try {
+            const timestamp = new Date().toISOString();
+            const processedMessage = {
+                id: this.generateMessageId(),
+                content: message,
+                type: type,
+                timestamp: timestamp,
+                processed: true
+            };
+            
+            // 应用处理器
+            if (this.processors.has(type)) {
+                processedMessage.content = this.processors.get(type)(message);
+            }
+            
+            // 应用过滤器
+            this.filters.forEach(filter => {
+                processedMessage.content = filter(processedMessage.content);
+            });
+            
+            this.messageHistory.push(processedMessage);
+            
+            return processedMessage;
+        } catch (error) {
+            console.error('❌ 消息处理失败:', error);
+            return {
+                id: this.generateMessageId(),
+                content: message,
+                type: 'error',
+                timestamp: new Date().toISOString(),
+                error: error.message
+            };
+        }
+    }
+    
+    processTextMessage(text) {
+        // 基本文本处理
+        return text.trim()
+            .replace(/\n{3,}/g, '\n\n') // 限制连续换行
+            .replace(/\s{2,}/g, ' '); // 压缩多余空格
+    }
+    
+    processEmojiMessage(text) {
+        // 表情符号处理
+        return text.replace(/:\w+:/g, (match) => {
+            const emojiMap = {
+                ':smile:': '😊',
+                ':heart:': '❤️',
+                ':thumbs_up:': '👍',
+                ':fire:': '🔥'
+            };
+            return emojiMap[match] || match;
+        });
+    }
+    
+    processLinkMessage(text) {
+        // 链接处理
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return text.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+    }
+    
+    processFileMessage(fileInfo) {
+        // 文件信息处理
+        return {
+            type: 'file',
+            name: fileInfo.name || 'unknown',
+            size: fileInfo.size || 0,
+            url: fileInfo.url || '',
+            processed: true
+        };
+    }
+    
+    addFilter(filterFn) {
+        if (typeof filterFn === 'function') {
+            this.filters.push(filterFn);
+        }
+    }
+    
+    generateMessageId() {
+        return 'msg_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    }
+    
+    getMessageHistory(limit = 50) {
+        return this.messageHistory.slice(-limit);
+    }
+    
+    clearHistory() {
+        this.messageHistory = [];
+        console.log('🧹 消息历史已清空');
+    }
+}
+
+// MessageRenderer 类 - 渲染消息
+class MessageRenderer {
+    constructor(containerElement) {
+        this.container = containerElement;
+        this.templates = new Map();
+        this.animations = true;
+        
+        this.initializeTemplates();
+        console.log('🎨 MessageRenderer 初始化完成');
+    }
+    
+    initializeTemplates() {
+        // 默认消息模板
+        this.templates.set('text', this.createTextTemplate.bind(this));
+        this.templates.set('system', this.createSystemTemplate.bind(this));
+        this.templates.set('error', this.createErrorTemplate.bind(this));
+        this.templates.set('file', this.createFileTemplate.bind(this));
+    }
+    
+    renderMessage(message) {
+        try {
+            const messageElement = this.createMessageElement(message);
+            
+            if (this.container) {
+                this.container.appendChild(messageElement);
+                
+                if (this.animations) {
+                    this.animateMessageIn(messageElement);
+                }
+                
+                this.scrollToBottom();
+            }
+            
+            return messageElement;
+        } catch (error) {
+            console.error('❌ 消息渲染失败:', error);
+            return this.createErrorMessage('渲染失败: ' + error.message);
+        }
+    }
+    
+    createMessageElement(message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message message-${message.type}`;
+        messageDiv.setAttribute('data-message-id', message.id);
+        
+        // 应用模板
+        const template = this.templates.get(message.type) || this.templates.get('text');
+        messageDiv.innerHTML = template(message);
+        
+        return messageDiv;
+    }
+    
+    createTextTemplate(message) {
+        return `
+            <div class="message-content">
+                <div class="message-text">${this.escapeHtml(message.content)}</div>
+                <div class="message-time">${this.formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+    
+    createSystemTemplate(message) {
+        return `
+            <div class="message-content system">
+                <i class="bi bi-info-circle"></i>
+                <span class="message-text">${this.escapeHtml(message.content)}</span>
+                <div class="message-time">${this.formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+    
+    createErrorTemplate(message) {
+        return `
+            <div class="message-content error">
+                <i class="bi bi-exclamation-triangle"></i>
+                <span class="message-text">${this.escapeHtml(message.content)}</span>
+                <div class="message-time">${this.formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+    
+    createFileTemplate(message) {
+        const fileInfo = typeof message.content === 'object' ? message.content : { name: message.content };
+        return `
+            <div class="message-content file">
+                <i class="bi bi-file-earmark"></i>
+                <div class="file-info">
+                    <div class="file-name">${this.escapeHtml(fileInfo.name)}</div>
+                    <div class="file-size">${this.formatFileSize(fileInfo.size)}</div>
+                </div>
+                <div class="message-time">${this.formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+    
+    createErrorMessage(errorText) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message message-error';
+        errorDiv.innerHTML = this.createErrorTemplate({
+            content: errorText,
+            timestamp: new Date().toISOString()
+        });
+        return errorDiv;
+    }
+    
+    animateMessageIn(element) {
+        element.style.opacity = '0';
+        element.style.transform = 'translateY(20px)';
+        
+        requestAnimationFrame(() => {
+            element.style.transition = 'all 0.3s ease';
+            element.style.opacity = '1';
+            element.style.transform = 'translateY(0)';
+        });
+    }
+    
+    scrollToBottom() {
+        if (this.container) {
+            this.container.scrollTop = this.container.scrollHeight;
+        }
+    }
+    
+    clearMessages() {
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    formatTime(timestamp) {
+        const date = new Date(timestamp);
+        return date.toLocaleTimeString('zh-CN', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+    }
+    
+    formatFileSize(bytes) {
+        if (!bytes) return 'Unknown size';
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+    }
+}
+
+// ChatCore 类 - 聊天核心功能
+class ChatCore {
+    constructor() {
+        this.processor = new MessageProcessor();
+        this.renderer = null;
+        this.isInitialized = false;
+        this.eventHandlers = new Map();
+        
+        console.log('💬 ChatCore 初始化完成');
+    }
+    
+    initialize(chatContainer) {
+        try {
+            if (chatContainer) {
+                this.renderer = new MessageRenderer(chatContainer);
+            }
+            
+            this.isInitialized = true;
+            this.emit('initialized');
+            
+            console.log('✅ ChatCore 完全初始化成功');
+            return true;
+        } catch (error) {
+            console.error('❌ ChatCore 初始化失败:', error);
+            return false;
+        }
+    }
+    
+    sendMessage(content, type = 'text') {
+        if (!this.isInitialized) {
+            console.warn('⚠️ ChatCore 未初始化');
+            return false;
+        }
+        
+        const processedMessage = this.processor.processMessage(content, type);
+        
+        if (this.renderer) {
+            this.renderer.renderMessage(processedMessage);
+        }
+        
+        this.emit('messageSent', processedMessage);
+        
+        return processedMessage;
+    }
+    
+    receiveMessage(content, type = 'text') {
+        return this.sendMessage(content, type);
+    }
+    
+    on(event, handler) {
+        if (!this.eventHandlers.has(event)) {
+            this.eventHandlers.set(event, []);
+        }
+        this.eventHandlers.get(event).push(handler);
+    }
+    
+    emit(event, data) {
+        if (this.eventHandlers.has(event)) {
+            this.eventHandlers.get(event).forEach(handler => {
+                try {
+                    handler(data);
+                } catch (error) {
+                    console.error(`❌ 事件处理器错误 (${event}):`, error);
+                }
+            });
+        }
+    }
+    
+    getMessageHistory() {
+        return this.processor.getMessageHistory();
+    }
+    
+    clearChat() {
+        this.processor.clearHistory();
+        if (this.renderer) {
+            this.renderer.clearMessages();
+        }
+        this.emit('chatCleared');
+    }
+    
+    isReady() {
+        return this.isInitialized && this.processor && this.renderer;
+    }
+}
+
+// 创建全局实例
+window.MessageProcessor = MessageProcessor;
+window.MessageRenderer = MessageRenderer;
+window.ChatCore = ChatCore;
+
+// 创建全局聊天实例
+window.chatInstance = {
+    core: new ChatCore(),
+    processor: new MessageProcessor(),
+    renderer: null,
+    ui: {
+        initialize: function(container) {
+            return window.chatInstance.core.initialize(container);
+        },
+        sendMessage: function(content, type) {
+            return window.chatInstance.core.sendMessage(content, type);
+        },
+        clearChat: function() {
+            return window.chatInstance.core.clearChat();
+        }
+    },
+    api: {
+        sendRequest: async function(message) {
+            // 模拟API请求
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve({
+                        success: true,
+                        response: `回复: ${message}`,
+                        timestamp: new Date().toISOString()
+                    });
+                }, 1000);
+            });
+        },
+        getHistory: function() {
+            return window.chatInstance.core.getMessageHistory();
+        }
+    }
+};
+
+console.log('✅ 聊天核心类模块加载完成');
+console.log('📦 可用类: MessageProcessor, MessageRenderer, ChatCore');
+console.log('🌐 全局实例: chatInstance, MessageProcessor, MessageRenderer, ChatCore');

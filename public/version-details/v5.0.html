@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Platform v5.0.0 - 云原生架构 | 版本详情</title>
+    
+    <!-- SEO 和元数据 -->
+    <meta name="description" content="AlingAI Platform v5.0.0 云原生架构重构，完全容器化部署，微服务设计模式，多云支持">
+    <meta name="keywords" content="AlingAI v5.0,云原生,容器化,微服务,Docker,Kubernetes">
+    <meta name="author" content="珑凌科技">
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- 核心框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- 核心样式表 -->
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-dark': '#0A0016',
+                        'quantum-purple': '#1A003C',
+                        'quantum-primary': '#6C13FF',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#0EA5E9',
+                        'cyber-green': '#00FF94',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'jetbrains': ['JetBrains Mono', 'monospace'],
+                        'fira': ['Fira Code', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 云原生主题样式 */
+        .cloud-pattern {
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(14,165,233,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(108,19,255,0.2) 0%, transparent 50%),
+                radial-gradient(circle at 50% 10%, rgba(0,255,148,0.1) 0%, transparent 70%);
+        }
+        
+        .cloud-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            transition: all 0.5s ease;
+        }
+        
+        .cloud-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(14, 165, 233, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(14, 165, 233, 0.2);
+        }
+        
+        .architecture-diagram {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(108, 19, 255, 0.1));
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-node {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .service-node:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(14, 165, 233, 0.6);
+            transform: scale(1.05);
+        }
+        
+        .migration-step {
+            background: rgba(10, 0, 22, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .migration-step::before {
+            content: '';
+            position: absolute;
+            left: -2px;
+            top: -2px;
+            bottom: -2px;
+            width: 4px;
+            background: linear-gradient(to bottom, #0EA5E9, #6C13FF);
+            border-radius: 2px;
+        }
+        
+        .docker-command {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 12px;
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Kubernetes 样式 */
+        .k8s-resource {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .k8s-resource:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(0, 255, 148, 0.6);
+        }
+        
+        /* 云服务提供商图标 */
+        .cloud-provider {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .cloud-provider:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(14, 165, 233, 0.6);
+            transform: translateY(-5px);
+        }
+        
+        .legacy-warning {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 165, 0, 0.1));
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-quantum-dark text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo 和版本信息 -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-xl flex items-center justify-center">
+                            <i class="fab fa-docker text-white"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold bg-gradient-to-r from-quantum-accent to-cyber-green bg-clip-text text-transparent">
+                                AlingAI v5.0.0
+                            </h1>
+                            <p class="text-xs text-gray-400 font-jetbrains">云原生架构</p>
+                        </div>
+                    </a>
+                    
+                    <div class="hidden md:block">
+                        <span class="px-3 py-1 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-full text-white text-sm font-medium">
+                            历史版本
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- 导航链接 -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#overview" class="text-gray-300 hover:text-quantum-accent transition-colors duration-300">概览</a>
+                    <a href="#architecture" class="text-gray-300 hover:text-quantum-accent transition-colors duration-300">架构</a>
+                    <a href="#migration" class="text-gray-300 hover:text-quantum-accent transition-colors duration-300">迁移指南</a>
+                    <a href="#changelog" class="text-gray-300 hover:text-quantum-accent transition-colors duration-300">更新日志</a>
+                </div>
+                
+                <!-- 操作按钮 -->
+                <div class="flex items-center space-x-4">
+                    <a href="/version-timeline.html" class="px-4 py-2 border border-quantum-accent text-quantum-accent rounded-lg hover:bg-quantum-accent hover:text-black transition-all duration-300">
+                        <i class="fas fa-history mr-2"></i>返回时间轴
+                    </a>
+                    <a href="/version-details/v6.0.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-lg text-white hover:shadow-lg hover:shadow-quantum-primary/30 transition-all duration-300">
+                        <i class="fas fa-arrow-up mr-2"></i>升级到v6.0
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-20">
+        <!-- 英雄区域 -->
+        <section id="overview" class="py-20 relative overflow-hidden cloud-pattern">
+            <div class="container mx-auto px-6 relative z-10">
+                <div class="text-center mb-16">
+                    <!-- 版本徽章 -->
+                    <div class="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-sm rounded-full px-8 py-4 mb-8">
+                        <div class="w-3 h-3 bg-quantum-accent rounded-full animate-pulse"></div>
+                        <span class="font-jetbrains text-lg font-bold">VERSION 5.0.0</span>
+                        <div class="text-sm text-gray-400">•</div>
+                        <span class="text-sm text-gray-400">2024年4月20日发布</span>
+                    </div>
+                    
+                    <!-- 主标题 -->
+                    <h1 class="text-5xl md:text-7xl font-black mb-8 leading-tight">
+                        <span class="block bg-gradient-to-r from-quantum-accent via-cyber-green to-quantum-primary bg-clip-text text-transparent">
+                            云原生架构
+                        </span>
+                        <span class="block text-3xl md:text-4xl text-gray-300 font-medium mt-4">
+                            容器化时代的安全重构
+                        </span>
+                    </h1>
+                    
+                    <!-- 副标题 -->
+                    <p class="text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed mb-12">
+                        AlingAI Platform v5.0.0 标志着我们向云原生架构的全面转型。通过完全重构为容器化和微服务架构，
+                        系统获得了前所未有的可扩展性、可维护性和部署灵活性，为现代云环境提供了理想的安全解决方案。
+                    </p>
+                    
+                    <!-- 核心优势 -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+                        <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-accent/20">
+                            <div class="text-3xl font-black text-quantum-accent mb-2">100%</div>
+                            <div class="text-gray-400 text-sm">容器化</div>
+                        </div>
+                        <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-cyber-green/20">
+                            <div class="text-3xl font-black text-cyber-green mb-2">5x</div>
+                            <div class="text-gray-400 text-sm">部署速度</div>
+                        </div>
+                        <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20">
+                            <div class="text-3xl font-black text-quantum-primary mb-2">3</div>
+                            <div class="text-gray-400 text-sm">云平台支持</div>
+                        </div>
+                        <div class="text-center p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-secondary/20">
+                            <div class="text-3xl font-black text-quantum-secondary mb-2">99.9%</div>
+                            <div class="text-gray-400 text-sm">服务可用性</div>
+                        </div>
+                    </div>
+                    
+                    <!-- 架构预览 -->
+                    <div class="mt-16">
+                        <div class="legacy-warning max-w-3xl mx-auto mb-8">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-info-circle text-yellow-400"></i>
+                                <span class="text-yellow-200 font-medium">历史版本提醒</span>
+                            </div>
+                            <p class="text-gray-300 mt-2">
+                                v5.0.0 已归档，建议升级到最新的 v6.0.0 以获得量子安全功能和AI智能助手支持。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 云原生架构 -->
+        <section id="architecture" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-accent to-cyber-green bg-clip-text text-transparent">
+                        云原生架构设计
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        完全重构的微服务架构，支持容器化部署和多云环境
+                    </p>
+                </div>
+
+                <!-- 架构概览 -->
+                <div class="architecture-diagram mb-16">
+                    <h3 class="text-2xl font-bold mb-8 text-center text-white">微服务架构图</h3>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <!-- API 网关层 -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-bold text-quantum-accent text-center">API网关层</h4>
+                            <div class="service-node">
+                                <i class="fas fa-network-wired text-quantum-accent text-2xl mb-2"></i>
+                                <div class="font-medium">API Gateway</div>
+                                <div class="text-xs text-gray-400">路由 & 负载均衡</div>
+                            </div>
+                            <div class="service-node">
+                                <i class="fas fa-shield-alt text-cyber-green text-2xl mb-2"></i>
+                                <div class="font-medium">Auth Service</div>
+                                <div class="text-xs text-gray-400">身份认证</div>
+                            </div>
+                        </div>
+
+                        <!-- 业务服务层 -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-bold text-cyber-green text-center">业务服务层</h4>
+                            <div class="service-node">
+                                <i class="fas fa-lock text-quantum-primary text-2xl mb-2"></i>
+                                <div class="font-medium">Security Service</div>
+                                <div class="text-xs text-gray-400">安全核心</div>
+                            </div>
+                            <div class="service-node">
+                                <i class="fas fa-user-shield text-quantum-accent text-2xl mb-2"></i>
+                                <div class="font-medium">Policy Service</div>
+                                <div class="text-xs text-gray-400">策略管理</div>
+                            </div>
+                            <div class="service-node">
+                                <i class="fas fa-chart-line text-cyber-green text-2xl mb-2"></i>
+                                <div class="font-medium">Analytics Service</div>
+                                <div class="text-xs text-gray-400">分析引擎</div>
+                            </div>
+                        </div>
+
+                        <!-- 数据服务层 -->
+                        <div class="space-y-4">
+                            <h4 class="text-lg font-bold text-quantum-primary text-center">数据服务层</h4>
+                            <div class="service-node">
+                                <i class="fas fa-database text-quantum-primary text-2xl mb-2"></i>
+                                <div class="font-medium">Database Service</div>
+                                <div class="text-xs text-gray-400">数据存储</div>
+                            </div>
+                            <div class="service-node">
+                                <i class="fas fa-memory text-quantum-accent text-2xl mb-2"></i>
+                                <div class="font-medium">Cache Service</div>
+                                <div class="text-xs text-gray-400">缓存服务</div>
+                            </div>
+                            <div class="service-node">
+                                <i class="fas fa-stream text-cyber-green text-2xl mb-2"></i>
+                                <div class="font-medium">Message Queue</div>
+                                <div class="text-xs text-gray-400">消息队列</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 容器化特性 -->
+                <div class="grid lg:grid-cols-2 gap-8 mb-16">
+                    <!-- Docker 配置 -->
+                    <div class="cloud-card rounded-3xl p-8">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fab fa-docker text-3xl text-quantum-accent"></i>
+                            <h3 class="text-2xl font-bold text-white">Docker 容器化</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            每个微服务都被封装在独立的Docker容器中，确保环境一致性和部署可靠性。
+                        </p>
+                        
+                        <div class="docker-command">
+                            <div class="p-4 bg-quantum-accent/20 border-b border-quantum-accent/30 flex items-center">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                </div>
+                                <div class="flex-1 text-center">
+                                    <span class="text-white font-jetbrains text-sm">Dockerfile</span>
+                                </div>
+                            </div>
+                            <pre><code class="language-bash">FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY . .
+
+EXPOSE 3000
+
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhost:3000/health || exit 1
+
+USER node
+
+CMD ["npm", "start"]</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Kubernetes 部署 -->
+                    <div class="cloud-card rounded-3xl p-8">
+                        <div class="flex items-center space-x-3 mb-6">
+                            <i class="fas fa-dharmachakra text-3xl text-cyber-green"></i>
+                            <h3 class="text-2xl font-bold text-white">Kubernetes 编排</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            使用Kubernetes进行容器编排，提供自动扩缩容、服务发现和故障恢复能力。
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="k8s-resource">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <i class="fas fa-server text-cyber-green"></i>
+                                    <span class="font-medium text-white">Deployment</span>
+                                </div>
+                                <div class="text-sm text-gray-400">管理Pod副本和滚动更新</div>
+                            </div>
+                            <div class="k8s-resource">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <i class="fas fa-network-wired text-quantum-accent"></i>
+                                    <span class="font-medium text-white">Service</span>
+                                </div>
+                                <div class="text-sm text-gray-400">服务发现和负载均衡</div>
+                            </div>
+                            <div class="k8s-resource">
+                                <div class="flex items-center space-x-2 mb-2">
+                                    <i class="fas fa-route text-quantum-primary"></i>
+                                    <span class="font-medium text-white">Ingress</span>
+                                </div>
+                                <div class="text-sm text-gray-400">外部流量路由和SSL终止</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 多云支持 -->
+                <div class="text-center mb-12">
+                    <h3 class="text-2xl font-bold mb-8 text-white">多云平台支持</h3>
+                    <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                        <div class="cloud-provider">
+                            <i class="fab fa-aws text-4xl text-yellow-500 mb-4"></i>
+                            <h4 class="font-bold text-white mb-2">AWS</h4>
+                            <div class="text-sm text-gray-400">EKS, ECS, Lambda</div>
+                        </div>
+                        <div class="cloud-provider">
+                            <i class="fab fa-microsoft text-4xl text-blue-500 mb-4"></i>
+                            <h4 class="font-bold text-white mb-2">Azure</h4>
+                            <div class="text-sm text-gray-400">AKS, Container Instances</div>
+                        </div>
+                        <div class="cloud-provider">
+                            <i class="fab fa-google text-4xl text-red-500 mb-4"></i>
+                            <h4 class="font-bold text-white mb-2">GCP</h4>
+                            <div class="text-sm text-gray-400">GKE, Cloud Run</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 迁移指南 -->
+        <section id="migration" class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/10">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-accent to-cyber-green bg-clip-text text-transparent">
+                        迁移指南
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        从传统架构迁移到云原生架构的完整指导
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto space-y-8">
+                    <!-- 迁移步骤1 -->
+                    <div class="migration-step">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                1
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">环境准备</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            首先准备容器化环境和Kubernetes集群，确保基础设施满足云原生要求。
+                        </p>
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="p-4 bg-white/5 rounded-lg border border-quantum-accent/20">
+                                <h4 class="font-bold text-white mb-2">Docker环境</h4>
+                                <ul class="text-sm text-gray-400 space-y-1">
+                                    <li>• Docker 20.10+</li>
+                                    <li>• Docker Compose 3.8+</li>
+                                    <li>• 容器注册表配置</li>
+                                </ul>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-lg border border-cyber-green/20">
+                                <h4 class="font-bold text-white mb-2">Kubernetes集群</h4>
+                                <ul class="text-sm text-gray-400 space-y-1">
+                                    <li>• Kubernetes 1.24+</li>
+                                    <li>• Helm 3.9+</li>
+                                    <li>• Ingress Controller</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 迁移步骤2 -->
+                    <div class="migration-step">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-cyber-green to-quantum-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                2
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">数据迁移</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            将现有数据从单体架构迁移到微服务架构，确保数据一致性和完整性。
+                        </p>
+                        
+                        <div class="docker-command">
+                            <div class="p-4 bg-quantum-primary/20 border-b border-quantum-primary/30 flex items-center">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                </div>
+                                <div class="flex-1 text-center">
+                                    <span class="text-white font-jetbrains text-sm">数据迁移脚本</span>
+                                </div>
+                            </div>
+                            <pre><code class="language-bash"># 导出现有数据
+alingai-legacy export --format json --output /backup/
+
+# 验证数据完整性
+alingai-legacy verify --backup /backup/
+
+# 导入到新架构
+alingai migrate import \
+  --source /backup/ \
+  --target kubernetes \
+  --namespace alingai-system</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 迁移步骤3 -->
+                    <div class="migration-step">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                3
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">服务部署</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            使用Helm Charts部署微服务到Kubernetes集群，配置服务间通信和监控。
+                        </p>
+                        
+                        <div class="docker-command">
+                            <div class="p-4 bg-cyber-green/20 border-b border-cyber-green/30 flex items-center">
+                                <div class="flex space-x-2">
+                                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                </div>
+                                <div class="flex-1 text-center">
+                                    <span class="text-white font-jetbrains text-sm">Helm部署命令</span>
+                                </div>
+                            </div>
+                            <pre><code class="language-bash"># 添加AlingAI Helm仓库
+helm repo add alingai https://charts.alingai.com
+helm repo update
+
+# 部署核心服务
+helm install alingai-core alingai/core \
+  --namespace alingai-system \
+  --create-namespace \
+  --values values-production.yaml
+
+# 部署安全服务
+helm install alingai-security alingai/security \
+  --namespace alingai-system \
+  --values security-config.yaml</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- 迁移步骤4 -->
+                    <div class="migration-step">
+                        <div class="flex items-center space-x-4 mb-6">
+                            <div class="w-12 h-12 bg-gradient-to-r from-quantum-secondary to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                4
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">验证和测试</h3>
+                        </div>
+                        <p class="text-gray-300 mb-6">
+                            进行全面的功能测试和性能验证，确保迁移后系统运行正常。
+                        </p>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <div class="p-4 bg-white/5 rounded-lg border border-quantum-accent/20 text-center">
+                                <i class="fas fa-check-circle text-cyber-green text-2xl mb-2"></i>
+                                <div class="font-medium text-white">功能测试</div>
+                                <div class="text-xs text-gray-400">API端点验证</div>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-lg border border-quantum-primary/20 text-center">
+                                <i class="fas fa-tachometer-alt text-quantum-accent text-2xl mb-2"></i>
+                                <div class="font-medium text-white">性能测试</div>
+                                <div class="text-xs text-gray-400">负载和压力测试</div>
+                            </div>
+                            <div class="p-4 bg-white/5 rounded-lg border border-cyber-green/20 text-center">
+                                <i class="fas fa-shield-alt text-quantum-primary text-2xl mb-2"></i>
+                                <div class="font-medium text-white">安全测试</div>
+                                <div class="text-xs text-gray-400">漏洞扫描和渗透测试</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 更新日志 -->
+        <section id="changelog" class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 bg-gradient-to-r from-quantum-accent to-cyber-green bg-clip-text text-transparent">
+                        v5.0.0 更新日志
+                    </h2>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        架构重构和容器化带来的重大变更
+                    </p>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="change-log">
+                        <!-- 架构重构 -->
+                        <div class="p-6 border-b border-quantum-accent/20">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-cube text-quantum-accent mr-3"></i>
+                                架构重构 (重大变更)
+                            </h3>
+                        </div>
+                        
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fab fa-docker text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">完全容器化</div>
+                                <div class="text-gray-400 text-sm">所有服务组件都已容器化，支持Docker和Kubernetes部署</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fas fa-network-wired text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">微服务架构</div>
+                                <div class="text-gray-400 text-sm">将单体应用拆分为独立的微服务，提高可维护性和扩展性</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fas fa-cloud text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">多云支持</div>
+                                <div class="text-gray-400 text-sm">原生支持AWS、Azure、GCP等主流云平台</div>
+                            </div>
+                        </div>
+
+                        <!-- 新功能 -->
+                        <div class="p-6 border-b border-quantum-accent/20">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-plus-circle text-cyber-green mr-3"></i>
+                                新增功能 (25项)
+                            </h3>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fas fa-dharmachakra text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">Kubernetes原生支持</div>
+                                <div class="text-gray-400 text-sm">提供Helm Charts和Operator，简化K8s部署</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fas fa-balance-scale text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">自动扩缩容</div>
+                                <div class="text-gray-400 text-sm">基于CPU、内存和自定义指标的智能扩缩容</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon new">
+                                <i class="fas fa-heartbeat text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">健康检查和自愈</div>
+                                <div class="text-gray-400 text-sm">完善的健康检查机制和故障自动恢复</div>
+                            </div>
+                        </div>
+
+                        <!-- 性能改进 -->
+                        <div class="p-6 border-b border-quantum-accent/20">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-rocket text-quantum-primary mr-3"></i>
+                                性能提升
+                            </h3>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon improved">
+                                <i class="fas fa-tachometer-alt text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">启动时间优化</div>
+                                <div class="text-gray-400 text-sm">容器启动时间减少80%，从5分钟降至1分钟</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon improved">
+                                <i class="fas fa-memory text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">资源利用率</div>
+                                <div class="text-gray-400 text-sm">通过容器化和资源隔离，整体资源利用率提升40%</div>
+                            </div>
+                        </div>
+
+                        <!-- 移除功能 -->
+                        <div class="p-6 border-b border-quantum-accent/20">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center">
+                                <i class="fas fa-minus-circle text-red-400 mr-3"></i>
+                                移除的功能
+                            </h3>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon fixed">
+                                <i class="fas fa-server text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">传统虚拟机部署</div>
+                                <div class="text-gray-400 text-sm">不再支持直接在虚拟机上的传统部署方式</div>
+                            </div>
+                        </div>
+
+                        <div class="change-item">
+                            <div class="change-icon fixed">
+                                <i class="fas fa-database text-xs"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-medium text-white">嵌入式数据库</div>
+                                <div class="text-gray-400 text-sm">移除嵌入式SQLite支持，要求外部数据库</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-12">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-3 mb-6">
+                    <div class="w-8 h-8 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-lg flex items-center justify-center">
+                        <i class="fab fa-docker text-white text-sm"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-quantum-accent">AlingAI Platform v5.0.0</h3>
+                </div>
+                
+                <p class="text-gray-400 text-sm mb-6 max-w-2xl mx-auto">
+                    云原生架构的里程碑版本，为现代容器化部署奠定了坚实基础。
+                </p>
+                
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="/version-timeline.html" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-history mr-2"></i>版本历史
+                    </a>
+                    <a href="/migration-guide-v5.html" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-book mr-2"></i>迁移指南
+                    </a>
+                    <a href="/version-details/v6.0.html" class="text-gray-400 hover:text-quantum-accent transition-colors duration-300">
+                        <i class="fas fa-arrow-up mr-2"></i>升级到v6.0
+                    </a>
+                </div>
+                
+                <div class="border-t border-quantum-primary/20 pt-8">
+                    <p class="text-gray-400 text-sm">
+                        © 2024 珑凌科技. 保留所有权利. | v5.0.0 发布日期：2024年4月20日 | 已归档
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 注册GSAP插件
+            gsap.registerPlugin(ScrollTrigger);
+
+            // 云服务提供商卡片动画
+            const cloudProviders = document.querySelectorAll('.cloud-provider');
+            cloudProviders.forEach((provider, index) => {
+                gsap.fromTo(provider, {
+                    y: 50,
+                    opacity: 0,
+                    scale: 0.9
+                }, {
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.6,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: provider,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    delay: index * 0.2
+                });
+            });
+
+            // 服务节点动画
+            const serviceNodes = document.querySelectorAll('.service-node');
+            serviceNodes.forEach((node, index) => {
+                gsap.fromTo(node, {
+                    scale: 0,
+                    opacity: 0
+                }, {
+                    scale: 1,
+                    opacity: 1,
+                    duration: 0.5,
+                    ease: "back.out(1.7)",
+                    scrollTrigger: {
+                        trigger: node,
+                        start: "top 90%",
+                        toggleActions: "play none none reverse"
+                    },
+                    delay: index * 0.1
+                });
+            });
+
+            // 迁移步骤动画
+            const migrationSteps = document.querySelectorAll('.migration-step');
+            migrationSteps.forEach((step, index) => {
+                gsap.fromTo(step, {
+                    x: index % 2 === 0 ? -100 : 100,
+                    opacity: 0
+                }, {
+                    x: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: step,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+
+            // 初始化代码高亮
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        gsap.to(window, {
+                            duration: 1,
+                            scrollTo: {
+                                y: target,
+                                offsetY: 100
+                            },
+                            ease: "power2.inOut"
+                        });
+                    }
+                });
+            });
+
+            console.log('🚀 AlingAI Platform v5.0.0 详情页面已加载完成');
+            console.log('🐳 云原生架构展示已初始化');
+        });
+    </script>
+</body>
+</html>

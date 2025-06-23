@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi 实时网络安全监控 - 演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00f5ff, #0080ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4em;
+            color: #00f5ff;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-active { background-color: #00ff00; }
+        .status-warning { background-color: #ffaa00; }
+        .status-error { background-color: #ff0000; }
+        .status-inactive { background-color: #666; }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-value {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        .threat-high { color: #ff4444; }
+        .threat-medium { color: #ffaa00; }
+        .threat-low { color: #44ff44; }
+        
+        .log-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        
+        .log-info { color: #00ff00; }
+        .log-warning { color: #ffaa00; }
+        .log-error { color: #ff4444; }
+        
+        .connection-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 0.9em;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-status" id="connectionStatus">
+        <span class="status-indicator status-inactive"></span>
+        连接状态: 断开
+    </div>
+
+    <div class="header">
+        <h1>🛡️ AlingAi 实时网络安全监控</h1>
+        <p>实时监控 • 威胁检测 • 自动防御 • 智能分析</p>
+    </div>
+
+    <div class="dashboard">
+        <!-- 系统状态 -->
+        <div class="card">
+            <h3>🚀 系统状态</h3>
+            <div class="metric">
+                <span>监控状态</span>
+                <span class="metric-value" id="systemStatus">
+                    <span class="status-indicator status-active"></span>运行中
+                </span>
+            </div>
+            <div class="metric">
+                <span>CPU使用率</span>
+                <span class="metric-value" id="cpuUsage">45%</span>
+            </div>
+            <div class="metric">
+                <span>内存使用率</span>
+                <span class="metric-value" id="memoryUsage">62%</span>
+            </div>
+            <div class="metric">
+                <span>运行时间</span>
+                <span class="metric-value" id="uptime">2小时3分钟</span>
+            </div>
+        </div>
+
+        <!-- 威胁检测 -->
+        <div class="card">
+            <h3>🔍 威胁检测</h3>
+            <div class="metric">
+                <span>活跃威胁</span>
+                <span class="metric-value threat-high" id="activeThreats">3</span>
+            </div>
+            <div class="metric">
+                <span>已阻止攻击</span>
+                <span class="metric-value" id="blockedAttacks">127</span>
+            </div>
+            <div class="metric">
+                <span>威胁等级</span>
+                <span class="metric-value threat-medium" id="threatLevel">中等</span>
+            </div>
+            <div class="metric">
+                <span>可疑IP</span>
+                <span class="metric-value" id="suspiciousIPs">8</span>
+            </div>
+        </div>
+
+        <!-- 网络流量 -->
+        <div class="card">
+            <h3>📊 网络流量</h3>
+            <div class="metric">
+                <span>请求/秒</span>
+                <span class="metric-value" id="requestsPerSec">235</span>
+            </div>
+            <div class="metric">
+                <span>阻止请求</span>
+                <span class="metric-value" id="blockedRequests">28</span>
+            </div>
+            <div class="metric">
+                <span>带宽使用</span>
+                <span class="metric-value" id="bandwidthUsage">4.2 MB/s</span>
+            </div>
+            <div class="metric">
+                <span>连接数</span>
+                <span class="metric-value" id="connectionCount">156</span>
+            </div>
+        </div>
+
+        <!-- 实时日志 -->
+        <div class="card" style="grid-column: span 2;">
+            <h3>📝 实时安全日志</h3>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry log-info">[05:20:15] 系统启动完成</div>
+                <div class="log-entry log-info">[05:20:16] 威胁检测引擎已启动</div>
+                <div class="log-entry log-warning">[05:20:18] 检测到可疑IP: 192.168.1.100</div>
+                <div class="log-entry log-info">[05:20:20] 自动防御规则已应用</div>
+                <div class="log-entry log-error">[05:20:22] 阻止SQL注入攻击: 来源IP 192.168.1.100</div>
+                <div class="log-entry log-info">[05:20:25] 威胁情报数据库已更新</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 AlingAi Pro - 实时网络安全监控系统 | 当前时间: <span id="currentTime"></span></p>
+    </div>
+
+    <script>
+        // WebSocket连接
+        let ws = null;
+        let reconnectInterval = 5000;
+        let isConnected = false;
+
+        function connect() {
+            try {
+                ws = new WebSocket('ws://localhost:8080');
+                
+                ws.onopen = function() {
+                    console.log('WebSocket连接已建立');
+                    isConnected = true;
+                    updateConnectionStatus(true);
+                    
+                    // 发送订阅消息
+                    ws.send(JSON.stringify({
+                        type: 'subscribe',
+                        channel: 'security-monitoring'
+                    }));
+                };
+                
+                ws.onmessage = function(event) {
+                    try {
+                        const data = JSON.parse(event.data);
+                        updateDashboard(data);
+                    } catch (e) {
+                        console.error('解析WebSocket消息失败:', e);
+                    }
+                };
+                
+                ws.onclose = function() {
+                    console.log('WebSocket连接已关闭');
+                    isConnected = false;
+                    updateConnectionStatus(false);
+                    
+                    // 自动重连
+                    setTimeout(connect, reconnectInterval);
+                };
+                
+                ws.onerror = function(error) {
+                    console.error('WebSocket错误:', error);
+                    isConnected = false;
+                    updateConnectionStatus(false);
+                };
+                
+            } catch (e) {
+                console.error('WebSocket连接失败:', e);
+                isConnected = false;
+                updateConnectionStatus(false);
+                setTimeout(connect, reconnectInterval);
+            }
+        }
+
+        function updateConnectionStatus(connected) {
+            const statusEl = document.getElementById('connectionStatus');
+            const indicator = statusEl.querySelector('.status-indicator');
+            
+            if (connected) {
+                indicator.className = 'status-indicator status-active';
+                statusEl.innerHTML = '<span class="status-indicator status-active"></span>连接状态: 已连接';
+            } else {
+                indicator.className = 'status-indicator status-error';
+                statusEl.innerHTML = '<span class="status-indicator status-error"></span>连接状态: 断开';
+            }
+        }
+
+        function updateDashboard(data) {
+            if (data.system) {
+                document.getElementById('cpuUsage').textContent = data.system.cpu_usage + '%';
+                document.getElementById('memoryUsage').textContent = data.system.memory_usage + '%';
+            }
+            
+            if (data.threats) {
+                document.getElementById('activeThreats').textContent = data.threats.active;
+                document.getElementById('blockedAttacks').textContent = data.threats.blocked;
+                document.getElementById('threatLevel').textContent = data.threats.level;
+            }
+            
+            if (data.traffic) {
+                document.getElementById('requestsPerSec').textContent = data.traffic.requests_per_second;
+                document.getElementById('blockedRequests').textContent = data.traffic.blocked_requests;
+                document.getElementById('suspiciousIPs').textContent = data.traffic.suspicious_ips;
+            }
+            
+            // 添加日志条目
+            if (data.log) {
+                addLogEntry(data.log.level, data.log.message);
+            }
+        }
+
+        function addLogEntry(level, message) {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const logClass = level === 'ERROR' ? 'log-error' : 
+                           level === 'WARNING' ? 'log-warning' : 'log-info';
+            
+            const logEntry = document.createElement('div');
+            logEntry.className = `log-entry ${logClass}`;
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // 保持最多50条日志
+            while (logContainer.children.length > 50) {
+                logContainer.removeChild(logContainer.firstChild);
+            }
+        }
+
+        function updateTime() {
+            document.getElementById('currentTime').textContent = new Date().toLocaleString('zh-CN');
+        }
+
+        // 模拟数据更新（在没有真实WebSocket数据时）
+        function simulateData() {
+            if (!isConnected) {
+                const mockData = {
+                    threats: {
+                        active: Math.floor(Math.random() * 10),
+                        blocked: Math.floor(Math.random() * 200) + 100,
+                        level: ['低', '中等', '高'][Math.floor(Math.random() * 3)]
+                    },
+                    traffic: {
+                        requests_per_second: Math.floor(Math.random() * 300) + 100,
+                        blocked_requests: Math.floor(Math.random() * 50),
+                        suspicious_ips: Math.floor(Math.random() * 20)
+                    },
+                    system: {
+                        cpu_usage: Math.floor(Math.random() * 40) + 30,
+                        memory_usage: Math.floor(Math.random() * 30) + 50
+                    }
+                };
+                updateDashboard(mockData);
+            }
+        }
+
+        // 初始化
+        connect();
+        setInterval(updateTime, 1000);
+        setInterval(simulateData, 3000);
+        updateTime();
+    </script>
+</body>
+</html>

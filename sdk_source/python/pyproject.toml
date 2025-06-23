@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "alingai-sdk"
+version = "2.0.0"
+description = "AlingAI Platform Python SDK - 量子安全API客户端库"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "AlingAI Development Team", email = "dev@alingai.com"}
+]
+keywords = ["alingai", "quantum", "security", "ai", "crypto"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Security :: Cryptography",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+requires-python = ">=3.7"
+dependencies = [
+    "requests>=2.25.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.8"
+]
+
+[project.urls]
+"Homepage" = "https://alingai.com"
+"Documentation" = "https://docs.alingai.com"
+"Repository" = "https://github.com/alingai/python-sdk"
+"Bug Tracker" = "https://github.com/alingai/python-sdk/issues"

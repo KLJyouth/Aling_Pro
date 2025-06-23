@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全注册 - AlingAi Pro</title>
+    <meta name="description" content="AlingAi Pro零信任安全注册系统">
+    
+    <!-- 核心资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- WebAuthn API支持 -->
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js" type="module"></script>
+    
+    <!-- 安全相关库 -->
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-purple': '#6B46C1',
+                        'quantum-blue': '#3B82F6',
+                        'quantum-cyan': '#06B6D4',
+                        'neon-green': '#10B981',
+                        'cyber-orange': '#F59E0B'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'sans': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        }
+        
+        .quantum-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(107, 70, 193, 0.8), transparent);
+            border-radius: 50%;
+            animation: quantumFloat 8s ease-in-out infinite;
+        }
+        
+        @keyframes quantumFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(15px) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-15px) translateX(-20px) rotate(180deg);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateY(-25px) translateX(25px) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+        
+        .password-strength-bar {
+            height: 6px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
+            background-size: 400% 100%;
+        }
+        
+        .strength-weak { background-position: 0% 50%; }
+        .strength-fair { background-position: 33% 50%; }
+        .strength-good { background-position: 66% 50%; }
+        .strength-strong { background-position: 100% 50%; }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .progress-step {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-step.active {
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
+            color: white;
+        }
+        
+        .progress-step.completed {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+        }
+        
+        .verification-code-input {
+            letter-spacing: 0.5em;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+        }
+        
+        .social-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .security-checklist li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.3s ease;
+        }
+        
+        .security-checklist li::before {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .security-checklist li.valid {
+            color: #10B981;
+        }
+        
+        .security-checklist li.valid::before {
+            opacity: 1;
+        }
+        
+        .biometric-setup {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 50%;
+            animation: biometricPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes biometricPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- 注册容器 -->
+    <div class="glassmorphism rounded-3xl p-8 w-full max-w-2xl shadow-2xl z-10 relative">
+        <!-- 进度指示器 -->
+        <div class="flex items-center justify-center mb-8">
+            <div class="flex items-center space-x-4">
+                <div class="progress-step w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" data-step="1">1</div>
+                <div class="w-12 h-1 bg-white/20 rounded"></div>
+                <div class="progress-step w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" data-step="2">2</div>
+                <div class="w-12 h-1 bg-white/20 rounded"></div>
+                <div class="progress-step w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" data-step="3">3</div>
+                <div class="w-12 h-1 bg-white/20 rounded"></div>
+                <div class="progress-step w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold" data-step="4">4</div>
+            </div>
+        </div>
+        
+        <!-- Logo和标题 -->
+            <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto mb-4 glassmorphism rounded-full flex items-center justify-center">
+                <i class="fas fa-user-plus text-3xl text-blue-400"></i>
+                    </div>
+            <h1 class="text-3xl font-bold text-white mb-2">创建安全账户</h1>
+            <p class="text-gray-300">加入AlingAi Pro，体验最先进的AI服务</p>
+            </div>
+            
+        <!-- 步骤1: 基本信息 -->
+        <div id="step1" class="registration-step">
+            <form id="basicInfoForm" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">
+                            <i class="fas fa-user mr-2"></i>用户名
+                        </label>
+                        <input type="text" id="username" name="username" required
+                            class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                            placeholder="请输入用户名" minlength="3" maxlength="20">
+                        <div id="usernameError" class="text-red-400 text-sm mt-1 hidden"></div>
+                        <div id="usernameSuccess" class="text-green-400 text-sm mt-1 hidden">
+                            <i class="fas fa-check mr-1"></i>用户名可用
+                </div>
+            </div>
+            
+                        <div>
+                        <label class="block text-gray-300 text-sm font-medium mb-2">
+                            <i class="fas fa-id-card mr-2"></i>昵称
+                            </label>
+                        <input type="text" id="nickname" name="nickname" required
+                            class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                            placeholder="请输入昵称">
+                            </div>
+                        </div>
+                        
+                        <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-envelope mr-2"></i>邮箱地址
+                            </label>
+                    <input type="email" id="email" name="email" required
+                        class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                        placeholder="请输入邮箱地址">
+                    <div id="emailError" class="text-red-400 text-sm mt-1 hidden"></div>
+                    <div id="emailSuccess" class="text-green-400 text-sm mt-1 hidden">
+                        <i class="fas fa-check mr-1"></i>邮箱格式正确
+                            </div>
+                        </div>
+                        
+                        <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-lock mr-2"></i>密码
+                            </label>
+                            <div class="relative">
+                        <input type="password" id="password" name="password" required
+                            class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none pr-12"
+                            placeholder="请输入密码" minlength="8">
+                        <button type="button" id="togglePassword" 
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                    
+                    <!-- 密码强度指示器 -->
+                    <div class="mt-3 space-y-2">
+                        <div class="password-strength-bar rounded"></div>
+                        <div class="flex justify-between text-xs">
+                            <span id="passwordStrengthText" class="text-gray-400">密码强度: 弱</span>
+                            <span id="passwordScore" class="text-gray-400">0/4</span>
+                        </div>
+                        
+                        <!-- 密码要求检查列表 -->
+                        <ul class="security-checklist text-xs space-y-1">
+                            <li id="lengthCheck">至少8个字符</li>
+                            <li id="uppercaseCheck">包含大写字母</li>
+                            <li id="lowercaseCheck">包含小写字母</li>
+                            <li id="numberCheck">包含数字</li>
+                            <li id="specialCheck">包含特殊字符</li>
+                        </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-lock mr-2"></i>确认密码
+                            </label>
+                            <div class="relative">
+                        <input type="password" id="confirmPassword" name="confirmPassword" required
+                            class="input-field w-full px-4 py-3 rounded-lg text-white placeholder-gray-400 focus:outline-none pr-12"
+                            placeholder="请再次输入密码">
+                        <button type="button" id="toggleConfirmPassword" 
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                    <div id="confirmPasswordError" class="text-red-400 text-sm mt-1 hidden"></div>
+                    <div id="confirmPasswordSuccess" class="text-green-400 text-sm mt-1 hidden">
+                        <i class="fas fa-check mr-1"></i>密码匹配
+                        </div>
+                    </div>
+                    
+                <button type="submit" class="btn-primary w-full py-3 rounded-lg font-semibold text-white">
+                    <span class="mr-2">下一步</span>
+                    <i class="fas fa-arrow-right"></i>
+                    </button>
+            </form>
+                </div>
+                
+        <!-- 步骤2: 邮箱验证 -->
+        <div id="step2" class="registration-step hidden">
+            <div class="text-center space-y-6">
+                <div class="w-24 h-24 mx-auto glassmorphism rounded-full flex items-center justify-center">
+                    <i class="fas fa-envelope-open-text text-4xl text-blue-400"></i>
+                    </div>
+                    
+                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">验证邮箱地址</h3>
+                    <p class="text-gray-300">我们已向 <span id="emailDisplay" class="text-blue-400 font-semibold"></span> 发送验证码</p>
+                                </div>
+                
+                <div class="space-y-4">
+                    <input type="text" id="emailVerificationCode" maxlength="6"
+                        class="verification-code-input input-field w-full px-4 py-4 rounded-lg text-white placeholder-gray-400 focus:outline-none"
+                        placeholder="请输入6位验证码">
+                    
+                    <div class="flex justify-between items-center text-sm">
+                        <span class="text-gray-400">验证码有效期: <span id="codeExpiry">10:00</span></span>
+                        <button id="resendCodeBtn" class="text-blue-400 hover:text-blue-300 transition-colors" disabled>
+                            重新发送验证码
+                        </button>
+                            </div>
+                        </div>
+                        
+                <div class="flex space-x-4">
+                    <button id="backToStep1" class="flex-1 glassmorphism text-white py-3 rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-arrow-left mr-2"></i>上一步
+                    </button>
+                    <button id="verifyEmailBtn" class="flex-1 btn-primary py-3 rounded-lg font-semibold text-white">
+                        <span class="mr-2">验证邮箱</span>
+                        <i class="fas fa-check"></i>
+                    </button>
+                                </div>
+                                </div>
+                            </div>
+        
+        <!-- 步骤3: 安全设置 -->
+        <div id="step3" class="registration-step hidden">
+            <div class="space-y-6">
+                <div class="text-center mb-6">
+                    <h3 class="text-xl font-semibold text-white mb-2">安全设置</h3>
+                    <p class="text-gray-300">配置额外的安全保护措施</p>
+                        </div>
+                        
+                <!-- 两步验证设置 -->
+                <div class="glassmorphism p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="text-white font-semibold">两步验证</h4>
+                            <p class="text-gray-300 text-sm">通过短信或认证器应用增强账户安全</p>
+                                </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="enable2FA" class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                    </div>
+                    
+                    <div id="twoFactorOptions" class="hidden space-y-3">
+                        <div class="flex space-x-3">
+                            <button class="auth-method-btn flex-1 glassmorphism p-3 rounded-lg text-white hover:bg-white/10 transition-all">
+                                <i class="fas fa-mobile-alt mr-2"></i>短信验证
+                        </button>
+                            <button class="auth-method-btn flex-1 glassmorphism p-3 rounded-lg text-white hover:bg-white/10 transition-all">
+                                <i class="fas fa-qrcode mr-2"></i>认证器应用
+                        </button>
+                    </div>
+                </div>
+                    </div>
+                    
+                <!-- 生物识别设置 -->
+                <div class="glassmorphism p-6 rounded-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h4 class="text-white font-semibold">生物识别登录</h4>
+                            <p class="text-gray-300 text-sm">使用指纹或面部识别快速安全登录</p>
+                            </div>
+                        <button id="setupBiometricBtn" class="btn-primary px-4 py-2 rounded-lg text-white font-medium">
+                            <i class="fas fa-fingerprint mr-2"></i>设置
+                                    </button>
+                                </div>
+                    
+                    <div id="biometricSetup" class="hidden text-center space-y-4">
+                        <div class="biometric-setup w-24 h-24 mx-auto flex items-center justify-center">
+                            <i class="fas fa-fingerprint text-4xl text-green-400"></i>
+                            </div>
+                        <p class="text-gray-300 text-sm">请按照浏览器提示完成生物识别设置</p>
+                        </div>
+                    </div>
+                    
+                <!-- 设备信任设置 -->
+                <div class="glassmorphism p-6 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h4 class="text-white font-semibold">设备信任</h4>
+                            <p class="text-gray-300 text-sm">记住此设备，下次登录时跳过部分验证步骤</p>
+                                </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="trustThisDevice" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                                </div>
+                            </div>
+                            
+                <div class="flex space-x-4">
+                    <button id="backToStep2" class="flex-1 glassmorphism text-white py-3 rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-arrow-left mr-2"></i>上一步
+                    </button>
+                    <button id="proceedToStep4" class="flex-1 btn-primary py-3 rounded-lg font-semibold text-white">
+                        <span class="mr-2">下一步</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+        <!-- 步骤4: 完成注册 -->
+        <div id="step4" class="registration-step hidden">
+            <div class="text-center space-y-6">
+                <div class="w-24 h-24 mx-auto glassmorphism rounded-full flex items-center justify-center">
+                    <i class="fas fa-check-circle text-4xl text-green-400"></i>
+                                </div>
+                
+                <div>
+                    <h3 class="text-2xl font-bold text-white mb-2">注册成功！</h3>
+                    <p class="text-gray-300">欢迎加入AlingAi Pro，您的AI助手之旅即将开始</p>
+                                    </div>
+                
+                <!-- 账户信息摘要 -->
+                <div class="glassmorphism p-6 rounded-xl text-left space-y-3">
+                    <h4 class="text-white font-semibold mb-3">账户信息</h4>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">用户名:</span>
+                            <span class="text-white" id="summaryUsername"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">邮箱:</span>
+                            <span class="text-white" id="summaryEmail"></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">安全级别:</span>
+                            <span class="text-green-400 font-semibold">高级</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-300">注册时间:</span>
+                            <span class="text-white" id="registrationTime"></span>
+                        </div>
+                                </div>
+                            </div>
+                            
+                <!-- 快速开始 -->
+                <div class="space-y-3">
+                    <button id="startChatBtn" class="w-full btn-primary py-3 rounded-lg font-semibold text-white">
+                        <i class="fas fa-comments mr-2"></i>开始AI对话
+                    </button>
+                    <button id="exploreDashboardBtn" class="w-full glassmorphism text-white py-3 rounded-lg hover:bg-white/10 transition-all">
+                        <i class="fas fa-tachometer-alt mr-2"></i>探索控制台
+                    </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+        <!-- 社交注册选项 -->
+        <div id="socialRegistration" class="mt-8">
+            <div class="flex items-center mb-6">
+                <div class="flex-1 border-t border-white/20"></div>
+                <span class="px-4 text-gray-400 text-sm">或使用社交账户注册</span>
+                <div class="flex-1 border-t border-white/20"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-3">
+                <button class="social-btn p-3 rounded-lg text-white flex items-center justify-center">
+                    <i class="fab fa-qq text-blue-400 mr-2"></i>QQ
+                        </button>
+                <button class="social-btn p-3 rounded-lg text-white flex items-center justify-center">
+                    <i class="fab fa-weixin text-green-400 mr-2"></i>微信
+                </button>
+                <button class="social-btn p-3 rounded-lg text-white flex items-center justify-center">
+                    <i class="fab fa-google text-red-400 mr-2"></i>Google
+                </button>
+                <button class="social-btn p-3 rounded-lg text-white flex items-center justify-center">
+                    <i class="fab fa-github text-purple-400 mr-2"></i>GitHub
+                        </button>
+                    </div>
+                </div>
+        
+        <!-- 登录链接 -->
+        <div class="text-center mt-8">
+            <p class="text-gray-300">
+                已有账户？
+                <a href="login-enhanced.html" class="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
+                            立即登录
+                        </a>
+            </p>
+            </div>
+            
+        <!-- 条款和隐私 -->
+        <div class="text-center mt-6 text-xs text-gray-400">
+            <p>
+                    注册即表示您同意我们的
+                <a href="#" class="text-blue-400 hover:underline">服务条款</a>
+                    和
+                <a href="#" class="text-blue-400 hover:underline">隐私政策</a>
+                </p>
+        </div>
+    </div>
+    
+    <!-- 消息提示容器 -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+    <script>
+        // API端点配置
+        const API_ENDPOINTS = {
+            CHECK_USERNAME: '/api/auth/check-username',
+            SEND_EMAIL_CODE: '/api/auth/send-email-code',
+            VERIFY_EMAIL: '/api/auth/verify-email',
+            REGISTER: '/api/auth/register',
+            SETUP_2FA: '/api/auth/setup-2fa',
+            SETUP_BIOMETRIC: '/api/auth/setup-biometric',
+            SOCIAL_REGISTER: '/api/auth/social-register'
+        };
+
+        class SecureRegistration {
+            constructor() {
+                this.currentStep = 1;
+                this.registrationData = {};
+                this.emailVerificationTimer = null;
+                this.deviceFingerprint = null;
+                
+                this.initializeQuantumBackground();
+                this.generateDeviceFingerprint();
+                this.initializeEventListeners();
+                this.initializePasswordStrength();
+            }
+
+            // 初始化量子粒子背景
+            initializeQuantumBackground() {
+                const container = document.getElementById('quantum-particles');
+                for (let i = 0; i < 80; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'quantum-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 8 + 's';
+                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    container.appendChild(particle);
+                }
+            }
+
+            // 生成设备指纹
+            generateDeviceFingerprint() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillText('Device fingerprint', 2, 2);
+                
+                const fingerprint = [
+                    navigator.userAgent,
+                    navigator.language,
+                    screen.width + 'x' + screen.height,
+                    new Date().getTimezoneOffset(),
+                    canvas.toDataURL()
+                ].join('|');
+                
+                this.deviceFingerprint = CryptoJS.SHA256(fingerprint).toString();
+            }
+
+            // 初始化事件监听器
+            initializeEventListeners() {
+                // 基本信息表单
+                document.getElementById('basicInfoForm').addEventListener('submit', (e) => this.handleStep1Submit(e));
+                
+                // 用户名实时检查
+                document.getElementById('username').addEventListener('blur', () => this.checkUsername());
+                
+                // 邮箱格式检查
+                document.getElementById('email').addEventListener('blur', () => this.validateEmail());
+                
+                // 密码确认检查
+                document.getElementById('confirmPassword').addEventListener('input', () => this.checkPasswordMatch());
+                
+                // 密码显示切换
+                document.getElementById('togglePassword').addEventListener('click', () => this.togglePassword('password'));
+                document.getElementById('toggleConfirmPassword').addEventListener('click', () => this.togglePassword('confirmPassword'));
+                
+                // 邮箱验证
+                document.getElementById('verifyEmailBtn').addEventListener('click', () => this.verifyEmail());
+                document.getElementById('resendCodeBtn').addEventListener('click', () => this.resendEmailCode());
+                
+                // 步骤导航
+                document.getElementById('backToStep1').addEventListener('click', () => this.goToStep(1));
+                document.getElementById('backToStep2').addEventListener('click', () => this.goToStep(2));
+                document.getElementById('proceedToStep4').addEventListener('click', () => this.proceedToStep4());
+                
+                // 安全设置
+                document.getElementById('enable2FA').addEventListener('change', (e) => this.toggle2FAOptions(e.target.checked));
+                document.getElementById('setupBiometricBtn').addEventListener('click', () => this.setupBiometric());
+                
+                // 完成注册
+                document.getElementById('startChatBtn').addEventListener('click', () => window.location.href = '/chat-enhanced.html');
+                document.getElementById('exploreDashboardBtn').addEventListener('click', () => window.location.href = '/dashboard-enhanced.html');
+                
+                // 社交注册
+                document.querySelectorAll('.social-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => this.handleSocialRegistration(e.target.closest('.social-btn')));
+                });
+            }
+
+            // 初始化密码强度检查
+            initializePasswordStrength() {
+                const passwordInput = document.getElementById('password');
+                passwordInput.addEventListener('input', () => this.checkPasswordStrength());
+            }
+
+            // 检查密码强度
+            checkPasswordStrength() {
+                const password = document.getElementById('password').value;
+                const strengthBar = document.querySelector('.password-strength-bar');
+                const strengthText = document.getElementById('passwordStrengthText');
+                const scoreText = document.getElementById('passwordScore');
+                
+                // 使用zxcvbn库进行密码强度评估
+                const result = zxcvbn(password);
+                const score = result.score;
+                
+                // 更新强度条
+                strengthBar.className = 'password-strength-bar rounded';
+                const strengthClasses = ['strength-weak', 'strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
+                strengthBar.classList.add(strengthClasses[score]);
+                
+                // 更新文本
+                const strengthTexts = ['很弱', '弱', '一般', '强', '很强'];
+                strengthText.textContent = `密码强度: ${strengthTexts[score]}`;
+                scoreText.textContent = `${score}/4`;
+                
+                // 检查密码要求
+                this.checkPasswordRequirements(password);
+            }
+
+            // 检查密码要求
+            checkPasswordRequirements(password) {
+                const checks = {
+                    lengthCheck: password.length >= 8,
+                    uppercaseCheck: /[A-Z]/.test(password),
+                    lowercaseCheck: /[a-z]/.test(password),
+                    numberCheck: /\d/.test(password),
+                    specialCheck: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+                };
+                
+                Object.entries(checks).forEach(([checkId, passed]) => {
+                    const element = document.getElementById(checkId);
+                    if (passed) {
+                        element.classList.add('valid');
+                } else {
+                        element.classList.remove('valid');
+                }
+            });
+        }
+        
+            // 检查用户名可用性
+            async checkUsername() {
+            const username = document.getElementById('username').value.trim();
+                const errorElement = document.getElementById('usernameError');
+                const successElement = document.getElementById('usernameSuccess');
+            
+                if (username.length < 3) {
+                    this.showFieldError('usernameError', '用户名至少需要3个字符');
+                return false;
+            }
+            
+                if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]+$/.test(username)) {
+                    this.showFieldError('usernameError', '用户名只能包含字母、数字、下划线和中文');
+                return false;
+            }
+            
+                try {
+                    const response = await fetch(API_ENDPOINTS.CHECK_USERNAME, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ username })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.available) {
+                        this.showFieldSuccess('usernameSuccess', '用户名可用');
+                        this.hideFieldError('usernameError');
+                        return true;
+                    } else {
+                        this.showFieldError('usernameError', '用户名已被使用');
+                return false;
+            }
+                } catch (error) {
+                    this.showFieldError('usernameError', '检查用户名时出错');
+                return false;
+                }
+            }
+
+            // 验证邮箱格式
+            validateEmail() {
+                const email = document.getElementById('email').value.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                if (emailRegex.test(email)) {
+                    this.showFieldSuccess('emailSuccess', '邮箱格式正确');
+                    this.hideFieldError('emailError');
+                    return true;
+                } else {
+                    this.showFieldError('emailError', '邮箱格式不正确');
+                return false;
+                }
+            }
+
+            // 检查密码匹配
+            checkPasswordMatch() {
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (confirmPassword && password === confirmPassword) {
+                    this.showFieldSuccess('confirmPasswordSuccess', '密码匹配');
+                    this.hideFieldError('confirmPasswordError');
+            return true;
+                } else if (confirmPassword) {
+                    this.showFieldError('confirmPasswordError', '密码不匹配');
+                    return false;
+                }
+                return false;
+            }
+
+            // 切换密码显示
+            togglePassword(fieldId) {
+                const field = document.getElementById(fieldId);
+                const toggleBtn = document.getElementById(`toggle${fieldId.charAt(0).toUpperCase() + fieldId.slice(1)}`);
+                const icon = toggleBtn.querySelector('i');
+                
+                if (field.type === 'password') {
+                    field.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    field.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            }
+
+            // 处理第1步提交
+            async handleStep1Submit(e) {
+                e.preventDefault();
+                
+                // 验证所有字段
+                const usernameValid = await this.checkUsername();
+                const emailValid = this.validateEmail();
+                const passwordMatch = this.checkPasswordMatch();
+                const password = document.getElementById('password').value;
+                
+                if (!usernameValid || !emailValid || !passwordMatch || password.length < 8) {
+                    this.showMessage('请完善所有必填信息', 'error');
+                    return;
+                }
+                
+                // 保存基本信息
+                this.registrationData = {
+                    username: document.getElementById('username').value.trim(),
+                    nickname: document.getElementById('nickname').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    password: password,
+                    deviceFingerprint: this.deviceFingerprint
+                };
+                
+                // 发送邮箱验证码
+                await this.sendEmailVerificationCode();
+        }
+        
+        // 发送邮箱验证码
+            async sendEmailVerificationCode() {
+                try {
+                    const response = await fetch(API_ENDPOINTS.SEND_EMAIL_CODE, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email: this.registrationData.email,
+                            type: 'registration'
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.goToStep(2);
+                        this.startEmailVerificationTimer();
+                        this.showMessage('验证码已发送到您的邮箱', 'success');
+                    } else {
+                        throw new Error(data.error || '发送验证码失败');
+                    }
+                } catch (error) {
+                    this.showMessage(error.message, 'error');
+                }
+            }
+
+            // 重新发送邮箱验证码
+            async resendEmailCode() {
+                await this.sendEmailVerificationCode();
+            }
+
+            // 启动邮箱验证倒计时
+            startEmailVerificationTimer() {
+                let timeLeft = 600; // 10分钟
+                const expiryElement = document.getElementById('codeExpiry');
+                const resendBtn = document.getElementById('resendCodeBtn');
+            
+            resendBtn.disabled = true;
+            
+                this.emailVerificationTimer = setInterval(() => {
+                    const minutes = Math.floor(timeLeft / 60);
+                    const seconds = timeLeft % 60;
+                    expiryElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    timeLeft--;
+                    
+                    if (timeLeft < 0) {
+                        clearInterval(this.emailVerificationTimer);
+                        expiryElement.textContent = '已过期';
+                    resendBtn.disabled = false;
+                }
+            }, 1000);
+        }
+        
+            // 验证邮箱
+            async verifyEmail() {
+                const code = document.getElementById('emailVerificationCode').value.trim();
+                
+                if (!code || code.length !== 6) {
+                    this.showMessage('请输入6位验证码', 'error');
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(API_ENDPOINTS.VERIFY_EMAIL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            email: this.registrationData.email,
+                            code: code
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        this.showMessage('邮箱验证成功', 'success');
+                        this.goToStep(3);
+                        if (this.emailVerificationTimer) {
+                            clearInterval(this.emailVerificationTimer);
+                        }
+            } else {
+                        throw new Error(data.error || '验证码错误');
+                    }
+                } catch (error) {
+                    this.showMessage(error.message, 'error');
+                }
+            }
+
+            // 切换两步验证选项
+            toggle2FAOptions(enabled) {
+                const optionsElement = document.getElementById('twoFactorOptions');
+                if (enabled) {
+                    optionsElement.classList.remove('hidden');
+                } else {
+                    optionsElement.classList.add('hidden');
+                }
+            }
+
+            // 设置生物识别
+            async setupBiometric() {
+                if (!window.PublicKeyCredential) {
+                    this.showMessage('您的浏览器不支持生物识别功能', 'error');
+                return;
+            }
+            
+                document.getElementById('biometricSetup').classList.remove('hidden');
+                
+                try {
+                    const publicKeyCredentialCreationOptions = {
+                        challenge: new Uint8Array(32),
+                        rp: {
+                            name: "AlingAi Pro",
+                            id: window.location.hostname,
+                        },
+                        user: {
+                            id: new TextEncoder().encode(this.registrationData.username),
+                            name: this.registrationData.email,
+                            displayName: this.registrationData.nickname,
+                        },
+                        pubKeyCredParams: [{alg: -7, type: "public-key"}],
+                        authenticatorSelection: {
+                            authenticatorAttachment: "platform",
+                            userVerification: "required"
+                        },
+                        timeout: 60000,
+                        attestation: "direct"
+                    };
+                    
+                    const credential = await navigator.credentials.create({
+                        publicKey: publicKeyCredentialCreationOptions
+                    });
+                    
+                    this.registrationData.biometricCredential = {
+                        id: credential.id,
+                        publicKey: Array.from(new Uint8Array(credential.response.publicKey)),
+                        attestationObject: Array.from(new Uint8Array(credential.response.attestationObject))
+                    };
+                    
+                    this.showMessage('生物识别设置成功', 'success');
+                } catch (error) {
+                    this.showMessage('生物识别设置失败', 'error');
+                    document.getElementById('biometricSetup').classList.add('hidden');
+                }
+            }
+
+            // 进入第4步
+            async proceedToStep4() {
+                // 完成注册
+                await this.completeRegistration();
+            }
+
+            // 完成注册
+            async completeRegistration() {
+                try {
+                    const registrationPayload = {
+                        ...this.registrationData,
+                        enable2FA: document.getElementById('enable2FA').checked,
+                        trustDevice: document.getElementById('trustThisDevice').checked
+                    };
+                    
+                    const response = await fetch(API_ENDPOINTS.REGISTER, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(registrationPayload)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        // 存储令牌
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+                        
+                        // 显示注册成功页面
+                        this.showRegistrationSuccess();
+                        this.goToStep(4);
+                    } else {
+                        throw new Error(data.error || '注册失败');
+                    }
+                } catch (error) {
+                    this.showMessage(error.message, 'error');
+                }
+            }
+
+            // 显示注册成功信息
+            showRegistrationSuccess() {
+                document.getElementById('summaryUsername').textContent = this.registrationData.username;
+                document.getElementById('summaryEmail').textContent = this.registrationData.email;
+                document.getElementById('registrationTime').textContent = new Date().toLocaleString('zh-CN');
+            }
+
+            // 处理社交注册
+            handleSocialRegistration(button) {
+                const provider = button.textContent.trim().toLowerCase();
+                this.showMessage(`正在连接${provider}...`, 'info');
+                
+                // 这里实现具体的社交注册逻辑
+                // 类似登录页面的社交登录处理
+            }
+
+            // 步骤切换
+            goToStep(step) {
+                // 隐藏所有步骤
+                document.querySelectorAll('.registration-step').forEach(stepElement => {
+                    stepElement.classList.add('hidden');
+                });
+                
+                // 显示目标步骤
+                document.getElementById(`step${step}`).classList.remove('hidden');
+                
+                // 更新进度指示器
+                this.updateProgressIndicator(step);
+                
+                // 隐藏社交注册选项（除了第1步）
+                const socialSection = document.getElementById('socialRegistration');
+                if (step === 1) {
+                    socialSection.classList.remove('hidden');
+                } else {
+                    socialSection.classList.add('hidden');
+                }
+                
+                this.currentStep = step;
+            }
+
+            // 更新进度指示器
+            updateProgressIndicator(currentStep) {
+                document.querySelectorAll('.progress-step').forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    
+                    if (index + 1 < currentStep) {
+                        step.classList.add('completed');
+                    } else if (index + 1 === currentStep) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+
+            // 显示字段错误
+            showFieldError(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+
+            // 隐藏字段错误
+            hideFieldError(elementId) {
+                const element = document.getElementById(elementId);
+                element.classList.add('hidden');
+            }
+
+            // 显示字段成功
+            showFieldSuccess(elementId, message) {
+                const element = document.getElementById(elementId);
+                element.textContent = message;
+                element.classList.remove('hidden');
+            }
+
+            // 显示消息
+            showMessage(text, type = 'info', duration = 4000) {
+                const container = document.getElementById('messageContainer');
+                const message = document.createElement('div');
+                
+                const colors = {
+                    success: 'bg-green-500/90 text-white',
+                    error: 'bg-red-500/90 text-white',
+                    warning: 'bg-yellow-500/90 text-white',
+                    info: 'bg-blue-500/90 text-white'
+                };
+
+                message.className = `glassmorphism p-4 rounded-lg shadow-lg transform translate-x-full transition-all duration-300 ${colors[type]}`;
+                message.innerHTML = `
+                <div class="flex items-center">
+                        <i class="fas fa-${this.getMessageIcon(type)} mr-2"></i>
+                        <span>${text}</span>
+                </div>
+            `;
+            
+                container.appendChild(message);
+            
+            // 显示动画
+            setTimeout(() => {
+                    message.style.transform = 'translateX(0)';
+            }, 100);
+            
+                // 自动隐藏
+            setTimeout(() => {
+                    message.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                        if (message.parentNode) {
+                            message.parentNode.removeChild(message);
+                        }
+                }, 300);
+                }, duration);
+            }
+
+            // 获取消息图标
+            getMessageIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                };
+                return icons[type] || 'info-circle';
+            }
+        }        // 初始化注册系统
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查是否已登录
+            if (localStorage.getItem('token')) {
+                window.location.href = '/dashboard-enhanced.html';
+                return;
+            }
+
+            // 初始化安全注册系统
+            new SecureRegistration();
+        });
+    </script>
+
+    <!-- 集成认证模块 -->
+    <script src="/assets/js/assets/js/api-config.js"></script>
+    <script src="/assets/js/assets/js/zero-trust-auth.js"></script>
+    <script src="/assets/js/assets/js/multi-auth-system.js"></script>
+</body>
+</html>

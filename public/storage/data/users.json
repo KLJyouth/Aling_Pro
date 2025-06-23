@@ -1,0 +1,80 @@
+[
+    {
+        "username": "admin",
+        "email": "admin@alingai.com",
+        "password_hash": "$2y$10$mBXAOoPkym.Ohvh0PBHLKemBKjdotmD7nLUmlxJ8SYnVDXHSHtGAS",
+        "full_name": "\u7cfb\u7edf\u7ba1\u7406\u5458",
+        "user_type": "admin",
+        "status": "active",
+        "id": 1,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "username": "tech_corp",
+        "email": "contact@techcorp.com",
+        "full_name": "\u79d1\u6280\u516c\u53f8\u7ba1\u7406\u5458",
+        "user_type": "enterprise",
+        "status": "active",
+        "password_hash": "$2y$10$CzMoyQJiDeCHsqN.T8OpNOA2knv51\/6c43Ik1RED8DpKRd0AM8SXa",
+        "id": 2,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "username": "ai_startup",
+        "email": "admin@aistartup.com",
+        "full_name": "AI\u521b\u4e1a\u516c\u53f8",
+        "user_type": "enterprise",
+        "status": "pending",
+        "password_hash": "$2y$10$DbPqRlWlkuAIE4ga8AaEjuoaR\/nFz3yAzdbCx1zE\/uXr7a1tBNN.e",
+        "id": 3,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "username": "data_labs",
+        "email": "info@datalabs.com",
+        "full_name": "\u6570\u636e\u5b9e\u9a8c\u5ba4",
+        "user_type": "enterprise",
+        "status": "active",
+        "password_hash": "$2y$10$yT.qguUZ\/\/ItVppwpKWI4e6uRRXrSkBvPFYGP.LkAa6PymkQPPZFS",
+        "id": 4,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "username": "john_doe",
+        "email": "john@example.com",
+        "full_name": "John Doe",
+        "user_type": "individual",
+        "status": "active",
+        "password_hash": "$2y$10$jYBXB22suRhO6Ry8urXkTu2gWTXu4PXSqmS87OcH.G8K7a5n.qDOa",
+        "id": 5,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "username": "jane_smith",
+        "email": "jane@example.com",
+        "full_name": "Jane Smith",
+        "user_type": "individual",
+        "status": "active",
+        "password_hash": "$2y$10$fgZ6yg1ROF5pEaaa0zX5MO98HvXetsFlthQPAripQcjXv2CvWbYtC",
+        "id": 6,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "id": 7,
+        "username": "testuser_1749460472",
+        "email": "test@example.com",
+        "password": "$2y$10$PXtrjL8p.U\/HO5GwOIZz..UHrN39Mu\/orfhcTB2msk3QIZgUGn2U6",
+        "full_name": "\u6d4b\u8bd5\u7528\u6237",
+        "role": "user",
+        "status": "active",
+        "created_at": "2025-06-09 09:14:32",
+        "updated_at": "2025-06-09 09:14:32",
+        "login_count": 0
+    }
+]

@@ -1,0 +1,89 @@
+{
+    "timestamp": "2025-06-01 20:42:04",
+    "optimizations": [
+        {
+            "name": "Composer优化",
+            "status": "success",
+            "actions": [
+                "✅ 类映射优化完成",
+                "✅ Composer缓存清理完成"
+            ],
+            "duration": 11.19
+        },
+        {
+            "name": "缓存系统优化",
+            "status": "success",
+            "actions": [
+                "✅ 缓存目录清理完成",
+                "✅ 缓存配置创建完成",
+                "✅ 缓存预热完成"
+            ],
+            "duration": 0
+        },
+        {
+            "name": "日志系统优化",
+            "status": "success",
+            "actions": [
+                "✅ 日志轮转完成",
+                "✅ 旧日志压缩完成",
+                "✅ 日志配置优化完成"
+            ],
+            "duration": 0
+        },
+        {
+            "name": "静态资源优化",
+            "status": "success",
+            "actions": [
+                "✅ CSS文件优化完成",
+                "✅ JavaScript文件优化完成",
+                "✅ 图片文件优化完成",
+                "✅ 静态资源缓存配置完成"
+            ],
+            "duration": 0.23
+        },
+        {
+            "name": "数据库优化",
+            "status": "success",
+            "actions": [
+                "✅ 数据库连接池配置完成",
+                "✅ 数据库查询优化完成",
+                "✅ 索引优化建议生成完成"
+            ],
+            "duration": 0
+        },
+        {
+            "name": "PHP配置优化",
+            "status": "success",
+            "actions": [
+                "✅ PHP配置建议生成完成",
+                "✅ OPcache配置生成完成",
+                "✅ 内存使用优化完成"
+            ],
+            "duration": 0
+        },
+        {
+            "name": "安全配置优化",
+            "status": "success",
+            "actions": [
+                "✅ 文件权限优化完成",
+                "✅ 安全头配置完成",
+                "✅ JWT密钥生成完成"
+            ],
+            "duration": 0
+        }
+    ],
+    "performance_before": {
+        "memory_usage": 4194304,
+        "memory_peak": 4194304,
+        "execution_time": 1748810524.599762,
+        "php_version": "8.1.32",
+        "loaded_extensions": 32
+    },
+    "performance_after": {
+        "memory_usage": 4194304,
+        "memory_peak": 4194304,
+        "execution_time": 1748810536.040256,
+        "php_version": "8.1.32",
+        "loaded_extensions": 32
+    }
+}

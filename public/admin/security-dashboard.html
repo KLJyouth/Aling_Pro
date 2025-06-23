@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 6.0 - 安全仪表盘</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            padding: 30px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric-card.critical {
+            border-left-color: var(--danger-color);
+        }
+
+        .metric-card.high {
+            border-left-color: var(--warning-color);
+        }
+
+        .metric-card.medium {
+            border-left-color: var(--info-color);
+        }
+
+        .metric-card.low {
+            border-left-color: var(--success-color);
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .status-excellent { background-color: var(--success-color); }
+        .status-good { background-color: var(--info-color); }
+        .status-fair { background-color: var(--warning-color); }
+        .status-poor { background-color: var(--danger-color); }
+
+        .chart-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .event-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            padding: 15px;
+            border-left: 4px solid var(--info-color);
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .event-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .event-item.critical {
+            border-left-color: var(--danger-color);
+            background: #fff5f5;
+        }
+
+        .event-item.high {
+            border-left-color: var(--warning-color);
+            background: #fffbf0;
+        }
+
+        .event-item.medium {
+            border-left-color: var(--info-color);
+            background: #f0f8ff;
+        }
+
+        .event-item.low {
+            border-left-color: var(--success-color);
+            background: #f0fff4;
+        }
+
+        .progress-custom {
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+        }
+
+        .progress-custom .progress-bar {
+            border-radius: 4px;
+        }
+
+        .alert-custom {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .component-status {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .component-name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .component-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-color);
+        }
+
+        .component-indicator.warning {
+            background: var(--warning-color);
+        }
+
+        .component-indicator.danger {
+            background: var(--danger-color);
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .real-time-indicator {
+            background: var(--success-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .geographic-map {
+            height: 300px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .threat-trend {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .trend-indicator {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            margin-right: 10px;
+        }
+
+        .trend-up {
+            border-bottom: 8px solid var(--danger-color);
+        }
+
+        .trend-down {
+            border-top: 8px solid var(--success-color);
+        }
+
+        .trend-stable {
+            border-top: 8px solid var(--info-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1><i class="bi bi-shield-check"></i> AlingAi Pro 6.0 安全仪表盘</h1>
+                    <p class="mb-0">实时安全监控与威胁分析系统</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn refresh-btn" onclick="refreshDashboard()">
+                        <i class="bi bi-arrow-clockwise"></i> 刷新数据
+                    </button>
+                    <div class="real-time-indicator pulse">
+                        <i class="bi bi-circle-fill"></i> 实时更新
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载指示器 -->
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+            <p class="mt-2">正在获取最新数据...</p>
+        </div>
+
+        <!-- 主要内容 -->
+        <div id="dashboardContent">
+            <!-- 系统状态概览 -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-value" id="overallStatus">优秀</div>
+                        <div class="metric-label">整体安全状态</div>
+                        <div class="mt-2">
+                            <span class="status-indicator status-excellent"></span>
+                            <span id="statusText">系统运行正常</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-value" id="securityScore">95</div>
+                        <div class="metric-label">安全评分</div>
+                        <div class="progress progress-custom mt-2">
+                            <div class="progress-bar bg-success" id="securityScoreBar" style="width: 95%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-value" id="threatsBlocked">180</div>
+                        <div class="metric-label">已阻断威胁</div>
+                        <div class="mt-2 text-success">
+                            <i class="bi bi-shield-check"></i> 防护有效
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="metric-card">
+                        <div class="metric-value" id="responseTime">0.5s</div>
+                        <div class="metric-label">平均响应时间</div>
+                        <div class="mt-2 text-info">
+                            <i class="bi bi-lightning"></i> 响应迅速
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 威胁分析图表 -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-pie-chart"></i> 威胁类型分布</h5>
+                        <canvas id="threatTypesChart" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-graph-up"></i> 威胁趋势</h5>
+                        <canvas id="threatTrendChart" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 性能指标和组件状态 -->
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-speedometer2"></i> 系统性能指标</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div class="h4 text-primary" id="cpuUsage">45%</div>
+                                    <div class="text-muted">CPU使用率</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div class="h4 text-info" id="memoryUsage">65%</div>
+                                    <div class="text-muted">内存使用率</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div class="h4 text-warning" id="diskUsage">40%</div>
+                                    <div class="text-muted">磁盘使用率</div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <div class="h4 text-success" id="networkUsage">250Mbps</div>
+                                    <div class="text-muted">网络流量</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-gear"></i> 组件状态</h5>
+                        <div id="componentStatus">
+                            <!-- 组件状态将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实时事件和告警 -->
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-activity"></i> 实时安全事件</h5>
+                        <div class="event-list" id="recentEvents">
+                            <!-- 事件列表将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="chart-container">
+                        <h5><i class="bi bi-exclamation-triangle"></i> 活跃告警</h5>
+                        <div id="activeAlerts">
+                            <!-- 告警列表将通过JavaScript动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.js"></script>
+    <script>
+        // 全局变量
+        let threatTypesChart, threatTrendChart;
+        let refreshInterval;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startAutoRefresh();
+        });
+
+        // 初始化仪表盘
+        function initializeDashboard() {
+            loadDashboardData();
+            initializeCharts();
+        }
+
+        // 加载仪表盘数据
+        async function loadDashboardData() {
+            showLoading(true);
+            
+            try {
+                const response = await fetch('/api/security/dashboard/overview');
+                const data = await response.json();
+                
+                if (data.success) {
+                    updateDashboard(data.data);
+                } else {
+                    showError('加载数据失败: ' + data.message);
+                }
+            } catch (error) {
+                console.error('加载数据失败:', error);
+                showError('网络错误，请检查连接');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // 更新仪表盘
+        function updateDashboard(data) {
+            // 更新系统状态
+            updateSystemStatus(data.system_status);
+            
+            // 更新安全指标
+            updateSecurityMetrics(data.security_metrics);
+            
+            // 更新性能指标
+            updatePerformanceMetrics(data.performance_metrics);
+            
+            // 更新组件状态
+            updateComponentStatus(data.component_status);
+            
+            // 更新事件列表
+            updateRecentEvents(data.recent_events);
+            
+            // 更新告警列表
+            updateActiveAlerts(data.alerts);
+            
+            // 更新图表
+            updateCharts(data.threat_analysis);
+        }
+
+        // 更新系统状态
+        function updateSystemStatus(status) {
+            document.getElementById('overallStatus').textContent = getStatusText(status.overall_status);
+            document.getElementById('statusText').textContent = getStatusDescription(status.overall_status);
+            
+            // 更新状态指示器
+            const statusIndicator = document.querySelector('.status-indicator');
+            statusIndicator.className = `status-indicator status-${status.overall_status}`;
+        }
+
+        // 更新安全指标
+        function updateSecurityMetrics(metrics) {
+            document.getElementById('securityScore').textContent = Math.round(metrics.security_score);
+            document.getElementById('securityScoreBar').style.width = metrics.security_score + '%';
+            document.getElementById('threatsBlocked').textContent = metrics.threats_blocked;
+            document.getElementById('responseTime').textContent = metrics.response_time.toFixed(1) + 's';
+        }
+
+        // 更新性能指标
+        function updatePerformanceMetrics(metrics) {
+            document.getElementById('cpuUsage').textContent = metrics.resource_usage.cpu.current + '%';
+            document.getElementById('memoryUsage').textContent = metrics.resource_usage.memory.current + '%';
+            document.getElementById('diskUsage').textContent = metrics.resource_usage.disk.current + '%';
+            document.getElementById('networkUsage').textContent = metrics.resource_usage.network.inbound + 'Mbps';
+        }
+
+        // 更新组件状态
+        function updateComponentStatus(components) {
+            const container = document.getElementById('componentStatus');
+            container.innerHTML = '';
+            
+            Object.entries(components).forEach(([name, status]) => {
+                const componentDiv = document.createElement('div');
+                componentDiv.className = 'component-status';
+                
+                const statusClass = getComponentStatusClass(status);
+                const statusText = getComponentStatusText(status);
+                
+                componentDiv.innerHTML = `
+                    <div>
+                        <div class="component-name">${formatComponentName(name)}</div>
+                        <small class="text-muted">${statusText}</small>
+                    </div>
+                    <div class="component-indicator ${statusClass}"></div>
+                `;
+                
+                container.appendChild(componentDiv);
+            });
+        }
+
+        // 更新最近事件
+        function updateRecentEvents(events) {
+            const container = document.getElementById('recentEvents');
+            container.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `event-item ${event.severity}`;
+                
+                eventDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${event.description}</strong>
+                            <br>
+                            <small class="text-muted">来源: ${event.source_ip}</small>
+                        </div>
+                        <div class="text-end">
+                            <span class="badge bg-${getSeverityColor(event.severity)}">${event.severity.toUpperCase()}</span>
+                            <br>
+                            <small class="text-muted">${formatTime(event.timestamp)}</small>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(eventDiv);
+            });
+        }
+
+        // 更新活跃告警
+        function updateActiveAlerts(alerts) {
+            const container = document.getElementById('activeAlerts');
+            container.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${getAlertLevel(alert.level)} alert-custom`;
+                
+                alertDiv.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>${alert.message}</strong>
+                            <br>
+                            <small class="text-muted">${formatTime(alert.timestamp)}</small>
+                        </div>
+                        <div>
+                            <span class="badge bg-${getAlertLevel(alert.level)}">${alert.level.toUpperCase()}</span>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(alertDiv);
+            });
+        }
+
+        // 初始化图表
+        function initializeCharts() {
+            // 威胁类型分布图
+            const threatTypesCtx = document.getElementById('threatTypesChart').getContext('2d');
+            threatTypesChart = new Chart(threatTypesCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['SQL注入', 'XSS', '暴力破解', 'DDoS', '恶意软件', '钓鱼'],
+                    datasets: [{
+                        data: [25, 21, 18, 16, 12, 8],
+                        backgroundColor: [
+                            '#e74c3c', '#f39c12', '#e67e22', '#9b59b6', '#34495e', '#95a5a6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+
+            // 威胁趋势图
+            const threatTrendCtx = document.getElementById('threatTrendChart').getContext('2d');
+            threatTrendChart = new Chart(threatTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['7天前', '6天前', '5天前', '4天前', '3天前', '2天前', '今天'],
+                    datasets: [{
+                        label: '威胁数量',
+                        data: [30, 25, 35, 40, 30, 25, 20],
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // 更新图表
+        function updateCharts(threatAnalysis) {
+            // 更新威胁类型分布
+            if (threatAnalysis.threat_types) {
+                const labels = Object.keys(threatAnalysis.threat_types);
+                const data = Object.values(threatAnalysis.threat_types).map(t => t.count);
+                
+                threatTypesChart.data.labels = labels;
+                threatTypesChart.data.datasets[0].data = data;
+                threatTypesChart.update();
+            }
+
+            // 更新威胁趋势
+            if (threatAnalysis.threat_trends) {
+                const labels = Object.keys(threatAnalysis.threat_trends);
+                const data = Object.values(threatAnalysis.threat_trends).map(t => t.threats);
+                
+                threatTrendChart.data.labels = labels;
+                threatTrendChart.data.datasets[0].data = data;
+                threatTrendChart.update();
+            }
+        }
+
+        // 刷新仪表盘
+        function refreshDashboard() {
+            loadDashboardData();
+        }
+
+        // 开始自动刷新
+        function startAutoRefresh() {
+            refreshInterval = setInterval(loadDashboardData, 30000); // 每30秒刷新一次
+        }
+
+        // 显示加载状态
+        function showLoading(show) {
+            const loading = document.getElementById('loadingIndicator');
+            const content = document.getElementById('dashboardContent');
+            
+            if (show) {
+                loading.style.display = 'block';
+                content.style.display = 'none';
+            } else {
+                loading.style.display = 'none';
+                content.style.display = 'block';
+            }
+        }
+
+        // 显示错误
+        function showError(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-danger alert-custom';
+            alertDiv.innerHTML = `
+                <i class="bi bi-exclamation-triangle"></i>
+                ${message}
+            `;
+            
+            const container = document.querySelector('.dashboard-container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // 辅助函数
+        function getStatusText(status) {
+            const statusMap = {
+                'excellent': '优秀',
+                'good': '良好',
+                'fair': '一般',
+                'poor': '较差'
+            };
+            return statusMap[status] || '未知';
+        }
+
+        function getStatusDescription(status) {
+            const descMap = {
+                'excellent': '系统运行正常，安全防护有效',
+                'good': '系统运行良好，需要关注',
+                'fair': '系统运行一般，建议优化',
+                'poor': '系统运行较差，需要立即处理'
+            };
+            return descMap[status] || '状态未知';
+        }
+
+        function getComponentStatusClass(status) {
+            if (status.status === 'active' || status.status === 'excellent') return '';
+            if (status.status === 'warning') return 'warning';
+            if (status.status === 'error' || status.status === 'poor') return 'danger';
+            return '';
+        }
+
+        function getComponentStatusText(status) {
+            return status.status || '未知状态';
+        }
+
+        function formatComponentName(name) {
+            const nameMap = {
+                'real_time_response': '实时响应系统',
+                'attack_surface_management': '攻击面管理',
+                'quantum_defense': '量子防御',
+                'honeypot_system': '蜜罐系统',
+                'ai_defense': 'AI防御',
+                'situational_awareness': '态势感知'
+            };
+            return nameMap[name] || name;
+        }
+
+        function getSeverityColor(severity) {
+            const colorMap = {
+                'critical': 'danger',
+                'high': 'warning',
+                'medium': 'info',
+                'low': 'success'
+            };
+            return colorMap[severity] || 'secondary';
+        }
+
+        function getAlertLevel(level) {
+            const levelMap = {
+                'critical': 'danger',
+                'high': 'warning',
+                'medium': 'info',
+                'low': 'success'
+            };
+            return levelMap[level] || 'secondary';
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return '刚刚';
+            if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+            return Math.floor(diff / 86400000) + '天前';
+        }
+
+        // 页面卸载时清理定时器
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+    </script>
+</body>
+</html> 

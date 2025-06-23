@@ -1,0 +1,521 @@
+// 集成系统验证器
+// 检查所有组件和功能是否正常工作
+// 创建时间: 2025-05-30
+
+
+
+class IntegratedSystemValidator {
+    constructor() {
+        this.testResults = [];
+        this.errors = [];
+        this.warnings = [];
+        
+        // 自动启动验证
+        setTimeout(() => {
+            this.runFullValidation();
+        }, 2000);
+    }
+    
+    async runFullValidation() {
+        
+        
+        // 1. 验证核心脚本加载
+        this.validateScriptLoading();
+        
+        // 2. 验证DOM元素
+        this.validateDOMElements();
+        
+        // 3. 验证功能按钮
+        this.validateButtons();
+        
+        // 4. 验证下拉菜单
+        this.validateDropdownMenus();
+        
+        // 5. 验证聊天核心类
+        this.validateChatClasses();
+        
+        // 6. 验证错误处理器
+        this.validateErrorHandlers();
+          // 7. 验证音频系统
+        this.validateAudioSystem();
+        
+        // 8. 验证新增功能系统
+        this.validateNewFeatureSystems();
+        
+        // 9. 生成验证报告
+        this.generateValidationReport();
+    }
+    
+    validateScriptLoading() {
+        
+        
+        const requiredScripts = [
+            'SystemErrorHandler',
+            'ConsoleOptimizer', 
+            'PerformanceMonitor',
+            'MessageProcessor',
+            'MessageRenderer',
+            'ChatCore',
+            'NotificationSystem',
+            'VisualizationDashboard',
+            'ApiIntegration',
+            'TeamCollaboration',
+            'IntelligentAlertSystem'
+        ];
+        
+        requiredScripts.forEach(scriptClass => {
+            if (typeof window[scriptClass] !== 'undefined') {
+                this.addResult('✅', `${scriptClass} 类已加载`);
+            } else {
+                this.addError('❌', `${scriptClass} 类未找到`);
+            }
+        });
+        
+        // 检查全局实例
+        if (window.chatInstance) {
+            this.addResult('✅', 'chatInstance 全局实例已创建');
+        } else {
+            this.addError('❌', 'chatInstance 全局实例未创建');
+        }
+    }
+    
+    validateDOMElements() {
+        
+          const requiredElements = [
+            { id: 'quickDetectionBtn', name: '快速检测按钮' },
+            { id: 'fullDetectionBtn', name: '完整检测按钮' },
+            { id: 'analysisReportBtn', name: '分析报告按钮' },
+            { id: 'systemStatusBtn', name: '系统状态按钮' },
+            { id: 'toolsDropdown', name: '工具下拉菜单' },
+            { id: 'detectionResults', name: '检测结果区域' },
+            { id: 'chatTestElements', name: '聊天测试元素容器' },
+            { id: 'loginModal', name: '登录模态框' },
+            { id: 'messageInput', name: '消息输入框' },
+            { id: 'chatMessages', name: '聊天消息区域' },
+            // 新增动画系统元素
+            { id: 'quantumParticles', name: '量子粒子系统' },
+            { id: 'orbitalContainer', name: '轨道容器' },
+            { id: 'matrixEffect', name: '矩阵效果' },
+            { id: 'quantumLoader', name: '量子加载器' },
+            // 新增聊天功能元素
+            { id: 'chatWidget', name: '聊天组件' },
+            { id: 'chatInput', name: '聊天输入框' },
+            // 新增无障碍功能元素
+            { id: 'accessibilityToolbar', name: '无障碍工具栏' },
+            { id: 'fontSizeUp', name: '字体放大按钮' },
+            { id: 'fontSizeDown', name: '字体缩小按钮' },
+            { id: 'toggleContrast', name: '对比度切换按钮' },
+            { id: 'toggleScreenReader', name: '屏幕阅读器切换按钮' }
+        ];
+        
+        requiredElements.forEach(element => {
+            const domElement = document.getElementById(element.id);
+            if (domElement) {
+                this.addResult('✅', `${element.name} 元素存在`);
+            } else {
+                this.addError('❌', `${element.name} 元素缺失`);
+            }
+        });
+    }
+    
+    validateButtons() {
+        
+        
+        const buttons = [
+            { id: 'quickDetectionBtn', name: '快速检测' },
+            { id: 'fullDetectionBtn', name: '完整检测' },
+            { id: 'analysisReportBtn', name: '分析报告' },
+            { id: 'systemStatusBtn', name: '系统状态' }
+        ];
+        
+        buttons.forEach(button => {
+            const btn = document.getElementById(button.id);
+            if (btn) {
+                // 检查事件监听器
+                const hasEventListener = btn.onclick !== null || btn.getAttribute('onclick');
+                if (hasEventListener) {
+                    this.addResult('✅', `${button.name}按钮有事件处理器`);
+                } else {
+                    this.addWarning('⚠️', `${button.name}按钮缺少事件处理器`);
+                }
+                
+                // 检查样式
+                const isVisible = window.getComputedStyle(btn).display !== 'none';
+                if (isVisible) {
+                    this.addResult('✅', `${button.name}按钮可见`);
+                } else {
+                    this.addWarning('⚠️', `${button.name}按钮不可见`);
+                }
+            }
+        });
+    }
+    
+    validateDropdownMenus() {
+        
+        
+        const dropdown = document.getElementById('toolsDropdown');
+        if (dropdown) {
+            // 检查Bootstrap下拉菜单
+            const hasBootstrapToggle = dropdown.getAttribute('data-bs-toggle') === 'dropdown';
+            if (hasBootstrapToggle) {
+                this.addResult('✅', '工具下拉菜单配置正确');
+            } else {
+                this.addError('❌', '工具下拉菜单配置错误');
+            }
+            
+            // 检查下拉菜单项
+            const dropdownMenu = dropdown.nextElementSibling;
+            if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                const menuItems = dropdownMenu.querySelectorAll('.dropdown-item');
+                if (menuItems.length > 0) {
+                    this.addResult('✅', `工具下拉菜单包含 ${menuItems.length} 个选项`);
+                } else {
+                    this.addWarning('⚠️', '工具下拉菜单选项为空');
+                }
+            }
+        }
+    }
+    
+    validateChatClasses() {
+        
+        
+        try {
+            if (window.chatInstance) {
+                const { core, processor, ui, api } = window.chatInstance;
+                
+                if (core) this.addResult('✅', 'ChatCore 实例存在');
+                else this.addError('❌', 'ChatCore 实例缺失');
+                
+                if (processor) this.addResult('✅', 'MessageProcessor 实例存在');
+                else this.addError('❌', 'MessageProcessor 实例缺失');
+                
+                if (ui) this.addResult('✅', 'UI 方法集合存在');
+                else this.addError('❌', 'UI 方法集合缺失');
+                
+                if (api) this.addResult('✅', 'API 方法集合存在');
+                else this.addError('❌', 'API 方法集合缺失');
+            }
+        } catch (error) {
+            this.addError('❌', `聊天核心类验证失败: ${error.message}`);
+        }
+    }
+    
+    validateErrorHandlers() {
+        
+        
+        if (window.systemErrorHandler) {
+            this.addResult('✅', '系统错误处理器已启动');
+        } else {
+            this.addError('❌', '系统错误处理器未启动');
+        }
+        
+        if (window.consoleOptimizer) {
+            this.addResult('✅', '控制台优化器已启动');
+        } else {
+            this.addError('❌', '控制台优化器未启动');
+        }
+        
+        if (window.performanceMonitor) {
+            this.addResult('✅', '性能监控器已启动');
+        } else {
+            this.addError('❌', '性能监控器未启动');
+        }
+    }
+      validateAudioSystem() {
+        
+        
+        // 检查音频上下文初始化策略
+        if (window.soundManager) {
+            this.addResult('✅', '音频管理器存在');
+            
+            // 检查是否有延迟初始化
+            if (window.soundManager.pendingAudioInit !== undefined) {
+                this.addResult('✅', '音频延迟初始化策略已实施');
+            } else {
+                this.addWarning('⚠️', '音频延迟初始化策略可能缺失');
+            }
+        } else {
+            this.addWarning('⚠️', '音频管理器未找到');
+        }
+    }
+    
+    validateNewFeatureSystems() {
+        
+        
+        // 1. 验证前端增强功能类
+        const frontendEnhancementClasses = [
+            { name: 'AnimationSystem', description: '动画系统' },
+            { name: 'ChatSystem', description: '聊天系统' },
+            { name: 'AccessibilitySystem', description: '无障碍系统' },
+            { name: 'FrontendResourceManager', description: '前端资源管理器' }
+        ];
+        
+        frontendEnhancementClasses.forEach(cls => {
+            if (typeof window[cls.name] !== 'undefined') {
+                this.addResult('✅', `${cls.description} (${cls.name}) 类已加载`);
+            } else {
+                this.addError('❌', `${cls.description} (${cls.name}) 类未找到`);
+            }
+        });
+        
+        // 2. 验证网站状态和集成测试类
+        const integrationClasses = [
+            { name: 'WebsiteStatusMonitor', description: '网站状态监控器' },
+            { name: 'ComprehensiveIntegrationTester', description: '综合集成测试器' }
+        ];
+        
+        integrationClasses.forEach(cls => {
+            if (typeof window[cls.name] !== 'undefined') {
+                this.addResult('✅', `${cls.description} (${cls.name}) 类已加载`);
+            } else {
+                this.addError('❌', `${cls.description} (${cls.name}) 类未找到`);
+            }
+        });
+        
+        // 3. 验证全局实例创建
+        const globalInstances = [
+            { name: 'frontendResourceManager', description: '前端资源管理器实例' },
+            { name: 'websiteMonitor', description: '网站监控器实例' },
+            { name: 'integrationTester', description: '集成测试器实例' }
+        ];
+        
+        globalInstances.forEach(instance => {
+            if (window[instance.name]) {
+                this.addResult('✅', `${instance.description}已创建`);
+            } else {
+                this.addWarning('⚠️', `${instance.description}可能未创建`);
+            }
+        });
+        
+        // 4. 验证动画系统功能
+        this.validateAnimationSystemFeatures();
+        
+        // 5. 验证聊天系统功能
+        this.validateChatSystemFeatures();
+        
+        // 6. 验证无障碍系统功能
+        this.validateAccessibilityFeatures();
+        
+        // 7. 验证工具菜单新增项
+        this.validateToolMenuExtensions();
+    }
+    
+    validateAnimationSystemFeatures() {
+        
+        
+        // 检查动画相关DOM元素
+        const animationElements = ['quantumParticles', 'orbitalContainer', 'matrixEffect', 'quantumLoader'];
+        animationElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                this.addResult('✅', `动画元素 ${id} 存在`);
+                
+                // 检查Canvas元素
+                if (id === 'quantumParticles' || id === 'matrixEffect') {
+                    const canvas = element.querySelector('canvas');
+                    if (canvas) {
+                        this.addResult('✅', `${id} Canvas 元素存在`);
+                    } else {
+                        this.addWarning('⚠️', `${id} Canvas 元素缺失`);
+                    }
+                }
+            } else {
+                this.addError('❌', `动画元素 ${id} 缺失`);
+            }
+        });
+        
+        // 检查动画CSS样式
+        const hasAnimationStyles = document.querySelector('style') && 
+            document.querySelector('style').textContent.includes('@keyframes');
+        if (hasAnimationStyles) {
+            this.addResult('✅', '动画CSS样式已加载');
+        } else {
+            this.addWarning('⚠️', '动画CSS样式可能缺失');
+        }
+    }
+    
+    validateChatSystemFeatures() {
+        
+        
+        // 检查聊天相关DOM元素
+        const chatElements = ['chatWidget', 'chatMessages', 'chatInput', 'chatToggleBtn'];
+        chatElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                this.addResult('✅', `聊天元素 ${id} 存在`);
+                
+                // 检查事件处理器
+                if (id === 'chatToggleBtn' && element.onclick) {
+                    this.addResult('✅', '聊天切换按钮有事件处理器');
+                }
+            } else {
+                this.addError('❌', `聊天元素 ${id} 缺失`);
+            }
+        });
+        
+        // 检查聊天样式
+        const chatWidget = document.getElementById('chatWidget');
+        if (chatWidget) {
+            const computedStyle = window.getComputedStyle(chatWidget);
+            if (computedStyle.position === 'fixed') {
+                this.addResult('✅', '聊天窗口定位样式正确');
+            } else {
+                this.addWarning('⚠️', '聊天窗口定位样式可能不正确');
+            }
+        }
+    }
+    
+    validateAccessibilityFeatures() {
+        
+        
+        // 检查无障碍相关DOM元素
+        const accessibilityElements = [
+            'accessibilityToolbar', 
+            'fontSizeUp', 
+            'fontSizeDown', 
+            'toggleContrast', 
+            'toggleScreenReader'
+        ];
+        
+        accessibilityElements.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                this.addResult('✅', `无障碍元素 ${id} 存在`);
+                
+                // 检查按钮的可访问性属性
+                if (element.tagName === 'BUTTON') {
+                    if (element.getAttribute('aria-label')) {
+                        this.addResult('✅', `${id} 有 aria-label 属性`);
+                    } else {
+                        this.addWarning('⚠️', `${id} 缺少 aria-label 属性`);
+                    }
+                    
+                    if (element.getAttribute('title')) {
+                        this.addResult('✅', `${id} 有 title 属性`);
+                    } else {
+                        this.addWarning('⚠️', `${id} 缺少 title 属性`);
+                    }
+                }
+            } else {
+                this.addError('❌', `无障碍元素 ${id} 缺失`);
+            }
+        });
+        
+        // 检查无障碍CSS类
+        const hasAccessibilityStyles = document.querySelector('style') && 
+            document.querySelector('style').textContent.includes('.high-contrast');
+        if (hasAccessibilityStyles) {
+            this.addResult('✅', '无障碍CSS样式已加载');
+        } else {
+            this.addWarning('⚠️', '无障碍CSS样式可能缺失');
+        }
+    }
+    
+    validateToolMenuExtensions() {
+        
+        
+        const toolsDropdown = document.getElementById('toolsDropdown');
+        if (toolsDropdown) {
+            const dropdownMenu = toolsDropdown.nextElementSibling;
+            if (dropdownMenu) {
+                // 检查网站状态检查菜单项
+                const statusCheckItem = Array.from(dropdownMenu.querySelectorAll('a'))
+                    .find(a => a.textContent.includes('网站状态检查'));
+                if (statusCheckItem) {
+                    this.addResult('✅', '网站状态检查菜单项存在');
+                    if (statusCheckItem.getAttribute('onclick')) {
+                        this.addResult('✅', '网站状态检查有事件处理器');
+                    } else {
+                        this.addWarning('⚠️', '网站状态检查缺少事件处理器');
+                    }
+                } else {
+                    this.addError('❌', '网站状态检查菜单项缺失');
+                }
+                
+                // 检查集成测试菜单项
+                const integrationTestItem = Array.from(dropdownMenu.querySelectorAll('a'))
+                    .find(a => a.textContent.includes('集成测试'));
+                if (integrationTestItem) {
+                    this.addResult('✅', '集成测试菜单项存在');
+                    if (integrationTestItem.getAttribute('onclick')) {
+                        this.addResult('✅', '集成测试有事件处理器');
+                    } else {
+                        this.addWarning('⚠️', '集成测试缺少事件处理器');
+                    }
+                } else {
+                    this.addError('❌', '集成测试菜单项缺失');
+                }
+            }
+        }
+    }
+    
+    addResult(status, message) {
+        this.testResults.push({ status, message, type: 'success' });
+        
+    }
+    
+    addError(status, message) {
+        this.errors.push({ status, message, type: 'error' });
+        console.error(`${status} ${message}`);
+    }
+    
+    addWarning(status, message) {
+        this.warnings.push({ status, message, type: 'warning' });
+        console.warn(`${status} ${message}`);
+    }
+    
+    generateValidationReport() {
+        
+        
+        
+        
+        const totalTests = this.testResults.length + this.errors.length + this.warnings.length;
+        const successRate = ((this.testResults.length / totalTests) * 100).toFixed(1);
+        
+        
+        
+        
+        
+        
+        
+        if (this.errors.length === 0) {
+            
+            
+        } else {
+            
+            this.errors.forEach(error => {
+                console.error(`   ${error.status} ${error.message}`);
+            });
+        }
+        
+        if (this.warnings.length > 0) {
+            
+            this.warnings.forEach(warning => {
+                console.warn(`   ${warning.status} ${warning.message}`);
+            });
+        }
+        
+        
+        
+        
+        // 保存验证结果到全局
+        window.lastValidationReport = {
+            timestamp: new Date().toISOString(),
+            totalTests,
+            successes: this.testResults.length,
+            errors: this.errors.length,
+            warnings: this.warnings.length,
+            successRate: parseFloat(successRate),
+            details: {
+                results: this.testResults,
+                errors: this.errors,
+                warnings: this.warnings
+            }
+        };
+    }
+}
+
+// 自动启动验证器
+window.systemValidator = new IntegratedSystemValidator();
+
+

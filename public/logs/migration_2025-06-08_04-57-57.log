@@ -1,0 +1,15 @@
+2025-06-08 04:58:01 - 数据库连接成功
+2025-06-08 04:58:01 - 开始执行安全监控数据库迁移...
+2025-06-08 04:58:01 - 成功创建表: security_logs
+2025-06-08 04:58:01 - 成功创建表: threat_detections
+2025-06-08 04:58:01 - 成功创建表: security_blacklist
+2025-06-08 04:58:02 - 成功创建表: network_traffic_stats
+2025-06-08 04:58:02 - 成功创建表: geo_threat_distribution
+2025-06-08 04:58:02 - 成功创建表: attack_patterns
+2025-06-08 04:58:03 - 成功创建表: security_timeline
+2025-06-08 04:58:03 - 成功创建表: threat_intelligence
+2025-06-08 04:58:03 - 成功创建表: system_performance
+2025-06-08 04:58:03 - 成功创建表: auto_defense_rules
+2025-06-08 04:58:06 - 成功创建视图: active_threats_view
+2025-06-08 04:58:07 - 成功创建视图: security_summary_view
+2025-06-08 04:58:08 - 数据库迁移完成

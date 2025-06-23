@@ -1,0 +1,109 @@
+// C++动画验证脚本
+(function() {
+    console.log('🔍 开始C++动画验证...');
+    
+    // 等待页面完全加载
+    function waitForPageLoad() {
+        return new Promise((resolve) => {
+            if (document.readyState === 'complete') {
+                resolve();
+            } else {
+                window.addEventListener('load', resolve);
+            }
+        });
+    }
+    
+    // 检查必要资源
+    function checkResources() {
+        const checks = {
+            'Three.js': typeof THREE !== 'undefined',
+            'CppCodeAnimation类': typeof CppCodeAnimation !== 'undefined',
+            '动画容器': document.getElementById('cpp-animation-container') !== null,
+            'CSS样式': document.querySelector('link[href*="cpp-animation.css"]') !== null
+        };
+        
+        console.log('📋 资源检查结果:');
+        for (const [name, status] of Object.entries(checks)) {
+            console.log(`${status ? '✅' : '❌'} ${name}: ${status ? '正常' : '缺失'}`);
+        }
+        
+        return Object.values(checks).every(status => status);
+    }
+    
+    // 验证动画系统
+    async function verifyAnimation() {
+        await waitForPageLoad();
+        
+        console.log('🚀 页面加载完成，开始验证...');
+        
+        const resourcesOK = checkResources();
+        
+        if (!resourcesOK) {
+            console.error('❌ 资源检查失败，无法初始化动画');
+            return false;
+        }
+        
+        const container = document.getElementById('cpp-animation-container');
+        if (!container) {
+            console.error('❌ 动画容器未找到');
+            return false;
+        }
+        
+        try {
+            // 检查是否已经初始化
+            if (window.cppAnimation) {
+                console.log('✅ 动画系统已自动初始化');
+                return true;
+            }
+            
+            // 手动初始化
+            console.log('🔧 手动初始化动画系统...');
+            window.cppAnimation = new CppCodeAnimation('cpp-animation-container');
+            window.cppAnimation.addMouseInteraction();
+            
+            console.log('✅ C++动画系统验证成功！');
+            console.log('🎯 动画位置:', {
+                容器: container.getBoundingClientRect(),
+                页面中的位置: container.offsetTop + 'px from top'
+            });
+            
+            return true;
+            
+        } catch (error) {
+            console.error('❌ 动画初始化失败:', error);
+            return false;
+        }
+    }
+    
+    // 添加调试功能
+    window.debugCppAnimation = {
+        restart: () => {
+            if (window.cppAnimation) {
+                window.cppAnimation.restart();
+                console.log('🔄 动画已重启');
+            }
+        },
+        check: verifyAnimation,
+        info: () => {
+            if (window.cppAnimation) {
+                console.log('📊 动画信息:', {
+                    performance: window.cppAnimation.performanceMode,
+                    reduceMotion: window.cppAnimation.reduceMotion,
+                    isTyping: window.cppAnimation.isTyping,
+                    currentLine: window.cppAnimation.currentLineIndex
+                });
+            }
+        }
+    };
+    
+    // 自动运行验证
+    verifyAnimation().then(success => {
+        if (success) {
+            console.log('🎉 C++动画集成验证完成！');
+            console.log('💡 调试命令: window.debugCppAnimation.restart(), window.debugCppAnimation.info()');
+        } else {
+            console.error('💥 C++动画集成验证失败！');
+        }
+    });
+    
+})();

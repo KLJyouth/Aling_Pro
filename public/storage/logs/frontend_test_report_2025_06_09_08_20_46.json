@@ -1,0 +1,44 @@
+{
+    "test_time": "2025-06-09 08:20:46",
+    "total_tests": 5,
+    "passed_tests": 0,
+    "failed_tests": 5,
+    "success_rate": 0,
+    "results": {
+        "\u9996\u9875": {
+            "success": false,
+            "http_code": 404,
+            "url": "http:\/\/localhost:8000\/index.html",
+            "elements_found": [],
+            "response_size": 543
+        },
+        "\u767b\u5f55\u9875": {
+            "success": false,
+            "http_code": 404,
+            "url": "http:\/\/localhost:8000\/login.html",
+            "elements_found": [],
+            "response_size": 543
+        },
+        "\u6ce8\u518c\u9875": {
+            "success": false,
+            "http_code": 404,
+            "url": "http:\/\/localhost:8000\/register.html",
+            "elements_found": [],
+            "response_size": 546
+        },
+        "\u4eea\u8868\u677f": {
+            "success": false,
+            "http_code": 404,
+            "url": "http:\/\/localhost:8000\/dashboard.html",
+            "elements_found": [],
+            "response_size": 547
+        },
+        "\u804a\u5929\u9875\u9762": {
+            "success": false,
+            "http_code": 404,
+            "url": "http:\/\/localhost:8000\/chat.html",
+            "elements_found": [],
+            "response_size": 542
+        }
+    }
+}

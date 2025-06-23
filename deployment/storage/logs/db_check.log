@@ -1,0 +1,2 @@
+[2025-06-03T13:08:37.565140+00:00] db_check.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-03T13:08:38.910320+00:00] db_check.ERROR: Execute failed {"sql":"INSERT INTO `users` (username,email,password,level) VALUES (:username, :email, :password, :level)","params":{"username":"db_test_1748956118","email":"dbtest@example.com","password":"$2y$10$sC14qoPbmZS64gb.PvVjAO4VHr/hs8k.yBpFTXroszkKJaD29fFHy","level":1},"error":"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'level' in 'field list'"} []

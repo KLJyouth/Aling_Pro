@@ -1,0 +1,5 @@
+{
+    "redis_enabled": false,
+    "opcache_enabled": false,
+    "file_cache_path": "E:\\Code\\AlingAi\\AlingAi_pro\/storage\/cache\/"
+}

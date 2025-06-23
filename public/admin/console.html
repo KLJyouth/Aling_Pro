@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 6.0 - 系统管理控制台</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1f2937 0%, #374151 50%, #4b5563 100%);
+        }
+        .dark-card {
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+        .glass-effect {
+            background: rgba(31, 41, 55, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(55, 65, 81, 0.3);
+        }
+        .metric-card {
+            background: linear-gradient(145deg, #1f2937 0%, #374151 100%);
+            border: 1px solid #4b5563;
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-color: #6366f1;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        .status-online { background-color: #10b981; }
+        .status-warning { background-color: #f59e0b; }
+        .status-error { background-color: #ef4444; }
+        .status-offline { background-color: #6b7280; }
+        .sidebar-dark {
+            background: #111827;
+            border-right: 1px solid #374151;
+        }
+        .console-terminal {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            border-radius: 8px;
+            padding: 16px;
+            height: 300px;
+            overflow-y: auto;
+        }
+        .console-prompt {
+            color: #00ff00;
+        }
+        .console-output {
+            color: #ffffff;
+        }
+        .console-error {
+            color: #ff4444;
+        }
+        .console-warning {
+            color: #ffaa00;
+        }
+        .loading-spinner {
+            border: 2px solid #374151;
+            border-top: 2px solid #6366f1;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .security-alert {
+            background: linear-gradient(45deg, #dc2626, #991b1b);
+            animation: securityPulse 2s infinite;
+        }
+        @keyframes securityPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        .realtime-chart {
+            background: rgba(31, 41, 55, 0.5);
+            border: 1px solid #374151;
+            border-radius: 8px;
+        }
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+        .tab-button.active {
+            background: #6366f1;
+            color: white;
+        }
+        .notification-item {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .notification-item.critical {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .notification-item.warning {
+            border-left-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .notification-item.info {
+            border-left-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .log-level-error { color: #ef4444; }
+        .log-level-warn { color: #f59e0b; }
+        .log-level-info { color: #3b82f6; }
+        .log-level-debug { color: #6b7280; }
+    </style>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <!-- Header -->
+    <header class="gradient-bg border-b border-gray-700 shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-cogs text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">AlingAi Pro 6.0 控制台</h1>
+                            <p class="text-sm text-gray-300">系统管理与监控中心</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- System Status -->
+                    <div class="flex items-center space-x-2 text-sm">
+                        <span class="status-indicator status-online"></span>
+                        <span>系统正常</span>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors" title="刷新">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                        <button class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors" title="告警">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                        </button>
+                        <button class="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors" title="设置">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <img src="../images/admin-avatar.jpg" alt="管理员" class="w-8 h-8 rounded-full object-cover" alt="">
+                        <div class="text-sm">
+                            <p class="font-medium">系统管理员</p>
+                            <p class="text-gray-400">最后登录: 刚刚</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 sidebar-dark">
+            <div class="p-4">
+                <nav class="space-y-2">
+                    <a href="#dashboard" class="nav-link active flex items-center p-3 rounded-lg bg-indigo-600 text-white">
+                        <i class="fas fa-tachometer-alt mr-3"></i>
+                        <span>仪表板</span>
+                    </a>
+                    <a href="#monitoring" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-chart-line mr-3"></i>
+                        <span>系统监控</span>
+                    </a>
+                    <a href="#security" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-shield-alt mr-3"></i>
+                        <span>安全中心</span>
+                    </a>
+                    <a href="#users" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-users mr-3"></i>
+                        <span>用户管理</span>
+                    </a>
+                    <a href="#services" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-server mr-3"></i>
+                        <span>服务管理</span>
+                    </a>
+                    <a href="#logs" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-file-alt mr-3"></i>
+                        <span>系统日志</span>
+                    </a>
+                    <a href="#backup" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-database mr-3"></i>
+                        <span>备份管理</span>
+                    </a>
+                    <a href="#config" class="nav-link flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-cogs mr-3"></i>
+                        <span>系统配置</span>
+                    </a>
+                </nav>
+
+                <!-- Quick System Info -->
+                <div class="mt-8 p-4 dark-card rounded-lg">
+                    <h4 class="text-sm font-medium text-gray-400 mb-3">系统资源</h4>
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>CPU</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>内存</span>
+                                <span>67%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-yellow-500 h-2 rounded-full" style="width: 67%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span>磁盘</span>
+                                <span>23%</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full" style="width: 23%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto">
+            <!-- Dashboard Tab -->
+            <div id="dashboard-content" class="tab-content p-6">
+                <!-- System Overview -->
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6">系统概览</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <!-- CPU Usage -->
+                        <div class="metric-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-microchip text-white text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">CPU 使用率</p>
+                                    <p class="text-2xl font-bold text-blue-400">45%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" style="width: 45%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">8核心 | 3.2GHz</p>
+                        </div>
+
+                        <!-- Memory Usage -->
+                        <div class="metric-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-memory text-white text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">内存使用率</p>
+                                    <p class="text-2xl font-bold text-green-400">67%</p>
+                                </div>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full transition-all duration-500" style="width: 67%"></div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">10.7GB / 16GB</p>
+                        </div>
+
+                        <!-- Active Users -->
+                        <div class="metric-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-users text-white text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">在线用户</p>
+                                    <p class="text-2xl font-bold text-purple-400">1,247</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-xs text-green-400">
+                                <i class="fas fa-arrow-up mr-1"></i>
+                                <span>+15%</span>
+                                <span class="text-gray-500 ml-2">vs 昨天</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">峰值: 1,523</p>
+                        </div>
+
+                        <!-- System Health -->
+                        <div class="metric-card rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-12 h-12 bg-orange-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-heartbeat text-white text-xl"></i>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-gray-400">系统健康</p>
+                                    <p class="text-2xl font-bold text-orange-400">98.5%</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-xs text-green-400">
+                                <span class="status-indicator status-online"></span>
+                                <span>所有服务正常</span>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">运行时间: 15天</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Analytics -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Performance Chart -->
+                    <div class="dark-card rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">系统性能趋势</h3>
+                            <div class="flex space-x-2">
+                                <button class="text-xs bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded transition-colors">1H</button>
+                                <button class="text-xs bg-indigo-600 px-3 py-1 rounded">24H</button>
+                                <button class="text-xs bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded transition-colors">7D</button>
+                            </div>
+                        </div>
+                        <div class="realtime-chart h-64">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Service Status -->
+                    <div class="dark-card rounded-lg p-6">
+                        <h3 class="text-lg font-semibold mb-4">服务状态</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="status-indicator status-online"></span>
+                                    <div>
+                                        <p class="font-medium">Web服务器</p>
+                                        <p class="text-sm text-gray-400">Nginx 1.21.6</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-green-400">正常</p>
+                                    <p class="text-xs text-gray-500">响应时间: 45ms</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="status-indicator status-online"></span>
+                                    <div>
+                                        <p class="font-medium">数据库</p>
+                                        <p class="text-sm text-gray-400">MySQL 8.0.32</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-green-400">正常</p>
+                                    <p class="text-xs text-gray-500">连接数: 45/1000</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="status-indicator status-warning"></span>
+                                    <div>
+                                        <p class="font-medium">Redis缓存</p>
+                                        <p class="text-sm text-gray-400">Redis 7.0.8</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-yellow-400">警告</p>
+                                    <p class="text-xs text-gray-500">内存使用率: 85%</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="status-indicator status-online"></span>
+                                    <div>
+                                        <p class="font-medium">AI服务</p>
+                                        <p class="text-sm text-gray-400">AlingAi Engine 6.0</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-green-400">正常</p>
+                                    <p class="text-xs text-gray-500">处理任务: 23/100</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-800 rounded-lg">
+                                <div class="flex items-center">
+                                    <span class="status-indicator status-online"></span>
+                                    <div>
+                                        <p class="font-medium">区块链节点</p>
+                                        <p class="text-sm text-gray-400">Ethereum Compatible</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm text-green-400">同步</p>
+                                    <p class="text-xs text-gray-500">区块高度: 1,247,856</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities and Alerts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- System Console -->
+                    <div class="dark-card rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">系统控制台</h3>
+                            <button class="text-xs bg-gray-600 hover:bg-gray-500 px-3 py-1 rounded transition-colors" onclick="clearConsole()">
+                                清空
+                            </button>
+                        </div>
+                        <div class="console-terminal" id="systemConsole">
+                            <div class="console-prompt">admin@alingai-pro:~$ systemctl status alingai</div>
+                            <div class="console-output">● alingai.service - AlingAi Pro 6.0 Service</div>
+                            <div class="console-output">   Loaded: loaded (/etc/systemd/system/alingai.service; enabled; vendor preset: enabled)</div>
+                            <div class="console-output">   Active: active (running) since Thu 2025-06-12 09:15:23 CST; 2h 15min ago</div>
+                            <div class="console-output">     Docs: https://docs.alingai.pro</div>
+                            <div class="console-output"> Main PID: 1247 (php-fpm)</div>
+                            <div class="console-output">    Tasks: 45 (limit: 4915)</div>
+                            <div class="console-output">   Memory: 2.1G</div>
+                            <div class="console-output">      CPU: 15min 34.567s</div>
+                            <div class="console-output">   CGroup: /system.slice/alingai.service</div>
+                            <div class="console-prompt">admin@alingai-pro:~$ <span class="cursor">|</span></div>
+                        </div>
+                        <div class="mt-4 flex space-x-2">
+                            <input type="text" placeholder="输入命令..." class="flex-1 bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm" id="consoleInput">
+                            <button class="bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded text-sm transition-colors" onclick="executeCommand()">
+                                执行
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Security Alerts -->
+                    <div class="dark-card rounded-lg p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">安全警报</h3>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs text-gray-400">自动刷新</span>
+                                <div class="loading-spinner"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-3 max-h-64 overflow-y-auto">
+                            <div class="notification-item critical p-3 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-triangle text-red-400 mt-1 mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-red-400">高危安全事件</p>
+                                        <p class="text-sm text-gray-300">检测到3次异常登录尝试 (IP: 192.168.1.100)</p>
+                                        <p class="text-xs text-gray-500 mt-1">2分钟前</p>
+                                    </div>
+                                    <button class="text-xs bg-red-600 hover:bg-red-700 px-2 py-1 rounded">
+                                        处理
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="notification-item warning p-3 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-exclamation-circle text-yellow-400 mt-1 mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-yellow-400">性能警告</p>
+                                        <p class="text-sm text-gray-300">Redis内存使用率超过85%，建议清理缓存</p>
+                                        <p class="text-xs text-gray-500 mt-1">5分钟前</p>
+                                    </div>
+                                    <button class="text-xs bg-yellow-600 hover:bg-yellow-700 px-2 py-1 rounded">
+                                        查看
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="notification-item info p-3 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-info-circle text-blue-400 mt-1 mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-blue-400">系统信息</p>
+                                        <p class="text-sm text-gray-300">定时备份任务已完成，数据备份至云存储</p>
+                                        <p class="text-xs text-gray-500 mt-1">10分钟前</p>
+                                    </div>
+                                    <button class="text-xs bg-blue-600 hover:bg-blue-700 px-2 py-1 rounded">
+                                        详情
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="notification-item info p-3 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-green-400 mt-1 mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-green-400">系统更新</p>
+                                        <p class="text-sm text-gray-300">AI模型更新完成，推理性能提升15%</p>
+                                        <p class="text-xs text-gray-500 mt-1">15分钟前</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="notification-item warning p-3 rounded-lg">
+                                <div class="flex items-start">
+                                    <i class="fas fa-shield-alt text-yellow-400 mt-1 mr-3"></i>
+                                    <div class="flex-1">
+                                        <p class="font-medium text-yellow-400">安全扫描</p>
+                                        <p class="text-sm text-gray-300">发现2个低风险漏洞，建议更新相关组件</p>
+                                        <p class="text-xs text-gray-500 mt-1">30分钟前</p>
+                                    </div>
+                                    <button class="text-xs bg-yellow-600 hover:bg-yellow-700 px-2 py-1 rounded">
+                                        修复
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other tab contents would go here -->
+            <div id="monitoring-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">系统监控</h2>
+                <!-- Monitoring content -->
+            </div>
+
+            <div id="security-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">安全中心</h2>
+                <!-- Security content -->
+            </div>
+
+            <div id="users-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">用户管理</h2>
+                <!-- Users content -->
+            </div>
+
+            <div id="services-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">服务管理</h2>
+                <!-- Services content -->
+            </div>
+
+            <div id="logs-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">系统日志</h2>
+                <!-- Logs content -->
+            </div>
+
+            <div id="backup-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">备份管理</h2>
+                <!-- Backup content -->
+            </div>
+
+            <div id="config-content" class="tab-content p-6 hidden">
+                <h2 class="text-2xl font-bold text-white mb-6">系统配置</h2>
+                <!-- Config content -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script>
+        // Navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeNavigation();
+            initializeCharts();
+            startRealTimeUpdates();
+            initializeConsole();
+        });
+
+        function initializeNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    navLinks.forEach(l => l.classList.remove('active', 'bg-indigo-600', 'text-white'));
+                    navLinks.forEach(l => l.classList.add('text-gray-300'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active', 'bg-indigo-600', 'text-white');
+                    this.classList.remove('text-gray-300');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => content.classList.add('hidden'));
+                    
+                    // Show selected tab content
+                    const targetId = this.getAttribute('href').substring(1) + '-content';
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                        targetContent.classList.remove('hidden');
+                    }
+                });
+            });
+        }
+
+        function initializeCharts() {
+            const ctx = document.getElementById('performanceChart');
+            if (ctx) {
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                        datasets: [{
+                            label: 'CPU使用率',
+                            data: [30, 35, 45, 55, 50, 45, 40],
+                            borderColor: '#3b82f6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            tension: 0.4
+                        }, {
+                            label: '内存使用率',
+                            data: [60, 62, 65, 70, 68, 67, 65],
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#d1d5db'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#9ca3af'
+                                },
+                                grid: {
+                                    color: '#374151'
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: '#9ca3af'
+                                },
+                                grid: {
+                                    color: '#374151'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                updateSystemMetrics();
+                updateServiceStatus();
+            }, 5000);
+        }
+
+        function updateSystemMetrics() {
+            // Simulate real-time metric updates
+            const cpuElement = document.querySelector('.text-blue-400');
+            const memoryElement = document.querySelector('.text-green-400');
+            const usersElement = document.querySelector('.text-purple-400');
+            
+            if (cpuElement) {
+                const newCpu = Math.floor(Math.random() * 20) + 35;
+                cpuElement.textContent = newCpu + '%';
+                
+                const cpuBar = document.querySelector('.bg-blue-500');
+                if (cpuBar) {
+                    cpuBar.style.width = newCpu + '%';
+                }
+            }
+            
+            if (memoryElement) {
+                const newMemory = Math.floor(Math.random() * 15) + 60;
+                memoryElement.textContent = newMemory + '%';
+                
+                const memoryBar = document.querySelector('.bg-green-500');
+                if (memoryBar) {
+                    memoryBar.style.width = newMemory + '%';
+                }
+            }
+            
+            if (usersElement) {
+                const newUsers = Math.floor(Math.random() * 100) + 1200;
+                usersElement.textContent = newUsers.toLocaleString();
+            }
+        }
+
+        function updateServiceStatus() {
+            // Simulate service status updates
+            const statusElements = document.querySelectorAll('.status-indicator');
+            statusElements.forEach(element => {
+                if (Math.random() > 0.95) {
+                    // Randomly change status
+                    const statuses = ['status-online', 'status-warning', 'status-error'];
+                    const currentStatus = element.className.split(' ').find(cls => cls.startsWith('status-'));
+                    const newStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                    element.className = element.className.replace(currentStatus, newStatus);
+                }
+            });
+        }
+
+        function initializeConsole() {
+            const consoleInput = document.getElementById('consoleInput');
+            if (consoleInput) {
+                consoleInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        executeCommand();
+                    }
+                });
+            }
+        }
+
+        function executeCommand() {
+            const input = document.getElementById('consoleInput');
+            const console = document.getElementById('systemConsole');
+            const command = input.value.trim();
+            
+            if (command) {
+                // Add command to console
+                const commandLine = document.createElement('div');
+                commandLine.className = 'console-prompt';
+                commandLine.textContent = `admin@alingai-pro:~$ ${command}`;
+                console.appendChild(commandLine);
+                
+                // Simulate command execution
+                setTimeout(() => {
+                    const output = getCommandOutput(command);
+                    const outputLine = document.createElement('div');
+                    outputLine.className = output.type === 'error' ? 'console-error' : 'console-output';
+                    outputLine.innerHTML = output.text;
+                    console.appendChild(outputLine);
+                    
+                    // Add new prompt
+                    const newPrompt = document.createElement('div');
+                    newPrompt.className = 'console-prompt';
+                    newPrompt.innerHTML = 'admin@alingai-pro:~$ <span class="cursor">|</span>';
+                    console.appendChild(newPrompt);
+                    
+                    console.scrollTop = console.scrollHeight;
+                }, 500);
+                
+                input.value = '';
+            }
+        }
+
+        function getCommandOutput(command) {
+            const commands = {
+                'ps aux': {
+                    type: 'output',
+                    text: 'USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND<br>root         1  0.0  0.1  19396  3876 ?        Ss   Jun11   0:02 /sbin/init<br>www-data  1247  2.1  5.4 456789 87456 ?        S    09:15  15:34 php-fpm: master process'
+                },
+                'df -h': {
+                    type: 'output',
+                    text: 'Filesystem      Size  Used Avail Use% Mounted on<br>/dev/sda1        50G   12G   36G  23% /<br>/dev/sda2       100G   45G   50G  48% /var<br>tmpfs           8.0G     0  8.0G   0% /dev/shm'
+                },
+                'systemctl status nginx': {
+                    type: 'output',
+                    text: '● nginx.service - A high performance web server<br>   Loaded: loaded (/lib/systemd/system/nginx.service; enabled)<br>   Active: active (running) since Thu 2025-06-12 09:15:23 CST<br>   Main PID: 1234 (nginx)'
+                },
+                'top': {
+                    type: 'output',
+                    text: 'top - 11:30:45 up 2:15,  1 user,  load average: 0.45, 0.32, 0.28<br>Tasks: 245 total,   1 running, 244 sleeping,   0 stopped,   0 zombie<br>%Cpu(s):  2.1 us,  1.2 sy,  0.0 ni, 96.5 id,  0.2 wa,  0.0 hi,  0.0 si,  0.0 st'
+                },
+                'help': {
+                    type: 'output',
+                    text: '可用命令:<br>- ps aux: 查看进程列表<br>- df -h: 查看磁盘使用情况<br>- systemctl status [service]: 查看服务状态<br>- top: 查看系统资源<br>- help: 显示帮助信息<br>- clear: 清空控制台'
+                }
+            };
+            
+            if (command === 'clear') {
+                clearConsole();
+                return { type: 'output', text: '' };
+            }
+            
+            return commands[command] || {
+                type: 'error',
+                text: `命令未找到: ${command}<br>输入 'help' 查看可用命令`
+            };
+        }
+
+        function clearConsole() {
+            const console = document.getElementById('systemConsole');
+            console.innerHTML = '<div class="console-prompt">admin@alingai-pro:~$ <span class="cursor">|</span></div>';
+        }
+
+        // Auto-scroll console
+        setInterval(() => {
+            const cursor = document.querySelector('.cursor');
+            if (cursor) {
+                cursor.style.opacity = cursor.style.opacity === '0' ? '1' : '0';
+            }
+        }, 500);
+
+        // Real-time notifications
+        function addSecurityAlert(level, title, message) {
+            const alertsContainer = document.querySelector('.space-y-3.max-h-64');
+            if (alertsContainer) {
+                const alert = document.createElement('div');
+                alert.className = `notification-item ${level} p-3 rounded-lg animate__animated animate__fadeInRight`;
+                alert.innerHTML = `
+                    <div class="flex items-start">
+                        <i class="fas fa-${level === 'critical' ? 'exclamation-triangle' : level === 'warning' ? 'exclamation-circle' : 'info-circle'} text-${level === 'critical' ? 'red' : level === 'warning' ? 'yellow' : 'blue'}-400 mt-1 mr-3"></i>
+                        <div class="flex-1">
+                            <p class="font-medium text-${level === 'critical' ? 'red' : level === 'warning' ? 'yellow' : 'blue'}-400">${title}</p>
+                            <p class="text-sm text-gray-300">${message}</p>
+                            <p class="text-xs text-gray-500 mt-1">刚刚</p>
+                        </div>
+                        ${level !== 'info' ? '<button class="text-xs bg-' + (level === 'critical' ? 'red' : 'yellow') + '-600 hover:bg-' + (level === 'critical' ? 'red' : 'yellow') + '-700 px-2 py-1 rounded">处理</button>' : ''}
+                    </div>
+                `;
+                alertsContainer.insertBefore(alert, alertsContainer.firstChild);
+                
+                // Remove oldest alert if too many
+                const alerts = alertsContainer.children;
+                if (alerts.length > 10) {
+                    alertsContainer.removeChild(alerts[alerts.length - 1]);
+                }
+            }
+        }
+
+        // Simulate random security events
+        setInterval(() => {
+            if (Math.random() > 0.85) {
+                const events = [
+                    { level: 'warning', title: '性能警告', message: 'CPU使用率持续高位运行' },
+                    { level: 'info', title: '系统信息', message: '自动清理临时文件完成' },
+                    { level: 'critical', title: '安全警报', message: '检测到异常网络请求' }
+                ];
+                const event = events[Math.floor(Math.random() * events.length)];
+                addSecurityAlert(event.level, event.title, event.message);
+            }
+        }, 15000);
+    </script>
+</body>
+</html>

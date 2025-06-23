@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>零信任量子系统 - 实时监控仪表板</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 25%, #16213e 50%, #533483 75%, #7209b7 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dashboard-container {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: title-gradient 3s infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes title-gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .dashboard-subtitle {
+            color: #a0a0ff;
+            font-size: 1.1rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .metric-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+            color: #00ffff;
+        }
+
+        .metric-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+
+        .metric-description {
+            color: #a0a0ff;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-online {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            animation: pulse 2s infinite;
+        }
+
+        .status-warning {
+            background: #ffaa00;
+            box-shadow: 0 0 10px #ffaa00;
+            animation: pulse 2s infinite;
+        }
+
+        .status-offline {
+            background: #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .events-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .events-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .events-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffffff;
+            margin-left: 10px;
+        }
+
+        .event-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid;
+            animation: event-appear 0.5s ease-out;
+        }
+
+        @keyframes event-appear {
+            0% { opacity: 0; transform: translateX(-20px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+
+        .event-success {
+            border-left-color: #00ff00;
+        }
+
+        .event-warning {
+            border-left-color: #ffaa00;
+        }
+
+        .event-info {
+            border-left-color: #00ffff;
+        }
+
+        .event-time {
+            color: #a0a0ff;
+            font-size: 0.9rem;
+            margin-right: 15px;
+            min-width: 80px;
+        }
+
+        .event-content {
+            flex: 1;
+            color: #ffffff;
+        }
+
+        .event-user {
+            color: #ff00ff;
+            font-weight: bold;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .performance-item {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .performance-label {
+            color: #a0a0ff;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .performance-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ffff;
+        }
+
+        .refresh-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+            color: #000000;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .refresh-button:hover {
+            transform: scale(1.1) rotate(180deg);
+            box-shadow: 0 8px 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .loading {
+            text-align: center;
+            color: #00ffff;
+            font-size: 1.1rem;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-top: 2px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 15px;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .performance-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <i class="fas fa-atom"></i> 
+                零信任量子系统监控
+            </h1>
+            <p class="dashboard-subtitle">Zero Trust Quantum System Monitoring Dashboard</p>
+        </div>
+
+        <div class="metrics-grid" id="metricsGrid">
+            <!-- 系统状态卡片 -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fas fa-shield-alt metric-icon"></i>
+                    <span class="metric-title">量子网关状态</span>
+                </div>
+                <div class="metric-value" id="gatewayStatus">
+                    <span class="status-indicator status-online"></span>在线
+                </div>
+                <div class="metric-description">零信任量子网关运行正常</div>
+            </div>
+
+            <!-- 信任评分 -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fas fa-star metric-icon"></i>
+                    <span class="metric-title">信任评分</span>
+                </div>
+                <div class="metric-value" id="trustScore">95.7%</div>
+                <div class="metric-description">当前环境信任等级</div>
+            </div>
+
+            <!-- 活跃会话 -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fas fa-users metric-icon"></i>
+                    <span class="metric-title">活跃会话</span>
+                </div>
+                <div class="metric-value" id="activeSessions">0</div>
+                <div class="metric-description">当前在线用户数量</div>
+            </div>
+
+            <!-- 安全级别 -->
+            <div class="metric-card">
+                <div class="metric-header">
+                    <i class="fas fa-lock metric-icon"></i>
+                    <span class="metric-title">安全级别</span>
+                </div>
+                <div class="metric-value" id="securityLevel">最高</div>
+                <div class="metric-description">量子级加密保护</div>
+            </div>
+        </div>
+
+        <div class="performance-grid" id="performanceGrid">
+            <div class="performance-item">
+                <div class="performance-label">响应时间</div>
+                <div class="performance-value" id="responseTime">--</div>
+            </div>
+            <div class="performance-item">
+                <div class="performance-label">CPU使用率</div>
+                <div class="performance-value" id="cpuUsage">--</div>
+            </div>
+            <div class="performance-item">
+                <div class="performance-label">内存使用率</div>
+                <div class="performance-value" id="memoryUsage">--</div>
+            </div>
+            <div class="performance-item">
+                <div class="performance-label">网络延迟</div>
+                <div class="performance-value" id="networkLatency">--</div>
+            </div>
+        </div>
+
+        <div class="events-container">
+            <div class="events-header">
+                <i class="fas fa-history" style="color: #00ffff; font-size: 1.3rem;"></i>
+                <span class="events-title">安全事件日志</span>
+            </div>
+            <div id="eventsContainer">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    正在加载安全事件...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="refresh-button" onclick="refreshDashboard()">
+        <i class="fas fa-sync-alt"></i>
+    </button>
+
+    <script>
+        let updateInterval;
+
+        // 初始化仪表板
+        function initDashboard() {
+            updateDashboard();
+            // 每5秒自动更新
+            updateInterval = setInterval(updateDashboard, 5000);
+        }
+
+        // 更新仪表板数据
+        async function updateDashboard() {
+            try {
+                // 获取系统状态
+                const statusResponse = await fetch('quantum_status_api.php?endpoint=status');
+                const statusData = await statusResponse.json();
+
+                // 更新系统状态
+                updateSystemStatus(statusData);
+
+                // 获取安全事件
+                const eventsResponse = await fetch('quantum_status_api.php?endpoint=security_events');
+                const eventsData = await eventsResponse.json();
+
+                // 更新安全事件
+                updateSecurityEvents(eventsData.events);
+
+            } catch (error) {
+                console.error('更新仪表板数据失败:', error);
+                showError('数据更新失败，请检查网络连接');
+            }
+        }
+
+        // 更新系统状态
+        function updateSystemStatus(data) {
+            // 更新网关状态
+            const gatewayStatus = document.getElementById('gatewayStatus');
+            const isOnline = data.system.quantum_gateway === 'online';
+            gatewayStatus.innerHTML = `
+                <span class="status-indicator ${isOnline ? 'status-online' : 'status-offline'}"></span>
+                ${isOnline ? '在线' : '离线'}
+            `;
+
+            // 更新信任评分
+            document.getElementById('trustScore').textContent = data.system.trust_score + '%';
+
+            // 更新活跃会话
+            document.getElementById('activeSessions').textContent = data.authentication.active_sessions;
+
+            // 更新安全级别
+            const securityLevel = data.system.security_level === 'maximum' ? '最高' : '标准';
+            document.getElementById('securityLevel').textContent = securityLevel;
+
+            // 更新性能指标
+            document.getElementById('responseTime').textContent = data.performance.response_time;
+            document.getElementById('cpuUsage').textContent = data.performance.cpu_usage;
+            document.getElementById('memoryUsage').textContent = data.performance.memory_usage;
+            document.getElementById('networkLatency').textContent = data.performance.network_latency;
+        }
+
+        // 更新安全事件
+        function updateSecurityEvents(events) {
+            const container = document.getElementById('eventsContainer');
+            
+            if (!events || events.length === 0) {
+                container.innerHTML = '<div style="text-align: center; color: #a0a0ff;">暂无安全事件</div>';
+                return;
+            }
+
+            const eventsHTML = events.map(event => {
+                const eventClass = getEventClass(event.type);
+                return `
+                    <div class="event-item ${eventClass}">
+                        <div class="event-time">${event.time}</div>
+                        <div class="event-content">
+                            ${event.event} - <span class="event-user">${event.user}</span>
+                            <small style="color: #888; margin-left: 10px;">风险: ${event.risk}</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = eventsHTML;
+        }
+
+        // 获取事件样式类
+        function getEventClass(type) {
+            switch (type) {
+                case 'success': return 'event-success';
+                case 'warning': return 'event-warning';
+                case 'info': return 'event-info';
+                default: return 'event-info';
+            }
+        }
+
+        // 显示错误信息
+        function showError(message) {
+            const container = document.getElementById('eventsContainer');
+            container.innerHTML = `
+                <div style="text-align: center; color: #ff6b6b; padding: 20px;">
+                    <i class="fas fa-exclamation-triangle"></i> ${message}
+                </div>
+            `;
+        }
+
+        // 刷新仪表板
+        function refreshDashboard() {
+            clearInterval(updateInterval);
+            updateDashboard();
+            updateInterval = setInterval(updateDashboard, 5000);
+            
+            // 添加视觉反馈
+            const button = document.querySelector('.refresh-button');
+            button.style.transform = 'scale(1.1) rotate(360deg)';
+            setTimeout(() => {
+                button.style.transform = 'scale(1) rotate(0deg)';
+            }, 300);
+        }
+
+        // 页面可见性变化时暂停/恢复更新
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearInterval(updateInterval);
+            } else {
+                updateInterval = setInterval(updateDashboard, 5000);
+            }
+        });
+
+        // 快捷键支持
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F5') {
+                e.preventDefault();
+                refreshDashboard();
+            }
+            if (e.key === 'Escape') {
+                window.close();
+            }
+        });
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initDashboard);
+
+        console.log('🚀 零信任量子系统监控仪表板已启动');
+        console.log('⚡ 自动更新间隔: 5秒');
+        console.log('🔄 按F5手动刷新');
+    </script>
+</body>
+</html>

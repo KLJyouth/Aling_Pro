@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全态势感知大屏 - AlingAi Pro 6.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+        }
+        .dashboard-header {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 2px solid #00d4ff;
+            padding: 1rem 0;
+        }
+        .situation-card {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .security-score {
+            font-size: 3rem;
+            font-weight: bold;
+            text-shadow: 0 0 20px currentColor;
+            text-align: center;
+        }
+        .score-excellent { color: #00ff00; }
+        .score-good { color: #ffff00; }
+        .score-warning { color: #ffaa00; }
+        .score-danger { color: #ff0000; }
+        .threat-map {
+            height: 400px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+        }
+        .situation-chart {
+            height: 300px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+        }
+        .metric-panel {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00d4ff;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        .metric-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+        .alert-panel {
+            height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #00d4ff;
+            border-radius: 12px;
+            padding: 1rem;
+        }
+        .alert-item {
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 4px;
+        }
+        .alert-item.critical { border-left-color: #ff0000; }
+        .alert-item.high { border-left-color: #ffaa00; }
+        .alert-item.medium { border-left-color: #ffff00; }
+        .alert-item.low { border-left-color: #00ff00; }
+    </style>
+</head>
+<body>
+    <!-- 大屏头部 -->
+    <div class="dashboard-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h2><i class="bi bi-radar"></i> 安全态势感知大屏</h2>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="security-score score-good" id="overallSecurityScore">85</div>
+                    <div class="text-muted">综合安全评分</div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div id="currentTime"></div>
+                    <div id="lastUpdate"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container-fluid p-4">
+        <!-- 关键指标 -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="threatLevel">中等</div>
+                    <div class="metric-label">威胁等级</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="activeThreats">23</div>
+                    <div class="metric-label">活跃威胁</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="vulnerabilities">12</div>
+                    <div class="metric-label">发现漏洞</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="incidents">5</div>
+                    <div class="metric-label">安全事件</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="responseTime">2.1s</div>
+                    <div class="metric-label">响应时间</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-panel">
+                    <div class="metric-value" id="coverage">98%</div>
+                    <div class="metric-label">防护覆盖率</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 威胁地图和态势分析 -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="situation-card">
+                    <h5><i class="bi bi-globe"></i> 全球威胁态势地图</h5>
+                    <div class="threat-map" id="globalThreatMap"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="situation-card">
+                    <h5><i class="bi bi-graph-up"></i> 安全态势趋势</h5>
+                    <div class="situation-chart" id="securityTrendChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 安全告警和态势评估 -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="situation-card">
+                    <h5><i class="bi bi-exclamation-triangle"></i> 安全告警态势</h5>
+                    <div class="alert-panel" id="securityAlerts"></div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="situation-card">
+                    <h5><i class="bi bi-clipboard-data"></i> 态势评估报告</h5>
+                    <div id="situationAssessment"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let threatMapChart = null;
+        let securityTrendChart = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startRealTimeUpdates();
+            updateTime();
+        });
+
+        function initializeDashboard() {
+            initializeThreatMap();
+            initializeSecurityTrend();
+            loadSecurityAlerts();
+            generateSituationAssessment();
+        }
+
+        function initializeThreatMap() {
+            const chartDom = document.getElementById('globalThreatMap');
+            threatMapChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: 'transparent',
+                geo: {
+                    map: 'world',
+                    roam: true,
+                    itemStyle: {
+                        areaColor: '#1a1a2e',
+                        borderColor: '#00d4ff'
+                    }
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: [
+                            {name: '北京', value: [116.46, 39.92, 100]},
+                            {name: '上海', value: [121.48, 31.22, 80]},
+                            {name: '纽约', value: [-74.006, 40.7128, 120]},
+                            {name: '伦敦', value: [-0.1276, 51.5074, 70]}
+                        ],
+                        symbolSize: function(val) {
+                            return val[2] / 10;
+                        },
+                        itemStyle: {
+                            color: '#ff0000'
+                        }
+                    }
+                ]
+            };
+            
+            threatMapChart.setOption(option);
+        }
+
+        function initializeSecurityTrend() {
+            const chartDom = document.getElementById('securityTrendChart');
+            securityTrendChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: 'transparent',
+                title: {
+                    text: '安全态势趋势',
+                    textStyle: {color: '#ffffff', fontSize: 14}
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    axisLabel: {color: '#ffffff'}
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {color: '#ffffff'}
+                },
+                series: [
+                    {
+                        name: '威胁指数',
+                        type: 'line',
+                        data: [30, 45, 35, 60, 40, 55, 50],
+                        itemStyle: {color: '#ff0000'},
+                        lineStyle: {color: '#ff0000'}
+                    }
+                ]
+            };
+            
+            securityTrendChart.setOption(option);
+        }
+
+        function loadSecurityAlerts() {
+            const alerts = [
+                {
+                    severity: 'critical',
+                    title: '检测到APT攻击',
+                    description: '发现来自境外IP的APT攻击活动',
+                    time: '2分钟前'
+                },
+                {
+                    severity: 'high',
+                    title: '异常登录',
+                    description: '检测到多个账户异常登录',
+                    time: '5分钟前'
+                }
+            ];
+            
+            const container = document.getElementById('securityAlerts');
+            container.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert-item ${alert.severity}`;
+                alertDiv.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <strong>${alert.title}</strong>
+                        <small>${alert.time}</small>
+                    </div>
+                    <div>${alert.description}</div>
+                `;
+                container.appendChild(alertDiv);
+            });
+        }
+
+        function generateSituationAssessment() {
+            const container = document.getElementById('situationAssessment');
+            container.innerHTML = `
+                <div class="mb-3">
+                    <h6>综合评估</h6>
+                    <div class="security-score score-good">85</div>
+                    <div class="text-center">威胁等级: 中等</div>
+                </div>
+                <div class="mb-3">
+                    <h6>建议措施</h6>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-check-circle text-success"></i> 加强网络边界防护</li>
+                        <li><i class="bi bi-check-circle text-success"></i> 完善安全监控体系</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                updateMetrics();
+            }, 5000);
+        }
+
+        function updateMetrics() {
+            document.getElementById('threatLevel').textContent = 
+                ['低', '中等', '高', '极高'][Math.floor(Math.random() * 4)];
+            document.getElementById('activeThreats').textContent = 
+                Math.floor(Math.random() * 20) + 20;
+        }
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleString('zh-CN');
+            document.getElementById('lastUpdate').textContent = 
+                '最后更新: ' + now.toLocaleTimeString('zh-CN');
+            
+            setTimeout(updateTime, 1000);
+        }
+
+        window.addEventListener('resize', function() {
+            if (threatMapChart) threatMapChart.resize();
+            if (securityTrendChart) securityTrendChart.resize();
+        });
+    </script>
+</body>
+</html> 

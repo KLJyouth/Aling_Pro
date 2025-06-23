@@ -1,0 +1,8 @@
+{
+    "type": "file_system",
+    "path": "E:\\Code\\AlingAi\\AlingAi_pro\/storage\/data",
+    "auto_backup": true,
+    "backup_interval": 3600,
+    "max_backups": 24,
+    "created_at": "2025-06-06 08:45:05"
+}

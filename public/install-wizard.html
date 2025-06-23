@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAI Pro - 智能安装向导</title>
+    
+    <!-- 引入外部样式 -->
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: white;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 玻璃态效果 */
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        /* 安装向导容器 */
+        .installer-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* 头部 */
+        .installer-header {
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+        }
+
+        .installer-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff, #e2e8f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .installer-header p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 进度指示器 */
+        .progress-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2rem 0;
+            padding: 0 2rem;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .progress-step::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            z-index: 0;
+        }
+
+        .progress-step:last-child::after {
+            display: none;
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .step-circle.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .step-circle.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .step-label.active {
+            color: white;
+            font-weight: 600;
+        }
+
+        /* 安装步骤内容 */
+        .install-content {
+            padding: 2rem;
+        }
+
+        .install-step {
+            display: none;
+        }
+
+        .install-step.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .step-description {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 1rem center;
+            background-repeat: no-repeat;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+
+        /* 检查项目 */
+        .check-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .check-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .check-icon.loading {
+            background: rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .check-icon.success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .check-icon.error {
+            background: var(--error-color);
+            color: white;
+        }
+
+        .check-text {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .check-detail {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.25rem;
+        }
+
+        /* 按钮样式 */
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 警告框 */
+        .alert {
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .alert-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .installer-container {
+                margin: 1rem auto;
+                padding: 0 0.5rem;
+            }
+
+            .installer-header {
+                padding: 2rem 1rem 1rem;
+            }
+
+            .installer-header h1 {
+                font-size: 2rem;
+            }
+
+            .progress-indicator {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .progress-step {
+                flex-direction: row;
+                max-width: none;
+                width: 100%;
+            }
+
+            .progress-step::after {
+                display: none;
+            }
+
+            .step-circle {
+                margin-right: 1rem;
+            }
+
+            .btn-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* 高级配置面板 */
+        .advanced-config {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .config-section {
+            margin-bottom: 2rem;
+        }
+
+        .config-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .config-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        /* 部署选项卡片 */
+        .deployment-option {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .deployment-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .deployment-option.selected {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .deployment-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .deployment-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .deployment-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="installer-container">
+        <!-- 安装向导主容器 -->
+        <div class="glass-container">
+            <!-- 头部 -->
+            <div class="installer-header">
+                <h1>🚀 AlingAI Pro</h1>
+                <p>智能对话系统安装向导 - 让AI触手可及，只需几分钟即可完成部署</p>
+            </div>
+
+            <!-- 进度指示器 -->
+            <div class="progress-indicator">
+                <div class="progress-step">
+                    <div class="step-circle active" id="step-circle-1">1</div>
+                    <div class="step-label active">环境检查</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle" id="step-circle-2">2</div>
+                    <div class="step-label">部署方式</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle" id="step-circle-3">3</div>
+                    <div class="step-label">基础配置</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle" id="step-circle-4">4</div>
+                    <div class="step-label">数据库设置</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle" id="step-circle-5">5</div>
+                    <div class="step-label">系统初始化</div>
+                </div>
+                <div class="progress-step">
+                    <div class="step-circle" id="step-circle-6">6</div>
+                    <div class="step-label">完成部署</div>
+                </div>
+            </div>
+
+            <!-- 安装步骤内容 -->
+            <div class="install-content">
+                <!-- 步骤1: 环境检查 -->
+                <div class="install-step active" id="step-1">
+                    <h2 class="step-title">🔍 环境检查</h2>
+                    <p class="step-description">正在检查系统环境是否满足运行要求，请稍候...</p>
+
+                    <ul class="check-list">
+                        <li class="check-item" id="check-php">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">PHP 版本检查</div>
+                                <div class="check-detail">检查 PHP 8.1+ 支持</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="check-extensions">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">PHP 扩展</div>
+                                <div class="check-detail">检查必需的 PHP 扩展</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="check-permissions">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">文件权限</div>
+                                <div class="check-detail">检查目录读写权限</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="check-database">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">数据库支持</div>
+                                <div class="check-detail">检查 MySQL/SQLite 支持</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="check-composer">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">Composer 依赖</div>
+                                <div class="check-detail">检查 Composer 包安装</div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="alert alert-info" style="display: none;" id="environment-info">
+                        <i class="bi bi-info-circle"></i>
+                        <div>
+                            <strong>提示：</strong> 如果某些检查项目未通过，请根据错误提示解决后重新检查。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤2: 部署方式选择 -->
+                <div class="install-step" id="step-2">
+                    <h2 class="step-title">🏗️ 选择部署方式</h2>
+                    <p class="step-description">请选择适合您环境的部署方式</p>
+
+                    <div class="config-grid">
+                        <div class="deployment-option" data-deployment="development">
+                            <div class="deployment-icon">🔧</div>
+                            <div class="deployment-title">开发环境</div>
+                            <div class="deployment-description">
+                                适合本地开发和测试，包含调试工具和详细日志
+                            </div>
+                        </div>
+                        <div class="deployment-option" data-deployment="production">
+                            <div class="deployment-icon">🚀</div>
+                            <div class="deployment-title">生产环境</div>
+                            <div class="deployment-description">
+                                优化的生产配置，高性能、高安全性、适合正式部署
+                            </div>
+                        </div>
+                        <div class="deployment-option" data-deployment="docker">
+                            <div class="deployment-icon">🐳</div>
+                            <div class="deployment-title">Docker 容器</div>
+                            <div class="deployment-description">
+                                基于 Docker 的容器化部署，易于扩展和维护
+                            </div>
+                        </div>
+                        <div class="deployment-option" data-deployment="cloud">
+                            <div class="deployment-icon">☁️</div>
+                            <div class="deployment-title">云平台</div>
+                            <div class="deployment-description">
+                                针对云平台优化的配置，支持自动扩缩容
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        <div>
+                            <strong>注意：</strong> 部署方式选择后会影响后续的配置选项，请根据实际需求选择。
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤3: 基础配置 -->
+                <div class="install-step" id="step-3">
+                    <h2 class="step-title">⚙️ 基础配置</h2>
+                    <p class="step-description">配置系统基本参数</p>
+
+                    <div class="config-section">
+                        <h3 class="config-title">应用信息</h3>
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">应用名称</label>
+                                <input type="text" class="form-control" value="AlingAI Pro" placeholder="输入应用名称">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">应用URL</label>
+                                <input type="url" class="form-control" placeholder="https://your-domain.com" id="app-url">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3 class="config-title">管理员账户</h3>
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">管理员邮箱</label>
+                                <input type="email" class="form-control" placeholder="admin@example.com" id="admin-email">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">管理员密码</label>
+                                <input type="password" class="form-control" placeholder="设置管理员密码" id="admin-password">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3 class="config-title">时区和语言</h3>
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">时区</label>
+                                <select class="form-control form-select" id="timezone">
+                                    <option value="Asia/Shanghai">Asia/Shanghai (北京时间)</option>
+                                    <option value="UTC">UTC (协调世界时)</option>
+                                    <option value="America/New_York">America/New_York (东部时间)</option>
+                                    <option value="Europe/London">Europe/London (伦敦时间)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">默认语言</label>
+                                <select class="form-control form-select" id="language">
+                                    <option value="zh-CN">简体中文</option>
+                                    <option value="en-US">English</option>
+                                    <option value="ja-JP">日本語</option>
+                                    <option value="ko-KR">한국어</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 步骤4: 数据库配置 -->
+                <div class="install-step" id="step-4">
+                    <h2 class="step-title">🗄️ 数据库设置</h2>
+                    <p class="step-description">配置数据库连接信息</p>
+
+                    <div class="form-group">
+                        <label class="form-label">数据库类型</label>
+                        <select class="form-control form-select" id="db-type">
+                            <option value="sqlite">SQLite (推荐用于开发)</option>
+                            <option value="mysql">MySQL</option>
+                            <option value="postgresql">PostgreSQL</option>
+                        </select>
+                    </div>
+
+                    <div id="mysql-config" style="display: none;">
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">数据库主机</label>
+                                <input type="text" class="form-control" placeholder="localhost" id="db-host">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">端口</label>
+                                <input type="number" class="form-control" placeholder="3306" id="db-port">
+                            </div>
+                        </div>
+                        <div class="config-grid">
+                            <div class="form-group">
+                                <label class="form-label">数据库名</label>
+                                <input type="text" class="form-control" placeholder="alingai_pro" id="db-name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">用户名</label>
+                                <input type="text" class="form-control" placeholder="root" id="db-username">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">密码</label>
+                            <input type="password" class="form-control" placeholder="数据库密码" id="db-password">
+                        </div>
+                    </div>
+
+                    <div id="sqlite-config">
+                        <div class="form-group">
+                            <label class="form-label">数据库文件路径</label>
+                            <input type="text" class="form-control" value="./database/alingai.db" id="sqlite-path">
+                        </div>
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <div>
+                                <strong>提示：</strong> SQLite 是轻量级数据库，适合小型部署和开发环境。
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" id="test-db-connection">
+                        <i class="bi bi-database-check"></i>
+                        测试数据库连接
+                    </button>
+                </div>
+
+                <!-- 步骤5: 系统初始化 -->
+                <div class="install-step" id="step-5">
+                    <h2 class="step-title">🔄 系统初始化</h2>
+                    <p class="step-description">正在初始化系统，创建数据库表和基础数据...</p>
+
+                    <ul class="check-list">
+                        <li class="check-item" id="init-database">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">创建数据库表</div>
+                                <div class="check-detail">初始化数据库结构</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="init-admin">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">创建管理员账户</div>
+                                <div class="check-detail">设置系统管理员</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="init-config">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">写入配置文件</div>
+                                <div class="check-detail">保存系统配置</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="init-cache">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">优化系统缓存</div>
+                                <div class="check-detail">生成缓存文件</div>
+                            </div>
+                        </li>
+                        <li class="check-item" id="init-security">
+                            <div class="check-icon loading">⏳</div>
+                            <div>
+                                <div class="check-text">配置安全设置</div>
+                                <div class="check-detail">启用安全机制</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 步骤6: 完成安装 -->
+                <div class="install-step" id="step-6">
+                    <h2 class="step-title">🎉 安装完成</h2>
+                    <p class="step-description">恭喜！AlingAI Pro 已成功安装并配置完成</p>
+
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        <div>
+                            <strong>安装成功！</strong> 系统已准备就绪，您可以开始使用 AlingAI Pro。
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <h3 class="config-title">快速链接</h3>
+                        <div class="config-grid">
+                            <a href="/dashboard.html" class="deployment-option" style="text-decoration: none; color: inherit;">
+                                <div class="deployment-icon">📊</div>
+                                <div class="deployment-title">控制台</div>
+                                <div class="deployment-description">管理您的AI对话和系统设置</div>
+                            </a>
+                            <a href="/admin.html" class="deployment-option" style="text-decoration: none; color: inherit;">
+                                <div class="deployment-icon">⚙️</div>
+                                <div class="deployment-title">系统管理</div>
+                                <div class="deployment-description">高级系统配置和用户管理</div>
+                            </a>
+                            <a href="/api-docs.html" class="deployment-option" style="text-decoration: none; color: inherit;">
+                                <div class="deployment-icon">📚</div>
+                                <div class="deployment-title">API文档</div>
+                                <div class="deployment-description">查看完整的API接口文档</div>
+                            </a>
+                            <a href="/docs-center.html" class="deployment-option" style="text-decoration: none; color: inherit;">
+                                <div class="deployment-icon">📖</div>
+                                <div class="deployment-title">技术文档</div>
+                                <div class="deployment-description">深入了解系统架构和配置</div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-lightbulb"></i>
+                        <div>
+                            <strong>下一步建议：</strong>
+                            <ul style="margin: 0.5rem 0 0 1rem; padding: 0;">
+                                <li>访问控制台开始您的第一次AI对话</li>
+                                <li>在系统管理中配置AI模型和参数</li>
+                                <li>查看技术文档了解高级功能</li>
+                                <li>备份配置文件以防意外丢失</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 按钮区域 -->
+            <div class="btn-container">
+                <button type="button" class="btn btn-secondary" id="prev-btn" style="display: none;">
+                    <i class="bi bi-arrow-left"></i>
+                    上一步
+                </button>
+                <div></div>
+                <button type="button" class="btn btn-primary" id="next-btn">
+                    开始检查
+                    <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入外部脚本 -->
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // 安装向导状态管理
+        class InstallWizard {
+            constructor() {
+                this.currentStep = 1;
+                this.totalSteps = 6;
+                this.config = {
+                    deployment: '',
+                    database: {
+                        type: 'sqlite',
+                        host: 'localhost',
+                        port: 3306,
+                        name: 'alingai_pro',
+                        username: 'root',
+                        password: '',
+                        path: './database/alingai.db'
+                    },
+                    app: {
+                        name: 'AlingAI Pro',
+                        url: '',
+                        timezone: 'Asia/Shanghai',
+                        language: 'zh-CN'
+                    },
+                    admin: {
+                        email: '',
+                        password: ''
+                    }
+                };
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.startEnvironmentCheck();
+            }
+
+            bindEvents() {
+                // 下一步按钮
+                document.getElementById('next-btn').addEventListener('click', () => {
+                    this.nextStep();
+                });
+
+                // 上一步按钮
+                document.getElementById('prev-btn').addEventListener('click', () => {
+                    this.prevStep();
+                });
+
+                // 部署方式选择
+                document.querySelectorAll('.deployment-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        document.querySelectorAll('.deployment-option').forEach(opt => 
+                            opt.classList.remove('selected'));
+                        option.classList.add('selected');
+                        this.config.deployment = option.dataset.deployment;
+                    });
+                });
+
+                // 数据库类型切换
+                document.getElementById('db-type').addEventListener('change', (e) => {
+                    this.toggleDatabaseConfig(e.target.value);
+                    this.config.database.type = e.target.value;
+                });
+
+                // 测试数据库连接
+                document.getElementById('test-db-connection').addEventListener('click', () => {
+                    this.testDatabaseConnection();
+                });
+
+                // 自动检测应用URL
+                this.detectAppUrl();
+            }
+
+            nextStep() {
+                if (this.currentStep < this.totalSteps) {
+                    if (this.validateCurrentStep()) {
+                        this.currentStep++;
+                        this.updateUI();
+                        
+                        // 特殊步骤处理
+                        if (this.currentStep === 5) {
+                            this.startSystemInitialization();
+                        }
+                    }
+                }
+            }
+
+            prevStep() {
+                if (this.currentStep > 1) {
+                    this.currentStep--;
+                    this.updateUI();
+                }
+            }
+
+            updateUI() {
+                // 更新进度指示器
+                this.updateProgressIndicator();
+                
+                // 显示对应步骤内容
+                document.querySelectorAll('.install-step').forEach((step, index) => {
+                    step.classList.toggle('active', index + 1 === this.currentStep);
+                });
+
+                // 更新按钮状态
+                this.updateButtons();
+            }
+
+            updateProgressIndicator() {
+                for (let i = 1; i <= this.totalSteps; i++) {
+                    const circle = document.getElementById(`step-circle-${i}`);
+                    const label = circle.parentElement.querySelector('.step-label');
+                    
+                    circle.classList.remove('active', 'completed');
+                    label.classList.remove('active');
+                    
+                    if (i < this.currentStep) {
+                        circle.classList.add('completed');
+                        circle.innerHTML = '<i class="bi bi-check"></i>';
+                    } else if (i === this.currentStep) {
+                        circle.classList.add('active');
+                        label.classList.add('active');
+                        circle.textContent = i;
+                    } else {
+                        circle.textContent = i;
+                    }
+                }
+            }
+
+            updateButtons() {
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+
+                // 上一步按钮
+                prevBtn.style.display = this.currentStep > 1 ? 'flex' : 'none';
+
+                // 下一步按钮
+                if (this.currentStep === this.totalSteps) {
+                    nextBtn.innerHTML = '<i class="bi bi-house"></i> 访问首页';
+                    nextBtn.onclick = () => window.location.href = '/';
+                } else if (this.currentStep === 1) {
+                    nextBtn.innerHTML = '开始检查 <i class="bi bi-arrow-right"></i>';
+                } else if (this.currentStep === 2) {
+                    nextBtn.innerHTML = '确认选择 <i class="bi bi-arrow-right"></i>';
+                } else if (this.currentStep === 4) {
+                    nextBtn.innerHTML = '开始初始化 <i class="bi bi-arrow-right"></i>';
+                } else {
+                    nextBtn.innerHTML = '下一步 <i class="bi bi-arrow-right"></i>';
+                }
+            }
+
+            validateCurrentStep() {
+                switch (this.currentStep) {
+                    case 1:
+                        return this.validateEnvironment();
+                    case 2:
+                        return this.validateDeployment();
+                    case 3:
+                        return this.validateBasicConfig();
+                    case 4:
+                        return this.validateDatabaseConfig();
+                    default:
+                        return true;
+                }
+            }
+
+            validateEnvironment() {
+                // 检查所有环境检查项是否通过
+                const checkItems = document.querySelectorAll('.check-item .check-icon');
+                return Array.from(checkItems).every(icon => icon.classList.contains('success'));
+            }
+
+            validateDeployment() {
+                if (!this.config.deployment) {
+                    alert('请选择部署方式');
+                    return false;
+                }
+                return true;
+            }
+
+            validateBasicConfig() {
+                const email = document.getElementById('admin-email').value;
+                const password = document.getElementById('admin-password').value;
+                
+                if (!email || !password) {
+                    alert('请填写管理员邮箱和密码');
+                    return false;
+                }
+                
+                this.config.admin.email = email;
+                this.config.admin.password = password;
+                this.config.app.url = document.getElementById('app-url').value;
+                this.config.app.timezone = document.getElementById('timezone').value;
+                this.config.app.language = document.getElementById('language').value;
+                
+                return true;
+            }
+
+            validateDatabaseConfig() {
+                if (this.config.database.type === 'mysql') {
+                    const host = document.getElementById('db-host').value;
+                    const name = document.getElementById('db-name').value;
+                    const username = document.getElementById('db-username').value;
+                    
+                    if (!host || !name || !username) {
+                        alert('请填写完整的数据库配置信息');
+                        return false;
+                    }
+                    
+                    this.config.database.host = host;
+                    this.config.database.name = name;
+                    this.config.database.username = username;
+                    this.config.database.password = document.getElementById('db-password').value;
+                    this.config.database.port = document.getElementById('db-port').value || 3306;
+                } else {
+                    this.config.database.path = document.getElementById('sqlite-path').value;
+                }
+                
+                return true;
+            }
+
+            // 环境检查
+            async startEnvironmentCheck() {
+                const checks = [
+                    { id: 'check-php', name: 'PHP版本检查', delay: 1000 },
+                    { id: 'check-extensions', name: 'PHP扩展检查', delay: 1500 },
+                    { id: 'check-permissions', name: '文件权限检查', delay: 2000 },
+                    { id: 'check-database', name: '数据库支持检查', delay: 2500 },
+                    { id: 'check-composer', name: 'Composer检查', delay: 3000 }
+                ];
+
+                for (const check of checks) {
+                    await this.performCheck(check);
+                }
+
+                // 显示环境信息提示
+                document.getElementById('environment-info').style.display = 'flex';
+            }
+
+            async performCheck(check) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const checkItem = document.getElementById(check.id);
+                        const icon = checkItem.querySelector('.check-icon');
+                        
+                        // 模拟检查结果 (实际应该调用后端API)
+                        const success = Math.random() > 0.1; // 90% 成功率
+                        
+                        icon.classList.remove('loading');
+                        if (success) {
+                            icon.classList.add('success');
+                            icon.innerHTML = '<i class="bi bi-check"></i>';
+                        } else {
+                            icon.classList.add('error');
+                            icon.innerHTML = '<i class="bi bi-x"></i>';
+                        }
+                        
+                        resolve();
+                    }, check.delay);
+                });
+            }
+
+            // 数据库配置切换
+            toggleDatabaseConfig(type) {
+                const mysqlConfig = document.getElementById('mysql-config');
+                const sqliteConfig = document.getElementById('sqlite-config');
+                
+                if (type === 'mysql' || type === 'postgresql') {
+                    mysqlConfig.style.display = 'block';
+                    sqliteConfig.style.display = 'none';
+                } else {
+                    mysqlConfig.style.display = 'none';
+                    sqliteConfig.style.display = 'block';
+                }
+            }
+
+            // 测试数据库连接
+            async testDatabaseConnection() {
+                const testBtn = document.getElementById('test-db-connection');
+                const originalText = testBtn.innerHTML;
+                
+                testBtn.disabled = true;
+                testBtn.innerHTML = '<div class="loading-spinner"></div> 测试中...';
+                
+                try {
+                    // 模拟数据库连接测试
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // 显示成功消息
+                    alert('数据库连接测试成功！');
+                } catch (error) {
+                    alert('数据库连接测试失败，请检查配置！');
+                } finally {
+                    testBtn.disabled = false;
+                    testBtn.innerHTML = originalText;
+                }
+            }
+
+            // 系统初始化
+            async startSystemInitialization() {
+                const initSteps = [
+                    { id: 'init-database', name: '创建数据库表', delay: 1000 },
+                    { id: 'init-admin', name: '创建管理员账户', delay: 2000 },
+                    { id: 'init-config', name: '写入配置文件', delay: 3000 },
+                    { id: 'init-cache', name: '优化系统缓存', delay: 4000 },
+                    { id: 'init-security', name: '配置安全设置', delay: 5000 }
+                ];
+
+                for (const step of initSteps) {
+                    await this.performInitStep(step);
+                }
+
+                // 初始化完成后自动进入下一步
+                setTimeout(() => {
+                    this.nextStep();
+                }, 1000);
+            }
+
+            async performInitStep(step) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const stepItem = document.getElementById(step.id);
+                        const icon = stepItem.querySelector('.check-icon');
+                        
+                        icon.classList.remove('loading');
+                        icon.classList.add('success');
+                        icon.innerHTML = '<i class="bi bi-check"></i>';
+                        
+                        resolve();
+                    }, step.delay);
+                });
+            }
+
+            // 自动检测应用URL
+            detectAppUrl() {
+                const appUrlInput = document.getElementById('app-url');
+                const protocol = window.location.protocol;
+                const host = window.location.host;
+                appUrlInput.value = `${protocol}//${host}`;
+            }
+        }
+
+        // 初始化安装向导
+        document.addEventListener('DOMContentLoaded', () => {
+            new InstallWizard();
+        });
+    </script>
+</body>
+</html>

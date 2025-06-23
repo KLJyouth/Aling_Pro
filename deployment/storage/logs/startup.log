@@ -1,0 +1,5 @@
+[2025-06-03T15:03:40.688114+00:00] startup.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-03T16:00:58.742080+00:00] startup.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-03T16:01:07.552623+00:00] startup.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-04T02:47:24.292022+00:00] startup.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-04T02:47:44.053938+00:00] startup.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []

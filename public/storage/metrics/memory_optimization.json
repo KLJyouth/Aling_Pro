@@ -1,0 +1,12 @@
+{
+    "timestamp": "2025-06-07 12:42:55",
+    "memory_usage": {
+        "current": 2097152,
+        "peak": 2097152,
+        "limit": "128M"
+    },
+    "recommendations": [
+        "\u5efa\u8bae\u542f\u7528 OPcache \u4ee5\u51cf\u5c11\u5185\u5b58\u4f7f\u7528",
+        "\u5b9a\u671f\u6e05\u7406\u4e34\u65f6\u6587\u4ef6\u548c\u8fc7\u671f\u7f13\u5b58"
+    ]
+}

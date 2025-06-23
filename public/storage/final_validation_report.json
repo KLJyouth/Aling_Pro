@@ -1,0 +1,27 @@
+{
+    "timestamp": "2025-06-11 03:39:16",
+    "total_tests": 18,
+    "passed_tests": 18,
+    "success_rate": 100,
+    "status": "excellent",
+    "detailed_results": {
+        "PHP\u7248\u672c\u68c0\u67e5": true,
+        "\u5fc5\u9700\u6269\u5c55\u68c0\u67e5": true,
+        "\u73af\u5883\u53d8\u91cf\u52a0\u8f7d": true,
+        "Composer\u81ea\u52a8\u52a0\u8f7d\u5668": true,
+        "AlingAi\u6838\u5fc3\u7c7b": true,
+        "\u670d\u52a1\u7c7b\u52a0\u8f7d": true,
+        "\u6570\u636e\u5e93\u670d\u52a1\u521b\u5efa": true,
+        "\u6570\u636e\u5e93\u67e5\u8be2\u6d4b\u8bd5": true,
+        "\u6587\u4ef6\u7cfb\u7edf\u6570\u636e\u5e93": true,
+        "\u5e94\u7528\u7a0b\u5e8f\u521b\u5efa": true,
+        "\u9759\u6001\u5de5\u5382\u65b9\u6cd5": true,
+        "PSR-7\u63a5\u53e3\u5b9e\u73b0": true,
+        "\u7f13\u5b58\u670d\u52a1": true,
+        "\u8ba4\u8bc1\u670d\u52a1": true,
+        "\u914d\u7f6e\u670d\u52a1": true,
+        "\u5b58\u50a8\u76ee\u5f55\u6743\u9650": true,
+        "\u65e5\u5fd7\u6587\u4ef6\u5199\u5165": true,
+        "\u914d\u7f6e\u6587\u4ef6\u5b58\u5728": true
+    }
+}

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录模态框测试</title>
+    <style>
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .login-modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .login-modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+        
+        .login-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .login-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .login-button:hover {
+            background: #0056b3;
+        }
+        
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        .test-btn {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>登录模态框功能测试</h1>
+    <button id="login-btn" class="test-btn">点击测试登录模态框</button>
+    
+    <!-- 登录模态框 -->
+    <div id="login-modal" class="login-modal" role="dialog" aria-labelledby="login-title" aria-modal="true">
+        <div class="login-modal-content">
+            <button class="login-modal-close" aria-label="关闭登录对话框">&times;</button>
+            
+            <form class="login-form" id="login-form" novalidate>
+                <h2 id="login-title">用户登录</h2>
+                
+                <div class="form-group">
+                    <label for="login-username">用户名或邮箱</label>
+                    <input 
+                        type="text" 
+                        id="login-username" 
+                        name="username"
+                        placeholder="请输入用户名或邮箱" 
+                        required
+                    >
+                    <div id="username-error" class="error-message" role="alert"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">密码</label>
+                    <input 
+                        type="password" 
+                        id="login-password" 
+                        name="password"
+                        placeholder="请输入密码" 
+                        required
+                    >
+                    <div id="password-error" class="error-message" role="alert"></div>
+                </div>
+                
+                <button type="submit" class="login-button" id="login-submit">登录</button>
+                
+                <div id="login-error" class="error-message" role="alert"></div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // 登录模态框初始化
+        function initLoginModal() {
+            const loginBtn = document.getElementById('login-btn');
+            const loginModal = document.getElementById('login-modal');
+            const closeBtn = loginModal.querySelector('.login-modal-close');
+            const loginForm = document.getElementById('login-form');
+            
+            console.log('✅ 登录模态框初始化');
+            
+            // 打开模态框
+            loginBtn.addEventListener('click', function() {
+                console.log('🔓 登录按钮被点击');
+                loginModal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                // 聚焦到第一个输入框
+                setTimeout(() => {
+                    document.getElementById('login-username').focus();
+                }, 100);
+            });
+            
+            // 关闭模态框
+            function closeModal() {
+                console.log('❌ 关闭登录模态框');
+                loginModal.classList.remove('show');
+                document.body.style.overflow = 'auto';
+                clearErrors();
+            }
+            
+            closeBtn.addEventListener('click', closeModal);
+            
+            // 点击模态框外部关闭
+            loginModal.addEventListener('click', function(e) {
+                if (e.target === loginModal) {
+                    closeModal();
+                }
+            });
+            
+            // ESC键关闭
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && loginModal.classList.contains('show')) {
+                    closeModal();
+                }
+            });
+            
+            // 表单提交处理
+            loginForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('📝 表单提交');
+                
+                if (!validateLoginForm()) {
+                    return;
+                }
+                
+                const submitBtn = document.getElementById('login-submit');
+                
+                // 显示加载状态
+                submitBtn.disabled = true;
+                submitBtn.textContent = '登录中...';
+                
+                try {
+                    const formData = new FormData(loginForm);
+                    const loginData = {
+                        username: formData.get('username'),
+                        password: formData.get('password')
+                    };
+                    
+                    console.log('🔐 登录数据:', loginData);
+                    
+                    // 模拟登录过程
+                    await simulateLogin(loginData);
+                    
+                    // 登录成功
+                    console.log('✅ 登录成功');
+                    alert('登录成功！');
+                    closeModal();
+                    
+                } catch (error) {
+                    console.error('❌ 登录失败:', error);
+                    showError('login-error', error.message || '登录失败，请稍后重试');
+                } finally {
+                    // 恢复按钮状态
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '登录';
+                }
+            });
+        }
+        
+        // 表单验证
+        function validateLoginForm() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            let isValid = true;
+            
+            clearErrors();
+            
+            if (!username) {
+                showError('username-error', '请输入用户名或邮箱');
+                isValid = false;
+            }
+            
+            if (!password) {
+                showError('password-error', '请输入密码');
+                isValid = false;
+            } else if (password.length < 6) {
+                showError('password-error', '密码长度至少6位');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // 显示错误信息
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+        }
+        
+        // 清除错误信息
+        function clearErrors() {
+            const errorElements = document.querySelectorAll('.error-message');
+            errorElements.forEach(element => {
+                element.classList.remove('show');
+                element.textContent = '';
+            });
+        }
+        
+        // 模拟登录过程
+        async function simulateLogin(loginData) {
+            // 模拟网络延迟
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            // 模拟登录验证
+            if (loginData.username === 'demo' && loginData.password === 'demo123') {
+                return { success: true, token: 'mock-jwt-token' };
+            } else {
+                throw new Error('用户名或密码错误（试试 demo/demo123）');
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 页面加载完成，初始化登录模态框');
+            initLoginModal();
+        });
+    </script>
+</body>
+</html>

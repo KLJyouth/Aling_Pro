@@ -1,0 +1,21 @@
+[
+    {
+        "id": 1,
+        "level": "info",
+        "message": "Database initialized with file storage",
+        "context": "{\"system\":\"filedb\"}",
+        "created_at": "2025-06-11 15:49:05"
+    },
+    {
+        "id": 2,
+        "level": "test",
+        "message": "Performance test log",
+        "created_at": "2025-06-11 15:50:39"
+    },
+    {
+        "id": 3,
+        "level": "test",
+        "message": "Performance test log",
+        "created_at": "2025-06-11 16:33:35"
+    }
+]

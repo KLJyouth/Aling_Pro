@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API文档 - AlingAI | 珑凌科技</title>
+    
+    <!-- SEO 优化 -->
+    <meta name="description" content="AlingAI API文档 - 完整的API接口文档，包含认证、对话、模型管理等功能接口">
+    <meta name="keywords" content="AlingAI,API文档,接口文档,开发者文档,SDK">
+    
+    <!-- 核心样式和字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'quantum': {
+                            50: '#f0f0ff',
+                            100: '#e0e0ff',
+                            500: '#6C13FF',
+                            600: '#5A0FD9',
+                            700: '#480BB3',
+                            800: '#36078D',
+                            900: '#240367'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+        }
+        
+        .sidebar {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .content-area {
+            background: rgba(26, 26, 46, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: rgba(108, 19, 255, 0.1);
+            border-left-color: #6C13FF;
+            color: #6C13FF;
+        }
+        
+        .method-badge {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .method-get { background: #10B981; color: white; }
+        .method-post { background: #3B82F6; color: white; }
+        .method-put { background: #F59E0B; color: white; }
+        .method-delete { background: #EF4444; color: white; }
+        
+        .code-block {
+            background: #1e1e1e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .endpoint-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .parameter-table {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .parameter-table th {
+            background: rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .parameter-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .response-example {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .error-example {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        
+        .try-it-btn {
+            background: linear-gradient(135deg, #6C13FF, #9333EA);
+            transition: all 0.3s ease;
+        }
+        
+        .try-it-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(108, 19, 255, 0.3);
+        }
+        
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .search-box:focus {
+            border-color: #6C13FF;
+            box-shadow: 0 0 20px rgba(108, 19, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- 导航栏 -->
+    <nav class="glass-card fixed top-0 left-0 right-0 z-40 p-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-r from-quantum-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-robot text-sm text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white">AlingAI</span>
+                </a>
+                <span class="text-gray-400">/</span>
+                <span class="text-quantum-300">API文档</span>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="搜索API..."
+                           class="search-box px-4 py-2 pl-10 rounded-lg text-white placeholder-gray-300 focus:outline-none w-64">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                
+                <!-- 用户菜单 -->
+                <div class="flex items-center space-x-2">
+                    <a href="dashboard.html" class="px-4 py-2 bg-quantum-600 hover:bg-quantum-700 rounded-lg text-white transition-colors">
+                        <i class="fas fa-tachometer-alt mr-2"></i>控制台
+                    </a>
+                    <a href="login-new.html" class="px-4 py-2 border border-gray-600 hover:bg-gray-600 rounded-lg text-white transition-colors">
+                        <i class="fas fa-sign-in-alt mr-2"></i>登录
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区域 -->
+    <div class="flex pt-20">
+        <!-- 侧边栏 -->
+        <div class="sidebar w-80 min-h-screen fixed left-0 top-20 overflow-y-auto">
+            <div class="p-6">
+                <!-- API版本选择 -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">API版本</label>
+                    <select class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-quantum-500">
+                        <option value="v1">v1.0 (当前版本)</option>
+                        <option value="beta">v2.0 (Beta)</option>
+                    </select>
+                </div>
+                
+                <!-- 导航菜单 -->
+                <nav class="space-y-2">
+                    <div class="nav-section">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3">快速开始</h3>
+                        <a href="#overview" class="nav-link active block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-play mr-3"></i>概述
+                        </a>
+                        <a href="#authentication" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-key mr-3"></i>身份认证
+                        </a>
+                        <a href="#rate-limits" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-tachometer-alt mr-3"></i>速率限制
+                        </a>
+                        <a href="#errors" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>错误处理
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3 mt-6">API接口</h3>
+                        <a href="#chat" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-comments mr-3"></i>对话接口
+                        </a>
+                        <a href="#models" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-brain mr-3"></i>模型管理
+                        </a>
+                        <a href="#files" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-file mr-3"></i>文件管理
+                        </a>
+                        <a href="#agents" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-robot mr-3"></i>智能体
+                        </a>
+                        <a href="#usage" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-chart-bar mr-3"></i>使用统计
+                        </a>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wide mb-3 mt-6">SDK & 工具</h3>
+                        <a href="#sdk-python" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fab fa-python mr-3"></i>Python SDK
+                        </a>
+                        <a href="#sdk-javascript" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fab fa-js-square mr-3"></i>JavaScript SDK
+                        </a>
+                        <a href="#postman" class="nav-link block px-4 py-2 rounded-lg text-gray-300 hover:text-quantum-300">
+                            <i class="fas fa-paper-plane mr-3"></i>Postman集合
+                        </a>
+                    </div>
+                </nav>
+                
+                <!-- API状态 -->
+                <div class="mt-8 p-4 bg-green-500 bg-opacity-10 border border-green-500 border-opacity-30 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-3"></div>
+                        <div>
+                            <p class="text-green-300 font-semibold">API状态正常</p>
+                            <p class="text-green-200 text-sm">99.9% 正常运行时间</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="content-area flex-1 ml-80 p-8">
+            <!-- 概述部分 -->
+            <section id="overview" class="mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-r from-quantum-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-rocket text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold text-white mb-2">AlingAI API 文档</h1>
+                            <p class="text-gray-300">强大的AI对话API，为您的应用注入智能</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-blue-500 bg-opacity-10 border border-blue-500 border-opacity-30 rounded-lg p-6 text-center">
+                            <i class="fas fa-lightning-bolt text-blue-400 text-2xl mb-3"></i>
+                            <h3 class="text-blue-300 font-semibold mb-2">高性能</h3>
+                            <p class="text-blue-200 text-sm">平均响应时间 < 200ms</p>
+                        </div>
+                        <div class="bg-green-500 bg-opacity-10 border border-green-500 border-opacity-30 rounded-lg p-6 text-center">
+                            <i class="fas fa-shield-alt text-green-400 text-2xl mb-3"></i>
+                            <h3 class="text-green-300 font-semibold mb-2">安全可靠</h3>
+                            <p class="text-green-200 text-sm">零信任安全架构</p>
+                        </div>
+                        <div class="bg-purple-500 bg-opacity-10 border border-purple-500 border-opacity-30 rounded-lg p-6 text-center">
+                            <i class="fas fa-code text-purple-400 text-2xl mb-3"></i>
+                            <h3 class="text-purple-300 font-semibold mb-2">易于集成</h3>
+                            <p class="text-purple-200 text-sm">RESTful API设计</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-500 bg-opacity-10 border border-yellow-500 border-opacity-30 rounded-lg p-6">
+                        <div class="flex items-start">
+                            <i class="fas fa-star text-yellow-400 mr-3 mt-1"></i>
+                            <div>
+                                <h4 class="text-yellow-300 font-semibold mb-2">快速开始</h4>
+                                <p class="text-yellow-200 text-sm mb-4">
+                                    获取API密钥后，您可以立即开始使用AlingAI的强大功能。
+                                    我们提供完整的SDK和示例代码，帮助您快速集成。
+                                </p>
+                                <div class="flex space-x-4">
+                                    <a href="#authentication" class="inline-flex items-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 rounded-lg text-white transition-colors">
+                                        <i class="fas fa-key mr-2"></i>获取API密钥
+                                    </a>
+                                    <a href="#chat" class="inline-flex items-center px-4 py-2 border border-yellow-600 hover:bg-yellow-600 hover:bg-opacity-20 rounded-lg text-yellow-300 transition-colors">
+                                        <i class="fas fa-play mr-2"></i>查看示例
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 身份认证 -->
+            <section id="authentication" class="mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-key text-quantum-400 mr-3"></i>
+                        身份认证
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-3">API密钥认证</h3>
+                            <p class="text-gray-300 mb-4">
+                                所有API请求都需要在请求头中包含您的API密钥。您可以在
+                                <a href="dashboard.html" class="text-quantum-400 hover:text-quantum-300">用户控制台</a>
+                                中获取API密钥。
+                            </p>
+                            
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-bash">curl -X POST "https://api.alingai.com/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "Hello, AlingAI!"}
+    ]
+  }'</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="parameter-table rounded-lg overflow-hidden">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            请求头
+                                        </th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">
+                                            说明
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-600">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <code class="text-quantum-300 font-mono">Authorization</code>
+                                        </td>
+                                        <td class="px-6 py-4 text-gray-300">
+                                            Bearer token，格式为 <code class="text-gray-400 font-mono">Bearer YOUR_API_KEY</code>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <code class="text-quantum-300 font-mono">Content-Type</code>
+                                        </td>
+                                        <td class="px-6 py-4 text-gray-300">
+                                            必须设置为 <code class="text-gray-400 font-mono">application/json</code>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="bg-red-500 bg-opacity-10 border border-red-500 border-opacity-30 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-exclamation-triangle text-red-400 mr-3 mt-1"></i>
+                                <div>
+                                    <h4 class="text-red-300 font-semibold mb-1">安全提醒</h4>
+                                    <p class="text-red-200 text-sm">
+                                        请妥善保管您的API密钥，不要在客户端代码中暴露。
+                                        如果密钥泄露，请立即在控制台中重新生成。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 对话接口 -->
+            <section id="chat" class="mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-comments text-quantum-400 mr-3"></i>
+                        对话接口
+                    </h2>
+                    
+                    <!-- 创建对话 -->
+                    <div class="endpoint-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <span class="method-badge method-post mr-4">POST</span>
+                                <code class="text-lg font-mono text-white">/v1/chat/completions</code>
+                            </div>
+                            <button class="try-it-btn px-4 py-2 rounded-lg text-white font-medium hover:scale-105 transition-transform">
+                                <i class="fas fa-play mr-2"></i>试试看
+                            </button>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-6">
+                            创建一个新的对话完成请求。支持多轮对话和流式响应。
+                        </p>
+                        
+                        <!-- 请求参数 -->
+                        <h4 class="text-lg font-semibold text-white mb-4">请求参数</h4>
+                        <div class="parameter-table rounded-lg overflow-hidden mb-6">
+                            <table class="w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">参数</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">类型</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">必需</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">说明</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="px-6 py-4"><code class="text-quantum-300">messages</code></td>
+                                        <td class="px-6 py-4 text-gray-300">array</td>
+                                        <td class="px-6 py-4"><span class="text-red-400">是</span></td>
+                                        <td class="px-6 py-4 text-gray-300">对话消息数组</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4"><code class="text-quantum-300">model</code></td>
+                                        <td class="px-6 py-4 text-gray-300">string</td>
+                                        <td class="px-6 py-4"><span class="text-gray-400">否</span></td>
+                                        <td class="px-6 py-4 text-gray-300">使用的模型，默认为 gpt-4</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4"><code class="text-quantum-300">temperature</code></td>
+                                        <td class="px-6 py-4 text-gray-300">number</td>
+                                        <td class="px-6 py-4"><span class="text-gray-400">否</span></td>
+                                        <td class="px-6 py-4 text-gray-300">温度参数，范围 0-2，默认 1</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4"><code class="text-quantum-300">max_tokens</code></td>
+                                        <td class="px-6 py-4 text-gray-300">integer</td>
+                                        <td class="px-6 py-4"><span class="text-gray-400">否</span></td>
+                                        <td class="px-6 py-4 text-gray-300">最大输出token数，默认 4096</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4"><code class="text-quantum-300">stream</code></td>
+                                        <td class="px-6 py-4 text-gray-300">boolean</td>
+                                        <td class="px-6 py-4"><span class="text-gray-400">否</span></td>
+                                        <td class="px-6 py-4 text-gray-300">是否启用流式响应，默认 false</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 请求示例 -->
+                        <h4 class="text-lg font-semibold text-white mb-4">请求示例</h4>
+                        <div class="code-block p-4 rounded-lg mb-6">
+                            <pre><code class="language-json">{
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是一个有用的AI助手。"
+    },
+    {
+      "role": "user",
+      "content": "请解释一下什么是量子计算。"
+    }
+  ],
+  "model": "gpt-4",
+  "temperature": 0.7,
+  "max_tokens": 2048,
+  "stream": false
+}</code></pre>
+                        </div>
+                        
+                        <!-- 响应示例 -->
+                        <h4 class="text-lg font-semibold text-white mb-4">响应示例</h4>
+                        <div class="response-example p-4 rounded-lg mb-4">
+                            <h5 class="text-green-300 font-semibold mb-2">成功响应 (200 OK)</h5>
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-json">{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "gpt-4",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "量子计算是一种基于量子力学原理的计算技术..."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 150,
+    "total_tokens": 162
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="error-example p-4 rounded-lg">
+                            <h5 class="text-red-300 font-semibold mb-2">错误响应 (400 Bad Request)</h5>
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-json">{
+  "error": {
+    "message": "Missing required parameter: messages",
+    "type": "invalid_request_error",
+    "code": "missing_parameter"
+  }
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 模型管理 -->
+            <section id="models" class="mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-brain text-quantum-400 mr-3"></i>
+                        模型管理
+                    </h2>
+                    
+                    <!-- 获取模型列表 -->
+                    <div class="endpoint-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <span class="method-badge method-get mr-4">GET</span>
+                                <code class="text-lg font-mono text-white">/v1/models</code>
+                            </div>
+                            <button class="try-it-btn px-4 py-2 rounded-lg text-white font-medium hover:scale-105 transition-transform">
+                                <i class="fas fa-play mr-2"></i>试试看
+                            </button>
+                        </div>
+                        
+                        <p class="text-gray-300 mb-6">
+                            获取可用的AI模型列表及其详细信息。
+                        </p>
+                        
+                        <!-- 响应示例 -->
+                        <h4 class="text-lg font-semibold text-white mb-4">响应示例</h4>
+                        <div class="response-example p-4 rounded-lg">
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-json">{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-4",
+      "object": "model",
+      "created": 1677610602,
+      "owned_by": "openai",
+      "capabilities": ["chat", "completion"],
+      "max_tokens": 4096,
+      "description": "最新的GPT-4模型，具有强大的推理能力"
+    },
+    {
+      "id": "gpt-3.5-turbo",
+      "object": "model",
+      "created": 1677610602,
+      "owned_by": "openai",
+      "capabilities": ["chat", "completion"],
+      "max_tokens": 4096,
+      "description": "优化的GPT-3.5模型，速度更快"
+    }
+  ]
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- SDK部分 -->
+            <section id="sdk-python" class="mb-12">
+                <div class="glass-card p-8 rounded-2xl">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fab fa-python text-quantum-400 mr-3"></i>
+                        Python SDK
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <!-- 安装 -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-3">安装</h3>
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-bash">pip install alingai</code></pre>
+                            </div>
+                        </div>
+                        
+                        <!-- 快速开始 -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-3">快速开始</h3>
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-python">import alingai
+
+# 初始化客户端
+client = alingai.Client(api_key="your-api-key")
+
+# 创建对话
+response = client.chat.completions.create(
+    messages=[
+        {"role": "user", "content": "Hello, AlingAI!"}
+    ],
+    model="gpt-4"
+)
+
+print(response.choices[0].message.content)</code></pre>
+                            </div>
+                        </div>
+                        
+                        <!-- 流式响应 -->
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-3">流式响应</h3>
+                            <div class="code-block p-4 rounded-lg">
+                                <pre><code class="language-python">stream = client.chat.completions.create(
+    messages=[
+        {"role": "user", "content": "写一首关于AI的诗"}
+    ],
+    model="gpt-4",
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content is not None:
+        print(chunk.choices[0].delta.content, end="")</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-4">
+                            <a href="#" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium transition-colors">
+                                <i class="fab fa-github mr-2"></i>
+                                GitHub
+                            </a>
+                            <a href="#" class="inline-flex items-center px-6 py-3 bg-orange-600 hover:bg-orange-700 rounded-lg text-white font-medium transition-colors">
+                                <i class="fas fa-book mr-2"></i>
+                                完整文档
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <!-- API测试工具弹窗 -->
+    <div id="apiTester" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl w-full max-w-4xl max-h-[80vh] overflow-y-auto">
+            <div class="p-6 border-b border-gray-600">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-white">API测试工具</h3>
+                    <button onclick="closeApiTester()" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- 请求配置 -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-white mb-4">请求配置</h4>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">API端点</label>
+                                <select id="apiEndpoint" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white">
+                                    <option value="/v1/chat/completions">POST /v1/chat/completions</option>
+                                    <option value="/v1/models">GET /v1/models</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">请求体</label>
+                                <textarea id="requestBody" rows="10" 
+                                          class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-white font-mono text-sm"
+                                          placeholder='{"messages": [{"role": "user", "content": "Hello!"}]}'></textarea>
+                            </div>
+                            
+                            <button onclick="sendApiRequest()" 
+                                    class="w-full bg-quantum-600 hover:bg-quantum-700 px-4 py-2 rounded-lg text-white font-medium transition-colors">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                发送请求
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 响应结果 -->
+                    <div>
+                        <h4 class="text-lg font-semibold text-white mb-4">响应结果</h4>
+                        
+                        <div class="space-y-4">
+                            <div id="responseStatus" class="hidden">
+                                <div class="flex items-center space-x-2">
+                                    <span class="text-sm text-gray-300">状态码:</span>
+                                    <span id="statusCode" class="px-2 py-1 rounded text-sm font-mono"></span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <pre id="responseBody" class="bg-gray-900 border border-gray-600 rounded-lg p-4 text-sm text-green-300 font-mono min-h-[200px] overflow-x-auto"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // 导航激活状态
+        function updateActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.pageYOffset >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // API测试工具
+        function openApiTester() {
+            document.getElementById('apiTester').classList.remove('hidden');
+        }
+        
+        function closeApiTester() {
+            document.getElementById('apiTester').classList.add('hidden');
+        }
+        
+        // 试试看按钮点击事件
+        document.querySelectorAll('.try-it-btn').forEach(btn => {
+            btn.addEventListener('click', openApiTester);
+        });
+        
+        // 发送API请求
+        async function sendApiRequest() {
+            const endpoint = document.getElementById('apiEndpoint').value;
+            const requestBody = document.getElementById('requestBody').value;
+            const responseStatus = document.getElementById('responseStatus');
+            const statusCode = document.getElementById('statusCode');
+            const responseBody = document.getElementById('responseBody');
+            
+            try {
+                responseBody.textContent = '发送请求中...';
+                
+                // 模拟API请求
+                setTimeout(() => {
+                    const mockResponse = {
+                        id: "chatcmpl-" + Math.random().toString(36).substr(2, 9),
+                        object: "chat.completion",
+                        created: Math.floor(Date.now() / 1000),
+                        model: "gpt-4",
+                        choices: [{
+                            index: 0,
+                            message: {
+                                role: "assistant",
+                                content: "这是一个模拟的API响应。在实际使用中，这里会返回AI生成的内容。"
+                            },
+                            finish_reason: "stop"
+                        }],
+                        usage: {
+                            prompt_tokens: 12,
+                            completion_tokens: 150,
+                            total_tokens: 162
+                        }
+                    };
+                    
+                    responseStatus.classList.remove('hidden');
+                    statusCode.textContent = '200 OK';
+                    statusCode.className = 'px-2 py-1 rounded text-sm font-mono bg-green-600 text-white';
+                    responseBody.textContent = JSON.stringify(mockResponse, null, 2);
+                }, 1000);
+                
+            } catch (error) {
+                responseStatus.classList.remove('hidden');
+                statusCode.textContent = '500 Error';
+                statusCode.className = 'px-2 py-1 rounded text-sm font-mono bg-red-600 text-white';
+                responseBody.textContent = JSON.stringify({
+                    error: {
+                        message: error.message,
+                        type: "api_error"
+                    }
+                }, null, 2);
+            }
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('section[id]');
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                const isVisible = query === '' || content.includes(query);
+                section.style.display = isVisible ? 'block' : 'none';
+            });
+        });
+        
+        // 监听滚动事件
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            updateActiveNav();
+            
+            // 设置默认请求体
+            document.getElementById('requestBody').value = JSON.stringify({
+                messages: [
+                    {
+                        role: "user",
+                        content: "Hello, AlingAI!"
+                    }
+                ],
+                model: "gpt-4",
+                temperature: 0.7
+            }, null, 2);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>威胁情报可视化大屏 - AlingAi Pro 6.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+        }
+        .dashboard-header {
+            background: linear-gradient(90deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 2px solid #00ff00;
+            padding: 1rem 0;
+        }
+        .metric-card {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+        .threat-level {
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px currentColor;
+        }
+        .threat-high { color: #ff0000; }
+        .threat-medium { color: #ffaa00; }
+        .threat-low { color: #00ff00; }
+        .attack-map {
+            height: 400px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+        }
+        .threat-chart {
+            height: 300px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+        }
+        .real-time-feed {
+            height: 400px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        .threat-event {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #00ff00;
+            background: rgba(0, 255, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+        .threat-event.critical { border-left-color: #ff0000; background: rgba(255, 0, 0, 0.1); }
+        .threat-event.high { border-left-color: #ffaa00; background: rgba(255, 170, 0, 0.1); }
+        .threat-event.medium { border-left-color: #ffff00; background: rgba(255, 255, 0, 0.1); }
+        .threat-event.low { border-left-color: #00ff00; background: rgba(0, 255, 0, 0.1); }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+            animation: blink 1s infinite;
+        }
+        .status-active { background: #00ff00; }
+        .status-warning { background: #ffaa00; }
+        .status-error { background: #ff0000; }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .metric-label {
+            font-size: 0.9rem;
+            color: #cccccc;
+            text-transform: uppercase;
+        }
+        .globe-container {
+            position: relative;
+            height: 400px;
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .attack-line {
+            position: absolute;
+            height: 2px;
+            background: linear-gradient(90deg, #ff0000, #ffaa00, #00ff00);
+            animation: attack-animation 3s linear infinite;
+        }
+        @keyframes attack-animation {
+            0% { width: 0%; opacity: 1; }
+            100% { width: 100%; opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 大屏头部 -->
+    <div class="dashboard-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <h2><i class="bi bi-shield-exclamation"></i> 威胁情报可视化大屏</h2>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="threat-level threat-medium" id="globalThreatLevel">中等威胁</div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div id="currentTime"></div>
+                    <div id="lastUpdate"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <div class="container-fluid p-4">
+        <!-- 关键指标 -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="totalThreats">1,247</div>
+                    <div class="metric-label">总威胁数</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="activeAttacks">23</div>
+                    <div class="metric-label">活跃攻击</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="blockedAttacks">156</div>
+                    <div class="metric-label">已阻止攻击</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="vulnerabilities">45</div>
+                    <div class="metric-label">发现漏洞</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="malwareCount">89</div>
+                    <div class="metric-label">恶意软件</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="metric-card text-center">
+                    <div class="metric-value" id="responseTime">2.3s</div>
+                    <div class="metric-label">平均响应时间</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 攻击地图和威胁分布 -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="globe-container" id="attackMap">
+                    <!-- 攻击地图将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="threat-chart" id="threatDistribution">
+                    <!-- 威胁分布图表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 威胁趋势和实时事件 -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="threat-chart" id="threatTrends">
+                    <!-- 威胁趋势图表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5><i class="bi bi-clock-history"></i> 实时威胁事件</h5>
+                <div class="real-time-feed" id="realTimeEvents">
+                    <!-- 实时事件将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 威胁类型和来源分析 -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="threat-chart" id="threatTypes">
+                    <!-- 威胁类型图表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="threat-chart" id="attackSources">
+                    <!-- 攻击来源图表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="threat-chart" id="targetAnalysis">
+                    <!-- 目标分析图表将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统状态和告警 -->
+        <div class="row">
+            <div class="col-md-6">
+                <h5><i class="bi bi-gear"></i> 系统状态</h5>
+                <div class="table-responsive">
+                    <table class="table table-dark table-sm">
+                        <thead>
+                            <tr>
+                                <th>系统组件</th>
+                                <th>状态</th>
+                                <th>性能</th>
+                                <th>最后更新</th>
+                            </tr>
+                        </thead>
+                        <tbody id="systemStatus">
+                            <!-- 系统状态将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5><i class="bi bi-exclamation-triangle"></i> 活跃告警</h5>
+                <div class="real-time-feed" id="activeAlerts">
+                    <!-- 活跃告警将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        // 全局变量
+        let attackMapChart = null;
+        let threatDistributionChart = null;
+        let threatTrendsChart = null;
+        let threatTypesChart = null;
+        let attackSourcesChart = null;
+        let targetAnalysisChart = null;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            startRealTimeUpdates();
+            updateTime();
+        });
+
+        // 初始化仪表板
+        function initializeDashboard() {
+            initializeAttackMap();
+            initializeThreatDistribution();
+            initializeThreatTrends();
+            initializeThreatTypes();
+            initializeAttackSources();
+            initializeTargetAnalysis();
+            loadSystemStatus();
+            loadActiveAlerts();
+            loadRealTimeEvents();
+        }
+
+        // 初始化攻击地图
+        function initializeAttackMap() {
+            const chartDom = document.getElementById('attackMap');
+            attackMapChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                geo: {
+                    map: 'world',
+                    roam: true,
+                    itemStyle: {
+                        areaColor: '#2d2d2d',
+                        borderColor: '#00ff00'
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            areaColor: '#3d3d3d'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        coordinateSystem: 'geo',
+                        data: generateAttackData(),
+                        symbolSize: function(val) {
+                            return val[2] / 10;
+                        },
+                        itemStyle: {
+                            color: function(params) {
+                                const colors = ['#ff0000', '#ffaa00', '#ffff00', '#00ff00'];
+                                return colors[Math.floor(Math.random() * colors.length)];
+                            }
+                        }
+                    },
+                    {
+                        type: 'lines',
+                        coordinateSystem: 'geo',
+                        data: generateAttackLines(),
+                        lineStyle: {
+                            color: '#ff0000',
+                            width: 1,
+                            opacity: 0.6,
+                            curveness: 0.2
+                        },
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0.7,
+                            color: '#ff0000',
+                            symbolSize: 3
+                        }
+                    }
+                ]
+            };
+            
+            attackMapChart.setOption(option);
+        }
+
+        // 生成攻击数据
+        function generateAttackData() {
+            const data = [];
+            const cities = [
+                {name: '北京', value: [116.46, 39.92, 100]},
+                {name: '上海', value: [121.48, 31.22, 80]},
+                {name: '广州', value: [113.23, 23.16, 60]},
+                {name: '深圳', value: [114.07, 22.62, 90]},
+                {name: '纽约', value: [-74.006, 40.7128, 120]},
+                {name: '伦敦', value: [-0.1276, 51.5074, 70]},
+                {name: '东京', value: [139.6917, 35.6895, 85]},
+                {name: '莫斯科', value: [37.6173, 55.7558, 95]}
+            ];
+            
+            cities.forEach(city => {
+                data.push(city.value);
+            });
+            
+            return data;
+        }
+
+        // 生成攻击线路
+        function generateAttackLines() {
+            return [
+                {
+                    coords: [[116.46, 39.92], [-74.006, 40.7128]],
+                    lineStyle: {color: '#ff0000'}
+                },
+                {
+                    coords: [[121.48, 31.22], [-0.1276, 51.5074]],
+                    lineStyle: {color: '#ffaa00'}
+                },
+                {
+                    coords: [[114.07, 22.62], [139.6917, 35.6895]],
+                    lineStyle: {color: '#ffff00'}
+                }
+            ];
+        }
+
+        // 初始化威胁分布
+        function initializeThreatDistribution() {
+            const chartDom = document.getElementById('threatDistribution');
+            threatDistributionChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                title: {
+                    text: '威胁分布',
+                    textStyle: {color: '#ffffff'}
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: '60%',
+                        data: [
+                            {value: 35, name: '恶意软件', itemStyle: {color: '#ff0000'}},
+                            {value: 25, name: '网络攻击', itemStyle: {color: '#ffaa00'}},
+                            {value: 20, name: '钓鱼攻击', itemStyle: {color: '#ffff00'}},
+                            {value: 15, name: '数据泄露', itemStyle: {color: '#00ff00'}},
+                            {value: 5, name: '其他', itemStyle: {color: '#888888'}}
+                        ],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 255, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+            
+            threatDistributionChart.setOption(option);
+        }
+
+        // 初始化威胁趋势
+        function initializeThreatTrends() {
+            const chartDom = document.getElementById('threatTrends');
+            threatTrendsChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                title: {
+                    text: '威胁趋势',
+                    textStyle: {color: '#ffffff'}
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['威胁数量', '攻击强度'],
+                    textStyle: {color: '#ffffff'}
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
+                    axisLabel: {color: '#ffffff'}
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {color: '#ffffff'}
+                },
+                series: [
+                    {
+                        name: '威胁数量',
+                        type: 'line',
+                        data: [120, 132, 101, 134, 90, 230, 210],
+                        itemStyle: {color: '#ff0000'},
+                        lineStyle: {color: '#ff0000'}
+                    },
+                    {
+                        name: '攻击强度',
+                        type: 'line',
+                        data: [220, 182, 191, 234, 290, 330, 310],
+                        itemStyle: {color: '#00ff00'},
+                        lineStyle: {color: '#00ff00'}
+                    }
+                ]
+            };
+            
+            threatTrendsChart.setOption(option);
+        }
+
+        // 初始化威胁类型
+        function initializeThreatTypes() {
+            const chartDom = document.getElementById('threatTypes');
+            threatTypesChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                title: {
+                    text: '威胁类型',
+                    textStyle: {color: '#ffffff'}
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['恶意软件', '网络攻击', '钓鱼攻击', '数据泄露', 'DDoS'],
+                    axisLabel: {color: '#ffffff', rotate: 45}
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {color: '#ffffff'}
+                },
+                series: [
+                    {
+                        type: 'bar',
+                        data: [120, 200, 150, 80, 70],
+                        itemStyle: {
+                            color: function(params) {
+                                const colors = ['#ff0000', '#ffaa00', '#ffff00', '#00ff00', '#0088ff'];
+                                return colors[params.dataIndex];
+                            }
+                        }
+                    }
+                ]
+            };
+            
+            threatTypesChart.setOption(option);
+        }
+
+        // 初始化攻击来源
+        function initializeAttackSources() {
+            const chartDom = document.getElementById('attackSources');
+            attackSourcesChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                title: {
+                    text: '攻击来源',
+                    textStyle: {color: '#ffffff'}
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        data: [
+                            {value: 40, name: '中国', itemStyle: {color: '#ff0000'}},
+                            {value: 25, name: '美国', itemStyle: {color: '#ffaa00'}},
+                            {value: 15, name: '俄罗斯', itemStyle: {color: '#ffff00'}},
+                            {value: 10, name: '朝鲜', itemStyle: {color: '#00ff00'}},
+                            {value: 10, name: '其他', itemStyle: {color: '#888888'}}
+                        ]
+                    }
+                ]
+            };
+            
+            attackSourcesChart.setOption(option);
+        }
+
+        // 初始化目标分析
+        function initializeTargetAnalysis() {
+            const chartDom = document.getElementById('targetAnalysis');
+            targetAnalysisChart = echarts.init(chartDom);
+            
+            const option = {
+                backgroundColor: '#1a1a1a',
+                title: {
+                    text: '目标分析',
+                    textStyle: {color: '#ffffff'}
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                radar: {
+                    indicator: [
+                        {name: '金融', max: 100},
+                        {name: '政府', max: 100},
+                        {name: '能源', max: 100},
+                        {name: '医疗', max: 100},
+                        {name: '教育', max: 100},
+                        {name: '制造', max: 100}
+                    ],
+                    axisLabel: {color: '#ffffff'}
+                },
+                series: [
+                    {
+                        type: 'radar',
+                        data: [
+                            {
+                                value: [80, 90, 70, 60, 50, 75],
+                                name: '攻击强度',
+                                itemStyle: {color: '#ff0000'},
+                                areaStyle: {color: 'rgba(255, 0, 0, 0.3)'}
+                            }
+                        ]
+                    }
+                ]
+            };
+            
+            targetAnalysisChart.setOption(option);
+        }
+
+        // 加载系统状态
+        function loadSystemStatus() {
+            const statusData = [
+                {
+                    component: '威胁检测引擎',
+                    status: 'active',
+                    performance: '95%',
+                    lastUpdate: '2分钟前'
+                },
+                {
+                    component: '防火墙系统',
+                    status: 'active',
+                    performance: '98%',
+                    lastUpdate: '1分钟前'
+                },
+                {
+                    component: '入侵检测系统',
+                    status: 'warning',
+                    performance: '87%',
+                    lastUpdate: '3分钟前'
+                },
+                {
+                    component: '安全信息管理系统',
+                    status: 'active',
+                    performance: '92%',
+                    lastUpdate: '30秒前'
+                },
+                {
+                    component: '漏洞扫描器',
+                    status: 'active',
+                    performance: '89%',
+                    lastUpdate: '5分钟前'
+                }
+            ];
+            
+            const tbody = document.getElementById('systemStatus');
+            tbody.innerHTML = '';
+            
+            statusData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.component}</td>
+                    <td><span class="status-indicator status-${item.status}"></span>${item.status}</td>
+                    <td>${item.performance}</td>
+                    <td>${item.lastUpdate}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 加载活跃告警
+        function loadActiveAlerts() {
+            const alerts = [
+                {
+                    severity: 'critical',
+                    message: '检测到高级持续性威胁(APT)攻击',
+                    time: '2分钟前'
+                },
+                {
+                    severity: 'high',
+                    message: '多个IP地址尝试暴力破解',
+                    time: '5分钟前'
+                },
+                {
+                    severity: 'medium',
+                    message: '异常网络流量检测',
+                    time: '8分钟前'
+                },
+                {
+                    severity: 'low',
+                    message: '可疑文件上传尝试',
+                    time: '12分钟前'
+                }
+            ];
+            
+            const container = document.getElementById('activeAlerts');
+            container.innerHTML = '';
+            
+            alerts.forEach(alert => {
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `threat-event ${alert.severity}`;
+                alertDiv.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <strong>${alert.message}</strong>
+                        <small>${alert.time}</small>
+                    </div>
+                `;
+                container.appendChild(alertDiv);
+            });
+        }
+
+        // 加载实时事件
+        function loadRealTimeEvents() {
+            const events = [
+                {
+                    severity: 'critical',
+                    message: '检测到勒索软件活动',
+                    time: '1分钟前',
+                    source: '192.168.1.100'
+                },
+                {
+                    severity: 'high',
+                    message: 'SQL注入攻击尝试',
+                    time: '3分钟前',
+                    source: '203.0.113.1'
+                },
+                {
+                    severity: 'medium',
+                    message: '异常登录尝试',
+                    time: '6分钟前',
+                    source: '10.0.0.50'
+                },
+                {
+                    severity: 'low',
+                    message: '端口扫描检测',
+                    time: '10分钟前',
+                    source: '172.16.0.25'
+                }
+            ];
+            
+            const container = document.getElementById('realTimeEvents');
+            container.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `threat-event ${event.severity}`;
+                eventDiv.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <strong>${event.message}</strong>
+                        <small>${event.time}</small>
+                    </div>
+                    <div><small>来源: ${event.source}</small></div>
+                `;
+                container.appendChild(eventDiv);
+            });
+        }
+
+        // 开始实时更新
+        function startRealTimeUpdates() {
+            // 更新指标
+            setInterval(() => {
+                updateMetrics();
+            }, 5000);
+            
+            // 更新图表
+            setInterval(() => {
+                updateCharts();
+            }, 10000);
+            
+            // 更新事件
+            setInterval(() => {
+                addNewEvent();
+            }, 3000);
+        }
+
+        // 更新指标
+        function updateMetrics() {
+            document.getElementById('totalThreats').textContent = 
+                Math.floor(Math.random() * 200) + 1200;
+            document.getElementById('activeAttacks').textContent = 
+                Math.floor(Math.random() * 10) + 20;
+            document.getElementById('blockedAttacks').textContent = 
+                Math.floor(Math.random() * 20) + 150;
+            document.getElementById('vulnerabilities').textContent = 
+                Math.floor(Math.random() * 10) + 40;
+            document.getElementById('malwareCount').textContent = 
+                Math.floor(Math.random() * 15) + 85;
+            document.getElementById('responseTime').textContent = 
+                (Math.random() * 2 + 1).toFixed(1) + 's';
+        }
+
+        // 更新图表
+        function updateCharts() {
+            // 更新攻击地图
+            if (attackMapChart) {
+                const newData = generateAttackData();
+                attackMapChart.setOption({
+                    series: [{
+                        data: newData
+                    }]
+                });
+            }
+        }
+
+        // 添加新事件
+        function addNewEvent() {
+            const events = [
+                '检测到新的恶意软件变种',
+                '网络钓鱼攻击尝试',
+                'DDoS攻击检测',
+                '数据泄露尝试',
+                '权限提升攻击'
+            ];
+            
+            const severities = ['low', 'medium', 'high', 'critical'];
+            const sources = ['192.168.1.100', '203.0.113.1', '10.0.0.50', '172.16.0.25'];
+            
+            const newEvent = {
+                severity: severities[Math.floor(Math.random() * severities.length)],
+                message: events[Math.floor(Math.random() * events.length)],
+                time: '刚刚',
+                source: sources[Math.floor(Math.random() * sources.length)]
+            };
+            
+            const container = document.getElementById('realTimeEvents');
+            const eventDiv = document.createElement('div');
+            eventDiv.className = `threat-event ${newEvent.severity}`;
+            eventDiv.innerHTML = `
+                <div class="d-flex justify-content-between">
+                    <strong>${newEvent.message}</strong>
+                    <small>${newEvent.time}</small>
+                </div>
+                <div><small>来源: ${newEvent.source}</small></div>
+            `;
+            
+            container.insertBefore(eventDiv, container.firstChild);
+            
+            // 保持最多10个事件
+            if (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        // 更新时间
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = 
+                now.toLocaleString('zh-CN');
+            document.getElementById('lastUpdate').textContent = 
+                '最后更新: ' + now.toLocaleTimeString('zh-CN');
+            
+            setTimeout(updateTime, 1000);
+        }
+
+        // 窗口大小改变时重新调整图表
+        window.addEventListener('resize', function() {
+            if (attackMapChart) attackMapChart.resize();
+            if (threatDistributionChart) threatDistributionChart.resize();
+            if (threatTrendsChart) threatTrendsChart.resize();
+            if (threatTypesChart) threatTypesChart.resize();
+            if (attackSourcesChart) attackSourcesChart.resize();
+            if (targetAnalysisChart) targetAnalysisChart.resize();
+        });
+    </script>
+</body>
+</html> 

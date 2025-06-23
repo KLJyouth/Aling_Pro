@@ -1,0 +1,388 @@
+<!-- 系统通知容器 -->
+<div id="notifications-container" class="notifications-container">
+    <!-- 浮动通知将在这里动态插入 -->
+</div>
+
+<!-- Flash 消息显示 -->
+{% if session.flash_messages is defined %}
+    {% for type, messages in session.flash_messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ type == 'error' ? 'danger' : type }} alert-dismissible fade show flash-message" role="alert">
+                <div class="d-flex align-items-center">
+                    {% if type == 'success' %}
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                    {% elseif type == 'error' %}
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {% elseif type == 'warning' %}
+                        <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    {% else %}
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                    {% endif %}
+                    <div class="flex-grow-1">{{ message }}</div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+<!-- 通知系统脚本 -->
+<script>
+class NotificationSystem {
+    constructor() {
+        this.container = document.getElementById('notifications-container');
+        this.notifications = [];
+        this.maxNotifications = 5;
+        this.defaultDuration = 5000;
+        
+        this.init();
+    }
+    
+    init() {
+        // 自动隐藏 Flash 消息
+        setTimeout(() => {
+            const flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(message => {
+                const alert = new bootstrap.Alert(message);
+                alert.close();
+            });
+        }, 5000);
+        
+        // 监听服务器推送的通知
+        this.initServerNotifications();
+    }
+    
+    // 显示通知
+    show(message, type = 'info', duration = null, actions = null) {
+        const notification = this.createNotification(message, type, duration, actions);
+        this.addNotification(notification);
+        return notification.id;
+    }
+    
+    // 显示成功通知
+    success(message, duration = null, actions = null) {
+        return this.show(message, 'success', duration, actions);
+    }
+    
+    // 显示错误通知
+    error(message, duration = null, actions = null) {
+        return this.show(message, 'error', duration || 8000, actions);
+    }
+    
+    // 显示警告通知
+    warning(message, duration = null, actions = null) {
+        return this.show(message, 'warning', duration, actions);
+    }
+    
+    // 显示信息通知
+    info(message, duration = null, actions = null) {
+        return this.show(message, 'info', duration, actions);
+    }
+    
+    // 创建通知元素
+    createNotification(message, type, duration, actions) {
+        const id = 'notification-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        const notification = {
+            id: id,
+            type: type,
+            message: message,
+            duration: duration || this.defaultDuration,
+            actions: actions,
+            element: null,
+            timer: null
+        };
+        
+        const icons = {
+            success: 'bi-check-circle-fill',
+            error: 'bi-exclamation-triangle-fill',
+            warning: 'bi-exclamation-circle-fill',
+            info: 'bi-info-circle-fill'
+        };
+        
+        const colors = {
+            success: 'success',
+            error: 'danger',
+            warning: 'warning',
+            info: 'primary'
+        };
+        
+        // 创建通知HTML
+        const element = document.createElement('div');
+        element.id = id;
+        element.className = `notification alert alert-${colors[type]} alert-dismissible fade show`;
+        element.setAttribute('role', 'alert');
+        
+        let actionsHtml = '';
+        if (actions && actions.length > 0) {
+            actionsHtml = '<div class="notification-actions mt-2">';
+            actions.forEach(action => {
+                actionsHtml += `
+                    <button type="button" class="btn btn-sm btn-outline-${colors[type]} me-2" 
+                            onclick="${action.callback}">${action.text}</button>
+                `;
+            });
+            actionsHtml += '</div>';
+        }
+        
+        element.innerHTML = `
+            <div class="d-flex align-items-start">
+                <i class="bi ${icons[type]} me-2 mt-1"></i>
+                <div class="flex-grow-1">
+                    <div class="notification-message">${message}</div>
+                    ${actionsHtml}
+                </div>
+                <button type="button" class="btn-close" onclick="notificationSystem.hide('${id}')"></button>
+            </div>
+        `;
+        
+        notification.element = element;
+        return notification;
+    }
+    
+    // 添加通知到容器
+    addNotification(notification) {
+        // 如果通知数量超过最大值，移除最旧的通知
+        if (this.notifications.length >= this.maxNotifications) {
+            const oldestNotification = this.notifications.shift();
+            this.hide(oldestNotification.id);
+        }
+        
+        this.notifications.push(notification);
+        this.container.appendChild(notification.element);
+        
+        // 触发动画
+        setTimeout(() => {
+            notification.element.classList.add('show');
+        }, 10);
+        
+        // 设置自动隐藏定时器
+        if (notification.duration > 0) {
+            notification.timer = setTimeout(() => {
+                this.hide(notification.id);
+            }, notification.duration);
+        }
+    }
+    
+    // 隐藏通知
+    hide(notificationId) {
+        const index = this.notifications.findIndex(n => n.id === notificationId);
+        if (index === -1) return;
+        
+        const notification = this.notifications[index];
+        
+        // 清除定时器
+        if (notification.timer) {
+            clearTimeout(notification.timer);
+        }
+        
+        // 移除元素
+        if (notification.element && notification.element.parentNode) {
+            notification.element.classList.remove('show');
+            notification.element.classList.add('fade');
+            
+            setTimeout(() => {
+                if (notification.element.parentNode) {
+                    notification.element.parentNode.removeChild(notification.element);
+                }
+            }, 300);
+        }
+        
+        // 从数组中移除
+        this.notifications.splice(index, 1);
+    }
+    
+    // 清除所有通知
+    clearAll() {
+        this.notifications.forEach(notification => {
+            this.hide(notification.id);
+        });
+    }
+    
+    // 初始化服务器推送通知
+    initServerNotifications() {
+        // 检查是否支持 EventSource
+        if (typeof EventSource !== 'undefined' && window.APP_CONFIG.user) {
+            const eventSource = new EventSource(`{{ url('api/notifications/stream') }}`);
+            
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    this.show(data.message, data.type || 'info', data.duration);
+                } catch (e) {
+                    console.error('Failed to parse notification:', e);
+                }
+            };
+            
+            eventSource.onerror = (error) => {
+                console.error('Notification stream error:', error);
+                eventSource.close();
+                
+                // 5分钟后重试连接
+                setTimeout(() => {
+                    this.initServerNotifications();
+                }, 300000);
+            };
+        }
+        
+        // 定期检查新通知（fallback）
+        if (window.APP_CONFIG.user) {
+            setInterval(() => {
+                this.checkNewNotifications();
+            }, 60000); // 每分钟检查一次
+        }
+    }
+    
+    // 检查新通知
+    async checkNewNotifications() {
+        try {
+            const response = await fetch('{{ url("api/notifications/unread") }}', {
+                headers: {
+                    'X-CSRF-Token': window.APP_CONFIG.csrfToken
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.data.count > 0) {
+                    // 更新导航栏通知计数
+                    const countElement = document.querySelector('.notification-count');
+                    if (countElement) {
+                        countElement.textContent = data.data.count;
+                        countElement.style.display = 'inline';
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Failed to check notifications:', error);
+        }
+    }
+    
+    // 显示确认对话框
+    confirm(message, onConfirm, onCancel = null) {
+        const actions = [
+            {
+                text: '{{ trans("confirm") }}',
+                callback: `notificationSystem.hide('${this.notifications.length}'); (${onConfirm.toString()})()`
+            }
+        ];
+        
+        if (onCancel) {
+            actions.push({
+                text: '{{ trans("cancel") }}',
+                callback: `notificationSystem.hide('${this.notifications.length}'); (${onCancel.toString()})()`
+            });
+        }
+        
+        return this.warning(message, 0, actions);
+    }
+    
+    // 显示加载通知
+    loading(message = '{{ trans("loading") }}...') {
+        return this.info(message, 0);
+    }
+}
+
+// 全局通知系统实例
+const notificationSystem = new NotificationSystem();
+
+// 全局函数，供其他脚本使用
+function showNotification(message, type = 'info', duration = null) {
+    return notificationSystem.show(message, type, duration);
+}
+
+function showSuccess(message, duration = null) {
+    return notificationSystem.success(message, duration);
+}
+
+function showError(message, duration = null) {
+    return notificationSystem.error(message, duration);
+}
+
+function showWarning(message, duration = null) {
+    return notificationSystem.warning(message, duration);
+}
+
+function showInfo(message, duration = null) {
+    return notificationSystem.info(message, duration);
+}
+
+// 初始化通知系统函数（从导航栏调用）
+function initNotificationSystem() {
+    // 通知系统已经在创建实例时初始化
+    console.log('Notification system initialized');
+}
+</script>
+
+<style>
+.notifications-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 1055;
+    max-width: 400px;
+    width: 100%;
+}
+
+.notification {
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 8px;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.notification.fade {
+    animation: slideOutRight 0.3s ease-in;
+}
+
+.notification-message {
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.notification-actions {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 8px;
+}
+
+.flash-message {
+    margin: 15px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .notifications-container {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+    
+    .notification {
+        font-size: 0.9rem;
+    }
+}
+</style>

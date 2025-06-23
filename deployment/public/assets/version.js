@@ -1,0 +1,1 @@
+window.ASSET_VERSION = '1749036343';

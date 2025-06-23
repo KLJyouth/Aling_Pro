@@ -1,0 +1,64 @@
+{
+    "name": "ai_models",
+    "structure": {
+        "id": "auto_increment",
+        "name": "string",
+        "provider": "string",
+        "api_key": "string",
+        "endpoint": "string",
+        "max_tokens": "integer",
+        "temperature": "float",
+        "status": "string",
+        "capabilities": "json",
+        "pricing": "json",
+        "created_at": "timestamp",
+        "updated_at": "timestamp"
+    },
+    "data": [
+        {
+            "name": "DeepSeek Chat",
+            "provider": "deepseek",
+            "api_key": "",
+            "endpoint": "https:\/\/api.deepseek.com\/v1\/chat\/completions",
+            "max_tokens": 4000,
+            "temperature": 0.7,
+            "status": "active",
+            "capabilities": [
+                "chat",
+                "completion"
+            ],
+            "pricing": {
+                "input": 0.14,
+                "output": 0.28
+            },
+            "id": 1,
+            "created_at": "2025-06-06 08:45:05",
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "name": "GPT-4",
+            "provider": "openai",
+            "api_key": "",
+            "endpoint": "https:\/\/api.openai.com\/v1\/chat\/completions",
+            "max_tokens": 4000,
+            "temperature": 0.7,
+            "status": "inactive",
+            "capabilities": [
+                "chat",
+                "completion",
+                "image"
+            ],
+            "pricing": {
+                "input": 30,
+                "output": 60
+            },
+            "id": 2,
+            "created_at": "2025-06-06 08:45:05",
+            "updated_at": "2025-06-06 08:45:05"
+        }
+    ],
+    "indexes": [],
+    "auto_increment": 3,
+    "created_at": "2025-06-06 08:45:05",
+    "updated_at": "2025-06-06 08:45:05"
+}

@@ -1,0 +1,661 @@
+<?php
+/**
+ * API 路由入口文件
+ * 统一处理所有API请求并路由到相应的控制器
+ * 
+ * @version 6.1.0
+ * @updated 2025-06-16
+ */
+
+require_once __DIR__ . '/../../vendor/autoload.php';
+
+// 设置错误处理
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // 生产环境禁用错误显示
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../../storage/logs/php-errors.log');
+
+// 加载环境配置
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->safeLoad();
+
+// 导入控制器
+use AlingAi\Controllers\Api\AuthApiController;
+use AlingAi\Controllers\Api\SimpleAuthApiController;
+use AlingAi\Controllers\Api\ChatApiController;
+use AlingAi\Controllers\Api\UserApiController;
+use AlingAi\Controllers\Api\AdminApiController;
+use AlingAi\Controllers\Api\SystemApiController;
+use AlingAi\Controllers\Api\FileApiController;
+use AlingAi\Controllers\Api\MonitorApiController;
+use AlingAi\Controllers\Api\HistoryApiController;
+use AlingAi\Core\Security\RateLimiter;
+use AlingAi\Core\Logging\ApiLogger;
+use AlingAi\Core\Exceptions\ApiException;
+use AlingAi\Core\Monitoring\ApiMonitor; // 添加API监控器
+
+// 设置CORS头
+header('Access-Control-Allow-Origin: ' . ($_ENV['CORS_ORIGIN'] ?? '*'));
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-API-Key');
+header('Content-Type: application/json; charset=utf-8');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
+
+// 初始化API监控器
+$apiMonitor = new ApiMonitor();
+
+// 处理OPTIONS预检请求
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
+/**
+ * API路由处理器
+ */
+class ApiRouter {
+    private $routes = [];
+    private $controllers = [];
+    private $logger;
+    private $rateLimiter;
+    private $startTime;
+    private $apiMonitor; // API监控器
+    
+    public function __construct(ApiMonitor $apiMonitor) {
+        $this->startTime = microtime(true);
+        $this->logger = new ApiLogger();
+        $this->rateLimiter = new RateLimiter();
+        $this->apiMonitor = $apiMonitor; // 注入API监控器
+        $this->initializeControllers();
+        $this->registerRoutes();
+    }
+    
+    /**
+     * 初始化控制器
+     */
+    private function initializeControllers() {        
+        try {
+            $this->controllers = [
+                'auth' => new AuthApiController(),
+                'simple_auth' => new SimpleAuthApiController(),
+                'chat' => new ChatApiController(),
+                'user' => new UserApiController(),
+                'admin' => new AdminApiController(),
+                'system' => new SystemApiController(),
+                'file' => new FileApiController(),
+                'monitor' => new MonitorApiController(),
+                'history' => new HistoryApiController()
+            ];
+        } catch (\Throwable $e) {
+            $this->logger->error('控制器初始化失败', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $this->sendError('系统错误：控制器初始化失败', 500);
+            exit;
+        }
+    }
+    
+    /**
+     * 注册路由
+     */    
+    private function registerRoutes() {        
+        // 认证路由
+        $this->addRoute('POST', '/api/auth/login', 'auth', 'login');
+        $this->addRoute('POST', '/api/auth/register', 'auth', 'register');
+        $this->addRoute('POST', '/api/auth/logout', 'auth', 'logout');
+        $this->addRoute('POST', '/api/auth/refresh', 'auth', 'refreshToken');
+        $this->addRoute('POST', '/api/auth/forgot-password', 'auth', 'forgotPassword');
+        $this->addRoute('POST', '/api/auth/reset-password', 'auth', 'resetPassword');
+        $this->addRoute('GET', '/api/auth/me', 'auth', 'getCurrentUser');
+        $this->addRoute('POST', '/api/auth/change-password', 'auth', 'changePassword');
+        $this->addRoute('POST', '/api/auth/verify-email', 'auth', 'verifyEmail');
+        $this->addRoute('POST', '/api/auth/resend-verification', 'auth', 'resendVerification');
+        $this->addRoute('POST', '/api/auth/two-factor/enable', 'auth', 'enableTwoFactor');
+        $this->addRoute('POST', '/api/auth/two-factor/verify', 'auth', 'verifyTwoFactor');
+        $this->addRoute('POST', '/api/auth/two-factor/disable', 'auth', 'disableTwoFactor');
+        $this->addRoute('GET', '/api/auth/test', 'auth', 'test');
+        
+        // 简化认证路由（用于开发测试）
+        $this->addRoute('POST', '/api/simple-auth/login', 'simple_auth', 'login');
+        $this->addRoute('POST', '/api/simple-auth/verify', 'simple_auth', 'verify');
+        $this->addRoute('GET', '/api/simple-auth/test', 'simple_auth', 'test');        
+        
+        // 聊天路由
+        $this->addRoute('GET', '/api/chat/test', 'chat', 'test');
+        $this->addRoute('POST', '/api/chat/send', 'chat', 'sendMessage');
+        $this->addRoute('POST', '/api/chat/chat', 'chat', 'sendMessage'); // 兼容现有前端
+        $this->addRoute('GET', '/api/chat/conversations', 'chat', 'getConversations');
+        $this->addRoute('GET', '/api/chat/conversations/{id}', 'chat', 'getConversation');
+        $this->addRoute('DELETE', '/api/chat/conversations/{id}', 'chat', 'deleteConversation');
+        $this->addRoute('POST', '/api/chat/regenerate', 'chat', 'regenerateResponse');
+        $this->addRoute('GET', '/api/chat/models', 'chat', 'getModels');
+          
+        // 用户路由
+        $this->addRoute('GET', '/api/user/test', 'user', 'test');
+        $this->addRoute('GET', '/api/user/profile', 'user', 'getProfile');
+        $this->addRoute('PUT', '/api/user/profile', 'user', 'updateProfile');
+        $this->addRoute('POST', '/api/user/avatar', 'user', 'uploadAvatar');
+        $this->addRoute('GET', '/api/user/settings', 'user', 'getSettings');
+        $this->addRoute('PUT', '/api/user/settings', 'user', 'updateSettings');
+        $this->addRoute('POST', '/api/user/change-password', 'user', 'changePassword');
+        $this->addRoute('GET', '/api/user/activity', 'user', 'getActivityLogs');
+        $this->addRoute('DELETE', '/api/user/account', 'user', 'deleteAccount');
+        $this->addRoute('GET', '/api/user/export', 'user', 'exportData');
+          
+        // 管理员路由
+        $this->addRoute('GET', '/api/admin/test', 'admin', 'test');
+        $this->addRoute('GET', '/api/admin/dashboard', 'admin', 'getDashboard');
+        $this->addRoute('GET', '/api/admin/users', 'admin', 'getUsers');
+        $this->addRoute('GET', '/api/admin/users/{id}', 'admin', 'getUser');
+        $this->addRoute('PUT', '/api/admin/users/{id}', 'admin', 'updateUser');
+        $this->addRoute('DELETE', '/api/admin/users/{id}', 'admin', 'deleteUser');
+        $this->addRoute('GET', '/api/admin/stats', 'admin', 'getSystemStats');
+        $this->addRoute('GET', '/api/admin/logs', 'admin', 'getSystemLogs');
+        $this->addRoute('POST', '/api/admin/maintenance', 'admin', 'toggleMaintenance');
+        $this->addRoute('POST', '/api/admin/backup', 'admin', 'createBackup');
+          
+        // 系统路由
+        $this->addRoute('GET', '/api/system/test', 'system', 'test');
+        $this->addRoute('GET', '/api/system/health', 'system', 'healthCheck');
+        $this->addRoute('GET', '/api/system/status', 'system', 'getStatus'); // 兼容现有前端
+        $this->addRoute('GET', '/api/system/config', 'system', 'getConfig');
+        $this->addRoute('PUT', '/api/system/config', 'system', 'updateConfig');
+        $this->addRoute('GET', '/api/system/performance', 'system', 'getPerformanceMetrics');
+        $this->addRoute('GET', '/api/system/diagnostics', 'system', 'runDiagnostics');
+        $this->addRoute('POST', '/api/system/cache/clear', 'system', 'clearCache');
+          
+        // 文件路由
+        $this->addRoute('GET', '/api/files/test', 'file', 'test');
+        $this->addRoute('POST', '/api/files/upload', 'file', 'uploadFile');
+        $this->addRoute('GET', '/api/files/{id}', 'file', 'downloadFile');
+        $this->addRoute('GET', '/api/files', 'file', 'getUserFiles');
+        $this->addRoute('DELETE', '/api/files/{id}', 'file', 'deleteFile');
+        $this->addRoute('POST', '/api/files/{id}/share', 'file', 'shareFile');
+        $this->addRoute('GET', '/api/files/shared/{token}', 'file', 'getSharedFile');        
+        
+        // 监控路由
+        $this->addRoute('GET', '/api/monitor/test', 'monitor', 'test');
+        $this->addRoute('GET', '/api/monitor/metrics', 'monitor', 'getMetrics');
+        $this->addRoute('GET', '/api/monitor/analytics', 'monitor', 'getAnalytics');
+        $this->addRoute('GET', '/api/monitor/errors', 'monitor', 'getErrors');
+        $this->addRoute('GET', '/api/monitor/security', 'monitor', 'getSecurityEvents');
+        $this->addRoute('POST', '/api/monitor/alerts', 'monitor', 'createAlert');
+        
+        // 历史记录路由 (匹配前端期望的端点)
+        $this->addRoute('GET', '/api/history/test', 'history', 'test');
+        $this->addRoute('GET', '/api/history/sessions', 'history', 'getSessions'); // 前端期望的端点
+        $this->addRoute('GET', '/api/history', 'history', 'getMessages'); // 前端期望的端点
+        $this->addRoute('POST', '/api/history', 'history', 'saveHistory'); // 前端期望的端点
+        $this->addRoute('GET', '/api/history/{id}', 'history', 'getHistoryById');
+        $this->addRoute('DELETE', '/api/history/{id}', 'history', 'deleteHistory');
+        $this->addRoute('DELETE', '/api/history', 'history', 'clearHistory');
+        $this->addRoute('GET', '/api/history/search', 'history', 'searchHistory');
+        $this->addRoute('GET', '/api/history/export', 'history', 'exportHistory');
+        
+        // API监控中心路由
+        $this->addRoute('GET', '/api/monitor/api-calls', 'monitor', 'getApiCalls');
+        $this->addRoute('GET', '/api/monitor/api-calls/{id}', 'monitor', 'getApiCall');
+        $this->addRoute('GET', '/api/monitor/api-stats', 'monitor', 'getApiStats');
+        $this->addRoute('GET', '/api/monitor/security-events', 'monitor', 'getSecurityEvents');
+        $this->addRoute('GET', '/api/monitor/performance', 'monitor', 'getPerformanceData');
+        $this->addRoute('GET', '/api/monitor/real-time', 'monitor', 'getRealTimeData');
+        $this->addRoute('GET', '/api/monitor/dashboard', 'monitor', 'getDashboardData');
+        $this->addRoute('POST', '/api/monitor/alerts/config', 'monitor', 'saveAlertConfig');
+        $this->addRoute('GET', '/api/monitor/alerts/config', 'monitor', 'getAlertConfigs');
+        $this->addRoute('DELETE', '/api/monitor/alerts/config/{id}', 'monitor', 'deleteAlertConfig');
+    }
+    
+    /**
+     * 添加路由
+     */
+    private function addRoute($method, $path, $controller, $action) {
+        $this->routes[] = [
+            'method' => $method,
+            'path' => $path,
+            'controller' => $controller,
+            'action' => $action
+        ];
+    }
+    
+    /**
+     * 处理请求
+     */    
+    public function handleRequest() {
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
+            $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $requestId = $this->generateRequestId();
+            
+            // 记录请求开始
+            $this->logger->info('API请求开始', [
+                'request_id' => $requestId,
+                'method' => $method,
+                'path' => $path,
+                'ip' => $this->getClientIp(),
+                'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+            ]);
+            
+            // 速率限制检查
+            if (!$this->checkRateLimit($path)) {
+                $this->logger->warning('请求被限流', [
+                    'request_id' => $requestId,
+                    'path' => $path,
+                    'ip' => $this->getClientIp()
+                ]);
+                $this->sendError('请求过于频繁，请稍后再试', 429);
+                return;
+            }
+            
+            // 查找路由
+            $route = $this->findRoute($method, $path);
+            
+            if (!$route) {
+                $this->logger->warning('路由未找到', [
+                    'request_id' => $requestId,
+                    'method' => $method,
+                    'path' => $path
+                ]);
+                $this->sendError('请求的路由不存在', 404);
+                return;
+            }
+            
+            // 获取控制器
+            $controller = $this->controllers[$route['controller']];
+            if (!$controller) {
+                $this->logger->error('控制器未找到', [
+                    'request_id' => $requestId,
+                    'controller' => $route['controller']
+                ]);
+                $this->sendError('服务器内部错误', 500);
+                return;
+            }
+            
+            // 获取请求数据
+            $requestData = $this->getRequestData();
+            
+            // 检查鉴权
+            $isProtectedRoute = $this->requiresAuthentication($path);
+            $user = null;
+            
+            if ($isProtectedRoute) {
+                $user = $this->authenticateRequest();
+                
+                if (!$user) {
+                    $this->logger->warning('未授权访问', [
+                        'request_id' => $requestId,
+                        'path' => $path,
+                        'ip' => $this->getClientIp()
+                    ]);
+                    $this->sendError('需要登录授权', 401);
+                    return;
+                }
+                
+                // 设置用户ID到API监视器
+                $this->apiMonitor->setUserInfo($user['id'], $user['role'] ?? 'user');
+            }
+            
+            // 检查是否包含加密数据
+            $isEncrypted = isset($requestData['encrypted']) && $requestData['encrypted'] === true;
+            
+            if ($isEncrypted) {
+                $this->apiMonitor->setEncryptionInfo(true, $requestData['encryption_type'] ?? 'sm4');
+            }
+            
+            // 执行控制器动作
+            $action = $route['action'];
+            if (!method_exists($controller, $action)) {
+                $this->logger->error('控制器方法未找到', [
+                    'request_id' => $requestId,
+                    'controller' => $route['controller'],
+                    'action' => $action
+                ]);
+                $this->sendError('服务器内部错误', 500);
+                return;
+            }
+            
+            // 调用控制器方法
+            $result = $controller->$action($requestData);
+            
+            // 发送响应
+            $this->sendResponse($result);
+            
+            // 记录完成时间
+            $elapsedTime = microtime(true) - $this->startTime;
+            $statusCode = http_response_code();
+            
+            $this->logger->info('API请求完成', [
+                'request_id' => $requestId,
+                'method' => $method,
+                'path' => $path,
+                'status_code' => $statusCode,
+                'elapsed_time' => round($elapsedTime * 1000, 2) . 'ms'
+            ]);
+            
+            // 记录API调用到监控系统
+            $this->apiMonitor->logResponse($statusCode, $result);
+            
+        } catch (ApiException $e) {
+            $statusCode = $e->getCode() ?: 400;
+            $this->sendError($e->getMessage(), $statusCode);
+            
+            // 记录API调用到监控系统(错误情况)
+            $this->apiMonitor->logResponse($statusCode, null, $e->getMessage());
+            
+        } catch (\Throwable $e) {
+            $this->logger->error('API处理异常', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            $this->sendError('服务器内部错误', 500);
+            
+            // 记录API调用到监控系统(错误情况)
+            $this->apiMonitor->logResponse(500, null, $e->getMessage());
+        }
+    }
+    
+    /**
+     * 判断路径是否需要认证
+     */
+    private function requiresAuthentication(string $path): bool {        
+        // 不需要认证的路径
+        $publicPaths = [
+            '/api/auth/login',
+            '/api/auth/register',
+            '/api/auth/forgot-password',
+            '/api/auth/reset-password',
+            '/api/auth/verify-email',
+            '/api/auth/test',
+            '/api/simple-auth/login',
+            '/api/simple-auth/verify',
+            '/api/simple-auth/test',
+            '/api/system/health',
+            '/api/system/status'
+        ];
+        
+        // 检查路径是否在公开路径列表中
+        foreach ($publicPaths as $publicPath) {
+            if (strpos($path, $publicPath) === 0) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    /**
+     * 认证请求
+     * @throws ApiException
+     */
+    private function authenticateRequest() {
+        $token = $this->getBearerToken();
+        
+        if (!$token) {
+            throw new ApiException('未提供认证令牌', 401);
+        }
+        
+        // 验证令牌
+        try {
+            $payload = $this->verifyToken($token);
+            
+            // 检查令牌是否过期
+            if ($payload['exp'] < time()) {
+                throw new ApiException('认证令牌已过期', 401);
+            }
+            
+            // 检查用户是否存在
+            $user = $this->getUserById($payload['user_id']);
+            if (!$user) {
+                throw new ApiException('用户不存在', 401);
+            }
+            
+            // 检查用户状态
+            if ($user['status'] !== 'active') {
+                throw new ApiException('用户账户已禁用', 403);
+            }
+            
+            // 将用户信息存储在请求中
+            $_REQUEST['current_user'] = $user;
+            
+            return $user;
+            
+        } catch (ApiException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw new ApiException('无效的认证令牌', 401);
+        }
+    }
+    
+    /**
+     * 验证JWT令牌
+     */
+    private function verifyToken($token) {
+        $parts = explode('.', $token);
+        
+        if (count($parts) !== 3) {
+            throw new ApiException('令牌格式无效', 401);
+        }
+        
+        list($base64Header, $base64Payload, $base64Signature) = $parts;
+        
+        // 验证签名
+        $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, $_ENV['JWT_SECRET'] ?? 'your-secret-key', true);
+        $valid = hash_equals(
+            base64_decode(str_replace(['-', '_', ''], ['+', '/', '='], $base64Signature)),
+            $signature
+        );
+        
+        if (!$valid) {
+            throw new ApiException('令牌签名无效', 401);
+        }
+        
+        // 解码载荷
+        $payload = json_decode(base64_decode(str_replace(['-', '_', ''], ['+', '/', '='], $base64Payload)), true);
+        
+        return $payload;
+    }
+    
+    /**
+     * 根据ID获取用户
+     */
+    private function getUserById($userId) {
+        $userFile = __DIR__ . '/../../storage/data/users.json';
+        
+        if (!file_exists($userFile)) {
+            return null;
+        }
+        
+        $users = json_decode(file_get_contents($userFile), true) ?: [];
+        
+        foreach ($users as $user) {
+            if ($user['id'] === $userId) {
+                unset($user['password']);
+                return $user;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 获取Bearer令牌
+     */
+    private function getBearerToken(): ?string {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        
+        if (!$authHeader) {
+            return null;
+        }
+        
+        if (preg_match('/Bearer\s+(.+)/', $authHeader, $matches)) {
+            return $matches[1];
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 生成请求ID
+     */
+    private function generateRequestId(): string {
+        return bin2hex(random_bytes(16));
+    }
+    
+    /**
+     * 获取客户端IP
+     */
+    private function getClientIp(): string {
+        $ipAddress = '';
+        
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else if (isset($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
+        } else if (isset($_SERVER['REMOTE_ADDR'])) {
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        }
+        
+        return $ipAddress ?: 'unknown';
+    }
+    
+    /**
+     * 检查速率限制
+     */
+    private function checkRateLimit($path): bool {
+        // 获取客户端IP
+        $clientIp = $this->getClientIp();
+        
+        // 检查速率限制
+        return $this->rateLimiter->check($clientIp, $path);
+    }
+    
+    /**
+     * 查找路由
+     */
+    private function findRoute($method, $path) {
+        foreach ($this->routes as $route) {
+            if ($route['method'] !== $method) {
+                continue;
+            }
+            
+            // 处理路径参数
+            $pattern = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '([^/]+)', $route['path']);
+            $pattern = str_replace('/', '\/', $pattern);
+            $pattern = '/^' . $pattern . '$/';
+            
+            if (preg_match($pattern, $path, $matches)) {
+                // 提取路径参数
+                array_shift($matches); // 移除完整匹配
+                
+                // 将参数添加到请求中
+                if (!empty($matches)) {
+                    // 从路由路径中提取参数名称
+                    preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $route['path'], $paramNames);
+                    $paramNames = $paramNames[1]; // 获取捕获组
+                    
+                    foreach ($matches as $index => $value) {
+                        if (isset($paramNames[$index])) {
+                            $_REQUEST[$paramNames[$index]] = $value;
+                        }
+                    }
+                }
+                
+                return $route;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * 获取请求数据
+     */
+    private function getRequestData() {
+        $data = [];
+        
+        // 获取URL查询参数
+        parse_str($_SERVER['QUERY_STRING'] ?? '', $queryParams);
+        $data = array_merge($data, $queryParams);
+        
+        // 获取POST数据
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+            
+            if (strpos($contentType, 'application/json') !== false) {
+                $input = file_get_contents('php://input');
+                $jsonData = json_decode($input, true);
+                
+                if (json_last_error() === JSON_ERROR_NONE && is_array($jsonData)) {
+                    $data = array_merge($data, $jsonData);
+                }
+            } else {
+                $data = array_merge($data, $_POST);
+            }
+        }
+        
+        // 获取PUT数据
+        if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+            $input = file_get_contents('php://input');
+            $jsonData = json_decode($input, true);
+            
+            if (json_last_error() === JSON_ERROR_NONE && is_array($jsonData)) {
+                $data = array_merge($data, $jsonData);
+            }
+        }
+        
+        // 获取文件
+        if (!empty($_FILES)) {
+            $data['files'] = $_FILES;
+        }
+        
+        return $data;
+    }
+    
+    /**
+     * 发送响应
+     */
+    private function sendResponse($data) {
+        if (is_array($data)) {
+            // 如果没有指定success字段，默认添加
+            if (!isset($data['success'])) {
+                $data['success'] = true;
+            }
+            
+            echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        } else if (is_string($data)) {
+            echo $data;
+        } else {
+            echo json_encode([
+                'success' => true,
+                'data' => $data
+            ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        }
+    }
+    
+    /**
+     * 发送错误响应
+     */
+    private function sendError($message, $statusCode = 500, $details = null) {
+        http_response_code($statusCode);
+        
+        $response = [
+            'success' => false,
+            'error' => [
+                'code' => $statusCode,
+                'message' => $message
+            ]
+        ];
+        
+        if ($details !== null && ($_ENV['APP_DEBUG'] ?? false)) {
+            $response['error']['details'] = $details;
+        }
+        
+        echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    }
+}
+
+// 实例化路由器并处理请求
+$router = new ApiRouter($apiMonitor);
+$router->handleRequest();

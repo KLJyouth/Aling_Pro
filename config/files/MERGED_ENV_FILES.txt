@@ -1,0 +1,607 @@
+# ===============================
+# AlingAi Pro 5.0 环境配置文件合并
+# 合并时间: 2025-06-12
+# 包含所有子目录的.env文件内容
+# ===============================
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env
+# ===============================
+# AlingAi Pro 5.0 Development Environment Configuration
+APP_ENV=development
+APP_DEBUG=true
+APP_URL=http://localhost
+APP_KEY=e58abd7ba84215087cea9b9e234204e92a7f06530938665c6241f718c5709f64
+
+# Database Configuration
+DB_CONNECTION=sqlite
+DB_DATABASE=database/alingai_pro.sqlite
+
+# Cache Configuration
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+
+# Mail Configuration for Development
+MAIL_DRIVER=log
+MAIL_FROM_ADDRESS=noreply@alingai.pro
+MAIL_FROM_NAME="AlingAi Pro"
+
+# AI Service Configuration
+OPENAI_API_KEY=your_openai_api_key_here
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.development
+# ===============================
+# AlingAi Pro 5.0 - development Environment Configuration
+
+APP_ENV=development
+APP_DEBUG=true
+LOG_LEVEL=debug
+CACHE_DRIVER=array
+SESSION_DRIVER=file
+QUEUE_CONNECTION=sync
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro_development
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Redis Configuration
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Security Configuration
+APP_KEY=
+JWT_SECRET=
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.example
+# ===============================
+# AlingAi Pro 环境配置文件
+# 复制此文件为 .env 并根据你的环境进行配置
+
+# 应用配置
+APP_NAME="AlingAi Pro"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=http://localhost
+APP_TIMEZONE=Asia/Shanghai
+APP_LOCALE=zh_CN
+APP_KEY=base64:CHANGE_THIS_TO_A_RANDOM_32_CHARACTER_STRING
+
+# 数据库配置
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro
+DB_USERNAME=root
+DB_PASSWORD=
+DB_PREFIX=
+
+# Redis缓存配置
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+REDIS_PREFIX=alingai_pro:
+
+# 缓存配置
+CACHE_DRIVER=redis
+CACHE_PREFIX=alingai_pro:
+
+# 会话配置
+SESSION_DRIVER=redis
+SESSION_LIFETIME=7200
+SESSION_DOMAIN=
+SESSION_SECURE_COOKIE=false
+
+# JWT配置
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_TTL=3600
+JWT_REFRESH_TTL=604800
+JWT_LEEWAY=60
+JWT_ISSUER=alingai-pro
+JWT_AUDIENCE=alingai-pro-users
+
+# 邮件配置
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-email-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@alingai.com
+MAIL_FROM_NAME="AlingAi Pro"
+MAIL_REPLY_TO_ADDRESS=support@alingai.com
+MAIL_REPLY_TO_NAME="AlingAi Support"
+
+# 文件存储配置
+FILESYSTEM_DRIVER=local
+
+# 日志配置
+LOG_CHANNEL=daily
+LOG_LEVEL=info
+
+# 安全配置
+FORCE_HTTPS=false
+CSRF_PROTECTION=true
+
+# 功能开关
+FEATURE_REGISTRATION=true
+FEATURE_EMAIL_VERIFICATION=true
+FEATURE_PASSWORD_RESET=true
+FEATURE_ADMIN_PANEL=true
+FEATURE_CHAT=true
+FEATURE_DOCUMENTS=true
+
+# 第三方服务配置
+OPENAI_API_KEY=your-openai-api-key
+OPENAI_API_URL=https://api.openai.com/v1
+OPENAI_MODEL=gpt-3.5-turbo
+OPENAI_MAX_TOKENS=2048
+OPENAI_TEMPERATURE=0.7
+
+# Google服务配置
+GOOGLE_ANALYTICS_ID=
+GOOGLE_RECAPTCHA_SITE_KEY=
+GOOGLE_RECAPTCHA_SECRET_KEY=
+
+# 上传文件配置
+UPLOAD_MAX_SIZE=10485760
+UPLOAD_ALLOWED_TYPES=jpg,jpeg,png,gif,webp,pdf,doc,docx,txt,md
+
+# API配置
+API_RATE_LIMIT_PER_MINUTE=100
+API_RATE_LIMIT_PER_HOUR=2000
+
+# 开发环境专用配置（仅在开发环境下启用）
+# APP_ENV=development时下面的配置才生效
+DEV_SHOW_ERRORS=true
+DEV_ENABLE_PROFILER=true
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.local
+# ===============================
+# AlingAi Pro 本地开发环境配置
+# 用于本地开发和测试
+
+# 环境配置
+NODE_ENV=development
+PORT=3000
+
+# 应用配置
+APP_NAME="AlingAi Pro"
+APP_ENV=development
+APP_DEBUG=true
+APP_URL=http://localhost:3000
+APP_TIMEZONE=Asia/Shanghai
+APP_LOCALE=zh_CN
+APP_KEY=base64:3f8d!@^kLz9$2xQw7pL0vB1nM4rT6yUe
+
+# 本地数据库配置（SQLite）
+DB_CONNECTION=sqlite
+DB_DATABASE=./storage/database/alingai_local.db
+DB_PREFIX=
+
+# 生产数据库配置（备用）
+# DB_CONNECTION=mysql
+# DB_HOST=111.180.205.70
+# DB_PORT=3306
+# DB_DATABASE=alingai
+# DB_USERNAME=AlingAi
+# DB_PASSWORD=e5bjzeWCr7k38TrZ
+
+# Redis缓存配置（可选，本地开发可关闭）
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=
+REDIS_DB=0
+REDIS_PREFIX=alingai_pro:
+
+# 缓存配置
+CACHE_DRIVER=file
+CACHE_PREFIX=alingai_pro:
+
+# 会话配置
+SESSION_DRIVER=file
+SESSION_LIFETIME=7200
+SESSION_DOMAIN=
+SESSION_SECURE_COOKIE=false
+
+# 安全配置
+JWT_SECRET=3f8d!@^kLz9$2xQw7pL0vB1nM4rT6yUe
+JWT_TTL=3600
+JWT_REFRESH_TTL=604800
+JWT_EXPIRE=7d
+JWT_LEEWAY=60
+JWT_ISSUER=alingai-pro
+JWT_AUDIENCE=alingai-pro-users
+
+# 速率限制
+RATE_LIMIT_WINDOW=15
+RATE_LIMIT_MAX=100
+API_RATE_LIMIT_PER_MINUTE=100
+API_RATE_LIMIT_PER_HOUR=2000
+
+# 邮件通知配置（开发环境可使用文件模拟）
+MAIL_DRIVER=file
+MAIL_FILE_PATH=./storage/mail
+# 生产邮件配置（备用）
+# MAIL_DRIVER=smtp
+# SMTP_HOST=smtp.exmail.qq.com
+# SMTP_PORT=465
+# SMTP_SECURE=SSL
+# SMTP_USER=admin@gxggm.com
+# SMTP_PASS=PALtPBCRaEDp84xr
+
+# API Keys
+DEEPSEEK_API_KEY=sk-11a9c376a35e4541b1468554bf6a6e4b
+OPENAI_API_KEY=sk-11a9c376a35e4541b1468554bf6a6e4b
+OPENAI_API_URL=https://api.deepseek.com/v1
+OPENAI_MODEL=deepseek-chat
+OPENAI_MAX_TOKENS=2048
+OPENAI_TEMPERATURE=0.7
+
+# Baidu Agent Configuration
+MCP_ENDPOINT=https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/agent
+AGENT_AUTH_TOKEN=MPxrokVoaHPkDno8UK7GUgB3UiF33Mll
+API_ID=6pTSQx7eHDFHkFCSQKlwdzG2EwqjgJD2
+BAIDU_APP_ID=6pTSQx7eHDFHkFCSQKlwdzG2EwqjgJD2
+BAIDU_SECRET_KEY=MPxrokVoaHPkDno8UK7GUgB3UiF33Mll
+BAIDU_API_KEY=MPxrokVoaHPkDno8UK7GUgB3UiF33Mll
+
+# 日志配置
+LOG_CHANNEL=daily
+LOG_LEVEL=debug
+LOG_FILE_PATH=./logs/app.log
+
+# Memory Configuration
+MEMORY_DB_PATH=./storage/memory.db
+MEMORY_CLEAN_THRESHOLD=1000
+
+# 监控配置（开发环境可降低频率）
+HEALTH_CHECK_FREQUENCY=600000
+RESOURCE_CHECK_INTERVAL=120000
+METRICS_RETENTION_DAYS=7
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.production
+# ===============================
+# AlingAi Pro 5.0 - production Environment Configuration
+
+APP_ENV=production
+APP_DEBUG=false
+LOG_LEVEL=warning
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro_production
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Redis Configuration
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Security Configuration
+APP_KEY=
+JWT_SECRET=
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.production.example
+# ===============================
+# AlingAi Pro 生产环境配置
+# 请根据实际环境修改这些配置值
+
+# 应用配置
+APP_NAME="AlingAi Pro"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+APP_TIMEZONE=Asia/Shanghai
+
+# 数据库配置 - MySQL 5.7.43+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro
+DB_USERNAME=alingai_user
+DB_PASSWORD=your_secure_password
+DB_CHARSET=utf8mb4
+DB_COLLATION=utf8mb4_unicode_ci
+
+# Redis配置 - 缓存和会话
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=your_redis_password
+REDIS_PORT=6379
+REDIS_DB=0
+
+# WebSocket配置
+WEBSOCKET_HOST=0.0.0.0
+WEBSOCKET_PORT=8080
+WEBSOCKET_SSL=false
+
+# JWT配置
+JWT_SECRET=your_very_long_and_secure_jwt_secret_key_here
+JWT_ISSUER=alingai_pro
+JWT_AUDIENCE=alingai_users
+JWT_EXPIRE=3600
+
+# 邮件配置
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.your-domain.com
+MAIL_PORT=587
+MAIL_USERNAME=noreply@your-domain.com
+MAIL_PASSWORD=your_mail_password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@your-domain.com
+MAIL_FROM_NAME="AlingAi Pro"
+
+# 日志配置
+LOG_CHANNEL=daily
+LOG_LEVEL=warning
+LOG_DAYS=14
+
+# 文件上传配置
+UPLOAD_MAX_SIZE=10485760
+UPLOAD_ALLOWED_TYPES=jpg,jpeg,png,gif,pdf,doc,docx
+
+# API限制配置
+API_RATE_LIMIT=1000
+API_RATE_WINDOW=3600
+
+# 安全配置
+CSRF_TOKEN_NAME=csrf_token
+CSRF_EXPIRE=7200
+SESSION_EXPIRE=86400
+PASSWORD_MIN_LENGTH=8
+
+# 外部服务配置
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-3.5-turbo
+OPENAI_MAX_TOKENS=2048
+
+# 监控配置
+MONITORING_ENABLED=true
+METRICS_ENABLED=true
+HEALTH_CHECK_ENABLED=true
+
+# 缓存配置
+CACHE_DRIVER=redis
+CACHE_TTL=3600
+CACHE_PREFIX=alingai_
+
+# 队列配置
+QUEUE_CONNECTION=redis
+QUEUE_DEFAULT=default
+QUEUE_DELAY=0
+QUEUE_RETRY_AFTER=90
+
+# 文件存储配置
+FILESYSTEM_DRIVER=local
+FILESYSTEM_ROOT=/var/www/alingai_pro/storage/app
+
+# 备份配置
+BACKUP_ENABLED=true
+BACKUP_SCHEDULE="0 2 * * *"
+BACKUP_RETENTION=30
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.staging
+# ===============================
+# AlingAi Pro 5.0 - staging Environment Configuration
+
+APP_ENV=staging
+APP_DEBUG=false
+LOG_LEVEL=info
+CACHE_DRIVER=redis
+SESSION_DRIVER=redis
+QUEUE_CONNECTION=redis
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro_staging
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Redis Configuration
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Security Configuration
+APP_KEY=
+JWT_SECRET=
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\.env.testing
+# ===============================
+# AlingAi Pro 5.0 - testing Environment Configuration
+
+APP_ENV=testing
+APP_DEBUG=true
+LOG_LEVEL=debug
+CACHE_DRIVER=array
+SESSION_DRIVER=array
+QUEUE_CONNECTION=sync
+DB_CONNECTION=sqlite
+DB_DATABASE=:memory:
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=alingai_pro_testing
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Redis Configuration
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Security Configuration
+APP_KEY=
+JWT_SECRET=
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\deployment\.env.production
+# ===============================
+# AlingAi Pro 生产环境配置
+APP_NAME="AlingAi Pro"
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=${APP_KEY}
+APP_URL=${APP_URL}
+
+# 数据库配置 (Azure MySQL)
+DB_CONNECTION=mysql
+DB_HOST=${DB_HOST}
+DB_PORT=3306
+DB_DATABASE=alingai
+DB_USERNAME=${DB_USERNAME}
+DB_PASSWORD=${DB_PASSWORD}
+
+# AI服务配置
+DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+DEEPSEEK_API_URL=https://api.deepseek.com
+
+# 邮件配置
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.exmail.qq.com
+MAIL_PORT=465
+MAIL_USERNAME=admin@gxggm.com
+MAIL_PASSWORD=${MAIL_PASSWORD}
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=admin@gxggm.com
+MAIL_FROM_NAME="AlingAi Pro"
+
+# Azure存储配置
+AZURE_STORAGE_ACCOUNT=${AZURE_STORAGE_ACCOUNT}
+AZURE_STORAGE_KEY=${AZURE_STORAGE_KEY}
+AZURE_STORAGE_CONTAINER=uploads
+
+# 缓存配置
+CACHE_DRIVER=file
+SESSION_DRIVER=file
+QUEUE_CONNECTION=database
+
+# 应用洞察
+APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS_INSTRUMENTATIONKEY}
+
+# ===============================
+# 文件来源: e:\Code\AlingAi\AlingAi_pro\scripts\.env.production
+# ===============================
+# AlingAi Pro 生产环境配置 - 安全优化版本
+# 生成时间: 周四 2025/06/05 21:47:02.93
+
+# 应用基础配置
+APP_NAME="AlingAi Pro"
+APP_ENV=production
+APP_DEBUG=false
+APP_URL=https://your-domain.com
+FORCE_HTTPS=true
+
+# 数据库配置 - 生产环境
+DB_CONNECTION=mysql
+DB_HOST=148.72.248.218
+DB_PORT=3306
+DB_DATABASE=alingai_pro
+DB_USERNAME=alingai_user
+DB_PASSWORD=7pD9mKqL2xNvR8sE
+
+# 缓存配置 - Redis 安全加固
+CACHE_DRIVER=redis
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6380
+REDIS_PASSWORD=SecureRedisPass2024!
+REDIS_DB=0
+
+# 会话安全配置
+SESSION_DRIVER=redis
+SESSION_LIFETIME=120
+SESSION_SECURE_COOKIE=true
+SESSION_HTTP_ONLY=true
+SESSION_SAME_SITE=strict
+
+# JWT 安全配置
+JWT_SECRET=your_super_secure_jwt_secret_key_32_chars_or_more_2024
+JWT_TTL=60
+JWT_REFRESH_TTL=20160
+
+# 邮件配置
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=aoteman2024@gmail.com
+MAIL_PASSWORD=vsie\ wpgx\ rkej\ jhfs
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=aoteman2024@gmail.com
+MAIL_FROM_NAME="AlingAi Pro"
+
+# API 安全配置
+API_RATE_LIMIT_PER_MINUTE=60
+API_RATE_LIMIT_PER_HOUR=1000
+
+# 文件上传安全配置
+UPLOAD_PATH=storage/uploads
+UPLOAD_MAX_SIZE=5242880
+UPLOAD_ALLOWED_TYPES=jpg,jpeg,png,gif,pdf,doc,docx
+
+# 日志配置
+LOG_CHANNEL=stack
+LOG_LEVEL=warning
+LOG_FILE_PATH=./logs/app.log
+
+# WebSocket 安全配置
+WEBSOCKET_HOST=0.0.0.0
+WEBSOCKET_PORT=8080
+WEBSOCKET_SSL=true
+
+# OpenAI API 配置
+OPENAI_API_KEY=sk-proj-i2nKNLjOu-bZYJ2HaVs7YwQJBU9zAQyTqHWl7rCqpxA8GjdIbKv9s-JUgpT3BlbkFJyzQM7sQJ_r-xHw7Q0zqT0S-nA
+OPENAI_API_URL=https://api.openai.com/v1
+
+# 安全相关配置
+BCRYPT_ROUNDS=12
+HASH_DRIVER=bcrypt
+
+# CORS 配置
+CORS_ALLOWED_ORIGINS=https://your-domain.com
+CORS_ALLOWED_METHODS=GET,POST,PUT,DELETE,OPTIONS
+CORS_ALLOWED_HEADERS=Content-Type,Authorization
+
+# 错误报告配置
+ERROR_REPORTING=false
+DISPLAY_ERRORS=false
+LOG_ERRORS=true
+
+# ===============================
+# 合并完成统计信息
+# ===============================
+# 总计找到 10 个 .env 文件
+# 文件路径:
+# 1. e:\Code\AlingAi\AlingAi_pro\.env
+# 2. e:\Code\AlingAi\AlingAi_pro\.env.development
+# 3. e:\Code\AlingAi\AlingAi_pro\.env.example
+# 4. e:\Code\AlingAi\AlingAi_pro\.env.local
+# 5. e:\Code\AlingAi\AlingAi_pro\.env.production
+# 6. e:\Code\AlingAi\AlingAi_pro\.env.production.example
+# 7. e:\Code\AlingAi\AlingAi_pro\.env.staging
+# 8. e:\Code\AlingAi\AlingAi_pro\.env.testing
+# 9. e:\Code\AlingAi\AlingAi_pro\deployment\.env.production
+# 10. e:\Code\AlingAi\AlingAi_pro\scripts\.env.production
+# ===============================

@@ -1,0 +1,70 @@
+{
+    "test_info": {
+        "timestamp": "2025-06-11 16:33:35",
+        "version": "1.0",
+        "project": "AlingAi Pro 5.0",
+        "tester": "SystemPerformanceTester"
+    },
+    "results": {
+        "filesystem": {
+            "file_read": 0.0006051063537597656,
+            "file_write": 0.0008151531219482422,
+            "directory_scan": 0.0064771175384521484
+        },
+        "database": {
+            "read_users": 0.00039315223693847656,
+            "write_log": 0.0007278919219970703,
+            "search_records": 0.00013113021850585938
+        },
+        "config": {
+            "app": {
+                "time": 0.0001361370086669922,
+                "valid": true
+            },
+            "database": {
+                "time": 0.00019502639770507812,
+                "valid": true
+            },
+            "cache": {
+                "time": 8.893013000488281e-5,
+                "valid": true
+            },
+            "security": {
+                "time": 0.0001049041748046875,
+                "valid": true
+            },
+            "performance": {
+                "time": 0.00010704994201660156,
+                "valid": true
+            }
+        },
+        "security": {
+            "csrf_token": 1.0967254638671875e-5,
+            "password_hash": 0.05301499366760254,
+            "session_id": 3.981590270996094e-5,
+            "encryption": 3.218650817871094e-5
+        },
+        "cache": {
+            "file_cache_write": 0.0006451606750488281,
+            "file_cache_read": 0.00015997886657714844,
+            "memory_cache": 0
+        },
+        "resources": {
+            "memory_usage": 2097152,
+            "peak_memory": 2097152,
+            "cpu_time": 0
+        },
+        "summary": {
+            "total_time": 0.07355093955993652,
+            "scores": {
+                "filesystem": 92.10262298583984,
+                "database": 97.49565124511719,
+                "config": 100,
+                "security": 90
+            },
+            "overall_score": 94.89956855773926,
+            "status": "excellent"
+        }
+    },
+    "recommendations": []
+}

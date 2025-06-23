@@ -1,0 +1,974 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}用户仪表板 - {{ parent() }}{% endblock %}
+{% block description %}个人仪表板 - 查看您的使用统计、消息记录、系统状态等信息{% endblock %}
+
+{% block body_class %}dashboard-page{% endblock %}
+
+{% block styles %}
+<style>
+/* 仪表板专用样式 */
+.dashboard-page {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.dashboard-container {
+    padding: 2rem 0;
+    min-height: calc(100vh - 120px);
+}
+
+.dashboard-header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dashboard-title {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    font-weight: bold;
+}
+
+.user-details h3 {
+    color: white;
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+.user-details p {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0.2rem 0 0 0;
+    font-size: 0.95rem;
+}
+
+.status-badge {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    border: 1px solid #4caf50;
+    margin-left: 1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.dashboard-widget {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-widget::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s ease;
+    opacity: 0;
+}
+
+.dashboard-widget:hover::before {
+    animation: shimmer 1.5s ease-in-out;
+}
+
+.dashboard-widget:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+}
+
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.widget-title {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.widget-icon {
+    font-size: 1.4rem;
+    opacity: 0.9;
+}
+
+.widget-action {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.widget-action:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transform: scale(1.05);
+}
+
+.widget-content {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.stat-label {
+    font-size: 0.95rem;
+    opacity: 0.8;
+}
+
+.progress-section {
+    margin-top: 1rem;
+}
+
+.progress-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.progress-label {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.progress-value {
+    font-weight: 600;
+    color: #feca57;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 0.3rem;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #feca57);
+    border-radius: 4px;
+    transition: width 0.8s ease;
+    position: relative;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: progressShine 2s infinite;
+}
+
+@keyframes progressShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.chart-container {
+    height: 200px;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.activity-list {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b6b, #feca57);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-title {
+    color: white;
+    font-size: 0.95rem;
+    margin: 0 0 0.2rem 0;
+}
+
+.activity-time {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+}
+
+.notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #ff6b6b;
+    margin-top: 0.3rem;
+    flex-shrink: 0;
+}
+
+.notification-indicator.read {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-title {
+    color: white;
+    font-size: 0.95rem;
+    margin: 0 0 0.3rem 0;
+    font-weight: 500;
+}
+
+.notification-text {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.notification-time {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+}
+
+.quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-action {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-action:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+    color: white;
+}
+
+.quick-action-icon {
+    font-size: 2rem;
+    opacity: 0.9;
+}
+
+.quick-action-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.recent-files {
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.file-item:last-child {
+    border-bottom: none;
+}
+
+.file-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 0 -0.5rem;
+    padding: 0.8rem 0.5rem;
+}
+
+.file-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name {
+    color: white;
+    font-size: 0.95rem;
+    margin: 0 0 0.2rem 0;
+    font-weight: 500;
+}
+
+.file-meta {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .dashboard-title {
+        font-size: 2rem;
+    }
+    
+    .user-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .quick-actions {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 滚动条样式 */
+.activity-list::-webkit-scrollbar,
+.recent-files::-webkit-scrollbar {
+    width: 6px;
+}
+
+.activity-list::-webkit-scrollbar-track,
+.recent-files::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.activity-list::-webkit-scrollbar-thumb,
+.recent-files::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.activity-list::-webkit-scrollbar-thumb:hover,
+.recent-files::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 量子粒子背景容器 */
+.quantum-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="quantum-bg" id="quantum-particles"></div>
+
+<div class="container-fluid dashboard-container">
+    <!-- 仪表板头部 -->
+    <div class="dashboard-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="dashboard-title">
+                    <i class="bi bi-speedometer2 widget-icon"></i>
+                    欢迎回来，{{ user.name | default(user.username) }}！
+                </h1>
+                <p class="dashboard-subtitle">
+                    今天是美好的一天，让我们一起完成更多目标吧 🚀
+                </p>
+            </div>
+            <div class="col-md-4">
+                <div class="user-info justify-content-md-end">
+                    <div class="user-avatar">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar }}" alt="{{ user.name }}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        {% else %}
+                            {{ user.name[0] | upper | default('U') }}
+                        {% endif %}
+                    </div>
+                    <div class="user-details">
+                        <h3>{{ user.name | default(user.username) }}</h3>
+                        <p>{{ user.email }}</p>
+                        <p>会员等级：{{ user.membership_level | default('标准用户') }}</p>
+                    </div>
+                    <span class="status-badge">
+                        <i class="bi bi-circle-fill"></i> 在线
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 仪表板网格 -->
+    <div class="dashboard-grid">
+        <!-- 使用统计 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-bar-chart widget-icon"></i>
+                    使用统计
+                </h3>
+                <a href="{{ url('dashboard/analytics') }}" class="widget-action">详细分析</a>
+            </div>
+            <div class="widget-content">
+                <div class="row text-center">
+                    <div class="col-6">
+                        <div class="stat-number" id="conversations-count">{{ stats.conversations | default(0) }}</div>
+                        <div class="stat-label">对话次数</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="stat-number" id="documents-count">{{ stats.documents | default(0) }}</div>
+                        <div class="stat-label">文档数量</div>
+                    </div>
+                </div>
+                <div class="progress-section">
+                    <div class="progress-item">
+                        <span class="progress-label">本月使用量</span>
+                        <span class="progress-value">{{ stats.monthly_usage | default(75) }}%</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: {{ stats.monthly_usage | default(75) }}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近活动 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-clock-history widget-icon"></i>
+                    最近活动
+                </h3>
+                <a href="{{ url('dashboard/activity') }}" class="widget-action">查看全部</a>
+            </div>
+            <div class="widget-content">
+                <div class="activity-list">
+                    {% for activity in recent_activities | default([]) %}
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="bi bi-{{ activity.icon | default('chat-dots') }}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">{{ activity.title }}</div>
+                            <div class="activity-time">{{ activity.created_at | time_ago }}</div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">暂无活动记录</div>
+                            <div class="activity-time">开始使用系统来查看活动记录</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统通知 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-bell widget-icon"></i>
+                    系统通知
+                    {% if unread_notifications_count > 0 %}
+                    <span class="badge bg-danger ms-2">{{ unread_notifications_count }}</span>
+                    {% endif %}
+                </h3>
+                <a href="{{ url('dashboard/notifications') }}" class="widget-action">管理通知</a>
+            </div>
+            <div class="widget-content">
+                {% for notification in notifications | default([]) | slice(0, 3) %}
+                <div class="notification-item">
+                    <div class="notification-indicator{% if notification.is_read %} read{% endif %}"></div>
+                    <div class="notification-content">
+                        <div class="notification-title">{{ notification.title }}</div>
+                        <div class="notification-text">{{ notification.content | truncate(60) }}</div>
+                        <div class="notification-time">{{ notification.created_at | time_ago }}</div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="notification-item">
+                    <div class="notification-indicator read"></div>
+                    <div class="notification-content">
+                        <div class="notification-title">暂无通知</div>
+                        <div class="notification-text">您的通知将在这里显示</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 快速操作 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-lightning widget-icon"></i>
+                    快速操作
+                </h3>
+            </div>
+            <div class="widget-content">
+                <div class="quick-actions">
+                    <a href="{{ url('chat') }}" class="quick-action">
+                        <i class="bi bi-chat-dots quick-action-icon"></i>
+                        <span class="quick-action-label">新对话</span>
+                    </a>
+                    <a href="{{ url('documents/upload') }}" class="quick-action">
+                        <i class="bi bi-cloud-upload quick-action-icon"></i>
+                        <span class="quick-action-label">上传文档</span>
+                    </a>
+                    <a href="{{ url('dashboard/settings') }}" class="quick-action">
+                        <i class="bi bi-gear quick-action-icon"></i>
+                        <span class="quick-action-label">设置</span>
+                    </a>
+                    <a href="{{ url('help') }}" class="quick-action">
+                        <i class="bi bi-question-circle quick-action-icon"></i>
+                        <span class="quick-action-label">帮助</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 使用情况图表 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-graph-up widget-icon"></i>
+                    使用趋势
+                </h3>
+                <a href="{{ url('dashboard/analytics') }}" class="widget-action">详细报告</a>
+            </div>
+            <div class="widget-content">
+                <div class="chart-container">
+                    <canvas id="usage-trend-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近文档 -->
+        <div class="dashboard-widget">
+            <div class="widget-header">
+                <h3 class="widget-title">
+                    <i class="bi bi-file-earmark-text widget-icon"></i>
+                    最近文档
+                </h3>
+                <a href="{{ url('documents') }}" class="widget-action">文档管理</a>
+            </div>
+            <div class="widget-content">
+                <div class="recent-files">
+                    {% for document in recent_documents | default([]) %}
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="bi bi-{{ document.icon | default('file-text') }}"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">{{ document.name }}</div>
+                            <div class="file-meta">{{ document.size }} • {{ document.updated_at | time_ago }}</div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="bi bi-file-plus"></i>
+                        </div>
+                        <div class="file-details">
+                            <div class="file-name">暂无文档</div>
+                            <div class="file-meta">上传您的第一个文档</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化使用趋势图表
+    initUsageTrendChart();
+    
+    // 初始化数字动画
+    animateNumbers();
+    
+    // 定期更新数据
+    startDataRefresh();
+    
+    // 初始化量子粒子效果
+    initQuantumParticles();
+});
+
+function initUsageTrendChart() {
+    const ctx = document.getElementById('usage-trend-chart');
+    if (!ctx) return;
+    
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels | json_encode | raw }},
+            datasets: [{
+                label: '对话次数',
+                data: {{ chart_conversations | json_encode | raw }},
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }, {
+                label: '文档处理',
+                data: {{ chart_documents | json_encode | raw }},
+                borderColor: '#feca57',
+                backgroundColor: 'rgba(254, 202, 87, 0.1)',
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        font: {
+                            size: 12
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'rgba(255, 255, 255, 0.7)',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function animateNumbers() {
+    const counters = document.querySelectorAll('.stat-number');
+    counters.forEach(counter => {
+        const target = parseInt(counter.textContent);
+        let current = 0;
+        const increment = target / 50;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                counter.textContent = target;
+                clearInterval(timer);
+            } else {
+                counter.textContent = Math.floor(current);
+            }
+        }, 30);
+    });
+}
+
+function startDataRefresh() {
+    // 每5分钟刷新一次数据
+    setInterval(async () => {
+        try {
+            const response = await fetch('{{ url("api/dashboard/refresh") }}', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                updateDashboardData(data);
+            }
+        } catch (error) {
+            console.error('刷新数据失败:', error);
+        }
+    }, 300000); // 5分钟
+}
+
+function updateDashboardData(data) {
+    // 更新统计数字
+    if (data.stats) {
+        const conversationsEl = document.getElementById('conversations-count');
+        const documentsEl = document.getElementById('documents-count');
+        
+        if (conversationsEl) conversationsEl.textContent = data.stats.conversations;
+        if (documentsEl) documentsEl.textContent = data.stats.documents;
+    }
+    
+    // 显示更新通知
+    showUpdateNotification();
+}
+
+function showUpdateNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success position-fixed';
+    notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
+    notification.innerHTML = `
+        <i class="bi bi-check-circle"></i>
+        数据已更新
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // 显示动画
+    setTimeout(() => notification.style.opacity = '1', 100);
+    
+    // 3秒后隐藏
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
+}
+
+function initQuantumParticles() {
+    if (typeof QuantumParticles !== 'undefined') {
+        const container = document.getElementById('quantum-particles');
+        if (container) {
+            new QuantumParticles(container, {
+                particleCount: 30,
+                particleColor: 'rgba(255, 255, 255, 0.6)',
+                lineColor: 'rgba(255, 255, 255, 0.2)',
+                particleSize: 2,
+                speed: 0.5
+            });
+        }
+    }
+}
+
+// 键盘快捷键
+document.addEventListener('keydown', function(e) {
+    // Ctrl + 1-4 快速导航
+    if (e.ctrlKey && !e.shiftKey && !e.altKey) {
+        switch(e.key) {
+            case '1':
+                e.preventDefault();
+                window.location.href = '{{ url("chat") }}';
+                break;
+            case '2':
+                e.preventDefault();
+                window.location.href = '{{ url("documents") }}';
+                break;
+            case '3':
+                e.preventDefault();
+                window.location.href = '{{ url("dashboard/settings") }}';
+                break;
+            case '4':
+                e.preventDefault();
+                window.location.href = '{{ url("help") }}';
+                break;
+        }
+    }
+});
+
+// 添加快捷键帮助
+function showKeyboardShortcuts() {
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog">
+            <div class="modal-content" style="background: rgba(0,0,0,0.9); color: white; border: none;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title">键盘快捷键</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6><i class="bi bi-keyboard"></i> 导航快捷键</h6>
+                            <p><kbd>Ctrl</kbd> + <kbd>1</kbd> - 新对话</p>
+                            <p><kbd>Ctrl</kbd> + <kbd>2</kbd> - 文档管理</p>
+                            <p><kbd>Ctrl</kbd> + <kbd>3</kbd> - 设置</p>
+                            <p><kbd>Ctrl</kbd> + <kbd>4</kbd> - 帮助</p>
+                        </div>
+                        <div class="col-6">
+                            <h6><i class="bi bi-gear"></i> 系统快捷键</h6>
+                            <p><kbd>F1</kbd> - 显示帮助</p>
+                            <p><kbd>Ctrl</kbd> + <kbd>/</kbd> - 搜索</p>
+                            <p><kbd>Esc</kbd> - 关闭模态框</p>
+                            <p><kbd>F5</kbd> - 刷新数据</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const modalInstance = new bootstrap.Modal(modal);
+    modalInstance.show();
+    
+    modal.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal);
+    });
+}
+
+// F1 显示快捷键帮助
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F1') {
+        e.preventDefault();
+        showKeyboardShortcuts();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安装 AlingAi Pro</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --primary-dark: #2980b9;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --text-color: #333;
+            --light-bg: #f9f9f9;
+            --border-color: #ddd;
+        }
+        
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 300;
+            font-size: 2.5em;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo img {
+            max-width: 150px;
+        }
+        
+        .container {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .step {
+            display: none;
+            margin-bottom: 20px;
+        }
+        
+        .step.active {
+            display: block;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+        }
+        
+        button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+        
+        .btn-next {
+            float: right;
+        }
+        
+        .btn-prev {
+            float: left;
+            background: #7f8c8d;
+        }
+        
+        .btn-prev:hover {
+            background: #6c7a7d;
+        }
+        
+        .btn-finish {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            background: var(--success-color);
+        }
+        
+        .btn-finish:hover {
+            background: #27ae60;
+        }
+        
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0;
+            transition: width 0.5s;
+        }
+        
+        .error {
+            color: var(--error-color);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .success {
+            color: var(--success-color);
+        }
+        
+        .check-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .check-item:last-child {
+            border-bottom: none;
+        }
+        
+        .check-item .status {
+            font-weight: bold;
+        }
+        
+        .check-item .status.success {
+            color: var(--success-color);
+        }
+        
+        .check-item .status.error {
+            color: var(--error-color);
+        }
+        
+        .system-requirements {
+            background: var(--light-bg);
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .system-requirements h3 {
+            margin-top: 0;
+        }
+        
+        .install-progress {
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .install-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .install-step .step-name {
+            flex: 1;
+        }
+        
+        .install-step .step-status {
+            font-weight: bold;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="/assets/images/logo.png" alt="AlingAi Pro Logo" onerror="this.style.display='none'">
+    </div>
+    
+    <h1>安装 AlingAi Pro</h1>
+    
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <div class="step active" id="step1">
+            <div class="step-title">步骤 1: 系统检查</div>
+            <div class="system-requirements">
+                <h3>系统要求</h3>
+                <div class="check-item">
+                    <div>PHP 版本</div>
+                    <div>8.0.0 或更高</div>
+                </div>
+                <div class="check-item">
+                    <div>必要扩展</div>
+                    <div>PDO, MySQL/SQLite, MBString, OpenSSL, GD, cURL, XML, ZIP</div>
+                </div>
+                <div class="check-item">
+                    <div>目录权限</div>
+                    <div>storage/ 及其子目录可写</div>
+                </div>
+            </div>
+            <div id="system-check-results">正在检查系统环境...</div>
+            <div class="clearfix">
+                <button class="btn-next" id="btn-step1-next" disabled>下一步</button>
+            </div>
+        </div>
+        
+        <div class="step" id="step2">
+            <div class="step-title">步骤 2: 数据库设置</div>
+            <div class="form-group">
+                <label for="db-type">数据库类型</label>
+                <select id="db-type" name="db_type">
+                    <option value="mysql">MySQL</option>
+                    <option value="sqlite">SQLite</option>
+                </select>
+            </div>
+            <div id="mysql-settings">
+                <div class="form-group">
+                    <label for="db-host">数据库主机</label>
+                    <input type="text" id="db-host" name="db_host" value="localhost">
+                </div>
+                <div class="form-group">
+                    <label for="db-port">数据库端口</label>
+                    <input type="text" id="db-port" name="db_port" value="3306">
+                </div>
+                <div class="form-group">
+                    <label for="db-name">数据库名称</label>
+                    <input type="text" id="db-name" name="db_name" value="alingai_pro">
+                </div>
+                <div class="form-group">
+                    <label for="db-user">数据库用户名</label>
+                    <input type="text" id="db-user" name="db_user" value="root">
+                </div>
+                <div class="form-group">
+                    <label for="db-pass">数据库密码</label>
+                    <input type="password" id="db-pass" name="db_pass">
+                </div>
+            </div>
+            <div id="sqlite-settings" style="display: none;">
+                <div class="form-group">
+                    <label for="sqlite-db">数据库文件名</label>
+                    <input type="text" id="sqlite-db" name="sqlite_db" value="alingai_pro.sqlite">
+                    <div class="help-text">文件将保存在 storage/data/ 目录下</div>
+                </div>
+            </div>
+            <div class="clearfix">
+                <button class="btn-prev" id="btn-step2-prev">上一步</button>
+                <button class="btn-next" id="btn-step2-next">下一步</button>
+            </div>
+        </div>
+        
+        <div class="step" id="step3">
+            <div class="step-title">步骤 3: 管理员账号</div>
+            <div class="form-group">
+                <label for="admin-email">管理员邮箱</label>
+                <input type="email" id="admin-email" name="admin_email" required>
+            </div>
+            <div class="form-group">
+                <label for="admin-password">管理员密码</label>
+                <input type="password" id="admin-password" name="admin_password" required>
+                <div class="help-text">密码至少需要8个字符</div>
+            </div>
+            <div class="form-group">
+                <label for="admin-password-confirm">确认密码</label>
+                <input type="password" id="admin-password-confirm" name="admin_password_confirm" required>
+            </div>
+            <div class="clearfix">
+                <button class="btn-prev" id="btn-step3-prev">上一步</button>
+                <button class="btn-next" id="btn-step3-next">下一步</button>
+            </div>
+        </div>
+        
+        <div class="step" id="step4">
+            <div class="step-title">步骤 4: 应用设置</div>
+            <div class="form-group">
+                <label for="app-name">应用名称</label>
+                <input type="text" id="app-name" name="app_name" value="AlingAi Pro">
+            </div>
+            <div class="form-group">
+                <label for="app-url">应用URL</label>
+                <input type="url" id="app-url" name="app_url" value="">
+                <div class="help-text">例如: http://localhost 或 https://yourdomain.com</div>
+            </div>
+            <div class="form-group">
+                <label for="app-timezone">时区</label>
+                <select id="app-timezone" name="app_timezone">
+                    <option value="Asia/Shanghai">Asia/Shanghai (北京时间)</option>
+                    <option value="UTC">UTC</option>
+                    <option value="America/New_York">America/New_York</option>
+                    <option value="Europe/London">Europe/London</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="app-locale">语言</label>
+                <select id="app-locale" name="app_locale">
+                    <option value="zh_CN">简体中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <div class="clearfix">
+                <button class="btn-prev" id="btn-step4-prev">上一步</button>
+                <button class="btn-next" id="btn-step4-next">安装</button>
+            </div>
+        </div>
+        
+        <div class="step" id="step5">
+            <div class="step-title">步骤 5: 安装进度</div>
+            <div class="install-progress" id="install-progress">
+                <div class="install-step">
+                    <div class="step-name">准备安装...</div>
+                    <div class="step-status"></div>
+                </div>
+            </div>
+            <div class="clearfix">
+                <button class="btn-finish" id="btn-finish" style="display: none;">完成安装</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 设置当前URL作为默认应用URL
+            const currentUrl = window.location.protocol + "//" + window.location.host;
+            document.getElementById("app-url").value = currentUrl;
+            
+            // 步骤控制
+            let currentStep = 1;
+            const totalSteps = 5;
+            
+            // 系统检查
+            checkSystem();
+            
+            // 步骤按钮事件
+            document.getElementById("btn-step1-next").addEventListener("click", () => goToStep(2));
+            document.getElementById("btn-step2-prev").addEventListener("click", () => goToStep(1));
+            document.getElementById("btn-step2-next").addEventListener("click", () => {
+                if (validateDatabaseForm()) {
+                    goToStep(3);
+                }
+            });
+            document.getElementById("btn-step3-prev").addEventListener("click", () => goToStep(2));
+            document.getElementById("btn-step3-next").addEventListener("click", () => {
+                if (validateAdminForm()) {
+                    goToStep(4);
+                }
+            });
+            document.getElementById("btn-step4-prev").addEventListener("click", () => goToStep(3));
+            document.getElementById("btn-step4-next").addEventListener("click", () => {
+                if (validateAppForm()) {
+                    startInstallation();
+                }
+            });
+            document.getElementById("btn-finish").addEventListener("click", () => window.location.href = "/");
+            
+            // 数据库类型切换
+            document.getElementById("db-type").addEventListener("change", function() {
+                const mysqlSettings = document.getElementById("mysql-settings");
+                const sqliteSettings = document.getElementById("sqlite-settings");
+                
+                if (this.value === "mysql") {
+                    mysqlSettings.style.display = "block";
+                    sqliteSettings.style.display = "none";
+                } else {
+                    mysqlSettings.style.display = "none";
+                    sqliteSettings.style.display = "block";
+                }
+            });
+            
+            function goToStep(step) {
+                document.getElementById(`step${currentStep}`).classList.remove("active");
+                document.getElementById(`step${step}`).classList.add("active");
+                currentStep = step;
+                updateProgress();
+            }
+            
+            function updateProgress() {
+                const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
+                document.getElementById("progress").style.width = `${percent}%`;
+            }
+            
+            function validateDatabaseForm() {
+                const dbType = document.getElementById("db-type").value;
+                
+                if (dbType === "mysql") {
+                    const host = document.getElementById("db-host").value;
+                    const port = document.getElementById("db-port").value;
+                    const name = document.getElementById("db-name").value;
+                    const user = document.getElementById("db-user").value;
+                    
+                    if (!host || !port || !name || !user) {
+                        alert("请填写所有必要的MySQL数据库信息");
+                        return false;
+                    }
+                } else {
+                    const sqliteDb = document.getElementById("sqlite-db").value;
+                    
+                    if (!sqliteDb) {
+                        alert("请填写SQLite数据库文件名");
+                        return false;
+                    }
+                }
+                
+                return true;
+            }
+            
+            function validateAdminForm() {
+                const email = document.getElementById("admin-email").value;
+                const password = document.getElementById("admin-password").value;
+                const confirmPassword = document.getElementById("admin-password-confirm").value;
+                
+                if (!email || !password || !confirmPassword) {
+                    alert("请填写所有管理员账号信息");
+                    return false;
+                }
+                
+                if (!isValidEmail(email)) {
+                    alert("请输入有效的邮箱地址");
+                    return false;
+                }
+                
+                if (password.length < 8) {
+                    alert("密码长度不能少于8个字符");
+                    return false;
+                }
+                
+                if (password !== confirmPassword) {
+                    alert("两次输入的密码不一致");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            function validateAppForm() {
+                const appName = document.getElementById("app-name").value;
+                const appUrl = document.getElementById("app-url").value;
+                
+                if (!appName || !appUrl) {
+                    alert("请填写应用名称和URL");
+                    return false;
+                }
+                
+                if (!isValidUrl(appUrl)) {
+                    alert("请输入有效的URL");
+                    return false;
+                }
+                
+                return true;
+            }
+            
+            function isValidEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+            
+            function isValidUrl(url) {
+                try {
+                    new URL(url);
+                    return true;
+                } catch (e) {
+                    return false;
+                }
+            }
+            
+            function checkSystem() {
+                const resultsDiv = document.getElementById("system-check-results");
+                resultsDiv.innerHTML = "<div class='install-step'><div class='step-name'>正在检查系统环境...</div><div class='step-status'></div></div>";
+                
+                fetch("/install/system-check")
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            let html = "<div class='success' style='margin-bottom: 15px;'>系统检查通过！您的环境满足所有要求。</div>";
+                            
+                            // PHP版本
+                            html += "<div class='check-item'><div>PHP版本</div><div class='status success'>" + 
+                                    data.checks.php_version.current + " ✓</div></div>";
+                            
+                            // 扩展
+                            html += "<div class='check-item'><div>PHP扩展</div><div class='status success'>全部可用 ✓</div></div>";
+                            
+                            // 目录权限
+                            html += "<div class='check-item'><div>目录权限</div><div class='status success'>全部可写 ✓</div></div>";
+                            
+                            resultsDiv.innerHTML = html;
+                            document.getElementById("btn-step1-next").disabled = false;
+                        } else {
+                            resultsDiv.innerHTML = `<div class="error">系统检查失败: ${data.message}</div>`;
+                        }
+                    })
+                    .catch(error => {
+                        resultsDiv.innerHTML = `<div class="error">检查时发生错误: ${error.message}</div>`;
+                    });
+            }
+            
+            function startInstallation() {
+                goToStep(5);
+                const progressDiv = document.getElementById("install-progress");
+                progressDiv.innerHTML = "<div class='install-step'><div class='step-name'>正在准备安装...</div><div class='step-status'></div></div>";
+                
+                // 收集表单数据
+                const formData = {
+                    database: {},
+                    admin: {
+                        email: document.getElementById("admin-email").value,
+                        password: document.getElementById("admin-password").value
+                    },
+                    app: {
+                        name: document.getElementById("app-name").value,
+                        url: document.getElementById("app-url").value,
+                        timezone: document.getElementById("app-timezone").value,
+                        locale: document.getElementById("app-locale").value
+                    }
+                };
+                
+                // 根据数据库类型设置数据库配置
+                const dbType = document.getElementById("db-type").value;
+                formData.database.type = dbType;
+                
+                if (dbType === "mysql") {
+                    formData.database.host = document.getElementById("db-host").value;
+                    formData.database.port = document.getElementById("db-port").value;
+                    formData.database.database = document.getElementById("db-name").value;
+                    formData.database.username = document.getElementById("db-user").value;
+                    formData.database.password = document.getElementById("db-pass").value;
+                } else {
+                    formData.database.database = document.getElementById("sqlite-db").value;
+                }
+                
+                // 更新安装进度
+                updateInstallProgress("正在验证配置...", "进行中");
+                
+                // 发送安装请求
+                fetch("/install/perform", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateInstallProgress("配置验证", "成功", "success");
+                        updateInstallProgress("数据库设置", "成功", "success");
+                        updateInstallProgress("创建数据表", "成功", "success");
+                        updateInstallProgress("创建管理员账户", "成功", "success");
+                        updateInstallProgress("设置应用配置", "成功", "success");
+                        updateInstallProgress("安装完成", "成功", "success");
+                        
+                        // 显示成功消息和完成按钮
+                        const successMessage = document.createElement("div");
+                        successMessage.className = "success";
+                        successMessage.style.marginTop = "20px";
+                        successMessage.style.fontSize = "18px";
+                        successMessage.style.textAlign = "center";
+                        successMessage.innerHTML = "安装成功完成！<br>您可以现在开始使用 AlingAi Pro。";
+                        progressDiv.appendChild(successMessage);
+                        
+                        document.getElementById("btn-finish").style.display = "block";
+                    } else {
+                        updateInstallProgress("安装失败", data.message, "error");
+                    }
+                })
+                .catch(error => {
+                    updateInstallProgress("安装错误", error.message, "error");
+                });
+            }
+            
+            function updateInstallProgress(step, status, statusClass = "") {
+                const progressDiv = document.getElementById("install-progress");
+                
+                // 创建新的安装步骤元素
+                const stepElement = document.createElement("div");
+                stepElement.className = "install-step";
+                
+                const stepName = document.createElement("div");
+                stepName.className = "step-name";
+                stepName.textContent = step;
+                
+                const stepStatus = document.createElement("div");
+                stepStatus.className = "step-status";
+                if (statusClass) {
+                    stepStatus.classList.add(statusClass);
+                }
+                stepStatus.textContent = status;
+                
+                stepElement.appendChild(stepName);
+                stepElement.appendChild(stepStatus);
+                
+                progressDiv.appendChild(stepElement);
+            }
+        });
+    </script>
+</body>
+</html>

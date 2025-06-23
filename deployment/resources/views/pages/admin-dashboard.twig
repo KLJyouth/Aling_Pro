@@ -1,0 +1,1091 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}管理员仪表板 - {{ parent() }}{% endblock %}
+{% block description %}管理员控制面板 - 系统监控、用户管理、数据分析等高级功能{% endblock %}
+
+{% block body_class %}admin-dashboard-page{% endblock %}
+
+{% block styles %}
+<style>
+/* 管理员仪表板专用样式 */
+.admin-dashboard-page {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #2c3e50 100%);
+    min-height: 100vh;
+}
+
+.admin-container {
+    padding: 1.5rem 0;
+    min-height: calc(100vh - 120px);
+}
+
+.admin-header {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: adminHeaderShine 3s infinite;
+}
+
+@keyframes adminHeaderShine {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.admin-title {
+    color: #ecf0f1;
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.admin-crown {
+    color: #f39c12;
+    font-size: 2.5rem;
+    animation: crownPulse 2s infinite;
+}
+
+@keyframes crownPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.admin-subtitle {
+    color: rgba(236, 240, 241, 0.9);
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-status-bar {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(236, 240, 241, 0.9);
+    font-size: 0.95rem;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #27ae60;
+    animation: statusPulse 2s infinite;
+}
+
+.status-indicator.warning {
+    background: #f39c12;
+}
+
+.status-indicator.error {
+    background: #e74c3c;
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.admin-widget {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 1.8rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.admin-widget::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #3498db, #9b59b6, #e74c3c, #f39c12, #27ae60, #3498db);
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background-size: 300% 300%;
+    animation: gradientShift 5s ease infinite;
+}
+
+.admin-widget:hover::before {
+    opacity: 0.3;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.admin-widget:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+.admin-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.admin-widget-title {
+    color: #ecf0f1;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.admin-widget-icon {
+    font-size: 1.6rem;
+    opacity: 0.9;
+    padding: 0.5rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-widget-action {
+    background: rgba(52, 152, 219, 0.2);
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    color: #3498db;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.admin-widget-action:hover {
+    background: rgba(52, 152, 219, 0.3);
+    color: #5dade2;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+}
+
+.admin-widget-content {
+    color: rgba(236, 240, 241, 0.9);
+}
+
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    text-align: center;
+}
+
+.admin-stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.admin-stat-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+}
+
+.admin-stat-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #3498db;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+.admin-stat-label {
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.system-health {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.health-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.health-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.health-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #27ae60;
+    margin-bottom: 0.3rem;
+}
+
+.health-value.warning {
+    color: #f39c12;
+}
+
+.health-value.critical {
+    color: #e74c3c;
+}
+
+.health-label {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.recent-activity {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    margin: 0 -0.5rem;
+    padding: 1rem 0.5rem;
+}
+
+.activity-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3498db, #9b59b6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.activity-details {
+    flex: 1;
+}
+
+.activity-title {
+    color: #ecf0f1;
+    font-size: 1rem;
+    margin: 0 0 0.3rem 0;
+    font-weight: 500;
+}
+
+.activity-meta {
+    color: rgba(236, 240, 241, 0.6);
+    font-size: 0.85rem;
+}
+
+.chart-container {
+    height: 250px;
+    margin-top: 1rem;
+    position: relative;
+}
+
+.alert-list {
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.alert-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.alert-item:last-child {
+    border-bottom: none;
+}
+
+.alert-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e74c3c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.alert-icon.warning {
+    background: #f39c12;
+}
+
+.alert-icon.info {
+    background: #3498db;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-title {
+    color: #ecf0f1;
+    font-size: 1rem;
+    margin: 0 0 0.3rem 0;
+    font-weight: 500;
+}
+
+.alert-text {
+    color: rgba(236, 240, 241, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
+}
+
+.alert-time {
+    color: rgba(236, 240, 241, 0.6);
+    font-size: 0.8rem;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.quick-action-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.2rem;
+    text-align: center;
+    text-decoration: none;
+    color: #ecf0f1;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.quick-action-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    color: #ecf0f1;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.quick-action-icon {
+    font-size: 2.2rem;
+    opacity: 0.9;
+}
+
+.quick-action-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .admin-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .admin-title {
+        font-size: 2.2rem;
+    }
+    
+    .admin-stat-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-status-bar {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* 滚动条样式 */
+.recent-activity::-webkit-scrollbar,
+.alert-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.recent-activity::-webkit-scrollbar-track,
+.alert-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.recent-activity::-webkit-scrollbar-thumb,
+.alert-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.recent-activity::-webkit-scrollbar-thumb:hover,
+.alert-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 量子粒子背景容器 */
+.quantum-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="quantum-bg" id="quantum-particles"></div>
+
+<div class="container-fluid admin-container">
+    <!-- 管理员头部 -->
+    <div class="admin-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="admin-title">
+                    <i class="bi bi-crown admin-crown"></i>
+                    管理员控制中心
+                </h1>
+                <p class="admin-subtitle">
+                    欢迎回来，{{ user.name }}！系统运行正常，一切尽在掌控之中 ⚡
+                </p>
+            </div>
+            <div class="col-md-4">
+                <div class="admin-status-bar justify-content-md-end">
+                    <div class="status-item">
+                        <div class="status-indicator"></div>
+                        <span>系统正常</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-indicator warning"></div>
+                        <span>{{ alerts_count | default(2) }} 个警告</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-indicator"></div>
+                        <span>{{ online_users | default(15) }} 在线用户</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理员网格 -->
+    <div class="admin-grid">
+        <!-- 系统概览 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-speedometer2 admin-widget-icon"></i>
+                    系统概览
+                </h3>
+                <a href="{{ url('admin/system') }}" class="admin-widget-action">详细监控</a>
+            </div>
+            <div class="admin-widget-content">
+                <div class="admin-stat-grid">
+                    <div class="admin-stat-item">
+                        <span class="admin-stat-number">{{ system_stats.total_users | default(1250) }}</span>
+                        <div class="admin-stat-label">总用户数</div>
+                    </div>
+                    <div class="admin-stat-item">
+                        <span class="admin-stat-number">{{ system_stats.active_sessions | default(89) }}</span>
+                        <div class="admin-stat-label">活跃会话</div>
+                    </div>
+                    <div class="admin-stat-item">
+                        <span class="admin-stat-number">{{ system_stats.total_conversations | default(5240) }}</span>
+                        <div class="admin-stat-label">总对话数</div>
+                    </div>
+                    <div class="admin-stat-item">
+                        <span class="admin-stat-number">{{ system_stats.total_documents | default(3180) }}</span>
+                        <div class="admin-stat-label">文档总数</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统健康状况 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-heart-pulse admin-widget-icon"></i>
+                    系统健康
+                </h3>
+                <a href="{{ url('admin/monitoring') }}" class="admin-widget-action">监控面板</a>
+            </div>
+            <div class="admin-widget-content">
+                <div class="system-health">
+                    <div class="health-item">
+                        <div class="health-value">{{ system_health.cpu | default(15) }}%</div>
+                        <div class="health-label">CPU 使用率</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-value">{{ system_health.memory | default(68) }}%</div>
+                        <div class="health-label">内存使用</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-value">{{ system_health.disk | default(42) }}%</div>
+                        <div class="health-label">磁盘使用</div>
+                    </div>
+                    <div class="health-item">
+                        <div class="health-value">{{ system_health.network | default(25) }}MB/s</div>
+                        <div class="health-label">网络流量</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近活动 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-activity admin-widget-icon"></i>
+                    最近活动
+                </h3>
+                <a href="{{ url('admin/activity-log') }}" class="admin-widget-action">完整日志</a>
+            </div>
+            <div class="admin-widget-content">
+                <div class="recent-activity">
+                    {% for activity in recent_admin_activities | default([]) %}
+                    <div class="activity-item">
+                        <div class="activity-avatar">
+                            {{ activity.user_name[0] | upper | default('S') }}
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">{{ activity.title }}</div>
+                            <div class="activity-meta">{{ activity.user_name }} • {{ activity.created_at | time_ago }}</div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="activity-item">
+                        <div class="activity-avatar">S</div>
+                        <div class="activity-details">
+                            <div class="activity-title">系统启动</div>
+                            <div class="activity-meta">系统 • 刚刚</div>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-avatar">A</div>
+                        <div class="activity-details">
+                            <div class="activity-title">管理员登录</div>
+                            <div class="activity-meta">Admin • 5分钟前</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 系统警告 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-exclamation-triangle admin-widget-icon"></i>
+                    系统警告
+                    {% if alerts_count > 0 %}
+                    <span class="badge bg-warning ms-2">{{ alerts_count }}</span>
+                    {% endif %}
+                </h3>
+                <a href="{{ url('admin/alerts') }}" class="admin-widget-action">管理警告</a>
+            </div>
+            <div class="admin-widget-content">
+                <div class="alert-list">
+                    {% for alert in system_alerts | default([]) %}
+                    <div class="alert-item">
+                        <div class="alert-icon {{ alert.type | default('warning') }}">
+                            <i class="bi bi-{{ alert.icon | default('exclamation-triangle') }}"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">{{ alert.title }}</div>
+                            <div class="alert-text">{{ alert.message }}</div>
+                            <div class="alert-time">{{ alert.created_at | time_ago }}</div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert-item">
+                        <div class="alert-icon warning">
+                            <i class="bi bi-info-circle"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">存储空间提醒</div>
+                            <div class="alert-text">系统存储使用率已达到75%，建议清理旧文件。</div>
+                            <div class="alert-time">2小时前</div>
+                        </div>
+                    </div>
+                    <div class="alert-item">
+                        <div class="alert-icon info">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title">安全扫描完成</div>
+                            <div class="alert-text">系统安全扫描已完成，未发现威胁。</div>
+                            <div class="alert-time">1天前</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 用户统计图表 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-graph-up admin-widget-icon"></i>
+                    用户活跃度
+                </h3>
+                <a href="{{ url('admin/analytics') }}" class="admin-widget-action">详细分析</a>
+            </div>
+            <div class="admin-widget-content">
+                <div class="chart-container">
+                    <canvas id="user-activity-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速操作 -->
+        <div class="admin-widget">
+            <div class="admin-widget-header">
+                <h3 class="admin-widget-title">
+                    <i class="bi bi-lightning admin-widget-icon"></i>
+                    快速操作
+                </h3>
+            </div>
+            <div class="admin-widget-content">
+                <div class="quick-actions-grid">
+                    <a href="{{ url('admin/users') }}" class="quick-action-btn">
+                        <i class="bi bi-people quick-action-icon"></i>
+                        <span class="quick-action-label">用户管理</span>
+                    </a>
+                    <a href="{{ url('admin/system/maintenance') }}" class="quick-action-btn">
+                        <i class="bi bi-tools quick-action-icon"></i>
+                        <span class="quick-action-label">系统维护</span>
+                    </a>
+                    <a href="{{ url('admin/backup') }}" class="quick-action-btn">
+                        <i class="bi bi-cloud-download quick-action-icon"></i>
+                        <span class="quick-action-label">数据备份</span>
+                    </a>
+                    <a href="{{ url('admin/settings') }}" class="quick-action-btn">
+                        <i class="bi bi-gear quick-action-icon"></i>
+                        <span class="quick-action-label">系统设置</span>
+                    </a>
+                    <a href="{{ url('admin/logs') }}" class="quick-action-btn">
+                        <i class="bi bi-file-text quick-action-icon"></i>
+                        <span class="quick-action-label">系统日志</span>
+                    </a>
+                    <a href="{{ url('admin/security') }}" class="quick-action-btn">
+                        <i class="bi bi-shield-check quick-action-icon"></i>
+                        <span class="quick-action-label">安全中心</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化用户活跃度图表
+    initUserActivityChart();
+    
+    // 初始化实时数据更新
+    startRealTimeUpdates();
+    
+    // 初始化量子粒子效果
+    initQuantumParticles();
+    
+    // 初始化管理员快捷键
+    setupAdminShortcuts();
+});
+
+function initUserActivityChart() {
+    const ctx = document.getElementById('user-activity-chart');
+    if (!ctx) return;
+    
+    const chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels | json_encode | raw }},
+            datasets: [{
+                label: '活跃用户',
+                data: {{ chart_active_users | json_encode | raw }},
+                borderColor: '#3498db',
+                backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#3498db',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 5
+            }, {
+                label: '新注册',
+                data: {{ chart_new_users | json_encode | raw }},
+                borderColor: '#27ae60',
+                backgroundColor: 'rgba(39, 174, 96, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#27ae60',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    labels: {
+                        color: 'rgba(236, 240, 241, 0.9)',
+                        font: {
+                            size: 12,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    ticks: {
+                        color: 'rgba(236, 240, 241, 0.7)',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: 'rgba(236, 240, 241, 0.7)',
+                        font: {
+                            size: 11
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    }
+                }
+            }
+        }
+    });
+}
+
+function startRealTimeUpdates() {
+    // 每30秒更新一次系统状态
+    setInterval(async () => {
+        try {
+            const response = await fetch('{{ url("api/admin/system/status") }}', {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    'Content-Type': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                updateSystemStatus(data);
+            }
+        } catch (error) {
+            console.error('更新系统状态失败:', error);
+        }
+    }, 30000); // 30秒
+}
+
+function updateSystemStatus(data) {
+    // 更新系统健康状况
+    if (data.health) {
+        const healthItems = document.querySelectorAll('.health-value');
+        healthItems.forEach((item, index) => {
+            if (data.health[index]) {
+                item.textContent = data.health[index];
+                item.className = 'health-value';
+                
+                // 根据值设置状态
+                const value = parseInt(data.health[index]);
+                if (value > 80) {
+                    item.classList.add('critical');
+                } else if (value > 60) {
+                    item.classList.add('warning');
+                }
+            }
+        });
+    }
+    
+    // 更新统计数字
+    if (data.stats) {
+        const statNumbers = document.querySelectorAll('.admin-stat-number');
+        statNumbers.forEach((stat, index) => {
+            if (data.stats[index]) {
+                animateNumber(stat, parseInt(stat.textContent), data.stats[index]);
+            }
+        });
+    }
+}
+
+function animateNumber(element, from, to) {
+    const duration = 1000;
+    const steps = 50;
+    const stepValue = (to - from) / steps;
+    let current = from;
+    let step = 0;
+    
+    const timer = setInterval(() => {
+        current += stepValue;
+        step++;
+        
+        if (step >= steps) {
+            element.textContent = to;
+            clearInterval(timer);
+        } else {
+            element.textContent = Math.floor(current);
+        }
+    }, duration / steps);
+}
+
+function initQuantumParticles() {
+    if (typeof QuantumParticles !== 'undefined') {
+        const container = document.getElementById('quantum-particles');
+        if (container) {
+            new QuantumParticles(container, {
+                particleCount: 25,
+                particleColor: 'rgba(236, 240, 241, 0.4)',
+                lineColor: 'rgba(236, 240, 241, 0.1)',
+                particleSize: 2.5,
+                speed: 0.3
+            });
+        }
+    }
+}
+
+function setupAdminShortcuts() {
+    document.addEventListener('keydown', function(e) {
+        // Alt + 数字键快速导航
+        if (e.altKey && !e.shiftKey && !e.ctrlKey) {
+            switch(e.key) {
+                case '1':
+                    e.preventDefault();
+                    window.location.href = '{{ url("admin/users") }}';
+                    break;
+                case '2':
+                    e.preventDefault();
+                    window.location.href = '{{ url("admin/system") }}';
+                    break;
+                case '3':
+                    e.preventDefault();
+                    window.location.href = '{{ url("admin/analytics") }}';
+                    break;
+                case '4':
+                    e.preventDefault();
+                    window.location.href = '{{ url("admin/settings") }}';
+                    break;
+                case 'm':
+                    e.preventDefault();
+                    toggleMaintenanceMode();
+                    break;
+                case 'r':
+                    e.preventDefault();
+                    refreshDashboard();
+                    break;
+            }
+        }
+    });
+}
+
+function toggleMaintenanceMode() {
+    if (confirm('确定要切换系统维护模式吗？')) {
+        fetch('{{ url("api/admin/system/maintenance") }}', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showNotification('维护模式已' + (data.enabled ? '启用' : '禁用'), 'success');
+            } else {
+                showNotification('操作失败: ' + data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showNotification('操作失败', 'error');
+        });
+    }
+}
+
+function refreshDashboard() {
+    showNotification('正在刷新数据...', 'info');
+    
+    fetch('{{ url("api/admin/dashboard/refresh") }}', {
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('token'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showNotification('数据已刷新', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('刷新失败', 'error');
+        }
+    })
+    .catch(error => {
+        showNotification('刷新失败', 'error');
+    });
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'error' ? 'danger' : type} position-fixed`;
+    notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        max-width: 300px;
+    `;
+    notification.innerHTML = `
+        <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info-circle'}"></i>
+        ${message}
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // 显示动画
+    setTimeout(() => notification.style.opacity = '1', 100);
+    
+    // 3秒后隐藏
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// 显示管理员快捷键帮助
+function showAdminShortcuts() {
+    const modal = document.createElement('div');
+    modal.className = 'modal fade';
+    modal.innerHTML = `
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="background: rgba(44, 62, 80, 0.95); color: #ecf0f1; border: none;">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title"><i class="bi bi-keyboard"></i> 管理员快捷键</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h6><i class="bi bi-arrow-right-circle"></i> 快速导航</h6>
+                            <p><kbd>Alt</kbd> + <kbd>1</kbd> - 用户管理</p>
+                            <p><kbd>Alt</kbd> + <kbd>2</kbd> - 系统监控</p>
+                            <p><kbd>Alt</kbd> + <kbd>3</kbd> - 数据分析</p>
+                            <p><kbd>Alt</kbd> + <kbd>4</kbd> - 系统设置</p>
+                        </div>
+                        <div class="col-6">
+                            <h6><i class="bi bi-tools"></i> 系统操作</h6>
+                            <p><kbd>Alt</kbd> + <kbd>M</kbd> - 维护模式</p>
+                            <p><kbd>Alt</kbd> + <kbd>R</kbd> - 刷新数据</p>
+                            <p><kbd>F12</kbd> - 开发者工具</p>
+                            <p><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> - 检查元素</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(modal);
+    const modalInstance = new bootstrap.Modal(modal);
+    modalInstance.show();
+    
+    modal.addEventListener('hidden.bs.modal', () => {
+        document.body.removeChild(modal);
+    });
+}
+
+// F1 显示快捷键帮助
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F1') {
+        e.preventDefault();
+        showAdminShortcuts();
+    }
+});
+</script>
+{% endblock %}

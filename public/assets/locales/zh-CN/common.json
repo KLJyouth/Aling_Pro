@@ -1,0 +1,67 @@
+{
+  "navigation": {
+    "home": "首页",
+    "solutions": "解决方案",
+    "products": "产品服务",
+    "about": "关于我们",
+    "api": "API文档",
+    "docs": "技术文档",
+    "login": "登录",
+    "register": "注册",
+    "profile": "个人中心",
+    "dashboard": "控制台"
+  },
+  "hero": {
+    "title": "量子安全·智能未来",
+    "subtitle": "AI驱动的企业级量子安全解决方案",
+    "description": "重新定义数字化安全标准",
+    "cta_primary": "立即体验",
+    "cta_secondary": "观看演示"
+  },
+  "features": {
+    "zero_trust": {
+      "title": "零信任安全",
+      "description": "全方位身份验证，多重安全防护"
+    },
+    "ai_assistant": {
+      "title": "AI智能助手",
+      "description": "24/7智能对话，专业技术支持"
+    },
+    "quantum_computing": {
+      "title": "量子计算",
+      "description": "下一代计算技术，突破性能极限"
+    }
+  },
+  "solutions": {
+    "title": "企业级解决方案",
+    "subtitle": "为不同行业和规模的企业提供定制化的量子安全解决方案",
+    "financial": {
+      "title": "金融安全",
+      "description": "银行级量子加密，保护金融交易和客户数据安全"
+    },
+    "healthcare": {
+      "title": "医疗健康", 
+      "description": "符合HIPAA标准的医疗数据保护和隐私计算"
+    },
+    "government": {
+      "title": "政府机构",
+      "description": "国家级安全标准，保护关键基础设施和敏感信息"
+    }
+  },
+  "chat": {
+    "welcome": "您好！我是AlingAI智能助手，有什么可以帮助您的吗？",
+    "placeholder": "输入您的问题...",
+    "send": "发送",
+    "online": "在线",
+    "title": "AlingAI Assistant"
+  },
+  "common": {
+    "contact_us": "联系我们",
+    "learn_more": "了解更多",
+    "get_started": "开始使用",
+    "back_to_top": "返回顶部",
+    "quick_nav": "快速导航",
+    "theme_toggle": "主题切换",
+    "language": "中文"
+  }
+}

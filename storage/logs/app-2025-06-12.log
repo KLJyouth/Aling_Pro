@@ -1,0 +1,4 @@
+[2025-06-12T04:44:36.056409+00:00] alingai.INFO: Performance monitoring started [] []
+[2025-06-12T04:44:36.060203+00:00] alingai.INFO: Performance monitoring completed {"runtime":0.005037069320678711,"peak_memory":4194304,"total_requests":0,"error_rate":0.0,"alerts":0} []
+[2025-06-12T04:44:54.101026+00:00] alingai.INFO: Performance monitoring started [] []
+[2025-06-12T04:44:54.102631+00:00] alingai.INFO: Performance monitoring completed {"runtime":0.001870870590209961,"peak_memory":4194304,"total_requests":0,"error_rate":0.0,"alerts":0} []

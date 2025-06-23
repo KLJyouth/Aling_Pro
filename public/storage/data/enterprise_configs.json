@@ -1,0 +1,47 @@
+[
+    {
+        "user_id": 2,
+        "ai_providers": "{\"openai\":{\"enabled\":true,\"api_key\":\"sk-***\"},\"anthropic\":{\"enabled\":true,\"api_key\":\"sk-***\"},\"google\":{\"enabled\":false,\"api_key\":\"\"}}",
+        "custom_models": "[\"gpt-4-turbo\",\"claude-3-sonnet\",\"gemini-pro\"]",
+        "webhook_url": "https:\/\/techcorp.com\/webhook",
+        "callback_url": "https:\/\/techcorp.com\/callback",
+        "allowed_domains": "[\"techcorp.com\",\"*.techcorp.com\"]",
+        "ip_whitelist": "[\"192.168.1.0\\\/24\",\"10.0.0.0\\\/8\"]",
+        "features": "{\"advanced_analytics\":true,\"custom_fine_tuning\":true,\"priority_support\":true,\"sla_guarantee\":true}",
+        "billing_type": "enterprise",
+        "contract_start": "2025-05-07",
+        "contract_end": "2026-05-02",
+        "status": "active",
+        "id": 1,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "user_id": 4,
+        "ai_providers": "{\"openai\":{\"enabled\":true,\"api_key\":\"sk-***\"},\"anthropic\":{\"enabled\":false,\"api_key\":\"\"},\"google\":{\"enabled\":true,\"api_key\":\"sk-***\"}}",
+        "custom_models": "[\"gpt-4\",\"gemini-pro\"]",
+        "webhook_url": "https:\/\/datalabs.com\/webhook",
+        "callback_url": "https:\/\/datalabs.com\/callback",
+        "allowed_domains": "[\"datalabs.com\"]",
+        "ip_whitelist": "[\"203.0.113.0\\\/24\"]",
+        "features": "{\"advanced_analytics\":true,\"custom_fine_tuning\":false,\"priority_support\":true,\"sla_guarantee\":false}",
+        "billing_type": "pay_per_use",
+        "contract_start": "2025-04-07",
+        "contract_end": "2026-04-02",
+        "status": "active",
+        "id": 2,
+        "created_at": "2025-06-06 18:39:24",
+        "updated_at": "2025-06-06 18:39:24"
+    },
+    {
+        "ai_providers": "{\"openai\":{\"enabled\":true,\"api_key\":\"sk-new-key\"},\"anthropic\":{\"enabled\":true,\"api_key\":\"sk-new-key\"},\"google\":{\"enabled\":true,\"api_key\":\"sk-new-key\"}}",
+        "custom_models": "[\"gpt-4-turbo\",\"claude-3-opus\"]",
+        "webhook_url": "https:\/\/aistartup.com\/webhook",
+        "features": "{\"advanced_analytics\":true,\"custom_fine_tuning\":true,\"priority_support\":false}",
+        "status": "active",
+        "user_id": 3,
+        "id": 3,
+        "created_at": "2025-06-06 18:41:13",
+        "updated_at": "2025-06-06 18:41:13"
+    }
+]

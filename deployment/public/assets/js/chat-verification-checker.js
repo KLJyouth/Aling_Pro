@@ -1,0 +1,288 @@
+/**
+ * 聊天页面验证检查器
+ * 在进入聊天页面时检查用户是否已通过初始化验证
+ */
+
+class ChatVerificationChecker {
+    constructor() {
+        this.verified = false;
+        this.checking = true;
+    }
+
+    async checkVerification() {
+        try {
+            const response = await fetch('/api/check-verification', {
+                method: 'GET',
+                credentials: 'include', // 包含cookies
+                cache: 'no-cache'
+            });
+
+            const data = await response.json();
+            
+            if (data.verified) {
+                this.verified = true;
+                this.onVerificationSuccess(data);
+            } else {
+                this.verified = false;
+                this.onVerificationFailed(data.reason);
+            }
+        } catch (error) {
+            console.error('验证检查失败:', error);
+            this.onVerificationError(error);
+        } finally {
+            this.checking = false;
+        }
+    }
+
+    onVerificationSuccess(data) {
+        console.log('✅ 用户已通过初始化验证', data);
+        // 允许正常加载聊天功能
+        this.enableChatFunctionality();
+        this.hideVerificationOverlay();
+    }
+
+    onVerificationFailed(reason) {
+        console.warn('❌ 用户未通过初始化验证:', reason);
+        
+        let message = '您需要完成系统初始化检测才能使用聊天功能';
+        if (reason === 'invalid_or_expired') {
+            message = '您的验证已过期，请重新完成初始化检测';
+        }
+        
+        this.showRedirectMessage(message);
+    }
+
+    onVerificationError(error) {
+        console.error('🔥 验证检查过程中发生错误:', error);
+        this.showRedirectMessage('验证检查失败，请重新进行初始化检测');
+    }
+
+    enableChatFunctionality() {
+        // 移除所有测试脚本
+        this.removeTestScripts();
+        
+        // 显示聊天界面
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        if (chatContainer) chatContainer.style.display = 'block';
+        if (messageInput) messageInput.disabled = false;
+        if (sendButton) sendButton.disabled = false;
+        
+        // 启用所有聊天功能
+        document.body.classList.add('chat-verified');
+        document.body.classList.remove('chat-pending');
+        
+        console.log('🎉 聊天功能已启用');
+    }
+
+    removeTestScripts() {
+        // 移除所有测试相关的脚本
+        const testScripts = [
+            'comprehensive-test.js',
+            'message-functionality-test.js', 
+            'final-user-interaction-test.js',
+            'browser-functionality-test.js',
+            'deep-diagnostics.js'
+        ];
+
+        testScripts.forEach(scriptName => {
+            const scripts = document.querySelectorAll(`script[src*="${scriptName}"]`);
+            scripts.forEach(script => {
+                script.remove();
+                console.log(`已移除测试脚本: ${scriptName}`);
+            });
+        });
+
+        // 清理全局测试对象
+        if (window.browserTestResults) delete window.browserTestResults;
+        if (window.diagnosticReport) delete window.diagnosticReport;
+        if (window.chatTestResults) delete window.chatTestResults;
+    }
+
+    showRedirectMessage(message) {
+        // 创建重定向覆盖层
+        const overlay = document.createElement('div');
+        overlay.id = 'verificationOverlay';
+        overlay.innerHTML = `
+            <div class="verification-overlay">
+                <div class="verification-content">
+                    <div class="verification-icon">
+                        <i class="bi bi-shield-exclamation"></i>
+                    </div>
+                    <h3>需要初始化验证</h3>
+                    <p>${message}</p>                    <div class="verification-actions">
+                        <button onclick="window.redirectToInit()" class="btn btn-primary">
+                            <i class="bi bi-arrow-right"></i> 前往验证
+                        </button>
+                        <button onclick="location.reload()" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-clockwise"></i> 重新检查
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <style>
+                .verification-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                }
+                .verification-content {
+                    background: white;
+                    padding: 40px;
+                    border-radius: 20px;
+                    text-align: center;
+                    max-width: 500px;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                }
+                .verification-icon {
+                    font-size: 4rem;
+                    color: #ffc107;
+                    margin-bottom: 20px;
+                }
+                .verification-content h3 {
+                    color: #333;
+                    margin-bottom: 15px;
+                }
+                .verification-content p {
+                    color: #666;
+                    margin-bottom: 30px;
+                    line-height: 1.6;
+                }
+                .verification-actions {
+                    display: flex;
+                    gap: 15px;
+                    justify-content: center;
+                }
+                .btn {
+                    padding: 12px 24px;
+                    border: none;
+                    border-radius: 25px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                .btn-primary {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                }
+                .btn-outline-secondary {
+                    background: transparent;
+                    border: 2px solid #6c757d;
+                    color: #6c757d;
+                }
+                .btn:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                }
+            </style>
+        `;
+
+        document.body.appendChild(overlay);
+
+        // 添加重定向函数到全局
+        window.redirectToInit = () => {
+            window.location.href = '/init.html';
+        };
+
+        // 禁用聊天功能
+        this.disableChatFunctionality();
+    }
+
+    hideVerificationOverlay() {
+        const overlay = document.getElementById('verificationOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+
+    disableChatFunctionality() {
+        // 隐藏或禁用聊天界面
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        if (chatContainer) chatContainer.style.display = 'none';
+        if (messageInput) messageInput.disabled = true;
+        if (sendButton) sendButton.disabled = true;
+        
+        document.body.classList.add('chat-pending');
+        document.body.classList.remove('chat-verified');
+    }
+
+    showLoadingState() {
+        // 显示加载状态
+        const loadingOverlay = document.createElement('div');
+        loadingOverlay.id = 'loadingOverlay';
+        loadingOverlay.innerHTML = `
+            <div class="loading-overlay">
+                <div class="loading-content">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-3">正在验证用户状态...</p>
+                </div>
+            </div>
+            <style>
+                .loading-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.9);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 9999;
+                }
+                .loading-content {
+                    text-align: center;
+                }
+                .loading-content p {
+                    color: #666;
+                    margin: 0;
+                }
+            </style>
+        `;
+        
+        document.body.appendChild(loadingOverlay);
+    }
+
+    hideLoadingState() {
+        const overlay = document.getElementById('loadingOverlay');
+        if (overlay) {
+            overlay.remove();
+        }
+    }
+}
+
+// 页面加载时自动检查验证状态
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🔍 开始检查用户验证状态...');
+    
+    const checker = new ChatVerificationChecker();
+    
+    // 显示加载状态
+    checker.showLoadingState();
+    
+    // 执行验证检查
+    await checker.checkVerification();
+    
+    // 隐藏加载状态
+    checker.hideLoadingState();
+    
+    // 将检查器暴露到全局供调试
+    window.chatVerificationChecker = checker;
+});

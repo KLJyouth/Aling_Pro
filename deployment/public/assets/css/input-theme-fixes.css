@@ -1,0 +1,125 @@
+
+/* 量子主题输入框 */
+[data-theme="quantum"] input,
+[data-theme="quantum"] textarea,
+[data-theme="quantum"] select,
+body.quantum-theme input,
+body.quantum-theme textarea,
+body.quantum-theme select {
+    color: #e0e7ff !important;
+    background-color: rgba(139, 92, 246, 0.1) !important;
+    border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
+[data-theme="quantum"] input::placeholder,
+[data-theme="quantum"] textarea::placeholder,
+body.quantum-theme input::placeholder,
+body.quantum-theme textarea::placeholder {
+    color: #c7d2fe !important;
+}
+
+/* Matrix主题输入框 */
+[data-theme="matrix"] input,
+[data-theme="matrix"] textarea,
+[data-theme="matrix"] select,
+body.matrix-theme input,
+body.matrix-theme textarea,
+body.matrix-theme select {
+    color: #00ff41 !important;
+    background-color: #001100 !important;
+    border-color: #003300 !important;
+}
+
+[data-theme="matrix"] input::placeholder,
+[data-theme="matrix"] textarea::placeholder,
+body.matrix-theme input::placeholder,
+body.matrix-theme textarea::placeholder {
+    color: #008f11 !important;
+}
+
+/* Aurora主题输入框 */
+[data-theme="aurora"] input,
+[data-theme="aurora"] textarea,
+[data-theme="aurora"] select,
+body.aurora-theme input,
+body.aurora-theme textarea,
+body.aurora-theme select {
+    color: #ffffff !important;
+    background-color: rgba(255, 107, 157, 0.1) !important;
+    border-color: rgba(255, 107, 157, 0.3) !important;
+}
+
+[data-theme="aurora"] input::placeholder,
+[data-theme="aurora"] textarea::placeholder,
+body.aurora-theme input::placeholder,
+body.aurora-theme textarea::placeholder {
+    color: #e0e7ff !important;
+}
+
+/* 聊天输入框特殊处理 */
+#chatInput,
+#messageInput {
+    color: var(--text-color) !important;
+    background-color: var(--input-background) !important;
+    border-color: var(--border-color) !important;
+}
+
+#chatInput::placeholder,
+#messageInput::placeholder {
+    color: var(--text-secondary) !important;
+}
+
+/* 登录表单输入框 */
+#username,
+#login-password,
+#password {
+    color: inherit !important;
+}
+
+/* 搜索框 */
+#historySearch {
+    color: white !important;
+}
+
+#historySearch::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* 高对比度模式增强 */
+.high-contrast input,
+.high-contrast textarea,
+.high-contrast select {
+    color: #ffffff !important;
+    background-color: #000000 !important;
+    border: 2px solid #ffffff !important;
+    font-weight: bold !important;
+}
+
+.high-contrast input::placeholder,
+.high-contrast textarea::placeholder {
+    color: #cccccc !important;
+    font-weight: bold !important;
+}
+
+/* 聚焦状态增强 */
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid var(--primary-color, #3b82f6) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+}
+
+/* 错误状态 */
+input.error,
+textarea.error {
+    border-color: #ef4444 !important;
+    color: #ef4444 !important;
+}
+
+/* 成功状态 */
+input.success,
+textarea.success {
+    border-color: #10b981 !important;
+    color: #10b981 !important;
+}

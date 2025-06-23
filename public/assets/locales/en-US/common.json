@@ -1,0 +1,67 @@
+{
+  "navigation": {
+    "home": "Home",
+    "solutions": "Solutions",
+    "products": "Products",
+    "about": "About",
+    "api": "API Docs",
+    "docs": "Documentation",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Quantum Security · Intelligent Future",
+    "subtitle": "AI-Driven Enterprise Quantum Security Solutions",
+    "description": "Redefining Digital Security Standards",
+    "cta_primary": "Get Started",
+    "cta_secondary": "Watch Demo"
+  },
+  "features": {
+    "zero_trust": {
+      "title": "Zero Trust Security",
+      "description": "Comprehensive identity verification and multi-layer security protection"
+    },
+    "ai_assistant": {
+      "title": "AI Smart Assistant",
+      "description": "24/7 intelligent conversation and professional technical support"
+    },
+    "quantum_computing": {
+      "title": "Quantum Computing",
+      "description": "Next-generation computing technology, breakthrough performance limits"
+    }
+  },
+  "solutions": {
+    "title": "Enterprise Solutions",
+    "subtitle": "Customized quantum security solutions for enterprises of different industries and scales",
+    "financial": {
+      "title": "Financial Security",
+      "description": "Bank-grade quantum encryption to protect financial transactions and customer data"
+    },
+    "healthcare": {
+      "title": "Healthcare",
+      "description": "HIPAA-compliant medical data protection and privacy computing"
+    },
+    "government": {
+      "title": "Government",
+      "description": "National-level security standards to protect critical infrastructure and sensitive information"
+    }
+  },
+  "chat": {
+    "welcome": "Hello! I'm AlingAI Assistant. How can I help you today?",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "online": "Online",
+    "title": "AlingAI Assistant"
+  },
+  "common": {
+    "contact_us": "Contact Us",
+    "learn_more": "Learn More",
+    "get_started": "Get Started",
+    "back_to_top": "Back to Top",
+    "quick_nav": "Quick Navigation",
+    "theme_toggle": "Theme Toggle",
+    "language": "English"
+  }
+}

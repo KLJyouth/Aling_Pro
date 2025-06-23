@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端调试页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-white p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-bold mb-8">AlingAi Pro 前端调试页面</h1>
+        
+        <!-- 按钮测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">按钮样式测试</h2>
+            <div class="space-x-4">
+                <button class="button-enhanced-primary px-6 py-3 rounded-full">了解更多</button>
+                <button class="button-enhanced-secondary px-6 py-3 rounded-full">预约演示</button>
+            </div>
+        </section>
+
+        <!-- 产品矩阵测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">产品矩阵显示测试</h2>
+            <div id="products" class="p-4 border border-gray-600 rounded-lg">
+                <div class="product-card-enhanced p-4 bg-gray-800 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">珑凌安全云</h3>
+                    <p class="text-gray-300">基于量子密钥分发技术的新一代云安全基础设施</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术实力测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">技术实力显示测试</h2>
+            <div id="technology" class="p-4 border border-gray-600 rounded-lg">
+                <div class="product-card-enhanced p-4 bg-gray-800 rounded-lg">
+                    <h3 class="text-xl font-bold mb-2">技术创新</h3>
+                    <p class="text-gray-300">每年投入营收30%用于前沿技术研发</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 语言切换测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">语言切换测试</h2>
+            <div class="lang-selector-enhanced flex items-center gap-2 text-sm text-gray-300 cursor-pointer inline-block">
+                <span class="current-lang">中文</span>
+                <i class="fas fa-chevron-down text-xs"></i>
+            </div>
+        </section>
+
+        <!-- 3D量子球测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">3D量子球测试</h2>
+            <div id="quantum-model" class="w-full h-64 border border-gray-600 rounded-lg"></div>
+        </section>
+
+        <!-- 量子彩虹丝带测试 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">量子彩虹丝带测试</h2>
+            <p class="text-gray-300">彩虹丝带应该显示在页面底部</p>
+        </section>
+
+        <!-- 调试信息 -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold mb-4">调试信息</h2>
+            <div id="debug-info" class="bg-gray-800 p-4 rounded-lg text-sm"></div>
+        </section>
+    </div>
+
+    <!-- CSS 样式 -->
+    <style>
+        /* 按钮样式 */
+        .button-enhanced-primary,
+        .button-enhanced-secondary {
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            outline: none;
+        }
+
+        .button-enhanced-primary {
+            background: linear-gradient(135deg, #6c13ff 0%, #3a86ff 50%, #06ffa5 100%);
+            color: white;
+            box-shadow: 
+                0 4px 15px rgba(108, 19, 255, 0.3),
+                0 0 20px rgba(58, 134, 255, 0.2);
+        }
+
+        .button-enhanced-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 8px 25px rgba(108, 19, 255, 0.4),
+                0 0 30px rgba(58, 134, 255, 0.3);
+            background: linear-gradient(135deg, #7c23ff 0%, #4a96ff 50%, #16ffb5 100%);
+        }
+
+        .button-enhanced-secondary {
+            background: transparent;
+            color: #3a86ff;
+            border: 2px solid #3a86ff;
+        }
+
+        .button-enhanced-secondary:hover {
+            background: rgba(58, 134, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(58, 134, 255, 0.2);
+        }
+
+        /* 产品卡片 */
+        .product-card-enhanced {
+            background: rgba(17, 25, 40, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card-enhanced:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            border-color: rgba(108, 19, 255, 0.3);
+        }
+
+        /* 语言选择器 */
+        .lang-selector-enhanced {
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .lang-selector-enhanced:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(58, 134, 255, 0.5);
+        }
+
+        /* 3D模型容器 */
+        #quantum-model {
+            background: 
+                radial-gradient(ellipse at center, rgba(58, 134, 255, 0.1) 0%, transparent 70%),
+                linear-gradient(45deg, rgba(108, 19, 255, 0.05), rgba(255, 0, 110, 0.05));
+            border: 1px solid rgba(58, 134, 255, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        /* 量子彩虹丝带 */
+        .quantum-rainbow-ribbon {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, 
+                #ff006e 0%, 
+                #8338ec 16.66%, 
+                #3a86ff 33.33%, 
+                #06ffa5 50%, 
+                #ffbe0b 66.66%, 
+                #ff006e 83.33%, 
+                #8338ec 100%);
+            background-size: 200% 100%;
+            animation: rainbowFlow 3s linear infinite;
+            z-index: 1000;
+            box-shadow: 0 -2px 20px rgba(255, 0, 110, 0.3);
+        }
+
+        @keyframes rainbowFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+    </style>
+
+    <!-- JavaScript -->
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 调试页面已加载');
+
+            // 创建量子彩虹丝带
+            const ribbon = document.createElement('div');
+            ribbon.className = 'quantum-rainbow-ribbon';
+            document.body.appendChild(ribbon);
+
+            // 调试信息
+            const debugInfo = document.getElementById('debug-info');
+            const info = {
+                'Three.js 加载': window.THREE ? '✅ 已加载' : '❌ 未加载',
+                '产品矩阵元素': document.getElementById('products') ? '✅ 找到' : '❌ 未找到',
+                '技术实力元素': document.getElementById('technology') ? '✅ 找到' : '❌ 未找到',
+                '量子模型容器': document.getElementById('quantum-model') ? '✅ 找到' : '❌ 未找到',
+                '语言选择器': document.querySelector('.lang-selector-enhanced') ? '✅ 找到' : '❌ 未找到',
+                '主要按钮': document.querySelectorAll('.button-enhanced-primary').length + ' 个主要按钮',
+                '次要按钮': document.querySelectorAll('.button-enhanced-secondary').length + ' 个次要按钮'
+            };
+
+            let debugHtml = '<h3 class="font-bold mb-2">元素检查结果:</h3><ul class="space-y-1">';
+            for (const [key, value] of Object.entries(info)) {
+                debugHtml += `<li><strong>${key}:</strong> ${value}</li>`;
+            }
+            debugHtml += '</ul>';
+            debugInfo.innerHTML = debugHtml;
+
+            // 测试按钮点击事件
+            const primaryBtns = document.querySelectorAll('.button-enhanced-primary');
+            primaryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('主要按钮被点击！样式和事件正常工作。');
+                });
+            });
+
+            const secondaryBtns = document.querySelectorAll('.button-enhanced-secondary');
+            secondaryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('次要按钮被点击！样式和事件正常工作。');
+                });
+            });
+
+            // 测试语言切换
+            const langSelector = document.querySelector('.lang-selector-enhanced');
+            if (langSelector) {
+                langSelector.addEventListener('click', function() {
+                    const currentLang = this.querySelector('.current-lang');
+                    if (currentLang.textContent === '中文') {
+                        currentLang.textContent = 'English';
+                        alert('语言已切换到英文！');
+                    } else {
+                        currentLang.textContent = '中文';
+                        alert('语言已切换到中文！');
+                    }
+                });
+            }
+
+            // 初始化3D量子球
+            if (window.THREE) {
+                initQuantumModel();
+            } else {
+                const container = document.getElementById('quantum-model');
+                container.innerHTML = '<div class="flex items-center justify-center h-full text-gray-400">Three.js 未加载</div>';
+            }
+
+            function initQuantumModel() {
+                const container = document.getElementById('quantum-model');
+                if (!container) return;
+
+                try {
+                    const scene = new THREE.Scene();
+                    const camera = new THREE.PerspectiveCamera(75, container.offsetWidth / container.offsetHeight, 0.1, 1000);
+                    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                    
+                    renderer.setSize(container.offsetWidth, container.offsetHeight);
+                    renderer.setClearColor(0x000000, 0);
+                    container.appendChild(renderer.domElement);
+
+                    // 创建量子球体
+                    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+                    const sphereMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x3a86ff,
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.8
+                    });
+                    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+                    scene.add(sphere);
+
+                    // 创建光环
+                    const ringGeometry = new THREE.RingGeometry(1.2, 1.4, 32);
+                    const ringMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x6c13ff,
+                        transparent: true,
+                        opacity: 0.5,
+                        side: THREE.DoubleSide
+                    });
+                    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                    ring.rotation.x = Math.PI / 2;
+                    scene.add(ring);
+
+                    camera.position.z = 3;
+
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        sphere.rotation.x += 0.01;
+                        sphere.rotation.y += 0.01;
+                        ring.rotation.z += 0.02;
+                        renderer.render(scene, camera);
+                    }
+
+                    animate();
+                    console.log('✅ 3D量子球初始化成功');
+
+                } catch (error) {
+                    console.error('❌ 3D量子球初始化失败:', error);
+                    container.innerHTML = '<div class="flex items-center justify-center h-full text-red-400">3D模型加载失败</div>';
+                }
+            }
+
+            console.log('🎉 调试页面初始化完成！');
+        });
+    </script>
+</body>
+</html>

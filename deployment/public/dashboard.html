@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珑凌科技 - 用户控制台</title>
+    <meta name="description" content="珑凌科技用户控制台 - 管理您的账户、API密钥和使用情况">
+    
+    <!-- 核心资源 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- 字体预加载 -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap">
+
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-purple': '#0A0016',
+                        'neon-pink': '#FF2B75',
+                        'tech-blue': '#00D4FF',
+                        'cyan-glow': 'rgba(0, 212, 255, 0.15)',
+                        'longling': '#6C13FF'
+                    },
+                    fontFamily: {
+                        'heading': ['"JetBrains Mono"', 'monospace'],
+                        'body': ['"Inter"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 自定义样式 -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #0A0016 0%, #1A003C 100%);
+            color: rgba(255, 255, 255, 0.9);
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: radial-gradient(circle at 10% 20%, rgba(26, 0, 60, 0.3) 0%, rgba(10, 0, 22, 0.3) 100%);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(108, 19, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .quantum-text {
+            background: linear-gradient(90deg, #FF2B75, #6C13FF, #00D4FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .quantum-button {
+            background: linear-gradient(135deg, #6C13FF 0%, #FF2B75 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quantum-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(108, 19, 255, 0.3);
+        }
+
+        .quantum-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .quantum-button:hover:before {
+            left: 100%;
+        }
+
+        .sidebar {
+            background: radial-gradient(circle at 10% 20%, rgba(26, 0, 60, 0.4) 0%, rgba(10, 0, 22, 0.4) 100%);
+            backdrop-filter: blur(24px);
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            margin: 4px 0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: rgba(108, 19, 255, 0.1);
+            border-left: 3px solid #6C13FF;
+        }
+
+        .nav-item.active {
+            background: rgba(108, 19, 255, 0.2);
+            border-left: 3px solid #6C13FF;
+            color: #00D4FF;
+        }
+
+        .stat-card {
+            background: radial-gradient(circle at 10% 20%, rgba(26, 0, 60, 0.2) 0%, rgba(10, 0, 22, 0.2) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            border-color: rgba(108, 19, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .chart-container {
+            background: rgba(10, 0, 22, 0.3);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            border: 3px solid rgba(108, 19, 255, 0.1);
+            border-radius: 50%;
+            border-top: 3px solid #6C13FF;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+            padding: 16px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+
+        .notification.warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen font-body">
+    <!-- 侧边栏 -->
+    <aside class="sidebar fixed left-0 top-0 h-full w-64 z-40">
+        <div class="p-6">
+            <!-- Logo -->
+            <div class="flex items-center space-x-2 mb-8">
+                <img src="assets/images/logo.svg" alt="珑凌科技" class="h-8 w-auto">
+                <span class="quantum-text text-xl font-heading">珑凌科技</span>
+            </div>
+
+            <!-- 用户信息 -->
+            <div class="glass-card p-4 mb-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-neon-pink to-longling flex items-center justify-center">
+                        <i class="fas fa-user text-white"></i>
+                    </div>
+                    <div>
+                        <p class="font-semibold" id="userDisplayName">加载中...</p>
+                        <p class="text-sm text-gray-400" id="userEmail">--</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 导航菜单 -->
+            <nav class="space-y-2">
+                <div class="nav-item active" data-tab="overview">
+                    <i class="fas fa-chart-pie"></i>
+                    <span>概览</span>
+                </div>
+                <div class="nav-item" data-tab="chat">
+                    <i class="fas fa-comments"></i>
+                    <span>对话记录</span>
+                </div>
+                <div class="nav-item" data-tab="api">
+                    <i class="fas fa-key"></i>
+                    <span>API管理</span>
+                </div>
+                <div class="nav-item" data-tab="billing">
+                    <i class="fas fa-credit-card"></i>
+                    <span>账单</span>
+                </div>
+                <div class="nav-item" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>设置</span>
+                </div>
+                <div class="nav-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>退出登录</span>
+                </div>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- 主要内容区域 -->
+    <main class="ml-64 min-h-screen">
+        <!-- 顶部栏 -->
+        <header class="glass-card m-6 p-4 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-heading quantum-text">用户控制台</h1>
+                <p class="text-gray-400">管理您的账户和服务</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="quantum-button px-4 py-2" onclick="window.location.href='/chat.html'">
+                    <i class="fas fa-plus mr-2"></i>新建对话
+                </button>
+                <button class="p-2 rounded-lg hover:bg-white/10 transition-colors">
+                    <i class="fas fa-bell"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 内容区域 -->
+        <div class="p-6">
+            <!-- 概览标签页 -->
+            <div id="overview-tab" class="tab-content">
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">今日对话</p>
+                                <p class="text-2xl font-bold quantum-text" id="todayChats">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-neon-pink to-longling flex items-center justify-center">
+                                <i class="fas fa-comments text-white"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">
+                            <span class="text-green-400">+12%</span> 比昨天
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">API调用</p>
+                                <p class="text-2xl font-bold quantum-text" id="apiCalls">0</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-tech-blue to-longling flex items-center justify-center">
+                                <i class="fas fa-code text-white"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">
+                            <span class="text-green-400">+5%</span> 比昨天
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">剩余额度</p>
+                                <p class="text-2xl font-bold quantum-text" id="remainingQuota">--</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-longling to-neon-pink flex items-center justify-center">
+                                <i class="fas fa-coins text-white"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">
+                            本月剩余
+                        </p>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <p class="text-gray-400 text-sm">账户状态</p>
+                                <p class="text-lg font-bold text-green-400">正常</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center">
+                                <i class="fas fa-check text-white"></i>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-500">
+                            运行正常
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 图表区域 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-heading mb-4">使用趋势</h3>
+                        <div class="chart-container">
+                            <canvas id="usageChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-heading mb-4">最近活动</h3>
+                        <div class="space-y-4" id="recentActivity">
+                            <!-- 活动列表将动态加载 -->
+                            <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5">
+                                <div class="loading-spinner"></div>
+                                <span class="text-gray-400">加载中...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 对话记录标签页 -->
+            <div id="chat-tab" class="tab-content hidden">
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-heading">对话记录</h3>
+                        <button class="quantum-button px-4 py-2" onclick="window.location.href='/chat.html'">
+                            <i class="fas fa-plus mr-2"></i>新建对话
+                        </button>
+                    </div>
+                    <div id="chatHistory">
+                        <div class="text-center py-8 text-gray-400">
+                            <i class="fas fa-comments text-4xl mb-4"></i>
+                            <p>暂无对话记录</p>
+                            <button class="quantum-button px-6 py-3 mt-4" onclick="window.location.href='/chat.html'">
+                                开始第一次对话
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API管理标签页 -->
+            <div id="api-tab" class="tab-content hidden">
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-heading">API密钥管理</h3>
+                        <button class="quantum-button px-4 py-2" onclick="generateApiKey()">
+                            <i class="fas fa-plus mr-2"></i>生成新密钥
+                        </button>
+                    </div>
+                    <div id="apiKeys">
+                        <div class="text-center py-8 text-gray-400">
+                            <i class="fas fa-key text-4xl mb-4"></i>
+                            <p>暂无API密钥</p>
+                            <p class="text-sm">生成您的第一个API密钥来开始使用我们的服务</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 账单标签页 -->
+            <div id="billing-tab" class="tab-content hidden">
+                <div class="glass-card p-6">
+                    <h3 class="text-lg font-heading mb-6">账单信息</h3>
+                    <div class="text-center py-8 text-gray-400">
+                        <i class="fas fa-receipt text-4xl mb-4"></i>
+                        <p>暂无账单信息</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 设置标签页 -->
+            <div id="settings-tab" class="tab-content hidden">
+                <div class="glass-card p-6">
+                    <h3 class="text-lg font-heading mb-6">账户设置</h3>
+                    <form id="settingsForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">用户名</label>
+                            <input type="text" id="settingsUsername" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg focus:border-longling focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">邮箱</label>
+                            <input type="email" id="settingsEmail" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg focus:border-longling focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">新密码</label>
+                            <input type="password" id="settingsPassword" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg focus:border-longling focus:outline-none" placeholder="留空表示不修改">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">确认新密码</label>
+                            <input type="password" id="settingsPasswordConfirm" class="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg focus:border-longling focus:outline-none">
+                        </div>
+                        <button type="submit" class="quantum-button px-6 py-3">
+                            <i class="fas fa-save mr-2"></i>保存设置
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 通知容器 -->
+    <div id="notifications"></div>
+
+    <!-- 脚本 -->
+    <script src="/js/notifications.js"></script>
+    <script>
+        // 全局状态
+        let currentUser = null;
+        let currentTab = 'overview';
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            initializeChart();
+        });
+
+        // 初始化仪表板
+        async function initializeDashboard() {
+            try {
+                // 检查登录状态
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+
+                // 获取用户信息
+                await loadUserInfo();
+                
+                // 加载仪表板数据
+                await loadDashboardData();
+                
+                // 设置事件监听器
+                setupEventListeners();
+                
+            } catch (error) {
+                console.error('初始化失败:', error);
+                showNotification('初始化失败，请刷新页面重试', 'error');
+            }
+        }
+
+        // 加载用户信息
+        async function loadUserInfo() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('/api/user/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    currentUser = data.user || data;
+                    
+                    // 更新UI
+                    document.getElementById('userDisplayName').textContent = currentUser.username || currentUser.name || '用户';
+                    document.getElementById('userEmail').textContent = currentUser.email || '';
+                    
+                    // 更新设置表单
+                    document.getElementById('settingsUsername').value = currentUser.username || '';
+                    document.getElementById('settingsEmail').value = currentUser.email || '';
+                } else {
+                    throw new Error('Failed to load user info');
+                }
+            } catch (error) {
+                console.error('加载用户信息失败:', error);
+                document.getElementById('userDisplayName').textContent = '未知用户';
+            }
+        }
+
+        // 加载仪表板数据
+        async function loadDashboardData() {
+            try {
+                const token = localStorage.getItem('authToken');
+                
+                // 模拟数据 - 在实际应用中，这些应该从API获取
+                document.getElementById('todayChats').textContent = Math.floor(Math.random() * 50) + 10;
+                document.getElementById('apiCalls').textContent = Math.floor(Math.random() * 1000) + 500;
+                document.getElementById('remainingQuota').textContent = (Math.floor(Math.random() * 900) + 100).toLocaleString();
+                
+                // 加载最近活动
+                loadRecentActivity();
+                
+            } catch (error) {
+                console.error('加载仪表板数据失败:', error);
+            }
+        }
+
+        // 加载最近活动
+        function loadRecentActivity() {
+            const activities = [
+                { icon: 'fas fa-comments', text: '创建了新的对话', time: '2分钟前' },
+                { icon: 'fas fa-key', text: '生成了新的API密钥', time: '1小时前' },
+                { icon: 'fas fa-sign-in-alt', text: '登录账户', time: '3小时前' },
+                { icon: 'fas fa-cog', text: '更新了账户设置', time: '1天前' }
+            ];
+
+            const container = document.getElementById('recentActivity');
+            container.innerHTML = activities.map(activity => `
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-r from-longling to-neon-pink flex items-center justify-center">
+                        <i class="${activity.icon} text-xs text-white"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm">${activity.text}</p>
+                        <p class="text-xs text-gray-400">${activity.time}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 初始化图表
+        function initializeChart() {
+            const ctx = document.getElementById('usageChart').getContext('2d');
+            
+            // 生成模拟数据
+            const labels = [];
+            const data = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                labels.push(date.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' }));
+                data.push(Math.floor(Math.random() * 100) + 20);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'API调用次数',
+                        data: data,
+                        borderColor: '#6C13FF',
+                        backgroundColor: 'rgba(108, 19, 255, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'rgba(255, 255, 255, 0.8)'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.6)'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 标签页切换
+            document.querySelectorAll('.nav-item[data-tab]').forEach(item => {
+                item.addEventListener('click', function() {
+                    const tab = this.dataset.tab;
+                    switchTab(tab);
+                });
+            });
+
+            // 设置表单提交
+            document.getElementById('settingsForm').addEventListener('submit', handleSettingsSubmit);
+        }
+
+        // 切换标签页
+        function switchTab(tab) {
+            // 更新导航状态
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+
+            // 切换内容
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(`${tab}-tab`).classList.remove('hidden');
+
+            currentTab = tab;
+        }
+
+        // 处理设置表单提交
+        async function handleSettingsSubmit(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('settingsUsername').value;
+            const email = document.getElementById('settingsEmail').value;
+            const password = document.getElementById('settingsPassword').value;
+            const confirmPassword = document.getElementById('settingsPasswordConfirm').value;
+
+            // 验证密码
+            if (password && password !== confirmPassword) {
+                showNotification('两次输入的密码不一致', 'error');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('authToken');
+                const updateData = { username, email };
+                if (password) {
+                    updateData.password = password;
+                }
+
+                const response = await fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+
+                if (response.ok) {
+                    showNotification('设置已保存', 'success');
+                    document.getElementById('settingsPassword').value = '';
+                    document.getElementById('settingsPasswordConfirm').value = '';
+                    await loadUserInfo(); // 重新加载用户信息
+                } else {
+                    const data = await response.json();
+                    throw new Error(data.message || '保存失败');
+                }
+            } catch (error) {
+                console.error('保存设置失败:', error);
+                showNotification(error.message || '保存失败，请重试', 'error');
+            }
+        }
+
+        // 生成API密钥
+        async function generateApiKey() {
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('/api/keys/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showNotification('API密钥已生成', 'success');
+                    // 这里应该更新API密钥列表
+                } else {
+                    throw new Error('生成失败');
+                }
+            } catch (error) {
+                console.error('生成API密钥失败:', error);
+                showNotification('生成失败，请重试', 'error');
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userInfo');
+            window.location.href = '/login.html';
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('notifications').appendChild(notification);
+
+            // 显示动画
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+
+            // 自动移除
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (notification.parentElement) {
+                        notification.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

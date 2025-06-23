@@ -1,0 +1,72 @@
+{
+    "name": "system_settings",
+    "structure": {
+        "id": "auto_increment",
+        "key": "string",
+        "value": "text",
+        "type": "string",
+        "description": "string",
+        "is_public": "boolean",
+        "updated_at": "timestamp"
+    },
+    "data": [
+        {
+            "key": "app_name",
+            "value": "AlingAi Pro",
+            "type": "string",
+            "description": "应用名称",
+            "is_public": true,
+            "id": 1,
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "key": "app_version",
+            "value": "1.0.0",
+            "type": "string",
+            "description": "应用版本",
+            "is_public": true,
+            "id": 2,
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "key": "max_tokens",
+            "value": "4000",
+            "type": "integer",
+            "description": "最大令牌数",
+            "is_public": false,
+            "id": 3,
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "key": "default_model",
+            "value": "deepseek-chat",
+            "type": "string",
+            "description": "默认AI模型",
+            "is_public": true,
+            "id": 4,
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "key": "registration_enabled",
+            "value": "true",
+            "type": "boolean",
+            "description": "是否允许注册",
+            "is_public": true,
+            "id": 5,
+            "updated_at": "2025-06-06 08:45:05"
+        },
+        {
+            "key": "maintenance_mode",
+            "value": "false",
+            "type": "boolean",
+            "description": "维护模式",
+            "is_public": true,
+            "id": 6,
+            "updated_at": "2025-06-06 08:45:05"
+        }
+    ],
+    "indexes": [],
+    "auto_increment": 7,
+    "created_at": "2025-06-06 08:45:05",
+    "updated_at": "2025-06-06 08:45:05"
+}

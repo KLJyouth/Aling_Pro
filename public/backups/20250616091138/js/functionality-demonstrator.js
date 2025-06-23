@@ -1,0 +1,677 @@
+/**
+ * AlingAi Pro - 功能演示控制器
+ * 展示所有增强功能的完整演示
+ */
+
+class FunctionalityDemonstrator {
+    constructor() {
+        this.isRunning = false;
+        this.currentDemo = null;
+        this.demoQueue = [];
+        this.demoResults = {};
+        
+        this.demos = [
+            {
+                name: 'coreAnimation',
+                title: '🎬 核心动画系统',
+                description: '展示3D场景、粒子系统和动画效果',
+                duration: 5000
+            },
+            {
+                name: 'audioEffects',
+                title: '🔊 音效系统',
+                description: '演示各种动态音效生成',
+                duration: 8000
+            },
+            {
+                name: 'gestureInteraction',
+                title: '👆 手势交互',
+                description: '展示多点触控和手势识别',
+                duration: 6000
+            },
+            {
+                name: 'dataVisualization',
+                title: '📊 数据可视化',
+                description: '实时数据驱动的动画效果',
+                duration: 7000
+            },
+            {
+                name: 'socialFeatures',
+                title: '🌐 社交自定义',
+                description: '自定义设置和分享功能',
+                duration: 5000
+            },
+            {
+                name: 'performanceMonitoring',
+                title: '📈 性能监控',
+                description: '实时性能监控和优化',
+                duration: 4000
+            },
+            {
+                name: 'errorRecovery',
+                title: '🛡️ 错误恢复',
+                description: '智能错误处理和自动恢复',
+                duration: 6000
+            }
+        ];
+
+        this.init();
+    }
+
+    init() {
+        this.createDemoInterface();
+        console.log('🎭 Functionality Demonstrator 已初始化');
+    }
+
+    createDemoInterface() {
+        const demoPanel = document.createElement('div');
+        demoPanel.className = 'demo-panel';
+        demoPanel.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            color: #00ffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            z-index: 10000;
+            max-width: 300px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 255, 255, 0.3);
+        `;
+
+        demoPanel.innerHTML = `
+            <h3 style="margin: 0 0 15px 0; color: #00ffff; text-align: center;">
+                🎭 功能演示控制器
+            </h3>
+            
+            <div class="demo-controls" style="margin-bottom: 15px;">
+                <button class="demo-btn" id="startFullDemo" style="
+                    background: linear-gradient(45deg, #00ffff, #0080ff);
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 5px;
+                    color: #000;
+                    font-weight: bold;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom: 8px;
+                ">▶️ 开始完整演示</button>
+                
+                <button class="demo-btn" id="stopDemo" style="
+                    background: linear-gradient(45deg, #ff4444, #ff8800);
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 5px;
+                    color: #000;
+                    font-weight: bold;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom: 8px;
+                ">⏹️ 停止演示</button>
+
+                <button class="demo-btn" id="quickTest" style="
+                    background: linear-gradient(45deg, #44ff44, #00ff88);
+                    border: none;
+                    padding: 8px 16px;
+                    border-radius: 5px;
+                    color: #000;
+                    font-weight: bold;
+                    cursor: pointer;
+                    width: 100%;
+                ">🚀 快速功能测试</button>
+            </div>
+
+            <div class="demo-status">
+                <div id="currentDemo" style="margin-bottom: 10px; font-weight: bold;">
+                    状态: 就绪
+                </div>
+                <div id="demoProgress" style="
+                    background: #333;
+                    height: 4px;
+                    border-radius: 2px;
+                    overflow: hidden;
+                    margin-bottom: 10px;
+                ">
+                    <div id="progressBar" style="
+                        width: 0%;
+                        height: 100%;
+                        background: linear-gradient(90deg, #00ffff, #0080ff);
+                        transition: width 0.3s ease;
+                    "></div>
+                </div>
+                <div id="demoList" style="max-height: 200px; overflow-y: auto;"></div>
+            </div>
+        `;
+
+        document.body.appendChild(demoPanel);
+
+        // 绑定事件
+        document.getElementById('startFullDemo').addEventListener('click', () => {
+            this.startFullDemo();
+        });
+
+        document.getElementById('stopDemo').addEventListener('click', () => {
+            this.stopDemo();
+        });
+
+        document.getElementById('quickTest').addEventListener('click', () => {
+            this.runQuickTest();
+        });
+
+        this.updateDemoList();
+    }
+
+    updateDemoList() {
+        const demoList = document.getElementById('demoList');
+        if (!demoList) return;
+
+        demoList.innerHTML = this.demos.map((demo, index) => `
+            <div style="
+                padding: 5px;
+                margin: 2px 0;
+                background: rgba(0, 255, 255, 0.1);
+                border-radius: 3px;
+                font-size: 10px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            " onclick="window.functionalityDemonstrator.runSingleDemo('${demo.name}')">
+                ${index + 1}. ${demo.title}
+                <div style="color: #aaa; font-size: 9px;">${demo.description}</div>
+            </div>
+        `).join('');
+    }
+
+    async startFullDemo() {
+        if (this.isRunning) {
+            console.log('演示已在进行中...');
+            return;
+        }
+
+        this.isRunning = true;
+        this.demoResults = {};
+        
+        console.log('🎭 开始完整功能演示...');
+        this.updateStatus('🎬 启动完整演示...');
+
+        try {
+            for (let i = 0; i < this.demos.length; i++) {
+                const demo = this.demos[i];
+                this.updateStatus(`${demo.title} (${i + 1}/${this.demos.length})`);
+                this.updateProgress((i / this.demos.length) * 100);
+                
+                console.log(`🎯 演示: ${demo.title}`);
+                const result = await this.runDemo(demo);
+                this.demoResults[demo.name] = result;
+                
+                // 短暂暂停
+                await this.sleep(1000);
+            }
+
+            this.updateProgress(100);
+            this.updateStatus('✅ 演示完成');
+            console.log('🎉 完整演示结束');
+            this.showDemoResults();
+            
+        } catch (error) {
+            console.error('演示过程中出错:', error);
+            this.updateStatus('❌ 演示出错');
+        } finally {
+            this.isRunning = false;
+            setTimeout(() => {
+                this.updateProgress(0);
+                this.updateStatus('就绪');
+            }, 3000);
+        }
+    }
+
+    async runDemo(demo) {
+        const startTime = Date.now();
+        const result = { name: demo.name, success: false, duration: 0, details: [] };
+
+        try {
+            switch (demo.name) {
+                case 'coreAnimation':
+                    await this.demonstrateCoreAnimation(result);
+                    break;
+                case 'audioEffects':
+                    await this.demonstrateAudioEffects(result);
+                    break;
+                case 'gestureInteraction':
+                    await this.demonstrateGestureInteraction(result);
+                    break;
+                case 'dataVisualization':
+                    await this.demonstrateDataVisualization(result);
+                    break;
+                case 'socialFeatures':
+                    await this.demonstrateSocialFeatures(result);
+                    break;
+                case 'performanceMonitoring':
+                    await this.demonstratePerformanceMonitoring(result);
+                    break;
+                case 'errorRecovery':
+                    await this.demonstrateErrorRecovery(result);
+                    break;
+            }
+
+            result.success = true;
+            result.duration = Date.now() - startTime;
+            
+        } catch (error) {
+            result.success = false;
+            result.duration = Date.now() - startTime;
+            result.error = error.message;
+            console.error(`演示 ${demo.name} 失败:`, error);
+        }
+
+        return result;
+    }
+
+    async demonstrateCoreAnimation(result) {
+        result.details.push('检查3D场景...');
+        
+        if (window.scene && window.renderer) {
+            result.details.push('✅ 3D场景正常运行');
+            
+            // 添加一些临时动画效果
+            if (window.scene.children.length > 0) {
+                result.details.push('✅ 场景对象存在');
+                
+                // 创建临时动画
+                const tempSphere = new THREE.SphereGeometry(2, 32, 32);
+                const tempMaterial = new THREE.MeshBasicMaterial({ 
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.5
+                });
+                const tempMesh = new THREE.Mesh(tempSphere, tempMaterial);
+                tempMesh.position.set(10, 10, 10);
+                
+                window.scene.add(tempMesh);
+                result.details.push('✅ 添加临时演示对象');
+                
+                // 动画移动
+                const animate = () => {
+                    tempMesh.rotation.x += 0.02;
+                    tempMesh.rotation.y += 0.02;
+                    tempMesh.position.x = Math.sin(Date.now() * 0.001) * 10;
+                };
+                
+                const animationInterval = setInterval(animate, 16);
+                
+                await this.sleep(3000);
+                
+                clearInterval(animationInterval);
+                window.scene.remove(tempMesh);
+                result.details.push('✅ 清理临时对象');
+            }
+        } else {
+            result.details.push('❌ 3D场景未初始化');
+            throw new Error('3D场景未找到');
+        }
+    }
+
+    async demonstrateAudioEffects(result) {
+        result.details.push('检查音频系统...');
+        
+        if (window.audioEnhancementSystem) {
+            const audio = window.audioEnhancementSystem;
+            result.details.push('✅ 音频系统已加载');
+            
+            try {
+                // 确保音频上下文激活
+                await audio.ensureAudioContext();
+                result.details.push('✅ 音频上下文激活');
+                
+                // 演示不同音效
+                const effects = ['typing', 'explosion', 'quantum', 'absorption'];
+                
+                for (const effect of effects) {
+                    result.details.push(`🔊 播放 ${effect} 音效`);
+                    
+                    switch (effect) {
+                        case 'typing':
+                            if (audio.createTypingEffect) {
+                                audio.createTypingEffect();
+                            }
+                            break;
+                        case 'explosion':
+                            if (audio.createExplosionEffect) {
+                                audio.createExplosionEffect();
+                            }
+                            break;
+                        case 'quantum':
+                            if (audio.createQuantumEffect) {
+                                audio.createQuantumEffect();
+                            }
+                            break;
+                        case 'absorption':
+                            if (audio.createAbsorptionEffect) {
+                                audio.createAbsorptionEffect();
+                            }
+                            break;
+                    }
+                    
+                    await this.sleep(800);
+                }
+                
+                result.details.push('✅ 音效演示完成');
+                
+            } catch (error) {
+                result.details.push(`❌ 音频播放错误: ${error.message}`);
+            }
+        } else {
+            result.details.push('❌ 音频系统未加载');
+            throw new Error('音频系统未找到');
+        }
+    }
+
+    async demonstrateGestureInteraction(result) {
+        result.details.push('检查手势系统...');
+        
+        if (window.gestureInteractionSystem) {
+            const gesture = window.gestureInteractionSystem;
+            result.details.push('✅ 手势系统已加载');
+            
+            // 模拟手势事件
+            result.details.push('🤏 模拟手势交互...');
+            
+            // 模拟点击事件
+            const clickEvent = new MouseEvent('click', {
+                clientX: window.innerWidth / 2,
+                clientY: window.innerHeight / 2
+            });
+            document.dispatchEvent(clickEvent);
+            result.details.push('✅ 模拟点击事件');
+            
+            await this.sleep(1000);
+            
+            // 模拟触摸事件（如果支持）
+            if ('ontouchstart' in window) {
+                const touchEvent = new TouchEvent('touchstart', {
+                    touches: [{
+                        clientX: window.innerWidth / 2,
+                        clientY: window.innerHeight / 2
+                    }]
+                });
+                document.dispatchEvent(touchEvent);
+                result.details.push('✅ 模拟触摸事件');
+            }
+            
+            result.details.push('✅ 手势交互演示完成');
+            
+        } else {
+            result.details.push('❌ 手势系统未加载');
+            throw new Error('手势系统未找到');
+        }
+    }
+
+    async demonstrateDataVisualization(result) {
+        result.details.push('检查数据可视化系统...');
+        
+        if (window.dataVisualizationSystem) {
+            const dataViz = window.dataVisualizationSystem;
+            result.details.push('✅ 数据可视化系统已加载');
+            
+            // 生成测试数据
+            result.details.push('📊 生成测试数据...');
+            
+            const testData = {
+                performance: Math.random() * 100,
+                userActivity: Math.random() * 50,
+                systemLoad: Math.random() * 80
+            };
+            
+            result.details.push(`📈 性能数据: ${testData.performance.toFixed(1)}%`);
+            result.details.push(`👤 用户活动: ${testData.userActivity.toFixed(1)}%`);
+            result.details.push(`💻 系统负载: ${testData.systemLoad.toFixed(1)}%`);
+            
+            // 模拟数据更新
+            if (dataViz.updateVisualization) {
+                dataViz.updateVisualization(testData);
+                result.details.push('✅ 数据可视化更新');
+            }
+            
+            await this.sleep(2000);
+            result.details.push('✅ 数据可视化演示完成');
+            
+        } else {
+            result.details.push('❌ 数据可视化系统未加载');
+            throw new Error('数据可视化系统未找到');
+        }
+    }
+
+    async demonstrateSocialFeatures(result) {
+        result.details.push('检查社交功能...');
+        
+        if (window.socialCustomizationSystem) {
+            const social = window.socialCustomizationSystem;
+            result.details.push('✅ 社交系统已加载');
+            
+            // 演示自定义功能
+            result.details.push('🎨 展示自定义面板...');
+            if (social.showCustomizationPanel) {
+                social.showCustomizationPanel();
+                result.details.push('✅ 自定义面板已显示');
+                
+                await this.sleep(2000);
+                
+                if (social.hideCustomizationPanel) {
+                    social.hideCustomizationPanel();
+                    result.details.push('✅ 自定义面板已隐藏');
+                }
+            }
+            
+            // 演示分享功能
+            result.details.push('🌐 测试分享功能...');
+            if (social.generateShareLink) {
+                const shareLink = social.generateShareLink();
+                result.details.push(`✅ 分享链接生成: ${shareLink ? '成功' : '失败'}`);
+            }
+            
+            result.details.push('✅ 社交功能演示完成');
+            
+        } else {
+            result.details.push('❌ 社交系统未加载');
+            throw new Error('社交系统未找到');
+        }
+    }
+
+    async demonstratePerformanceMonitoring(result) {
+        result.details.push('检查性能监控...');
+        
+        if (window.ultimatePerformanceValidator || window.realtimePerformanceDashboard) {
+            result.details.push('✅ 性能监控系统已加载');
+            
+            // 获取性能指标
+            result.details.push('📊 收集性能数据...');
+            
+            const performanceData = {
+                fps: window.fps || 60,
+                memory: (performance.memory?.usedJSHeapSize / 1024 / 1024) || 0,
+                loadTime: performance.timing?.loadEventEnd - performance.timing?.navigationStart || 0
+            };
+            
+            result.details.push(`🎮 FPS: ${performanceData.fps.toFixed(1)}`);
+            result.details.push(`💾 内存使用: ${performanceData.memory.toFixed(1)}MB`);
+            result.details.push(`⚡ 加载时间: ${performanceData.loadTime}ms`);
+            
+            // 显示性能仪表盘
+            if (window.realtimePerformanceDashboard && window.realtimePerformanceDashboard.show) {
+                window.realtimePerformanceDashboard.show();
+                result.details.push('✅ 性能仪表盘已显示');
+                
+                await this.sleep(3000);
+                
+                if (window.realtimePerformanceDashboard.hide) {
+                    window.realtimePerformanceDashboard.hide();
+                    result.details.push('✅ 性能仪表盘已隐藏');
+                }
+            }
+            
+            result.details.push('✅ 性能监控演示完成');
+            
+        } else {
+            result.details.push('❌ 性能监控系统未加载');
+            throw new Error('性能监控系统未找到');
+        }
+    }
+
+    async demonstrateErrorRecovery(result) {
+        result.details.push('检查错误恢复系统...');
+        
+        if (window.intelligentErrorRecovery) {
+            const errorSystem = window.intelligentErrorRecovery;
+            result.details.push('✅ 错误恢复系统已加载');
+            
+            // 模拟非关键错误
+            result.details.push('⚠️ 模拟测试错误...');
+            
+            try {
+                // 创建一个安全的测试错误
+                const testError = new Error('Demo Test Error - Safe to ignore');
+                testError.isTestError = true;
+                
+                if (errorSystem.handleJavaScriptError) {
+                    errorSystem.handleJavaScriptError({
+                        type: 'javascript',
+                        message: 'Demo test error',
+                        isTest: true,
+                        timestamp: Date.now()
+                    });
+                    result.details.push('✅ 错误处理触发');
+                }
+                
+                await this.sleep(1000);
+                
+                // 检查恢复状态
+                if (errorSystem.errors) {
+                    result.details.push(`📋 记录的错误数: ${errorSystem.errors.length}`);
+                }
+                
+                result.details.push('✅ 错误恢复演示完成');
+                
+            } catch (error) {
+                result.details.push(`❌ 错误恢复测试失败: ${error.message}`);
+            }
+            
+        } else {
+            result.details.push('❌ 错误恢复系统未加载');
+            throw new Error('错误恢复系统未找到');
+        }
+    }
+
+    async runSingleDemo(demoName) {
+        const demo = this.demos.find(d => d.name === demoName);
+        if (!demo) {
+            console.log(`未找到演示: ${demoName}`);
+            return;
+        }
+
+        console.log(`🎯 单独演示: ${demo.title}`);
+        this.updateStatus(`${demo.title}`);
+        
+        const result = await this.runDemo(demo);
+        console.log(`演示结果:`, result);
+    }
+
+    async runQuickTest() {
+        console.log('🚀 开始快速功能测试...');
+        this.updateStatus('🚀 快速测试中...');
+        
+        const systems = [
+            'scene', 'audioEnhancementSystem', 'gestureInteractionSystem',
+            'dataVisualizationSystem', 'socialCustomizationSystem',
+            'systemIntegrationManager', 'intelligentErrorRecovery'
+        ];
+        
+        const results = systems.map(system => ({
+            name: system,
+            available: !!window[system],
+            status: window[system] ? '✅' : '❌'
+        }));
+        
+        console.log('快速测试结果:');
+        results.forEach(r => {
+            console.log(`${r.status} ${r.name}`);
+        });
+        
+        const successRate = results.filter(r => r.available).length / results.length * 100;
+        console.log(`系统可用性: ${successRate.toFixed(1)}%`);
+        
+        this.updateStatus(`测试完成 - ${successRate.toFixed(1)}%`);
+        
+        setTimeout(() => {
+            this.updateStatus('就绪');
+        }, 3000);
+    }
+
+    stopDemo() {
+        this.isRunning = false;
+        this.updateStatus('🛑 演示已停止');
+        this.updateProgress(0);
+        console.log('演示已停止');
+    }
+
+    updateStatus(status) {
+        const statusElement = document.getElementById('currentDemo');
+        if (statusElement) {
+            statusElement.textContent = `状态: ${status}`;
+        }
+    }
+
+    updateProgress(percent) {
+        const progressBar = document.getElementById('progressBar');
+        if (progressBar) {
+            progressBar.style.width = `${percent}%`;
+        }
+    }
+
+    showDemoResults() {
+        console.log('\n' + '='.repeat(50));
+        console.log('🎭 演示结果总结');
+        console.log('='.repeat(50));
+        
+        Object.values(this.demoResults).forEach(result => {
+            const status = result.success ? '✅' : '❌';
+            console.log(`${status} ${result.name} (${result.duration}ms)`);
+            if (result.details) {
+                result.details.forEach(detail => {
+                    console.log(`   ${detail}`);
+                });
+            }
+            if (result.error) {
+                console.log(`   Error: ${result.error}`);
+            }
+        });
+        
+        const successCount = Object.values(this.demoResults).filter(r => r.success).length;
+        const totalCount = Object.values(this.demoResults).length;
+        const successRate = (successCount / totalCount * 100).toFixed(1);
+        
+        console.log('='.repeat(50));
+        console.log(`成功率: ${successRate}% (${successCount}/${totalCount})`);
+        console.log('='.repeat(50));
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+// 全局初始化
+if (typeof window !== 'undefined') {
+    // 等待页面加载完成后初始化
+    if (document.readyState === 'complete') {
+        window.functionalityDemonstrator = new FunctionalityDemonstrator();
+    } else {
+        window.addEventListener('load', () => {
+            window.functionalityDemonstrator = new FunctionalityDemonstrator();
+        });
+    }
+    
+    console.log('🎭 Functionality Demonstrator 已加载');
+}

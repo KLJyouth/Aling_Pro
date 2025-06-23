@@ -1,0 +1,7 @@
+# 测试工具，生产环境建议限制访问
+Order Deny,Allow
+Deny from all
+Allow from 127.0.0.1
+Allow from ::1
+# 添加您的IP地址:
+# Allow from YOUR_IP_ADDRESS

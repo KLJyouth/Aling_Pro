@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智慧政务大厅 - AlingAi Pro 6.0</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+        }
+        .service-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-color: #3b82f6;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .floating-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .progress-ring {
+            transition: stroke-dasharray 0.3s ease;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .typing-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #9ca3af;
+            animation: typing 1.4s infinite;
+        }
+        .typing-indicator:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+        }
+        .blockchain-verified {
+            position: relative;
+        }
+        .blockchain-verified::after {
+            content: '⛓️';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-landmark text-2xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-bold">智慧政务大厅</h1>
+                            <p class="text-sm opacity-90">AI驱动的数字化政府服务平台</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="hover:text-blue-200 transition-colors flex items-center">
+                        <i class="fas fa-home mr-2"></i>首页
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors flex items-center">
+                        <i class="fas fa-clipboard-list mr-2"></i>在线办事
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors flex items-center">
+                        <i class="fas fa-search mr-2"></i>办事指南
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors flex items-center">
+                        <i class="fas fa-phone mr-2"></i>联系我们
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-center">
+                        <p class="text-sm opacity-90">当前排队人数</p>
+                        <p class="text-xl font-bold">28</p>
+                    </div>
+                    <button class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+                        <i class="fas fa-user mr-2"></i>市民登录
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <!-- Welcome Section -->
+        <div class="text-center mb-12">
+            <div class="mb-6">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">欢迎来到智慧政务大厅</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    利用人工智能和区块链技术，为市民提供高效、透明、便民的数字化政府服务
+                </p>
+            </div>
+            
+            <!-- Quick Search -->
+            <div class="max-w-2xl mx-auto">
+                <div class="relative">
+                    <input type="text" placeholder="搜索政务服务，如：身份证办理、营业执照申请..." 
+                           class="w-full px-6 py-4 text-lg border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-lg">
+                    <button class="absolute right-2 top-2 bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-search mr-2"></i>搜索
+                    </button>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2 mt-4">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-blue-200">身份证办理</span>
+                    <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-green-200">营业执照</span>
+                    <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-purple-200">社保查询</span>
+                    <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-orange-200">户口迁移</span>
+                    <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm cursor-pointer hover:bg-red-200">不动产登记</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Categories -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="service-card rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 floating-icon">
+                    <i class="fas fa-id-card text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">证件办理</h3>
+                <p class="text-gray-600 text-sm mb-4">身份证、护照、驾驶证等各类证件申请</p>
+                <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <i class="fas fa-clock"></i>
+                    <span>平均用时：15分钟</span>
+                </div>
+                <button class="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    立即办理
+                </button>
+            </div>
+
+            <div class="service-card rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 floating-icon">
+                    <i class="fas fa-building text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">工商服务</h3>
+                <p class="text-gray-600 text-sm mb-4">营业执照、税务登记、企业变更等</p>
+                <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <i class="fas fa-clock"></i>
+                    <span>平均用时：30分钟</span>
+                </div>
+                <button class="mt-4 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    立即办理
+                </button>
+            </div>
+
+            <div class="service-card rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 floating-icon">
+                    <i class="fas fa-heart text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">社会保障</h3>
+                <p class="text-gray-600 text-sm mb-4">社保查询、医保办理、养老保险等</p>
+                <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <i class="fas fa-clock"></i>
+                    <span>平均用时：10分钟</span>
+                </div>
+                <button class="mt-4 w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors">
+                    立即办理
+                </button>
+            </div>
+
+            <div class="service-card rounded-xl p-6 text-center">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 floating-icon">
+                    <i class="fas fa-home text-orange-600 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800 mb-2">房产服务</h3>
+                <p class="text-gray-600 text-sm mb-4">不动产登记、房产证明、户口迁移等</p>
+                <div class="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                    <i class="fas fa-clock"></i>
+                    <span>平均用时：45分钟</span>
+                </div>
+                <button class="mt-4 w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors">
+                    立即办理
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- AI Smart Assistant -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-robot text-white"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">AI智能助手</h3>
+                                <p class="text-sm text-gray-600">24小时在线为您答疑解惑</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                            <span class="text-sm text-green-600 font-medium">在线</span>
+                        </div>
+                    </div>
+
+                    <!-- Chat Messages -->
+                    <div class="h-96 overflow-y-auto mb-4 p-4 bg-gray-50 rounded-lg" id="chatMessages">
+                        <div class="mb-4">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div class="chat-bubble bg-white p-3 rounded-lg shadow-sm">
+                                    <p class="text-sm text-gray-800">
+                                        您好！我是政务AI助手小智，很高兴为您服务！我可以帮您：<br>
+                                        🔹 查询办事流程和所需材料<br>
+                                        🔹 预约排号和进度查询<br>
+                                        🔹 政策解读和法律咨询<br>
+                                        🔹 智能表单填写辅助<br><br>
+                                        请问有什么可以帮助您的吗？
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="flex items-start justify-end">
+                                <div class="chat-bubble bg-blue-600 text-white p-3 rounded-lg shadow-sm">
+                                    <p class="text-sm">我想办理身份证，需要什么材料？</p>
+                                </div>
+                                <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center ml-3">
+                                    <i class="fas fa-user text-gray-600 text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="flex items-start">
+                                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div class="chat-bubble bg-white p-3 rounded-lg shadow-sm blockchain-verified">
+                                    <p class="text-sm text-gray-800">
+                                        身份证办理所需材料如下：<br><br>
+                                        📋 <strong>首次申领：</strong><br>
+                                        • 户口簿原件及复印件<br>
+                                        • 填写《居民身份证申领登记表》<br>
+                                        • 本人到场拍照<br><br>
+                                        🔄 <strong>换领/补领：</strong><br>
+                                        • 原身份证（换领）<br>
+                                        • 户口簿原件及复印件<br>
+                                        • 填写相应申请表<br><br>
+                                        ⏰ <strong>办理时间：</strong>工作日 9:00-17:00<br>
+                                        💰 <strong>收费标准：</strong>首次免费，换补领20元<br>
+                                        📅 <strong>办结时限：</strong>30个工作日<br><br>
+                                        需要我帮您预约办理时间吗？
+                                    </p>
+                                    <div class="mt-2 flex space-x-2">
+                                        <button class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700">立即预约</button>
+                                        <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-xs hover:bg-gray-300">查看流程图</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="flex items-center space-x-3">
+                        <div class="flex-1 relative">
+                            <input type="text" placeholder="输入您的问题..." 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                   id="chatInput">
+                            <button class="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                        <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Suggestions -->
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200" onclick="quickQuestion('护照办理流程')">
+                            护照办理流程
+                        </button>
+                        <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200" onclick="quickQuestion('营业执照申请')">
+                            营业执照申请
+                        </button>
+                        <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200" onclick="quickQuestion('社保缴费查询')">
+                            社保缴费查询
+                        </button>
+                        <button class="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-gray-200" onclick="quickQuestion('户口迁移手续')">
+                            户口迁移手续
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Status & Quick Actions -->
+            <div class="space-y-6">
+                <!-- Queue Status -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">实时办事状态</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                                <span class="text-sm font-medium text-gray-800">证件办理</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-green-600 font-medium">排队人数: 5</p>
+                                <p class="text-xs text-gray-500">预计等待: 15分钟</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                                <span class="text-sm font-medium text-gray-800">工商服务</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-yellow-600 font-medium">排队人数: 12</p>
+                                <p class="text-xs text-gray-500">预计等待: 35分钟</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                                <span class="text-sm font-medium text-gray-800">社会保障</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-blue-600 font-medium">排队人数: 8</p>
+                                <p class="text-xs text-gray-500">预计等待: 20分钟</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                                <span class="text-sm font-medium text-gray-800">房产服务</span>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm text-purple-600 font-medium">排队人数: 3</p>
+                                <p class="text-xs text-gray-500">预计等待: 25分钟</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-colors">
+                        <i class="fas fa-ticket-alt mr-2"></i>立即取号
+                    </button>
+                </div>
+
+                <!-- Quick Services -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">快速服务</h3>
+                    
+                    <div class="space-y-3">
+                        <button class="w-full flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                            <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-file-alt text-blue-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">在线申请</p>
+                                <p class="text-sm text-gray-600">填写电子表单</p>
+                            </div>
+                        </button>
+
+                        <button class="w-full flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                            <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-search text-green-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">进度查询</p>
+                                <p class="text-sm text-gray-600">查看办事进度</p>
+                            </div>
+                        </button>
+
+                        <button class="w-full flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                            <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-download text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">证件下载</p>
+                                <p class="text-sm text-gray-600">电子证照下载</p>
+                            </div>
+                        </button>
+
+                        <button class="w-full flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-left">
+                            <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-calendar text-orange-600"></i>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800">预约服务</p>
+                                <p class="text-sm text-gray-600">预约办事时间</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Service Statistics -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">今日服务统计</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">办结件数</span>
+                            <span class="text-lg font-bold text-green-600">127</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">在办件数</span>
+                            <span class="text-lg font-bold text-blue-600">28</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">平均用时</span>
+                            <span class="text-lg font-bold text-purple-600">22分钟</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-600">满意度</span>
+                            <div class="flex items-center">
+                                <span class="text-lg font-bold text-yellow-600 mr-2">98.5%</span>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star text-xs"></i>
+                                    <i class="fas fa-star text-xs"></i>
+                                    <i class="fas fa-star text-xs"></i>
+                                    <i class="fas fa-star text-xs"></i>
+                                    <i class="fas fa-star text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 bg-green-50 rounded-lg">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-600 mr-2"></i>
+                            <span class="text-sm text-green-800 font-medium">系统运行正常</span>
+                        </div>
+                        <p class="text-xs text-green-600 mt-1">区块链验证已启用，数据安全可信</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Notifications -->
+        <div class="mt-8 bg-white rounded-xl shadow-lg p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">最新公告</h3>
+                <a href="#" class="text-blue-600 hover:text-blue-700 text-sm">查看更多</a>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex items-start p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div class="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3"></div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800">【重要】身份证办理系统升级通知</h4>
+                        <p class="text-sm text-gray-600 mt-1">6月15日-16日，身份证办理系统将进行升级维护，期间可能影响正常办理...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            <span>2025-06-12 09:00</span>
+                            <span class="mx-2">|</span>
+                            <i class="fas fa-eye mr-1"></i>
+                            <span>1,247次查看</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-start p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3"></div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800">新增区块链电子证照服务</h4>
+                        <p class="text-sm text-gray-600 mt-1">即日起，所有新办证件均支持区块链电子证照，具有防伪、可验证等特性...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            <span>2025-06-11 14:30</span>
+                            <span class="mx-2">|</span>
+                            <i class="fas fa-eye mr-1"></i>
+                            <span>856次查看</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-start p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                    <div class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3"></div>
+                    <div class="flex-1">
+                        <h4 class="font-medium text-gray-800">端午节假期服务安排</h4>
+                        <p class="text-sm text-gray-600 mt-1">端午节假期期间（6月22日-24日），部分服务时间调整，在线服务正常...</p>
+                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                            <i class="fas fa-clock mr-1"></i>
+                            <span>2025-06-10 16:45</span>
+                            <span class="mx-2">|</span>
+                            <i class="fas fa-eye mr-1"></i>
+                            <span>2,103次查看</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">联系我们</h4>
+                    <div class="space-y-2 text-sm">
+                        <p><i class="fas fa-phone mr-2"></i>服务热线：12345</p>
+                        <p><i class="fas fa-envelope mr-2"></i>邮箱：service@gov.cn</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>地址：市政府大楼A座</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">办事指南</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-blue-400">个人办事</a></li>
+                        <li><a href="#" class="hover:text-blue-400">企业办事</a></li>
+                        <li><a href="#" class="hover:text-blue-400">便民服务</a></li>
+                        <li><a href="#" class="hover:text-blue-400">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">政务公开</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-blue-400">政策文件</a></li>
+                        <li><a href="#" class="hover:text-blue-400">规划计划</a></li>
+                        <li><a href="#" class="hover:text-blue-400">统计信息</a></li>
+                        <li><a href="#" class="hover:text-blue-400">财政预算</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">技术支持</h4>
+                    <div class="flex items-center space-x-4 text-sm">
+                        <div class="flex items-center">
+                            <i class="fas fa-shield-alt mr-2 text-green-400"></i>
+                            <span>区块链认证</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-robot mr-2 text-blue-400"></i>
+                            <span>AI智能</span>
+                        </div>
+                    </div>
+                    <p class="text-sm mt-4 text-gray-400">
+                        Powered by AlingAi Pro 6.0<br>
+                        智慧政务解决方案
+                    </p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-4 text-center text-sm text-gray-400">
+                <p>&copy; 2025 智慧政务大厅. 保留所有权利. | 备案号：XXX-XXXXXX</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        let messageCount = 0;
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addUserMessage(message);
+                input.value = '';
+                
+                // Simulate AI processing
+                setTimeout(() => {
+                    addTypingIndicator();
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        addAIResponse(message);
+                    }, 2000);
+                }, 500);
+            }
+        }
+
+        function quickQuestion(question) {
+            document.getElementById('chatInput').value = question;
+            sendMessage();
+        }
+
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'mb-4';
+            messageDiv.innerHTML = `
+                <div class="flex items-start justify-end">
+                    <div class="chat-bubble bg-blue-600 text-white p-3 rounded-lg shadow-sm">
+                        <p class="text-sm">${message}</p>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center ml-3">
+                        <i class="fas fa-user text-gray-600 text-sm"></i>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addTypingIndicator() {
+            const chatMessages = document.getElementById('chatMessages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'mb-4 typing-message';
+            typingDiv.innerHTML = `
+                <div class="flex items-start">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="chat-bubble bg-white p-3 rounded-lg shadow-sm">
+                        <div class="flex space-x-1">
+                            <div class="typing-indicator"></div>
+                            <div class="typing-indicator"></div>
+                            <div class="typing-indicator"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typingMessage = document.querySelector('.typing-message');
+            if (typingMessage) {
+                typingMessage.remove();
+            }
+        }
+
+        function addAIResponse(userMessage) {
+            const responses = {
+                '护照办理流程': `
+                    护照办理流程如下：<br><br>
+                    📋 <strong>所需材料：</strong><br>
+                    • 身份证原件及复印件<br>
+                    • 户口簿原件及复印件<br>
+                    • 2寸白底彩色照片2张<br>
+                    • 填写《中国公民因私出国申请表》<br><br>
+                    🔄 <strong>办理流程：</strong><br>
+                    1. 网上预约或现场取号<br>
+                    2. 提交申请材料<br>
+                    3. 现场拍照和指纹采集<br>
+                    4. 缴费（普通护照160元）<br>
+                    5. 等待制证（7-15个工作日）<br><br>
+                    📍 <strong>办理地点：</strong>市公安局出入境管理处<br>
+                    需要我帮您预约办理时间吗？
+                `,
+                '营业执照申请': `
+                    营业执照申请指南：<br><br>
+                    📋 <strong>申请材料：</strong><br>
+                    • 法定代表人身份证明<br>
+                    • 公司章程<br>
+                    • 股东会决议<br>
+                    • 经营场所证明<br>
+                    • 《公司设立登记申请书》<br><br>
+                    💻 <strong>网上申请流程：</strong><br>
+                    1. 企业名称预先核准<br>
+                    2. 网上填写申请信息<br>
+                    3. 上传电子材料<br>
+                    4. 等待审核（3-5个工作日）<br>
+                    5. 领取电子营业执照<br><br>
+                    💰 <strong>费用：</strong>免费<br>
+                    是否需要我协助您进行名称预核准？
+                `,
+                '社保缴费查询': `
+                    社保缴费查询方式：<br><br>
+                    💻 <strong>在线查询：</strong><br>
+                    • 社保官网个人账户<br>
+                    • 微信"城市服务"<br>
+                    • 支付宝"市民中心"<br>
+                    • 本平台"社保查询"功能<br><br>
+                    📱 <strong>手机查询：</strong><br>
+                    • 下载"社保"APP<br>
+                    • 人脸识别快速登录<br>
+                    • 查看缴费明细和余额<br><br>
+                    🏢 <strong>线下查询：</strong><br>
+                    • 各社保服务大厅<br>
+                    • 自助查询机<br>
+                    • 银行代办网点<br><br>
+                    🔍 <strong>查询内容：</strong><br>
+                    • 个人缴费记录<br>
+                    • 账户余额<br>
+                    • 待遇享受情况<br>
+                    需要我帮您快速查询吗？
+                `,
+                '户口迁移手续': `
+                    户口迁移办理指南：<br><br>
+                    📋 <strong>迁入材料：</strong><br>
+                    • 迁移证或准迁证<br>
+                    • 身份证原件<br>
+                    • 户口簿原件<br>
+                    • 迁入地证明材料<br>
+                    • 合法稳定住所证明<br><br>
+                    🏠 <strong>迁移类型：</strong><br>
+                    • 购房迁移（提供房产证）<br>
+                    • 工作迁移（提供劳动合同）<br>
+                    • 亲属投靠（提供关系证明）<br>
+                    • 人才引进（提供学历证明）<br><br>
+                    ⏰ <strong>办理时限：</strong><br>
+                    • 材料齐全当场办结<br>
+                    • 特殊情况3个工作日<br><br>
+                    📍 <strong>办理地点：</strong>户籍所在地派出所<br>
+                    需要我为您详细解答特定迁移类型吗？
+                `
+            };
+
+            let response = responses[userMessage] || `
+                感谢您的咨询！我正在为您查询"${userMessage}"的相关信息...<br><br>
+                🔍 <strong>搜索结果：</strong><br>
+                根据您的问题，我建议您：<br>
+                1. 查看相关政策文件<br>
+                2. 联系对应办事窗口<br>
+                3. 预约现场咨询<br><br>
+                如需更详细的信息，建议您：<br>
+                📞 拨打服务热线：12345<br>
+                💬 或者描述更具体的问题<br><br>
+                还有什么我可以帮助您的吗？
+            `;
+
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'mb-4';
+            messageDiv.innerHTML = `
+                <div class="flex items-start">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-3">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="chat-bubble bg-white p-3 rounded-lg shadow-sm blockchain-verified">
+                        <p class="text-sm text-gray-800">${response}</p>
+                        <div class="mt-2 flex space-x-2">
+                            <button class="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700" onclick="quickAction('预约办理')">预约办理</button>
+                            <button class="bg-gray-200 text-gray-700 px-3 py-1 rounded text-xs hover:bg-gray-300" onclick="quickAction('查看详情')">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function quickAction(action) {
+            showNotification(`正在为您执行：${action}`, 'info');
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification-toast bg-${
+                type === 'success' ? 'green' : 
+                type === 'error' ? 'red' : 
+                type === 'warning' ? 'yellow' : 'blue'
+            }-500 text-white p-4 rounded-lg shadow-lg animate__animated animate__fadeInRight`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${
+                        type === 'success' ? 'check-circle' :
+                        type === 'error' ? 'exclamation-circle' :
+                        type === 'warning' ? 'exclamation-triangle' : 'info-circle'
+                    } mr-2"></i>
+                    <span>${message}</span>
+                    <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('animate__fadeOutRight');
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+        }
+
+        // Enter key support for chat
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Simulate real-time queue updates
+        setInterval(() => {
+            const queueNumbers = document.querySelectorAll('.text-sm.font-medium');
+            queueNumbers.forEach(element => {
+                if (element.textContent.includes('排队人数:')) {
+                    const currentNum = parseInt(element.textContent.match(/\d+/)[0]);
+                    const change = Math.random() > 0.5 ? 1 : -1;
+                    const newNum = Math.max(0, currentNum + change);
+                    element.textContent = `排队人数: ${newNum}`;
+                }
+            });
+        }, 30000);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotification('欢迎来到智慧政务大厅！', 'success');
+        });
+    </script>
+</body>
+</html>

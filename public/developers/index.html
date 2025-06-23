@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者中心 - AlingAI | 珑凌科技</title>
+    
+    <!-- SEO 优化 -->
+    <meta name="description" content="AlingAI 开发者中心 - 提供完整的开发资源、API文档、SDK下载、示例代码和技术支持">
+    <meta name="keywords" content="AlingAI,开发者中心,API,SDK,技术文档,示例代码,开发工具">
+    
+    <!-- 核心样式和字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 图标和PWA -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        'quantum': {
+                            50: '#f0f0ff',
+                            100: '#e0e0ff',
+                            500: '#6C13FF',
+                            600: '#5A0FD9',
+                            700: '#480BB3',
+                            800: '#36078D',
+                            900: '#240367'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'slideInUp': 'slideInUp 0.8s ease-out',
+                        'slideInLeft': 'slideInLeft 0.8s ease-out',
+                        'slideInRight': 'slideInRight 0.8s ease-out',
+                        'fadeIn': 'fadeIn 0.6s ease-out',
+                        'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(108, 19, 255, 0.3); }
+            to { box-shadow: 0 0 30px rgba(108, 19, 255, 0.6); }
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .quantum-gradient {
+            background: linear-gradient(135deg, #6C13FF 0%, #FF6B9D 50%, #4ECDC4 100%);
+        }
+        
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 12px;
+            padding: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            position: relative;
+            overflow-x: auto;
+        }
+        
+        .copy-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #e0e0e0;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 19, 255, 0.3);
+        }
+        
+        .quick-start-step {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-start-step:hover {
+            transform: translateY(-4px);
+            border-color: rgba(108, 19, 255, 0.3);
+        }
+        
+        .nav-link {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #6C13FF;
+            transform: translateY(-2px);
+        }
+        
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(108, 19, 255, 0.5);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(108, 19, 255, 0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white overflow-x-hidden">
+    <!-- 动态背景 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-full blur-3xl animate-float" style="animation-delay: 1s;"></div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="relative z-50 glassmorphism">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent">
+                        AlingAI
+                    </a>
+                    <span class="ml-2 text-sm text-gray-300">开发者中心</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/docs" class="nav-link px-3 py-2 rounded-md text-sm font-medium">文档</a>
+                        <a href="/api-docs.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium">API</a>
+                        <a href="/examples" class="nav-link px-3 py-2 rounded-md text-sm font-medium">示例</a>
+                        <a href="/downloads" class="nav-link px-3 py-2 rounded-md text-sm font-medium">下载</a>
+                        <a href="/support" class="nav-link px-3 py-2 rounded-md text-sm font-medium">支持</a>
+                        <a href="/dashboard.html" class="bg-quantum-500 hover:bg-quantum-600 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300">
+                            控制台
+                        </a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button class="text-gray-300 hover:text-white" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="hidden md:hidden glassmorphism border-t border-white/10">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="/docs" class="block px-3 py-2 rounded-md text-base font-medium">文档</a>
+                <a href="/api-docs.html" class="block px-3 py-2 rounded-md text-base font-medium">API</a>
+                <a href="/examples" class="block px-3 py-2 rounded-md text-base font-medium">示例</a>
+                <a href="/downloads" class="block px-3 py-2 rounded-md text-base font-medium">下载</a>
+                <a href="/support" class="block px-3 py-2 rounded-md text-base font-medium">支持</a>
+                <a href="/dashboard.html" class="block px-3 py-2 rounded-md text-base font-medium bg-quantum-500">控制台</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section class="relative z-10 pt-20 pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">开发者中心</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    构建下一代智能应用，使用 AlingAI 强大的 API 和开发工具，让 AI 为您的产品注入无限可能
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slideInUp" style="animation-delay: 0.4s;">
+                    <a href="#quick-start" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-rocket mr-2"></i>快速开始
+                    </a>
+                    <a href="/api-docs.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-book mr-2"></i>查看文档
+                    </a>
+                    <a href="/examples" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-code mr-2"></i>示例代码
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据 -->
+    <section class="relative z-10 -mt-16 mb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glassmorphism rounded-2xl p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.1s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">50+</div>
+                        <div class="text-gray-300">API 接口</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.2s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">10K+</div>
+                        <div class="text-gray-300">开发者</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.3s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">99.9%</div>
+                        <div class="text-gray-300">可用性</div>
+                    </div>
+                    <div class="text-center animate-fadeIn" style="animation-delay: 0.4s;">
+                        <div class="text-3xl md:text-4xl font-bold quantum-gradient bg-clip-text text-transparent mb-2">24/7</div>
+                        <div class="text-gray-300">技术支持</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 快速开始 -->
+    <section id="quick-start" class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">快速开始</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    只需几分钟，即可集成 AlingAI 到您的应用中
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <div class="quick-start-step p-8 animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-quantum-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-white">1</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">注册账户</h3>
+                        <p class="text-gray-300 mb-6">注册 AlingAI 开发者账户，获取 API 密钥</p>
+                        <a href="/register.html" class="bg-quantum-500 hover:bg-quantum-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            立即注册
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="quick-start-step p-8 animate-slideInUp" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-quantum-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-white">2</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">获取 API Key</h3>
+                        <p class="text-gray-300 mb-6">在控制台中生成您的专属 API 密钥</p>
+                        <a href="/dashboard.html" class="bg-quantum-500 hover:bg-quantum-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            控制台
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="quick-start-step p-8 animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-quantum-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-2xl font-bold text-white">3</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">开始调用</h3>
+                        <p class="text-gray-300 mb-6">使用我们的 SDK 或 REST API 开始开发</p>
+                        <a href="/examples" class="bg-quantum-500 hover:bg-quantum-600 px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-block">
+                            查看示例
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 代码示例 -->
+            <div class="glassmorphism rounded-2xl p-8 animate-slideInUp" style="animation-delay: 0.4s;">
+                <h3 class="text-2xl font-semibold mb-6 text-center">5 分钟快速集成</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fab fa-js-square text-yellow-400 mr-2"></i>JavaScript
+                        </h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode('js-code')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <pre id="js-code"><code>// 安装 SDK
+npm install @alingai/sdk
+
+// 初始化客户端
+import { AlingAI } from '@alingai/sdk';
+
+const client = new AlingAI({
+  apiKey: 'your-api-key'
+});
+
+// 发送对话请求
+const response = await client.chat.create({
+  model: 'alingai-gpt-4',
+  messages: [
+    { role: 'user', content: 'Hello, AlingAI!' }
+  ]
+});
+
+console.log(response.choices[0].message.content);</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-lg font-semibold mb-4 flex items-center">
+                            <i class="fab fa-python text-blue-400 mr-2"></i>Python
+                        </h4>
+                        <div class="code-block">
+                            <button class="copy-btn" onclick="copyCode('python-code')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            <pre id="python-code"><code># 安装 SDK
+pip install alingai
+
+# 导入和初始化
+from alingai import AlingAI
+
+client = AlingAI(api_key="your-api-key")
+
+# 发送对话请求
+response = client.chat.create(
+    model="alingai-gpt-4",
+    messages=[
+        {"role": "user", "content": "Hello, AlingAI!"}
+    ]
+)
+
+print(response.choices[0].message.content)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心功能 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">核心功能</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    强大的 AI 能力，丰富的开发工具，助力您构建创新应用
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card p-8 animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-comments text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">智能对话</h3>
+                        <p class="text-gray-300 mb-6">支持多轮对话、上下文理解、情感分析等高级功能</p>
+                        <a href="/docs/chat-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-card p-8 animate-slideInUp" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-image text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">图像处理</h3>
+                        <p class="text-gray-300 mb-6">图像识别、生成、编辑，支持多种格式和高分辨率</p>
+                        <a href="/docs/image-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-card p-8 animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-microphone text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">语音识别</h3>
+                        <p class="text-gray-300 mb-6">多语言语音识别、语音合成、实时流式处理</p>
+                        <a href="/docs/speech-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-card p-8 animate-slideInLeft" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-brain text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">模型训练</h3>
+                        <p class="text-gray-300 mb-6">自定义模型训练、微调，适配您的业务场景</p>
+                        <a href="/docs/training-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-card p-8 animate-slideInUp" style="animation-delay: 0.5s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-shield-alt text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">安全防护</h3>
+                        <p class="text-gray-300 mb-6">零信任安全架构、量子加密、多重身份验证</p>
+                        <a href="/docs/security-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="feature-card p-8 animate-slideInRight" style="animation-delay: 0.6s;">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <i class="fas fa-chart-line text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-4">数据分析</h3>
+                        <p class="text-gray-300 mb-6">实时监控、使用统计、性能分析和可视化报表</p>
+                        <a href="/docs/analytics-api" class="text-quantum-400 hover:text-quantum-300 font-semibold">
+                            了解更多 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发资源 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 animate-slideInUp">
+                    <span class="quantum-gradient bg-clip-text text-transparent">开发资源</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto animate-slideInUp" style="animation-delay: 0.2s;">
+                    完整的开发工具包，助您快速构建和部署应用
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/api-docs.html" class="feature-card p-6 block group animate-slideInLeft" style="animation-delay: 0.1s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-book text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">API 文档</h3>
+                        <p class="text-gray-300 text-sm">详细的接口文档和参数说明</p>
+                    </div>
+                </a>
+                
+                <a href="/examples" class="feature-card p-6 block group animate-slideInLeft" style="animation-delay: 0.2s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-code text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">示例代码</h3>
+                        <p class="text-gray-300 text-sm">多语言示例和最佳实践</p>
+                    </div>
+                </a>
+                
+                <a href="/downloads" class="feature-card p-6 block group animate-slideInRight" style="animation-delay: 0.3s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-download text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">SDK 下载</h3>
+                        <p class="text-gray-300 text-sm">官方 SDK 和开发工具包</p>
+                    </div>
+                </a>
+                
+                <a href="/support" class="feature-card p-6 block group animate-slideInRight" style="animation-delay: 0.4s;">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fas fa-life-ring text-xl text-white"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold mb-2">技术支持</h3>
+                        <p class="text-gray-300 text-sm">专业的技术支持和社区</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA 区域 -->
+    <section class="relative z-10 py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glassmorphism rounded-2xl p-12 animate-slideInUp">
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                    <span class="quantum-gradient bg-clip-text text-transparent">准备开始了吗？</span>
+                </h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    加入数万名开发者，使用 AlingAI 构建下一代智能应用
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/register.html" class="bg-quantum-500 hover:bg-quantum-600 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg">
+                        <i class="fas fa-rocket mr-2"></i>免费开始
+                    </a>
+                    <a href="/contact.html" class="glassmorphism hover:bg-white/10 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105">
+                        <i class="fas fa-phone mr-2"></i>联系销售
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="relative z-10 border-t border-white/10 bg-black/20 backdrop-filter backdrop-blur-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-1">
+                    <h3 class="text-2xl font-bold quantum-gradient bg-clip-text text-transparent mb-4">AlingAI</h3>
+                    <p class="text-gray-300 mb-4">领先的人工智能平台，为开发者提供强大的 AI 能力和完整的开发工具。</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">产品</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/api-docs.html" class="text-gray-300 hover:text-white transition-colors">API 文档</a></li>
+                        <li><a href="/examples" class="text-gray-300 hover:text-white transition-colors">示例代码</a></li>
+                        <li><a href="/downloads" class="text-gray-300 hover:text-white transition-colors">SDK 下载</a></li>
+                        <li><a href="/pricing.html" class="text-gray-300 hover:text-white transition-colors">定价方案</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">支持</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/docs" class="text-gray-300 hover:text-white transition-colors">文档中心</a></li>
+                        <li><a href="/support" class="text-gray-300 hover:text-white transition-colors">技术支持</a></li>
+                        <li><a href="/community" class="text-gray-300 hover:text-white transition-colors">开发者社区</a></li>
+                        <li><a href="/status" class="text-gray-300 hover:text-white transition-colors">系统状态</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold mb-4">公司</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/about.html" class="text-gray-300 hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="/careers.html" class="text-gray-300 hover:text-white transition-colors">加入我们</a></li>
+                        <li><a href="/privacy.html" class="text-gray-300 hover:text-white transition-colors">隐私政策</a></li>
+                        <li><a href="/terms.html" class="text-gray-300 hover:text-white transition-colors">服务条款</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-8 pt-8 text-center">
+                <p class="text-gray-300">
+                    © 2025 AlingAI | 珑凌科技. 保留所有权利.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 复制代码功能
+        function copyCode(elementId) {
+            const codeElement = document.getElementById(elementId);
+            const text = codeElement.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                // 显示复制成功提示
+                const btn = codeElement.parentElement.querySelector('.copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.style.background = 'rgba(34, 197, 94, 0.3)';
+                
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.style.background = 'rgba(255, 255, 255, 0.1)';
+                }, 2000);
+            });
+        }
+        
+        // 移动端菜单切换
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+        
+        // 滚动动画
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+            
+            // 观察所有动画元素
+            document.querySelectorAll('[class*="animate-"]').forEach(el => {
+                el.style.animationPlayState = 'paused';
+                observer.observe(el);
+            });
+        }
+        
+        // 平滑滚动
+        function setupSmoothScrolling() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            setupScrollAnimations();
+            setupSmoothScrolling();
+        });
+        
+        // 页面性能优化
+        window.addEventListener('load', () => {
+            // 预加载关键资源
+            const preloadLinks = [
+                '/api-docs.html',
+                '/examples',
+                '/downloads',
+                '/support'
+            ];
+            
+            preloadLinks.forEach(href => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = href;
+                document.head.appendChild(link);
+            });
+        });
+    </script>
+</body>
+</html>

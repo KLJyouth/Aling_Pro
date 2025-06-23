@@ -1,0 +1,922 @@
+{% extends "layouts/app.twig" %}
+
+{% block title %}AI聊天 - {{ app.name }}{% endblock %}
+{% block description %}与AI智能助手进行自然对话，获得专业回答和建议{% endblock %}
+
+{% block styles %}
+<link href="{{ asset('css/chat.css') }}" rel="stylesheet">
+<link href="{{ asset('css/quantum-chat-animations.css') }}" rel="stylesheet">
+<style>
+    .chat-container {
+        height: calc(100vh - 80px);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .chat-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 10px 10px 0 0;
+        margin-bottom: 0;
+    }
+    
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-left: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+    }
+    
+    .chat-input-area {
+        padding: 1rem;
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 0 0 10px 10px;
+        border-top: none;
+    }
+    
+    .message {
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: flex-start;
+        animation: messageSlideIn 0.3s ease-out;
+    }
+    
+    .message.user {
+        flex-direction: row-reverse;
+    }
+    
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #3498db;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        margin: 0 10px;
+    }
+    
+    .message.user .message-avatar {
+        background: #e74c3c;
+    }
+    
+    .message-content {
+        max-width: 70%;
+        background: white;
+        padding: 12px 16px;
+        border-radius: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        position: relative;
+    }
+    
+    .message.user .message-content {
+        background: #3498db;
+        color: white;
+    }
+    
+    .message-time {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        margin-top: 5px;
+    }
+    
+    .typing-indicator {
+        display: none;
+        align-items: center;
+        margin: 10px 0;
+    }
+    
+    .typing-dots {
+        display: flex;
+        align-items: center;
+        margin-left: 10px;
+    }
+    
+    .typing-dots span {
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #3498db;
+        margin: 0 2px;
+        animation: typingAnimation 1.4s infinite;
+    }
+    
+    .typing-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .typing-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes messageSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes typingAnimation {
+        0%, 60%, 100% {
+            transform: scale(1);
+            opacity: 0.7;
+        }
+        30% {
+            transform: scale(1.2);
+            opacity: 1;
+        }
+    }
+    
+    .chat-sidebar {
+        background: white;
+        border-right: 1px solid #dee2e6;
+        height: calc(100vh - 80px);
+        overflow-y: auto;
+    }
+    
+    .conversation-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    
+    .conversation-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .conversation-item.active {
+        background-color: #e3f2fd;
+        border-left: 4px solid #3498db;
+    }
+    
+    .quick-actions {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .quick-action {
+        padding: 8px 12px;
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 0.9rem;
+    }
+    
+    .quick-action:hover {
+        background: #3498db;
+        color: white;
+        border-color: #3498db;
+    }
+    
+    .chat-tools {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .tool-button {
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 50%;
+        background: #f8f9fa;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .tool-button:hover {
+        background: #3498db;
+        color: white;
+    }
+    
+    .file-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        margin: 10px 0;
+        display: none;
+        transition: all 0.2s;
+    }
+    
+    .file-upload-area.dragover {
+        border-color: #3498db;
+        background-color: #f0f8ff;
+    }
+</style>
+{% endblock %}
+
+{% block body_class %}chat-page{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- 左侧对话列表 -->
+        <div class="col-md-3 col-lg-2 p-0">
+            <div class="chat-sidebar">
+                <div class="sidebar-header p-3 border-bottom">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">对话历史</h6>
+                        <button class="btn btn-sm btn-primary" onclick="createNewConversation()">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="conversations-list" id="conversations-list">
+                    <!-- 对话列表将通过JavaScript动态加载 -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主聊天区域 -->
+        <div class="col-md-9 col-lg-10 p-0">
+            <div class="chat-container">
+                <!-- 聊天头部 -->
+                <div class="chat-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="chat-info">
+                            <h5 class="mb-0" id="chat-title">AI助手</h5>
+                            <small class="text-white-75" id="chat-status">在线 - 准备为您服务</small>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="btn btn-sm btn-outline-light me-2" onclick="clearChat()" title="清空对话">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-light me-2" onclick="exportChat()" title="导出对话">
+                                <i class="bi bi-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-light" onclick="toggleSettings()" title="设置">
+                                <i class="bi bi-gear"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 消息显示区 -->
+                <div class="chat-messages" id="chat-messages">
+                    <!-- 欢迎消息 -->
+                    <div class="welcome-message text-center py-4">
+                        <div class="mb-3">
+                            <i class="bi bi-robot" style="font-size: 3rem; color: #3498db;"></i>
+                        </div>
+                        <h5>欢迎使用AI智能助手！</h5>
+                        <p class="text-muted">我可以帮助您解答问题、处理文档、分析数据等。请随时向我提问。</p>
+                        
+                        <!-- 快捷操作 -->
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="sendQuickMessage('介绍一下你的功能')">
+                                介绍功能
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('帮我分析一份文档')">
+                                文档分析
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('解释一个技术概念')">
+                                技术问答
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('帮我写一段代码')">
+                                代码生成
+                            </div>
+                            <div class="quick-action" onclick="sendQuickMessage('数据分析建议')">
+                                数据分析
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 打字指示器 -->
+                    <div class="typing-indicator" id="typing-indicator">
+                        <div class="message-avatar">AI</div>
+                        <div class="message-content">
+                            <div class="typing-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 输入区域 -->
+                <div class="chat-input-area">
+                    <!-- 工具栏 -->
+                    <div class="chat-tools">
+                        <button class="tool-button" onclick="toggleFileUpload()" title="上传文件">
+                            <i class="bi bi-paperclip"></i>
+                        </button>
+                        <button class="tool-button" onclick="toggleVoiceInput()" title="语音输入">
+                            <i class="bi bi-mic"></i>
+                        </button>
+                        <button class="tool-button" onclick="insertEmoji()" title="表情">
+                            <i class="bi bi-emoji-smile"></i>
+                        </button>
+                        <button class="tool-button" onclick="toggleMarkdown()" title="Markdown">
+                            <i class="bi bi-markdown"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 文件上传区域 -->
+                    <div class="file-upload-area" id="file-upload-area">
+                        <i class="bi bi-cloud-upload text-muted" style="font-size: 2rem;"></i>
+                        <p class="text-muted mb-0">拖拽文件到这里或点击上传</p>
+                        <input type="file" id="file-input" multiple style="display: none;">
+                    </div>
+                    
+                    <!-- 输入框 -->
+                    <div class="input-group">
+                        <textarea class="form-control" id="message-input" 
+                                placeholder="输入您的消息... (Shift + Enter 换行，Enter 发送)"
+                                rows="1" style="resize: none;"></textarea>
+                        <button class="btn btn-primary" type="button" onclick="sendMessage()" id="send-button">
+                            <i class="bi bi-send"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 状态信息 -->
+                    <div class="chat-status mt-2">
+                        <small class="text-muted">
+                            <span id="char-count">0</span>/2000 字符
+                            <span class="mx-2">|</span>
+                            <span id="connection-status">已连接</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 设置面板 -->
+<div class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">聊天设置</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">AI模型</label>
+                    <select class="form-select" id="ai-model">
+                        <option value="gpt-3.5-turbo">GPT-3.5 Turbo (快速)</option>
+                        <option value="gpt-4">GPT-4 (高质量)</option>
+                        <option value="claude">Claude (创意)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">温度设置</label>
+                    <input type="range" class="form-range" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                    <small class="text-muted">数值越高回答越创意，越低越精确</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">最大回复长度</label>
+                    <select class="form-select" id="max-tokens">
+                        <option value="500">短回复 (500)</option>
+                        <option value="1000" selected>中等回复 (1000)</option>
+                        <option value="2000">长回复 (2000)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="enable-memory">
+                        <label class="form-check-label">启用上下文记忆</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="enable-typing-indicator" checked>
+                        <label class="form-check-label">显示打字指示器</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ asset('js/chat/chat-core-classes.js') }}"></script>
+
+<script>
+class ChatInterface {
+    constructor() {
+        this.currentConversationId = null;
+        this.messages = [];
+        this.isTyping = false;
+        this.settings = {
+            model: 'gpt-3.5-turbo',
+            temperature: 0.7,
+            maxTokens: 1000,
+            enableMemory: true,
+            enableTypingIndicator: true
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.initializeElements();
+        this.bindEvents();
+        this.loadConversations();
+        this.loadSettings();
+        this.setupWebSocket();
+    }
+    
+    initializeElements() {
+        this.messageInput = document.getElementById('message-input');
+        this.sendButton = document.getElementById('send-button');
+        this.messagesContainer = document.getElementById('chat-messages');
+        this.typingIndicator = document.getElementById('typing-indicator');
+        this.conversationsList = document.getElementById('conversations-list');
+        this.fileInput = document.getElementById('file-input');
+        this.fileUploadArea = document.getElementById('file-upload-area');
+    }
+    
+    bindEvents() {
+        // 发送消息事件
+        this.sendButton.addEventListener('click', () => this.sendMessage());
+        this.messageInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage();
+            }
+            this.updateCharCount();
+        });
+        
+        // 文件上传事件
+        this.fileInput.addEventListener('change', (e) => this.handleFileUpload(e));
+        this.fileUploadArea.addEventListener('dragover', (e) => this.handleDragOver(e));
+        this.fileUploadArea.addEventListener('drop', (e) => this.handleDrop(e));
+        
+        // 输入字符计数
+        this.messageInput.addEventListener('input', () => this.updateCharCount());
+        
+        // 自动调整输入框高度
+        this.messageInput.addEventListener('input', () => this.autoResizeTextarea());
+    }
+    
+    async sendMessage(content = null) {
+        const message = content || this.messageInput.value.trim();
+        if (!message && !content) return;
+        
+        // 显示用户消息
+        this.addMessage(message, 'user');
+        
+        // 清空输入框
+        if (!content) {
+            this.messageInput.value = '';
+            this.updateCharCount();
+        }
+        
+        // 显示打字指示器
+        this.showTypingIndicator();
+        
+        try {
+            const response = await fetch('{{ url("api/chat/send") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': window.APP_CONFIG.csrfToken
+                },
+                body: JSON.stringify({
+                    message: message,
+                    conversation_id: this.currentConversationId,
+                    settings: this.settings
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                // 隐藏打字指示器
+                this.hideTypingIndicator();
+                
+                // 显示AI回复
+                this.addMessage(data.data.response, 'assistant');
+                
+                // 更新对话ID
+                if (data.data.conversation_id) {
+                    this.currentConversationId = data.data.conversation_id;
+                    this.updateConversationsList();
+                }
+            } else {
+                this.hideTypingIndicator();
+                this.addMessage('抱歉，处理您的消息时出现错误：' + data.message, 'error');
+            }
+        } catch (error) {
+            this.hideTypingIndicator();
+            this.addMessage('网络连接错误，请检查您的网络连接。', 'error');
+            console.error('Send message error:', error);
+        }
+    }
+    
+    addMessage(content, type, timestamp = null) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${type}`;
+        
+        const avatarEl = document.createElement('div');
+        avatarEl.className = 'message-avatar';
+        avatarEl.textContent = type === 'user' ? (window.APP_CONFIG.user?.username?.charAt(0) || 'U') : 'AI';
+        
+        const contentEl = document.createElement('div');
+        contentEl.className = 'message-content';
+        
+        if (type === 'error') {
+            contentEl.innerHTML = `<div class="text-danger">${content}</div>`;
+        } else {
+            contentEl.innerHTML = this.formatMessage(content);
+        }
+        
+        if (timestamp || type !== 'error') {
+            const timeEl = document.createElement('div');
+            timeEl.className = 'message-time';
+            timeEl.textContent = timestamp || new Date().toLocaleTimeString();
+            contentEl.appendChild(timeEl);
+        }
+        
+        messageEl.appendChild(avatarEl);
+        messageEl.appendChild(contentEl);
+        
+        // 插入到欢迎消息之后，打字指示器之前
+        const welcomeMessage = this.messagesContainer.querySelector('.welcome-message');
+        if (welcomeMessage && this.messages.length === 0) {
+            welcomeMessage.style.display = 'none';
+        }
+        
+        this.messagesContainer.insertBefore(messageEl, this.typingIndicator);
+        this.scrollToBottom();
+        
+        // 保存到消息数组
+        this.messages.push({
+            content,
+            type,
+            timestamp: timestamp || new Date().toISOString()
+        });
+    }
+    
+    formatMessage(content) {
+        // 支持 Markdown 基本格式
+        let formatted = content
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/`(.*?)`/g, '<code>$1</code>')
+            .replace(/\n/g, '<br>');
+        
+        // 代码块处理
+        formatted = formatted.replace(/```(\w*)\n([\s\S]*?)```/g, 
+            '<pre><code class="language-$1">$2</code></pre>');
+        
+        return formatted;
+    }
+    
+    showTypingIndicator() {
+        if (this.settings.enableTypingIndicator) {
+            this.typingIndicator.style.display = 'flex';
+            this.scrollToBottom();
+        }
+    }
+    
+    hideTypingIndicator() {
+        this.typingIndicator.style.display = 'none';
+    }
+    
+    scrollToBottom() {
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+    }
+    
+    updateCharCount() {
+        const count = this.messageInput.value.length;
+        document.getElementById('char-count').textContent = count;
+        
+        if (count > 2000) {
+            document.getElementById('char-count').style.color = '#dc3545';
+        } else {
+            document.getElementById('char-count').style.color = '';
+        }
+    }
+    
+    autoResizeTextarea() {
+        this.messageInput.style.height = 'auto';
+        this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 120) + 'px';
+    }
+    
+    async loadConversations() {
+        try {
+            const response = await fetch('{{ url("api/conversations") }}', {
+                headers: {
+                    'X-CSRF-Token': window.APP_CONFIG.csrfToken
+                }
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                this.renderConversations(data.data);
+            }
+        } catch (error) {
+            console.error('Load conversations error:', error);
+        }
+    }
+    
+    renderConversations(conversations) {
+        this.conversationsList.innerHTML = '';
+        
+        conversations.forEach(conv => {
+            const item = document.createElement('div');
+            item.className = 'conversation-item';
+            item.onclick = () => this.loadConversation(conv.id);
+            
+            item.innerHTML = `
+                <div class="conversation-title">${conv.title || '新对话'}</div>
+                <div class="conversation-preview text-muted">${conv.last_message || ''}</div>
+                <div class="conversation-time text-muted">${this.formatTime(conv.updated_at)}</div>
+            `;
+            
+            this.conversationsList.appendChild(item);
+        });
+    }
+    
+    async loadConversation(conversationId) {
+        try {
+            const response = await fetch(`{{ url("api/conversations") }}/${conversationId}`, {
+                headers: {
+                    'X-CSRF-Token': window.APP_CONFIG.csrfToken
+                }
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                this.currentConversationId = conversationId;
+                this.messages = data.data.messages || [];
+                this.renderMessages();
+                this.updateActiveConversation(conversationId);
+            }
+        } catch (error) {
+            console.error('Load conversation error:', error);
+        }
+    }
+    
+    renderMessages() {
+        // 清空消息容器（保留欢迎消息和打字指示器）
+        const messages = this.messagesContainer.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+        
+        // 渲染历史消息
+        this.messages.forEach(msg => {
+            this.addMessage(msg.content, msg.type, this.formatTime(msg.timestamp));
+        });
+    }
+    
+    updateActiveConversation(conversationId) {
+        const items = this.conversationsList.querySelectorAll('.conversation-item');
+        items.forEach(item => item.classList.remove('active'));
+        
+        // 找到并激活当前对话
+        const activeItem = Array.from(items).find(item => 
+            item.onclick.toString().includes(conversationId));
+        if (activeItem) {
+            activeItem.classList.add('active');
+        }
+    }
+    
+    formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diff = now - date;
+        
+        if (diff < 60000) return '刚刚';
+        if (diff < 3600000) return Math.floor(diff / 60000) + '分钟前';
+        if (diff < 86400000) return Math.floor(diff / 3600000) + '小时前';
+        if (diff < 604800000) return Math.floor(diff / 86400000) + '天前';
+        
+        return date.toLocaleDateString();
+    }
+    
+    loadSettings() {
+        const saved = localStorage.getItem('chatSettings');
+        if (saved) {
+            this.settings = { ...this.settings, ...JSON.parse(saved) };
+            this.applySettings();
+        }
+    }
+    
+    saveSettings() {
+        // 从设置面板获取值
+        this.settings.model = document.getElementById('ai-model').value;
+        this.settings.temperature = parseFloat(document.getElementById('temperature').value);
+        this.settings.maxTokens = parseInt(document.getElementById('max-tokens').value);
+        this.settings.enableMemory = document.getElementById('enable-memory').checked;
+        this.settings.enableTypingIndicator = document.getElementById('enable-typing-indicator').checked;
+        
+        localStorage.setItem('chatSettings', JSON.stringify(this.settings));
+        
+        const modal = bootstrap.Modal.getInstance(document.getElementById('settingsModal'));
+        modal.hide();
+        
+        showSuccess('设置已保存');
+    }
+    
+    applySettings() {
+        if (document.getElementById('ai-model')) {
+            document.getElementById('ai-model').value = this.settings.model;
+            document.getElementById('temperature').value = this.settings.temperature;
+            document.getElementById('max-tokens').value = this.settings.maxTokens;
+            document.getElementById('enable-memory').checked = this.settings.enableMemory;
+            document.getElementById('enable-typing-indicator').checked = this.settings.enableTypingIndicator;
+        }
+    }
+    
+    setupWebSocket() {
+        // WebSocket 连接用于实时通知
+        if (window.WebSocket) {
+            try {
+                this.websocket = new WebSocket(`ws://${window.location.host}/ws/chat`);
+                
+                this.websocket.onopen = () => {
+                    console.log('WebSocket connected');
+                    document.getElementById('connection-status').textContent = '已连接';
+                };
+                
+                this.websocket.onclose = () => {
+                    console.log('WebSocket disconnected');
+                    document.getElementById('connection-status').textContent = '连接中断';
+                };
+                
+                this.websocket.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    if (data.type === 'chat_response') {
+                        this.hideTypingIndicator();
+                        this.addMessage(data.message, 'assistant');
+                    }
+                };
+            } catch (error) {
+                console.error('WebSocket connection failed:', error);
+            }
+        }
+    }
+}
+
+// 全局函数
+function sendQuickMessage(message) {
+    window.chatInterface.sendMessage(message);
+}
+
+function createNewConversation() {
+    window.chatInterface.currentConversationId = null;
+    window.chatInterface.messages = [];
+    window.chatInterface.renderMessages();
+    
+    // 显示欢迎消息
+    const welcomeMessage = document.querySelector('.welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.style.display = 'block';
+    }
+    
+    // 清除活动状态
+    const items = document.querySelectorAll('.conversation-item');
+    items.forEach(item => item.classList.remove('active'));
+}
+
+function clearChat() {
+    if (confirm('确定要清空当前对话吗？')) {
+        window.chatInterface.messages = [];
+        window.chatInterface.renderMessages();
+        
+        // 显示欢迎消息
+        const welcomeMessage = document.querySelector('.welcome-message');
+        if (welcomeMessage) {
+            welcomeMessage.style.display = 'block';
+        }
+    }
+}
+
+function exportChat() {
+    const messages = window.chatInterface.messages;
+    if (messages.length === 0) {
+        showWarning('没有可导出的消息');
+        return;
+    }
+    
+    let content = `聊天记录导出 - ${new Date().toLocaleString()}\n\n`;
+    messages.forEach(msg => {
+        const type = msg.type === 'user' ? '用户' : 'AI助手';
+        content += `[${type}] ${msg.content}\n\n`;
+    });
+    
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-export-${Date.now()}.txt`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+}
+
+function toggleSettings() {
+    const modal = new bootstrap.Modal(document.getElementById('settingsModal'));
+    window.chatInterface.applySettings();
+    modal.show();
+}
+
+function toggleFileUpload() {
+    const area = document.getElementById('file-upload-area');
+    area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function toggleVoiceInput() {
+    // 语音输入功能
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.lang = 'zh-CN';
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        recognition.onresult = function(event) {
+            const result = event.results[0][0].transcript;
+            document.getElementById('message-input').value = result;
+            showSuccess('语音识别完成');
+        };
+        
+        recognition.onerror = function(event) {
+            showError('语音识别失败：' + event.error);
+        };
+        
+        recognition.start();
+        showInfo('开始语音识别...');
+    } else {
+        showError('您的浏览器不支持语音识别');
+    }
+}
+
+function insertEmoji() {
+    // 简单的表情插入
+    const emojis = ['😊', '😂', '🤔', '👍', '❤️', '🎉', '💡', '🚀'];
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+    const input = document.getElementById('message-input');
+    input.value += emoji;
+    input.focus();
+}
+
+function toggleMarkdown() {
+    showInfo('Markdown 格式支持：**粗体** *斜体* `代码` ```代码块```');
+}
+
+// 初始化聊天界面
+document.addEventListener('DOMContentLoaded', function() {
+    window.chatInterface = new ChatInterface();
+});
+</script>
+{% endblock %}
+
+{% block ready_script %}
+// 页面准备完成后的初始化
+console.log('Chat page ready');
+
+// 检查是否有未读消息
+{% if auth_check() %}
+    fetch('{{ url("api/notifications/unread") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data.chat_messages > 0) {
+                showInfo(`您有 ${data.data.chat_messages} 条未读消息`);
+            }
+        });
+{% endif %}
+
+// 设置页面可见性变化处理
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // 页面隐藏时暂停某些功能
+        console.log('Chat page hidden');
+    } else {
+        // 页面显示时恢复功能
+        console.log('Chat page visible');
+        if (window.chatInterface) {
+            window.chatInterface.loadConversations();
+        }
+    }
+});
+{% endblock %}

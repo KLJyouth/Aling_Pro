@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro 6.0 - 企业工作空间</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .sidebar-animation {
+            transition: width 0.3s ease;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        .status-online { background-color: #10b981; }
+        .status-busy { background-color: #f59e0b; }
+        .status-away { background-color: #6b7280; }
+        .status-offline { background-color: #ef4444; }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-cube text-2xl"></i>
+                        <h1 class="text-2xl font-bold">AlingAi Pro 6.0</h1>
+                        <span class="bg-green-500 text-xs px-2 py-1 rounded-full">企业版</span>
+                    </div>
+                </div>
+                
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#" class="hover:text-blue-200 transition-colors">
+                        <i class="fas fa-home mr-2"></i>工作台
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">
+                        <i class="fas fa-project-diagram mr-2"></i>项目
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">
+                        <i class="fas fa-users mr-2"></i>团队
+                    </a>
+                    <a href="#" class="hover:text-blue-200 transition-colors">
+                        <i class="fas fa-chart-bar mr-2"></i>分析
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Notifications -->
+                    <div class="relative">
+                        <button class="text-white hover:text-blue-200 relative">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                    
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-2">
+                        <img src="../images/user-avatar.jpg" alt="用户头像" class="w-8 h-8 rounded-full object-cover">
+                        <span class="text-sm">管理员</span>
+                        <i class="fas fa-chevron-down text-sm"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg sidebar-animation">
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">工作空间导航</h3>
+                    <div class="space-y-2">
+                        <a href="#" class="flex items-center p-3 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors">
+                            <i class="fas fa-tachometer-alt mr-3"></i>
+                            <span>仪表板</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-folder mr-3"></i>
+                            <span>我的项目</span>
+                            <span class="ml-auto bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">8</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-tasks mr-3"></i>
+                            <span>任务管理</span>
+                            <span class="ml-auto bg-red-100 text-red-600 text-xs px-2 py-1 rounded-full">12</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-comments mr-3"></i>
+                            <span>团队协作</span>
+                        </a>
+                        <a href="#" class="flex items-center p-3 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-robot mr-3"></i>
+                            <span>AI 助手</span>
+                            <span class="ml-auto pulse-animation">
+                                <i class="fas fa-circle text-green-500 text-xs"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">团队成员</h4>
+                    <div class="space-y-2">
+                        <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                            <img src="../images/team1.jpg" alt="团队成员" class="w-8 h-8 rounded-full object-cover mr-3">
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">张三</p>
+                                <p class="text-xs text-gray-500">项目经理</p>
+                            </div>
+                            <span class="status-indicator status-online"></span>
+                        </div>
+                        <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                            <img src="../images/team2.jpg" alt="团队成员" class="w-8 h-8 rounded-full object-cover mr-3">
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">李四</p>
+                                <p class="text-xs text-gray-500">开发工程师</p>
+                            </div>
+                            <span class="status-indicator status-busy"></span>
+                        </div>
+                        <div class="flex items-center p-2 rounded-lg hover:bg-gray-50">
+                            <img src="../images/team3.jpg" alt="团队成员" class="w-8 h-8 rounded-full object-cover mr-3">
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-gray-800">王五</p>
+                                <p class="text-xs text-gray-500">设计师</p>
+                            </div>
+                            <span class="status-indicator status-away"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-4 text-white">
+                    <h4 class="font-semibold mb-2">升级到 Pro Max</h4>
+                    <p class="text-sm opacity-90 mb-3">解锁更多高级功能</p>
+                    <button class="bg-white text-blue-600 text-sm px-3 py-1 rounded-full font-medium hover:bg-gray-100 transition-colors">
+                        了解更多
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 overflow-y-auto bg-gray-50">
+            <div class="p-6">
+                <!-- Welcome Section -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h2 class="text-3xl font-bold text-gray-800">欢迎回来，管理员</h2>
+                            <p class="text-gray-600 mt-1">今天是美好的一天，让我们开始工作吧！</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-plus mr-2"></i>新建项目
+                            </button>
+                            <button class="bg-white text-gray-700 px-4 py-2 rounded-lg border hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-download mr-2"></i>导出数据
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">活跃项目</p>
+                                <p class="text-2xl font-bold text-gray-900">8</p>
+                                <p class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i>+12%
+                                </p>
+                            </div>
+                            <div class="bg-blue-100 p-3 rounded-lg">
+                                <i class="fas fa-project-diagram text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">团队成员</p>
+                                <p class="text-2xl font-bold text-gray-900">24</p>
+                                <p class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i>+3%
+                                </p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg">
+                                <i class="fas fa-users text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">任务完成率</p>
+                                <p class="text-2xl font-bold text-gray-900">87%</p>
+                                <p class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i>+5%
+                                </p>
+                            </div>
+                            <div class="bg-purple-100 p-3 rounded-lg">
+                                <i class="fas fa-check-circle text-purple-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 shadow-md card-hover">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-600">AI 使用次数</p>
+                                <p class="text-2xl font-bold text-gray-900">1,247</p>
+                                <p class="text-sm text-green-600">
+                                    <i class="fas fa-arrow-up mr-1"></i>+28%
+                                </p>
+                            </div>
+                            <div class="bg-orange-100 p-3 rounded-lg">
+                                <i class="fas fa-robot text-orange-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project Overview -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Recent Projects -->
+                    <div class="bg-white rounded-xl shadow-md">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">最近项目</h3>
+                                <a href="#" class="text-blue-600 hover:text-blue-700 text-sm">查看全部</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-code text-blue-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-800">智能CRM系统</h4>
+                                        <p class="text-sm text-gray-600">客户关系管理平台开发</p>
+                                        <div class="flex items-center mt-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-2 mr-3">
+                                                <div class="bg-blue-600 h-2 rounded-full" style="width: 75%"></div>
+                                            </div>
+                                            <span class="text-sm text-gray-600">75%</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-gray-500">截止日期</p>
+                                        <p class="text-sm font-medium text-gray-800">2025-06-20</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-mobile-alt text-green-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-800">移动端应用</h4>
+                                        <p class="text-sm text-gray-600">跨平台移动应用开发</p>
+                                        <div class="flex items-center mt-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-2 mr-3">
+                                                <div class="bg-green-600 h-2 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <span class="text-sm text-gray-600">45%</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-gray-500">截止日期</p>
+                                        <p class="text-sm font-medium text-gray-800">2025-07-15</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                                        <i class="fas fa-chart-line text-purple-600"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h4 class="font-medium text-gray-800">数据分析平台</h4>
+                                        <p class="text-sm text-gray-600">企业级数据可视化系统</p>
+                                        <div class="flex items-center mt-2">
+                                            <div class="w-full bg-gray-200 rounded-full h-2 mr-3">
+                                                <div class="bg-purple-600 h-2 rounded-full" style="width: 90%"></div>
+                                            </div>
+                                            <span class="text-sm text-gray-600">90%</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="text-sm text-gray-500">截止日期</p>
+                                        <p class="text-sm font-medium text-gray-800">2025-06-30</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Assistant Panel -->
+                    <div class="bg-white rounded-xl shadow-md">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex items-center justify-between">
+                                <h3 class="text-lg font-semibold text-gray-800">AI 工作助手</h3>
+                                <span class="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">在线</span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="space-y-4">
+                                <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-robot text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800 mb-2">
+                                                🎯 <strong>智能建议：</strong>根据你的项目进度，建议优先处理"智能CRM系统"的用户界面设计，预计可以提升20%的完成效率。
+                                            </p>
+                                            <button class="text-blue-600 text-sm hover:text-blue-700">了解详情 →</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-lightbulb text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800 mb-2">
+                                                💡 <strong>代码优化：</strong>检测到3个可优化的代码片段，自动优化可提升性能15%。
+                                            </p>
+                                            <button class="text-green-600 text-sm hover:text-green-700">立即优化 →</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-orange-50 to-red-50 p-4 rounded-lg">
+                                    <div class="flex items-start">
+                                        <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-exclamation-triangle text-white text-sm"></i>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="text-sm text-gray-800 mb-2">
+                                                ⚠️ <strong>风险提醒：</strong>"移动端应用"项目存在2个潜在风险点，建议及时调整开发计划。
+                                            </p>
+                                            <button class="text-orange-600 text-sm hover:text-orange-700">查看详情 →</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="border-t border-gray-200 pt-4">
+                                    <div class="flex items-center">
+                                        <input type="text" placeholder="询问AI助手..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <button class="ml-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">快速操作</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-blue-200 transition-colors">
+                                <i class="fas fa-plus text-blue-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">新建项目</span>
+                        </button>
+
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-green-200 transition-colors">
+                                <i class="fas fa-user-plus text-green-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">邀请成员</span>
+                        </button>
+
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-purple-200 transition-colors">
+                                <i class="fas fa-calendar text-purple-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">安排会议</span>
+                        </button>
+
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-yellow-200 transition-colors">
+                                <i class="fas fa-file-alt text-yellow-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">创建文档</span>
+                        </button>
+
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-red-200 transition-colors">
+                                <i class="fas fa-chart-bar text-red-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">生成报告</span>
+                        </button>
+
+                        <button class="flex flex-col items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors group">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-2 group-hover:bg-indigo-200 transition-colors">
+                                <i class="fas fa-cog text-indigo-600"></i>
+                            </div>
+                            <span class="text-sm text-gray-700">系统设置</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.10.2/cdn.min.js" defer></script>
+    <script>
+        // Initialize the workspace dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate real-time updates
+            setInterval(updateStats, 30000);
+            
+            // Initialize tooltips and interactive elements
+            initializeInteractivity();
+            
+            // Load recent activities
+            loadRecentActivities();
+        });
+
+        function updateStats() {
+            // Simulate real-time stat updates
+            const stats = document.querySelectorAll('.text-2xl.font-bold');
+            stats.forEach(stat => {
+                const currentValue = parseInt(stat.textContent);
+                const newValue = currentValue + Math.floor(Math.random() * 3);
+                stat.textContent = newValue;
+            });
+        }
+
+        function initializeInteractivity() {
+            // Add click handlers for quick actions
+            const quickActions = document.querySelectorAll('.grid button');
+            quickActions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.querySelector('span').textContent;
+                    showNotification(`正在执行：${action}`, 'info');
+                });
+            });
+
+            // Add real-time team status updates
+            updateTeamStatus();
+        }
+
+        function updateTeamStatus() {
+            const statusIndicators = document.querySelectorAll('.status-indicator');
+            statusIndicators.forEach(indicator => {
+                setInterval(() => {
+                    const statuses = ['status-online', 'status-busy', 'status-away'];
+                    const currentStatus = indicator.className.split(' ').find(cls => cls.startsWith('status-'));
+                    const newStatus = statuses[Math.floor(Math.random() * statuses.length)];
+                    indicator.className = indicator.className.replace(currentStatus, newStatus);
+                }, 60000);
+            });
+        }
+
+        function loadRecentActivities() {
+            // Simulate loading recent activities
+            const activities = [
+                { user: '张三', action: '更新了项目文档', time: '5分钟前', type: 'update' },
+                { user: '李四', action: '完成了代码审查', time: '10分钟前', type: 'review' },
+                { user: '王五', action: '提交了新的设计稿', time: '15分钟前', type: 'design' }
+            ];
+            
+            // You can add these to a activity feed if needed
+            console.log('Recent activities loaded:', activities);
+        }
+
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg text-white ${
+                type === 'success' ? 'bg-green-500' : 
+                type === 'error' ? 'bg-red-500' : 
+                type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+            } animate__animated animate__fadeInRight`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${
+                        type === 'success' ? 'check-circle' :
+                        type === 'error' ? 'exclamation-circle' :
+                        type === 'warning' ? 'exclamation-triangle' : 'info-circle'
+                    } mr-2"></i>
+                    <span>${message}</span>
+                    <button class="ml-4 text-white hover:text-gray-200" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('animate__fadeOutRight');
+                setTimeout(() => notification.remove(), 500);
+            }, 5000);
+        }
+
+        // AI Assistant Chat functionality
+        document.querySelector('input[placeholder="询问AI助手..."]').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const message = this.value.trim();
+                if (message) {
+                    sendAIMessage(message);
+                    this.value = '';
+                }
+            }
+        });
+
+        function sendAIMessage(message) {
+            showNotification(`AI助手正在处理您的问题："${message}"`, 'info');
+            
+            // Simulate AI response
+            setTimeout(() => {
+                const responses = [
+                    '根据您的项目数据，我建议优先处理高优先级任务。',
+                    '我已经为您分析了代码质量，发现了几个可优化的地方。',
+                    '根据团队工作模式，建议调整项目时间线。',
+                    '我可以帮您生成项目报告和性能分析。'
+                ];
+                const response = responses[Math.floor(Math.random() * responses.length)];
+                showNotification(`AI助手回复：${response}`, 'success');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

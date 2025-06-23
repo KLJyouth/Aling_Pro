@@ -1,0 +1,49 @@
+{
+    "name": "alingai\/pro",
+    "description": "AlingAi Pro - Advanced PHP-based AI Documentation Platform",
+    "type": "project",
+    "license": "MIT",
+    "version": "2.0.0",
+    "require": {
+        "php": ">=7.4.0",
+        "firebase\/php-jwt": "^5.0",
+        "guzzlehttp\/guzzle": "^7.8",
+        "monolog\/monolog": "^2.9",
+        "nyholm\/psr7": "^1.8",
+        "php-di\/php-di": "^7.0",
+        "phpmailer\/phpmailer": "^6.8",
+        "predis\/predis": "^1.1",
+        "psr\/http-message": "^1.0",
+        "psr\/http-server-middleware": "^1.0",
+        "ramsey\/uuid": "^4.7",
+        "ratchet\/pawl": "^0.4.2",
+        "ratchet\/rfc6455": "^0.4.0",
+        "react\/http": "^1.10",
+        "react\/socket": "^1.15",
+        "slim\/psr7": "^1.6",
+        "slim\/slim": "^4.10",
+        "vlucas\/phpdotenv": "^5.5"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.6",
+        "phpstan\/phpstan": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlingAi\\": "src\/"
+        }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8000 -t public\/",
+        "dev": "php -S localhost:8000 -t public\/ public\/index.php"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "classmap-authoritative": true,
+        "apcu-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

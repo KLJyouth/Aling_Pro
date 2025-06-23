@@ -1,0 +1,166 @@
+{
+    "total_tests": 25,
+    "passed_tests": 25,
+    "failed_tests": 0,
+    "warnings": 0,
+    "test_details": [
+        {
+            "name": "PHP版本检查",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "必需扩展检查",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "文件系统权限",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "数据库管理器加载",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "数据库连接测试",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "数据库读写测试",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "安全事件记录测试",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "WebSocket服务器文件",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "安全控制器文件",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "监控面板模板",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "路由配置文件",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "环境配置文件",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "Web服务器运行检查",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "静态文件访问",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "PHP脚本处理",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "CPU性能测试",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "内存使用测试",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "磁盘空间检查",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "环境变量保护",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "敏感文件保护",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "错误信息隐藏",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "Windows部署脚本",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "Linux部署脚本",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "快速启动脚本",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        },
+        {
+            "name": "健康检查脚本",
+            "passed": true,
+            "warning": false,
+            "timestamp": "07:11:32"
+        }
+    ],
+    "test_time": "2025-06-10 07:11:32",
+    "pass_rate": 100,
+    "system_info": {
+        "php_version": "8.1.32",
+        "os": "WINNT",
+        "memory_limit": "128M",
+        "disk_free": "278167.52MB"
+    }
+}

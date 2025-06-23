@@ -1,0 +1,109 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AlingAi API",
+        "version": "1.0.0",
+        "description": "AlingAi多智能体系统API文档"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "开发服务器"
+        }
+    ],
+    "paths": {
+        "/register-agent": {
+            "post": {
+                "summary": "注册智能体",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AgentRegistration"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "注册成功"
+                    }
+                }
+            }
+        },
+        "/deepseek-chat": {
+            "post": {
+                "summary": "DeepSeek聊天接口",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChatRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "聊天响应",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChatResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AgentRegistration": {
+                "type": "object",
+                "properties": {
+                    "agentId": {
+                        "type": "string"
+                    },
+                    "capabilities": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "endpoint": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ChatRequest": {
+                "type": "object",
+                "properties": {
+                    "text": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "stream": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "ChatResponse": {
+                "type": "object",
+                "properties": {
+                    "assistantText": {
+                        "type": "string"
+                    },
+                    "context": {
+                        "type": "object"
+                    }
+                }
+            }
+        }
+    }
+}

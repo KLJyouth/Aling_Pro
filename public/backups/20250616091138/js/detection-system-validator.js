@@ -1,0 +1,527 @@
+/**
+ * AlingAi 集成检测系统 - 完整功能验证测试
+ * 自动验证所有新增功能是否正常工作
+ * 创建时间: 2025年5月30日
+ */
+
+class IntegratedDetectionValidator {
+    constructor() {
+        this.testResults = [];
+        this.passedTests = 0;
+        this.failedTests = 0;
+    }
+
+    async runAllValidations() {
+        console.log('🔍 开始验证集成检测系统的所有功能...');
+        console.log('━'.repeat(60));
+
+        const validations = [
+            () => this.validateSystemInitialization(),
+            () => this.validateCoreDetectionEngine(),
+            () => this.validateExportFunctions(),
+            () => this.validateModalFunctions(),
+            () => this.validateLogManagement(),
+            () => this.validateKeyboardShortcuts(),
+            () => this.validateUIUpdates(),
+            () => this.validateCustomDetection(),
+            () => this.validateErrorHandling()
+        ];
+
+        for (const validation of validations) {
+            try {
+                await validation();
+            } catch (error) {
+                this.recordResult('验证异常', false, error.message);
+            }
+            await this.delay(500);
+        }
+
+        this.showValidationResults();
+    }
+
+    async validateSystemInitialization() {
+        console.log('🔧 验证系统初始化...');
+        
+        // 检查核心对象是否存在
+        this.recordResult(
+            '检测系统对象存在',
+            typeof window.detectionSystem !== 'undefined',
+            window.detectionSystem ? '系统对象已创建' : '系统对象未创建'
+        );
+
+        // 检查初始化函数
+        this.recordResult(
+            '初始化函数可用',
+            typeof window.initializeDetectionSystem === 'function',
+            '初始化函数正常'
+        );
+
+        // 检查HTML元素是否存在
+        const requiredElements = [
+            'progressCircle', 'progressText', 'totalTestsCount', 
+            'logConsole', 'completedTestsCount', 'passedTestsCount'
+        ];
+
+        for (const elementId of requiredElements) {
+            this.recordResult(
+                `HTML元素存在: ${elementId}`,
+                document.getElementById(elementId) !== null,
+                `元素 ${elementId} 状态`
+            );
+        }
+    }
+
+    async validateCoreDetectionEngine() {
+        console.log('⚙️ 验证核心检测引擎...');
+
+        if (!window.detectionSystem) {
+            this.recordResult('核心引擎验证', false, '检测系统未初始化');
+            return;
+        }
+
+        const system = window.detectionSystem;
+
+        // 检查核心方法
+        const coreMethods = [
+            'runFullDetection', 'runQuickDetection', 'runCustomDetection',
+            'startDetection', 'completeDetection', 'clearResults',
+            'updateProgress', 'updateSummaryStats', 'addLog'
+        ];
+
+        for (const method of coreMethods) {
+            this.recordResult(
+                `核心方法: ${method}`,
+                typeof system[method] === 'function',
+                `方法 ${method} 可用性`
+            );
+        }
+
+        // 检查测试分类配置
+        this.recordResult(
+            '测试分类配置',
+            system.testCategories && Object.keys(system.testCategories).length > 0,
+            `配置了 ${Object.keys(system.testCategories || {}).length} 个测试分类`
+        );
+
+        // 检查测试总数计算
+        this.recordResult(
+            '测试总数计算',
+            system.totalTests > 0,
+            `总计 ${system.totalTests} 个测试项目`
+        );
+    }
+
+    async validateExportFunctions() {
+        console.log('📤 验证导出功能...');
+
+        // 检查导出函数存在性
+        const exportFunctions = [
+            'exportResults', 'exportJSON', 'exportCSV', 'exportPDF'
+        ];
+
+        for (const func of exportFunctions) {
+            this.recordResult(
+                `导出函数: ${func}`,
+                typeof window[func] === 'function',
+                `函数 ${func} 可用性`
+            );
+        }
+
+        // 检查核心导出方法
+        if (window.detectionSystem) {
+            const system = window.detectionSystem;
+            
+            this.recordResult(
+                'CSV数据生成',
+                typeof system.generateCSVData === 'function',
+                'CSV数据生成方法可用'
+            );
+
+            this.recordResult(
+                'PDF库加载',
+                typeof system.loadJsPDF === 'function',
+                'PDF库加载方法可用'
+            );
+
+            this.recordResult(
+                'JSON下载',
+                typeof system.downloadJSON === 'function',
+                'JSON下载方法可用'
+            );
+        }
+    }
+
+    async validateModalFunctions() {
+        console.log('🪟 验证模态框功能...');
+
+        if (!window.detectionSystem) {
+            this.recordResult('模态框验证', false, '检测系统未初始化');
+            return;
+        }
+
+        const system = window.detectionSystem;
+
+        // 检查模态框相关方法
+        const modalMethods = [
+            'showSystemInfo', 'showCustomDetectionModal',
+            'collectSystemInfo', 'displaySystemInfoModal',
+            'generateCustomDetectionOptions'
+        ];
+
+        for (const method of modalMethods) {
+            this.recordResult(
+                `模态框方法: ${method}`,
+                typeof system[method] === 'function',
+                `方法 ${method} 可用性`
+            );
+        }
+
+        // 检查Bootstrap模态框支持
+        this.recordResult(
+            'Bootstrap模态框',
+            typeof window.bootstrap !== 'undefined' && typeof bootstrap.Modal === 'function',
+            'Bootstrap模态框支持'
+        );
+    }
+
+    async validateLogManagement() {
+        console.log('📜 验证日志管理...');
+
+        // 检查日志相关函数
+        const logFunctions = [
+            'logInfo', 'logSuccess', 'logWarning', 'logError',
+            'clearLog', 'toggleAutoScroll', 'exportLog'
+        ];
+
+        for (const func of logFunctions) {
+            this.recordResult(
+                `日志函数: ${func}`,
+                typeof window[func] === 'function',
+                `函数 ${func} 可用性`
+            );
+        }
+
+        // 检查日志容器
+        const logConsole = document.getElementById('logConsole');
+        this.recordResult(
+            '日志容器存在',
+            logConsole !== null,
+            '日志显示容器状态'
+        );
+
+        if (logConsole) {
+            this.recordResult(
+                '自动滚动属性',
+                logConsole.hasAttribute('data-auto-scroll') || logConsole.getAttribute('data-auto-scroll') !== null,
+                '自动滚动配置'
+            );
+        }
+    }
+
+    async validateKeyboardShortcuts() {
+        console.log('⌨️ 验证键盘快捷键...');
+
+        // 检查事件监听器是否添加
+        // 注意：这个检查比较困难，我们通过检查相关函数来间接验证
+        const shortcutFunctions = [
+            'runQuickDetection', 'runFullDetection',
+            'clearResults', 'exportResults'
+        ];
+
+        for (const func of shortcutFunctions) {
+            this.recordResult(
+                `快捷键函数: ${func}`,
+                typeof window[func] === 'function',
+                `快捷键对应函数 ${func} 可用性`
+            );
+        }
+
+        // 模拟按键事件测试（安全测试）
+        try {
+            const testEvent = new KeyboardEvent('keydown', {
+                ctrlKey: true,
+                key: 'r'
+            });
+            
+            this.recordResult(
+                '键盘事件创建',
+                testEvent instanceof KeyboardEvent,
+                '可以创建键盘事件对象'
+            );
+        } catch (error) {
+            this.recordResult(
+                '键盘事件创建',
+                false,
+                `键盘事件创建失败: ${error.message}`
+            );
+        }
+    }
+
+    async validateUIUpdates() {
+        console.log('🖥️ 验证UI更新功能...');
+
+        if (!window.detectionSystem) {
+            this.recordResult('UI更新验证', false, '检测系统未初始化');
+            return;
+        }
+
+        const system = window.detectionSystem;
+
+        // 检查UI更新方法
+        const uiMethods = [
+            'updateProgress', 'updateSummaryStats',
+            'updateCategoryStatus', 'updateTestStatus',
+            'updateControlButtons', 'updateLastUpdate'
+        ];
+
+        for (const method of uiMethods) {
+            this.recordResult(
+                `UI更新方法: ${method}`,
+                typeof system[method] === 'function',
+                `方法 ${method} 可用性`
+            );
+        }
+
+        // 测试进度更新
+        try {
+            system.updateProgress(50);
+            const progressText = document.getElementById('progressText');
+            this.recordResult(
+                '进度更新测试',
+                progressText && progressText.textContent.includes('50'),
+                '进度显示更新正常'
+            );
+        } catch (error) {
+            this.recordResult(
+                '进度更新测试',
+                false,
+                `进度更新失败: ${error.message}`
+            );
+        }
+    }
+
+    async validateCustomDetection() {
+        console.log('⚙️ 验证自定义检测功能...');
+
+        if (!window.detectionSystem) {
+            this.recordResult('自定义检测验证', false, '检测系统未初始化');
+            return;
+        }
+
+        const system = window.detectionSystem;
+
+        // 检查自定义检测相关方法
+        const customMethods = [
+            'selectAllTests', 'clearAllTests', 'runSelectedTests',
+            'attachCustomModalEvents', 'updateSelectedCount',
+            'updateCategoryCheckboxes', 'runCustomDetectionTests'
+        ];
+
+        for (const method of customMethods) {
+            this.recordResult(
+                `自定义检测方法: ${method}`,
+                typeof system[method] === 'function',
+                `方法 ${method} 可用性`
+            );
+        }
+
+        // 检查测试显示名称映射
+        this.recordResult(
+            '测试名称映射',
+            typeof system.getTestDisplayName === 'function',
+            '测试名称映射方法可用'
+        );
+
+        if (typeof system.getTestDisplayName === 'function') {
+            const testName = system.getTestDisplayName('serverHealth');
+            this.recordResult(
+                '测试名称映射功能',
+                testName && testName !== 'serverHealth',
+                `映射结果: ${testName}`
+            );
+        }
+    }
+
+    async validateErrorHandling() {
+        console.log('🛡️ 验证错误处理...');
+
+        if (!window.detectionSystem) {
+            this.recordResult('错误处理验证', false, '检测系统未初始化');
+            return;
+        }
+
+        const system = window.detectionSystem;
+
+        // 测试日志错误处理
+        try {
+            system.logError('测试错误消息');
+            this.recordResult(
+                '错误日志记录',
+                true,
+                '错误日志记录正常'
+            );
+        } catch (error) {
+            this.recordResult(
+                '错误日志记录',
+                false,
+                `错误日志记录失败: ${error.message}`
+            );
+        }
+
+        // 测试进度更新错误处理
+        try {
+            system.updateProgress(null);
+            this.recordResult(
+                '进度更新错误处理',
+                true,
+                '进度更新错误处理正常'
+            );
+        } catch (error) {
+            this.recordResult(
+                '进度更新错误处理',
+                false,
+                `进度更新错误处理失败: ${error.message}`
+            );
+        }
+
+        // 测试不存在元素的处理
+        try {
+            system.updateTestStatus('non-existent-test', 'success');
+            this.recordResult(
+                '不存在元素处理',
+                true,
+                '不存在元素处理正常'
+            );
+        } catch (error) {
+            this.recordResult(
+                '不存在元素处理',
+                false,
+                `不存在元素处理失败: ${error.message}`
+            );
+        }
+    }
+
+    recordResult(testName, passed, message) {
+        this.testResults.push({
+            name: testName,
+            passed: passed,
+            message: message,
+            timestamp: new Date().toISOString()
+        });
+
+        if (passed) {
+            this.passedTests++;
+            console.log(`✅ ${testName}: ${message}`);
+        } else {
+            this.failedTests++;
+            console.log(`❌ ${testName}: ${message}`);
+        }
+    }
+
+    showValidationResults() {
+        console.log('\n📊 验证结果汇总:');
+        console.log('━'.repeat(60));
+        console.log(`✅ 通过: ${this.passedTests} 项`);
+        console.log(`❌ 失败: ${this.failedTests} 项`);
+        console.log(`📊 总计: ${this.testResults.length} 项`);
+        
+        const successRate = ((this.passedTests / this.testResults.length) * 100).toFixed(1);
+        console.log(`📈 成功率: ${successRate}%`);
+
+        if (this.failedTests > 0) {
+            console.log('\n❌ 失败的验证项目:');
+            this.testResults
+                .filter(result => !result.passed)
+                .forEach(result => {
+                    console.log(`  • ${result.name}: ${result.message}`);
+                });
+        }
+
+        console.log('\n🎯 系统状态评估:');
+        if (successRate >= 95) {
+            console.log('🟢 系统状态: 优秀 - 所有功能正常工作');
+        } else if (successRate >= 85) {
+            console.log('🟡 系统状态: 良好 - 大部分功能正常');
+        } else if (successRate >= 70) {
+            console.log('🟠 系统状态: 一般 - 部分功能需要修复');
+        } else {
+            console.log('🔴 系统状态: 需要修复 - 多个功能存在问题');
+        }
+
+        // 导出验证报告
+        this.exportValidationReport();
+    }
+
+    exportValidationReport() {
+        const report = {
+            timestamp: new Date().toISOString(),
+            summary: {
+                totalTests: this.testResults.length,
+                passedTests: this.passedTests,
+                failedTests: this.failedTests,
+                successRate: ((this.passedTests / this.testResults.length) * 100).toFixed(1) + '%'
+            },
+            details: this.testResults,
+            recommendations: this.generateRecommendations()
+        };
+
+        // 如果在浏览器环境中，下载报告
+        if (typeof document !== 'undefined') {
+            const blob = new Blob([JSON.stringify(report, null, 2)], { 
+                type: 'application/json' 
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `integrated-detection-validation-${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            console.log('📄 验证报告已导出');
+        }
+
+        return report;
+    }
+
+    generateRecommendations() {
+        const recommendations = [];
+        
+        if (this.failedTests > 0) {
+            recommendations.push('检查并修复失败的验证项目');
+        }
+        
+        if (this.passedTests / this.testResults.length < 0.9) {
+            recommendations.push('建议进行更全面的功能测试');
+        }
+        
+        recommendations.push('定期运行验证以确保系统稳定性');
+        recommendations.push('在新功能开发后重新运行验证');
+        
+        return recommendations;
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+// 创建全局验证器实例
+window.detectionValidator = new IntegratedDetectionValidator();
+
+// 快速验证函数
+window.validateDetectionSystem = () => {
+    return window.detectionValidator.runAllValidations();
+};
+
+// 自动运行验证（延迟启动）
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            console.log('🔍 集成检测系统验证工具已就绪！');
+            console.log('💡 输入 validateDetectionSystem() 开始验证');
+            console.log('💡 输入 detectionValidator.runAllValidations() 运行完整验证');
+        }, 3000);
+    });
+}

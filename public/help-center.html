@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助中心 - 珑凌科技</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/assets/css/styles.css" rel="stylesheet">
+    <link href="/assets/css/quantum-styles.css" rel="stylesheet">
+</head>
+<body class="bg-quantum-dark text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            珑凌科技
+                        </h1>
+                        <p class="text-xs text-gray-400">帮助中心</p>
+                    </div>
+                </div>
+                <!-- 导航菜单 -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-4 py-2 text-quantum-accent hover:text-white transition-colors duration-300">返回首页</a>
+                    <a href="/contact.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg transition-all duration-300">
+                        联系支持
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-20">
+        <!-- 帮助中心英雄区域 -->
+        <section class="py-20 bg-gradient-to-b from-quantum-purple/20 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        帮助中心
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        为您提供全面的产品使用指南、常见问题解答和技术支持资源
+                    </p>
+                    
+                    <!-- 搜索框 -->
+                    <div class="max-w-2xl mx-auto mt-8">
+                        <div class="relative">
+                            <input type="text" placeholder="搜索您的问题..." 
+                                   class="w-full px-6 py-4 bg-white/10 backdrop-blur-sm border border-quantum-primary/30 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-quantum-primary focus:ring-2 focus:ring-quantum-primary/20">
+                            <button class="absolute right-4 top-1/2 transform -translate-y-1/2 text-quantum-accent hover:text-white transition-colors duration-300">
+                                <i class="fas fa-search text-xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 快速导航 -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20 hover:border-quantum-primary/40 transition-all duration-300 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-rocket text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">快速入门</h3>
+                        <p class="text-gray-400 text-sm mb-4">新手指南和快速上手教程</p>
+                        <a href="#quick-start" class="text-quantum-accent hover:text-white text-sm">了解更多 →</a>
+                    </div>
+
+                    <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20 hover:border-quantum-accent/40 transition-all duration-300 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-question-circle text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">常见问题</h3>
+                        <p class="text-gray-400 text-sm mb-4">最常见的问题和解决方案</p>
+                        <a href="#faq" class="text-quantum-accent hover:text-white text-sm">查看FAQ →</a>
+                    </div>
+
+                    <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20 hover:border-quantum-secondary/40 transition-all duration-300 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-secondary to-neon-pink rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-book text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">产品文档</h3>
+                        <p class="text-gray-400 text-sm mb-4">详细的产品功能说明文档</p>
+                        <a href="/docs" class="text-quantum-accent hover:text-white text-sm">查看文档 →</a>
+                    </div>
+
+                    <div class="p-6 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20 hover:border-cyber-green/40 transition-all duration-300 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-r from-cyber-green to-quantum-primary rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-headset text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold mb-2">技术支持</h3>
+                        <p class="text-gray-400 text-sm mb-4">专业的技术支持和咨询服务</p>
+                        <a href="/tech-support.html" class="text-quantum-accent hover:text-white text-sm">联系支持 →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题 -->
+        <section id="faq" class="py-16 bg-white/5">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4 text-quantum-accent">常见问题</h2>
+                    <p class="text-xl text-gray-300">快速找到您需要的答案</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto space-y-4">
+                    <!-- FAQ 项目 -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-300" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">如何开始使用 AlingAI Platform？</span>
+                            <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+                        </button>
+                        <div class="hidden px-6 pb-4">
+                            <p class="text-gray-400">首先注册账户，然后根据快速入门指南配置您的安全环境。我们提供详细的设置向导帮助您快速上手。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-300" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">量子安全技术是什么？</span>
+                            <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+                        </button>
+                        <div class="hidden px-6 pb-4">
+                            <p class="text-gray-400">量子安全技术是基于量子力学原理的新一代加密技术，能够抵御量子计算机的攻击，为未来的数据安全提供保障。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-300" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">如何集成 API？</span>
+                            <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+                        </button>
+                        <div class="hidden px-6 pb-4">
+                            <p class="text-gray-400">请查看我们的 API 文档获取详细的集成指南。我们提供多种编程语言的 SDK 和示例代码。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-300" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">支持哪些支付方式？</span>
+                            <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+                        </button>
+                        <div class="hidden px-6 pb-4">
+                            <p class="text-gray-400">我们支持信用卡、银行转账、企业采购等多种支付方式。具体请联系我们的销售团队了解详情。</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                        <button class="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-white/5 transition-colors duration-300" onclick="toggleFAQ(this)">
+                            <span class="font-semibold">数据安全如何保证？</span>
+                            <i class="fas fa-chevron-down transform transition-transform duration-300"></i>
+                        </button>
+                        <div class="hidden px-6 pb-4">
+                            <p class="text-gray-400">我们采用端到端加密、零信任架构和量子安全算法，确保您的数据在传输和存储过程中的绝对安全。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 快速入门 -->
+        <section id="quick-start" class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4 text-quantum-accent">快速入门</h2>
+                    <p class="text-xl text-gray-300">三步快速开始使用 AlingAI Platform</p>
+                </div>
+
+                <div class="max-w-4xl mx-auto">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">1</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">注册账户</h3>
+                            <p class="text-gray-400">创建您的专属账户，选择适合的服务套餐</p>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">2</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">配置环境</h3>
+                            <p class="text-gray-400">按照向导配置您的安全环境和策略</p>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-r from-quantum-secondary to-neon-pink rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-white text-2xl font-bold">3</span>
+                            </div>
+                            <h3 class="text-xl font-bold mb-4">开始使用</h3>
+                            <p class="text-gray-400">享受智能化的安全防护和管理服务</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系支持 -->
+        <section class="py-16 bg-gradient-to-r from-quantum-primary/10 to-quantum-accent/10">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl font-bold mb-4 text-quantum-accent">找不到答案？</h2>
+                <p class="text-xl text-gray-300 mb-8">我们的专业支持团队随时为您提供帮助</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="/tech-support.html" class="px-8 py-3 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
+                        技术支持
+                    </a>
+                    <a href="/contact.html" class="px-8 py-3 bg-white/10 backdrop-blur-sm border border-quantum-accent rounded-lg text-quantum-accent hover:bg-quantum-accent hover:text-white transition-all duration-300">
+                        联系我们
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <!-- 公司信息 -->
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                            <i class="fas fa-atom text-white text-sm"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-quantum-accent">珑凌科技</h3>
+                    </div>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        全球领先的量子安全基础设施提供商，为企业级客户提供从底层加密到智能决策的全栈解决方案。
+                    </p>
+                </div>
+
+                <!-- 产品服务 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">产品服务</h3>
+                    <div class="space-y-2">
+                        <a href="/platform.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">AlingAI Platform</a>
+                        <a href="/quantum-security.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">量子安全服务</a>
+                        <a href="/zero-trust.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">零信任架构</a>
+                        <a href="/ai-assistant.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">AI安全助手</a>
+                    </div>
+                </div>
+
+                <!-- 开发者资源 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">开发者</h3>
+                    <div class="space-y-2">
+                        <a href="/api" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">API文档</a>
+                        <a href="/docs" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">技术文档</a>
+                        <a href="/sdk-download.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">SDK下载</a>
+                        <a href="/code-examples.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">示例代码</a>
+                    </div>
+                </div>
+
+                <!-- 支持帮助 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">支持</h3>
+                    <div class="space-y-2">
+                        <a href="/help-center.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">帮助中心</a>
+                        <a href="/tech-support.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">技术支持</a>
+                        <a href="/contact.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">联系我们</a>
+                        <a href="/privacy.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">隐私政策</a>
+                        <a href="/terms.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">服务条款</a>
+                    </div>
+                </div>
+
+                <!-- 合作伙伴 -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-semibold text-white">合作伙伴</h3>
+                    <div class="space-y-2">
+                        <a href="/partnership.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">成为合作伙伴</a>
+                        <a href="/partnership-handbook.pdf" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm" target="_blank">下载合作手册</a>
+                        <a href="/partner-portal.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">合作伙伴门户</a>
+                        <a href="/ecosystem.html" class="block text-gray-400 hover:text-quantum-accent transition-colors duration-300 text-sm">生态系统</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-quantum-primary/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2024 珑凌科技. 保留所有权利.
+                </p>
+                <p class="text-gray-400 text-sm mt-4 md:mt-0">
+                    ICP备案号：粤ICP备2024000000号
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+{
+    "test_summary": {
+        "total_tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "success_rate": 100,
+        "duration": 5.45,
+        "timestamp": "2025-06-07 12:19:31"
+    },
+    "test_results": {
+        "application_init": {
+            "status": "success",
+            "message": "应用程序初始化完成"
+        },
+        "service_registration": {
+            "status": "success",
+            "message": "所有核心服务注册成功",
+            "services": {
+                "database": "registered",
+                "cache": "registered",
+                "security": "registered",
+                "auth": "registered",
+                "agent_coordinator": "registered"
+            }
+        },
+        "agent_coordinator": {
+            "status": "success",
+            "message": "智能体协调器功能测试通过",
+            "system_status": {
+                "coordinator_status": "running",
+                "active_agents_count": 5,
+                "available_agents_count": 4,
+                "queued_tasks": 0,
+                "completed_tasks": 0,
+                "configuration": {
+                    "max_concurrent_tasks": 10,
+                    "task_timeout": 300,
+                    "agent_selection_strategy": "ai_optimized",
+                    "load_balancing_enabled": true,
+                    "performance_monitoring": true,
+                    "auto_scaling": true
+                },
+                "last_update": "2025-06-07 12:19:27"
+            },
+            "test_task": {
+                "success": true,
+                "task_id": "task_1",
+                "assigned_agent": {
+                    "id": "chat_assistant_001",
+                    "name": "智能聊天助手",
+                    "type": "chat_assistant",
+                    "capabilities": [
+                        "conversation",
+                        "question_answering",
+                        "task_assistance"
+                    ],
+                    "performance_score": 0.9,
+                    "availability": "available",
+                    "selection_method": "deepseek_recommendation"
+                },
+                "analysis": {
+                    "task_complexity": "medium",
+                    "recommended_agent": "chat_assistant_001",
+                    "confidence": 0.6,
+                    "reasoning": "使用默认分析策略",
+                    "estimated_duration": 5,
+                    "required_capabilities": [
+                        "general_assistance"
+                    ],
+                    "priority": "medium"
+                },
+                "execution_result": {
+                    "status": "completed",
+                    "result": {
+                        "response": "",
+                        "conversation_id": "task_1",
+                        "tokens_used": 0
+                    },
+                    "performance": {
+                        "execution_time": 0,
+                        "quality_score": 0.9
+                    }
+                }
+            },
+            "performance": {
+                "ppt_generator_001": {
+                    "agent_info": {
+                        "id": "ppt_generator_001",
+                        "name": "PPT生成专家",
+                        "type": "ppt_generator",
+                        "capabilities": [
+                            "ppt_creation",
+                            "slide_design",
+                            "content_organization"
+                        ],
+                        "performance_score": 0.92,
+                        "availability": "available"
+                    },
+                    "performance": {
+                        "tasks_completed": 0,
+                        "average_execution_time": 0,
+                        "success_rate": 0,
+                        "quality_score": 0.92
+                    }
+                },
+                "data_analyst_001": {
+                    "agent_info": {
+                        "id": "data_analyst_001",
+                        "name": "数据分析师",
+                        "type": "data_analyst",
+                        "capabilities": [
+                            "data_analysis",
+                            "statistical_modeling",
+                            "visualization"
+                        ],
+                        "performance_score": 0.88,
+                        "availability": "available"
+                    },
+                    "performance": {
+                        "tasks_completed": 0,
+                        "average_execution_time": 0,
+                        "success_rate": 0,
+                        "quality_score": 0.88
+                    }
+                },
+                "security_scanner_001": {
+                    "agent_info": {
+                        "id": "security_scanner_001",
+                        "name": "安全扫描专家",
+                        "type": "security_scanner",
+                        "capabilities": [
+                            "vulnerability_scan",
+                            "threat_detection",
+                            "security_audit"
+                        ],
+                        "performance_score": 0.94,
+                        "availability": "available"
+                    },
+                    "performance": {
+                        "tasks_completed": 0,
+                        "average_execution_time": 0,
+                        "success_rate": 0,
+                        "quality_score": 0.94
+                    }
+                },
+                "chat_assistant_001": {
+                    "agent_info": {
+                        "id": "chat_assistant_001",
+                        "name": "智能聊天助手",
+                        "type": "chat_assistant",
+                        "capabilities": [
+                            "conversation",
+                            "question_answering",
+                            "task_assistance"
+                        ],
+                        "performance_score": 0.9,
+                        "availability": "available"
+                    },
+                    "performance": {
+                        "tasks_completed": 0,
+                        "average_execution_time": 0,
+                        "success_rate": 0,
+                        "quality_score": 0.9
+                    }
+                }
+            }
+        },
+        "router_integration": {
+            "status": "success",
+            "message": "路由集成验证完成",
+            "total_routes": 37,
+            "agent_routes": [
+                "POST \/api\/v2\/agents\/task\/assign",
+                "GET \/api\/v2\/agents\/task\/{taskId}\/status",
+                "GET \/api\/v2\/agents\/system\/status",
+                "GET \/api\/v2\/agents\/performance\/report"
+            ]
+        },
+        "api_endpoints": {
+            "status": "success",
+            "message": "API端点验证完成",
+            "endpoints": {
+                "system_status": "ready",
+                "task_assign": "ready",
+                "task_status": "ready",
+                "performance_report": "ready"
+            }
+        }
+    },
+    "system_info": {
+        "php_version": "8.1.32",
+        "app_version": "3.0.0",
+        "test_environment": "development"
+    }
+}

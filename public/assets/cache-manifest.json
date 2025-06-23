@@ -1,0 +1,3027 @@
+{
+    "version": "2025-06-11 16:36:07",
+    "assets": {
+        "css": [],
+        "js": [
+            {
+                "path": "\/js\\accessibility.min.js",
+                "size": 8094,
+                "hash": "1b6a81e07de463df05549239986b688b"
+            },
+            {
+                "path": "\/js\\accessibility.min.min.js",
+                "size": 8094,
+                "hash": "1b6a81e07de463df05549239986b688b"
+            },
+            {
+                "path": "\/js\\accessibility.min.min.min.js",
+                "size": 8094,
+                "hash": "1b6a81e07de463df05549239986b688b"
+            },
+            {
+                "path": "\/js\\accessibility.min.min.min.min.js",
+                "size": 8094,
+                "hash": "1b6a81e07de463df05549239986b688b"
+            },
+            {
+                "path": "\/js\\accessibility.min.min.min.min.min.js",
+                "size": 8094,
+                "hash": "1b6a81e07de463df05549239986b688b"
+            },
+            {
+                "path": "\/js\\admin\\configuration-manager.min.js",
+                "size": 20580,
+                "hash": "c34fc1766190ba3a201ed2924e7b9c67"
+            },
+            {
+                "path": "\/js\\admin\\configuration-manager.min.min.js",
+                "size": 20580,
+                "hash": "c34fc1766190ba3a201ed2924e7b9c67"
+            },
+            {
+                "path": "\/js\\admin\\configuration-manager.min.min.min.js",
+                "size": 20580,
+                "hash": "c34fc1766190ba3a201ed2924e7b9c67"
+            },
+            {
+                "path": "\/js\\admin\\configuration-manager.min.min.min.min.js",
+                "size": 20580,
+                "hash": "c34fc1766190ba3a201ed2924e7b9c67"
+            },
+            {
+                "path": "\/js\\advanced-debug-console.min.js",
+                "size": 21205,
+                "hash": "04ead0c5b2e0a8afc7f774a7570d5117"
+            },
+            {
+                "path": "\/js\\advanced-debug-console.min.min.js",
+                "size": 21205,
+                "hash": "04ead0c5b2e0a8afc7f774a7570d5117"
+            },
+            {
+                "path": "\/js\\advanced-debug-console.min.min.min.js",
+                "size": 21205,
+                "hash": "04ead0c5b2e0a8afc7f774a7570d5117"
+            },
+            {
+                "path": "\/js\\advanced-debug-console.min.min.min.min.js",
+                "size": 21205,
+                "hash": "04ead0c5b2e0a8afc7f774a7570d5117"
+            },
+            {
+                "path": "\/js\\advanced-ui-components.min.js",
+                "size": 24258,
+                "hash": "b71240d50874ba155a4648d7c8a38f03"
+            },
+            {
+                "path": "\/js\\advanced-ui-components.min.min.js",
+                "size": 24258,
+                "hash": "b71240d50874ba155a4648d7c8a38f03"
+            },
+            {
+                "path": "\/js\\advanced-ui-components.min.min.min.js",
+                "size": 24258,
+                "hash": "b71240d50874ba155a4648d7c8a38f03"
+            },
+            {
+                "path": "\/js\\advanced-ui-components.min.min.min.min.js",
+                "size": 24258,
+                "hash": "b71240d50874ba155a4648d7c8a38f03"
+            },
+            {
+                "path": "\/js\\advanced-ui-components.min.min.min.min.min.js",
+                "size": 24258,
+                "hash": "b71240d50874ba155a4648d7c8a38f03"
+            },
+            {
+                "path": "\/js\\animation-performance-monitor.min.js",
+                "size": 5763,
+                "hash": "7f7712ae47562a7292bf856e7b076e15"
+            },
+            {
+                "path": "\/js\\animation-performance-monitor.min.min.js",
+                "size": 5763,
+                "hash": "7f7712ae47562a7292bf856e7b076e15"
+            },
+            {
+                "path": "\/js\\animation-performance-monitor.min.min.min.js",
+                "size": 5763,
+                "hash": "7f7712ae47562a7292bf856e7b076e15"
+            },
+            {
+                "path": "\/js\\animation-performance-monitor.min.min.min.min.js",
+                "size": 5763,
+                "hash": "7f7712ae47562a7292bf856e7b076e15"
+            },
+            {
+                "path": "\/js\\api-integration.min.js",
+                "size": 20419,
+                "hash": "ef3e4b8136702e3e7db764088d05cea3"
+            },
+            {
+                "path": "\/js\\api-integration.min.min.js",
+                "size": 20419,
+                "hash": "ef3e4b8136702e3e7db764088d05cea3"
+            },
+            {
+                "path": "\/js\\api-integration.min.min.min.js",
+                "size": 20419,
+                "hash": "ef3e4b8136702e3e7db764088d05cea3"
+            },
+            {
+                "path": "\/js\\api-integration.min.min.min.min.js",
+                "size": 20419,
+                "hash": "ef3e4b8136702e3e7db764088d05cea3"
+            },
+            {
+                "path": "\/js\\api-integration.min.min.min.min.min.js",
+                "size": 20419,
+                "hash": "ef3e4b8136702e3e7db764088d05cea3"
+            },
+            {
+                "path": "\/js\\api-management.min.js",
+                "size": 3907,
+                "hash": "937ce099ca656210e46502a4ae123018"
+            },
+            {
+                "path": "\/js\\api-management.min.min.js",
+                "size": 3907,
+                "hash": "937ce099ca656210e46502a4ae123018"
+            },
+            {
+                "path": "\/js\\api-management.min.min.min.js",
+                "size": 3907,
+                "hash": "937ce099ca656210e46502a4ae123018"
+            },
+            {
+                "path": "\/js\\api-management.min.min.min.min.js",
+                "size": 3907,
+                "hash": "937ce099ca656210e46502a4ae123018"
+            },
+            {
+                "path": "\/js\\api-management.min.min.min.min.min.js",
+                "size": 3907,
+                "hash": "937ce099ca656210e46502a4ae123018"
+            },
+            {
+                "path": "\/js\\api-manager.min.js",
+                "size": 12619,
+                "hash": "9a387e3b43ca4239de9ef3256a270938"
+            },
+            {
+                "path": "\/js\\api-manager.min.min.js",
+                "size": 12619,
+                "hash": "9a387e3b43ca4239de9ef3256a270938"
+            },
+            {
+                "path": "\/js\\api-manager.min.min.min.js",
+                "size": 12619,
+                "hash": "9a387e3b43ca4239de9ef3256a270938"
+            },
+            {
+                "path": "\/js\\api-manager.min.min.min.min.js",
+                "size": 12619,
+                "hash": "9a387e3b43ca4239de9ef3256a270938"
+            },
+            {
+                "path": "\/js\\api-manager.min.min.min.min.min.js",
+                "size": 12619,
+                "hash": "9a387e3b43ca4239de9ef3256a270938"
+            },
+            {
+                "path": "\/js\\apiConfig.min.js",
+                "size": 1822,
+                "hash": "085ae90f9f90549d281d03f032591c4b"
+            },
+            {
+                "path": "\/js\\apiConfig.min.min.js",
+                "size": 1822,
+                "hash": "085ae90f9f90549d281d03f032591c4b"
+            },
+            {
+                "path": "\/js\\apiConfig.min.min.min.js",
+                "size": 1822,
+                "hash": "085ae90f9f90549d281d03f032591c4b"
+            },
+            {
+                "path": "\/js\\apiConfig.min.min.min.min.js",
+                "size": 1822,
+                "hash": "085ae90f9f90549d281d03f032591c4b"
+            },
+            {
+                "path": "\/js\\apiConfig.min.min.min.min.min.js",
+                "size": 1822,
+                "hash": "085ae90f9f90549d281d03f032591c4b"
+            },
+            {
+                "path": "\/js\\app.min.js",
+                "size": 5331,
+                "hash": "43bcf5c7ba2f88b779dc38c97c52e97f"
+            },
+            {
+                "path": "\/js\\app.min.min.js",
+                "size": 5331,
+                "hash": "43bcf5c7ba2f88b779dc38c97c52e97f"
+            },
+            {
+                "path": "\/js\\app.min.min.min.js",
+                "size": 5331,
+                "hash": "43bcf5c7ba2f88b779dc38c97c52e97f"
+            },
+            {
+                "path": "\/js\\app.min.min.min.min.js",
+                "size": 5331,
+                "hash": "43bcf5c7ba2f88b779dc38c97c52e97f"
+            },
+            {
+                "path": "\/js\\audio-enhancement.min.js",
+                "size": 4098,
+                "hash": "25c7b9df193bcc89bfdbe045a535c3f5"
+            },
+            {
+                "path": "\/js\\audio-enhancement.min.min.js",
+                "size": 4098,
+                "hash": "25c7b9df193bcc89bfdbe045a535c3f5"
+            },
+            {
+                "path": "\/js\\audio-enhancement.min.min.min.js",
+                "size": 4098,
+                "hash": "25c7b9df193bcc89bfdbe045a535c3f5"
+            },
+            {
+                "path": "\/js\\audio-enhancement.min.min.min.min.js",
+                "size": 4098,
+                "hash": "25c7b9df193bcc89bfdbe045a535c3f5"
+            },
+            {
+                "path": "\/js\\auth.min.js",
+                "size": 9899,
+                "hash": "ee99a0038c62089e739d076348091e21"
+            },
+            {
+                "path": "\/js\\auth.min.min.js",
+                "size": 9899,
+                "hash": "ee99a0038c62089e739d076348091e21"
+            },
+            {
+                "path": "\/js\\auth.min.min.min.js",
+                "size": 9899,
+                "hash": "ee99a0038c62089e739d076348091e21"
+            },
+            {
+                "path": "\/js\\auth.min.min.min.min.js",
+                "size": 9899,
+                "hash": "ee99a0038c62089e739d076348091e21"
+            },
+            {
+                "path": "\/js\\auth.min.min.min.min.min.js",
+                "size": 9899,
+                "hash": "ee99a0038c62089e739d076348091e21"
+            },
+            {
+                "path": "\/js\\auth_new.min.js",
+                "size": 8517,
+                "hash": "5fbdc138a660dec25e42744187b89db6"
+            },
+            {
+                "path": "\/js\\auth_new.min.min.js",
+                "size": 8517,
+                "hash": "5fbdc138a660dec25e42744187b89db6"
+            },
+            {
+                "path": "\/js\\auth_new.min.min.min.js",
+                "size": 8517,
+                "hash": "5fbdc138a660dec25e42744187b89db6"
+            },
+            {
+                "path": "\/js\\auth_new.min.min.min.min.js",
+                "size": 8517,
+                "hash": "5fbdc138a660dec25e42744187b89db6"
+            },
+            {
+                "path": "\/js\\bootstrap.bundle.min.min.js",
+                "size": 44064,
+                "hash": "d3eb67ddbe58a7cbc303395dc726145d"
+            },
+            {
+                "path": "\/js\\bootstrap.bundle.min.min.min.js",
+                "size": 44064,
+                "hash": "d3eb67ddbe58a7cbc303395dc726145d"
+            },
+            {
+                "path": "\/js\\bootstrap.bundle.min.min.min.min.js",
+                "size": 44064,
+                "hash": "d3eb67ddbe58a7cbc303395dc726145d"
+            },
+            {
+                "path": "\/js\\bootstrap.bundle.min.min.min.min.min.js",
+                "size": 44064,
+                "hash": "d3eb67ddbe58a7cbc303395dc726145d"
+            },
+            {
+                "path": "\/js\\bootstrap.bundle.min.min.min.min.min.min.js",
+                "size": 44064,
+                "hash": "d3eb67ddbe58a7cbc303395dc726145d"
+            },
+            {
+                "path": "\/js\\browser-functionality-test.min.js",
+                "size": 5787,
+                "hash": "fa61e00e1618e47a5e604b7654e0dd28"
+            },
+            {
+                "path": "\/js\\browser-functionality-test.min.min.js",
+                "size": 5787,
+                "hash": "fa61e00e1618e47a5e604b7654e0dd28"
+            },
+            {
+                "path": "\/js\\browser-functionality-test.min.min.min.js",
+                "size": 5787,
+                "hash": "fa61e00e1618e47a5e604b7654e0dd28"
+            },
+            {
+                "path": "\/js\\browser-functionality-test.min.min.min.min.js",
+                "size": 5787,
+                "hash": "fa61e00e1618e47a5e604b7654e0dd28"
+            },
+            {
+                "path": "\/js\\browser-functionality-test.min.min.min.min.min.js",
+                "size": 5787,
+                "hash": "fa61e00e1618e47a5e604b7654e0dd28"
+            },
+            {
+                "path": "\/js\\browser-test.min.js",
+                "size": 5849,
+                "hash": "e0f47ca8576615accb234a8fa5291f9c"
+            },
+            {
+                "path": "\/js\\browser-test.min.min.js",
+                "size": 5849,
+                "hash": "e0f47ca8576615accb234a8fa5291f9c"
+            },
+            {
+                "path": "\/js\\browser-test.min.min.min.js",
+                "size": 5849,
+                "hash": "e0f47ca8576615accb234a8fa5291f9c"
+            },
+            {
+                "path": "\/js\\browser-test.min.min.min.min.js",
+                "size": 5849,
+                "hash": "e0f47ca8576615accb234a8fa5291f9c"
+            },
+            {
+                "path": "\/js\\browser-test.min.min.min.min.min.js",
+                "size": 5849,
+                "hash": "e0f47ca8576615accb234a8fa5291f9c"
+            },
+            {
+                "path": "\/js\\chat\\api.min.js",
+                "size": 5833,
+                "hash": "6abd4ded8b8bfbb740b06c45c34675ca"
+            },
+            {
+                "path": "\/js\\chat\\api.min.min.js",
+                "size": 5833,
+                "hash": "6abd4ded8b8bfbb740b06c45c34675ca"
+            },
+            {
+                "path": "\/js\\chat\\api.min.min.min.js",
+                "size": 5833,
+                "hash": "6abd4ded8b8bfbb740b06c45c34675ca"
+            },
+            {
+                "path": "\/js\\chat\\api.min.min.min.min.js",
+                "size": 5833,
+                "hash": "6abd4ded8b8bfbb740b06c45c34675ca"
+            },
+            {
+                "path": "\/js\\chat\\core.min.js",
+                "size": 9738,
+                "hash": "b39b6bb9edf514f5c30cb142d2ba59f9"
+            },
+            {
+                "path": "\/js\\chat\\core.min.min.js",
+                "size": 9738,
+                "hash": "b39b6bb9edf514f5c30cb142d2ba59f9"
+            },
+            {
+                "path": "\/js\\chat\\core.min.min.min.js",
+                "size": 9738,
+                "hash": "b39b6bb9edf514f5c30cb142d2ba59f9"
+            },
+            {
+                "path": "\/js\\chat\\core.min.min.min.min.js",
+                "size": 9738,
+                "hash": "b39b6bb9edf514f5c30cb142d2ba59f9"
+            },
+            {
+                "path": "\/js\\chat\\message-processor.min.js",
+                "size": 4747,
+                "hash": "54b7e8bb996589ad00656a980bcde624"
+            },
+            {
+                "path": "\/js\\chat\\message-processor.min.min.js",
+                "size": 4747,
+                "hash": "54b7e8bb996589ad00656a980bcde624"
+            },
+            {
+                "path": "\/js\\chat\\message-processor.min.min.min.js",
+                "size": 4747,
+                "hash": "54b7e8bb996589ad00656a980bcde624"
+            },
+            {
+                "path": "\/js\\chat\\message-processor.min.min.min.min.js",
+                "size": 4747,
+                "hash": "54b7e8bb996589ad00656a980bcde624"
+            },
+            {
+                "path": "\/js\\chat\\message-renderer.min.js",
+                "size": 6700,
+                "hash": "125ee2eec71b80c8fe11eecdd0fc85a2"
+            },
+            {
+                "path": "\/js\\chat\\message-renderer.min.min.js",
+                "size": 6700,
+                "hash": "125ee2eec71b80c8fe11eecdd0fc85a2"
+            },
+            {
+                "path": "\/js\\chat\\message-renderer.min.min.min.js",
+                "size": 6700,
+                "hash": "125ee2eec71b80c8fe11eecdd0fc85a2"
+            },
+            {
+                "path": "\/js\\chat\\message-renderer.min.min.min.min.js",
+                "size": 6700,
+                "hash": "125ee2eec71b80c8fe11eecdd0fc85a2"
+            },
+            {
+                "path": "\/js\\chat\\ui.min.js",
+                "size": 17598,
+                "hash": "b17c198b597852f95f616a3c9f21befa"
+            },
+            {
+                "path": "\/js\\chat\\ui.min.min.js",
+                "size": 17598,
+                "hash": "b17c198b597852f95f616a3c9f21befa"
+            },
+            {
+                "path": "\/js\\chat\\ui.min.min.min.js",
+                "size": 17598,
+                "hash": "b17c198b597852f95f616a3c9f21befa"
+            },
+            {
+                "path": "\/js\\chat\\ui.min.min.min.min.js",
+                "size": 17598,
+                "hash": "b17c198b597852f95f616a3c9f21befa"
+            },
+            {
+                "path": "\/js\\chat\\utils\\ui-utils.min.js",
+                "size": 1870,
+                "hash": "79d7017a498a0874a6e1bd1ca80862f7"
+            },
+            {
+                "path": "\/js\\chat\\utils\\ui-utils.min.min.js",
+                "size": 1870,
+                "hash": "79d7017a498a0874a6e1bd1ca80862f7"
+            },
+            {
+                "path": "\/js\\chat\\utils\\ui-utils.min.min.min.js",
+                "size": 1870,
+                "hash": "79d7017a498a0874a6e1bd1ca80862f7"
+            },
+            {
+                "path": "\/js\\chat\\utils\\ui-utils.min.min.min.min.js",
+                "size": 1870,
+                "hash": "79d7017a498a0874a6e1bd1ca80862f7"
+            },
+            {
+                "path": "\/js\\chat\\voice-utils.min.js",
+                "size": 2957,
+                "hash": "c5bc8c531ee9e5420c270d220a94c39d"
+            },
+            {
+                "path": "\/js\\chat\\voice-utils.min.min.js",
+                "size": 2957,
+                "hash": "c5bc8c531ee9e5420c270d220a94c39d"
+            },
+            {
+                "path": "\/js\\chat\\voice-utils.min.min.min.js",
+                "size": 2957,
+                "hash": "c5bc8c531ee9e5420c270d220a94c39d"
+            },
+            {
+                "path": "\/js\\chat\\voice-utils.min.min.min.min.js",
+                "size": 2957,
+                "hash": "c5bc8c531ee9e5420c270d220a94c39d"
+            },
+            {
+                "path": "\/js\\chat-button-integrator.min.js",
+                "size": 4502,
+                "hash": "4fcc2ac950a25d32a6c9494b03d57eb8"
+            },
+            {
+                "path": "\/js\\chat-button-integrator.min.min.js",
+                "size": 4502,
+                "hash": "4fcc2ac950a25d32a6c9494b03d57eb8"
+            },
+            {
+                "path": "\/js\\chat-button-integrator.min.min.min.js",
+                "size": 4502,
+                "hash": "4fcc2ac950a25d32a6c9494b03d57eb8"
+            },
+            {
+                "path": "\/js\\chat-button-integrator.min.min.min.min.js",
+                "size": 4502,
+                "hash": "4fcc2ac950a25d32a6c9494b03d57eb8"
+            },
+            {
+                "path": "\/js\\chat-core-classes.min.js",
+                "size": 9579,
+                "hash": "9f1f193b29b0079f6c69fd1f662527d1"
+            },
+            {
+                "path": "\/js\\chat-core-classes.min.min.js",
+                "size": 9579,
+                "hash": "9f1f193b29b0079f6c69fd1f662527d1"
+            },
+            {
+                "path": "\/js\\chat-core-classes.min.min.min.js",
+                "size": 9579,
+                "hash": "9f1f193b29b0079f6c69fd1f662527d1"
+            },
+            {
+                "path": "\/js\\chat-core-classes.min.min.min.min.js",
+                "size": 9579,
+                "hash": "9f1f193b29b0079f6c69fd1f662527d1"
+            },
+            {
+                "path": "\/js\\chat-core-classes.min.min.min.min.min.js",
+                "size": 9579,
+                "hash": "9f1f193b29b0079f6c69fd1f662527d1"
+            },
+            {
+                "path": "\/js\\chat-system.min.js",
+                "size": 30711,
+                "hash": "c7c77aba29fc6eb3068fa480c5c94a3b"
+            },
+            {
+                "path": "\/js\\chat-system.min.min.js",
+                "size": 30711,
+                "hash": "c7c77aba29fc6eb3068fa480c5c94a3b"
+            },
+            {
+                "path": "\/js\\chat-system.min.min.min.js",
+                "size": 30711,
+                "hash": "c7c77aba29fc6eb3068fa480c5c94a3b"
+            },
+            {
+                "path": "\/js\\chat-system.min.min.min.min.js",
+                "size": 30711,
+                "hash": "c7c77aba29fc6eb3068fa480c5c94a3b"
+            },
+            {
+                "path": "\/js\\chat-system.min.min.min.min.min.js",
+                "size": 30711,
+                "hash": "c7c77aba29fc6eb3068fa480c5c94a3b"
+            },
+            {
+                "path": "\/js\\chat-test.min.js",
+                "size": 4582,
+                "hash": "29eed6f6c8099fde17ec4f7caa2ca535"
+            },
+            {
+                "path": "\/js\\chat-test.min.min.js",
+                "size": 4582,
+                "hash": "29eed6f6c8099fde17ec4f7caa2ca535"
+            },
+            {
+                "path": "\/js\\chat-test.min.min.min.js",
+                "size": 4582,
+                "hash": "29eed6f6c8099fde17ec4f7caa2ca535"
+            },
+            {
+                "path": "\/js\\chat-test.min.min.min.min.js",
+                "size": 4582,
+                "hash": "29eed6f6c8099fde17ec4f7caa2ca535"
+            },
+            {
+                "path": "\/js\\chat-test.min.min.min.min.min.js",
+                "size": 4582,
+                "hash": "29eed6f6c8099fde17ec4f7caa2ca535"
+            },
+            {
+                "path": "\/js\\chat-verification-checker.min.js",
+                "size": 5641,
+                "hash": "dc99a01b056e8018365033f158745a09"
+            },
+            {
+                "path": "\/js\\chat-verification-checker.min.min.js",
+                "size": 5641,
+                "hash": "dc99a01b056e8018365033f158745a09"
+            },
+            {
+                "path": "\/js\\chat-verification-checker.min.min.min.js",
+                "size": 5641,
+                "hash": "dc99a01b056e8018365033f158745a09"
+            },
+            {
+                "path": "\/js\\chat-verification-checker.min.min.min.min.js",
+                "size": 5641,
+                "hash": "dc99a01b056e8018365033f158745a09"
+            },
+            {
+                "path": "\/js\\chat-verification-checker.min.min.min.min.min.js",
+                "size": 5641,
+                "hash": "dc99a01b056e8018365033f158745a09"
+            },
+            {
+                "path": "\/js\\chat-widget.min.js",
+                "size": 7922,
+                "hash": "2edea926366e2ff1de6e46af3d4469b0"
+            },
+            {
+                "path": "\/js\\chat-widget.min.min.js",
+                "size": 7922,
+                "hash": "2edea926366e2ff1de6e46af3d4469b0"
+            },
+            {
+                "path": "\/js\\chat-widget.min.min.min.js",
+                "size": 7922,
+                "hash": "2edea926366e2ff1de6e46af3d4469b0"
+            },
+            {
+                "path": "\/js\\chat-widget.min.min.min.min.js",
+                "size": 7922,
+                "hash": "2edea926366e2ff1de6e46af3d4469b0"
+            },
+            {
+                "path": "\/js\\chat-widget.min.min.min.min.min.js",
+                "size": 7922,
+                "hash": "2edea926366e2ff1de6e46af3d4469b0"
+            },
+            {
+                "path": "\/js\\complete-system-validator.min.js",
+                "size": 13142,
+                "hash": "907e18ee10b6f6eca155cc53013b0ea4"
+            },
+            {
+                "path": "\/js\\complete-system-validator.min.min.js",
+                "size": 13142,
+                "hash": "907e18ee10b6f6eca155cc53013b0ea4"
+            },
+            {
+                "path": "\/js\\complete-system-validator.min.min.min.js",
+                "size": 13142,
+                "hash": "907e18ee10b6f6eca155cc53013b0ea4"
+            },
+            {
+                "path": "\/js\\complete-system-validator.min.min.min.min.js",
+                "size": 13142,
+                "hash": "907e18ee10b6f6eca155cc53013b0ea4"
+            },
+            {
+                "path": "\/js\\components\\chat-component.min.js",
+                "size": 21929,
+                "hash": "8d5baa26b0a359ce3d7ef3a6fa815aa7"
+            },
+            {
+                "path": "\/js\\components\\chat-component.min.min.js",
+                "size": 21929,
+                "hash": "8d5baa26b0a359ce3d7ef3a6fa815aa7"
+            },
+            {
+                "path": "\/js\\components\\chat-component.min.min.min.js",
+                "size": 21929,
+                "hash": "8d5baa26b0a359ce3d7ef3a6fa815aa7"
+            },
+            {
+                "path": "\/js\\components\\chat-component.min.min.min.min.js",
+                "size": 21929,
+                "hash": "8d5baa26b0a359ce3d7ef3a6fa815aa7"
+            },
+            {
+                "path": "\/js\\components\\enhanced-chat-component.min.js",
+                "size": 27752,
+                "hash": "87fae6483df53f8c30aece9dc9d954e0"
+            },
+            {
+                "path": "\/js\\components\\enhanced-chat-component.min.min.js",
+                "size": 27752,
+                "hash": "87fae6483df53f8c30aece9dc9d954e0"
+            },
+            {
+                "path": "\/js\\components\\enhanced-chat-component.min.min.min.js",
+                "size": 27752,
+                "hash": "87fae6483df53f8c30aece9dc9d954e0"
+            },
+            {
+                "path": "\/js\\components\\enhanced-chat-component.min.min.min.min.js",
+                "size": 27752,
+                "hash": "87fae6483df53f8c30aece9dc9d954e0"
+            },
+            {
+                "path": "\/js\\components\\form-component.min.js",
+                "size": 19789,
+                "hash": "e4abe0d49c24822847837a3cdd9efe7a"
+            },
+            {
+                "path": "\/js\\components\\form-component.min.min.js",
+                "size": 19789,
+                "hash": "e4abe0d49c24822847837a3cdd9efe7a"
+            },
+            {
+                "path": "\/js\\components\\form-component.min.min.min.js",
+                "size": 19789,
+                "hash": "e4abe0d49c24822847837a3cdd9efe7a"
+            },
+            {
+                "path": "\/js\\components\\form-component.min.min.min.min.js",
+                "size": 19789,
+                "hash": "e4abe0d49c24822847837a3cdd9efe7a"
+            },
+            {
+                "path": "\/js\\components\\modal-component.min.js",
+                "size": 11064,
+                "hash": "d21367f245b559d9f6edc17f5027177d"
+            },
+            {
+                "path": "\/js\\components\\modal-component.min.min.js",
+                "size": 11064,
+                "hash": "d21367f245b559d9f6edc17f5027177d"
+            },
+            {
+                "path": "\/js\\components\\modal-component.min.min.min.js",
+                "size": 11064,
+                "hash": "d21367f245b559d9f6edc17f5027177d"
+            },
+            {
+                "path": "\/js\\components\\modal-component.min.min.min.min.js",
+                "size": 11064,
+                "hash": "d21367f245b559d9f6edc17f5027177d"
+            },
+            {
+                "path": "\/js\\components\\notification-component.min.js",
+                "size": 10034,
+                "hash": "5c3ea95e936e64965453a1a8231a823d"
+            },
+            {
+                "path": "\/js\\components\\notification-component.min.min.js",
+                "size": 10034,
+                "hash": "5c3ea95e936e64965453a1a8231a823d"
+            },
+            {
+                "path": "\/js\\components\\notification-component.min.min.min.js",
+                "size": 10034,
+                "hash": "5c3ea95e936e64965453a1a8231a823d"
+            },
+            {
+                "path": "\/js\\components\\notification-component.min.min.min.min.js",
+                "size": 10034,
+                "hash": "5c3ea95e936e64965453a1a8231a823d"
+            },
+            {
+                "path": "\/js\\comprehensive-integration-test.min.js",
+                "size": 19733,
+                "hash": "94359c376cf7bd8797b8a71acdb1ea5f"
+            },
+            {
+                "path": "\/js\\comprehensive-integration-test.min.min.js",
+                "size": 19733,
+                "hash": "94359c376cf7bd8797b8a71acdb1ea5f"
+            },
+            {
+                "path": "\/js\\comprehensive-integration-test.min.min.min.js",
+                "size": 19733,
+                "hash": "94359c376cf7bd8797b8a71acdb1ea5f"
+            },
+            {
+                "path": "\/js\\comprehensive-integration-test.min.min.min.min.js",
+                "size": 19733,
+                "hash": "94359c376cf7bd8797b8a71acdb1ea5f"
+            },
+            {
+                "path": "\/js\\comprehensive-integration-test.min.min.min.min.min.js",
+                "size": 19733,
+                "hash": "94359c376cf7bd8797b8a71acdb1ea5f"
+            },
+            {
+                "path": "\/js\\comprehensive-test.min.js",
+                "size": 7405,
+                "hash": "4e97f023eaaa72ac1c51c419e7633962"
+            },
+            {
+                "path": "\/js\\comprehensive-test.min.min.js",
+                "size": 7405,
+                "hash": "4e97f023eaaa72ac1c51c419e7633962"
+            },
+            {
+                "path": "\/js\\comprehensive-test.min.min.min.js",
+                "size": 7405,
+                "hash": "4e97f023eaaa72ac1c51c419e7633962"
+            },
+            {
+                "path": "\/js\\comprehensive-test.min.min.min.min.js",
+                "size": 7405,
+                "hash": "4e97f023eaaa72ac1c51c419e7633962"
+            },
+            {
+                "path": "\/js\\comprehensive-test.min.min.min.min.min.js",
+                "size": 7405,
+                "hash": "4e97f023eaaa72ac1c51c419e7633962"
+            },
+            {
+                "path": "\/js\\comprehensive-testing-system.min.js",
+                "size": 18920,
+                "hash": "f744421850e0d50912cfc51b70ccd3f8"
+            },
+            {
+                "path": "\/js\\comprehensive-testing-system.min.min.js",
+                "size": 18920,
+                "hash": "f744421850e0d50912cfc51b70ccd3f8"
+            },
+            {
+                "path": "\/js\\comprehensive-testing-system.min.min.min.js",
+                "size": 18920,
+                "hash": "f744421850e0d50912cfc51b70ccd3f8"
+            },
+            {
+                "path": "\/js\\comprehensive-testing-system.min.min.min.min.js",
+                "size": 18920,
+                "hash": "f744421850e0d50912cfc51b70ccd3f8"
+            },
+            {
+                "path": "\/js\\comprehensive-testing-system.min.min.min.min.min.js",
+                "size": 18920,
+                "hash": "f744421850e0d50912cfc51b70ccd3f8"
+            },
+            {
+                "path": "\/js\\comprehensive-verification.min.js",
+                "size": 7982,
+                "hash": "62d62453596be878c8a34ff953ecf22b"
+            },
+            {
+                "path": "\/js\\comprehensive-verification.min.min.js",
+                "size": 7982,
+                "hash": "62d62453596be878c8a34ff953ecf22b"
+            },
+            {
+                "path": "\/js\\comprehensive-verification.min.min.min.js",
+                "size": 7982,
+                "hash": "62d62453596be878c8a34ff953ecf22b"
+            },
+            {
+                "path": "\/js\\comprehensive-verification.min.min.min.min.js",
+                "size": 7982,
+                "hash": "62d62453596be878c8a34ff953ecf22b"
+            },
+            {
+                "path": "\/js\\comprehensive-verification.min.min.min.min.min.js",
+                "size": 7982,
+                "hash": "62d62453596be878c8a34ff953ecf22b"
+            },
+            {
+                "path": "\/js\\config.min.js",
+                "size": 86,
+                "hash": "da65e705617c423aab323ccc19f80f8f"
+            },
+            {
+                "path": "\/js\\config.min.min.js",
+                "size": 86,
+                "hash": "da65e705617c423aab323ccc19f80f8f"
+            },
+            {
+                "path": "\/js\\config.min.min.min.js",
+                "size": 86,
+                "hash": "da65e705617c423aab323ccc19f80f8f"
+            },
+            {
+                "path": "\/js\\config.min.min.min.min.js",
+                "size": 86,
+                "hash": "da65e705617c423aab323ccc19f80f8f"
+            },
+            {
+                "path": "\/js\\core\\app.min.js",
+                "size": 5268,
+                "hash": "d4b0f7b53baaff09dee16fe6cc793ebf"
+            },
+            {
+                "path": "\/js\\core\\app.min.min.js",
+                "size": 5268,
+                "hash": "d4b0f7b53baaff09dee16fe6cc793ebf"
+            },
+            {
+                "path": "\/js\\core\\app.min.min.min.js",
+                "size": 5268,
+                "hash": "d4b0f7b53baaff09dee16fe6cc793ebf"
+            },
+            {
+                "path": "\/js\\core\\app.min.min.min.min.js",
+                "size": 5268,
+                "hash": "d4b0f7b53baaff09dee16fe6cc793ebf"
+            },
+            {
+                "path": "\/js\\cpp-animation-enhanced.min.js",
+                "size": 16333,
+                "hash": "9fae575ff5e6270ca12575c4c22ea861"
+            },
+            {
+                "path": "\/js\\cpp-animation-enhanced.min.min.js",
+                "size": 16333,
+                "hash": "9fae575ff5e6270ca12575c4c22ea861"
+            },
+            {
+                "path": "\/js\\cpp-animation-enhanced.min.min.min.js",
+                "size": 16333,
+                "hash": "9fae575ff5e6270ca12575c4c22ea861"
+            },
+            {
+                "path": "\/js\\cpp-animation-enhanced.min.min.min.min.js",
+                "size": 16333,
+                "hash": "9fae575ff5e6270ca12575c4c22ea861"
+            },
+            {
+                "path": "\/js\\cpp-animation-verification.min.js",
+                "size": 2321,
+                "hash": "70af859e4eee794c62d4d03dda0873d6"
+            },
+            {
+                "path": "\/js\\cpp-animation-verification.min.min.js",
+                "size": 2321,
+                "hash": "70af859e4eee794c62d4d03dda0873d6"
+            },
+            {
+                "path": "\/js\\cpp-animation-verification.min.min.min.js",
+                "size": 2321,
+                "hash": "70af859e4eee794c62d4d03dda0873d6"
+            },
+            {
+                "path": "\/js\\cpp-animation-verification.min.min.min.min.js",
+                "size": 2321,
+                "hash": "70af859e4eee794c62d4d03dda0873d6"
+            },
+            {
+                "path": "\/js\\cpp-animation.min.js",
+                "size": 17302,
+                "hash": "a249c1ef58924fb5255066cf7dd0a5bb"
+            },
+            {
+                "path": "\/js\\cpp-animation.min.min.js",
+                "size": 17302,
+                "hash": "a249c1ef58924fb5255066cf7dd0a5bb"
+            },
+            {
+                "path": "\/js\\cpp-animation.min.min.min.js",
+                "size": 17302,
+                "hash": "a249c1ef58924fb5255066cf7dd0a5bb"
+            },
+            {
+                "path": "\/js\\cpp-animation.min.min.min.min.js",
+                "size": 17302,
+                "hash": "a249c1ef58924fb5255066cf7dd0a5bb"
+            },
+            {
+                "path": "\/js\\dashboard-integration.min.js",
+                "size": 1576,
+                "hash": "1f58b93d0a38ffd26d87d0ced26f6c8a"
+            },
+            {
+                "path": "\/js\\dashboard-integration.min.min.js",
+                "size": 1576,
+                "hash": "1f58b93d0a38ffd26d87d0ced26f6c8a"
+            },
+            {
+                "path": "\/js\\dashboard-integration.min.min.min.js",
+                "size": 1576,
+                "hash": "1f58b93d0a38ffd26d87d0ced26f6c8a"
+            },
+            {
+                "path": "\/js\\dashboard-integration.min.min.min.min.js",
+                "size": 1576,
+                "hash": "1f58b93d0a38ffd26d87d0ced26f6c8a"
+            },
+            {
+                "path": "\/js\\dashboard-integration.min.min.min.min.min.js",
+                "size": 1576,
+                "hash": "1f58b93d0a38ffd26d87d0ced26f6c8a"
+            },
+            {
+                "path": "\/js\\data\\data-manager.min.js",
+                "size": 9471,
+                "hash": "789e4609b9ceb04e8ca2881c9daa490f"
+            },
+            {
+                "path": "\/js\\data\\data-manager.min.min.js",
+                "size": 9471,
+                "hash": "789e4609b9ceb04e8ca2881c9daa490f"
+            },
+            {
+                "path": "\/js\\data\\data-manager.min.min.min.js",
+                "size": 9471,
+                "hash": "789e4609b9ceb04e8ca2881c9daa490f"
+            },
+            {
+                "path": "\/js\\data\\data-manager.min.min.min.min.js",
+                "size": 9471,
+                "hash": "789e4609b9ceb04e8ca2881c9daa490f"
+            },
+            {
+                "path": "\/js\\data-visualization.min.js",
+                "size": 7837,
+                "hash": "2508a6963923d482ce36fd36791df661"
+            },
+            {
+                "path": "\/js\\data-visualization.min.min.js",
+                "size": 7837,
+                "hash": "2508a6963923d482ce36fd36791df661"
+            },
+            {
+                "path": "\/js\\data-visualization.min.min.min.js",
+                "size": 7837,
+                "hash": "2508a6963923d482ce36fd36791df661"
+            },
+            {
+                "path": "\/js\\data-visualization.min.min.min.min.js",
+                "size": 7837,
+                "hash": "2508a6963923d482ce36fd36791df661"
+            },
+            {
+                "path": "\/js\\deep-diagnostics.min.js",
+                "size": 7873,
+                "hash": "c3997741d834e69a8706e6b1dff06b81"
+            },
+            {
+                "path": "\/js\\deep-diagnostics.min.min.js",
+                "size": 7873,
+                "hash": "c3997741d834e69a8706e6b1dff06b81"
+            },
+            {
+                "path": "\/js\\deep-diagnostics.min.min.min.js",
+                "size": 7873,
+                "hash": "c3997741d834e69a8706e6b1dff06b81"
+            },
+            {
+                "path": "\/js\\deep-diagnostics.min.min.min.min.js",
+                "size": 7873,
+                "hash": "c3997741d834e69a8706e6b1dff06b81"
+            },
+            {
+                "path": "\/js\\deep-diagnostics.min.min.min.min.min.js",
+                "size": 7873,
+                "hash": "c3997741d834e69a8706e6b1dff06b81"
+            },
+            {
+                "path": "\/js\\detection-system-demo.min.js",
+                "size": 7085,
+                "hash": "77bace5c4b2c41f97efa66c70232926d"
+            },
+            {
+                "path": "\/js\\detection-system-demo.min.min.js",
+                "size": 7085,
+                "hash": "77bace5c4b2c41f97efa66c70232926d"
+            },
+            {
+                "path": "\/js\\detection-system-demo.min.min.min.js",
+                "size": 7085,
+                "hash": "77bace5c4b2c41f97efa66c70232926d"
+            },
+            {
+                "path": "\/js\\detection-system-demo.min.min.min.min.js",
+                "size": 7085,
+                "hash": "77bace5c4b2c41f97efa66c70232926d"
+            },
+            {
+                "path": "\/js\\detection-system-demo.min.min.min.min.min.js",
+                "size": 7085,
+                "hash": "77bace5c4b2c41f97efa66c70232926d"
+            },
+            {
+                "path": "\/js\\detection-system-validator.min.js",
+                "size": 10466,
+                "hash": "d66b4c4a081fc610580368f439e3380b"
+            },
+            {
+                "path": "\/js\\detection-system-validator.min.min.js",
+                "size": 10466,
+                "hash": "d66b4c4a081fc610580368f439e3380b"
+            },
+            {
+                "path": "\/js\\detection-system-validator.min.min.min.js",
+                "size": 10466,
+                "hash": "d66b4c4a081fc610580368f439e3380b"
+            },
+            {
+                "path": "\/js\\detection-system-validator.min.min.min.min.js",
+                "size": 10466,
+                "hash": "d66b4c4a081fc610580368f439e3380b"
+            },
+            {
+                "path": "\/js\\detection-system-validator.min.min.min.min.min.js",
+                "size": 10466,
+                "hash": "d66b4c4a081fc610580368f439e3380b"
+            },
+            {
+                "path": "\/js\\diagnostics-export-manager.min.js",
+                "size": 6049,
+                "hash": "043c45836764cdff428ed13618655feb"
+            },
+            {
+                "path": "\/js\\diagnostics-export-manager.min.min.js",
+                "size": 6049,
+                "hash": "043c45836764cdff428ed13618655feb"
+            },
+            {
+                "path": "\/js\\diagnostics-export-manager.min.min.min.js",
+                "size": 6049,
+                "hash": "043c45836764cdff428ed13618655feb"
+            },
+            {
+                "path": "\/js\\diagnostics-export-manager.min.min.min.min.js",
+                "size": 6049,
+                "hash": "043c45836764cdff428ed13618655feb"
+            },
+            {
+                "path": "\/js\\e2e-test.min.js",
+                "size": 5016,
+                "hash": "8b652df3a48865c568fa1fa0d191e893"
+            },
+            {
+                "path": "\/js\\e2e-test.min.min.js",
+                "size": 5016,
+                "hash": "8b652df3a48865c568fa1fa0d191e893"
+            },
+            {
+                "path": "\/js\\e2e-test.min.min.min.js",
+                "size": 5016,
+                "hash": "8b652df3a48865c568fa1fa0d191e893"
+            },
+            {
+                "path": "\/js\\e2e-test.min.min.min.min.js",
+                "size": 5016,
+                "hash": "8b652df3a48865c568fa1fa0d191e893"
+            },
+            {
+                "path": "\/js\\e2e-test.min.min.min.min.min.js",
+                "size": 5016,
+                "hash": "8b652df3a48865c568fa1fa0d191e893"
+            },
+            {
+                "path": "\/js\\enhanced-admin-testing-system.min.js",
+                "size": 15238,
+                "hash": "1b61b832e59501f8c630396c100c3f5f"
+            },
+            {
+                "path": "\/js\\enhanced-admin-testing-system.min.min.js",
+                "size": 15238,
+                "hash": "1b61b832e59501f8c630396c100c3f5f"
+            },
+            {
+                "path": "\/js\\enhanced-admin-testing-system.min.min.min.js",
+                "size": 15238,
+                "hash": "1b61b832e59501f8c630396c100c3f5f"
+            },
+            {
+                "path": "\/js\\enhanced-admin-testing-system.min.min.min.min.js",
+                "size": 15238,
+                "hash": "1b61b832e59501f8c630396c100c3f5f"
+            },
+            {
+                "path": "\/js\\enhanced-detection-demo.min.js",
+                "size": 19253,
+                "hash": "ddfb22dd5b2da220959ca095db8e657d"
+            },
+            {
+                "path": "\/js\\enhanced-detection-demo.min.min.js",
+                "size": 19253,
+                "hash": "ddfb22dd5b2da220959ca095db8e657d"
+            },
+            {
+                "path": "\/js\\enhanced-detection-demo.min.min.min.js",
+                "size": 19253,
+                "hash": "ddfb22dd5b2da220959ca095db8e657d"
+            },
+            {
+                "path": "\/js\\enhanced-detection-demo.min.min.min.min.js",
+                "size": 19253,
+                "hash": "ddfb22dd5b2da220959ca095db8e657d"
+            },
+            {
+                "path": "\/js\\enhanced-detection-demo.min.min.min.min.min.js",
+                "size": 19253,
+                "hash": "ddfb22dd5b2da220959ca095db8e657d"
+            },
+            {
+                "path": "\/js\\enhanced-ui-manager.min.js",
+                "size": 8848,
+                "hash": "387e4b63e3b4e540e92a284c9f7c6c32"
+            },
+            {
+                "path": "\/js\\enhanced-ui-manager.min.min.js",
+                "size": 8848,
+                "hash": "387e4b63e3b4e540e92a284c9f7c6c32"
+            },
+            {
+                "path": "\/js\\enhanced-ui-manager.min.min.min.js",
+                "size": 8848,
+                "hash": "387e4b63e3b4e540e92a284c9f7c6c32"
+            },
+            {
+                "path": "\/js\\enhanced-ui-manager.min.min.min.min.js",
+                "size": 8848,
+                "hash": "387e4b63e3b4e540e92a284c9f7c6c32"
+            },
+            {
+                "path": "\/js\\environment-checker.min.js",
+                "size": 13567,
+                "hash": "56a17c43e049c7343796f1b7bcb26419"
+            },
+            {
+                "path": "\/js\\environment-checker.min.min.js",
+                "size": 13567,
+                "hash": "56a17c43e049c7343796f1b7bcb26419"
+            },
+            {
+                "path": "\/js\\environment-checker.min.min.min.js",
+                "size": 13567,
+                "hash": "56a17c43e049c7343796f1b7bcb26419"
+            },
+            {
+                "path": "\/js\\environment-checker.min.min.min.min.js",
+                "size": 13567,
+                "hash": "56a17c43e049c7343796f1b7bcb26419"
+            },
+            {
+                "path": "\/js\\environment-checker.min.min.min.min.min.js",
+                "size": 13567,
+                "hash": "56a17c43e049c7343796f1b7bcb26419"
+            },
+            {
+                "path": "\/js\\final-browser-validation.min.js",
+                "size": 9095,
+                "hash": "ea570dea926c9a144e45402874f3cc83"
+            },
+            {
+                "path": "\/js\\final-browser-validation.min.min.js",
+                "size": 9095,
+                "hash": "ea570dea926c9a144e45402874f3cc83"
+            },
+            {
+                "path": "\/js\\final-browser-validation.min.min.min.js",
+                "size": 9095,
+                "hash": "ea570dea926c9a144e45402874f3cc83"
+            },
+            {
+                "path": "\/js\\final-browser-validation.min.min.min.min.js",
+                "size": 9095,
+                "hash": "ea570dea926c9a144e45402874f3cc83"
+            },
+            {
+                "path": "\/js\\final-browser-validation.min.min.min.min.min.js",
+                "size": 9095,
+                "hash": "ea570dea926c9a144e45402874f3cc83"
+            },
+            {
+                "path": "\/js\\final-integration-test.min.js",
+                "size": 12399,
+                "hash": "5d937df5d7af663de74a54d079b1f4b4"
+            },
+            {
+                "path": "\/js\\final-integration-test.min.min.js",
+                "size": 12399,
+                "hash": "5d937df5d7af663de74a54d079b1f4b4"
+            },
+            {
+                "path": "\/js\\final-integration-test.min.min.min.js",
+                "size": 12399,
+                "hash": "5d937df5d7af663de74a54d079b1f4b4"
+            },
+            {
+                "path": "\/js\\final-integration-test.min.min.min.min.js",
+                "size": 12399,
+                "hash": "5d937df5d7af663de74a54d079b1f4b4"
+            },
+            {
+                "path": "\/js\\final-system-status-check.min.js",
+                "size": 3833,
+                "hash": "16205ab999e3f93a56d957390bb894d2"
+            },
+            {
+                "path": "\/js\\final-system-status-check.min.min.js",
+                "size": 3833,
+                "hash": "16205ab999e3f93a56d957390bb894d2"
+            },
+            {
+                "path": "\/js\\final-system-status-check.min.min.min.js",
+                "size": 3833,
+                "hash": "16205ab999e3f93a56d957390bb894d2"
+            },
+            {
+                "path": "\/js\\final-system-status-check.min.min.min.min.js",
+                "size": 3833,
+                "hash": "16205ab999e3f93a56d957390bb894d2"
+            },
+            {
+                "path": "\/js\\final-user-interaction-test.min.js",
+                "size": 9271,
+                "hash": "cc5dd9fb3bf218bd4319310bdd9b1636"
+            },
+            {
+                "path": "\/js\\final-user-interaction-test.min.min.js",
+                "size": 9271,
+                "hash": "cc5dd9fb3bf218bd4319310bdd9b1636"
+            },
+            {
+                "path": "\/js\\final-user-interaction-test.min.min.min.js",
+                "size": 9271,
+                "hash": "cc5dd9fb3bf218bd4319310bdd9b1636"
+            },
+            {
+                "path": "\/js\\final-user-interaction-test.min.min.min.min.js",
+                "size": 9271,
+                "hash": "cc5dd9fb3bf218bd4319310bdd9b1636"
+            },
+            {
+                "path": "\/js\\final-user-interaction-test.min.min.min.min.min.js",
+                "size": 9271,
+                "hash": "cc5dd9fb3bf218bd4319310bdd9b1636"
+            },
+            {
+                "path": "\/js\\final-validation.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\final-validation.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\final-validation.min.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\final-validation.min.min.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\final-validation.min.min.min.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\final-verification-2.min.js",
+                "size": 5685,
+                "hash": "d326163b5d1eca4a1ce5bed330b89da0"
+            },
+            {
+                "path": "\/js\\final-verification-2.min.min.js",
+                "size": 5685,
+                "hash": "d326163b5d1eca4a1ce5bed330b89da0"
+            },
+            {
+                "path": "\/js\\final-verification-2.min.min.min.js",
+                "size": 5685,
+                "hash": "d326163b5d1eca4a1ce5bed330b89da0"
+            },
+            {
+                "path": "\/js\\final-verification-2.min.min.min.min.js",
+                "size": 5685,
+                "hash": "d326163b5d1eca4a1ce5bed330b89da0"
+            },
+            {
+                "path": "\/js\\final-verification-2.min.min.min.min.min.js",
+                "size": 5685,
+                "hash": "d326163b5d1eca4a1ce5bed330b89da0"
+            },
+            {
+                "path": "\/js\\final-verification.min.js",
+                "size": 6400,
+                "hash": "2c2ee792bd3ae28f0df196a2b8d25b05"
+            },
+            {
+                "path": "\/js\\final-verification.min.min.js",
+                "size": 6400,
+                "hash": "2c2ee792bd3ae28f0df196a2b8d25b05"
+            },
+            {
+                "path": "\/js\\final-verification.min.min.min.js",
+                "size": 6400,
+                "hash": "2c2ee792bd3ae28f0df196a2b8d25b05"
+            },
+            {
+                "path": "\/js\\final-verification.min.min.min.min.js",
+                "size": 6400,
+                "hash": "2c2ee792bd3ae28f0df196a2b8d25b05"
+            },
+            {
+                "path": "\/js\\final-verification.min.min.min.min.min.js",
+                "size": 6400,
+                "hash": "2c2ee792bd3ae28f0df196a2b8d25b05"
+            },
+            {
+                "path": "\/js\\fix-verification.min.js",
+                "size": 8319,
+                "hash": "8ad2d936148e607d556d3b4c7d6de5dd"
+            },
+            {
+                "path": "\/js\\fix-verification.min.min.js",
+                "size": 8319,
+                "hash": "8ad2d936148e607d556d3b4c7d6de5dd"
+            },
+            {
+                "path": "\/js\\fix-verification.min.min.min.js",
+                "size": 8319,
+                "hash": "8ad2d936148e607d556d3b4c7d6de5dd"
+            },
+            {
+                "path": "\/js\\fix-verification.min.min.min.min.js",
+                "size": 8319,
+                "hash": "8ad2d936148e607d556d3b4c7d6de5dd"
+            },
+            {
+                "path": "\/js\\floating-buttons-deployment-manager.min.js",
+                "size": 9507,
+                "hash": "f31dfabf3a54dc29f1a0e83742b9e10c"
+            },
+            {
+                "path": "\/js\\floating-buttons-deployment-manager.min.min.js",
+                "size": 9507,
+                "hash": "f31dfabf3a54dc29f1a0e83742b9e10c"
+            },
+            {
+                "path": "\/js\\floating-buttons-deployment-manager.min.min.min.js",
+                "size": 9507,
+                "hash": "f31dfabf3a54dc29f1a0e83742b9e10c"
+            },
+            {
+                "path": "\/js\\floating-buttons-deployment-manager.min.min.min.min.js",
+                "size": 9507,
+                "hash": "f31dfabf3a54dc29f1a0e83742b9e10c"
+            },
+            {
+                "path": "\/js\\floating-buttons-diagnostic.min.js",
+                "size": 6321,
+                "hash": "0b4743321146d6a2b4cf358272a17ccf"
+            },
+            {
+                "path": "\/js\\floating-buttons-diagnostic.min.min.js",
+                "size": 6321,
+                "hash": "0b4743321146d6a2b4cf358272a17ccf"
+            },
+            {
+                "path": "\/js\\floating-buttons-diagnostic.min.min.min.js",
+                "size": 6321,
+                "hash": "0b4743321146d6a2b4cf358272a17ccf"
+            },
+            {
+                "path": "\/js\\floating-buttons-diagnostic.min.min.min.min.js",
+                "size": 6321,
+                "hash": "0b4743321146d6a2b4cf358272a17ccf"
+            },
+            {
+                "path": "\/js\\floating-buttons-manager.min.js",
+                "size": 7418,
+                "hash": "6388bd32e806fabf54ea6cbb698cdef2"
+            },
+            {
+                "path": "\/js\\floating-buttons-manager.min.min.js",
+                "size": 7418,
+                "hash": "6388bd32e806fabf54ea6cbb698cdef2"
+            },
+            {
+                "path": "\/js\\floating-buttons-manager.min.min.min.js",
+                "size": 7418,
+                "hash": "6388bd32e806fabf54ea6cbb698cdef2"
+            },
+            {
+                "path": "\/js\\floating-buttons-manager.min.min.min.min.js",
+                "size": 7418,
+                "hash": "6388bd32e806fabf54ea6cbb698cdef2"
+            },
+            {
+                "path": "\/js\\floating-buttons-test-runner.min.js",
+                "size": 10348,
+                "hash": "ca1f2694cd9405230cc4f6a98fa0a248"
+            },
+            {
+                "path": "\/js\\floating-buttons-test-runner.min.min.js",
+                "size": 10348,
+                "hash": "ca1f2694cd9405230cc4f6a98fa0a248"
+            },
+            {
+                "path": "\/js\\floating-buttons-test-runner.min.min.min.js",
+                "size": 10348,
+                "hash": "ca1f2694cd9405230cc4f6a98fa0a248"
+            },
+            {
+                "path": "\/js\\floating-buttons-test-runner.min.min.min.min.js",
+                "size": 10348,
+                "hash": "ca1f2694cd9405230cc4f6a98fa0a248"
+            },
+            {
+                "path": "\/js\\form-validation.min.js",
+                "size": 15046,
+                "hash": "937fd266f4f5b605902175cc8120ce39"
+            },
+            {
+                "path": "\/js\\form-validation.min.min.js",
+                "size": 15046,
+                "hash": "937fd266f4f5b605902175cc8120ce39"
+            },
+            {
+                "path": "\/js\\form-validation.min.min.min.js",
+                "size": 15046,
+                "hash": "937fd266f4f5b605902175cc8120ce39"
+            },
+            {
+                "path": "\/js\\form-validation.min.min.min.min.js",
+                "size": 15046,
+                "hash": "937fd266f4f5b605902175cc8120ce39"
+            },
+            {
+                "path": "\/js\\form-validation.min.min.min.min.min.js",
+                "size": 15046,
+                "hash": "937fd266f4f5b605902175cc8120ce39"
+            },
+            {
+                "path": "\/js\\frontend-enhancements.min.js",
+                "size": 9817,
+                "hash": "bd82e72acc09d2e1a62a2adb39586995"
+            },
+            {
+                "path": "\/js\\frontend-enhancements.min.min.js",
+                "size": 9817,
+                "hash": "bd82e72acc09d2e1a62a2adb39586995"
+            },
+            {
+                "path": "\/js\\frontend-enhancements.min.min.min.js",
+                "size": 9817,
+                "hash": "bd82e72acc09d2e1a62a2adb39586995"
+            },
+            {
+                "path": "\/js\\frontend-enhancements.min.min.min.min.js",
+                "size": 9817,
+                "hash": "bd82e72acc09d2e1a62a2adb39586995"
+            },
+            {
+                "path": "\/js\\frontend-enhancements.min.min.min.min.min.js",
+                "size": 9817,
+                "hash": "bd82e72acc09d2e1a62a2adb39586995"
+            },
+            {
+                "path": "\/js\\frontend-fixes.min.js",
+                "size": 11050,
+                "hash": "25fdc07e7b24586b56599a8c4732a38f"
+            },
+            {
+                "path": "\/js\\frontend-fixes.min.min.js",
+                "size": 11050,
+                "hash": "25fdc07e7b24586b56599a8c4732a38f"
+            },
+            {
+                "path": "\/js\\frontend-fixes.min.min.min.js",
+                "size": 11050,
+                "hash": "25fdc07e7b24586b56599a8c4732a38f"
+            },
+            {
+                "path": "\/js\\frontend-fixes.min.min.min.min.js",
+                "size": 11050,
+                "hash": "25fdc07e7b24586b56599a8c4732a38f"
+            },
+            {
+                "path": "\/js\\frontend-resource-manager.min.js",
+                "size": 6613,
+                "hash": "267a8da51fe9bcfbac9c062ad8d1ac57"
+            },
+            {
+                "path": "\/js\\frontend-resource-manager.min.min.js",
+                "size": 6613,
+                "hash": "267a8da51fe9bcfbac9c062ad8d1ac57"
+            },
+            {
+                "path": "\/js\\frontend-resource-manager.min.min.min.js",
+                "size": 6613,
+                "hash": "267a8da51fe9bcfbac9c062ad8d1ac57"
+            },
+            {
+                "path": "\/js\\frontend-resource-manager.min.min.min.min.js",
+                "size": 6613,
+                "hash": "267a8da51fe9bcfbac9c062ad8d1ac57"
+            },
+            {
+                "path": "\/js\\frontend-validation.min.js",
+                "size": 3783,
+                "hash": "05953c4131b7c3e48d93a9eaccf441bf"
+            },
+            {
+                "path": "\/js\\frontend-validation.min.min.js",
+                "size": 3783,
+                "hash": "05953c4131b7c3e48d93a9eaccf441bf"
+            },
+            {
+                "path": "\/js\\frontend-validation.min.min.min.js",
+                "size": 3783,
+                "hash": "05953c4131b7c3e48d93a9eaccf441bf"
+            },
+            {
+                "path": "\/js\\frontend-validation.min.min.min.min.js",
+                "size": 3783,
+                "hash": "05953c4131b7c3e48d93a9eaccf441bf"
+            },
+            {
+                "path": "\/js\\functionality-demonstrator.min.js",
+                "size": 14906,
+                "hash": "b5da86d690bbaeca33c7ceeed0fc51ff"
+            },
+            {
+                "path": "\/js\\functionality-demonstrator.min.min.js",
+                "size": 14906,
+                "hash": "b5da86d690bbaeca33c7ceeed0fc51ff"
+            },
+            {
+                "path": "\/js\\functionality-demonstrator.min.min.min.js",
+                "size": 14906,
+                "hash": "b5da86d690bbaeca33c7ceeed0fc51ff"
+            },
+            {
+                "path": "\/js\\functionality-demonstrator.min.min.min.min.js",
+                "size": 14906,
+                "hash": "b5da86d690bbaeca33c7ceeed0fc51ff"
+            },
+            {
+                "path": "\/js\\functionality-test.min.js",
+                "size": 6202,
+                "hash": "f382d3d207c8071acce6c24c1784bf90"
+            },
+            {
+                "path": "\/js\\functionality-test.min.min.js",
+                "size": 6202,
+                "hash": "f382d3d207c8071acce6c24c1784bf90"
+            },
+            {
+                "path": "\/js\\functionality-test.min.min.min.js",
+                "size": 6202,
+                "hash": "f382d3d207c8071acce6c24c1784bf90"
+            },
+            {
+                "path": "\/js\\functionality-test.min.min.min.min.js",
+                "size": 6202,
+                "hash": "f382d3d207c8071acce6c24c1784bf90"
+            },
+            {
+                "path": "\/js\\gesture-interaction.min.js",
+                "size": 9647,
+                "hash": "01fa3762d85805462a310bc042f2fa52"
+            },
+            {
+                "path": "\/js\\gesture-interaction.min.min.js",
+                "size": 9647,
+                "hash": "01fa3762d85805462a310bc042f2fa52"
+            },
+            {
+                "path": "\/js\\gesture-interaction.min.min.min.js",
+                "size": 9647,
+                "hash": "01fa3762d85805462a310bc042f2fa52"
+            },
+            {
+                "path": "\/js\\gesture-interaction.min.min.min.min.js",
+                "size": 9647,
+                "hash": "01fa3762d85805462a310bc042f2fa52"
+            },
+            {
+                "path": "\/js\\globe.min.js",
+                "size": 1938,
+                "hash": "87731109b749b8bdd8cc7973f07eeecb"
+            },
+            {
+                "path": "\/js\\globe.min.min.js",
+                "size": 1938,
+                "hash": "87731109b749b8bdd8cc7973f07eeecb"
+            },
+            {
+                "path": "\/js\\globe.min.min.min.js",
+                "size": 1938,
+                "hash": "87731109b749b8bdd8cc7973f07eeecb"
+            },
+            {
+                "path": "\/js\\globe.min.min.min.min.js",
+                "size": 1938,
+                "hash": "87731109b749b8bdd8cc7973f07eeecb"
+            },
+            {
+                "path": "\/js\\highlight.min.min.js",
+                "size": 6629,
+                "hash": "b889d43f3386580b89b7bf9f71a8bbef"
+            },
+            {
+                "path": "\/js\\highlight.min.min.min.js",
+                "size": 6629,
+                "hash": "b889d43f3386580b89b7bf9f71a8bbef"
+            },
+            {
+                "path": "\/js\\highlight.min.min.min.min.js",
+                "size": 6629,
+                "hash": "b889d43f3386580b89b7bf9f71a8bbef"
+            },
+            {
+                "path": "\/js\\highlight.min.min.min.min.min.js",
+                "size": 6629,
+                "hash": "b889d43f3386580b89b7bf9f71a8bbef"
+            },
+            {
+                "path": "\/js\\highlight.min.min.min.min.min.min.js",
+                "size": 6629,
+                "hash": "b889d43f3386580b89b7bf9f71a8bbef"
+            },
+            {
+                "path": "\/js\\history\\manager.min.js",
+                "size": 3726,
+                "hash": "782b20c66b3886da7b7ffa8dd8eacaf6"
+            },
+            {
+                "path": "\/js\\history\\manager.min.min.js",
+                "size": 3726,
+                "hash": "782b20c66b3886da7b7ffa8dd8eacaf6"
+            },
+            {
+                "path": "\/js\\history\\manager.min.min.min.js",
+                "size": 3726,
+                "hash": "782b20c66b3886da7b7ffa8dd8eacaf6"
+            },
+            {
+                "path": "\/js\\history\\manager.min.min.min.min.js",
+                "size": 3726,
+                "hash": "782b20c66b3886da7b7ffa8dd8eacaf6"
+            },
+            {
+                "path": "\/js\\history\\render.min.js",
+                "size": 4386,
+                "hash": "e5e802aeffb5a685d995b9f4563f29fe"
+            },
+            {
+                "path": "\/js\\history\\render.min.min.js",
+                "size": 4386,
+                "hash": "e5e802aeffb5a685d995b9f4563f29fe"
+            },
+            {
+                "path": "\/js\\history\\render.min.min.min.js",
+                "size": 4386,
+                "hash": "e5e802aeffb5a685d995b9f4563f29fe"
+            },
+            {
+                "path": "\/js\\history\\render.min.min.min.min.js",
+                "size": 4386,
+                "hash": "e5e802aeffb5a685d995b9f4563f29fe"
+            },
+            {
+                "path": "\/js\\historyUtils.min.js",
+                "size": 2014,
+                "hash": "5421abafcce024b24d349625f62ac7e9"
+            },
+            {
+                "path": "\/js\\historyUtils.min.min.js",
+                "size": 2014,
+                "hash": "5421abafcce024b24d349625f62ac7e9"
+            },
+            {
+                "path": "\/js\\historyUtils.min.min.min.js",
+                "size": 2014,
+                "hash": "5421abafcce024b24d349625f62ac7e9"
+            },
+            {
+                "path": "\/js\\historyUtils.min.min.min.min.js",
+                "size": 2014,
+                "hash": "5421abafcce024b24d349625f62ac7e9"
+            },
+            {
+                "path": "\/js\\historyUtils.min.min.min.min.min.js",
+                "size": 2014,
+                "hash": "5421abafcce024b24d349625f62ac7e9"
+            },
+            {
+                "path": "\/js\\homepage-ai-chat.min.js",
+                "size": 21982,
+                "hash": "44fee641360853e1c678d593f14315f2"
+            },
+            {
+                "path": "\/js\\homepage-ai-chat.min.min.js",
+                "size": 21982,
+                "hash": "44fee641360853e1c678d593f14315f2"
+            },
+            {
+                "path": "\/js\\homepage-ai-chat.min.min.min.js",
+                "size": 21982,
+                "hash": "44fee641360853e1c678d593f14315f2"
+            },
+            {
+                "path": "\/js\\homepage-ai-chat.min.min.min.min.js",
+                "size": 21982,
+                "hash": "44fee641360853e1c678d593f14315f2"
+            },
+            {
+                "path": "\/js\\homepage-fixes.min.js",
+                "size": 16366,
+                "hash": "87e732e9a8bf476605b2c34815c6ba27"
+            },
+            {
+                "path": "\/js\\homepage-fixes.min.min.js",
+                "size": 16366,
+                "hash": "87e732e9a8bf476605b2c34815c6ba27"
+            },
+            {
+                "path": "\/js\\homepage-fixes.min.min.min.js",
+                "size": 16366,
+                "hash": "87e732e9a8bf476605b2c34815c6ba27"
+            },
+            {
+                "path": "\/js\\homepage-fixes.min.min.min.min.js",
+                "size": 16366,
+                "hash": "87e732e9a8bf476605b2c34815c6ba27"
+            },
+            {
+                "path": "\/js\\i18n\\i18n-manager.min.js",
+                "size": 11875,
+                "hash": "aa30bab21eff1d03a5345acdeb3ff276"
+            },
+            {
+                "path": "\/js\\i18n\\i18n-manager.min.min.js",
+                "size": 11875,
+                "hash": "aa30bab21eff1d03a5345acdeb3ff276"
+            },
+            {
+                "path": "\/js\\i18n\\i18n-manager.min.min.min.js",
+                "size": 11875,
+                "hash": "aa30bab21eff1d03a5345acdeb3ff276"
+            },
+            {
+                "path": "\/js\\i18n\\i18n-manager.min.min.min.min.js",
+                "size": 11875,
+                "hash": "aa30bab21eff1d03a5345acdeb3ff276"
+            },
+            {
+                "path": "\/js\\i18n\\translations.min.js",
+                "size": 8725,
+                "hash": "6b21712081be8d52763c2c7cb8269deb"
+            },
+            {
+                "path": "\/js\\i18n\\translations.min.min.js",
+                "size": 8725,
+                "hash": "6b21712081be8d52763c2c7cb8269deb"
+            },
+            {
+                "path": "\/js\\i18n\\translations.min.min.min.js",
+                "size": 8725,
+                "hash": "6b21712081be8d52763c2c7cb8269deb"
+            },
+            {
+                "path": "\/js\\i18n\\translations.min.min.min.min.js",
+                "size": 8725,
+                "hash": "6b21712081be8d52763c2c7cb8269deb"
+            },
+            {
+                "path": "\/js\\integrated-detection-core.min.js",
+                "size": 63792,
+                "hash": "0b4f1dc599698d78084b231b67cee073"
+            },
+            {
+                "path": "\/js\\integrated-detection-core.min.min.js",
+                "size": 63792,
+                "hash": "0b4f1dc599698d78084b231b67cee073"
+            },
+            {
+                "path": "\/js\\integrated-detection-core.min.min.min.js",
+                "size": 63792,
+                "hash": "0b4f1dc599698d78084b231b67cee073"
+            },
+            {
+                "path": "\/js\\integrated-detection-core.min.min.min.min.js",
+                "size": 63792,
+                "hash": "0b4f1dc599698d78084b231b67cee073"
+            },
+            {
+                "path": "\/js\\integrated-detection-core.min.min.min.min.min.js",
+                "size": 63792,
+                "hash": "0b4f1dc599698d78084b231b67cee073"
+            },
+            {
+                "path": "\/js\\integrated-system-validator.min.js",
+                "size": 12698,
+                "hash": "134548d746a50ec8bf104e42a3851f93"
+            },
+            {
+                "path": "\/js\\integrated-system-validator.min.min.js",
+                "size": 12698,
+                "hash": "134548d746a50ec8bf104e42a3851f93"
+            },
+            {
+                "path": "\/js\\integrated-system-validator.min.min.min.js",
+                "size": 12698,
+                "hash": "134548d746a50ec8bf104e42a3851f93"
+            },
+            {
+                "path": "\/js\\integrated-system-validator.min.min.min.min.js",
+                "size": 12698,
+                "hash": "134548d746a50ec8bf104e42a3851f93"
+            },
+            {
+                "path": "\/js\\integrated-system-validator.min.min.min.min.min.js",
+                "size": 12698,
+                "hash": "134548d746a50ec8bf104e42a3851f93"
+            },
+            {
+                "path": "\/js\\intelligent-alert-system.min.js",
+                "size": 31138,
+                "hash": "e3573f504c00b780a33cdebbb35aeeee"
+            },
+            {
+                "path": "\/js\\intelligent-alert-system.min.min.js",
+                "size": 31138,
+                "hash": "e3573f504c00b780a33cdebbb35aeeee"
+            },
+            {
+                "path": "\/js\\intelligent-alert-system.min.min.min.js",
+                "size": 31138,
+                "hash": "e3573f504c00b780a33cdebbb35aeeee"
+            },
+            {
+                "path": "\/js\\intelligent-alert-system.min.min.min.min.js",
+                "size": 31138,
+                "hash": "e3573f504c00b780a33cdebbb35aeeee"
+            },
+            {
+                "path": "\/js\\intelligent-alert-system.min.min.min.min.min.js",
+                "size": 31138,
+                "hash": "e3573f504c00b780a33cdebbb35aeeee"
+            },
+            {
+                "path": "\/js\\intelligent-error-recovery.min.js",
+                "size": 16376,
+                "hash": "185a5de2ab99ca10f070b185726bed66"
+            },
+            {
+                "path": "\/js\\intelligent-error-recovery.min.min.js",
+                "size": 16376,
+                "hash": "185a5de2ab99ca10f070b185726bed66"
+            },
+            {
+                "path": "\/js\\intelligent-error-recovery.min.min.min.js",
+                "size": 16376,
+                "hash": "185a5de2ab99ca10f070b185726bed66"
+            },
+            {
+                "path": "\/js\\intelligent-error-recovery.min.min.min.min.js",
+                "size": 16376,
+                "hash": "185a5de2ab99ca10f070b185726bed66"
+            },
+            {
+                "path": "\/js\\main-fixed.min.js",
+                "size": 12218,
+                "hash": "0b86f0be06bf33467beaf6425ac035f2"
+            },
+            {
+                "path": "\/js\\main-fixed.min.min.js",
+                "size": 12218,
+                "hash": "0b86f0be06bf33467beaf6425ac035f2"
+            },
+            {
+                "path": "\/js\\main-fixed.min.min.min.js",
+                "size": 12218,
+                "hash": "0b86f0be06bf33467beaf6425ac035f2"
+            },
+            {
+                "path": "\/js\\main-fixed.min.min.min.min.js",
+                "size": 12218,
+                "hash": "0b86f0be06bf33467beaf6425ac035f2"
+            },
+            {
+                "path": "\/js\\main-fixed.min.min.min.min.min.js",
+                "size": 12218,
+                "hash": "0b86f0be06bf33467beaf6425ac035f2"
+            },
+            {
+                "path": "\/js\\main.min.js",
+                "size": 23732,
+                "hash": "8a2d7b5989a8f3158546d7805875e83a"
+            },
+            {
+                "path": "\/js\\main.min.min.js",
+                "size": 23732,
+                "hash": "8a2d7b5989a8f3158546d7805875e83a"
+            },
+            {
+                "path": "\/js\\main.min.min.min.js",
+                "size": 23732,
+                "hash": "8a2d7b5989a8f3158546d7805875e83a"
+            },
+            {
+                "path": "\/js\\main.min.min.min.min.js",
+                "size": 23732,
+                "hash": "8a2d7b5989a8f3158546d7805875e83a"
+            },
+            {
+                "path": "\/js\\main.min.min.min.min.min.js",
+                "size": 23732,
+                "hash": "8a2d7b5989a8f3158546d7805875e83a"
+            },
+            {
+                "path": "\/js\\marked.min.min.js",
+                "size": 37795,
+                "hash": "fb12ce3ee930b5c6930767cfb722019f"
+            },
+            {
+                "path": "\/js\\marked.min.min.min.js",
+                "size": 37795,
+                "hash": "fb12ce3ee930b5c6930767cfb722019f"
+            },
+            {
+                "path": "\/js\\marked.min.min.min.min.js",
+                "size": 37795,
+                "hash": "fb12ce3ee930b5c6930767cfb722019f"
+            },
+            {
+                "path": "\/js\\marked.min.min.min.min.min.js",
+                "size": 37795,
+                "hash": "fb12ce3ee930b5c6930767cfb722019f"
+            },
+            {
+                "path": "\/js\\marked.min.min.min.min.min.min.js",
+                "size": 37795,
+                "hash": "fb12ce3ee930b5c6930767cfb722019f"
+            },
+            {
+                "path": "\/js\\media-processing-system.min.js",
+                "size": 33014,
+                "hash": "95f324564ef71e0f4c320d6699c7ba87"
+            },
+            {
+                "path": "\/js\\media-processing-system.min.min.js",
+                "size": 33014,
+                "hash": "95f324564ef71e0f4c320d6699c7ba87"
+            },
+            {
+                "path": "\/js\\media-processing-system.min.min.min.js",
+                "size": 33014,
+                "hash": "95f324564ef71e0f4c320d6699c7ba87"
+            },
+            {
+                "path": "\/js\\media-processing-system.min.min.min.min.js",
+                "size": 33014,
+                "hash": "95f324564ef71e0f4c320d6699c7ba87"
+            },
+            {
+                "path": "\/js\\media-processing-system.min.min.min.min.min.js",
+                "size": 33014,
+                "hash": "95f324564ef71e0f4c320d6699c7ba87"
+            },
+            {
+                "path": "\/js\\message-functionality-test.min.js",
+                "size": 7228,
+                "hash": "fc75eef18ec62856ac8f80d5cf1e2e1f"
+            },
+            {
+                "path": "\/js\\message-functionality-test.min.min.js",
+                "size": 7228,
+                "hash": "fc75eef18ec62856ac8f80d5cf1e2e1f"
+            },
+            {
+                "path": "\/js\\message-functionality-test.min.min.min.js",
+                "size": 7228,
+                "hash": "fc75eef18ec62856ac8f80d5cf1e2e1f"
+            },
+            {
+                "path": "\/js\\message-functionality-test.min.min.min.min.js",
+                "size": 7228,
+                "hash": "fc75eef18ec62856ac8f80d5cf1e2e1f"
+            },
+            {
+                "path": "\/js\\message-functionality-test.min.min.min.min.min.js",
+                "size": 7228,
+                "hash": "fc75eef18ec62856ac8f80d5cf1e2e1f"
+            },
+            {
+                "path": "\/js\\migration\\localStorage-migrator.min.js",
+                "size": 7639,
+                "hash": "2c65a9ec575f2f0bab0135d00dae60b5"
+            },
+            {
+                "path": "\/js\\migration\\localStorage-migrator.min.min.js",
+                "size": 7639,
+                "hash": "2c65a9ec575f2f0bab0135d00dae60b5"
+            },
+            {
+                "path": "\/js\\migration\\localStorage-migrator.min.min.min.js",
+                "size": 7639,
+                "hash": "2c65a9ec575f2f0bab0135d00dae60b5"
+            },
+            {
+                "path": "\/js\\migration\\localStorage-migrator.min.min.min.min.js",
+                "size": 7639,
+                "hash": "2c65a9ec575f2f0bab0135d00dae60b5"
+            },
+            {
+                "path": "\/js\\minimalist-background.min.js",
+                "size": 4985,
+                "hash": "b8a84217995282111ab5775299b0b312"
+            },
+            {
+                "path": "\/js\\minimalist-background.min.min.js",
+                "size": 4985,
+                "hash": "b8a84217995282111ab5775299b0b312"
+            },
+            {
+                "path": "\/js\\minimalist-background.min.min.min.js",
+                "size": 4985,
+                "hash": "b8a84217995282111ab5775299b0b312"
+            },
+            {
+                "path": "\/js\\minimalist-background.min.min.min.min.js",
+                "size": 4985,
+                "hash": "b8a84217995282111ab5775299b0b312"
+            },
+            {
+                "path": "\/js\\minimalist-background.min.min.min.min.min.js",
+                "size": 4985,
+                "hash": "b8a84217995282111ab5775299b0b312"
+            },
+            {
+                "path": "\/js\\multi-auth-system.min.js",
+                "size": 21923,
+                "hash": "b3d2e95fb7267184ac00c63bce31467b"
+            },
+            {
+                "path": "\/js\\multi-auth-system.min.min.js",
+                "size": 21923,
+                "hash": "b3d2e95fb7267184ac00c63bce31467b"
+            },
+            {
+                "path": "\/js\\multi-auth-system.min.min.min.js",
+                "size": 21923,
+                "hash": "b3d2e95fb7267184ac00c63bce31467b"
+            },
+            {
+                "path": "\/js\\multi-auth-system.min.min.min.min.js",
+                "size": 21923,
+                "hash": "b3d2e95fb7267184ac00c63bce31467b"
+            },
+            {
+                "path": "\/js\\notification-system.min.js",
+                "size": 14247,
+                "hash": "18fee93972ec843e53e8ab8c8aee40fb"
+            },
+            {
+                "path": "\/js\\notification-system.min.min.js",
+                "size": 14247,
+                "hash": "18fee93972ec843e53e8ab8c8aee40fb"
+            },
+            {
+                "path": "\/js\\notification-system.min.min.min.js",
+                "size": 14247,
+                "hash": "18fee93972ec843e53e8ab8c8aee40fb"
+            },
+            {
+                "path": "\/js\\notification-system.min.min.min.min.js",
+                "size": 14247,
+                "hash": "18fee93972ec843e53e8ab8c8aee40fb"
+            },
+            {
+                "path": "\/js\\notification-system.min.min.min.min.min.js",
+                "size": 14247,
+                "hash": "18fee93972ec843e53e8ab8c8aee40fb"
+            },
+            {
+                "path": "\/js\\notifications.min.js",
+                "size": 2787,
+                "hash": "61d8d2e2e7233e94fc88946bb7342588"
+            },
+            {
+                "path": "\/js\\notifications.min.min.js",
+                "size": 2787,
+                "hash": "61d8d2e2e7233e94fc88946bb7342588"
+            },
+            {
+                "path": "\/js\\notifications.min.min.min.js",
+                "size": 2787,
+                "hash": "61d8d2e2e7233e94fc88946bb7342588"
+            },
+            {
+                "path": "\/js\\notifications.min.min.min.min.js",
+                "size": 2787,
+                "hash": "61d8d2e2e7233e94fc88946bb7342588"
+            },
+            {
+                "path": "\/js\\notifications.min.min.min.min.min.js",
+                "size": 2787,
+                "hash": "61d8d2e2e7233e94fc88946bb7342588"
+            },
+            {
+                "path": "\/js\\optimized\\background-systems.min.js",
+                "size": 12417,
+                "hash": "81e2186e9930db27c0812fac71bc3e55"
+            },
+            {
+                "path": "\/js\\optimized\\background-systems.min.min.js",
+                "size": 12417,
+                "hash": "81e2186e9930db27c0812fac71bc3e55"
+            },
+            {
+                "path": "\/js\\optimized\\background-systems.min.min.min.js",
+                "size": 12417,
+                "hash": "81e2186e9930db27c0812fac71bc3e55"
+            },
+            {
+                "path": "\/js\\optimized\\background-systems.min.min.min.min.js",
+                "size": 12417,
+                "hash": "81e2186e9930db27c0812fac71bc3e55"
+            },
+            {
+                "path": "\/js\\optimized\\core-quantum.min.js",
+                "size": 43520,
+                "hash": "3da16ffdbdaff452ceea2b2d30b51aa7"
+            },
+            {
+                "path": "\/js\\optimized\\core-quantum.min.min.js",
+                "size": 43520,
+                "hash": "3da16ffdbdaff452ceea2b2d30b51aa7"
+            },
+            {
+                "path": "\/js\\optimized\\core-quantum.min.min.min.js",
+                "size": 43520,
+                "hash": "3da16ffdbdaff452ceea2b2d30b51aa7"
+            },
+            {
+                "path": "\/js\\optimized\\core-quantum.min.min.min.min.js",
+                "size": 43520,
+                "hash": "3da16ffdbdaff452ceea2b2d30b51aa7"
+            },
+            {
+                "path": "\/js\\optimized\\ui-components.min.js",
+                "size": 14461,
+                "hash": "8412781563a04a3e4acec27ec5eca7f8"
+            },
+            {
+                "path": "\/js\\optimized\\ui-components.min.min.js",
+                "size": 14461,
+                "hash": "8412781563a04a3e4acec27ec5eca7f8"
+            },
+            {
+                "path": "\/js\\optimized\\ui-components.min.min.min.js",
+                "size": 14461,
+                "hash": "8412781563a04a3e4acec27ec5eca7f8"
+            },
+            {
+                "path": "\/js\\optimized\\ui-components.min.min.min.min.js",
+                "size": 14461,
+                "hash": "8412781563a04a3e4acec27ec5eca7f8"
+            },
+            {
+                "path": "\/js\\optimized\\validation-testing.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\optimized\\validation-testing.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\optimized\\validation-testing.min.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\optimized\\validation-testing.min.min.min.min.js",
+                "size": 6286,
+                "hash": "a6cf005af2569bd178f3f0cf0890efea"
+            },
+            {
+                "path": "\/js\\page-enhancements.min.js",
+                "size": 5732,
+                "hash": "2eb02863ff2375f03e0e2f20de191177"
+            },
+            {
+                "path": "\/js\\page-enhancements.min.min.js",
+                "size": 5732,
+                "hash": "2eb02863ff2375f03e0e2f20de191177"
+            },
+            {
+                "path": "\/js\\page-enhancements.min.min.min.js",
+                "size": 5732,
+                "hash": "2eb02863ff2375f03e0e2f20de191177"
+            },
+            {
+                "path": "\/js\\page-enhancements.min.min.min.min.js",
+                "size": 5732,
+                "hash": "2eb02863ff2375f03e0e2f20de191177"
+            },
+            {
+                "path": "\/js\\page-enhancements.min.min.min.min.min.js",
+                "size": 5732,
+                "hash": "2eb02863ff2375f03e0e2f20de191177"
+            },
+            {
+                "path": "\/js\\problem-fixer.min.js",
+                "size": 10534,
+                "hash": "492a2573c0b5b6ea88c1ce25909aa812"
+            },
+            {
+                "path": "\/js\\problem-fixer.min.min.js",
+                "size": 10534,
+                "hash": "492a2573c0b5b6ea88c1ce25909aa812"
+            },
+            {
+                "path": "\/js\\problem-fixer.min.min.min.js",
+                "size": 10534,
+                "hash": "492a2573c0b5b6ea88c1ce25909aa812"
+            },
+            {
+                "path": "\/js\\problem-fixer.min.min.min.min.js",
+                "size": 10534,
+                "hash": "492a2573c0b5b6ea88c1ce25909aa812"
+            },
+            {
+                "path": "\/js\\problem-fixer.min.min.min.min.min.js",
+                "size": 10534,
+                "hash": "492a2573c0b5b6ea88c1ce25909aa812"
+            },
+            {
+                "path": "\/js\\quantum-ball-detection.min.js",
+                "size": 12589,
+                "hash": "9a957439ac1bde864673810c331e952c"
+            },
+            {
+                "path": "\/js\\quantum-ball-detection.min.min.js",
+                "size": 12589,
+                "hash": "9a957439ac1bde864673810c331e952c"
+            },
+            {
+                "path": "\/js\\quantum-ball-detection.min.min.min.js",
+                "size": 12589,
+                "hash": "9a957439ac1bde864673810c331e952c"
+            },
+            {
+                "path": "\/js\\quantum-ball-detection.min.min.min.min.js",
+                "size": 12589,
+                "hash": "9a957439ac1bde864673810c331e952c"
+            },
+            {
+                "path": "\/js\\quantum-ball-detection.min.min.min.min.min.js",
+                "size": 12589,
+                "hash": "9a957439ac1bde864673810c331e952c"
+            },
+            {
+                "path": "\/js\\quantum-chat-integrator.min.js",
+                "size": 16473,
+                "hash": "4e6959f81f3f1f3d7182d21a85220601"
+            },
+            {
+                "path": "\/js\\quantum-chat-integrator.min.min.js",
+                "size": 16473,
+                "hash": "4e6959f81f3f1f3d7182d21a85220601"
+            },
+            {
+                "path": "\/js\\quantum-chat-integrator.min.min.min.js",
+                "size": 16473,
+                "hash": "4e6959f81f3f1f3d7182d21a85220601"
+            },
+            {
+                "path": "\/js\\quantum-chat-integrator.min.min.min.min.js",
+                "size": 16473,
+                "hash": "4e6959f81f3f1f3d7182d21a85220601"
+            },
+            {
+                "path": "\/js\\quantum-chat-integrator.min.min.min.min.min.js",
+                "size": 16473,
+                "hash": "4e6959f81f3f1f3d7182d21a85220601"
+            },
+            {
+                "path": "\/js\\quantum-demo.min.js",
+                "size": 7783,
+                "hash": "d0078f6598386b0055f355497f8ff59d"
+            },
+            {
+                "path": "\/js\\quantum-demo.min.min.js",
+                "size": 7783,
+                "hash": "d0078f6598386b0055f355497f8ff59d"
+            },
+            {
+                "path": "\/js\\quantum-demo.min.min.min.js",
+                "size": 7783,
+                "hash": "d0078f6598386b0055f355497f8ff59d"
+            },
+            {
+                "path": "\/js\\quantum-demo.min.min.min.min.js",
+                "size": 7783,
+                "hash": "d0078f6598386b0055f355497f8ff59d"
+            },
+            {
+                "path": "\/js\\quantum-demo.min.min.min.min.min.js",
+                "size": 7783,
+                "hash": "d0078f6598386b0055f355497f8ff59d"
+            },
+            {
+                "path": "\/js\\quantum-particles.min.js",
+                "size": 8705,
+                "hash": "088df613c2fa0f6a73da35a679fd9ddd"
+            },
+            {
+                "path": "\/js\\quantum-particles.min.min.js",
+                "size": 8705,
+                "hash": "088df613c2fa0f6a73da35a679fd9ddd"
+            },
+            {
+                "path": "\/js\\quantum-particles.min.min.min.js",
+                "size": 8705,
+                "hash": "088df613c2fa0f6a73da35a679fd9ddd"
+            },
+            {
+                "path": "\/js\\quantum-particles.min.min.min.min.js",
+                "size": 8705,
+                "hash": "088df613c2fa0f6a73da35a679fd9ddd"
+            },
+            {
+                "path": "\/js\\quantum-particles.min.min.min.min.min.js",
+                "size": 8705,
+                "hash": "088df613c2fa0f6a73da35a679fd9ddd"
+            },
+            {
+                "path": "\/js\\quick-test.min.js",
+                "size": 1714,
+                "hash": "d8fa13949e2bf07c492c64acf68481ef"
+            },
+            {
+                "path": "\/js\\quick-test.min.min.js",
+                "size": 1714,
+                "hash": "d8fa13949e2bf07c492c64acf68481ef"
+            },
+            {
+                "path": "\/js\\quick-test.min.min.min.js",
+                "size": 1714,
+                "hash": "d8fa13949e2bf07c492c64acf68481ef"
+            },
+            {
+                "path": "\/js\\quick-test.min.min.min.min.js",
+                "size": 1714,
+                "hash": "d8fa13949e2bf07c492c64acf68481ef"
+            },
+            {
+                "path": "\/js\\quick-test.min.min.min.min.min.js",
+                "size": 1714,
+                "hash": "d8fa13949e2bf07c492c64acf68481ef"
+            },
+            {
+                "path": "\/js\\real-time-security-dashboard.min.js",
+                "size": 17039,
+                "hash": "528dda5468c0f141620ed1d2abf85a13"
+            },
+            {
+                "path": "\/js\\real-time-security-dashboard.min.min.js",
+                "size": 17039,
+                "hash": "528dda5468c0f141620ed1d2abf85a13"
+            },
+            {
+                "path": "\/js\\real-time-security-dashboard.min.min.min.js",
+                "size": 17039,
+                "hash": "528dda5468c0f141620ed1d2abf85a13"
+            },
+            {
+                "path": "\/js\\real-time-security-dashboard.min.min.min.min.js",
+                "size": 17039,
+                "hash": "528dda5468c0f141620ed1d2abf85a13"
+            },
+            {
+                "path": "\/js\\realtime-monitor.min.js",
+                "size": 8160,
+                "hash": "74bdcd80503ba8bbe69cbe965e08f104"
+            },
+            {
+                "path": "\/js\\realtime-monitor.min.min.js",
+                "size": 8160,
+                "hash": "74bdcd80503ba8bbe69cbe965e08f104"
+            },
+            {
+                "path": "\/js\\realtime-monitor.min.min.min.js",
+                "size": 8160,
+                "hash": "74bdcd80503ba8bbe69cbe965e08f104"
+            },
+            {
+                "path": "\/js\\realtime-monitor.min.min.min.min.js",
+                "size": 8160,
+                "hash": "74bdcd80503ba8bbe69cbe965e08f104"
+            },
+            {
+                "path": "\/js\\realtime-monitor.min.min.min.min.min.js",
+                "size": 8160,
+                "hash": "74bdcd80503ba8bbe69cbe965e08f104"
+            },
+            {
+                "path": "\/js\\realtime-performance-dashboard.min.js",
+                "size": 18324,
+                "hash": "161b45298e455e9153ca34c19f2d6266"
+            },
+            {
+                "path": "\/js\\realtime-performance-dashboard.min.min.js",
+                "size": 18324,
+                "hash": "161b45298e455e9153ca34c19f2d6266"
+            },
+            {
+                "path": "\/js\\realtime-performance-dashboard.min.min.min.js",
+                "size": 18324,
+                "hash": "161b45298e455e9153ca34c19f2d6266"
+            },
+            {
+                "path": "\/js\\realtime-performance-dashboard.min.min.min.min.js",
+                "size": 18324,
+                "hash": "161b45298e455e9153ca34c19f2d6266"
+            },
+            {
+                "path": "\/js\\router\\router-manager.min.js",
+                "size": 10102,
+                "hash": "a999876db3ac12e889653d0b22f812be"
+            },
+            {
+                "path": "\/js\\router\\router-manager.min.min.js",
+                "size": 10102,
+                "hash": "a999876db3ac12e889653d0b22f812be"
+            },
+            {
+                "path": "\/js\\router\\router-manager.min.min.min.js",
+                "size": 10102,
+                "hash": "a999876db3ac12e889653d0b22f812be"
+            },
+            {
+                "path": "\/js\\router\\router-manager.min.min.min.min.js",
+                "size": 10102,
+                "hash": "a999876db3ac12e889653d0b22f812be"
+            },
+            {
+                "path": "\/js\\search-filter-system.min.js",
+                "size": 25276,
+                "hash": "74ce93812904e16653408202aace651d"
+            },
+            {
+                "path": "\/js\\search-filter-system.min.min.js",
+                "size": 25276,
+                "hash": "74ce93812904e16653408202aace651d"
+            },
+            {
+                "path": "\/js\\search-filter-system.min.min.min.js",
+                "size": 25276,
+                "hash": "74ce93812904e16653408202aace651d"
+            },
+            {
+                "path": "\/js\\search-filter-system.min.min.min.min.js",
+                "size": 25276,
+                "hash": "74ce93812904e16653408202aace651d"
+            },
+            {
+                "path": "\/js\\search-filter-system.min.min.min.min.min.js",
+                "size": 25276,
+                "hash": "74ce93812904e16653408202aace651d"
+            },
+            {
+                "path": "\/js\\services\\auth-service.min.js",
+                "size": 6726,
+                "hash": "de1eb4b78cdc26662d3f60e433ed9ef7"
+            },
+            {
+                "path": "\/js\\services\\auth-service.min.min.js",
+                "size": 6726,
+                "hash": "de1eb4b78cdc26662d3f60e433ed9ef7"
+            },
+            {
+                "path": "\/js\\services\\auth-service.min.min.min.js",
+                "size": 6726,
+                "hash": "de1eb4b78cdc26662d3f60e433ed9ef7"
+            },
+            {
+                "path": "\/js\\services\\auth-service.min.min.min.min.js",
+                "size": 6726,
+                "hash": "de1eb4b78cdc26662d3f60e433ed9ef7"
+            },
+            {
+                "path": "\/js\\services\\http-client.min.js",
+                "size": 5299,
+                "hash": "3174fa597eb0302ea7911157ede49448"
+            },
+            {
+                "path": "\/js\\services\\http-client.min.min.js",
+                "size": 5299,
+                "hash": "3174fa597eb0302ea7911157ede49448"
+            },
+            {
+                "path": "\/js\\services\\http-client.min.min.min.js",
+                "size": 5299,
+                "hash": "3174fa597eb0302ea7911157ede49448"
+            },
+            {
+                "path": "\/js\\services\\http-client.min.min.min.min.js",
+                "size": 5299,
+                "hash": "3174fa597eb0302ea7911157ede49448"
+            },
+            {
+                "path": "\/js\\services\\state-manager.min.js",
+                "size": 5509,
+                "hash": "c74f3dd8ab7808764aa501bc1cc87471"
+            },
+            {
+                "path": "\/js\\services\\state-manager.min.min.js",
+                "size": 5509,
+                "hash": "c74f3dd8ab7808764aa501bc1cc87471"
+            },
+            {
+                "path": "\/js\\services\\state-manager.min.min.min.js",
+                "size": 5509,
+                "hash": "c74f3dd8ab7808764aa501bc1cc87471"
+            },
+            {
+                "path": "\/js\\services\\state-manager.min.min.min.min.js",
+                "size": 5509,
+                "hash": "c74f3dd8ab7808764aa501bc1cc87471"
+            },
+            {
+                "path": "\/js\\services\\websocket-manager.min.js",
+                "size": 5091,
+                "hash": "e96713eae89309b5bd0afaf34ede0924"
+            },
+            {
+                "path": "\/js\\services\\websocket-manager.min.min.js",
+                "size": 5091,
+                "hash": "e96713eae89309b5bd0afaf34ede0924"
+            },
+            {
+                "path": "\/js\\services\\websocket-manager.min.min.min.js",
+                "size": 5091,
+                "hash": "e96713eae89309b5bd0afaf34ede0924"
+            },
+            {
+                "path": "\/js\\services\\websocket-manager.min.min.min.min.js",
+                "size": 5091,
+                "hash": "e96713eae89309b5bd0afaf34ede0924"
+            },
+            {
+                "path": "\/js\\simplified-tech-background.min.js",
+                "size": 0,
+                "hash": "d41d8cd98f00b204e9800998ecf8427e"
+            },
+            {
+                "path": "\/js\\simplified-tech-background.min.min.js",
+                "size": 0,
+                "hash": "d41d8cd98f00b204e9800998ecf8427e"
+            },
+            {
+                "path": "\/js\\simplified-tech-background.min.min.min.js",
+                "size": 0,
+                "hash": "d41d8cd98f00b204e9800998ecf8427e"
+            },
+            {
+                "path": "\/js\\simplified-tech-background.min.min.min.min.js",
+                "size": 0,
+                "hash": "d41d8cd98f00b204e9800998ecf8427e"
+            },
+            {
+                "path": "\/js\\social-customization.min.js",
+                "size": 20485,
+                "hash": "dbab9037b402ee46fd6f23af3aa0a841"
+            },
+            {
+                "path": "\/js\\social-customization.min.min.js",
+                "size": 20485,
+                "hash": "dbab9037b402ee46fd6f23af3aa0a841"
+            },
+            {
+                "path": "\/js\\social-customization.min.min.min.js",
+                "size": 20485,
+                "hash": "dbab9037b402ee46fd6f23af3aa0a841"
+            },
+            {
+                "path": "\/js\\system-error-handler.min.js",
+                "size": 6719,
+                "hash": "ff0fef02f980725fc241e60e41b184f4"
+            },
+            {
+                "path": "\/js\\system-error-handler.min.min.js",
+                "size": 6719,
+                "hash": "ff0fef02f980725fc241e60e41b184f4"
+            },
+            {
+                "path": "\/js\\system-error-handler.min.min.min.js",
+                "size": 6719,
+                "hash": "ff0fef02f980725fc241e60e41b184f4"
+            },
+            {
+                "path": "\/js\\system-error-handler.min.min.min.min.js",
+                "size": 6719,
+                "hash": "ff0fef02f980725fc241e60e41b184f4"
+            },
+            {
+                "path": "\/js\\system-health-checker.min.js",
+                "size": 2178,
+                "hash": "709bfbad131aeabae63f89106cef00f8"
+            },
+            {
+                "path": "\/js\\system-health-checker.min.min.js",
+                "size": 2178,
+                "hash": "709bfbad131aeabae63f89106cef00f8"
+            },
+            {
+                "path": "\/js\\system-health-checker.min.min.min.js",
+                "size": 2178,
+                "hash": "709bfbad131aeabae63f89106cef00f8"
+            },
+            {
+                "path": "\/js\\system-health-checker.min.min.min.min.js",
+                "size": 2178,
+                "hash": "709bfbad131aeabae63f89106cef00f8"
+            },
+            {
+                "path": "\/js\\system-integration-manager.min.js",
+                "size": 13806,
+                "hash": "0f9e12bb8ae149028878a42501dc6ddb"
+            },
+            {
+                "path": "\/js\\system-integration-manager.min.min.js",
+                "size": 13806,
+                "hash": "0f9e12bb8ae149028878a42501dc6ddb"
+            },
+            {
+                "path": "\/js\\system-integration-manager.min.min.min.js",
+                "size": 13806,
+                "hash": "0f9e12bb8ae149028878a42501dc6ddb"
+            },
+            {
+                "path": "\/js\\team-collaboration.min.js",
+                "size": 21685,
+                "hash": "8762f6caf1e6299af6a7042914c538a6"
+            },
+            {
+                "path": "\/js\\team-collaboration.min.min.js",
+                "size": 21685,
+                "hash": "8762f6caf1e6299af6a7042914c538a6"
+            },
+            {
+                "path": "\/js\\team-collaboration.min.min.min.js",
+                "size": 21685,
+                "hash": "8762f6caf1e6299af6a7042914c538a6"
+            },
+            {
+                "path": "\/js\\team-collaboration.min.min.min.min.js",
+                "size": 21685,
+                "hash": "8762f6caf1e6299af6a7042914c538a6"
+            },
+            {
+                "path": "\/js\\theme-system.min.js",
+                "size": 17523,
+                "hash": "bd5887297b2b8c20d7195f7490961aca"
+            },
+            {
+                "path": "\/js\\theme-system.min.min.js",
+                "size": 17523,
+                "hash": "bd5887297b2b8c20d7195f7490961aca"
+            },
+            {
+                "path": "\/js\\theme-system.min.min.min.js",
+                "size": 17523,
+                "hash": "bd5887297b2b8c20d7195f7490961aca"
+            },
+            {
+                "path": "\/js\\theme-system.min.min.min.min.js",
+                "size": 17523,
+                "hash": "bd5887297b2b8c20d7195f7490961aca"
+            },
+            {
+                "path": "\/js\\ui-components.min.js",
+                "size": 20617,
+                "hash": "d80b2fbd3c8af5ec689b19178259abc0"
+            },
+            {
+                "path": "\/js\\ui-components.min.min.js",
+                "size": 20617,
+                "hash": "d80b2fbd3c8af5ec689b19178259abc0"
+            },
+            {
+                "path": "\/js\\ui-components.min.min.min.js",
+                "size": 20617,
+                "hash": "d80b2fbd3c8af5ec689b19178259abc0"
+            },
+            {
+                "path": "\/js\\ui-components.min.min.min.min.js",
+                "size": 20617,
+                "hash": "d80b2fbd3c8af5ec689b19178259abc0"
+            },
+            {
+                "path": "\/js\\ui.min.js",
+                "size": 7519,
+                "hash": "28e7868d185deeb542272b3d4db7e96f"
+            },
+            {
+                "path": "\/js\\ui.min.min.js",
+                "size": 7519,
+                "hash": "28e7868d185deeb542272b3d4db7e96f"
+            },
+            {
+                "path": "\/js\\ui.min.min.min.js",
+                "size": 7519,
+                "hash": "28e7868d185deeb542272b3d4db7e96f"
+            },
+            {
+                "path": "\/js\\ui.min.min.min.min.js",
+                "size": 7519,
+                "hash": "28e7868d185deeb542272b3d4db7e96f"
+            },
+            {
+                "path": "\/js\\ultimate-performance-validator.min.js",
+                "size": 17642,
+                "hash": "8961accdf259af6c142d6b6280190935"
+            },
+            {
+                "path": "\/js\\ultimate-performance-validator.min.min.js",
+                "size": 17642,
+                "hash": "8961accdf259af6c142d6b6280190935"
+            },
+            {
+                "path": "\/js\\ultimate-performance-validator.min.min.min.js",
+                "size": 17642,
+                "hash": "8961accdf259af6c142d6b6280190935"
+            },
+            {
+                "path": "\/js\\unified-background-manager.min.js",
+                "size": 7432,
+                "hash": "75526985efd3ed314507e32b6009fa33"
+            },
+            {
+                "path": "\/js\\unified-background-manager.min.min.js",
+                "size": 7432,
+                "hash": "75526985efd3ed314507e32b6009fa33"
+            },
+            {
+                "path": "\/js\\unified-background-manager.min.min.min.js",
+                "size": 7432,
+                "hash": "75526985efd3ed314507e32b6009fa33"
+            },
+            {
+                "path": "\/js\\unified-background-manager.min.min.min.min.js",
+                "size": 7432,
+                "hash": "75526985efd3ed314507e32b6009fa33"
+            },
+            {
+                "path": "\/js\\utils\\helpers.min.js",
+                "size": 1712,
+                "hash": "0869db1a405c05bc9531b0cdb3ab198c"
+            },
+            {
+                "path": "\/js\\utils\\helpers.min.min.js",
+                "size": 1712,
+                "hash": "0869db1a405c05bc9531b0cdb3ab198c"
+            },
+            {
+                "path": "\/js\\utils\\helpers.min.min.min.js",
+                "size": 1712,
+                "hash": "0869db1a405c05bc9531b0cdb3ab198c"
+            },
+            {
+                "path": "\/js\\utils.min.js",
+                "size": 15721,
+                "hash": "4c2253da9c57eb75e49d71341a7e3aa2"
+            },
+            {
+                "path": "\/js\\utils.min.min.js",
+                "size": 15721,
+                "hash": "4c2253da9c57eb75e49d71341a7e3aa2"
+            },
+            {
+                "path": "\/js\\utils.min.min.min.js",
+                "size": 15721,
+                "hash": "4c2253da9c57eb75e49d71341a7e3aa2"
+            },
+            {
+                "path": "\/js\\utils.min.min.min.min.js",
+                "size": 15721,
+                "hash": "4c2253da9c57eb75e49d71341a7e3aa2"
+            },
+            {
+                "path": "\/js\\ux-validator.min.js",
+                "size": 10320,
+                "hash": "920d014b79abcf035816e84f7188cb74"
+            },
+            {
+                "path": "\/js\\ux-validator.min.min.js",
+                "size": 10320,
+                "hash": "920d014b79abcf035816e84f7188cb74"
+            },
+            {
+                "path": "\/js\\ux-validator.min.min.min.js",
+                "size": 10320,
+                "hash": "920d014b79abcf035816e84f7188cb74"
+            },
+            {
+                "path": "\/js\\ux-validator.min.min.min.min.js",
+                "size": 10320,
+                "hash": "920d014b79abcf035816e84f7188cb74"
+            },
+            {
+                "path": "\/js\\visualization-dashboard.min.js",
+                "size": 23765,
+                "hash": "c2dc8249e95b8d4d20809681e41c9d20"
+            },
+            {
+                "path": "\/js\\visualization-dashboard.min.min.js",
+                "size": 23765,
+                "hash": "c2dc8249e95b8d4d20809681e41c9d20"
+            },
+            {
+                "path": "\/js\\visualization-dashboard.min.min.min.js",
+                "size": 23765,
+                "hash": "c2dc8249e95b8d4d20809681e41c9d20"
+            },
+            {
+                "path": "\/js\\visualization-dashboard.min.min.min.min.js",
+                "size": 23765,
+                "hash": "c2dc8249e95b8d4d20809681e41c9d20"
+            },
+            {
+                "path": "\/js\\voice-utils.min.js",
+                "size": 2692,
+                "hash": "fe2db1ee98a15415695a03c680cac91a"
+            },
+            {
+                "path": "\/js\\voice-utils.min.min.js",
+                "size": 2692,
+                "hash": "fe2db1ee98a15415695a03c680cac91a"
+            },
+            {
+                "path": "\/js\\voice-utils.min.min.min.js",
+                "size": 2692,
+                "hash": "fe2db1ee98a15415695a03c680cac91a"
+            },
+            {
+                "path": "\/js\\voice-utils.min.min.min.min.js",
+                "size": 2692,
+                "hash": "fe2db1ee98a15415695a03c680cac91a"
+            },
+            {
+                "path": "\/js\\website-status-integration.min.js",
+                "size": 10241,
+                "hash": "63cc650a784f3766402cafc12beffd46"
+            },
+            {
+                "path": "\/js\\website-status-integration.min.min.js",
+                "size": 10241,
+                "hash": "63cc650a784f3766402cafc12beffd46"
+            },
+            {
+                "path": "\/js\\website-status-integration.min.min.min.js",
+                "size": 10241,
+                "hash": "63cc650a784f3766402cafc12beffd46"
+            },
+            {
+                "path": "\/js\\website-status-integration.min.min.min.min.js",
+                "size": 10241,
+                "hash": "63cc650a784f3766402cafc12beffd46"
+            },
+            {
+                "path": "\/js\\websocket-client.min.js",
+                "size": 10039,
+                "hash": "9d9f0edc405bac9ff0ec998a86782bac"
+            },
+            {
+                "path": "\/js\\websocket-client.min.min.js",
+                "size": 10039,
+                "hash": "9d9f0edc405bac9ff0ec998a86782bac"
+            },
+            {
+                "path": "\/js\\websocket-client.min.min.min.js",
+                "size": 10039,
+                "hash": "9d9f0edc405bac9ff0ec998a86782bac"
+            },
+            {
+                "path": "\/js\\websocket-client.min.min.min.min.js",
+                "size": 10039,
+                "hash": "9d9f0edc405bac9ff0ec998a86782bac"
+            },
+            {
+                "path": "\/js\\zero-trust-auth.min.js",
+                "size": 17409,
+                "hash": "7585d31bafa7f238404f4af03efab0e1"
+            },
+            {
+                "path": "\/js\\zero-trust-auth.min.min.js",
+                "size": 17409,
+                "hash": "7585d31bafa7f238404f4af03efab0e1"
+            },
+            {
+                "path": "\/js\\zero-trust-auth.min.min.min.js",
+                "size": 17409,
+                "hash": "7585d31bafa7f238404f4af03efab0e1"
+            }
+        ],
+        "images": [],
+        "fonts": []
+    },
+    "cache_strategy": {
+        "css": "max-age=31536000, immutable",
+        "js": "max-age=31536000, immutable",
+        "images": "max-age=2592000",
+        "fonts": "max-age=31536000, immutable",
+        "html": "max-age=3600"
+    }
+}

@@ -1,0 +1,76 @@
+{
+    "verification_time": "2025-06-09 08:24:51",
+    "system_version": "AlingAi Pro v4.0",
+    "file_integrity": {
+        "public\/index.html": {
+            "exists": true,
+            "description": "\u4e3b\u9875\u9762",
+            "size": 54280
+        },
+        "public\/login.html": {
+            "exists": true,
+            "description": "\u767b\u5f55\u9875\u9762",
+            "size": 24417
+        },
+        "public\/register.html": {
+            "exists": true,
+            "description": "\u6ce8\u518c\u9875\u9762",
+            "size": 41980
+        },
+        "public\/dashboard.html": {
+            "exists": true,
+            "description": "\u4eea\u8868\u677f\u9875\u9762",
+            "size": 36958
+        },
+        "public\/chat.html": {
+            "exists": true,
+            "description": "\u804a\u5929\u9875\u9762",
+            "size": 29538
+        },
+        "public\/api\/index.php": {
+            "exists": true,
+            "description": "API\u5165\u53e3",
+            "size": 17055
+        },
+        "public\/assets\/js\/main.js": {
+            "exists": true,
+            "description": "\u4e3b\u8981JavaScript",
+            "size": 39286
+        },
+        "public\/assets\/js\/auth.js": {
+            "exists": true,
+            "description": "\u8ba4\u8bc1\u811a\u672c",
+            "size": 10282
+        },
+        "public\/assets\/js\/ui.js": {
+            "exists": true,
+            "description": "UI\u63a7\u5236\u811a\u672c",
+            "size": 12876
+        },
+        "public\/assets\/css\/style.css": {
+            "exists": false,
+            "description": "\u4e3b\u6837\u5f0f\u8868",
+            "size": 0
+        },
+        "src\/Config\/config.php": {
+            "exists": true,
+            "description": "\u7cfb\u7edf\u914d\u7f6e",
+            "size": 1395
+        },
+        "storage\/data\/users.json": {
+            "exists": true,
+            "description": "\u7528\u6237\u6570\u636e",
+            "size": 2288
+        },
+        "storage\/data\/system_status.json": {
+            "exists": true,
+            "description": "\u7cfb\u7edf\u72b6\u6001",
+            "size": 134
+        }
+    },
+    "server_running": false,
+    "score": 8,
+    "max_score": 10,
+    "percentage": 80,
+    "status": "ready"
+}

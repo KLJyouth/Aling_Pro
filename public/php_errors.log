@@ -1,0 +1,78 @@
+[21-Jun-2025 13:43:13 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 13:43:13 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 13:43:13 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 13:43:13 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 13:43:15 Asia/Shanghai] [2025-06-21 13:43:15] FATAL ERROR: AlingAi\Core\CompleteRouterIntegration::__construct(): Argument #5 ($logger) must be of type ?Monolog\Logger, AlingAi\Core\Logger\SimpleLogger given, called in E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php on line 222 in E:\Code\AlingAi\AlingAi_pro\src\Core\CompleteRouterIntegration.php:43
+Stack trace:
+#0 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(222): AlingAi\Core\CompleteRouterIntegration->__construct(Object(Slim\App), Object(AlingAi\Services\DatabaseService), Object(AlingAi\Services\SecurityService), Object(AlingAi\Services\CacheService), Object(AlingAi\Core\Logger\SimpleLogger))
+#1 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(71): AlingAi\Core\AlingAiProApplication->setupRouting()
+#2 E:\Code\AlingAi\AlingAi_pro\public\index.php(80): AlingAi\Core\AlingAiProApplication->__construct()
+#3 {main}
+[21-Jun-2025 13:43:15 Asia/Shanghai] Application execution completed in 2.1126 seconds
+[21-Jun-2025 13:57:13 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 13:57:13 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 13:57:13 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 13:57:13 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 13:57:15 Asia/Shanghai] Slim Application Error
+Type: FastRoute\BadRouteException
+Code: 0
+Message: Cannot register two routes matching &quot;/api&quot; for method &quot;GET&quot;
+File: E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php
+Line: 86
+Trace: #0 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\DataGenerator\RegexBasedAbstract.php(30): FastRoute\DataGenerator\RegexBasedAbstract->addStaticRoute('GET', Array, 'route29')
+#1 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\RouteCollector.php(44): FastRoute\DataGenerator\RegexBasedAbstract->addRoute('GET', Array, 'route29')
+#2 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(34): FastRoute\RouteCollector->addRoute(Array, '/api', 'route29')
+#3 E:\Code\AlingAi\AlingAi_pro\vendor\nikic\fast-route\src\functions.php(25): Slim\Routing\Dispatcher->Slim\Routing\{closure}(Object(FastRoute\RouteCollector))
+#4 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(52): FastRoute\simpleDispatcher(Object(Closure), Array)
+#5 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\Dispatcher.php(65): Slim\Routing\Dispatcher->createDispatcher()
+#6 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Routing\RouteResolver.php(46): Slim\Routing\Dispatcher->dispatch('GET', '/')
+#7 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(95): Slim\Routing\RouteResolver->computeRoutingResults('/', 'GET')
+#8 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(61): Slim\Middleware\RoutingMiddleware->resolveRoutingResultsFromRequest(Object(Slim\Psr7\Request))
+#9 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\RoutingMiddleware.php(44): Slim\Middleware\RoutingMiddleware->performRouting(Object(Slim\Psr7\Request))
+#10 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\RoutingMiddleware->process(Object(Slim\Psr7\Request), Object(Slim\Routing\RouteRunner))
+#11 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\ErrorMiddleware.php(76): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#12 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\ErrorMiddleware->process(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#13 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(186): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#14 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(269): AlingAi\Core\AlingAiProApplication->AlingAi\Core\{closure}(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#15 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(197): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#16 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(269): AlingAi\Core\AlingAiProApplication->AlingAi\Core\{closure}(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#17 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\Middleware\BodyParsingMiddleware.php(64): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#18 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(121): Slim\Middleware\BodyParsingMiddleware->process(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#19 E:\Code\AlingAi\AlingAi_pro\src\Core\CompleteRouterIntegration.php(97): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#20 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(269): AlingAi\Core\CompleteRouterIntegration->AlingAi\Core\{closure}(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#21 E:\Code\AlingAi\AlingAi_pro\src\Core\CompleteRouterIntegration.php(107): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#22 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(269): AlingAi\Core\CompleteRouterIntegration->AlingAi\Core\{closure}(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#23 E:\Code\AlingAi\AlingAi_pro\src\Core\CompleteRouterIntegration.php(129): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#24 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(269): AlingAi\Core\CompleteRouterIntegration->AlingAi\Core\{closure}(Object(Slim\Psr7\Request), Object(Psr\Http\Server\RequestHandlerInterface@anonymous))
+#25 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\MiddlewareDispatcher.php(65): Psr\Http\Server\RequestHandlerInterface@anonymous->handle(Object(Slim\Psr7\Request))
+#26 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(199): Slim\MiddlewareDispatcher->handle(Object(Slim\Psr7\Request))
+#27 E:\Code\AlingAi\AlingAi_pro\vendor\slim\slim\Slim\App.php(183): Slim\App->handle(Object(Slim\Psr7\Request))
+#28 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(433): Slim\App->run()
+#29 E:\Code\AlingAi\AlingAi_pro\public\index.php(81): AlingAi\Core\AlingAiProApplication->run()
+#30 {main}
+[21-Jun-2025 13:57:15 Asia/Shanghai] Application execution completed in 2.0628 seconds
+[21-Jun-2025 14:02:13 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 14:02:13 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 14:02:13 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 14:02:13 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 14:02:17 Asia/Shanghai] Application execution completed in 3.8928 seconds
+[21-Jun-2025 14:02:31 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 14:02:31 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 14:02:31 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 14:02:31 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 14:02:33 Asia/Shanghai] Application execution completed in 2.0499 seconds
+[21-Jun-2025 14:02:39 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 14:02:39 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 14:02:39 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 14:02:39 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 14:02:41 Asia/Shanghai] Application execution completed in 2.0325 seconds
+[21-Jun-2025 14:02:44 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 14:02:44 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 14:02:44 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 14:02:44 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 14:02:46 Asia/Shanghai] Application execution completed in 2.0427 seconds
+[21-Jun-2025 14:03:02 Asia/Shanghai] === Starting AlingAi Pro Application ===
+[21-Jun-2025 14:03:02 Asia/Shanghai] APP_ROOT: E:\Code\AlingAi\AlingAi_pro
+[21-Jun-2025 14:03:02 Asia/Shanghai] APP_ENV: 
+[21-Jun-2025 14:03:02 Asia/Shanghai] Creating AlingAiProApplication instance...
+[21-Jun-2025 14:03:04 Asia/Shanghai] Application execution completed in 2.0557 seconds

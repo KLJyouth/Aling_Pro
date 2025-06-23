@@ -1,0 +1,60 @@
+parameters:
+    level: 8
+    paths:
+        - src
+        - app
+        - tests
+    
+    excludePaths:
+        - src/Database/migrations
+        - vendor
+        - storage
+        - bootstrap/cache
+        - node_modules
+    
+    # 缓存
+    tmpDir: storage/phpstan
+    
+    # 检查规则
+    checkMissingIterableValueType: true
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: true
+    treatPhpDocTypesAsCertain: false
+    
+    # 引导文件
+    bootstrapFiles:
+        - vendor/autoload.php
+    
+    # 忽略错误
+    ignoreErrors:
+        # Laravel 特定忽略
+        - '#Call to an undefined method Illuminate\\Database\\Eloquent\\Builder#'
+        - '#Call to an undefined method Illuminate\\Database\\Query\\Builder#'
+        - '#Property .* \(.*\) does not accept default value of type null#'
+        
+        # Facade 相关忽略
+        - '#Call to an undefined static method Illuminate\\Support\\Facades#'
+        
+        # 测试相关忽略
+        - '#Call to an undefined method PHPUnit\\Framework\\MockObject\\MockObject#'
+        - '#Cannot call method .* on PHPUnit\\Framework\\MockObject\\MockObject#'
+    
+    # 包含的检查器
+    includes:
+        - vendor/larastan/larastan/extension.neon
+        - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+        - vendor/phpstan/phpstan-strict-rules/rules.neon
+    
+    # 动态返回类型扩展
+    dynamicConstantNames:
+        - APP_DEBUG
+        - APP_ENV
+        - DB_CONNECTION
+        - CACHE_DRIVER
+        - SESSION_DRIVER
+        - QUEUE_CONNECTION
+    
+    # 自定义规则
+    rules:
+        - AlingAi\Pro\PHPStan\Rules\NoDebugStatementsRule
+        - AlingAi\Pro\PHPStan\Rules\NoDirectDBQueryRule

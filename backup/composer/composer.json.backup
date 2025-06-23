@@ -1,0 +1,75 @@
+{
+    "name": "alingai/pro",
+    "description": "AlingAi Pro - Advanced PHP-based AI Documentation Platform",
+    "type": "project",
+    "license": "MIT",
+    "version": "2.0.0",
+    "require": {
+        "php": ">=7.4.0",
+        "slim/slim": "^4.10",
+        "slim/psr7": "^1.6",
+        "firebase/php-jwt": "^5.0",
+        "vlucas/phpdotenv": "^5.5",
+        "illuminate/database": "^9.52",
+        "monolog/monolog": "^3.4",
+        "symfony/cache": "^6.3",
+        "guzzlehttp/guzzle": "^7.8",
+        "phpmailer/phpmailer": "^6.8",
+        "ramsey/uuid": "^4.7",
+        "league/flysystem": "^3.15",
+        "predis/predis": "^2.2",
+        "twig/twig": "^3.7",
+        "respect/validation": "^2.2",        "middlewares/cors": "^2.0",
+        "selective/transformer": "^1.1",
+        "nyholm/psr7": "^1.8",
+        "tuupola/slim-jwt-auth": "^3.7",
+        "doctrine/dbal": "^3.6",
+        "illuminate/pagination": "^9.52",
+        "league/oauth2-server": "^8.5",
+        "nesbot/carbon": "^2.70"
+    },    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "phpstan/phpstan": "^1.10",
+        "squizlabs/php_codesniffer": "^3.7",
+        "mockery/mockery": "^1.6",
+        "friendsofphp/php-cs-fixer": "^3.21",
+        "symfony/var-dumper": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "AlingAi\\": "src/",
+            "AlingAi\\Tests\\": "tests/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "scripts": {
+        "test": "pest",
+        "test:unit": "pest --testsuite=Unit",
+        "test:integration": "pest --testsuite=Integration",
+        "test:coverage": "pest --coverage",
+        "analyse": "phpstan analyse",
+        "cs:check": "php-cs-fixer fix --dry-run --diff",
+        "cs:fix": "php-cs-fixer fix",
+        "sniff": "phpcs",
+        "sniff:fix": "phpcbf",
+        "migrate": "php bin/migrate.php",
+        "seed": "php bin/seed.php",
+        "serve": "php -S localhost:8000 -t public/",
+        "dev": "php -S localhost:8000 -t public/ public/index.php",
+        "build": "composer install --optimize-autoloader --no-dev",
+        "production": "composer install --optimize-autoloader --no-dev && php bin/cache:clear",
+        "clear-cache": "php bin/cache:clear"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "*": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

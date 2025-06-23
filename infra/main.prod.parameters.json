@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "alingai-pro"
+    },
+    "environmentName": {
+      "value": "prod"
+    },
+    "location": {
+      "value": "East Asia"
+    },
+    "databaseAdminUsername": {
+      "value": "alingai_admin"
+    },
+    "databaseAdminPassword": {
+      "value": "请在部署时提供安全密码"
+    },
+    "deepSeekApiKey": {
+      "value": "请在部署时提供DeepSeek API密钥"
+    },
+    "smtpPassword": {
+      "value": "请在部署时提供SMTP密码"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+[07-Jun-2025 10:58:13 UTC] PHP Fatal error:  Uncaught Error: Undefined constant "AlingAi\Core\APP_ROOT" in E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php:94
+Stack trace:
+#0 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(60): AlingAi\Core\AlingAiProApplication->initializeLogger()
+#1 E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php(53): AlingAi\Core\AlingAiProApplication->__construct()
+#2 E:\Code\AlingAi\AlingAi_pro\public\debug.php(49): AlingAi\Core\AlingAiProApplication::create()
+#3 {main}
+  thrown in E:\Code\AlingAi\AlingAi_pro\src\Core\AlingAiProApplication.php on line 94

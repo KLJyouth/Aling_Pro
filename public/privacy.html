@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隐私政策 - AlingAi 珑凌AI智能平台</title>
+    <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-pink': '#FF2B75',
+                        'longling': '#6C13FF',
+                        'electric-blue': '#00D4FF'
+                    },
+                    fontFamily: {
+                        'heading': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .quantum-text {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF, #00D4FF);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: quantum-flow 3s ease-in-out infinite;
+        }
+
+        @keyframes quantum-flow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .privacy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .privacy-content h2 {
+            color: #00D4FF;
+            font-size: 1.8rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+        }
+
+        .privacy-content h3 {
+            color: #FF2B75;
+            font-size: 1.4rem;
+            margin: 1.5rem 0 1rem;
+            font-weight: 500;
+        }
+
+        .privacy-content p {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .privacy-content ul, .privacy-content ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+
+        .privacy-content li {
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .contact-info {
+            background: rgba(108, 19, 255, 0.1);
+            border: 1px solid rgba(108, 19, 255, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #00D4FF;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #FF2B75, #6C13FF);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 43, 117, 0.3);
+        }
+
+        .last-updated {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .privacy-content {
+                padding: 0 1rem;
+            }
+            
+            .privacy-content h2 {
+                font-size: 1.5rem;
+            }
+            
+            .privacy-content h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-body">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full z-50 glass-card bg-opacity-80 backdrop-blur-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <img src="/assets/images/assets/images/logo.svg" alt="AlingAi" class="h-8 w-auto" alt="">
+                    <span class="quantum-text text-xl font-heading">AlingAi</span>
+                </a>
+
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="nav-link">首页</a>
+                    <a href="/docs/template.html" class="nav-link">文档</a>
+                    <a href="/dashboard.html" class="nav-link">控制台</a>
+                    <a href="/contact.html" class="nav-link">联系我们</a>
+                    <a href="/privacy.html" class="nav-link text-electric-blue">隐私政策</a>
+                </div>
+
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 移动端菜单 -->
+    <div id="mobileMenu" class="fixed inset-0 z-40 hidden">
+        <div class="glass-card m-4 mt-20 p-6">
+            <div class="flex flex-col space-y-4">
+                <a href="/" class="nav-link">首页</a>
+                <a href="/docs/template.html" class="nav-link">文档</a>
+                <a href="/dashboard.html" class="nav-link">控制台</a>
+                <a href="/contact.html" class="nav-link">联系我们</a>
+                <a href="/privacy.html" class="nav-link text-electric-blue">隐私政策</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主要内容 -->
+    <main class="pt-24 pb-16">
+        <div class="container mx-auto px-4">
+            <!-- 页面标题 -->
+            <div class="text-center mb-12">
+                <h1 class="text-4xl font-heading quantum-text mb-4">隐私政策</h1>
+                <p class="text-lg text-gray-300">我们承诺保护您的隐私和数据安全</p>
+            </div>
+
+            <!-- 隐私政策内容 -->
+            <div class="glass-card p-8 privacy-content">
+                <div class="contact-info">
+                    <h4 class="text-lg font-semibold quantum-text mb-2">生效日期</h4>
+                    <p>本隐私政策于 2025年5月29日 生效，最后更新时间为 2025年5月29日。</p>
+                </div>
+
+                <h2>1. 引言</h2>
+                <p>
+                    欢迎使用AlingAi（珑凌AI智能平台）！我们深知个人信息对您的重要性，并会尽全力保护您的个人信息安全可靠。
+                    我们致力于维持您对我们的信任，恪守以下原则，保护您的个人信息：权责一致原则、目的明确原则、
+                    选择同意原则、最少够用原则、确保安全原则、主体参与原则、公开透明原则等。
+                </p>
+                <p>
+                    本隐私政策适用于您通过AlingAi平台、网站、移动应用程序和相关服务访问和使用我们服务的情形。
+                </p>
+
+                <h2>2. 我们收集的信息</h2>
+                
+                <h3>2.1 您主动提供的信息</h3>
+                <ul>
+                    <li><strong>账户信息：</strong>用户名、电子邮箱地址、密码等注册信息</li>
+                    <li><strong>个人资料：</strong>您选择提供的姓名、头像、联系方式等</li>
+                    <li><strong>交互内容：</strong>您与AI助手的对话记录、上传的文件和数据</li>
+                    <li><strong>反馈信息：</strong>您提供的意见、建议、问题报告等</li>
+                </ul>
+
+                <h3>2.2 自动收集的信息</h3>
+                <ul>
+                    <li><strong>设备信息：</strong>设备型号、操作系统、浏览器类型和版本</li>
+                    <li><strong>使用数据：</strong>访问时间、页面浏览记录、功能使用情况</li>
+                    <li><strong>网络信息：</strong>IP地址、网络连接类型</li>
+                    <li><strong>性能数据：</strong>系统响应时间、错误日志等技术信息</li>
+                </ul>
+
+                <h2>3. 信息使用目的</h2>
+                <p>我们收集和使用您的个人信息用于以下目的：</p>
+                <ol>
+                    <li><strong>服务提供：</strong>为您提供AI对话、文档处理、知识管理等核心功能</li>
+                    <li><strong>账户管理：</strong>创建和维护您的用户账户，进行身份验证</li>
+                    <li><strong>个性化体验：</strong>根据您的使用习惯优化服务体验</li>
+                    <li><strong>服务改进：</strong>分析使用数据以改进产品功能和性能</li>
+                    <li><strong>安全保障：</strong>检测和防范安全威胁，保护平台安全</li>
+                    <li><strong>客户支持：</strong>响应您的咨询和技术支持请求</li>
+                    <li><strong>法律合规：</strong>遵守适用的法律法规要求</li>
+                </ol>
+
+                <h2>4. 信息共享与披露</h2>
+                <p>我们不会出售、出租或以其他方式商业化您的个人信息。我们只会在以下情况下共享您的信息：</p>
+                
+                <h3>4.1 征得您的同意</h3>
+                <p>在获得您明确同意的情况下，我们可能会与第三方共享您的特定信息。</p>
+                
+                <h3>4.2 服务提供商</h3>
+                <p>我们可能与可信的第三方服务提供商共享信息，包括：</p>
+                <ul>
+                    <li>云存储和计算服务提供商</li>
+                    <li>数据分析和统计服务商</li>
+                    <li>技术基础设施服务商</li>
+                </ul>
+                
+                <h3>4.3 法律要求</h3>
+                <p>在法律要求或政府机关依法要求的情况下，我们可能会披露您的信息。</p>
+
+                <h2>5. 数据安全</h2>
+                <p>我们采用行业标准的安全措施保护您的个人信息：</p>
+                <ul>
+                    <li><strong>加密传输：</strong>使用HTTPS/TLS加密协议保护数据传输</li>
+                    <li><strong>加密存储：</strong>对敏感数据进行加密存储</li>
+                    <li><strong>访问控制：</strong>严格限制员工对个人信息的访问权限</li>
+                    <li><strong>安全监控：</strong>24/7安全监控和入侵检测系统</li>
+                    <li><strong>定期审计：</strong>定期进行安全评估和漏洞扫描</li>
+                    <li><strong>备份恢复：</strong>建立完善的数据备份和灾难恢复机制</li>
+                </ul>
+
+                <h2>6. 数据保留</h2>
+                <p>我们会根据以下原则保留您的个人信息：</p>
+                <ul>
+                    <li><strong>账户信息：</strong>在您的账户有效期内保留</li>
+                    <li><strong>对话记录：</strong>默认保留30天，您可以选择延长或立即删除</li>
+                    <li><strong>日志数据：</strong>通常保留90天用于系统维护和安全分析</li>
+                    <li><strong>法律要求：</strong>在法律法规要求的期限内保留相关数据</li>
+                </ul>
+
+                <h2>7. 您的权利</h2>
+                <p>根据适用的隐私法律，您享有以下权利：</p>
+                <ul>
+                    <li><strong>访问权：</strong>您有权了解我们处理您个人信息的情况</li>
+                    <li><strong>更正权：</strong>您有权要求我们更正错误的个人信息</li>
+                    <li><strong>删除权：</strong>在特定情况下，您有权要求删除您的个人信息</li>
+                    <li><strong>限制处理权：</strong>您有权要求限制对您个人信息的处理</li>
+                    <li><strong>数据可携权：</strong>您有权获取您的个人信息副本</li>
+                    <li><strong>撤回同意权：</strong>您有权随时撤回之前给予的同意</li>
+                </ul>
+
+                <h2>8. Cookie和类似技术</h2>
+                <p>我们使用Cookie和类似技术来：</p>
+                <ul>
+                    <li>保持您的登录状态</li>
+                    <li>记住您的偏好设置</li>
+                    <li>分析网站使用情况</li>
+                    <li>提供个性化体验</li>
+                </ul>
+                <p>您可以通过浏览器设置来控制Cookie的使用，但这可能会影响某些功能的正常使用。</p>
+
+                <h2>9. 国际数据传输</h2>
+                <p>
+                    我们的服务可能涉及跨境数据传输。在进行国际数据传输时，我们会确保：
+                </p>
+                <ul>
+                    <li>遵守适用的数据保护法律</li>
+                    <li>采用适当的安全保障措施</li>
+                    <li>与接收方签署数据传输协议</li>
+                    <li>在必要时获得您的明确同意</li>
+                </ul>
+
+                <h2>10. 未成年人保护</h2>
+                <p>
+                    我们的服务主要面向成年用户。如果您未满18周岁，请在父母或监护人的指导下使用我们的服务。
+                    如果我们发现在未获得适当同意的情况下收集了未成年人的个人信息，我们会尽快删除相关信息。
+                </p>
+
+                <h2>11. 隐私政策更新</h2>
+                <p>
+                    我们可能会不时更新本隐私政策。当我们对隐私政策进行重大变更时，我们会：
+                </p>
+                <ul>
+                    <li>在网站上发布更新通知</li>
+                    <li>通过电子邮件通知您（如适用）</li>
+                    <li>在应用程序中显示提醒</li>
+                    <li>为重大变更提供选择退出的机会</li>
+                </ul>
+
+                <h2>12. 联系我们</h2>
+                <div class="contact-info">
+                    <p>如果您对本隐私政策有任何疑问、意见或投诉，请通过以下方式联系我们：</p>
+                    <ul>
+                        <li><strong>邮箱：</strong> privacy@alingai.com</li>
+                        <li><strong>地址：</strong> 中国上海市浦东新区张江高科技园区</li>
+                        <li><strong>电话：</strong> +86 21-12345678</li>
+                        <li><strong>在线客服：</strong> <a href="/contact.html" class="text-electric-blue hover:underline">联系我们页面</a></li>
+                    </ul>
+                    <p>我们会在30天内回复您的隐私相关询问。</p>
+                </div>
+
+                <div class="last-updated">
+                    <p>本隐私政策最后更新时间：2025年5月29日</p>
+                    <p>© 2025 珑凌科技 AlingAi. 保留所有权利。</p>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="text-center mt-8">
+                <a href="/" class="btn-primary mr-4">
+                    <i class="fas fa-home mr-2"></i>
+                    返回首页
+                </a>
+                <a href="/contact.html" class="btn-primary">
+                    <i class="fas fa-envelope mr-2"></i>
+                    联系我们
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- JavaScript -->
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // 关闭移动菜单当点击外部区域
+        document.addEventListener('click', function(e) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const menuButton = e.target.closest('button');
+            
+            if (!mobileMenu.contains(e.target) && !menuButton) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
+        // 平滑滚动到锚点
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // 页面加载完成后的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('隐私政策页面加载完成');
+        });
+    </script>
+</body>
+</html>

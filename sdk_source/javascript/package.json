@@ -1,0 +1,28 @@
+{
+  "name": "alingai-sdk",
+  "version": "2.0.0",
+  "description": "AlingAI Platform JavaScript SDK - 量子安全API客户端库",
+  "main": "alingai.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "keywords": [
+    "alingai",
+    "quantum",
+    "security",
+    "ai",
+    "crypto"
+  ],
+  "author": "AlingAI Development Team <dev@alingai.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alingai/javascript-sdk.git"
+  },
+  "dependencies": {
+    "node-fetch": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

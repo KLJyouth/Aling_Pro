@@ -1,0 +1,13 @@
+{
+    "timestamp": "2025-06-03 12:55:32",
+    "php_version": "8.1.32",
+    "database_type": "file",
+    "storage_writable": true,
+    "cache_driver": "file",
+    "ai_services": {
+        "deepseek": false,
+        "baidu": false
+    },
+    "mail_configured": false,
+    "debug_mode": false
+}

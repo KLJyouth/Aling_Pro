@@ -1,0 +1,375 @@
+{
+    "timestamp": "2025-06-10 06:31:59",
+    "version": "5.0.0-Final",
+    "checks": [
+        {
+            "name": "PHP版本",
+            "passed": true,
+            "message": "当前版本: 8.1.32 (符合要求)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: pdo",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: pdo_sqlite",
+            "passed": false,
+            "message": "未加载",
+            "level": "error",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: curl",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: json",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: mbstring",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: openssl",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: filter",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: hash",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: fileinfo",
+            "passed": false,
+            "message": "未加载",
+            "level": "error",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP扩展: zip",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "可选扩展: redis",
+            "passed": false,
+            "message": "未加载",
+            "level": "warning",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "可选扩展: memcached",
+            "passed": false,
+            "message": "未加载",
+            "level": "warning",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "可选扩展: imagick",
+            "passed": false,
+            "message": "未加载",
+            "level": "warning",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "可选扩展: gd",
+            "passed": false,
+            "message": "未加载",
+            "level": "warning",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "PHP内存限制",
+            "passed": false,
+            "message": "当前: 128M (建议256MB+)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "最大执行时间",
+            "passed": true,
+            "message": "无限制",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: logs",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: storage",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: public",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: config",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: src",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: resources",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "目录: vendor",
+            "passed": true,
+            "message": "存在且可写",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "文件: 环境配置文件",
+            "passed": true,
+            "message": "存在 (.env)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "文件: Composer配置",
+            "passed": true,
+            "message": "存在 (composer.json)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "文件: 路由配置",
+            "passed": true,
+            "message": "存在 (config\/routes.php)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "文件: 安全控制器",
+            "passed": true,
+            "message": "存在 (src\/Controllers\/Frontend\/RealTimeSecurityController.php)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "文件: WebSocket服务器",
+            "passed": true,
+            "message": "存在 (src\/Security\/WebSocketSecurityServer.php)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "磁盘空间",
+            "passed": true,
+            "message": "可用: 278168.97MB, 使用率: 41.68%",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "Vendor目录",
+            "passed": true,
+            "message": "存在",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "Autoload文件",
+            "passed": true,
+            "message": "存在",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "依赖: Slim Framework",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "依赖: Monolog日志库",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "依赖: Guzzle HTTP客户端",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "依赖: PSR-7 HTTP消息接口",
+            "passed": true,
+            "message": "已加载",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "SQLite数据库文件",
+            "passed": true,
+            "message": "存在 (storage\/database.sqlite)",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "数据库连接",
+            "passed": false,
+            "message": "连接失败: could not find driver",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "端口 8000 (Web服务器)",
+            "passed": true,
+            "message": "可用\/被占用",
+            "level": "info",
+            "timestamp": "06:31:59"
+        },
+        {
+            "name": "端口 8080 (WebSocket服务器)",
+            "passed": false,
+            "message": "不可用",
+            "level": "info",
+            "timestamp": "06:32:00"
+        },
+        {
+            "name": "互联网连接",
+            "passed": true,
+            "message": "正常",
+            "level": "warning",
+            "timestamp": "06:32:00"
+        },
+        {
+            "name": "PHP进程",
+            "passed": true,
+            "message": "运行中 (3个进程)",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "日志: Web服务器日志",
+            "passed": false,
+            "message": "不存在",
+            "level": "warning",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "日志: WebSocket日志",
+            "passed": false,
+            "message": "不存在",
+            "level": "warning",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "日志: 安全监控日志",
+            "passed": false,
+            "message": "不存在",
+            "level": "warning",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "JWT密钥配置",
+            "passed": true,
+            "message": "已配置",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "加密密钥配置",
+            "passed": false,
+            "message": "使用默认值（不安全）",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "调试模式",
+            "passed": true,
+            "message": "已关闭（安全）",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "安全监控",
+            "passed": false,
+            "message": "未启用",
+            "level": "warning",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "CPU性能",
+            "passed": true,
+            "message": "计算耗时: 0.004秒",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "内存使用",
+            "passed": true,
+            "message": "当前: 2MB, 峰值: 2MB",
+            "level": "info",
+            "timestamp": "06:32:03"
+        },
+        {
+            "name": "磁盘I\/O性能",
+            "passed": false,
+            "message": "100KB读写耗时: 0.002秒",
+            "level": "warning",
+            "timestamp": "06:32:03"
+        }
+    ],
+    "overall_status": "critical",
+    "critical_issues": 6,
+    "warnings": 9,
+    "duration": 4.147,
+    "end_time": "2025-06-10 06:32:03"
+}

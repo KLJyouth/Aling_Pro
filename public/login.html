@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全登录 - AlingAi Pro</title>
+    <meta name="description" content="AlingAi Pro零信任安全登录系统">
+    
+    <!-- 核心资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- WebAuthn API支持 -->
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js" type="module"></script>
+    
+    <!-- 安全相关库 -->
+    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-purple': '#6B46C1',
+                        'quantum-blue': '#3B82F6',
+                        'quantum-cyan': '#06B6D4',
+                        'neon-green': '#10B981',
+                        'cyber-orange': '#F59E0B'
+                    },
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'sans': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        }
+        
+        .quantum-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(107, 70, 193, 0.8), transparent);
+            border-radius: 50%;
+            animation: quantumFloat 8s ease-in-out infinite;
+        }
+        
+        @keyframes quantumFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(15px) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-15px) translateX(-20px) rotate(180deg);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateY(-25px) translateX(25px) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+        
+        .security-indicator {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .security-indicator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3), transparent);
+            animation: securityScan 2s infinite;
+        }
+        
+        @keyframes securityScan {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .two-factor-input {
+            letter-spacing: 0.5em;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .biometric-scanner {
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            animation: biometricPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes biometricPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+                transform: scale(1.05);
+            }
+        }
+        
+        .auth-method-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .auth-method-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(107, 70, 193, 0.3);
+        }
+        
+        .security-level {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        
+        .progress-ring-circle {
+            stroke-dasharray: 283;
+            stroke-dashoffset: 283;
+            transition: stroke-dashoffset 0.35s;
+        }
+        
+        .device-trust-badge {
+            background: linear-gradient(135deg, #F59E0B, #D97706);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- 安全登录容器 -->
+    <div class="glassmorphism rounded-3xl p-8 w-full max-w-lg shadow-2xl z-10 relative">
+        <!-- 安全状态指示器 -->
+        <div class="absolute top-4 right-4 flex items-center space-x-2">
+            <div class="security-indicator w-3 h-3 bg-green-500 rounded-full"></div>
+            <span class="text-green-400 text-xs font-mono">SECURE</span>
+    </div>
+    
+        <!-- Logo和标题 -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto mb-4 glassmorphism rounded-full flex items-center justify-center">
+                <i class="fas fa-shield-halved text-3xl text-blue-400"></i>
+                        </div>
+            <h1 class="text-3xl font-bold text-white mb-2">零信任登录</h1>
+            <p class="text-gray-300">多重身份验证保护您的账户安全</p>
+            <div class="security-level mt-3 inline-block">
+                <i class="fas fa-lock mr-1"></i>军用级加密
+                        </div>
+                    </div>
+                    
+        <!-- 认证方式选择 -->
+        <div class="mb-6">
+            <div class="flex space-x-2 mb-4">
+                <button id="emailAuthBtn" class="auth-method-card glassmorphism flex-1 p-4 rounded-xl text-center active">
+                    <i class="fas fa-envelope text-blue-400 mb-2 block text-lg"></i>
+                    <span class="text-white text-sm">邮箱验证</span>
+                </button>
+                <button id="biometricAuthBtn" class="auth-method-card glassmorphism flex-1 p-4 rounded-xl text-center">
+                    <i class="fas fa-fingerprint text-green-400 mb-2 block text-lg"></i>
+                    <span class="text-white text-sm">生物识别</span>
+                </button>
+                <button id="socialAuthBtn" class="auth-method-card glassmorphism flex-1 p-4 rounded-xl text-center">
+                    <i class="fas fa-users text-purple-400 mb-2 block text-lg"></i>
+                    <span class="text-white text-sm">社交登录</span>
+                </button>
+            </div>
+                </div>
+                
+        <!-- 邮箱认证表单 -->
+        <div id="emailAuthForm" class="auth-form">
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-user mr-2"></i>用户名或邮箱
+                    </label>
+                    <input type="text" id="username" name="username" required
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="请输入用户名或邮箱地址">
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-lock mr-2"></i>密码
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" required
+                            class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all pr-12"
+                            placeholder="请输入密码">
+                        <button type="button" id="togglePassword" 
+                            class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 两步验证码 -->
+                <div id="twoFactorSection" class="hidden">
+                    <label class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-mobile-alt mr-2"></i>验证码
+                    </label>
+                    <input type="text" id="twoFactorCode" maxlength="6"
+                        class="two-factor-input w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all"
+                        placeholder="请输入6位验证码">
+                        </div>
+                        
+                <!-- 设备信任选项 -->
+                        <div class="flex items-center justify-between">
+                    <label class="flex items-center text-gray-300">
+                        <input type="checkbox" id="trustDevice" class="mr-2 rounded glassmorphism">
+                        <span class="text-sm">信任此设备</span>
+                        <div class="device-trust-badge ml-2">30天</div>
+                            </label>
+                    <a href="#" class="text-blue-400 hover:text-blue-300 text-sm transition-colors">
+                                忘记密码？
+                            </a>
+                        </div>
+                        
+                <button type="submit" id="loginBtn" class="btn-primary w-full py-3 rounded-lg font-semibold text-white transition-all transform hover:scale-105">
+                    <span class="mr-2">安全登录</span>
+                    <i class="fas fa-arrow-right"></i>
+                        </button>
+            </form>
+        </div>
+        
+        <!-- 生物识别认证 -->
+        <div id="biometricAuthForm" class="auth-form hidden">
+            <div class="text-center space-y-6">
+                <div class="biometric-scanner w-32 h-32 mx-auto rounded-full flex items-center justify-center">
+                    <i class="fas fa-fingerprint text-6xl text-green-400"></i>
+                </div>
+                                <div>
+                    <h3 class="text-xl font-semibold text-white mb-2">生物识别登录</h3>
+                    <p class="text-gray-300 mb-4">使用指纹、面部识别或其他生物特征进行安全登录</p>
+                    <button id="startBiometricAuth" class="btn-primary px-8 py-3 rounded-lg font-semibold text-white">
+                        <i class="fas fa-scan mr-2"></i>开始扫描
+                    </button>
+                </div>
+                                </div>
+                            </div>
+                            
+        <!-- 社交登录 -->
+        <div id="socialAuthForm" class="auth-form hidden">
+                            <div class="space-y-4">
+                <button id="qqLoginBtn" class="w-full glassmorphism p-4 rounded-lg text-white hover:bg-white/10 transition-all flex items-center justify-center">
+                    <i class="fab fa-qq text-blue-400 mr-3 text-xl"></i>
+                    <span>QQ 快速登录</span>
+                    <div class="security-level ml-auto">安全</div>
+                </button>
+                
+                <button id="wechatLoginBtn" class="w-full glassmorphism p-4 rounded-lg text-white hover:bg-white/10 transition-all flex items-center justify-center">
+                    <i class="fab fa-weixin text-green-400 mr-3 text-xl"></i>
+                    <span>微信 快速登录</span>
+                    <div class="security-level ml-auto">安全</div>
+                </button>
+                
+                <button id="googleLoginBtn" class="w-full glassmorphism p-4 rounded-lg text-white hover:bg-white/10 transition-all flex items-center justify-center">
+                    <i class="fab fa-google text-red-400 mr-3 text-xl"></i>
+                    <span>Google 登录</span>
+                    <div class="security-level ml-auto">全球</div>
+                                </button>
+                
+                <button id="githubLoginBtn" class="w-full glassmorphism p-4 rounded-lg text-white hover:bg-white/10 transition-all flex items-center justify-center">
+                    <i class="fab fa-github text-purple-400 mr-3 text-xl"></i>
+                    <span>GitHub 登录</span>
+                    <div class="security-level ml-auto">开发者</div>
+                                </button>
+                            </div>
+            
+            <!-- 社交登录后的邮箱绑定 -->
+            <div id="emailBindingSection" class="hidden mt-6 p-4 glassmorphism rounded-lg">
+                <h4 class="text-white font-semibold mb-3">
+                    <i class="fas fa-link mr-2"></i>绑定邮箱地址
+                </h4>
+                <p class="text-gray-300 text-sm mb-4">为了账户安全，请绑定您的邮箱地址</p>
+                <div class="space-y-4">
+                    <input type="email" id="bindingEmail" 
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="请输入邮箱地址">
+                    <button id="sendVerificationBtn" class="w-full btn-primary py-2 rounded-lg font-medium text-white">
+                        发送验证码
+                    </button>
+                    <input type="text" id="emailVerificationCode" maxlength="6"
+                        class="two-factor-input w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 hidden"
+                        placeholder="请输入邮箱验证码">
+                </div>
+                            </div>
+                        </div>
+                        
+        <!-- 登录进度 -->
+        <div id="loginProgress" class="hidden text-center mt-6">
+            <div class="progress-ring w-16 h-16 mx-auto mb-4">
+                <svg class="w-16 h-16">
+                    <circle class="progress-ring-circle stroke-current text-blue-400" 
+                        stroke-width="3" fill="transparent" r="45" cx="32" cy="32"/>
+                </svg>
+                            </div>
+            <p class="text-white font-medium" id="progressText">正在验证身份...</p>
+                        </div>
+                        
+        <!-- 注册链接 -->
+        <div class="text-center mt-8">
+            <p class="text-gray-300 mb-4">
+                还没有账户？
+                <a href="register-enhanced.html" class="text-blue-400 hover:text-blue-300 font-semibold transition-colors">
+                    立即注册
+                </a>
+            </p>
+            
+            <!-- 安全认证标识 -->
+            <div class="flex items-center justify-center space-x-4 text-xs text-gray-400">
+                <div class="flex items-center">
+                    <i class="fas fa-shield-alt mr-1"></i>
+                    <span>SSL加密</span>
+                    </div>
+                <div class="flex items-center">
+                    <i class="fas fa-user-shield mr-1"></i>
+                    <span>零信任架构</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-key mr-1"></i>
+                    <span>多重验证</span>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+                        
+    <!-- 消息提示 -->
+    <div id="messageContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    
+    <!-- 安全警告模态框 -->
+    <div id="securityModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="glassmorphism rounded-2xl p-6 max-w-md w-full">
+            <div class="text-center">
+                <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-2xl text-red-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-2">安全警告</h3>
+                <p class="text-gray-300 mb-6" id="securityWarningText"></p>
+                <div class="flex space-x-3">
+                    <button id="securityCancelBtn" class="flex-1 glassmorphism text-white py-2 rounded-lg hover:bg-white/10 transition-all">
+                        取消
+                    </button>
+                    <button id="securityConfirmBtn" class="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-all">
+                        继续
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // API配置
+        const API_ENDPOINTS = {
+            AUTH_LOGIN: '/api/v1/auth/login',
+            AUTH_2FA: '/api/v1/auth/2fa',
+            AUTH_BIOMETRIC: '/api/v1/auth/biometric',
+            AUTH_SOCIAL: '/api/v1/auth/social',
+            EMAIL_VERIFY: '/api/v1/auth/email-verify',
+            DEVICE_TRUST: '/api/v1/auth/device-trust'
+        };
+
+        // 全局状态
+        let currentAuthMethod = 'email';
+        let loginAttempts = 0;
+        let deviceFingerprint = null;
+        let twoFactorRequired = false;
+
+        class ZeroTrustLogin {
+            constructor() {
+                this.initializeQuantumBackground();
+                this.initializeEventListeners();
+                this.generateDeviceFingerprint();
+                this.checkDeviceTrust();
+            }
+
+            // 初始化量子粒子背景
+            initializeQuantumBackground() {
+                const container = document.getElementById('quantum-particles');
+                for (let i = 0; i < 100; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'quantum-particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.top = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 8 + 's';
+                    particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+                    container.appendChild(particle);
+                }
+            }
+
+            // 初始化事件监听器
+            initializeEventListeners() {
+                // 认证方式切换
+                document.getElementById('emailAuthBtn').addEventListener('click', () => this.switchAuthMethod('email'));
+                document.getElementById('biometricAuthBtn').addEventListener('click', () => this.switchAuthMethod('biometric'));
+                document.getElementById('socialAuthBtn').addEventListener('click', () => this.switchAuthMethod('social'));
+
+                // 密码显示切换
+                document.getElementById('togglePassword').addEventListener('click', this.togglePasswordVisibility);
+
+                // 登录表单提交
+                document.getElementById('loginForm').addEventListener('submit', (e) => this.handleEmailLogin(e));
+
+                // 生物识别登录
+                document.getElementById('startBiometricAuth').addEventListener('click', () => this.handleBiometricLogin());
+
+                // 社交登录按钮
+                document.getElementById('qqLoginBtn').addEventListener('click', () => this.handleSocialLogin('qq'));
+                document.getElementById('wechatLoginBtn').addEventListener('click', () => this.handleSocialLogin('wechat'));
+                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleSocialLogin('google'));
+                document.getElementById('githubLoginBtn').addEventListener('click', () => this.handleSocialLogin('github'));
+
+                // 邮箱验证
+                document.getElementById('sendVerificationBtn').addEventListener('click', () => this.sendEmailVerification());
+
+                // 安全模态框
+                document.getElementById('securityCancelBtn').addEventListener('click', () => this.hideSecurityModal());
+                document.getElementById('securityConfirmBtn').addEventListener('click', () => this.confirmSecurityAction());
+            }
+
+            // 切换认证方式
+            switchAuthMethod(method) {
+                currentAuthMethod = method;
+                    
+                    // 更新按钮状态
+                document.querySelectorAll('.auth-method-card').forEach(btn => btn.classList.remove('active'));
+                document.getElementById(method + 'AuthBtn').classList.add('active');
+
+                // 显示对应表单
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.add('hidden'));
+                document.getElementById(method + 'AuthForm').classList.remove('hidden');
+            }
+
+            // 生成设备指纹
+            generateDeviceFingerprint() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillText('Device fingerprint', 2, 2);
+                
+                const fingerprint = [
+                    navigator.userAgent,
+                    navigator.language,
+                    screen.width + 'x' + screen.height,
+                    new Date().getTimezoneOffset(),
+                    canvas.toDataURL()
+                ].join('|');
+                
+                deviceFingerprint = CryptoJS.SHA256(fingerprint).toString();
+            }
+
+            // 检查设备信任状态
+            checkDeviceTrust() {
+                const trustedDevices = JSON.parse(localStorage.getItem('trustedDevices') || '[]');
+                const isTrusted = trustedDevices.includes(deviceFingerprint);
+                
+                if (isTrusted) {
+                    this.showMessage('检测到受信任设备', 'info');
+                    document.getElementById('trustDevice').checked = true;
+                }
+            }
+
+            // 密码显示切换
+            togglePasswordVisibility() {
+                const passwordInput = document.getElementById('password');
+                const icon = document.querySelector('#togglePassword i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.className = 'fas fa-eye-slash';
+                } else {
+                    passwordInput.type = 'password';
+                    icon.className = 'fas fa-eye';
+                }
+            }
+
+            // 处理邮箱登录
+            async handleEmailLogin(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value;
+                const trustDevice = document.getElementById('trustDevice').checked;
+                const twoFactorCode = document.getElementById('twoFactorCode').value;
+                
+                if (!username || !password) {
+                    this.showMessage('请填写完整的登录信息', 'error');
+                    return;
+                }
+
+                loginAttempts++;
+                if (loginAttempts > 3) {
+                    this.showSecurityWarning('登录尝试次数过多，请稍后再试');
+                    return;
+                }
+
+                this.showLoginProgress('正在验证身份...');
+
+                try {
+                    const loginData = {
+                        username,
+                        password,
+                        deviceFingerprint,
+                        trustDevice,
+                        twoFactorCode: twoFactorRequired ? twoFactorCode : null
+                    };
+
+                    const response = await fetch(API_ENDPOINTS.AUTH_LOGIN, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Device-Fingerprint': deviceFingerprint
+                        },
+                        body: JSON.stringify(loginData)
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        if (data.requireTwoFactor) {
+                            this.showTwoFactorAuth();
+                            this.hideLoginProgress();
+                            this.showMessage('已发送验证码到您的设备', 'info');
+                            return;
+                        }
+
+                        // 登录成功
+                        await this.handleLoginSuccess(data);
+                    } else {
+                        throw new Error(data.error || '登录失败');
+                    }
+                } catch (error) {
+                    this.hideLoginProgress();
+                    this.showMessage(error.message, 'error');
+                    
+                    if (loginAttempts >= 3) {
+                        this.lockAccount();
+                    }
+                }
+            }
+
+            // 处理生物识别登录
+            async handleBiometricLogin() {
+                if (!window.PublicKeyCredential) {
+                    this.showMessage('您的浏览器不支持生物识别登录', 'error');
+                    return;
+                }
+
+                this.showLoginProgress('正在扫描生物特征...');
+
+                try {
+                    // 获取认证选项
+                    const credentialRequestOptions = {
+                        publicKey: {
+                            timeout: 60000,
+                            rpId: window.location.hostname,
+                            userVerification: 'required'
+                        }
+                    };
+
+                    const credential = await navigator.credentials.get(credentialRequestOptions);
+                    
+                    const response = await fetch(API_ENDPOINTS.AUTH_BIOMETRIC, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Device-Fingerprint': deviceFingerprint
+                        },
+                        body: JSON.stringify({
+                            credentialId: credential.id,
+                            authenticatorData: Array.from(new Uint8Array(credential.response.authenticatorData)),
+                            signature: Array.from(new Uint8Array(credential.response.signature)),
+                            deviceFingerprint
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        await this.handleLoginSuccess(data);
+                    } else {
+                        throw new Error(data.error || '生物识别验证失败');
+                    }
+                } catch (error) {
+                    this.hideLoginProgress();
+                    if (error.name === 'NotAllowedError') {
+                        this.showMessage('生物识别验证被取消', 'warning');
+                    } else {
+                        this.showMessage(error.message, 'error');
+                    }
+                }
+            }
+
+            // 处理社交登录
+            async handleSocialLogin(provider) {
+                this.showLoginProgress(`正在连接${provider.toUpperCase()}...`);
+
+                try {
+                    // 根据不同提供商处理OAuth流程
+                    let authUrl;
+                    switch (provider) {
+                        case 'qq':
+                            authUrl = `/api/auth/qq/authorize?state=${deviceFingerprint}`;
+                            break;
+                        case 'wechat':
+                            authUrl = `/api/auth/wechat/authorize?state=${deviceFingerprint}`;
+                            break;
+                        case 'google':
+                            authUrl = `/api/auth/google/authorize?state=${deviceFingerprint}`;
+                            break;
+                        case 'github':
+                            authUrl = `/api/auth/github/authorize?state=${deviceFingerprint}`;
+                            break;
+                    }
+
+                    // 打开OAuth窗口
+                    const authWindow = window.open(authUrl, 'socialAuth', 'width=600,height=600');
+                    
+                    // 监听OAuth回调
+                    const checkClosed = setInterval(() => {
+                        if (authWindow.closed) {
+                            clearInterval(checkClosed);
+                            this.hideLoginProgress();
+                            // 检查是否需要邮箱绑定
+                            this.checkSocialLoginResult();
+                        }
+                    }, 1000);
+
+                } catch (error) {
+                    this.hideLoginProgress();
+                    this.showMessage(`${provider}登录失败: ${error.message}`, 'error');
+                }
+            }
+
+            // 检查社交登录结果
+            async checkSocialLoginResult() {
+                try {
+                    const response = await fetch('/api/auth/social-status', {
+                        method: 'GET',
+                        headers: {
+                            'X-Device-Fingerprint': deviceFingerprint
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.success && data.token) {
+                        await this.handleLoginSuccess(data);
+                    } else if (data.requireEmailBinding) {
+                        this.showEmailBinding(data.socialData);
+                    } else {
+                        this.showMessage('社交登录失败，请重试', 'error');
+                    }
+                } catch (error) {
+                    this.showMessage('检查登录状态失败', 'error');
+                }
+            }
+
+            // 显示邮箱绑定
+            showEmailBinding(socialData) {
+                document.getElementById('emailBindingSection').classList.remove('hidden');
+                this.socialData = socialData;
+            }
+
+            // 发送邮箱验证码
+            async sendEmailVerification() {
+                const email = document.getElementById('bindingEmail').value.trim();
+                
+                if (!email || !this.isValidEmail(email)) {
+                    this.showMessage('请输入有效的邮箱地址', 'error');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(API_ENDPOINTS.EMAIL_VERIFY, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email,
+                            socialData: this.socialData
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        this.showMessage('验证码已发送到您的邮箱', 'success');
+                        document.getElementById('emailVerificationCode').classList.remove('hidden');
+                        
+                        // 启动倒计时
+                        this.startVerificationCountdown();
+                    } else {
+                        throw new Error(data.error || '验证码发送失败');
+                    }
+                } catch (error) {
+                    this.showMessage(error.message, 'error');
+                }
+            }
+
+            // 启动验证码倒计时
+            startVerificationCountdown() {
+                const btn = document.getElementById('sendVerificationBtn');
+                let countdown = 60;
+                
+                btn.disabled = true;
+                const timer = setInterval(() => {
+                    btn.textContent = `重新发送 (${countdown}s)`;
+                    countdown--;
+                    
+                    if (countdown < 0) {
+                        clearInterval(timer);
+                        btn.disabled = false;
+                        btn.textContent = '重新发送验证码';
+                    }
+            }, 1000);
+        }
+        
+            // 显示两步验证
+            showTwoFactorAuth() {
+                twoFactorRequired = true;
+                document.getElementById('twoFactorSection').classList.remove('hidden');
+                document.getElementById('twoFactorCode').focus();
+            }
+
+            // 处理登录成功
+            async handleLoginSuccess(data) {
+                this.showLoginProgress('登录成功，正在跳转...');
+                
+                // 存储认证令牌
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+                
+                if (data.apiKey) {
+                    localStorage.setItem('apiKey', data.apiKey);
+                }
+
+                // 如果信任设备，存储设备指纹
+                if (document.getElementById('trustDevice').checked) {
+                    const trustedDevices = JSON.parse(localStorage.getItem('trustedDevices') || '[]');
+                    if (!trustedDevices.includes(deviceFingerprint)) {
+                        trustedDevices.push(deviceFingerprint);
+                        localStorage.setItem('trustedDevices', JSON.stringify(trustedDevices));
+                    }
+                }
+
+                this.showMessage('登录成功！正在跳转...', 'success');
+                
+                // 跳转到仪表板
+            setTimeout(() => {
+                    const returnUrl = new URLSearchParams(window.location.search).get('return') || '/dashboard-enhanced.html';
+                    window.location.href = returnUrl;
+                }, 1500);
+            }
+
+            // 显示登录进度
+            showLoginProgress(text) {
+                document.getElementById('progressText').textContent = text;
+                document.getElementById('loginProgress').classList.remove('hidden');
+                
+                // 动画进度环
+                const circle = document.querySelector('.progress-ring-circle');
+                const circumference = 2 * Math.PI * 45;
+                circle.style.strokeDasharray = circumference;
+                circle.style.strokeDashoffset = circumference * 0.25;
+            }
+
+            // 隐藏登录进度
+            hideLoginProgress() {
+                document.getElementById('loginProgress').classList.add('hidden');
+            }
+
+            // 显示消息
+            showMessage(text, type = 'info', duration = 4000) {
+                const container = document.getElementById('messageContainer');
+                const message = document.createElement('div');
+                
+                const colors = {
+                    success: 'bg-green-500/90 text-white',
+                    error: 'bg-red-500/90 text-white',
+                    warning: 'bg-yellow-500/90 text-white',
+                    info: 'bg-blue-500/90 text-white'
+                };
+
+                message.className = `glassmorphism p-4 rounded-lg shadow-lg transform translate-x-full transition-all duration-300 ${colors[type]}`;
+                message.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas fa-${this.getMessageIcon(type)} mr-2"></i>
+                        <span>${text}</span>
+                    </div>
+                `;
+                
+                container.appendChild(message);
+                
+                // 显示动画
+                setTimeout(() => {
+                    message.style.transform = 'translateX(0)';
+                }, 100);
+                
+                // 自动隐藏
+                setTimeout(() => {
+                    message.style.transform = 'translateX(100%)';
+                    setTimeout(() => {
+                        if (message.parentNode) {
+                            message.parentNode.removeChild(message);
+                        }
+                    }, 300);
+                }, duration);
+            }
+
+            // 获取消息图标
+            getMessageIcon(type) {
+                const icons = {
+                    success: 'check-circle',
+                    error: 'exclamation-circle',
+                    warning: 'exclamation-triangle',
+                    info: 'info-circle'
+                };
+                return icons[type] || 'info-circle';
+            }
+
+            // 显示安全警告
+            showSecurityWarning(message) {
+                document.getElementById('securityWarningText').textContent = message;
+                document.getElementById('securityModal').classList.remove('hidden');
+            }
+
+            // 隐藏安全模态框
+            hideSecurityModal() {
+                document.getElementById('securityModal').classList.add('hidden');
+            }
+
+            // 确认安全操作
+            confirmSecurityAction() {
+                this.hideSecurityModal();
+                // 这里可以添加具体的安全操作逻辑
+            }
+
+            // 锁定账户
+            lockAccount() {
+                this.showSecurityWarning('账户已被临时锁定，请15分钟后重试');
+                setTimeout(() => {
+                    loginAttempts = 0;
+                }, 15 * 60 * 1000); // 15分钟
+            }
+
+            // 验证邮箱格式
+            isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+        }        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查是否已登录
+            if (localStorage.getItem('token')) {
+                const returnUrl = new URLSearchParams(window.location.search).get('return') || '/dashboard-enhanced.html';
+                window.location.href = returnUrl;
+                return;
+            }
+
+            // 初始化零信任登录系统
+            new ZeroTrustLogin();
+        });
+    </script>
+
+    <!-- 集成认证模块 -->
+    <script src="/assets/js/assets/js/api-config.js"></script>
+    <script src="/assets/js/assets/js/zero-trust-auth.js"></script>
+    <script src="/assets/js/assets/js/multi-auth-system.js"></script>
+    
+    <script>
+
+        // OAuth回调处理
+        window.addEventListener('message', (event) => {
+            if (event.origin !== window.location.origin) return;
+            
+            if (event.data.type === 'oauth-success') {
+                // 处理OAuth成功
+                window.location.reload();
+            } else if (event.data.type === 'oauth-error') {
+                // 处理OAuth错误
+                new ZeroTrustLogin().showMessage(event.data.error, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

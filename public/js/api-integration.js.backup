@@ -1,0 +1,1043 @@
+/**
+ * API集成接口模块
+ * 提供RESTful API、Webhooks、外部系统集成功能
+ * 
+ * 功能包括：
+ * - RESTful API 接口
+ * - Webhook 支持
+ * - 外部系统集成
+ * - API 密钥管理
+ * - 数据同步
+ * - 第三方服务集成
+ */
+
+class APIIntegration {
+    constructor() {
+        this.apiKey = null;
+        this.apiEndpoints = new Map();
+        this.webhookEndpoints = new Map();
+        this.externalServices = new Map();
+        this.syncQueue = [];
+        this.rateLimiter = new Map();
+        this.authTokens = new Map();
+        this.isInitialized = false;
+        
+        // API配置
+        this.config = {
+            baseUrl: '/api/v1',
+            timeout: 30000,
+            retryAttempts: 3,
+            rateLimitWindow: 60000, // 1分钟
+            maxRequestsPerWindow: 100,
+            enableWebhooks: true,
+            webhookSecret: null
+        };
+
+        // 支持的外部服务
+        this.supportedServices = {
+            slack: { name: 'Slack', icon: 'slack', color: '#4A154B' },
+            teams: { name: 'Microsoft Teams', icon: 'microsoft', color: '#6264A7' },
+            discord: { name: 'Discord', icon: 'discord', color: '#5865F2' },
+            email: { name: 'Email', icon: 'envelope', color: '#EA4335' },
+            webhook: { name: 'Custom Webhook', icon: 'webhook', color: '#28a745' },
+            grafana: { name: 'Grafana', icon: 'graph-up', color: '#F46800' },
+            prometheus: { name: 'Prometheus', icon: 'speedometer2', color: '#E6522C' },
+            elastic: { name: 'Elasticsearch', icon: 'search', color: '#005571' },
+            jira: { name: 'Jira', icon: 'kanban', color: '#0052CC' },
+            github: { name: 'GitHub', icon: 'github', color: '#24292e' }
+        };
+
+        
+    }
+
+    // ==================== 初始化方法 ====================
+
+    async initialize(detectionSystem) {
+        if (this.isInitialized) return;
+
+        this.detectionSystem = detectionSystem;
+        await this.loadConfiguration();
+        this.setupAPIEndpoints();
+        this.initializeWebhooks();
+        this.setupRateLimiting();
+        this.startSyncService();
+        
+        this.isInitialized = true;
+        
+    }
+
+    async loadConfiguration() {
+        try {
+            const savedConfig = localStorage.getItem('api-integration-config');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                this.config = { ...this.config, ...config };
+            }
+
+            // 加载API密钥
+            const savedApiKey = localStorage.getItem('api-integration-key');
+            if (savedApiKey) {
+                this.apiKey = savedApiKey;
+            }
+
+            // 加载外部服务配置
+            const savedServices = localStorage.getItem('external-services-config');
+            if (savedServices) {
+                const services = JSON.parse(savedServices);
+                services.forEach(service => {
+                    this.externalServices.set(service.id, service);
+                });
+            }
+
+            
+        } catch (error) {
+            console.error('❌ 配置加载失败:', error);
+        }
+    }
+
+    saveConfiguration() {
+        try {
+            localStorage.setItem('api-integration-config', JSON.stringify(this.config));
+            
+            if (this.apiKey) {
+                localStorage.setItem('api-integration-key', this.apiKey);
+            }
+
+            const services = Array.from(this.externalServices.values());
+            localStorage.setItem('external-services-config', JSON.stringify(services));
+
+            
+        } catch (error) {
+            console.error('❌ 配置保存失败:', error);
+        }
+    }
+
+    // ==================== RESTful API 接口 ====================
+
+    setupAPIEndpoints() {
+        // 检测结果API
+        this.apiEndpoints.set('GET /detection/results', {
+            handler: this.getDetectionResults.bind(this),
+            description: '获取检测结果',
+            auth: true
+        });
+
+        this.apiEndpoints.set('POST /detection/start', {
+            handler: this.startDetection.bind(this),
+            description: '启动检测',
+            auth: true
+        });
+
+        this.apiEndpoints.set('GET /detection/status', {
+            handler: this.getDetectionStatus.bind(this),
+            description: '获取检测状态',
+            auth: false
+        });
+
+        this.apiEndpoints.set('GET /detection/history', {
+            handler: this.getDetectionHistory.bind(this),
+            description: '获取检测历史',
+            auth: true
+        });
+
+        // 系统信息API
+        this.apiEndpoints.set('GET /system/info', {
+            handler: this.getSystemInfo.bind(this),
+            description: '获取系统信息',
+            auth: false
+        });
+
+        this.apiEndpoints.set('GET /system/metrics', {
+            handler: this.getSystemMetrics.bind(this),
+            description: '获取系统指标',
+            auth: true
+        });
+
+        // 配置管理API
+        this.apiEndpoints.set('GET /config', {
+            handler: this.getConfiguration.bind(this),
+            description: '获取配置',
+            auth: true
+        });
+
+        this.apiEndpoints.set('PUT /config', {
+            handler: this.updateConfiguration.bind(this),
+            description: '更新配置',
+            auth: true
+        });
+
+        
+    }
+
+    // API处理方法
+    async getDetectionResults(params) {
+        if (!this.detectionSystem) {
+            throw new Error('检测系统未初始化');
+        }
+
+        const results = Array.from(this.detectionSystem.testResults.entries()).map(([key, result]) => ({
+            testId: key,
+            status: result.status,
+            duration: result.duration,
+            timestamp: result.timestamp,
+            details: result.details
+        }));
+
+        return {
+            success: true,
+            data: {
+                results,
+                summary: {
+                    total: this.detectionSystem.totalTests,
+                    completed: this.detectionSystem.completedTests,
+                    passed: this.detectionSystem.passedTests,
+                    failed: this.detectionSystem.failedTests,
+                    successRate: this.detectionSystem.completedTests > 0 ? 
+                        (this.detectionSystem.passedTests / this.detectionSystem.completedTests * 100).toFixed(2) : 0
+                }
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async startDetection(params) {
+        if (!this.detectionSystem) {
+            throw new Error('检测系统未初始化');
+        }
+
+        const { type = 'full', tests = null } = params;
+
+        try {
+            if (type === 'custom' && tests) {
+                await this.detectionSystem.runCustomDetectionTests(tests);
+            } else if (type === 'quick') {
+                await this.detectionSystem.runQuickDetection();
+            } else {
+                await this.detectionSystem.runFullDetection();
+            }
+
+            return {
+                success: true,
+                message: '检测已启动',
+                sessionId: this.detectionSystem.currentSession.sessionId,
+                timestamp: Date.now()
+            };
+        } catch (error) {
+            throw new Error(`检测启动失败: ${error.message}`);
+        }
+    }
+
+    async getDetectionStatus(params) {
+        if (!this.detectionSystem) {
+            throw new Error('检测系统未初始化');
+        }
+
+        return {
+            success: true,
+            data: {
+                isRunning: this.detectionSystem.isRunning,
+                isPaused: this.detectionSystem.isPaused,
+                progress: this.detectionSystem.totalTests > 0 ? 
+                    (this.detectionSystem.completedTests / this.detectionSystem.totalTests * 100) : 0,
+                currentTest: this.detectionSystem.currentTest,
+                sessionId: this.detectionSystem.currentSession.sessionId,
+                autoDetectionEnabled: this.detectionSystem.autoDetectionEnabled
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async getDetectionHistory(params) {
+        if (!this.detectionSystem) {
+            throw new Error('检测系统未初始化');
+        }
+
+        const { limit = 50, offset = 0, startDate = null, endDate = null } = params;
+        let history = [...this.detectionSystem.testHistory];
+
+        // 日期过滤
+        if (startDate) {
+            history = history.filter(record => record.timestamp >= new Date(startDate).getTime());
+        }
+        if (endDate) {
+            history = history.filter(record => record.timestamp <= new Date(endDate).getTime());
+        }
+
+        // 分页
+        const total = history.length;
+        const records = history.slice(offset, offset + limit);
+
+        return {
+            success: true,
+            data: {
+                records,
+                pagination: {
+                    total,
+                    limit,
+                    offset,
+                    hasMore: offset + limit < total
+                }
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async getSystemInfo(params) {
+        return {
+            success: true,
+            data: {
+                version: '2.0.0',
+                environment: this.detectionSystem?.currentSession?.environment || {},
+                uptime: Date.now() - (this.detectionSystem?.currentSession?.startTime || Date.now()),
+                apiVersion: '1.0',
+                features: {
+                    notifications: true,
+                    visualization: true,
+                    apiIntegration: true,
+                    collaboration: false,
+                    intelligentAlerts: false
+                }
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async getSystemMetrics(params) {
+        if (!this.detectionSystem) {
+            throw new Error('检测系统未初始化');
+        }
+
+        const dashboardData = this.detectionSystem.getDashboardData();
+        
+        return {
+            success: true,
+            data: {
+                performance: dashboardData.performance,
+                overview: dashboardData.overview,
+                trends: dashboardData.trends,
+                realtime: dashboardData.realtime
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async getConfiguration(params) {
+        return {
+            success: true,
+            data: {
+                config: this.config,
+                endpoints: Array.from(this.apiEndpoints.keys()),
+                webhooks: Array.from(this.webhookEndpoints.keys()),
+                services: Array.from(this.externalServices.values())
+            },
+            timestamp: Date.now()
+        };
+    }
+
+    async updateConfiguration(params) {
+        try {
+            const { config, webhooks, services } = params;
+
+            if (config) {
+                this.config = { ...this.config, ...config };
+            }
+
+            if (webhooks) {
+                webhooks.forEach(webhook => {
+                    this.addWebhook(webhook.event, webhook.url, webhook.options);
+                });
+            }
+
+            if (services) {
+                services.forEach(service => {
+                    this.addExternalService(service);
+                });
+            }
+
+            this.saveConfiguration();
+
+            return {
+                success: true,
+                message: '配置已更新',
+                timestamp: Date.now()
+            };
+        } catch (error) {
+            throw new Error(`配置更新失败: ${error.message}`);
+        }
+    }
+
+    // ==================== API请求处理 ====================
+
+    async handleAPIRequest(method, path, params = {}, headers = {}) {
+        const endpoint = `${method} ${path}`;
+        const apiEndpoint = this.apiEndpoints.get(endpoint);
+
+        if (!apiEndpoint) {
+            throw new Error(`API端点不存在: ${endpoint}`);
+        }
+
+        // 身份验证检查
+        if (apiEndpoint.auth && !this.verifyAuth(headers)) {
+            throw new Error('身份验证失败');
+        }
+
+        // 速率限制检查
+        if (!this.checkRateLimit(headers.clientId || 'default')) {
+            throw new Error('请求频率过高，请稍后再试');
+        }
+
+        try {
+            const result = await apiEndpoint.handler(params);
+            this.logAPIUsage(endpoint, 'success', headers);
+            return result;
+        } catch (error) {
+            this.logAPIUsage(endpoint, 'error', headers, error);
+            throw error;
+        }
+    }
+
+    verifyAuth(headers) {
+        const authHeader = headers.authorization || headers.Authorization;
+        if (!authHeader) return false;
+
+        const token = authHeader.replace('Bearer ', '');
+        return token === this.apiKey || this.authTokens.has(token);
+    }
+
+    checkRateLimit(clientId) {
+        const now = Date.now();
+        const windowStart = now - this.config.rateLimitWindow;
+
+        if (!this.rateLimiter.has(clientId)) {
+            this.rateLimiter.set(clientId, []);
+        }
+
+        const requests = this.rateLimiter.get(clientId);
+        
+        // 清理过期请求
+        const validRequests = requests.filter(timestamp => timestamp > windowStart);
+        this.rateLimiter.set(clientId, validRequests);
+
+        // 检查是否超过限制
+        if (validRequests.length >= this.config.maxRequestsPerWindow) {
+            return false;
+        }
+
+        // 记录当前请求
+        validRequests.push(now);
+        return true;
+    }
+
+    logAPIUsage(endpoint, status, headers, error = null) {
+        const logEntry = {
+            timestamp: Date.now(),
+            endpoint,
+            status,
+            clientId: headers.clientId || 'unknown',
+            userAgent: headers.userAgent || headers['user-agent'] || 'unknown',
+            error: error ? error.message : null
+        };
+
+        // 这里可以发送到日志系统或分析服务
+        
+    }
+
+    // ==================== Webhook 支持 ====================
+
+    initializeWebhooks() {
+        // 预定义的webhook事件
+        const webhookEvents = [
+            'detection.started',
+            'detection.completed',
+            'detection.failed',
+            'test.passed',
+            'test.failed',
+            'system.error',
+            'performance.threshold',
+            'auto.detection.enabled',
+            'auto.detection.disabled'
+        ];
+
+        webhookEvents.forEach(event => {
+            this.webhookEndpoints.set(event, new Set());
+        });
+
+        
+    }
+
+    addWebhook(event, url, options = {}) {
+        if (!this.webhookEndpoints.has(event)) {
+            this.webhookEndpoints.set(event, new Set());
+        }
+
+        const webhook = {
+            url,
+            options: {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'User-Agent': 'AlingAi-Detection-System/2.0'
+                },
+                timeout: 5000,
+                retryAttempts: 3,
+                ...options
+            },
+            createdAt: Date.now(),
+            lastTriggered: null,
+            triggerCount: 0
+        };
+
+        this.webhookEndpoints.get(event).add(webhook);
+        
+        
+        this.saveConfiguration();
+        return webhook;
+    }
+
+    removeWebhook(event, url) {
+        if (!this.webhookEndpoints.has(event)) return false;
+
+        const webhooks = this.webhookEndpoints.get(event);
+        const webhook = Array.from(webhooks).find(w => w.url === url);
+        
+        if (webhook) {
+            webhooks.delete(webhook);
+            
+            this.saveConfiguration();
+            return true;
+        }
+        
+        return false;
+    }
+
+    async triggerWebhook(event, data) {
+        if (!this.config.enableWebhooks || !this.webhookEndpoints.has(event)) {
+            return;
+        }
+
+        const webhooks = this.webhookEndpoints.get(event);
+        if (webhooks.size === 0) return;
+
+        const payload = {
+            event,
+            timestamp: Date.now(),
+            data,
+            source: 'AlingAi-Detection-System',
+            version: '2.0.0'
+        };
+
+        // 添加签名（如果配置了密钥）
+        if (this.config.webhookSecret) {
+            payload.signature = this.generateWebhookSignature(payload);
+        }
+
+        const promises = Array.from(webhooks).map(webhook => 
+            this.sendWebhook(webhook, payload)
+        );
+
+        try {
+            await Promise.allSettled(promises);
+            
+        } catch (error) {
+            console.error('❌ Webhook触发失败:', error);
+        }
+    }
+
+    async sendWebhook(webhook, payload) {
+        for (let attempt = 1; attempt <= webhook.options.retryAttempts; attempt++) {
+            try {
+                const response = await fetch(webhook.url, {
+                    method: webhook.options.method,
+                    headers: webhook.options.headers,
+                    body: JSON.stringify(payload),
+                    timeout: webhook.options.timeout
+                });
+
+                if (response.ok) {
+                    webhook.lastTriggered = Date.now();
+                    webhook.triggerCount++;
+                    return response;
+                }
+
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            } catch (error) {
+                if (attempt === webhook.options.retryAttempts) {
+                    console.error(`❌ Webhook发送失败 (${webhook.url}):`, error);
+                    throw error;
+                }
+                
+                // 指数退避
+                await this.delay(Math.pow(2, attempt) * 1000);
+            }
+        }
+    }
+
+    generateWebhookSignature(payload) {
+        // 简单的HMAC-SHA256签名实现
+        const message = JSON.stringify(payload);
+        // 这里应该使用真正的HMAC-SHA256，这只是示例
+        return btoa(this.config.webhookSecret + message).slice(0, 32);
+    }
+
+    // ==================== 外部系统集成 ====================
+
+    addExternalService(serviceConfig) {
+        const service = {
+            id: serviceConfig.id || this.generateId(),
+            type: serviceConfig.type,
+            name: serviceConfig.name,
+            config: serviceConfig.config || {},
+            enabled: serviceConfig.enabled !== false,
+            createdAt: Date.now(),
+            lastUsed: null,
+            usageCount: 0
+        };
+
+        this.externalServices.set(service.id, service);
+        console.log(`🔗 已添加外部服务: ${service.name} (${service.type})`);
+        
+        this.saveConfiguration();
+        return service;
+    }
+
+    removeExternalService(serviceId) {
+        if (this.externalServices.has(serviceId)) {
+            const service = this.externalServices.get(serviceId);
+            this.externalServices.delete(serviceId);
+            
+            this.saveConfiguration();
+            return true;
+        }
+        return false;
+    }
+
+    async sendToExternalService(serviceId, data, event = null) {
+        const service = this.externalServices.get(serviceId);
+        if (!service || !service.enabled) {
+            throw new Error('外部服务不存在或已禁用');
+        }
+
+        try {
+            let result;
+            
+            switch (service.type) {
+                case 'slack':
+                    result = await this.sendToSlack(service, data, event);
+                    break;
+                case 'teams':
+                    result = await this.sendToTeams(service, data, event);
+                    break;
+                case 'discord':
+                    result = await this.sendToDiscord(service, data, event);
+                    break;
+                case 'email':
+                    result = await this.sendEmail(service, data, event);
+                    break;
+                case 'webhook':
+                    result = await this.sendCustomWebhook(service, data, event);
+                    break;
+                case 'grafana':
+                    result = await this.sendToGrafana(service, data, event);
+                    break;
+                case 'prometheus':
+                    result = await this.sendToPrometheus(service, data, event);
+                    break;
+                default:
+                    throw new Error(`不支持的服务类型: ${service.type}`);
+            }
+
+            service.lastUsed = Date.now();
+            service.usageCount++;
+            this.saveConfiguration();
+
+            return result;
+        } catch (error) {
+            console.error(`❌ 发送到外部服务失败 (${service.name}):`, error);
+            throw error;
+        }
+    }
+
+    // 具体的外部服务发送方法
+    async sendToSlack(service, data, event) {
+        const webhook_url = service.config.webhookUrl;
+        if (!webhook_url) {
+            throw new Error('Slack Webhook URL未配置');
+        }
+
+        const message = this.formatSlackMessage(data, event);
+        
+        const response = await fetch(webhook_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(message)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Slack发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'slack' };
+    }
+
+    async sendToTeams(service, data, event) {
+        const webhook_url = service.config.webhookUrl;
+        if (!webhook_url) {
+            throw new Error('Teams Webhook URL未配置');
+        }
+
+        const message = this.formatTeamsMessage(data, event);
+        
+        const response = await fetch(webhook_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(message)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Teams发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'teams' };
+    }
+
+    async sendToDiscord(service, data, event) {
+        const webhook_url = service.config.webhookUrl;
+        if (!webhook_url) {
+            throw new Error('Discord Webhook URL未配置');
+        }
+
+        const message = this.formatDiscordMessage(data, event);
+        
+        const response = await fetch(webhook_url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(message)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Discord发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'discord' };
+    }
+
+    async sendEmail(service, data, event) {
+        // 这里需要实际的邮件发送服务
+        
+        return { success: true, service: 'email', note: '需要后端邮件服务' };
+    }
+
+    async sendCustomWebhook(service, data, event) {
+        const url = service.config.url;
+        if (!url) {
+            throw new Error('Webhook URL未配置');
+        }
+
+        const payload = {
+            event,
+            data,
+            timestamp: Date.now(),
+            source: 'AlingAi-Detection-System'
+        };
+
+        const response = await fetch(url, {
+            method: service.config.method || 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...service.config.headers
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Webhook发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'webhook' };
+    }
+
+    async sendToGrafana(service, data, event) {
+        // Grafana注解API
+        const url = `${service.config.url}/api/annotations`;
+        const apiKey = service.config.apiKey;
+
+        if (!url || !apiKey) {
+            throw new Error('Grafana配置不完整');
+        }
+
+        const annotation = {
+            text: this.formatGrafanaAnnotation(data, event),
+            tags: ['alingai', 'detection', event],
+            time: Date.now(),
+            isRegion: false
+        };
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(annotation)
+        });
+
+        if (!response.ok) {
+            throw new Error(`Grafana发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'grafana' };
+    }
+
+    async sendToPrometheus(service, data, event) {
+        // Prometheus Pushgateway
+        const url = service.config.pushgatewayUrl;
+        if (!url) {
+            throw new Error('Prometheus Pushgateway URL未配置');
+        }
+
+        const metrics = this.formatPrometheusMetrics(data, event);
+        
+        const response = await fetch(`${url}/metrics/job/alingai_detection`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: metrics
+        });
+
+        if (!response.ok) {
+            throw new Error(`Prometheus发送失败: ${response.statusText}`);
+        }
+
+        return { success: true, service: 'prometheus' };
+    }
+
+    // ==================== 消息格式化方法 ====================
+
+    formatSlackMessage(data, event) {
+        const color = this.getEventColor(event);
+        const emoji = this.getEventEmoji(event);
+        
+        return {
+            attachments: [{
+                color,
+                blocks: [{
+                    type: 'section',
+                    text: {
+                        type: 'mrkdwn',
+                        text: `${emoji} *AlingAi检测系统通知*\n\n*事件:* ${event}\n*时间:* ${new Date().toLocaleString()}`
+                    }
+                }, {
+                    type: 'section',
+                    fields: this.formatDataFields(data)
+                }]
+            }]
+        };
+    }
+
+    formatTeamsMessage(data, event) {
+        const color = this.getEventColor(event);
+        const emoji = this.getEventEmoji(event);
+        
+        return {
+            '@type': 'MessageCard',
+            '@context': 'http://schema.org/extensions',
+            themeColor: color,
+            summary: `AlingAi检测系统: ${event}`,
+            sections: [{
+                activityTitle: `${emoji} AlingAi检测系统通知`,
+                activitySubtitle: `事件: ${event}`,
+                facts: this.formatTeamsFacts(data)
+            }]
+        };
+    }
+
+    formatDiscordMessage(data, event) {
+        const color = parseInt(this.getEventColor(event).replace('#', ''), 16);
+        const emoji = this.getEventEmoji(event);
+        
+        return {
+            embeds: [{
+                title: `${emoji} AlingAi检测系统通知`,
+                description: `**事件:** ${event}\n**时间:** ${new Date().toLocaleString()}`,
+                color,
+                fields: this.formatDiscordFields(data),
+                timestamp: new Date().toISOString()
+            }]
+        };
+    }
+
+    formatGrafanaAnnotation(data, event) {
+        return `AlingAi检测系统: ${event} - ${JSON.stringify(data)}`;
+    }
+
+    formatPrometheusMetrics(data, event) {
+        const timestamp = Date.now();
+        let metrics = `# AlingAi Detection System Metrics\n`;
+        
+        metrics += `alingai_detection_event{event="${event}"} 1 ${timestamp}\n`;
+        
+        if (data.successRate !== undefined) {
+            metrics += `alingai_detection_success_rate ${data.successRate} ${timestamp}\n`;
+        }
+        
+        if (data.duration !== undefined) {
+            metrics += `alingai_detection_duration_ms ${data.duration} ${timestamp}\n`;
+        }
+        
+        return metrics;
+    }
+
+    // ==================== 工具方法 ====================
+
+    getEventColor(event) {
+        const colorMap = {
+            'detection.completed': '#28a745',
+            'detection.failed': '#dc3545',
+            'test.passed': '#28a745',
+            'test.failed': '#dc3545',
+            'system.error': '#dc3545',
+            'performance.threshold': '#ffc107'
+        };
+        return colorMap[event] || '#17a2b8';
+    }
+
+    getEventEmoji(event) {
+        const emojiMap = {
+            'detection.started': '🚀',
+            'detection.completed': '✅',
+            'detection.failed': '❌',
+            'test.passed': '✅',
+            'test.failed': '❌',
+            'system.error': '🚨',
+            'performance.threshold': '⚠️',
+            'auto.detection.enabled': '🔄',
+            'auto.detection.disabled': '⏹️'
+        };
+        return emojiMap[event] || '📊';
+    }
+
+    formatDataFields(data) {
+        const fields = [];
+        Object.entries(data).forEach(([key, value]) => {
+            fields.push({
+                type: 'mrkdwn',
+                text: `*${key}:* ${value}`
+            });
+        });
+        return fields;
+    }
+
+    formatTeamsFacts(data) {
+        return Object.entries(data).map(([key, value]) => ({
+            name: key,
+            value: String(value)
+        }));
+    }
+
+    formatDiscordFields(data) {
+        return Object.entries(data).map(([key, value]) => ({
+            name: key,
+            value: String(value),
+            inline: true
+        }));
+    }
+
+    generateId() {
+        return 'svc_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // ==================== 数据同步服务 ====================
+
+    startSyncService() {
+        // 每5分钟同步一次数据
+        setInterval(() => {
+            this.processSyncQueue();
+        }, 5 * 60 * 1000);
+
+        
+    }
+
+    addToSyncQueue(data, priority = 'normal') {
+        this.syncQueue.push({
+            id: this.generateId(),
+            data,
+            priority,
+            timestamp: Date.now(),
+            retries: 0,
+            maxRetries: 3
+        });
+    }
+
+    async processSyncQueue() {
+        if (this.syncQueue.length === 0) return;
+
+        // 按优先级排序
+        this.syncQueue.sort((a, b) => {
+            const priorityOrder = { high: 3, normal: 2, low: 1 };
+            return priorityOrder[b.priority] - priorityOrder[a.priority];
+        });
+
+        const batch = this.syncQueue.splice(0, 10); // 每次处理10个
+        
+        for (const item of batch) {
+            try {
+                await this.syncDataItem(item);
+            } catch (error) {
+                console.error('❌ 数据同步失败:', error);
+                
+                if (item.retries < item.maxRetries) {
+                    item.retries++;
+                    this.syncQueue.push(item); // 重新加入队列
+                }
+            }
+        }
+    }
+
+    async syncDataItem(item) {
+        // 这里实现具体的数据同步逻辑
+        
+        
+        // 发送到已配置的外部服务
+        const promises = Array.from(this.externalServices.values())
+            .filter(service => service.enabled && service.config.autoSync)
+            .map(service => this.sendToExternalService(service.id, item.data, 'data.sync'));
+
+        await Promise.allSettled(promises);
+    }
+
+    // ==================== 公共接口方法 ====================
+
+    /**
+     * 显示API集成配置界面
+     */
+    show() {
+        if (!this.isInitialized) {
+            console.warn('⚠️ API集成系统未初始化');
+            return;
+        }
+
+        this.createConfigurationModal();
+    }
+
+    async createConfigurationModal() {
+        // 这个方法将在下一步实现UI界面
+        
+    }
+}
+
+// 全局函数
+window.showAPIIntegration = function() {
+    if (window.detectionSystem && window.detectionSystem.apiIntegration) {
+        window.detectionSystem.apiIntegration.show();
+    } else {
+        console.warn('⚠️ API集成系统未初始化');
+    }
+};
+
+// 导出类
+window.APIIntegration = APIIntegration;
+
+

@@ -1,0 +1,5 @@
+PHP Fatal error:  Uncaught TypeError: AlingAi\Security\GlobalThreatIntelligence::__construct(): Argument #2 ($aiService) must be of type AlingAi\Services\DeepSeekAIService, Monolog\Logger given, called in E:\Code\AlingAi\AlingAi_pro\start_websocket_server.php on line 16 and defined in E:\Code\AlingAi\AlingAi_pro\src\Security\GlobalThreatIntelligence.php:48
+Stack trace:
+#0 E:\Code\AlingAi\AlingAi_pro\start_websocket_server.php(16): AlingAi\Security\GlobalThreatIntelligence->__construct()
+#1 {main}
+  thrown in E:\Code\AlingAi\AlingAi_pro\src\Security\GlobalThreatIntelligence.php on line 48

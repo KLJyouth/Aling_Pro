@@ -1,0 +1,794 @@
+/**
+ * C++ 代码打字动画和3D球体效果 - 增强版
+ * 左右布局 + 全屏3D效果 + 量子光环吸收 + 液态量子星球
+ * 集成到AlingAi Pro主页的英雄区域
+ */
+class CppCodeAnimationEnhanced {
+    constructor(containerId) {
+        this.container = document.getElementById(containerId);
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.sphere = null;
+        this.particles = [];
+        this.animationFrame = null;
+        this.isTyping = false;
+        this.currentLineIndex = 0;
+        this.currentCharIndex = 0;
+        this.isPaused = false;
+        this.isDestroyed = false;
+        
+        // 性能检测
+        this.performanceMode = this.detectPerformanceMode();
+        this.reduceMotion = this.checkReduceMotion();
+        
+        // C++ 代码内容（带语法高亮标记）
+        this.cppCode = [
+            '<span class="preprocessor">#include</span> <span class="string">&lt;iostream&gt;</span>',
+            '<span class="preprocessor">#include</span> <span class="string">&lt;vector&gt;</span>',
+            '<span class="preprocessor">#include</span> <span class="string">&lt;algorithm&gt;</span>',
+            '',
+            '<span class="keyword">class</span> <span class="function">QuantumAI</span> {',
+            '<span class="keyword">private</span>:',
+            '    <span class="keyword">std::vector</span>&lt;<span class="keyword">double</span>&gt; <span class="variable">quantumStates</span>;',
+            '<span class="keyword">public</span>:',
+            '    <span class="keyword">void</span> <span class="function">initialize</span>() {',
+            '        <span class="variable">quantumStates</span>.<span class="function">resize</span>(<span class="number">1024</span>);',
+            '        <span class="comment">// 量子态初始化</span>',
+            '        <span class="function">std::generate</span>(<span class="variable">quantumStates</span>.<span class="function">begin</span>(),',
+            '                      <span class="variable">quantumStates</span>.<span class="function">end</span>(),',
+            '                      []() { <span class="keyword">return</span> <span class="function">rand</span>() <span class="operator">/</span> <span class="number">1.0</span>; });',
+            '    }',
+            '};',
+            '',
+            '<span class="keyword">int</span> <span class="function">main</span>() {',
+            '    <span class="function">QuantumAI</span> <span class="variable">ai</span>;',
+            '    <span class="variable">ai</span>.<span class="function">initialize</span>();',
+            '    <span class="function">std::cout</span> <span class="operator">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="operator">&lt;&lt;</span> <span class="function">std::endl</span>;',
+            '    <span class="keyword">return</span> <span class="number">0</span>;',
+            '}'
+        ];
+        
+        this.init();
+    }
+    
+    // 检测设备性能模式
+    detectPerformanceMode() {
+        const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowEnd = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+        const hasLimitedMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
+        
+        if (isMobile || isLowEnd || hasLimitedMemory) {
+            return 'low';
+        }
+        
+        return 'high';
+    }
+    
+    // 检测用户是否偏好减少动画
+    checkReduceMotion() {
+        return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+    
+    init() {
+        if (!this.container) {
+            console.error('Container not found');
+            return;
+        }
+        
+        // 如果用户偏好减少动画，显示静态版本
+        if (this.reduceMotion) {
+            this.createStaticVersion();
+            return;
+        }
+        
+        this.createHTML();
+        this.setupThreeJS();
+        this.createQuantumParticles();
+        this.startAnimation();
+    }
+    
+    // 创建静态版本（无障碍友好）
+    createStaticVersion() {
+        this.container.innerHTML = `
+            <div class="code-editor">
+                <div class="code-content">
+                    ${this.cppCode.map(line => `<div class="code-line typing">${line}</div>`).join('')}
+                </div>
+                <div class="hello-world-text" style="display: block; opacity: 1; transform: translate(-50%, -50%) scale(1);">
+                    Hello, World!
+                </div>
+            </div>
+        `;
+    }
+    
+    createHTML() {
+        this.container.innerHTML = `
+            <div class="code-editor">
+                <div class="code-content"></div>
+                <div class="hello-world-text" style="display: none;">Hello, World!</div>
+                <div class="sphere-container">
+                    <canvas class="three-canvas"></canvas>
+                </div>
+                <div class="quantum-particles"></div>
+            </div>
+        `;
+        
+        this.codeContent = this.container.querySelector('.code-content');
+        this.helloWorldText = this.container.querySelector('.hello-world-text');
+        this.sphereContainer = this.container.querySelector('.sphere-container');
+        this.quantumParticlesContainer = this.container.querySelector('.quantum-particles');
+        this.canvas = this.container.querySelector('.three-canvas');
+    }
+    
+    setupThreeJS() {
+        try {
+            // 创建Three.js场景
+            this.scene = new THREE.Scene();
+            
+            // 创建相机
+            this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            this.camera.position.z = 2;
+            
+            // 创建渲染器
+            this.renderer = new THREE.WebGLRenderer({
+                canvas: this.canvas,
+                alpha: true,
+                antialias: this.performanceMode === 'high',
+                powerPreference: this.performanceMode === 'high' ? 'high-performance' : 'low-power'
+            });
+            
+            const size = this.performanceMode === 'high' ? 150 : 120;
+            this.renderer.setSize(size, size);
+            this.renderer.setClearColor(0x000000, 0);
+            
+            // 创建球体几何体
+            const segments = this.performanceMode === 'high' ? 32 : 16;
+            const geometry = new THREE.SphereGeometry(0.8, segments, segments);
+            
+            // 创建材质
+            const material = this.createSphereMaterial();
+            
+            // 创建球体网格
+            this.sphere = new THREE.Mesh(geometry, material);
+            this.scene.add(this.sphere);
+            
+            // 添加光源
+            this.addLights();
+            
+        } catch (error) {
+            console.warn('Three.js setup failed, falling back to CSS animation:', error);
+            this.createFallbackSphere();
+        }
+    }
+    
+    createSphereMaterial() {
+        if (this.performanceMode === 'low') {
+            // 低性能模式使用简单材质
+            return new THREE.MeshPhongMaterial({
+                color: 0x00ff41,
+                transparent: true,
+                opacity: 0.8,
+                emissive: 0x004411
+            });
+        }
+        
+        // 高性能模式使用shader材质
+        return new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                resolution: { value: new THREE.Vector2(150, 150) }
+            },
+            vertexShader: `
+                varying vec2 vUv;
+                varying vec3 vPosition;
+                uniform float time;
+                
+                void main() {
+                    vUv = uv;
+                    vPosition = position;
+                    
+                    // 量子波动效果
+                    vec3 pos = position;
+                    pos.x += sin(time * 2.0 + position.y * 5.0) * 0.05;
+                    pos.y += cos(time * 1.5 + position.x * 5.0) * 0.05;
+                    pos.z += sin(time * 3.0 + position.x * position.y * 10.0) * 0.03;
+                    
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                uniform vec2 resolution;
+                varying vec2 vUv;
+                varying vec3 vPosition;
+                
+                void main() {
+                    vec2 uv = vUv;
+                    
+                    // 量子干涉图案
+                    float pattern1 = sin(uv.x * 20.0 + time * 2.0) * sin(uv.y * 20.0 + time * 1.5);
+                    float pattern2 = cos(uv.x * 15.0 - time * 1.8) * cos(uv.y * 15.0 + time * 2.2);
+                    
+                    // 组合图案
+                    float combined = (pattern1 + pattern2) * 0.5;
+                    
+                    // 颜色渐变
+                    vec3 color1 = vec3(0.0, 1.0, 0.25); // 绿色
+                    vec3 color2 = vec3(0.4, 0.7, 1.0);  // 蓝色
+                    vec3 color3 = vec3(1.0, 0.4, 0.6);  // 粉色
+                    
+                    vec3 finalColor = mix(color1, color2, sin(combined + time) * 0.5 + 0.5);
+                    finalColor = mix(finalColor, color3, cos(combined * 2.0 + time * 1.3) * 0.3 + 0.3);
+                    
+                    // 透明度基于图案
+                    float alpha = 0.7 + sin(combined * 3.0 + time) * 0.3;
+                    
+                    gl_FragColor = vec4(finalColor, alpha);
+                }
+            `,
+            transparent: true,
+            blending: THREE.AdditiveBlending
+        });
+    }
+    
+    createFallbackSphere() {
+        // CSS fallback sphere
+        this.sphereContainer.innerHTML = `
+            <div style="
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+                background: radial-gradient(circle, #00ff41 0%, #004411 70%);
+                box-shadow: 0 0 30px #00ff41;
+                animation: pulse 2s ease-in-out infinite;
+            "></div>
+        `;
+    }
+    
+    addLights() {
+        // 环境光
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
+        this.scene.add(ambientLight);
+        
+        // 点光源
+        const pointLight = new THREE.PointLight(0x00ff41, 1, 100);
+        pointLight.position.set(2, 2, 2);
+        this.scene.add(pointLight);
+        
+        if (this.performanceMode === 'high') {
+            // 高性能模式添加更多光源
+            const pointLight2 = new THREE.PointLight(0x0066ff, 0.5, 50);
+            pointLight2.position.set(-2, -2, 2);
+            this.scene.add(pointLight2);
+        }
+    }
+    
+    createQuantumParticles() {
+        const particleCount = this.performanceMode === 'high' ? 20 : 10;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'quantum-particle';
+            
+            // 随机位置和动画
+            const angle = (i / particleCount) * Math.PI * 2;
+            const radius = 60 + Math.random() * 40;
+            const speed = 0.5 + Math.random() * 1.5;
+            
+            particle.style.cssText = `
+                animation: orbit ${speed + 2}s linear infinite;
+                animation-delay: ${i * 0.1}s;
+                transform-origin: 75px 75px;
+            `;
+            
+            this.quantumParticlesContainer.appendChild(particle);
+        }
+        
+        // 添加轨道动画CSS
+        if (!document.getElementById('quantum-orbit-styles')) {
+            const style = document.createElement('style');
+            style.id = 'quantum-orbit-styles';
+            style.textContent = `
+                @keyframes orbit {
+                    from {
+                        transform: rotate(0deg) translateX(60px) rotate(0deg);
+                    }
+                    to {
+                        transform: rotate(360deg) translateX(60px) rotate(-360deg);
+                    }
+                }
+                
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+    }
+    
+    async startAnimation() {
+        if (this.isDestroyed) return;
+        
+        try {
+            // 开始代码打字动画
+            await this.typeCode();
+            
+            if (this.isDestroyed) return;
+            
+            // 等待一秒
+            await this.delay(1000);
+            
+            if (this.isDestroyed) return;
+            
+            // 代码爆炸动画（包含全屏3D效果）
+            await this.explodeCode();
+            
+        } catch (error) {
+            console.error('Animation error:', error);
+        }
+    }
+    
+    async typeCode() {
+        this.isTyping = true;
+        const typingSpeed = this.performanceMode === 'high' ? 20 : 30;
+        
+        for (let lineIndex = 0; lineIndex < this.cppCode.length; lineIndex++) {
+            if (this.isDestroyed || this.isPaused) break;
+            
+            const line = this.cppCode[lineIndex];
+            const lineElement = document.createElement('div');
+            lineElement.className = 'code-line';
+            this.codeContent.appendChild(lineElement);
+            
+            // 添加打字效果
+            lineElement.classList.add('typing');
+            
+            // 逐字符显示
+            for (let charIndex = 0; charIndex < line.length; charIndex++) {
+                if (this.isDestroyed || this.isPaused) break;
+                
+                lineElement.innerHTML = line.substring(0, charIndex + 1);
+                
+                // 添加光标
+                if (charIndex === line.length - 1) {
+                    lineElement.innerHTML += '<span class="typing-cursor"></span>';
+                }
+                
+                await this.delay(typingSpeed);
+            }
+            
+            // 移除光标，添加到下一行
+            lineElement.innerHTML = line;
+            await this.delay(50);
+        }
+        
+        this.isTyping = false;
+    }
+    
+    async explodeCode() {
+        const lines = this.codeContent.querySelectorAll('.code-line');
+        
+        lines.forEach((line, index) => {
+            setTimeout(() => {
+                if (this.isDestroyed) return;
+                
+                line.classList.add('exploding');
+                
+                // 为每个字符设置随机的爆炸方向
+                const chars = line.textContent.split('');
+                line.innerHTML = '';
+                
+                chars.forEach((char, charIndex) => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.setProperty('--random-x', `${(Math.random() - 0.5) * 300}px`);
+                    span.style.setProperty('--random-y', `${(Math.random() - 0.5) * 300}px`);
+                    span.style.setProperty('--random-rotation', `${Math.random() * 720}deg`);
+                    line.appendChild(span);
+                    
+                    // 创建代码粒子被吸收效果
+                    this.createAbsorbedParticle(char, line.getBoundingClientRect(), charIndex * 50);
+                });
+            }, index * 100);
+        });
+        
+        // 显示Hello World 3D全屏效果
+        setTimeout(() => {
+            this.showFullscreenHelloWorld();
+        }, lines.length * 100 + 500);
+    }
+    
+    // 创建被量子光环吸收的代码粒子
+    createAbsorbedParticle(char, lineRect, delay) {
+        setTimeout(() => {
+            if (this.isDestroyed) return;
+            
+            const particle = document.createElement('div');
+            particle.className = 'code-particle-absorbed';
+            particle.textContent = char;
+            
+            // 设置初始位置
+            particle.style.left = `${lineRect.left + Math.random() * lineRect.width}px`;
+            particle.style.top = `${lineRect.top + Math.random() * lineRect.height}px`;
+            
+            // 设置目标位置（容器中心）
+            const containerRect = this.container.getBoundingClientRect();
+            const targetX = containerRect.left + containerRect.width / 2 - particle.offsetLeft;
+            const targetY = containerRect.top + containerRect.height / 2 - particle.offsetTop;
+            
+            particle.style.setProperty('--target-x', `${targetX}px`);
+            particle.style.setProperty('--target-y', `${targetY}px`);
+            
+            document.body.appendChild(particle);
+            
+            // 清理粒子
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 2000);
+        }, delay);
+    }
+    
+    // 显示全屏3D Hello World效果
+    showFullscreenHelloWorld() {
+        if (this.isDestroyed) return;
+        
+        // 创建全屏容器
+        const fullscreenContainer = document.createElement('div');
+        fullscreenContainer.className = 'hello-world-fullscreen';
+        fullscreenContainer.innerHTML = `
+            <div class="hello-world-3d">Hello, World!</div>
+        `;
+        
+        document.body.appendChild(fullscreenContainer);
+        
+        // 激活全屏效果
+        setTimeout(() => {
+            fullscreenContainer.classList.add('active');
+        }, 100);
+        
+        // 显示量子光环
+        setTimeout(() => {
+            this.createQuantumAbsorptionRing();
+        }, 2000);
+        
+        // 3秒后开始吸收过程
+        setTimeout(() => {
+            this.startAbsorptionProcess(fullscreenContainer);
+        }, 3000);
+    }
+    
+    // 创建量子光环
+    createQuantumAbsorptionRing() {
+        if (this.isDestroyed) return;
+        
+        const ring = document.createElement('div');
+        ring.className = 'quantum-absorption-ring';
+        this.container.appendChild(ring);
+        
+        // 创建粒子轨迹效果
+        this.createParticleTrails(ring);
+    }
+    
+    // 创建粒子轨迹
+    createParticleTrails(ring) {
+        const numTrails = this.performanceMode === 'high' ? 20 : 10;
+        
+        for (let i = 0; i < numTrails; i++) {
+            setTimeout(() => {
+                if (this.isDestroyed) return;
+                
+                const trail = document.createElement('div');
+                trail.className = 'quantum-particle-trail';
+                
+                // 随机位置
+                const angle = (Math.PI * 2 * i) / numTrails;
+                const radius = 100 + Math.random() * 50;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                
+                trail.style.left = `${50 + x}%`;
+                trail.style.top = `${50 + y}%`;
+                
+                // 设置轨迹目标
+                trail.style.setProperty('--trail-x', `${-x}px`);
+                trail.style.setProperty('--trail-y', `${-y}px`);
+                
+                this.container.appendChild(trail);
+                
+                // 清理轨迹
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        trail.parentNode.removeChild(trail);
+                    }
+                }, 1500);
+            }, i * 100);
+        }
+    }
+    
+    // 开始吸收过程
+    startAbsorptionProcess(fullscreenContainer) {
+        if (this.isDestroyed) return;
+        
+        // 逐渐隐藏全屏Hello World
+        fullscreenContainer.style.transition = 'opacity 2s ease-out';
+        fullscreenContainer.style.opacity = '0';
+        
+        // 创建液态量子星球
+        setTimeout(() => {
+            this.createQuantumDopplerSphere();
+            
+            // 清理全屏容器
+            setTimeout(() => {
+                if (fullscreenContainer.parentNode) {
+                    fullscreenContainer.parentNode.removeChild(fullscreenContainer);
+                }
+            }, 500);
+        }, 1000);
+    }
+    
+    // 创建液态量子多普勒星球
+    createQuantumDopplerSphere() {
+        if (this.isDestroyed) return;
+        
+        const sphere = document.createElement('div');
+        sphere.className = 'quantum-doppler-sphere';
+        this.container.appendChild(sphere);
+        
+        // 添加交互效果
+        this.addSphereInteraction(sphere);
+        
+        // 8秒后开始淡出效果
+        setTimeout(() => {
+            if (!this.isDestroyed && sphere.parentNode) {
+                sphere.style.transition = 'opacity 3s ease-out, transform 3s ease-out';
+                sphere.style.opacity = '0';
+                sphere.style.transform = 'scale(0.1)';
+                
+                // 最终清理
+                setTimeout(() => {
+                    if (sphere.parentNode) {
+                        sphere.parentNode.removeChild(sphere);
+                    }
+                    // 重新开始动画循环
+                    this.restart();
+                }, 3000);
+            }
+        }, 8000);
+    }
+    
+    // 添加星球交互效果
+    addSphereInteraction(sphere) {
+        let isHovering = false;
+        
+        sphere.addEventListener('mouseenter', () => {
+            if (this.isDestroyed) return;
+            isHovering = true;
+            sphere.style.transform += ' scale(1.1)';
+            sphere.style.filter = 'brightness(1.3) saturate(1.2)';
+        });
+        
+        sphere.addEventListener('mouseleave', () => {
+            if (this.isDestroyed) return;
+            isHovering = false;
+            sphere.style.transform = sphere.style.transform.replace(' scale(1.1)', '');
+            sphere.style.filter = sphere.style.filter.replace(' brightness(1.3) saturate(1.2)', '');
+        });
+        
+        sphere.addEventListener('click', () => {
+            if (this.isDestroyed) return;
+            // 创建涟漪效果
+            this.createRippleEffect(sphere);
+        });
+    }
+    
+    // 创建涟漪效果
+    createRippleEffect(sphere) {
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 65, 0.6) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: ripple-expand 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 100;
+        `;
+        
+        // 添加涟漪动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple-expand {
+                0% {
+                    width: 0;
+                    height: 0;
+                    opacity: 1;
+                }
+                100% {
+                    width: 300px;
+                    height: 300px;
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        sphere.appendChild(ripple);
+        
+        setTimeout(() => {
+            if (ripple.parentNode) {
+                ripple.parentNode.removeChild(ripple);
+            }
+            if (style.parentNode) {
+                style.parentNode.removeChild(style);
+            }
+        }, 1000);
+    }
+    
+    // 添加鼠标交互
+    addMouseInteraction() {
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        
+        if (!this.canvas) return;
+        
+        this.canvas.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !this.sphere) return;
+            
+            const deltaMove = {
+                x: e.clientX - previousMousePosition.x,
+                y: e.clientY - previousMousePosition.y
+            };
+            
+            this.sphere.rotation.y += deltaMove.x * 0.01;
+            this.sphere.rotation.x += deltaMove.y * 0.01;
+            
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+        
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+        
+        // 触摸设备支持
+        this.canvas.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            const touch = e.touches[0];
+            previousMousePosition = { x: touch.clientX, y: touch.clientY };
+        });
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+            if (!isDragging || !this.sphere) return;
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            const deltaMove = {
+                x: touch.clientX - previousMousePosition.x,
+                y: touch.clientY - previousMousePosition.y
+            };
+            
+            this.sphere.rotation.y += deltaMove.x * 0.01;
+            this.sphere.rotation.x += deltaMove.y * 0.01;
+            
+            previousMousePosition = { x: touch.clientX, y: touch.clientY };
+        });
+        
+        this.canvas.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+    }
+    
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    // 重置动画
+    reset() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        
+        this.currentLineIndex = 0;
+        this.currentCharIndex = 0;
+        this.isTyping = false;
+        
+        if (this.codeContent) {
+            this.codeContent.innerHTML = '';
+        }
+        
+        // 清理全屏元素
+        const fullscreenElements = document.querySelectorAll('.hello-world-fullscreen');
+        fullscreenElements.forEach(el => {
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        });
+        
+        // 清理量子效果元素
+        const quantumElements = document.querySelectorAll('.quantum-absorption-ring, .quantum-doppler-sphere, .code-particle-absorbed, .quantum-particle-trail');
+        quantumElements.forEach(el => {
+            if (el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        });
+    }
+    
+    // 重新开始动画
+    restart() {
+        this.reset();
+        setTimeout(() => {
+            this.startAnimation();
+        }, 500);
+    }
+    
+    // 销毁动画
+    destroy() {
+        this.isDestroyed = true;
+        
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+        
+        if (this.renderer) {
+            this.renderer.dispose();
+        }
+        
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
+        
+        // 清理全局元素
+        this.reset();
+    }
+}
+
+// 全局初始化函数
+window.initCppAnimationEnhanced = function(containerId) {
+    return new CppCodeAnimationEnhanced(containerId);
+};
+
+// 自动初始化（如果容器存在）
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('cpp-animation-container');
+    if (container) {
+        // 优先使用增强版
+        window.cppAnimationEnhanced = new CppCodeAnimationEnhanced('cpp-animation-container');
+        
+        // 添加鼠标交互
+        if (window.cppAnimationEnhanced.addMouseInteraction) {
+            window.cppAnimationEnhanced.addMouseInteraction();
+        }
+        
+        // 可选：添加重新播放按钮
+        const restartBtn = document.createElement('button');
+        restartBtn.innerHTML = '<i class="fas fa-redo"></i>';
+        restartBtn.className = 'restart-animation-btn';
+        restartBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(108, 19, 255, 0.8);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        `;
+        restartBtn.onclick = () => window.cppAnimationEnhanced.restart();
+        container.appendChild(restartBtn);
+    }
+});

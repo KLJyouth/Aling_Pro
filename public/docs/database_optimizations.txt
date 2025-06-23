@@ -1,0 +1,7 @@
+MySQL优化建议:
+================
+query_cache = 1
+slow_query_log = 1
+slow_query_time = 2
+max_connections = 100
+innodb_buffer_pool_size = 256M

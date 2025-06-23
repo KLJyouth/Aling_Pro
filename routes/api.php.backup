@@ -1,0 +1,413 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use AlingAi\Controllers\AuthController;
+use AlingAi\Controllers\UserController;
+use AlingAi\Controllers\SystemController;
+use AlingAi\Controllers\SystemManagementController;
+use AlingAi\Controllers\MonitoringController;
+use AlingAi\Controllers\WalletController;
+use AlingAi\Controllers\EnterpriseAdminController;
+use AlingAi\Controllers\PaymentController;
+use AlingAi\Controllers\DocumentController;
+use AlingAi\Controllers\SimpleApiController;
+use AlingAi\Controllers\Security\QuantumCryptoController;
+use AlingAi\Controllers\Security\SecurityTestController;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes for AlingAi Pro 6.0
+|--------------------------------------------------------------------------
+|
+| 这里定义了AlingAi Pro 6.0的所有API路由
+| 包括企业服务、AI平台、区块链服务等核心功能
+|
+*/
+
+// API版本信息
+Route::get('/version', function () {
+    return response()->json([
+        'success' => true,
+        'data' => [
+            'name' => 'AlingAi Pro',
+            'version' => '6.0.0',
+            'environment' => config('app.env'),
+            'timestamp' => now()->toISOString(),
+            'features' => [
+                'enterprise_services',
+                'ai_platform',
+                'blockchain_integration',
+                'zero_trust_security',
+                'real_time_monitoring'
+            ]
+        ]
+    ]);
+});
+
+// 健康检查
+Route::get('/health', [HealthController::class, 'check']);
+Route::get('/health/detailed', [HealthController::class, 'detailed']);
+
+// 系统状态
+Route::get('/status', [SystemController::class, 'status']);
+Route::get('/metrics', [SystemController::class, 'metrics']);
+
+/*
+|--------------------------------------------------------------------------
+| 认证相关路由
+|--------------------------------------------------------------------------
+*/
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api');
+    Route::post('forgot-password', [AuthController::class, 'forgotPassword']);
+    Route::post('reset-password', [AuthController::class, 'resetPassword']);
+    Route::post('verify-email', [AuthController::class, 'verifyEmail']);
+    Route::post('resend-verification', [AuthController::class, 'resendVerification']);
+});
+
+/*
+|--------------------------------------------------------------------------
+| 需要认证的路由
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:api', 'verified'])->group(function () {
+    
+    /*
+    |--------------------------------------------------------------------------
+    | 用户管理
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('user')->group(function () {
+        Route::get('profile', [UserController::class, 'profile']);
+        Route::put('profile', [UserController::class, 'updateProfile']);
+        Route::post('avatar', [UserController::class, 'uploadAvatar']);
+        Route::get('settings', [UserController::class, 'getSettings']);
+        Route::put('settings', [UserController::class, 'updateSettings']);
+        Route::post('change-password', [UserController::class, 'changePassword']);
+        Route::get('activity', [UserController::class, 'getActivity']);
+        Route::get('notifications', [UserController::class, 'getNotifications']);
+        Route::put('notifications/{id}/read', [UserController::class, 'markNotificationAsRead']);
+    });
+    
+    /*
+    |--------------------------------------------------------------------------
+    | 企业服务 API
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('enterprise')->group(function () {
+        
+        // 企业总览
+        Route::get('dashboard', [EnterpriseController::class, 'dashboard']);
+        Route::get('analytics', [EnterpriseController::class, 'analytics']);
+        Route::get('reports', [EnterpriseController::class, 'reports']);
+        
+        // 工作空间管理
+        Route::prefix('workspaces')->group(function () {
+            Route::get('/', [WorkspaceController::class, 'index']);
+            Route::post('/', [WorkspaceController::class, 'store']);
+            Route::get('{id}', [WorkspaceController::class, 'show']);
+            Route::put('{id}', [WorkspaceController::class, 'update']);
+            Route::delete('{id}', [WorkspaceController::class, 'destroy']);
+            Route::post('{id}/clone', [WorkspaceController::class, 'clone']);
+            Route::put('{id}/settings', [WorkspaceController::class, 'updateSettings']);
+            Route::get('{id}/analytics', [WorkspaceController::class, 'analytics']);
+            Route::get('{id}/members', [WorkspaceController::class, 'members']);
+            Route::post('{id}/members', [WorkspaceController::class, 'addMember']);
+            Route::delete('{id}/members/{userId}', [WorkspaceController::class, 'removeMember']);
+            Route::put('{id}/members/{userId}/role', [WorkspaceController::class, 'updateMemberRole']);
+        });
+        
+        // 项目管理
+        Route::prefix('projects')->group(function () {
+            Route::get('/', [ProjectController::class, 'index']);
+            Route::post('/', [ProjectController::class, 'store']);
+            Route::get('{id}', [ProjectController::class, 'show']);
+            Route::put('{id}', [ProjectController::class, 'update']);
+            Route::delete('{id}', [ProjectController::class, 'destroy']);
+            Route::put('{id}/status', [ProjectController::class, 'updateStatus']);
+            Route::get('{id}/tasks', [ProjectController::class, 'tasks']);
+            Route::post('{id}/tasks', [ProjectController::class, 'createTask']);
+            Route::get('{id}/timeline', [ProjectController::class, 'timeline']);
+            Route::get('{id}/reports', [ProjectController::class, 'reports']);
+            Route::post('{id}/archive', [ProjectController::class, 'archive']);
+            Route::post('{id}/restore', [ProjectController::class, 'restore']);
+        });
+        
+        // 团队管理
+        Route::prefix('teams')->group(function () {
+            Route::get('/', [TeamController::class, 'index']);
+            Route::post('/', [TeamController::class, 'store']);
+            Route::get('{id}', [TeamController::class, 'show']);
+            Route::put('{id}', [TeamController::class, 'update']);
+            Route::delete('{id}', [TeamController::class, 'destroy']);
+            Route::get('{id}/members', [TeamController::class, 'members']);
+            Route::post('{id}/members', [TeamController::class, 'addMember']);
+            Route::delete('{id}/members/{userId}', [TeamController::class, 'removeMember']);
+            Route::get('{id}/performance', [TeamController::class, 'performance']);
+        });
+        
+        // 文档管理
+        Route::prefix('documents')->group(function () {
+            Route::get('/', [EnterpriseController::class, 'getDocuments']);
+            Route::post('/', [EnterpriseController::class, 'uploadDocument']);
+            Route::get('{id}', [EnterpriseController::class, 'getDocument']);
+            Route::put('{id}', [EnterpriseController::class, 'updateDocument']);
+            Route::delete('{id}', [EnterpriseController::class, 'deleteDocument']);
+            Route::get('{id}/download', [EnterpriseController::class, 'downloadDocument']);
+            Route::post('{id}/share', [EnterpriseController::class, 'shareDocument']);
+            Route::get('search', [EnterpriseController::class, 'searchDocuments']);
+        });
+        
+        // 会议管理
+        Route::prefix('meetings')->group(function () {
+            Route::get('/', [EnterpriseController::class, 'getMeetings']);
+            Route::post('/', [EnterpriseController::class, 'createMeeting']);
+            Route::get('{id}', [EnterpriseController::class, 'getMeeting']);
+            Route::put('{id}', [EnterpriseController::class, 'updateMeeting']);
+            Route::delete('{id}', [EnterpriseController::class, 'cancelMeeting']);
+            Route::post('{id}/join', [EnterpriseController::class, 'joinMeeting']);
+            Route::post('{id}/leave', [EnterpriseController::class, 'leaveMeeting']);
+            Route::get('{id}/recording', [EnterpriseController::class, 'getMeetingRecording']);
+        });
+    });
+    
+    /*
+    |--------------------------------------------------------------------------
+    | AI 平台 API
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('ai')->group(function () {
+        
+        // AI 总览
+        Route::get('dashboard', [AIController::class, 'dashboard']);
+        Route::get('models', [ModelController::class, 'index']);
+        Route::get('usage', [AIController::class, 'usage']);
+        Route::get('status', [AIController::class, 'status']);
+        
+        // 文本生成
+        Route::prefix('text')->group(function () {
+            Route::post('generate', [TextGenerationController::class, 'generate']);
+            Route::post('complete', [TextGenerationController::class, 'complete']);
+            Route::post('summarize', [TextGenerationController::class, 'summarize']);
+            Route::post('translate', [TextGenerationController::class, 'translate']);
+            Route::post('analyze-sentiment', [TextGenerationController::class, 'analyzeSentiment']);
+            Route::post('extract-keywords', [TextGenerationController::class, 'extractKeywords']);
+            Route::post('classify', [TextGenerationController::class, 'classify']);
+        });
+        
+        // 计算机视觉
+        Route::prefix('vision')->group(function () {
+            Route::post('analyze', [VisionController::class, 'analyze']);
+            Route::post('recognize-text', [VisionController::class, 'recognizeText']);
+            Route::post('detect-objects', [VisionController::class, 'detectObjects']);
+            Route::post('classify-image', [VisionController::class, 'classifyImage']);
+            Route::post('generate-description', [VisionController::class, 'generateDescription']);
+            Route::post('extract-features', [VisionController::class, 'extractFeatures']);
+        });
+        
+        // 语音处理
+        Route::prefix('speech')->group(function () {
+            Route::post('to-text', [AIController::class, 'speechToText']);
+            Route::post('to-speech', [AIController::class, 'textToSpeech']);
+            Route::post('analyze-audio', [AIController::class, 'analyzeAudio']);
+        });
+        
+        // 知识图谱
+        Route::prefix('knowledge')->group(function () {
+            Route::get('entities', [AIController::class, 'getEntities']);
+            Route::post('entities', [AIController::class, 'createEntity']);
+            Route::get('relationships', [AIController::class, 'getRelationships']);
+            Route::post('query', [AIController::class, 'queryKnowledge']);
+            Route::post('extract-entities', [AIController::class, 'extractEntities']);
+        });
+        
+        // 模型管理
+        Route::prefix('models')->group(function () {
+            Route::get('/', [ModelController::class, 'index']);
+            Route::get('{id}', [ModelController::class, 'show']);
+            Route::post('/', [ModelController::class, 'store']);
+            Route::put('{id}', [ModelController::class, 'update']);
+            Route::delete('{id}', [ModelController::class, 'destroy']);
+            Route::post('{id}/deploy', [ModelController::class, 'deploy']);
+            Route::post('{id}/undeploy', [ModelController::class, 'undeploy']);
+            Route::get('{id}/metrics', [ModelController::class, 'metrics']);
+        });
+        
+        // AI 助手
+        Route::prefix('assistant')->group(function () {
+            Route::post('chat', [AIController::class, 'chat']);
+            Route::get('conversations', [AIController::class, 'getConversations']);
+            Route::get('conversations/{id}', [AIController::class, 'getConversation']);
+            Route::delete('conversations/{id}', [AIController::class, 'deleteConversation']);
+            Route::post('feedback', [AIController::class, 'submitFeedback']);
+        });
+    });
+    
+    /*
+    |--------------------------------------------------------------------------
+    | 区块链服务 API
+    |--------------------------------------------------------------------------
+    */
+    Route::prefix('blockchain')->group(function () {
+        
+        // 区块链总览
+        Route::get('dashboard', [BlockchainController::class, 'dashboard']);
+        Route::get('networks', [BlockchainController::class, 'getNetworks']);
+        Route::get('status', [BlockchainController::class, 'status']);
+        
+        // 钱包管理
+        Route::prefix('wallets')->group(function () {
+            Route::get('/', [WalletController::class, 'index']);
+            Route::post('/', [WalletController::class, 'create']);
+            Route::get('{address}', [WalletController::class, 'show']);
+            Route::get('{address}/balance', [WalletController::class, 'getBalance']);
+            Route::get('{address}/transactions', [WalletController::class, 'getTransactions']);
+            Route::post('{address}/backup', [WalletController::class, 'backup']);
+            Route::post('{address}/restore', [WalletController::class, 'restore']);
+        });
+        
+        // 交易管理
+        Route::prefix('transactions')->group(function () {
+            Route::get('/', [TransactionController::class, 'index']);
+            Route::post('/', [TransactionController::class, 'create']);
+            Route::get('{hash}', [TransactionController::class, 'show']);
+            Route::post('{hash}/confirm', [TransactionController::class, 'confirm']);
+            Route::get('{hash}/status', [TransactionController::class, 'getStatus']);
+            Route::get('pending', [TransactionController::class, 'getPending']);
+        });
+        
+        // 智能合约
+        Route::prefix('contracts')->group(function () {
+            Route::get('/', [BlockchainController::class, 'getContracts']);
+            Route::post('/', [BlockchainController::class, 'deployContract']);
+            Route::get('{address}', [BlockchainController::class, 'getContract']);
+            Route::post('{address}/call', [BlockchainController::class, 'callContract']);
+            Route::get('{address}/events', [BlockchainController::class, 'getContractEvents']);
+        });
+        
+        // DeFi 服务
+        Route::prefix('defi')->group(function () {
+            Route::get('pools', [BlockchainController::class, 'getLiquidityPools']);
+            Route::post('stake', [BlockchainController::class, 'stake']);
+            Route::post('unstake', [BlockchainController::class, 'unstake']);
+            Route::get('rewards', [BlockchainController::class, 'getRewards']);
+            Route::post('claim-rewards', [BlockchainController::class, 'claimRewards']);
+        });
+        
+        // NFT 管理
+        Route::prefix('nft')->group(function () {
+            Route::get('/', [BlockchainController::class, 'getNFTs']);
+            Route::post('mint', [BlockchainController::class, 'mintNFT']);
+            Route::get('{tokenId}', [BlockchainController::class, 'getNFT']);
+            Route::post('{tokenId}/transfer', [BlockchainController::class, 'transferNFT']);
+            Route::get('collections', [BlockchainController::class, 'getCollections']);
+        });
+        
+        // 跨链桥接
+        Route::prefix('bridge')->group(function () {
+            Route::get('supported-chains', [BlockchainController::class, 'getSupportedChains']);
+            Route::post('transfer', [BlockchainController::class, 'crossChainTransfer']);
+            Route::get('transfer/{id}/status', [BlockchainController::class, 'getCrossChainStatus']);
+        });
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| 管理员路由
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth:api', 'role:admin'])->prefix('admin')->group(function () {
+    
+    // 系统管理
+    Route::prefix('system')->group(function () {
+        Route::get('info', [SystemController::class, 'info']);
+        Route::get('health', [SystemController::class, 'healthCheck']);
+        Route::get('logs', [SystemController::class, 'logs']);
+        Route::post('maintenance', [SystemController::class, 'toggleMaintenance']);
+        Route::post('cache/clear', [SystemController::class, 'clearCache']);
+        Route::get('config', [SystemController::class, 'getConfig']);
+        Route::put('config', [SystemController::class, 'updateConfig']);
+    });
+    
+    // 用户管理
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::post('/', [UserController::class, 'store']);
+        Route::get('{id}', [UserController::class, 'show']);
+        Route::put('{id}', [UserController::class, 'update']);
+        Route::delete('{id}', [UserController::class, 'destroy']);
+        Route::post('{id}/suspend', [UserController::class, 'suspend']);
+        Route::post('{id}/activate', [UserController::class, 'activate']);
+        Route::get('{id}/activity', [UserController::class, 'getActivity']);
+    });
+    
+    // 权限管理
+    Route::prefix('permissions')->group(function () {
+        Route::get('roles', [UserController::class, 'getRoles']);
+        Route::post('roles', [UserController::class, 'createRole']);
+        Route::put('roles/{id}', [UserController::class, 'updateRole']);
+        Route::delete('roles/{id}', [UserController::class, 'deleteRole']);
+        Route::get('permissions', [UserController::class, 'getPermissions']);
+    });
+    
+    // 审计日志
+    Route::prefix('audit')->group(function () {
+        Route::get('logs', [SystemController::class, 'getAuditLogs']);
+        Route::get('logs/{id}', [SystemController::class, 'getAuditLog']);
+        Route::get('statistics', [SystemController::class, 'getAuditStatistics']);
+    });
+    
+    // 监控和分析
+    Route::prefix('monitoring')->group(function () {
+        Route::get('metrics', [SystemController::class, 'getMetrics']);
+        Route::get('performance', [SystemController::class, 'getPerformanceMetrics']);
+        Route::get('alerts', [SystemController::class, 'getAlerts']);
+        Route::post('alerts/{id}/acknowledge', [SystemController::class, 'acknowledgeAlert']);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| 公开 API 路由
+|--------------------------------------------------------------------------
+*/
+
+// 文档相关
+Route::prefix('docs')->group(function () {
+    Route::get('api', function () {
+        return response()->json(['message' => 'API Documentation']);
+    });
+    Route::get('openapi', function () {
+        return response()->json([
+            'openapi' => '3.0.3',
+            'info' => [
+                'title' => 'AlingAi Pro API',
+                'version' => '6.0.0'
+            ]
+        ]);
+    });
+});
+
+// 统计和分析（公开数据）
+Route::get('stats/public', [SystemController::class, 'getPublicStats']);
+
+// Webhook 端点
+Route::prefix('webhooks')->group(function () {
+    Route::post('github', [SystemController::class, 'githubWebhook']);
+    Route::post('blockchain/{network}', [BlockchainController::class, 'blockchainWebhook']);
+    Route::post('ai/callback', [AIController::class, 'aiCallback']);
+});
+
+// 错误处理
+Route::fallback(function () {
+    return response()->json([
+        'success' => false,
+        'message' => 'API endpoint not found',
+        'error' => 'NOT_FOUND'
+    ], 404);
+});

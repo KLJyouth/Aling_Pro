@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>示例代码 - 珑凌科技</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-dark.min.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+</head>
+<body class="bg-quantum-dark text-white overflow-x-hidden">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            珑凌科技
+                        </h1>
+                        <p class="text-xs text-gray-400">示例代码</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="px-4 py-2 text-quantum-accent hover:text-white transition-colors duration-300">返回首页</a>
+                    <a href="/sdk-download.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg transition-all duration-300">
+                        下载SDK
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-20">
+        <!-- 英雄区域 -->
+        <section class="py-20 bg-gradient-to-b from-quantum-purple/20 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        示例代码库
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        丰富的代码示例，帮助您快速上手AlingAI量子安全服务
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 分类导航 -->
+        <section class="py-10">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-wrap justify-center gap-4 mb-16">
+                    <button class="code-category-btn active px-6 py-3 bg-quantum-primary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300" data-category="all">
+                        全部示例
+                    </button>
+                    <button class="code-category-btn px-6 py-3 bg-white/10 rounded-lg text-gray-300 font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300" data-category="encryption">
+                        加密解密
+                    </button>
+                    <button class="code-category-btn px-6 py-3 bg-white/10 rounded-lg text-gray-300 font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300" data-category="key-management">
+                        密钥管理
+                    </button>
+                    <button class="code-category-btn px-6 py-3 bg-white/10 rounded-lg text-gray-300 font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300" data-category="authentication">
+                        身份认证
+                    </button>
+                    <button class="code-category-btn px-6 py-3 bg-white/10 rounded-lg text-gray-300 font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300" data-category="integration">
+                        框架集成
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 代码示例 -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="grid gap-8">
+                    <!-- Python 加密示例 -->
+                    <div class="code-example p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20" data-category="encryption">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <i class="fab fa-python text-quantum-primary text-2xl mr-4"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">Python - 量子加密解密</h3>
+                                    <p class="text-gray-400">使用后量子加密算法保护数据</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="copy-btn px-3 py-1 bg-quantum-accent rounded text-white text-sm hover:bg-quantum-accent/80 transition-colors duration-300">
+                                    <i class="fas fa-copy mr-1"></i>复制
+                                </button>
+                                <button class="px-3 py-1 bg-quantum-secondary rounded text-white text-sm hover:bg-quantum-secondary/80 transition-colors duration-300">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 rounded-lg overflow-hidden">
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-python">#!/usr/bin/env python3
+"""
+AlingAI 量子加密示例
+演示如何使用后量子加密算法保护敏感数据
+"""
+
+from alingai import QuantumSecurity, QuantumKeyManager
+import asyncio
+import json
+
+class QuantumEncryptionDemo:
+    def __init__(self, api_key: str):
+        """初始化量子安全客户端"""
+        self.client = QuantumSecurity(api_key=api_key)
+        self.key_manager = QuantumKeyManager(api_key=api_key)
+    
+    async def generate_quantum_key(self, key_size: int = 256) -> str:
+        """生成量子安全密钥"""
+        try:
+            key_result = await self.key_manager.generate_key(
+                algorithm="KYBER-768",  # 后量子密钥交换算法
+                key_size=key_size,
+                purpose="encryption"
+            )
+            print(f"✅ 量子密钥生成成功: {key_result['key_id']}")
+            return key_result['key_id']
+        except Exception as e:
+            print(f"❌ 密钥生成失败: {e}")
+            raise
+    
+    async def encrypt_data(self, data: str, key_id: str) -> dict:
+        """使用量子密钥加密数据"""
+        try:
+            # 使用CRYSTALS-Kyber算法进行加密
+            encrypted_result = await self.client.encrypt(
+                data=data.encode('utf-8'),
+                key_id=key_id,
+                algorithm="AES-256-GCM-QUANTUM"  # 量子增强的AES算法
+            )
+            
+            print(f"✅ 数据加密成功")
+            print(f"   - 原始大小: {len(data)} 字符")
+            print(f"   - 加密大小: {len(encrypted_result['ciphertext'])} 字节")
+            
+            return encrypted_result
+        except Exception as e:
+            print(f"❌ 数据加密失败: {e}")
+            raise
+    
+    async def decrypt_data(self, encrypted_data: dict, key_id: str) -> str:
+        """解密数据"""
+        try:
+            decrypted_bytes = await self.client.decrypt(
+                ciphertext=encrypted_data['ciphertext'],
+                key_id=key_id,
+                nonce=encrypted_data['nonce'],
+                tag=encrypted_data['tag']
+            )
+            
+            decrypted_text = decrypted_bytes.decode('utf-8')
+            print(f"✅ 数据解密成功")
+            return decrypted_text
+        except Exception as e:
+            print(f"❌ 数据解密失败: {e}")
+            raise
+    
+    async def demonstrate_file_encryption(self, file_path: str):
+        """演示文件加密"""
+        # 读取文件
+        with open(file_path, 'rb') as f:
+            file_data = f.read()
+        
+        # 生成专用密钥
+        key_id = await self.generate_quantum_key()
+        
+        # 加密文件
+        encrypted_file = await self.client.encrypt_file(
+            file_data=file_data,
+            key_id=key_id,
+            metadata={
+                "original_filename": file_path,
+                "file_type": file_path.split('.')[-1],
+                "encryption_timestamp": "2024-06-15T10:30:00Z"
+            }
+        )
+        
+        # 保存加密文件
+        encrypted_path = f"{file_path}.encrypted"
+        with open(encrypted_path, 'wb') as f:
+            f.write(encrypted_file['ciphertext'])
+        
+        print(f"✅ 文件加密完成: {encrypted_path}")
+        return encrypted_path, key_id
+
+async def main():
+    """主演示函数"""
+    # 初始化客户端（请替换为您的API密钥）
+    demo = QuantumEncryptionDemo(api_key="your_api_key_here")
+    
+    # 示例1: 文本加密
+    print("🔐 示例1: 文本数据加密演示")
+    print("-" * 50)
+    
+    sensitive_data = "这是需要保护的敏感信息：银行账号 1234567890"
+    
+    # 生成量子密钥
+    key_id = await demo.generate_quantum_key()
+    
+    # 加密数据
+    encrypted = await demo.encrypt_data(sensitive_data, key_id)
+    
+    # 解密数据
+    decrypted = await demo.decrypt_data(encrypted, key_id)
+    
+    # 验证结果
+    assert sensitive_data == decrypted, "解密结果不匹配!"
+    print(f"✅ 加密解密验证成功!")
+    print(f"   - 原始数据: {sensitive_data}")
+    print(f"   - 解密数据: {decrypted}")
+    
+    # 示例2: 批量加密
+    print("\n🔐 示例2: 批量数据加密演示")
+    print("-" * 50)
+    
+    batch_data = [
+        "用户ID: user_123",
+        "手机号: +86 138****1234", 
+        "邮箱: user@example.com",
+        "地址: 北京市朝阳区xxx路xxx号"
+    ]
+    
+    encrypted_batch = []
+    for i, data in enumerate(batch_data):
+        encrypted = await demo.encrypt_data(data, key_id)
+        encrypted_batch.append(encrypted)
+        print(f"   第{i+1}条数据加密完成")
+    
+    print(f"✅ 批量加密完成，共处理 {len(batch_data)} 条数据")
+
+if __name__ == "__main__":
+    asyncio.run(main())</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- JavaScript 密钥管理示例 -->
+                    <div class="code-example p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-accent/20" data-category="key-management">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <i class="fab fa-js-square text-quantum-accent text-2xl mr-4"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">JavaScript - 量子密钥管理</h3>
+                                    <p class="text-gray-400">前端密钥管理和安全存储</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="copy-btn px-3 py-1 bg-quantum-accent rounded text-white text-sm hover:bg-quantum-accent/80 transition-colors duration-300">
+                                    <i class="fas fa-copy mr-1"></i>复制
+                                </button>
+                                <button class="px-3 py-1 bg-quantum-secondary rounded text-white text-sm hover:bg-quantum-secondary/80 transition-colors duration-300">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 rounded-lg overflow-hidden">
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-javascript">/**
+ * AlingAI 量子密钥管理示例
+ * 演示前端安全的密钥生成、存储和管理
+ */
+
+import { QuantumKeyManager, SecureStorage } from '@alingai/sdk';
+
+class FrontendKeyManager {
+    constructor(apiKey) {
+        this.keyManager = new QuantumKeyManager({
+            apiKey: apiKey,
+            environment: 'production',
+            enableLogging: true
+        });
+        
+        this.secureStorage = new SecureStorage({
+            storageType: 'indexedDB',
+            encryption: true
+        });
+        
+        this.keyCache = new Map();
+    }
+
+    /**
+     * 生成新的量子密钥对
+     * @param {string} purpose - 密钥用途 ('encryption', 'signing', 'key-exchange')
+     * @param {number} keySize - 密钥大小
+     * @returns {Promise&lt;Object&gt;} 密钥信息
+     */
+    async generateKeyPair(purpose = 'encryption', keySize = 256) {
+        try {
+            console.log(`🔑 正在生成${purpose}密钥对...`);
+            
+            const keyPair = await this.keyManager.generateKeyPair({
+                algorithm: this.getAlgorithmForPurpose(purpose),
+                keySize: keySize,
+                purpose: purpose,
+                metadata: {
+                    created: new Date().toISOString(),
+                    userAgent: navigator.userAgent,
+                    origin: window.location.origin
+                }
+            });
+            
+            // 安全存储密钥
+            await this.storeKeySecurely(keyPair);
+            
+            console.log(`✅ 密钥对生成成功: ${keyPair.keyId}`);
+            return keyPair;
+            
+        } catch (error) {
+            console.error(`❌ 密钥生成失败:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * 根据用途获取推荐算法
+     */
+    getAlgorithmForPurpose(purpose) {
+        const algorithms = {
+            'encryption': 'KYBER-768',      // 后量子密钥封装
+            'signing': 'DILITHIUM-3',       // 后量子数字签名
+            'key-exchange': 'KYBER-1024'    // 高强度密钥交换
+        };
+        return algorithms[purpose] || 'KYBER-768';
+    }
+
+    /**
+     * 安全存储密钥
+     */
+    async storeKeySecurely(keyPair) {
+        try {
+            // 使用 IndexedDB 安全存储
+            await this.secureStorage.setItem(`key_${keyPair.keyId}`, {
+                keyId: keyPair.keyId,
+                publicKey: keyPair.publicKey,
+                // 私钥经过额外加密后存储
+                privateKey: await this.encryptPrivateKey(keyPair.privateKey),
+                algorithm: keyPair.algorithm,
+                created: keyPair.metadata.created,
+                purpose: keyPair.purpose
+            });
+            
+            // 缓存公钥用于快速访问
+            this.keyCache.set(keyPair.keyId, {
+                publicKey: keyPair.publicKey,
+                algorithm: keyPair.algorithm
+            });
+            
+            console.log(`🔒 密钥安全存储完成: ${keyPair.keyId}`);
+            
+        } catch (error) {
+            console.error('密钥存储失败:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 加密私钥（使用用户密码或生物识别）
+     */
+    async encryptPrivateKey(privateKey) {
+        // 模拟使用用户主密码加密私钥
+        const userSecret = await this.getUserSecret();
+        return await this.keyManager.encryptWithPassword(privateKey, userSecret);
+    }
+
+    /**
+     * 获取用户密钥（实际应用中可能使用生物识别或密码）
+     */
+    async getUserSecret() {
+        // 这里可以集成 WebAuthn、生物识别等
+        return 'user_master_password_hash';
+    }
+
+    /**
+     * 密钥轮换 - 定期更新密钥
+     */
+    async rotateKeys() {
+        try {
+            console.log('🔄 开始密钥轮换...');
+            
+            const oldKeys = await this.getAllStoredKeys();
+            const rotationResults = [];
+            
+            for (const oldKey of oldKeys) {
+                // 检查密钥年龄
+                const keyAge = Date.now() - new Date(oldKey.created).getTime();
+                const maxAge = 30 * 24 * 60 * 60 * 1000; // 30天
+                
+                if (keyAge > maxAge) {
+                    console.log(`🔄 轮换过期密钥: ${oldKey.keyId}`);
+                    
+                    // 生成新密钥
+                    const newKey = await this.generateKeyPair(
+                        oldKey.purpose,
+                        oldKey.keySize
+                    );
+                    
+                    // 标记旧密钥为已轮换
+                    await this.markKeyAsRotated(oldKey.keyId, newKey.keyId);
+                    
+                    rotationResults.push({
+                        oldKeyId: oldKey.keyId,
+                        newKeyId: newKey.keyId,
+                        rotatedAt: new Date().toISOString()
+                    });
+                }
+            }
+            
+            console.log(`✅ 密钥轮换完成，共轮换 ${rotationResults.length} 个密钥`);
+            return rotationResults;
+            
+        } catch (error) {
+            console.error('❌ 密钥轮换失败:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * 获取所有存储的密钥
+     */
+    async getAllStoredKeys() {
+        const keys = await this.secureStorage.getAllItems();
+        return Object.values(keys).filter(item => item.keyId);
+    }
+
+    /**
+     * 标记密钥为已轮换
+     */
+    async markKeyAsRotated(oldKeyId, newKeyId) {
+        const oldKey = await this.secureStorage.getItem(`key_${oldKeyId}`);
+        if (oldKey) {
+            oldKey.status = 'rotated';
+            oldKey.rotatedTo = newKeyId;
+            oldKey.rotatedAt = new Date().toISOString();
+            await this.secureStorage.setItem(`key_${oldKeyId}`, oldKey);
+        }
+    }
+
+    /**
+     * 加密文件（前端处理）
+     */
+    async encryptFile(file, keyId) {
+        try {
+            console.log(`🔐 开始加密文件: ${file.name}`);
+            
+            const arrayBuffer = await file.arrayBuffer();
+            const fileData = new Uint8Array(arrayBuffer);
+            
+            const encryptedResult = await this.keyManager.encryptData({
+                data: fileData,
+                keyId: keyId,
+                metadata: {
+                    originalName: file.name,
+                    originalSize: file.size,
+                    mimeType: file.type,
+                    encryptedAt: new Date().toISOString()
+                }
+            });
+            
+            // 创建加密文件的 Blob
+            const encryptedBlob = new Blob([encryptedResult.ciphertext], {
+                type: 'application/octet-stream'
+            });
+            
+            console.log(`✅ 文件加密完成: ${file.name}`);
+            console.log(`   - 原始大小: ${file.size} 字节`);
+            console.log(`   - 加密大小: ${encryptedBlob.size} 字节`);
+            
+            return {
+                encryptedFile: encryptedBlob,
+                metadata: encryptedResult.metadata,
+                keyId: keyId
+            };
+            
+        } catch (error) {
+            console.error(`❌ 文件加密失败:`, error);
+            throw error;
+        }
+    }
+
+    /**
+     * 清理过期密钥
+     */
+    async cleanupExpiredKeys() {
+        try {
+            const allKeys = await this.getAllStoredKeys();
+            const expiredKeys = allKeys.filter(key => {
+                const keyAge = Date.now() - new Date(key.created).getTime();
+                const maxRetentionTime = 90 * 24 * 60 * 60 * 1000; // 90天
+                return key.status === 'rotated' && keyAge > maxRetentionTime;
+            });
+            
+            for (const expiredKey of expiredKeys) {
+                await this.secureStorage.removeItem(`key_${expiredKey.keyId}`);
+                this.keyCache.delete(expiredKey.keyId);
+                console.log(`🗑️ 清理过期密钥: ${expiredKey.keyId}`);
+            }
+            
+            console.log(`✅ 清理完成，删除 ${expiredKeys.length} 个过期密钥`);
+            
+        } catch (error) {
+            console.error('❌ 密钥清理失败:', error);
+            throw error;
+        }
+    }
+}
+
+// 使用示例
+async function demoKeyManagement() {
+    const keyManager = new FrontendKeyManager('your_api_key_here');
+    
+    try {
+        // 生成加密密钥对
+        const encryptionKey = await keyManager.generateKeyPair('encryption', 256);
+        
+        // 生成签名密钥对
+        const signingKey = await keyManager.generateKeyPair('signing', 384);
+        
+        // 模拟文件加密
+        const fileInput = document.getElementById('fileInput');
+        if (fileInput && fileInput.files[0]) {
+            const encrypted = await keyManager.encryptFile(
+                fileInput.files[0], 
+                encryptionKey.keyId
+            );
+            
+            // 下载加密文件
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(encrypted.encryptedFile);
+            downloadLink.download = `${fileInput.files[0].name}.encrypted`;
+            downloadLink.click();
+        }
+        
+        // 定期密钥轮换（生产环境中应该定时执行）
+        setTimeout(() => {
+            keyManager.rotateKeys();
+        }, 24 * 60 * 60 * 1000); // 24小时后执行
+        
+    } catch (error) {
+        console.error('演示失败:', error);
+    }
+}
+
+// 导出供其他模块使用
+export { FrontendKeyManager, demoKeyManagement };</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Java Spring Boot 集成示例 -->
+                    <div class="code-example p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-secondary/20" data-category="integration">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <i class="fab fa-java text-quantum-secondary text-2xl mr-4"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">Java - Spring Boot 集成</h3>
+                                    <p class="text-gray-400">企业级应用集成量子安全服务</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="copy-btn px-3 py-1 bg-quantum-accent rounded text-white text-sm hover:bg-quantum-accent/80 transition-colors duration-300">
+                                    <i class="fas fa-copy mr-1"></i>复制
+                                </button>
+                                <button class="px-3 py-1 bg-quantum-secondary rounded text-white text-sm hover:bg-quantum-secondary/80 transition-colors duration-300">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 rounded-lg overflow-hidden">
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-java">/**
+ * Spring Boot 集成 AlingAI 量子安全服务
+ * 演示企业级应用中的量子安全集成
+ */
+
+package com.example.quantumsecurity.config;
+
+import com.alingai.sdk.QuantumSecurityClient;
+import com.alingai.sdk.QuantumKeyManager;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+
+@Configuration
+public class QuantumSecurityConfig {
+    
+    @Value("${alingai.api.key}")
+    private String apiKey;
+    
+    @Value("${alingai.api.endpoint:https://api.alingai.com}")
+    private String apiEndpoint;
+    
+    @Bean
+    @Primary
+    public QuantumSecurityClient quantumSecurityClient() {
+        return QuantumSecurityClient.builder()
+                .apiKey(apiKey)
+                .endpoint(apiEndpoint)
+                .connectionTimeout(30000)
+                .readTimeout(60000)
+                .enableRetry(true)
+                .maxRetries(3)
+                .build();
+    }
+    
+    @Bean
+    public QuantumKeyManager quantumKeyManager(QuantumSecurityClient client) {
+        return client.getKeyManager();
+    }
+}
+
+// 量子安全服务类
+package com.example.quantumsecurity.service;
+
+import com.alingai.sdk.QuantumSecurityClient;
+import com.alingai.sdk.QuantumKeyManager;
+import com.alingai.sdk.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.List;
+
+@Service
+@Slf4j
+public class QuantumSecurityService {
+    
+    @Autowired
+    private QuantumSecurityClient quantumClient;
+    
+    @Autowired
+    private QuantumKeyManager keyManager;
+    
+    /**
+     * 生成量子安全密钥
+     */
+    @Transactional
+    public CompletableFuture&lt;QuantumKey&gt; generateQuantumKey(KeyGenerationRequest request) {
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                log.info("生成量子密钥，算法: {}, 大小: {}", 
+                    request.getAlgorithm(), request.getKeySize());
+                
+                QuantumKey key = keyManager.generateKey(
+                    QuantumKeySpec.builder()
+                        .algorithm(request.getAlgorithm())
+                        .keySize(request.getKeySize())
+                        .purpose(KeyPurpose.ENCRYPTION)
+                        .metadata(request.getMetadata())
+                        .build()
+                );
+                
+                log.info("量子密钥生成成功: {}", key.getKeyId());
+                return key;
+                
+            } catch (Exception e) {
+                log.error("量子密钥生成失败", e);
+                throw new QuantumSecurityException("密钥生成失败", e);
+            }
+        });
+    }
+    
+    /**
+     * 批量加密用户敏感数据
+     */
+    @Transactional
+    public CompletableFuture&lt;List&lt;EncryptedData&gt;&gt; encryptUserData(
+            List&lt;String&gt; sensitiveData, String keyId) {
+        
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                log.info("开始批量加密，数据条数: {}, 密钥ID: {}", 
+                    sensitiveData.size(), keyId);
+                
+                List&lt;EncryptedData&gt; encryptedList = sensitiveData.parallelStream()
+                    .map(data -> {
+                        try {
+                            return quantumClient.encrypt(
+                                EncryptionRequest.builder()
+                                    .data(data.getBytes("UTF-8"))
+                                    .keyId(keyId)
+                                    .algorithm("AES-256-GCM-QUANTUM")
+                                    .build()
+                            );
+                        } catch (Exception e) {
+                            log.error("数据加密失败: {}", data, e);
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .collect(Collectors.toList());
+                
+                log.info("批量加密完成，成功加密 {} 条数据", encryptedList.size());
+                return encryptedList;
+                
+            } catch (Exception e) {
+                log.error("批量加密失败", e);
+                throw new QuantumSecurityException("批量加密失败", e);
+            }
+        });
+    }
+    
+    /**
+     * 安全存储加密密钥（带缓存）
+     */
+    @Cacheable(value = "quantumKeys", key = "#keyId")
+    public QuantumKey getKey(String keyId) {
+        try {
+            log.debug("获取量子密钥: {}", keyId);
+            return keyManager.getKey(keyId);
+        } catch (Exception e) {
+            log.error("获取密钥失败: {}", keyId, e);
+            throw new QuantumSecurityException("密钥获取失败", e);
+        }
+    }
+    
+    /**
+     * 密钥轮换服务
+     */
+    @Scheduled(fixedRate = 86400000) // 24小时执行一次
+    @Transactional
+    public void rotateKeys() {
+        try {
+            log.info("开始定期密钥轮换");
+            
+            List&lt;QuantumKey&gt; expiredKeys = keyManager.findExpiredKeys();
+            
+            for (QuantumKey expiredKey : expiredKeys) {
+                // 生成新密钥
+                QuantumKey newKey = keyManager.generateKey(
+                    QuantumKeySpec.builder()
+                        .algorithm(expiredKey.getAlgorithm())
+                        .keySize(expiredKey.getKeySize())
+                        .purpose(expiredKey.getPurpose())
+                        .build()
+                );
+                
+                // 更新密钥引用
+                updateKeyReferences(expiredKey.getKeyId(), newKey.getKeyId());
+                
+                // 标记旧密钥为已轮换
+                keyManager.markKeyAsRotated(expiredKey.getKeyId(), newKey.getKeyId());
+                
+                log.info("密钥轮换完成: {} -> {}", 
+                    expiredKey.getKeyId(), newKey.getKeyId());
+            }
+            
+            log.info("密钥轮换完成，共轮换 {} 个密钥", expiredKeys.size());
+            
+        } catch (Exception e) {
+            log.error("密钥轮换失败", e);
+        }
+    }
+    
+    /**
+     * 更新数据库中的密钥引用
+     */
+    private void updateKeyReferences(String oldKeyId, String newKeyId) {
+        // 实现密钥引用更新逻辑
+        // 这里应该更新所有使用旧密钥的数据记录
+    }
+}
+
+// REST控制器
+package com.example.quantumsecurity.controller;
+
+import com.example.quantumsecurity.service.QuantumSecurityService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.validation.annotation.Validated;
+
+import javax.validation.Valid;
+import java.util.concurrent.CompletableFuture;
+
+@RestController
+@RequestMapping("/api/v1/quantum")
+@Validated
+public class QuantumSecurityController {
+    
+    @Autowired
+    private QuantumSecurityService quantumService;
+    
+    /**
+     * 生成量子密钥API
+     */
+    @PostMapping("/keys/generate")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('KEY_MANAGER')")
+    public CompletableFuture&lt;ResponseEntity&lt;QuantumKeyResponse&gt;&gt; generateKey(
+            @Valid @RequestBody KeyGenerationRequest request) {
+        
+        return quantumService.generateQuantumKey(request)
+            .thenApply(key -> ResponseEntity.ok(
+                QuantumKeyResponse.builder()
+                    .keyId(key.getKeyId())
+                    .algorithm(key.getAlgorithm())
+                    .status("ACTIVE")
+                    .createdAt(key.getCreatedAt())
+                    .build()
+            ))
+            .exceptionally(throwable -> {
+                log.error("密钥生成API失败", throwable);
+                return ResponseEntity.internalServerError()
+                    .body(QuantumKeyResponse.builder()
+                        .status("ERROR")
+                        .error(throwable.getMessage())
+                        .build());
+            });
+    }
+    
+    /**
+     * 批量加密API
+     */
+    @PostMapping("/encrypt/batch")
+    @PreAuthorize("hasRole('USER')")
+    public CompletableFuture&lt;ResponseEntity&lt;BatchEncryptionResponse&gt;&gt; encryptBatch(
+            @Valid @RequestBody BatchEncryptionRequest request) {
+        
+        return quantumService.encryptUserData(request.getData(), request.getKeyId())
+            .thenApply(encryptedList -> ResponseEntity.ok(
+                BatchEncryptionResponse.builder()
+                    .encryptedCount(encryptedList.size())
+                    .encryptedData(encryptedList)
+                    .status("SUCCESS")
+                    .build()
+            ))
+            .exceptionally(throwable -> {
+                log.error("批量加密API失败", throwable);
+                return ResponseEntity.internalServerError()
+                    .body(BatchEncryptionResponse.builder()
+                        .status("ERROR")
+                        .error(throwable.getMessage())
+                        .build());
+            });
+    }
+    
+    /**
+     * 健康检查API
+     */
+    @GetMapping("/health")
+    public ResponseEntity&lt;HealthResponse&gt; healthCheck() {
+        try {
+            // 检查量子服务连接状态
+            boolean isHealthy = quantumService.isServiceHealthy();
+            
+            return ResponseEntity.ok(
+                HealthResponse.builder()
+                    .status(isHealthy ? "HEALTHY" : "UNHEALTHY")
+                    .timestamp(Instant.now())
+                    .quantumServiceStatus(isHealthy ? "CONNECTED" : "DISCONNECTED")
+                    .build()
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(503)
+                .body(HealthResponse.builder()
+                    .status("UNHEALTHY")
+                    .error(e.getMessage())
+                    .timestamp(Instant.now())
+                    .build());
+        }
+    }
+}
+
+// 异常处理
+@ControllerAdvice
+public class QuantumSecurityExceptionHandler {
+    
+    @ExceptionHandler(QuantumSecurityException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleQuantumSecurityException(
+            QuantumSecurityException e) {
+        return ResponseEntity.badRequest()
+            .body(ErrorResponse.builder()
+                .code("QUANTUM_SECURITY_ERROR")
+                .message(e.getMessage())
+                .timestamp(Instant.now())
+                .build());
+    }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- Go 微服务示例 -->
+                    <div class="code-example p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-cyber-green/20" data-category="integration">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center">
+                                <i class="fab fa-golang text-cyber-green text-2xl mr-4"></i>
+                                <div>
+                                    <h3 class="text-xl font-bold">Go - 微服务集成</h3>
+                                    <p class="text-gray-400">高性能微服务量子安全集成</p>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <button class="copy-btn px-3 py-1 bg-quantum-accent rounded text-white text-sm hover:bg-quantum-accent/80 transition-colors duration-300">
+                                    <i class="fas fa-copy mr-1"></i>复制
+                                </button>
+                                <button class="px-3 py-1 bg-quantum-secondary rounded text-white text-sm hover:bg-quantum-secondary/80 transition-colors duration-300">
+                                    <i class="fas fa-download mr-1"></i>下载
+                                </button>
+                            </div>
+                        </div>
+                        <div class="bg-black/50 rounded-lg overflow-hidden">
+                            <pre class="p-4 text-sm overflow-x-auto"><code class="language-go">// Go 微服务量子安全集成示例
+package main
+
+import (
+    "context"
+    "encoding/json"
+    "fmt"
+    "log"
+    "net/http"
+    "time"
+    
+    "github.com/alingai/go-sdk/quantum"
+    "github.com/gin-gonic/gin"
+    "github.com/go-redis/redis/v8"
+    "gorm.io/gorm"
+)
+
+// 量子安全微服务
+type QuantumSecurityService struct {
+    client     *quantum.Client
+    keyManager *quantum.KeyManager
+    redis      *redis.Client
+    db         *gorm.DB
+}
+
+// 初始化服务
+func NewQuantumSecurityService() *QuantumSecurityService {
+    client := quantum.NewClient(&quantum.Config{
+        APIKey:      getEnv("ALINGAI_API_KEY"),
+        Endpoint:    getEnv("ALINGAI_ENDPOINT", "https://api.alingai.com"),
+        Timeout:     30 * time.Second,
+        MaxRetries:  3,
+    })
+    
+    return &QuantumSecurityService{
+        client:     client,
+        keyManager: client.KeyManager(),
+        redis:      initRedis(),
+        db:         initDB(),
+    }
+}
+
+// 加密数据结构
+type EncryptionRequest struct {
+    Data     []byte                 `json:"data" binding:"required"`
+    KeyID    string                 `json:"key_id" binding:"required"`
+    Metadata map[string]interface{} `json:"metadata,omitempty"`
+}
+
+type EncryptionResponse struct {
+    CipherText string    `json:"cipher_text"`
+    KeyID      string    `json:"key_id"`
+    Nonce      string    `json:"nonce"`
+    Tag        string    `json:"tag"`
+    CreatedAt  time.Time `json:"created_at"`
+}
+
+// 高性能批量加密
+func (qs *QuantumSecurityService) BatchEncrypt(ctx context.Context, 
+    requests []EncryptionRequest) ([]EncryptionResponse, error) {
+    
+    // 使用 goroutine 并发处理
+    results := make([]EncryptionResponse, len(requests))
+    errChan := make(chan error, len(requests))
+    
+    for i, req := range requests {
+        go func(index int, request EncryptionRequest) {
+            defer func() {
+                if r := recover(); r != nil {
+                    errChan <- fmt.Errorf("encryption panic at index %d: %v", index, r)
+                    return
+                }
+            }()
+            
+            // 执行量子加密
+            encrypted, err := qs.client.Encrypt(ctx, &quantum.EncryptRequest{
+                Data:      request.Data,
+                KeyID:     request.KeyID,
+                Algorithm: "AES-256-GCM-QUANTUM",
+                Metadata:  request.Metadata,
+            })
+            
+            if err != nil {
+                errChan <- fmt.Errorf("encryption failed at index %d: %w", index, err)
+                return
+            }
+            
+            results[index] = EncryptionResponse{
+                CipherText: encrypted.CipherText,
+                KeyID:      encrypted.KeyID,
+                Nonce:      encrypted.Nonce,
+                Tag:        encrypted.Tag,
+                CreatedAt:  time.Now(),
+            }
+            
+            errChan <- nil
+        }(i, req)
+    }
+    
+    // 等待所有 goroutine 完成
+    for i := 0; i < len(requests); i++ {
+        if err := <-errChan; err != nil {
+            return nil, err
+        }
+    }
+    
+    log.Printf("批量加密完成，处理 %d 条数据", len(requests))
+    return results, nil
+}
+
+// 密钥缓存管理
+func (qs *QuantumSecurityService) GetCachedKey(ctx context.Context, keyID string) (*quantum.Key, error) {
+    // 先从 Redis 缓存获取
+    cacheKey := fmt.Sprintf("quantum:key:%s", keyID)
+    cached, err := qs.redis.Get(ctx, cacheKey).Result()
+    
+    if err == nil {
+        var key quantum.Key
+        if err := json.Unmarshal([]byte(cached), &key); err == nil {
+            return &key, nil
+        }
+    }
+    
+    // 缓存未命中，从API获取
+    key, err := qs.keyManager.GetKey(ctx, keyID)
+    if err != nil {
+        return nil, fmt.Errorf("failed to get key: %w", err)
+    }
+    
+    // 缓存密钥信息（不包含私钥）
+    cacheData := quantum.Key{
+        ID:        key.ID,
+        Algorithm: key.Algorithm,
+        KeySize:   key.KeySize,
+        Purpose:   key.Purpose,
+        Status:    key.Status,
+        CreatedAt: key.CreatedAt,
+        // 注意：不缓存私钥数据
+    }
+    
+    if data, err := json.Marshal(cacheData); err == nil {
+        qs.redis.Set(ctx, cacheKey, data, time.Hour).Err()
+    }
+    
+    return key, nil
+}
+
+// HTTP路由处理器
+func (qs *QuantumSecurityService) SetupRoutes() *gin.Engine {
+    r := gin.Default()
+    
+    // 中间件
+    r.Use(gin.Logger())
+    r.Use(gin.Recovery())
+    r.Use(qs.authMiddleware())
+    r.Use(qs.rateLimitMiddleware())
+    
+    api := r.Group("/api/v1")
+    {
+        // 生成密钥
+        api.POST("/keys", qs.generateKey)
+        
+        // 单个加密
+        api.POST("/encrypt", qs.encrypt)
+        
+        // 批量加密
+        api.POST("/encrypt/batch", qs.batchEncrypt)
+        
+        // 解密
+        api.POST("/decrypt", qs.decrypt)
+        
+        // 健康检查
+        api.GET("/health", qs.healthCheck)
+        
+        // 密钥管理
+        keys := api.Group("/keys")
+        {
+            keys.GET("/:id", qs.getKey)
+            keys.DELETE("/:id", qs.revokeKey)
+            keys.POST("/:id/rotate", qs.rotateKey)
+        }
+    }
+    
+    return r
+}
+
+// 生成密钥处理器
+func (qs *QuantumSecurityService) generateKey(c *gin.Context) {
+    var req struct {
+        Algorithm string                 `json:"algorithm" binding:"required"`
+        KeySize   int                    `json:"key_size" binding:"required"`
+        Purpose   string                 `json:"purpose" binding:"required"`
+        Metadata  map[string]interface{} `json:"metadata,omitempty"`
+    }
+    
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    
+    ctx, cancel := context.WithTimeout(c.Request.Context(), 30*time.Second)
+    defer cancel()
+    
+    key, err := qs.keyManager.GenerateKey(ctx, &quantum.KeySpec{
+        Algorithm: req.Algorithm,
+        KeySize:   req.KeySize,
+        Purpose:   quantum.ParsePurpose(req.Purpose),
+        Metadata:  req.Metadata,
+    })
+    
+    if err != nil {
+        log.Printf("密钥生成失败: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "密钥生成失败"})
+        return
+    }
+    
+    // 记录密钥生成事件
+    go qs.logKeyGeneration(key.ID, c.ClientIP())
+    
+    c.JSON(http.StatusCreated, gin.H{
+        "key_id":    key.ID,
+        "algorithm": key.Algorithm,
+        "key_size":  key.KeySize,
+        "status":    key.Status,
+        "created_at": key.CreatedAt,
+    })
+}
+
+// 批量加密处理器
+func (qs *QuantumSecurityService) batchEncrypt(c *gin.Context) {
+    var req struct {
+        Requests []EncryptionRequest `json:"requests" binding:"required"`
+    }
+    
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+    
+    // 限制批量大小
+    if len(req.Requests) > 100 {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "批量大小不能超过100"})
+        return
+    }
+    
+    ctx, cancel := context.WithTimeout(c.Request.Context(), 60*time.Second)
+    defer cancel()
+    
+    results, err := qs.BatchEncrypt(ctx, req.Requests)
+    if err != nil {
+        log.Printf("批量加密失败: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "批量加密失败"})
+        return
+    }
+    
+    c.JSON(http.StatusOK, gin.H{
+        "results": results,
+        "count":   len(results),
+        "status":  "success",
+    })
+}
+
+// 认证中间件
+func (qs *QuantumSecurityService) authMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        apiKey := c.GetHeader("X-API-Key")
+        if apiKey == "" {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "API密钥缺失"})
+            c.Abort()
+            return
+        }
+        
+        // 验证API密钥
+        if !qs.validateAPIKey(apiKey) {
+            c.JSON(http.StatusUnauthorized, gin.H{"error": "无效的API密钥"})
+            c.Abort()
+            return
+        }
+        
+        c.Next()
+    }
+}
+
+// 限流中间件
+func (qs *QuantumSecurityService) rateLimitMiddleware() gin.HandlerFunc {
+    return func(c *gin.Context) {
+        clientIP := c.ClientIP()
+        key := fmt.Sprintf("rate_limit:%s", clientIP)
+        
+        // 使用 Redis 实现令牌桶算法
+        current, err := qs.redis.Incr(c.Request.Context(), key).Result()
+        if err != nil {
+            log.Printf("限流检查失败: %v", err)
+            c.Next()
+            return
+        }
+        
+        if current == 1 {
+            qs.redis.Expire(c.Request.Context(), key, time.Minute)
+        }
+        
+        if current > 100 { // 每分钟100次请求
+            c.JSON(http.StatusTooManyRequests, gin.H{
+                "error": "请求过于频繁，请稍后再试",
+            })
+            c.Abort()
+            return
+        }
+        
+        c.Next()
+    }
+}
+
+// 健康检查
+func (qs *QuantumSecurityService) healthCheck(c *gin.Context) {
+    ctx, cancel := context.WithTimeout(c.Request.Context(), 5*time.Second)
+    defer cancel()
+    
+    // 检查量子服务连接
+    healthy := true
+    var issues []string
+    
+    if err := qs.client.Ping(ctx); err != nil {
+        healthy = false
+        issues = append(issues, "量子服务连接失败")
+    }
+    
+    if err := qs.redis.Ping(ctx).Err(); err != nil {
+        healthy = false
+        issues = append(issues, "Redis连接失败")
+    }
+    
+    status := "healthy"
+    if !healthy {
+        status = "unhealthy"
+    }
+    
+    c.JSON(http.StatusOK, gin.H{
+        "status":    status,
+        "timestamp": time.Now(),
+        "issues":    issues,
+        "version":   "1.0.0",
+    })
+}
+
+// 主函数
+func main() {
+    service := NewQuantumSecurityService()
+    router := service.SetupRoutes()
+    
+    log.Println("🚀 量子安全微服务启动...")
+    log.Println("📡 服务地址: http://localhost:8080")
+    
+    if err := router.Run(":8080"); err != nil {
+        log.Fatal("服务启动失败:", err)
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 获取更多示例 -->
+        <section class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6 text-center">
+                <div class="bg-gradient-to-r from-quantum-primary/10 to-quantum-accent/10 backdrop-blur-xl rounded-2xl border border-quantum-primary/20 p-12">
+                    <h2 class="text-3xl font-bold mb-6 text-white">获取更多示例</h2>
+                    <p class="text-xl text-gray-300 mb-8">查看完整的代码库和最佳实践</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="https://github.com/alingai/examples" class="px-8 py-4 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300" target="_blank">
+                            <i class="fab fa-github mr-2"></i>GitHub 仓库
+                        </a>
+                        <a href="/docs" class="px-8 py-4 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300">
+                            <i class="fas fa-book mr-2"></i>技术文档
+                        </a>
+                        <a href="/tech-support.html" class="px-8 py-4 border border-quantum-secondary text-quantum-secondary rounded-lg font-semibold hover:bg-quantum-secondary hover:text-white transition-all duration-300">
+                            <i class="fas fa-headset mr-2"></i>技术支持
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/50 backdrop-blur-xl border-t border-quantum-primary/20 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400 text-sm">© 2024 珑凌科技. 保留所有权利.</p>
+        </div>
+    </footer>
+
+    <!-- 脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        // 分类过滤功能
+        document.querySelectorAll('.code-category-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 更新按钮状态
+                document.querySelectorAll('.code-category-btn').forEach(b => {
+                    b.classList.remove('active', 'bg-quantum-primary');
+                    b.classList.add('bg-white/10', 'text-gray-300');
+                });
+                this.classList.add('active', 'bg-quantum-primary');
+                this.classList.remove('bg-white/10', 'text-gray-300');
+                
+                // 过滤示例
+                const category = this.dataset.category;
+                document.querySelectorAll('.code-example').forEach(example => {
+                    if (category === 'all' || example.dataset.category === category) {
+                        example.style.display = 'block';
+                    } else {
+                        example.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 复制代码功能
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const codeBlock = this.closest('.code-example').querySelector('code');
+                const text = codeBlock.textContent;
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check mr-1"></i>已复制';
+                    this.classList.add('bg-green-500');
+                    
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.classList.remove('bg-green-500');
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

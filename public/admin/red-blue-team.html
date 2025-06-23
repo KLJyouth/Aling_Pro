@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>红蓝队攻防演练 - AlingAi Pro 6.0</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css" rel="stylesheet">
+    <style>
+        .exercise-gradient {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 100%);
+        }
+        .exercise-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .red-team { color: #ff6b6b; }
+        .blue-team { color: #4ecdc4; }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .status-active { background: rgba(40, 167, 69, 0.2); color: #28a745; }
+        .status-completed { background: rgba(108, 117, 125, 0.2); color: #6c757d; }
+        .status-in-progress { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .progress-custom {
+            height: 8px;
+            border-radius: 4px;
+        }
+        .event-timeline {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .event-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-left: 3px solid #007bff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .event-attack { border-left-color: #ff6b6b; }
+        .event-defense { border-left-color: #4ecdc4; }
+        .event-neutral { border-left-color: #6c757d; }
+    </style>
+</head>
+<body class="exercise-gradient min-vh-100">
+    <div class="container-fluid">
+        <!-- 头部导航 -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <i class="bi bi-shield-check"></i> 红蓝队攻防演练
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="admin-dashboard.html">
+                        <i class="bi bi-house"></i> 返回仪表板
+                    </a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 主要内容 -->
+        <div class="row g-4 p-4">
+            <!-- 演练场景选择 -->
+            <div class="col-12">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-list-check"></i> 演练场景
+                        </h5>
+                        <div class="row g-3" id="exerciseScenarios">
+                            <!-- 场景卡片将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 当前演练状态 -->
+            <div class="col-md-8">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-activity"></i> 当前演练状态
+                        </h5>
+                        <div id="currentExercise" class="d-none">
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <h4 class="red-team">红队</h4>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-danger" id="redTeamProgress" style="width: 0%"></div>
+                                        </div>
+                                        <small id="redTeamScore">得分: 0</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <h4 class="blue-team">蓝队</h4>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-info" id="blueTeamProgress" style="width: 0%"></div>
+                                        </div>
+                                        <small id="blueTeamScore">得分: 0</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>演练进度</h6>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-warning" id="exerciseProgress" style="width: 0%"></div>
+                                        </div>
+                                        <small id="exerciseTime">剩余时间: --:--</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>攻击次数</h6>
+                                        <h4 id="attackCount">0</h4>
+                                        <small>成功: <span id="successfulAttacks">0</span></small>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="text-center">
+                                        <h6>防御次数</h6>
+                                        <h4 id="defenseCount">0</h4>
+                                        <small>成功: <span id="successfulDefenses">0</span></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-danger" onclick="stopExercise()">
+                                    <i class="bi bi-stop-circle"></i> 停止演练
+                                </button>
+                                <button class="btn btn-secondary ms-2" onclick="pauseExercise()">
+                                    <i class="bi bi-pause-circle"></i> 暂停演练
+                                </button>
+                            </div>
+                        </div>
+                        <div id="noExercise" class="text-center">
+                            <i class="bi bi-play-circle" style="font-size: 3rem;"></i>
+                            <p class="mt-3">请选择一个演练场景开始</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实时事件 -->
+            <div class="col-md-4">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-clock-history"></i> 实时事件
+                        </h5>
+                        <div class="event-timeline" id="realTimeEvents">
+                            <!-- 事件将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 演练统计 -->
+            <div class="col-md-6">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-graph-up"></i> 演练统计
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <h4 class="red-team">红队统计</h4>
+                                    <div class="mb-2">
+                                        <small>攻击成功率</small>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-danger" style="width: 75%"></div>
+                                        </div>
+                                        <small>75%</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small>目标达成率</small>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-danger" style="width: 60%"></div>
+                                        </div>
+                                        <small>60%</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="text-center">
+                                    <h4 class="blue-team">蓝队统计</h4>
+                                    <div class="mb-2">
+                                        <small>威胁检测率</small>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-info" style="width: 85%"></div>
+                                        </div>
+                                        <small>85%</small>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small>响应成功率</small>
+                                        <div class="progress progress-custom">
+                                            <div class="progress-bar bg-info" style="width: 70%"></div>
+                                        </div>
+                                        <small>70%</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 演练历史 -->
+            <div class="col-md-6">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-calendar3"></i> 演练历史
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-dark table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>场景</th>
+                                        <th>红队</th>
+                                        <th>蓝队</th>
+                                        <th>胜者</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="exerciseHistory">
+                                    <!-- 历史记录将通过JavaScript动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 演练结果 -->
+            <div class="col-12" id="exerciseResults" class="d-none">
+                <div class="card exercise-card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <i class="bi bi-trophy"></i> 演练结果
+                        </h5>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h4 id="winnerTeam">红队获胜</h4>
+                                    <div class="mb-3">
+                                        <span class="status-badge status-completed">演练完成</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small>演练时长</small>
+                                        <h5 id="exerciseDuration">120分钟</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h6>红队成就</h6>
+                                    <ul class="list-unstyled text-start" id="redTeamAchievements">
+                                        <li><i class="bi bi-check-circle text-success"></i> 成功获取管理员权限</li>
+                                        <li><i class="bi bi-check-circle text-success"></i> 提取敏感数据</li>
+                                        <li><i class="bi bi-check-circle text-success"></i> 建立持久化访问</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <h6>蓝队成就</h6>
+                                    <ul class="list-unstyled text-start" id="blueTeamAchievements">
+                                        <li><i class="bi bi-check-circle text-success"></i> 检测到80%的攻击</li>
+                                        <li><i class="bi bi-check-circle text-success"></i> 成功阻止数据泄露</li>
+                                        <li><i class="bi bi-check-circle text-success"></i> 快速响应安全事件</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="generateReport()">
+                                <i class="bi bi-file-earmark-text"></i> 生成报告
+                            </button>
+                            <button class="btn btn-secondary ms-2" onclick="downloadResults()">
+                                <i class="bi bi-download"></i> 下载结果
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 演练场景模态框 -->
+    <div class="modal fade" id="scenarioModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                    <h5 class="modal-title">演练场景详情</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="scenarioDetails">
+                    <!-- 场景详情将通过JavaScript动态加载 -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="startSelectedScenario()">开始演练</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <script>
+        let currentExercise = null;
+        let exerciseTimer = null;
+        let selectedScenario = null;
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadExerciseScenarios();
+            loadExerciseHistory();
+            startRealTimeUpdates();
+        });
+
+        // 加载演练场景
+        async function loadExerciseScenarios() {
+            try {
+                const response = await fetch('/api/red-blue-team/scenarios');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const scenariosContainer = document.getElementById('exerciseScenarios');
+                    scenariosContainer.innerHTML = '';
+                    
+                    data.data.forEach(scenario => {
+                        const scenarioCard = document.createElement('div');
+                        scenarioCard.className = 'col-md-4';
+                        scenarioCard.innerHTML = `
+                            <div class="card bg-dark text-white h-100">
+                                <div class="card-body">
+                                    <h6 class="card-title">${scenario.name}</h6>
+                                    <p class="card-text">${scenario.description}</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-${getDifficultyColor(scenario.difficulty)}">${scenario.difficulty}</span>
+                                        <span class="badge bg-secondary">${scenario.duration}分钟</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <small class="text-muted">目标: ${scenario.targets.join(', ')}</small>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="viewScenario(${scenario.id})">
+                                        查看详情
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        scenariosContainer.appendChild(scenarioCard);
+                    });
+                }
+            } catch (error) {
+                console.error('加载演练场景失败:', error);
+            }
+        }
+
+        // 获取难度颜色
+        function getDifficultyColor(difficulty) {
+            const colors = {
+                'easy': 'success',
+                'medium': 'warning',
+                'hard': 'danger'
+            };
+            return colors[difficulty] || 'secondary';
+        }
+
+        // 查看场景详情
+        async function viewScenario(scenarioId) {
+            try {
+                const response = await fetch(`/api/red-blue-team/scenarios/${scenarioId}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    selectedScenario = data.data;
+                    const detailsContainer = document.getElementById('scenarioDetails');
+                    
+                    detailsContainer.innerHTML = `
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>场景信息</h6>
+                                <p><strong>名称:</strong> ${selectedScenario.name}</p>
+                                <p><strong>描述:</strong> ${selectedScenario.description}</p>
+                                <p><strong>难度:</strong> <span class="badge bg-${getDifficultyColor(selectedScenario.difficulty)}">${selectedScenario.difficulty}</span></p>
+                                <p><strong>时长:</strong> ${selectedScenario.duration}分钟</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>目标</h6>
+                                <ul>
+                                    ${selectedScenario.objectives.map(obj => `<li>${obj}</li>`).join('')}
+                                </ul>
+                                <h6>工具</h6>
+                                <p><strong>红队:</strong> ${selectedScenario.red_team_tools.join(', ')}</p>
+                                <p><strong>蓝队:</strong> ${selectedScenario.blue_team_tools.join(', ')}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('scenarioModal'));
+                    modal.show();
+                }
+            } catch (error) {
+                console.error('获取场景详情失败:', error);
+            }
+        }
+
+        // 开始选定的场景
+        async function startSelectedScenario() {
+            if (!selectedScenario) {
+                alert('请先选择一个场景');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/red-blue-team/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        scenario_id: selectedScenario.id,
+                        teams: ['red_team', 'blue_team'],
+                        targets: selectedScenario.targets,
+                        attack_type: 'comprehensive',
+                        defense_level: 'standard'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentExercise = data.data;
+                    startExercise(currentExercise);
+                    
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('scenarioModal'));
+                    modal.hide();
+                }
+            } catch (error) {
+                console.error('启动演练失败:', error);
+                alert('启动演练失败');
+            }
+        }
+
+        // 开始演练
+        function startExercise(exercise) {
+            document.getElementById('noExercise').classList.add('d-none');
+            document.getElementById('currentExercise').classList.remove('d-none');
+            
+            // 初始化进度
+            updateExerciseProgress(exercise);
+            
+            // 开始计时器
+            startExerciseTimer(exercise);
+            
+            // 开始实时更新
+            startRealTimeUpdates();
+        }
+
+        // 更新演练进度
+        function updateExerciseProgress(exercise) {
+            const progress = exercise.progress || 0;
+            const redTeamScore = exercise.red_team_score || 0;
+            const blueTeamScore = exercise.blue_team_score || 0;
+            
+            document.getElementById('exerciseProgress').style.width = progress + '%';
+            document.getElementById('redTeamProgress').style.width = redTeamScore + '%';
+            document.getElementById('blueTeamProgress').style.width = blueTeamScore + '%';
+            
+            document.getElementById('redTeamScore').textContent = `得分: ${redTeamScore}`;
+            document.getElementById('blueTeamScore').textContent = `得分: ${blueTeamScore}`;
+        }
+
+        // 开始演练计时器
+        function startExerciseTimer(exercise) {
+            let remainingTime = exercise.duration * 60; // 转换为秒
+            
+            exerciseTimer = setInterval(() => {
+                remainingTime--;
+                
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = remainingTime % 60;
+                
+                document.getElementById('exerciseTime').textContent = 
+                    `剩余时间: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (remainingTime <= 0) {
+                    clearInterval(exerciseTimer);
+                    finishExercise();
+                }
+            }, 1000);
+        }
+
+        // 停止演练
+        async function stopExercise() {
+            if (!currentExercise) return;
+            
+            try {
+                const response = await fetch(`/api/red-blue-team/stop/${currentExercise.exercise_id}`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    clearInterval(exerciseTimer);
+                    finishExercise(data.data);
+                }
+            } catch (error) {
+                console.error('停止演练失败:', error);
+            }
+        }
+
+        // 暂停演练
+        function pauseExercise() {
+            if (exerciseTimer) {
+                clearInterval(exerciseTimer);
+                exerciseTimer = null;
+                alert('演练已暂停');
+            } else {
+                startExerciseTimer(currentExercise);
+                alert('演练已恢复');
+            }
+        }
+
+        // 完成演练
+        function finishExercise(results = null) {
+            if (results) {
+                showExerciseResults(results);
+            } else {
+                // 模拟结果
+                showExerciseResults({
+                    red_team_score: 85,
+                    blue_team_score: 78,
+                    winner: 'red_team',
+                    duration: 120
+                });
+            }
+            
+            document.getElementById('currentExercise').classList.add('d-none');
+            document.getElementById('exerciseResults').classList.remove('d-none');
+        }
+
+        // 显示演练结果
+        function showExerciseResults(results) {
+            document.getElementById('winnerTeam').textContent = 
+                results.winner === 'red_team' ? '红队获胜' : '蓝队获胜';
+            document.getElementById('exerciseDuration').textContent = `${results.duration}分钟`;
+        }
+
+        // 加载演练历史
+        async function loadExerciseHistory() {
+            try {
+                const response = await fetch('/api/red-blue-team/history?limit=5');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const historyContainer = document.getElementById('exerciseHistory');
+                    historyContainer.innerHTML = '';
+                    
+                    data.data.forEach(exercise => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${exercise.scenario_name}</td>
+                            <td>${exercise.red_team_score}</td>
+                            <td>${exercise.blue_team_score}</td>
+                            <td><span class="badge bg-${exercise.winner === 'red_team' ? 'danger' : 'info'}">${exercise.winner === 'red_team' ? '红队' : '蓝队'}</span></td>
+                            <td><span class="status-badge status-${exercise.status}">${exercise.status}</span></td>
+                        `;
+                        historyContainer.appendChild(row);
+                    });
+                }
+            } catch (error) {
+                console.error('加载演练历史失败:', error);
+            }
+        }
+
+        // 开始实时更新
+        function startRealTimeUpdates() {
+            if (!currentExercise) return;
+            
+            setInterval(async () => {
+                try {
+                    const response = await fetch(`/api/red-blue-team/status/${currentExercise.exercise_id}`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        updateExerciseProgress(data.data);
+                        updateRealTimeEvents(data.data.real_time_events);
+                        updateAttackDefenseCounts(data.data);
+                    }
+                } catch (error) {
+                    console.error('获取演练状态失败:', error);
+                }
+            }, 5000); // 每5秒更新一次
+        }
+
+        // 更新实时事件
+        function updateRealTimeEvents(events) {
+            const eventsContainer = document.getElementById('realTimeEvents');
+            eventsContainer.innerHTML = '';
+            
+            events.forEach(event => {
+                const eventItem = document.createElement('div');
+                eventItem.className = `event-item event-${event.type}`;
+                eventItem.innerHTML = `
+                    <div class="d-flex justify-content-between">
+                        <small>${new Date(event.timestamp * 1000).toLocaleTimeString()}</small>
+                        <span class="badge bg-${getSeverityColor(event.severity)}">${event.severity}</span>
+                    </div>
+                    <div>${event.description}</div>
+                `;
+                eventsContainer.appendChild(eventItem);
+            });
+        }
+
+        // 获取严重程度颜色
+        function getSeverityColor(severity) {
+            const colors = {
+                'low': 'success',
+                'medium': 'warning',
+                'high': 'danger',
+                'critical': 'danger'
+            };
+            return colors[severity] || 'secondary';
+        }
+
+        // 更新攻击防御计数
+        function updateAttackDefenseCounts(data) {
+            if (data.red_team_progress) {
+                document.getElementById('attackCount').textContent = data.red_team_progress.attacks_executed || 0;
+                document.getElementById('successfulAttacks').textContent = data.red_team_progress.successful_attacks || 0;
+            }
+            
+            if (data.blue_team_progress) {
+                document.getElementById('defenseCount').textContent = data.blue_team_progress.threats_detected || 0;
+                document.getElementById('successfulDefenses').textContent = data.blue_team_progress.incidents_responded || 0;
+            }
+        }
+
+        // 生成报告
+        async function generateReport() {
+            if (!currentExercise) return;
+            
+            try {
+                const response = await fetch(`/api/red-blue-team/report/${currentExercise.exercise_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ format: 'pdf' })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alert('报告生成成功');
+                    window.open(data.data.download_url, '_blank');
+                }
+            } catch (error) {
+                console.error('生成报告失败:', error);
+                alert('生成报告失败');
+            }
+        }
+
+        // 下载结果
+        function downloadResults() {
+            if (!currentExercise) return;
+            
+            // 模拟下载
+            alert('结果下载功能开发中...');
+        }
+    </script>
+</body>
+</html> 

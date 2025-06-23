@@ -1,0 +1,136 @@
+/* Input area styles */
+.input-area label, 
+.input-area .form-label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 400;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+}
+
+.input-area .form-control {
+    border-radius: 10px;
+    font-size: 15px;
+    padding: 8px 12px;
+    margin-bottom: 6px;
+}
+
+.input-area .input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.input-area .btn,
+.action-buttons .btn {
+    border-radius: 10px;
+    font-size: 15px;
+    min-width: 90px;
+    margin-right: 8px;
+    padding: 8px 0;
+}
+
+.input-area .btn-primary {
+    background: linear-gradient(90deg, #a882ff, #6c3cff);
+    border: none;
+}
+
+.input-area .btn-primary:active,
+.input-area .btn-primary:focus {
+    background: #6c3cff;
+}
+
+.input-area .btn-outline-secondary {
+    border: 1px solid #a882ff;
+    color: #6c3cff;
+    background: #fff;
+}
+
+.input-area .btn-outline-secondary:hover {
+    background: #f3eaff;
+}
+
+.input-area {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px #f3eaff44;
+    padding: 18px 18px 10px 18px;
+    margin-top: 10px;
+}
+
+/* 复制按钮样式 */
+.copy-button {
+    margin: 4px 0;
+    padding: 4px 8px;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    color: #666;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.copy-button:hover {
+    background: #f5f5f5;
+    border-color: #ddd;
+}
+
+.copy-button:active {
+    background: #eee;
+}
+
+/* 图片预览样式 */
+.image-preview {
+    margin: 4px 0;
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-preview img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 时间显示样式 */
+.msg-time {
+    min-width: 48px;
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+    .copy-button {
+        background: #333;
+        border-color: #444;
+        color: #eee;
+    }
+
+    .copy-button:hover {
+        background: #444;
+        border-color: #555;
+    }
+
+    .copy-button:active {
+        background: #555;
+    }
+
+    .msg-time {
+        color: #777;
+    }
+}
+
+@media (max-width: 768px) {
+    .input-area {
+        padding: 10px 4px 6px 4px;
+    }
+    .input-area .btn,
+    .action-buttons .btn {
+        min-width: 70px;
+        font-size: 13px;
+    }
+}

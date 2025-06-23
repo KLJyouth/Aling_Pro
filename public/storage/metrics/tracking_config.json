@@ -1,0 +1,7 @@
+{
+    "memory_tracking": true,
+    "execution_time_tracking": true,
+    "database_query_tracking": true,
+    "api_response_time_tracking": true,
+    "cache_hit_rate_tracking": true
+}

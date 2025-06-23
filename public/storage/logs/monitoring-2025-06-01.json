@@ -1,0 +1,51 @@
+[
+    {
+        "timestamp": "2025-06-01 20:49:10",
+        "metrics": {
+            "cpu_usage": 0,
+            "memory_usage": {
+                "total": "N\/A",
+                "used": "N\/A",
+                "available": "N\/A",
+                "percentage": 0
+            },
+            "disk_usage": [],
+            "load_average": {
+                "1min": 0,
+                "5min": 0,
+                "15min": 0
+            },
+            "websocket_running": false,
+            "log_size_mb": 0,
+            "php_memory_usage": 2,
+            "php_memory_peak": 2,
+            "health_check_time": 8.164,
+            "total_errors": 0,
+            "recent_errors": 0,
+            "health_score": 35
+        },
+        "alerts": [
+            {
+                "level": "critical",
+                "message": "数据库连接失败: SQLSTATE[HY000] [2002] 由于目标计算机积极拒绝，无法连接。",
+                "timestamp": "2025-06-01 20:49:04"
+            },
+            {
+                "level": "critical",
+                "message": "PHP-FPM服务未运行",
+                "timestamp": "2025-06-01 20:49:04"
+            },
+            {
+                "level": "critical",
+                "message": "Nginx服务未运行",
+                "timestamp": "2025-06-01 20:49:04"
+            },
+            {
+                "level": "warning",
+                "message": "HTTP响应测试失败",
+                "timestamp": "2025-06-01 20:49:08"
+            }
+        ],
+        "health_score": 35
+    }
+]

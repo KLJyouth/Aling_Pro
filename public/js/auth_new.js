@@ -1,0 +1,507 @@
+/**
+ * AlingAI Pro v4.0 - 认证系统
+ * 集成新的API端点
+ */
+
+const auth = {
+    // API配置
+    apiConfig: {
+        baseUrl: '/api',
+        endpoints: {
+            login: '/api/login.php',
+            register: '/api/register.php',
+            user: '/api/user.php',
+            logout: '/api/login.php'
+        }
+    },
+    
+    // 认证状态
+    isAuthenticated: false,
+    user: null,
+    token: null,
+    refreshTimer: null,
+
+    /**
+     * 初始化认证系统
+     */
+    init() {
+        this.checkAuthState();
+        this.setupAuthListeners();
+        this.setupTokenRefresh();
+    },
+
+    /**
+     * 检查认证状态
+     */
+    checkAuthState() {
+        const token = localStorage.getItem('token') || localStorage.getItem('auth_token');
+        const user = localStorage.getItem('user_data');
+        
+        if (token && user) {
+            try {
+                this.token = token;
+                this.user = JSON.parse(user);
+                this.isAuthenticated = true;
+                // 统一token存储
+                localStorage.setItem('token', token);
+                localStorage.setItem('auth_token', token);
+                this.onAuthStateChanged(true);
+            } catch (error) {
+                console.error('Auth state parse error:', error);
+                this.clearAuthState();
+            }
+        } else if (token) {
+            // 只有token没有用户数据，尝试验证token
+            this.token = token;
+            this.isAuthenticated = true;
+            // 统一token存储
+            localStorage.setItem('token', token);
+            localStorage.setItem('auth_token', token);
+            this.onAuthStateChanged(true);
+        } else {
+            this.isAuthenticated = false;
+            this.user = null;
+            this.token = null;
+            this.onAuthStateChanged(false);
+        }
+    },
+
+    /**
+     * 显示登录模态框
+     */
+    showLoginModal() {
+        const loginModal = document.getElementById('login-modal');
+        if (loginModal) {
+            loginModal.classList.remove('hidden');
+            loginModal.classList.add('flex');
+        } else {
+            console.warn('登录模态框不存在');
+        }
+    },
+
+    /**
+     * 隐藏登录模态框
+     */
+    hideLoginModal() {
+        const loginModal = document.getElementById('login-modal') || document.getElementById('loginModal');
+        if (loginModal) {
+            loginModal.classList.add('hidden');
+            loginModal.classList.remove('flex');
+        }
+    },
+
+    /**
+     * 设置认证事件监听器
+     */
+    setupAuthListeners() {
+        const loginForm = document.getElementById('loginForm');
+        const loginModal = document.getElementById('loginModal');
+        const closeLoginModal = document.getElementById('closeLoginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(loginForm);
+                await this.login(formData.get('username'), formData.get('password'));
+            });
+        }
+
+        if (closeLoginModal) {
+            closeLoginModal.addEventListener('click', () => {
+                this.hideLoginModal();
+            });
+        }
+
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                this.showLoginModal();
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                this.logout();
+            });
+        }
+    },
+
+    /**
+     * 登录方法 - 使用新的API端点
+     */
+    async login(username, password, rememberMe = false) {
+        try {
+            const response = await fetch(this.apiConfig.endpoints.login, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    remember_me: rememberMe
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // 保存认证信息
+                this.token = result.token;
+                this.user = result.user;
+                this.isAuthenticated = true;
+
+                // 存储到localStorage
+                localStorage.setItem('auth_token', this.token);
+                localStorage.setItem('token', this.token);
+                localStorage.setItem('user_data', JSON.stringify(this.user));
+                
+                if (result.session_id) {
+                    localStorage.setItem('session_id', result.session_id);
+                }
+
+                // 如果记住我，设置更长的过期时间
+                if (rememberMe) {
+                    localStorage.setItem('remember_me', 'true');
+                }
+
+                this.onAuthStateChanged(true);
+                this.setupTokenRefresh();
+                this.hideLoginModal();
+
+                // 显示成功消息
+                this.showMessage('登录成功', 'success');
+
+                return { success: true, user: this.user };
+            } else {
+                throw new Error(result.message || '登录失败');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            this.showMessage(error.message, 'error');
+            return { success: false, message: error.message };
+        }
+    },
+
+    /**
+     * 注册方法 - 使用新的API端点
+     */
+    async register(userData) {
+        try {
+            const response = await fetch(this.apiConfig.endpoints.register, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // 显示成功消息
+                this.showMessage(result.message || '注册成功', 'success');
+                return { success: true, user: result.user, message: result.message };
+            } else {
+                throw new Error(result.message || '注册失败');
+            }
+        } catch (error) {
+            console.error('Register error:', error);
+            this.showMessage(error.message, 'error');
+            return { success: false, message: error.message };
+        }
+    },
+
+    /**
+     * 登出方法 - 使用新的API端点
+     */
+    async logout() {
+        try {
+            // 尝试调用服务器登出端点
+            if (this.token) {
+                await fetch(this.apiConfig.endpoints.logout, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Logout API error:', error);
+        } finally {
+            // 无论API调用是否成功，都清理本地状态
+            this.clearAuthState();
+        }
+    },
+
+    /**
+     * 清理认证状态
+     */
+    clearAuthState() {
+        this.isAuthenticated = false;
+        this.user = null;
+        this.token = null;
+
+        // 清理localStorage
+        localStorage.removeItem('auth_token');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user_data');
+        localStorage.removeItem('session_id');
+        localStorage.removeItem('remember_me');
+
+        // 清理token刷新定时器
+        if (this.refreshTimer) {
+            clearTimeout(this.refreshTimer);
+            this.refreshTimer = null;
+        }
+
+        this.onAuthStateChanged(false);
+        this.showMessage('已退出登录', 'info');
+    },
+
+    /**
+     * 获取当前用户信息
+     */
+    async getCurrentUser() {
+        if (!this.token) {
+            throw new Error('未登录');
+        }
+
+        try {
+            const response = await fetch(this.apiConfig.endpoints.user, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.user = result.user;
+                localStorage.setItem('user_data', JSON.stringify(this.user));
+                return this.user;
+            } else {
+                throw new Error(result.message || '获取用户信息失败');
+            }
+        } catch (error) {
+            console.error('Get user error:', error);
+            if (error.message.includes('401') || error.message.includes('unauthorized')) {
+                this.clearAuthState();
+            }
+            throw error;
+        }
+    },
+
+    /**
+     * 更新用户信息
+     */
+    async updateUser(userData) {
+        if (!this.token) {
+            throw new Error('未登录');
+        }
+
+        try {
+            const response = await fetch(this.apiConfig.endpoints.user, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.user = { ...this.user, ...result.user };
+                localStorage.setItem('user_data', JSON.stringify(this.user));
+                this.showMessage('用户信息更新成功', 'success');
+                return this.user;
+            } else {
+                throw new Error(result.message || '更新用户信息失败');
+            }
+        } catch (error) {
+            console.error('Update user error:', error);
+            this.showMessage(error.message, 'error');
+            throw error;
+        }
+    },
+
+    /**
+     * 检查权限
+     */
+    hasPermission(permission) {
+        if (!this.user) {
+            return false;
+        }
+
+        // 管理员拥有所有权限
+        if (this.user.role === 'admin') {
+            return true;
+        }
+
+        // 检查用户的权限列表
+        return this.user.permissions && this.user.permissions.includes(permission);
+    },
+
+    /**
+     * 检查是否为管理员
+     */
+    isAdmin() {
+        return this.user && this.user.role === 'admin';
+    },
+
+    /**
+     * 检查是否为版主
+     */
+    isModerator() {
+        return this.user && ['admin', 'moderator'].includes(this.user.role);
+    },
+
+    /**
+     * 设置token刷新
+     */
+    setupTokenRefresh() {
+        if (this.refreshTimer) {
+            clearTimeout(this.refreshTimer);
+        }
+
+        // 如果没有token，不设置刷新
+        if (!this.token) {
+            return;
+        }
+
+        // 每50分钟刷新token（假设token有效期为1小时）
+        this.refreshTimer = setTimeout(async () => {
+            try {
+                await this.refreshToken();
+            } catch (error) {
+                console.error('Token refresh failed:', error);
+                this.clearAuthState();
+            }
+        }, 50 * 60 * 1000); // 50分钟
+    },
+
+    /**
+     * 刷新token
+     */
+    async refreshToken() {
+        if (!this.token) {
+            throw new Error('没有可刷新的token');
+        }
+
+        try {
+            const response = await fetch(this.apiConfig.endpoints.user, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.token) {
+                    this.token = result.token;
+                    localStorage.setItem('token', this.token);
+                    localStorage.setItem('auth_token', this.token);
+                    this.setupTokenRefresh();
+                }
+            } else {
+                throw new Error('Token刷新失败');
+            }
+        } catch (error) {
+            console.error('Token refresh error:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * 认证状态改变时的回调
+     */
+    onAuthStateChanged(isLoggedIn) {
+        
+        
+        // 查找页面上的用户相关元素
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userDisplay = document.getElementById('userDisplay');
+        const userDisplayName = document.getElementById('userDisplayName');
+
+        if (isLoggedIn) {
+            // 用户已登录
+            if (loginBtn) loginBtn.style.display = 'none';
+            if (logoutBtn) logoutBtn.style.display = 'block';
+            
+            if (userDisplay) {
+                userDisplay.style.display = 'block';
+                userDisplay.textContent = this.user.username || this.user.email || '用户';
+            }
+            
+            if (userDisplayName) {
+                userDisplayName.textContent = this.user.username || this.user.email || '用户';
+            }
+        } else {
+            // 用户未登录
+            if (loginBtn) loginBtn.style.display = 'block';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+            
+            if (userDisplay) {
+                userDisplay.style.display = 'none';
+            }
+            
+            if (userDisplayName) {
+                userDisplayName.textContent = '';
+            }
+        }
+
+        // 触发自定义事件
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+            detail: { isLoggedIn, user: this.user }
+        }));
+    },
+
+    /**
+     * 显示消息
+     */
+    showMessage(message, type = 'info') {
+        // 尝试使用现有的消息显示系统
+        if (window.showNotification) {
+            window.showNotification(message, type);
+        } else if (window.toast) {
+            window.toast(message, type);
+        } else {
+            // 后备方案：使用浏览器alert
+            console.log(`[${type.toUpperCase()}] ${message}`);
+            if (type === 'error') {
+                alert(message);
+            }
+        }
+    }
+};
+
+// 导出认证对象
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = auth;
+} else if (typeof window !== 'undefined') {
+    window.auth = auth;
+}
+
+// 页面加载完成后自动初始化
+if (typeof document !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => auth.init());
+    } else {
+        auth.init();
+    }
+}

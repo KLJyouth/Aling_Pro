@@ -1,0 +1,2 @@
+[2025-06-03T13:01:37.914755+00:00] migration_check.INFO: MySQL database connected {"host":"111.180.205.70","database":"alingai"} []
+[2025-06-03T13:01:39.419718+00:00] migration_check.ERROR: Execute failed {"sql":"INSERT INTO `users` (username,email,password,level) VALUES (:username, :email, :password, :level)","params":{"username":"migration_test_1748955699","email":"test@migration.local","password":"$2y$10$FZvvDcLWbrCmB1/76yyvWO65KpradYcPR2eyOPgGj27Mz4U.VS6ny","level":1},"error":"SQLSTATE[42S22]: Column not found: 1054 Unknown column 'level' in 'field list'"} []

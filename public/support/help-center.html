@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助中心 - AlingAI Platform</title>
+    <meta name="description" content="AlingAI Platform帮助中心，提供常见问题解答、使用教程、故障排除指南和最佳实践，助您快速上手和解决问题。">
+    <meta name="keywords" content="帮助中心,常见问题,使用教程,故障排除,技术支持,操作指南">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-color: #e2e8f0;
+            --text-muted: #6b7280;
+            --gradient-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #ffffff;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            background: var(--gradient-bg);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            color: var(--dark-color);
+            margin: 0 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--primary-color);
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: var(--gradient-bg);
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 3rem 0;
+            margin-top: -50px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.5rem 3rem 1.5rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 15px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Quick Access Cards */
+        .quick-access-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .access-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-bg);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .access-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .access-description {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            background: var(--light-color);
+        }
+
+        .faq-category {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .category-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.5rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: var(--dark-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: between;
+            padding: 0;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--primary-color);
+        }
+
+        .faq-toggle {
+            margin-left: auto;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        /* Popular Articles */
+        .article-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(5px);
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .article-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .article-description {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .article-meta i {
+            margin-right: 0.5rem;
+        }
+
+        .article-views {
+            margin-left: auto;
+        }
+
+        /* Contact Support */
+        .contact-support {
+            background: var(--dark-color);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .support-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .support-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-support {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin: 0 1rem;
+        }
+
+        .btn-support:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-support i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-outline-support {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+            padding: 13px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin: 0 1rem;
+        }
+
+        .btn-outline-support:hover {
+            background: white;
+            color: var(--dark-color);
+        }
+
+        .btn-outline-support i {
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+            padding-top: 2rem;
+            text-align: center;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .quick-access-card {
+                margin-bottom: 2rem;
+            }
+
+            .btn-support,
+            .btn-outline-support {
+                margin: 0.5rem 0;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../homepage.html">
+                <i class="fas fa-shield-alt me-2"></i>AlingAI Platform
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            解决方案
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../solutions/quantum-security.html">量子安全服务</a></li>
+                            <li><a class="dropdown-item" href="../solutions/zero-trust.html">零信任架构</a></li>
+                            <li><a class="dropdown-item" href="../solutions/ai-security-assistant.html">AI安全助手</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            开发者
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="../docs/api-docs.html">API文档</a></li>
+                            <li><a class="dropdown-item" href="../docs/technical-docs.html">技术文档</a></li>
+                            <li><a class="dropdown-item" href="../downloads/sdk.html">SDK下载</a></li>
+                            <li><a class="dropdown-item" href="../docs/examples.html">示例代码</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            支持
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="help-center.html">帮助中心</a></li>
+                            <li><a class="dropdown-item" href="technical-support.html">技术支持</a></li>
+                            <li><a class="dropdown-item" href="../contact.html">联系我们</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../partners.html">合作伙伴</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content text-center">
+                <h1 class="hero-title">帮助中心</h1>
+                <p class="hero-subtitle">
+                    找到您需要的答案，快速解决问题
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-container">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="搜索问题、教程或关键词..." id="searchInput">
+                    <button class="search-btn" onclick="performSearch()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Access -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">快速导航</h2>
+            <p class="section-subtitle">
+                选择您需要的帮助类型，快速找到相关信息
+            </p>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <a href="#getting-started" class="quick-access-card">
+                        <div class="access-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3 class="access-title">快速开始</h3>
+                        <p class="access-description">
+                            新用户入门指南，帮助您快速上手AlingAI Platform
+                        </p>
+                    </a>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <a href="#api-guide" class="quick-access-card">
+                        <div class="access-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="access-title">API集成</h3>
+                        <p class="access-description">
+                            API使用教程和集成指南，助力开发者快速集成
+                        </p>
+                    </a>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <a href="#troubleshooting" class="quick-access-card">
+                        <div class="access-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3 class="access-title">故障排除</h3>
+                        <p class="access-description">
+                            常见问题解决方案和故障排除步骤
+                        </p>
+                    </a>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <a href="#security-best-practices" class="quick-access-card">
+                        <div class="access-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="access-title">安全最佳实践</h3>
+                        <p class="access-description">
+                            安全配置指南和最佳实践建议
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq-section">
+        <div class="container">
+            <h2 class="section-title">常见问题</h2>
+            <p class="section-subtitle">
+                查看最常被问到的问题和详细解答
+            </p>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="faq-category" id="getting-started">
+                        <h3 class="category-title">
+                            <div class="category-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            快速开始
+                        </h3>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                如何注册AlingAI Platform账户？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>注册AlingAI Platform账户非常简单：</p>
+                                <ol>
+                                    <li>访问注册页面并填写基本信息</li>
+                                    <li>验证您的邮箱地址</li>
+                                    <li>完成身份验证流程</li>
+                                    <li>选择适合的服务套餐</li>
+                                    <li>开始使用我们的安全服务</li>
+                                </ol>
+                                <p>整个过程通常在5分钟内完成。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                如何获取API密钥？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>获取API密钥的步骤：</p>
+                                <ol>
+                                    <li>登录您的控制台</li>
+                                    <li>进入"开发者"→"API密钥"页面</li>
+                                    <li>点击"创建新密钥"</li>
+                                    <li>设置密钥权限和有效期</li>
+                                    <li>保存并安全存储您的密钥</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                支持哪些编程语言？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>我们提供多种编程语言的官方SDK：</p>
+                                <ul>
+                                    <li>JavaScript/TypeScript (Web和Node.js)</li>
+                                    <li>Python (3.7+)</li>
+                                    <li>Java (8+)</li>
+                                    <li>Go (1.18+)</li>
+                                    <li>C#/.NET (6+)</li>
+                                    <li>PHP (7.4+)</li>
+                                </ul>
+                                <p>同时也支持标准REST API调用。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="faq-category" id="api-guide">
+                        <h3 class="category-title">
+                            <div class="category-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            API集成
+                        </h3>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                API调用频率限制是什么？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>不同套餐的API调用限制：</p>
+                                <ul>
+                                    <li><strong>免费版：</strong>每分钟100次请求</li>
+                                    <li><strong>专业版：</strong>每分钟1000次请求</li>
+                                    <li><strong>企业版：</strong>每分钟10000次请求</li>
+                                    <li><strong>量子加密API：</strong>每分钟50次请求（所有版本）</li>
+                                </ul>
+                                <p>如需更高限制，请联系我们的销售团队。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                如何处理API错误？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>我们的API使用标准HTTP状态码：</p>
+                                <ul>
+                                    <li><strong>200：</strong>请求成功</li>
+                                    <li><strong>400：</strong>请求参数错误</li>
+                                    <li><strong>401：</strong>认证失败</li>
+                                    <li><strong>429：</strong>请求过于频繁</li>
+                                    <li><strong>500：</strong>服务器内部错误</li>
+                                </ul>
+                                <p>建议实现指数退避重试机制。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                是否支持WebSocket实时通信？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>是的，我们提供WebSocket支持：</p>
+                                <ul>
+                                    <li>实时威胁告警推送</li>
+                                    <li>系统状态监控</li>
+                                    <li>AI分析结果推送</li>
+                                    <li>量子密钥状态更新</li>
+                                </ul>
+                                <p>WebSocket端点：<code>wss://api.alingai.com/v1/ws</code></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="faq-category" id="troubleshooting">
+                        <h3 class="category-title">
+                            <div class="category-icon">
+                                <i class="fas fa-bug"></i>
+                            </div>
+                            故障排除
+                        </h3>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                连接超时如何解决？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>连接超时的常见解决方法：</p>
+                                <ol>
+                                    <li>检查网络连接是否正常</li>
+                                    <li>确认防火墙设置允许HTTPS连接</li>
+                                    <li>验证API端点地址是否正确</li>
+                                    <li>增加连接超时时间设置</li>
+                                    <li>使用重试机制处理临时网络问题</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                量子加密失败怎么办？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>量子加密失败的处理步骤：</p>
+                                <ol>
+                                    <li>检查量子密钥是否已过期</li>
+                                    <li>验证量子签名是否正确</li>
+                                    <li>确认量子服务状态是否正常</li>
+                                    <li>重新生成量子密钥</li>
+                                    <li>如问题持续，联系技术支持</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                AI检测结果不准确？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>提高AI检测准确性的方法：</p>
+                                <ul>
+                                    <li>确保输入数据格式正确</li>
+                                    <li>提供足够的上下文信息</li>
+                                    <li>使用最新版本的AI模型</li>
+                                    <li>调整检测阈值参数</li>
+                                    <li>提供反馈帮助模型优化</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="faq-category" id="security-best-practices">
+                        <h3 class="category-title">
+                            <div class="category-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            安全最佳实践
+                        </h3>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                如何保护API密钥安全？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>API密钥安全最佳实践：</p>
+                                <ul>
+                                    <li>绝不在客户端代码中暴露密钥</li>
+                                    <li>使用环境变量存储密钥</li>
+                                    <li>定期轮换API密钥</li>
+                                    <li>设置最小权限原则</li>
+                                    <li>监控密钥使用情况</li>
+                                    <li>及时撤销不需要的密钥</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                零信任架构如何配置？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>零信任架构配置步骤：</p>
+                                <ol>
+                                    <li>启用多因子认证(MFA)</li>
+                                    <li>配置设备合规检查</li>
+                                    <li>设置网络微分段</li>
+                                    <li>实施最小权限访问</li>
+                                    <li>启用行为分析监控</li>
+                                    <li>配置自适应访问策略</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div class="faq-item">
+                            <button class="faq-question" onclick="toggleFAQ(this)">
+                                如何监控安全事件？
+                                <i class="fas fa-chevron-down faq-toggle"></i>
+                            </button>
+                            <div class="faq-answer">
+                                <p>安全事件监控建议：</p>
+                                <ul>
+                                    <li>启用实时告警通知</li>
+                                    <li>配置威胁检测规则</li>
+                                    <li>设置安全日志审计</li>
+                                    <li>定期查看安全报告</li>
+                                    <li>建立应急响应流程</li>
+                                    <li>进行定期安全评估</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Articles -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">热门文章</h2>
+            <p class="section-subtitle">
+                最受欢迎的教程和指南
+            </p>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">AlingAI Platform 5分钟快速上手指南</h4>
+                        <p class="article-description">
+                            从注册账户到完成第一次API调用的完整流程介绍
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>5分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                12.5k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">量子安全加密实施指南</h4>
+                        <p class="article-description">
+                            详细介绍如何在您的应用中集成量子安全加密功能
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>15分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                8.2k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">AI威胁检测最佳实践</h4>
+                        <p class="article-description">
+                            如何充分利用AI引擎提升威胁检测的准确性和效率
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>10分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                6.8k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="col-lg-6">
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">零信任架构部署完整教程</h4>
+                        <p class="article-description">
+                            从规划到实施的零信任架构部署完整流程
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>20分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                9.1k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">SDK集成常见问题解决方案</h4>
+                        <p class="article-description">
+                            各种编程语言SDK集成过程中的常见问题和解决方法
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>12分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                5.6k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="article-card">
+                        <h4 class="article-title">性能优化和监控指南</h4>
+                        <p class="article-description">
+                            如何监控系统性能并进行优化，确保最佳用户体验
+                        </p>
+                        <div class="article-meta">
+                            <i class="fas fa-clock"></i>
+                            <span>18分钟阅读</span>
+                            <span class="article-views">
+                                <i class="fas fa-eye"></i>
+                                4.3k 次浏览
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Support -->
+    <section class="contact-support">
+        <div class="container">
+            <h2 class="support-title">仍需要帮助？</h2>
+            <p class="support-description">
+                我们的技术支持团队随时为您提供专业的服务
+            </p>
+            
+            <div class="mt-4">
+                <a href="technical-support.html" class="btn-support">
+                    <i class="fas fa-headset"></i>联系技术支持
+                </a>
+                <a href="../contact.html" class="btn-outline-support">
+                    <i class="fas fa-envelope"></i>发送邮件
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">解决方案</h5>
+                    <a href="../solutions/quantum-security.html" class="footer-link">量子安全服务</a>
+                    <a href="../solutions/zero-trust.html" class="footer-link">零信任架构</a>
+                    <a href="../solutions/ai-security-assistant.html" class="footer-link">AI安全助手</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">开发者</h5>
+                    <a href="../docs/api-docs.html" class="footer-link">API文档</a>
+                    <a href="../docs/technical-docs.html" class="footer-link">技术文档</a>
+                    <a href="../downloads/sdk.html" class="footer-link">SDK下载</a>
+                    <a href="../docs/examples.html" class="footer-link">示例代码</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">支持</h5>
+                    <a href="help-center.html" class="footer-link">帮助中心</a>
+                    <a href="technical-support.html" class="footer-link">技术支持</a>
+                    <a href="../contact.html" class="footer-link">联系我们</a>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="footer-title">公司</h5>
+                    <a href="../partners.html" class="footer-link">合作伙伴</a>
+                    <a href="../downloads/partnership-handbook.html" class="footer-link">合作手册</a>
+                    <a href="../privacy.html" class="footer-link">隐私政策</a>
+                    <a href="../terms.html" class="footer-link">服务条款</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 AlingAI Platform. 保留所有权利。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // FAQ toggle functionality
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isOpen = answer.classList.contains('show');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                item.classList.remove('show');
+            });
+            document.querySelectorAll('.faq-question').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isOpen) {
+                answer.classList.add('show');
+                element.classList.add('active');
+            }
+        }
+
+        // Search functionality
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                // Simulate search - in real implementation, this would make an API call
+                alert(`搜索功能开发中... 搜索词: "${query}"`);
+            }
+        }
+
+        // Enter key support for search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

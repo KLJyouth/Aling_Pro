@@ -1,0 +1,3325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统管理后台 - AlingAi Pro</title>
+    
+    <!-- CSS 引入 -->
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/assets/css/https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --admin-primary: #1e3a8a;
+            --admin-secondary: #3b82f6;
+            --admin-success: #059669;
+            --admin-warning: #d97706;
+            --admin-danger: #dc2626;
+            --admin-dark: #111827;
+            --admin-light: #f8fafc;
+            --sidebar-width: 280px;
+            --header-height: 70px;
+        }
+
+        body {
+            background: var(--admin-light);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 侧边栏样式 */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(135deg, var(--admin-dark), var(--admin-primary));
+            color: white;
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .sidebar-header h4 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-section {
+            margin-bottom: 2rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 0 1.5rem 0.5rem;
+        }
+
+        .nav-item {
+            margin-bottom: 0.25rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: var(--admin-secondary);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: #fbbf24;
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+
+        /* 主要内容区域 */
+        .admin-main {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+
+        .admin-header {
+            background: white;
+            height: var(--header-height);
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-content {
+            padding: 2rem;
+        }
+
+        /* 卡片样式 */
+        .admin-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f9fafb;
+        }
+
+        .card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--admin-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--admin-secondary);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card.success {
+            border-left-color: var(--admin-success);
+        }
+
+        .stat-card.warning {
+            border-left-color: var(--admin-warning);
+        }
+
+        .stat-card.danger {
+            border-left-color: var(--admin-danger);
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .stat-title {
+            color: #6b7280;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--admin-dark);
+            line-height: 1;
+        }
+
+        .stat-change {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .stat-change.positive {
+            color: var(--admin-success);
+        }
+
+        .stat-change.negative {
+            color: var(--admin-danger);
+        }
+
+        /* 按钮样式 */
+        .btn-admin {
+            border-radius: 8px;
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .btn-admin-primary {
+            background: var(--admin-primary);
+            border-color: var(--admin-primary);
+            color: white;
+        }
+
+        .btn-admin-primary:hover {
+            background: #1e40af;
+            border-color: #1e40af;
+            transform: translateY(-1px);
+        }
+
+        /* 表格样式 */
+        .admin-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-table table {
+            margin: 0;
+        }
+
+        .admin-table thead {
+            background: #f9fafb;
+        }
+
+        .admin-table th {
+            font-weight: 600;
+            color: var(--admin-dark);
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem;
+        }
+
+        .admin-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* 状态标签 */
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-online {
+            background: rgba(5, 150, 105, 0.1);
+            color: var(--admin-success);
+        }
+
+        .status-offline {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--admin-danger);
+        }
+
+        .status-warning {
+            background: rgba(217, 119, 6, 0.1);
+            color: var(--admin-warning);
+        }
+
+        /* 操作面板 */
+        .action-panel {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* 日志显示 */
+        .log-container {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+
+        .log-entry {
+            margin-bottom: 0.5rem;
+            padding: 0.25rem 0;
+        }
+
+        .log-timestamp {
+            color: #9ca3af;
+        }
+
+        .log-level-info {
+            color: #60a5fa;
+        }
+
+        .log-level-warning {
+            color: #fbbf24;
+        }
+
+        .log-level-error {
+            color: #f87171;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .admin-sidebar {
+                transform: translateX(-100%);
+            }
+
+            .admin-sidebar.show {
+                transform: translateX(0);
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+        }
+
+        /* 图表容器 */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 1rem;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* 任务状态 */
+        .task-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }        .task-progress {
+            flex: 1;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .task-progress-bar {
+            height: 100%;
+            background: var(--admin-secondary);
+            transition: width 0.3s ease;
+        }
+
+        /* 系统诊断样式 */
+        .diagnostic-console {
+            background: #1f2937;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #374151;
+        }
+
+        .console-header {
+            background: #111827;
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #f9fafb;
+            font-size: 0.875rem;
+            border-bottom: 1px solid #374151;
+        }
+
+        .console-status {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-indicator.ready {
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.running {
+            background: #f59e0b;
+            animation: blink 1s infinite;
+        }
+
+        .status-indicator.error {
+            background: #ef4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .console-body {
+            padding: 1rem;
+            background: #1f2937;
+            color: #f9fafb;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .console-line {
+            margin-bottom: 0.25rem;
+        }
+
+        .timestamp {
+            color: #9ca3af;
+        }
+
+        .message {
+            color: #f9fafb;
+        }
+
+        .message.success {
+            color: #10b981;
+        }
+
+        .message.error {
+            color: #ef4444;
+        }
+
+        .message.warning {
+            color: #f59e0b;
+        }
+
+        .diagnostic-categories {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .category-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-item:hover {
+            border-color: var(--admin-secondary);
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .category-item i {
+            color: var(--admin-secondary);
+            margin-right: 0.75rem;
+        }
+
+        .category-item span {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .category-status {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        .category-status.testing {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .category-status.passed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .category-status.failed {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .diagnostic-results {
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .results-header {
+            background: white;
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .results-header h6 {
+            margin: 0;
+        }
+
+        .results-summary {
+            margin-left: auto;
+        }
+
+        .results-body {
+            padding: 1rem;
+            min-height: 200px;
+        }
+
+        .result-item {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid #e5e7eb;
+        }
+
+        .result-item.success {
+            border-left-color: #10b981;
+        }
+
+        .result-item.error {
+            border-left-color: #ef4444;
+        }
+
+        .result-item.warning {
+            border-left-color: #f59e0b;
+        }
+
+        .result-item h6 {
+            margin: 0 0 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .diagnostic-history {
+            border-top: 1px solid #e2e8f0;
+            padding-top: 1rem;
+        }
+
+        .history-item {
+            background: white;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .history-info {
+            flex: 1;
+        }
+
+        .history-time {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+
+        .history-summary {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .floating-diagnostics-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--admin-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .floating-diagnostics-btn:hover {
+            background: #1e40af;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+        }
+
+        .floating-diagnostics-menu {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-diagnostics-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .floating-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+            gap: 0.75rem;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .floating-menu-item:hover {
+            background: #f1f5f9;
+        }
+
+        .floating-menu-item i {
+            color: var(--admin-primary);
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 导出功能样式 */
+        .export-status {
+            background: #f8fafc;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .export-status.success {
+            border-left-color: #10b981;
+            background: #f0fdf4;
+        }
+
+        .export-status.error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .export-progress {
+            background: #f1f5f9;
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+
+        .export-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            transition: width 0.3s ease;
+        }
+
+        .download-item {
+            transition: all 0.2s ease;
+        }
+
+        .download-item:hover {
+            background: #f8fafc;
+            transform: translateX(2px);
+        }
+
+        .file-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .file-icon.json {
+            background: #f59e0b;
+        }
+
+        .file-icon.csv {
+            background: #10b981;
+        }
+
+        .file-icon.html {
+            background: #3b82f6;
+        }
+
+        .file-icon.txt {
+            background: #6b7280;
+        }
+
+        .export-tooltip {
+            position: relative;
+        }
+
+        .export-tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- 侧边栏 -->
+    <div class="admin-sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4><i class="bi bi-shield-check me-2"></i>AlingAi Pro</h4>
+            <small>系统管理后台</small>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">主控制台</div>
+                <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                    <i class="bi bi-speedometer2"></i>
+                    系统概览
+                </a>
+                <a href="#monitoring" class="nav-link" data-section="monitoring">
+                    <i class="bi bi-activity"></i>
+                    实时监控
+                </a>
+                <a href="#users" class="nav-link" data-section="users">
+                    <i class="bi bi-people"></i>
+                    用户管理
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">运维管理</div>
+                <a href="#backup" class="nav-link" data-section="backup">
+                    <i class="bi bi-archive"></i>
+                    备份管理
+                </a>
+                <a href="#security" class="nav-link" data-section="security">
+                    <i class="bi bi-shield-lock"></i>
+                    安全扫描
+                </a>
+                <a href="#performance" class="nav-link" data-section="performance">
+                    <i class="bi bi-graph-up"></i>
+                    性能优化
+                </a>
+                <a href="#cache" class="nav-link" data-section="cache">
+                    <i class="bi bi-lightning"></i>
+                    缓存管理
+                </a>
+            </div>            <div class="nav-section">
+                <div class="nav-section-title">系统工具</div>
+                <a href="#diagnostics" class="nav-link" data-section="diagnostics">
+                    <i class="bi bi-shield-check"></i>
+                    系统诊断
+                </a>
+                <a href="#database" class="nav-link" data-section="database">
+                    <i class="bi bi-database"></i>
+                    数据库管理
+                </a>
+                <a href="#logs" class="nav-link" data-section="logs">
+                    <i class="bi bi-file-text"></i>
+                    日志查看
+                </a>
+                <a href="#tasks" class="nav-link" data-section="tasks">
+                    <i class="bi bi-list-task"></i>
+                    任务管理
+                </a>
+                <a href="#settings" class="nav-link" data-section="settings">
+                    <i class="bi bi-gear"></i>
+                    系统设置
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 主要内容区域 -->
+    <div class="admin-main">
+        <!-- 顶部导航 -->
+        <div class="admin-header">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-secondary d-md-none me-3" onclick="toggleSidebar()">
+                    <i class="bi bi-list"></i>
+                </button>
+                <h1 class="h4 mb-0" id="page-title">系统概览</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-bell"></i>
+                        <span class="badge bg-danger rounded-pill ms-1" id="notification-count">3</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><h6 class="dropdown-header">系统通知</h6></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-exclamation-triangle text-warning me-2"></i>磁盘使用率达到85%</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-shield-exclamation text-danger me-2"></i>发现安全漏洞</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="bi bi-info-circle text-info me-2"></i>系统更新可用</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i>
+                        管理员
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="/profile-enhanced.html"><i class="bi bi-person me-2"></i>个人设置</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>退出登录</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 内容区域 -->
+        <div class="admin-content">
+            <!-- 系统概览 -->
+            <div id="dashboard-section" class="content-section">
+                <!-- 统计卡片 -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-title">在线用户</div>
+                                <div class="stat-value" id="online-users">0</div>
+                            </div>
+                            <div class="stat-icon" style="background: var(--admin-success);">
+                                <i class="bi bi-people"></i>
+                            </div>
+                        </div>
+                        <div class="stat-change positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>+12% 较昨日</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card warning">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-title">系统负载</div>
+                                <div class="stat-value" id="system-load">0%</div>
+                            </div>
+                            <div class="stat-icon" style="background: var(--admin-warning);">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                        </div>
+                        <div class="stat-change negative">
+                            <i class="bi bi-arrow-down"></i>
+                            <span>高负载警告</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card success">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-title">内存使用</div>
+                                <div class="stat-value" id="memory-usage">0%</div>
+                            </div>
+                            <div class="stat-icon" style="background: var(--admin-secondary);">
+                                <i class="bi bi-memory"></i>
+                            </div>
+                        </div>
+                        <div class="stat-change positive">
+                            <i class="bi bi-arrow-up"></i>
+                            <span>正常范围</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card danger">
+                        <div class="stat-header">
+                            <div>
+                                <div class="stat-title">磁盘空间</div>
+                                <div class="stat-value" id="disk-usage">0%</div>
+                            </div>
+                            <div class="stat-icon" style="background: var(--admin-danger);">
+                                <i class="bi bi-hdd"></i>
+                            </div>
+                        </div>
+                        <div class="stat-change negative">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            <span>空间不足</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速操作 -->
+                <div class="action-panel">
+                    <h5 class="mb-3"><i class="bi bi-lightning-charge me-2"></i>快速操作</h5>
+                    <div class="action-buttons">
+                        <button class="btn btn-admin btn-admin-primary" onclick="executeQuickAction('backup')">
+                            <i class="bi bi-archive me-2"></i>立即备份
+                        </button>
+                        <button class="btn btn-outline-success" onclick="executeQuickAction('security-scan')">
+                            <i class="bi bi-shield-check me-2"></i>安全扫描
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="executeQuickAction('cache-clear')">
+                            <i class="bi bi-arrow-clockwise me-2"></i>清理缓存
+                        </button>
+                        <button class="btn btn-outline-info" onclick="executeQuickAction('optimize')">
+                            <i class="bi bi-speedometer me-2"></i>性能优化
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="executeQuickAction('restart-services')">
+                            <i class="bi bi-arrow-repeat me-2"></i>重启服务
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 系统状态图表 -->
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <h5><i class="bi bi-graph-up"></i>系统性能趋势</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart-container">
+                                    <canvas id="performance-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="admin-card">
+                            <div class="card-header">
+                                <h5><i class="bi bi-list-check"></i>服务状态</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="service-status">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>Web服务器</span>
+                                        <span class="status-badge status-online">运行中</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>数据库</span>
+                                        <span class="status-badge status-online">运行中</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>Redis缓存</span>
+                                        <span class="status-badge status-warning">负载高</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span>邮件服务</span>
+                                        <span class="status-badge status-online">运行中</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span>备份服务</span>
+                                        <span class="status-badge status-offline">已停止</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实时监控 -->
+            <div id="monitoring-section" class="content-section" style="display: none;">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-activity"></i>实时系统监控</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <canvas id="cpu-chart" width="400" height="200"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <canvas id="memory-chart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card mt-4">
+                    <div class="card-header">
+                        <h5><i class="bi bi-hdd"></i>磁盘使用情况</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="disk-info">
+                            <!-- 磁盘信息将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 备份管理 -->
+            <div id="backup-section" class="content-section" style="display: none;">
+                <div class="action-panel">
+                    <h5 class="mb-3"><i class="bi bi-archive me-2"></i>备份操作</h5>
+                    <div class="action-buttons">
+                        <button class="btn btn-admin btn-admin-primary" onclick="createBackup('full')">
+                            <i class="bi bi-database me-2"></i>完整备份
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="createBackup('incremental')">
+                            <i class="bi bi-plus-circle me-2"></i>增量备份
+                        </button>
+                        <button class="btn btn-outline-success" onclick="validateBackups()">
+                            <i class="bi bi-check-circle me-2"></i>验证备份
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="cleanupBackups()">
+                            <i class="bi bi-trash me-2"></i>清理过期备份
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-clock-history"></i>备份历史</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="admin-table">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>备份时间</th>
+                                        <th>类型</th>
+                                        <th>大小</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="backup-history">
+                                    <!-- 备份历史数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 安全扫描 -->
+            <div id="security-section" class="content-section" style="display: none;">
+                <div class="action-panel">
+                    <h5 class="mb-3"><i class="bi bi-shield-lock me-2"></i>安全扫描</h5>
+                    <div class="action-buttons">
+                        <button class="btn btn-admin btn-admin-primary" onclick="startSecurityScan('full')">
+                            <i class="bi bi-shield-check me-2"></i>完整扫描
+                        </button>
+                        <button class="btn btn-outline-primary" onclick="startSecurityScan('quick')">
+                            <i class="bi bi-lightning me-2"></i>快速扫描
+                        </button>
+                        <button class="btn btn-outline-warning" onclick="startSecurityScan('vulnerability')">
+                            <i class="bi bi-bug me-2"></i>漏洞扫描
+                        </button>
+                        <button class="btn btn-outline-info" onclick="viewSecurityReport()">
+                            <i class="bi bi-file-text me-2"></i>查看报告
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-shield-exclamation"></i>安全状态</h5>
+                    </div>
+                    <div class="card-body" id="security-status">
+                        <!-- 安全状态信息 -->
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-list-ul"></i>扫描结果</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="scan-results">
+                            <div class="text-center py-4">
+                                <i class="bi bi-shield-check" style="font-size: 3rem; color: var(--admin-success);"></i>
+                                <p class="mt-3">点击上方按钮开始安全扫描</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 任务管理 -->
+            <div id="tasks-section" class="content-section" style="display: none;">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-list-task"></i>运行中的任务</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="running-tasks">
+                            <!-- 运行中的任务列表 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h5><i class="bi bi-clock"></i>计划任务</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="admin-table">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>任务名称</th>
+                                        <th>计划时间</th>
+                                        <th>状态</th>
+                                        <th>下次运行</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="scheduled-tasks">
+                                    <!-- 计划任务数据 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>            <!-- 系统诊断 -->
+            <div id="diagnostics-section" class="content-section" style="display: none;">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5><i class="bi bi-shield-check"></i>系统诊断</h5>
+                            <div>
+                                <button class="btn btn-outline-primary btn-sm me-2" onclick="adminDiagnostics.startFullDiagnostic()">
+                                    <i class="bi bi-play-circle"></i>开始全面诊断
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm me-2" onclick="adminDiagnostics.refreshStatus()">
+                                    <i class="bi bi-arrow-clockwise"></i>刷新状态
+                                </button>
+                                <!-- 导出功能按钮组 -->
+                                <div class="btn-group" role="group">
+                                    <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-download"></i>导出报告
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#" onclick="adminDiagnostics.exportReport('json')">
+                                            <i class="bi bi-filetype-json me-2"></i>JSON格式
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="adminDiagnostics.exportReport('csv')">
+                                            <i class="bi bi-filetype-csv me-2"></i>CSV格式
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="adminDiagnostics.exportReport('html')">
+                                            <i class="bi bi-filetype-html me-2"></i>HTML格式
+                                        </a></li>
+                                        <li><a class="dropdown-item" href="#" onclick="adminDiagnostics.exportReport('txt')">
+                                            <i class="bi bi-filetype-txt me-2"></i>文本格式
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#" onclick="adminDiagnostics.exportMultipleFormats()">
+                                            <i class="bi bi-files me-2"></i>批量导出
+                                        </a></li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-outline-warning btn-sm ms-2" onclick="adminDiagnostics.showDownloadManager()">
+                                    <i class="bi bi-folder2-open"></i>下载管理
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- 诊断控制台 -->
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="diagnostic-console" id="diagnostic-console">
+                                    <div class="console-header">
+                                        <i class="bi bi-terminal"></i>
+                                        <span>诊断控制台</span>
+                                        <div class="console-status" id="console-status">
+                                            <span class="status-indicator ready"></span>就绪
+                                        </div>
+                                    </div>
+                                    <div class="console-body" id="console-output">
+                                        <div class="console-line">
+                                            <span class="timestamp">[2025-06-06 ${new Date().toLocaleTimeString()}]</span>
+                                            <span class="message">系统诊断就绪，等待指令...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <!-- 诊断分类 -->
+                                <div class="diagnostic-categories">
+                                    <h6>诊断分类</h6>
+                                    <div class="category-item" onclick="adminDiagnostics.runCategoryTest('backend')">
+                                        <i class="bi bi-server"></i>
+                                        <span>后端服务检测</span>
+                                        <div class="category-status" id="backend-status">未测试</div>
+                                    </div>
+                                    <div class="category-item" onclick="adminDiagnostics.runCategoryTest('websocket')">
+                                        <i class="bi bi-wifi"></i>
+                                        <span>WebSocket连接</span>
+                                        <div class="category-status" id="websocket-status">未测试</div>
+                                    </div>
+                                    <div class="category-item" onclick="adminDiagnostics.runCategoryTest('frontend')">
+                                        <i class="bi bi-window"></i>
+                                        <span>前端功能</span>
+                                        <div class="category-status" id="frontend-status">未测试</div>
+                                    </div>
+                                    <div class="category-item" onclick="adminDiagnostics.runCategoryTest('performance')">
+                                        <i class="bi bi-speedometer2"></i>
+                                        <span>性能分析</span>
+                                        <div class="category-status" id="performance-status">未测试</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 诊断结果面板 -->
+                        <div class="diagnostic-results" id="diagnostic-results">
+                            <div class="results-header">
+                                <h6>诊断结果</h6>
+                                <div class="results-summary" id="results-summary">
+                                    <span class="badge bg-secondary">待开始</span>
+                                </div>
+                            </div>
+                            <div class="results-body" id="results-body">
+                                <div class="text-center text-muted py-4">
+                                    <i class="bi bi-clipboard-data fs-1"></i>
+                                    <p>选择诊断分类或开始全面诊断以查看结果</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 历史记录 -->
+                        <div class="diagnostic-history mt-4" id="diagnostic-history">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6>诊断历史</h6>
+                                <button class="btn btn-outline-danger btn-sm" onclick="adminDiagnostics.clearHistory()">
+                                    <i class="bi bi-trash"></i>清空历史
+                                </button>
+                            </div>
+                            <div class="history-list" id="history-list">
+                                <div class="text-center text-muted py-3">
+                                    <i class="bi bi-clock-history fs-4"></i>
+                                    <p>暂无诊断历史记录</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 日志查看 -->
+            <div id="logs-section" class="content-section" style="display: none;">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5><i class="bi bi-file-text"></i>系统日志</h5>
+                            <div>
+                                <select class="form-select d-inline-block w-auto me-2" id="log-level">
+                                    <option value="all">所有级别</option>
+                                    <option value="error">错误</option>
+                                    <option value="warning">警告</option>
+                                    <option value="info">信息</option>
+                                </select>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="refreshLogs()">
+                                    <i class="bi bi-arrow-clockwise"></i>刷新
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="log-container" id="log-display">
+                            <!-- 日志内容 -->
+                        </div>
+                    </div>
+                </div>
+            </div>        </div>
+    </div>
+
+    <!-- 浮动诊断按钮 -->
+    <button class="floating-diagnostics-btn" id="floating-diagnostics-btn" onclick="toggleFloatingMenu()">
+        <i class="bi bi-shield-check"></i>
+    </button>
+      <!-- 浮动诊断菜单 -->
+    <div class="floating-diagnostics-menu" id="floating-diagnostics-menu">
+        <button class="floating-menu-item" onclick="quickSystemStatus()">
+            <i class="bi bi-speedometer"></i>
+            系统状态
+        </button>
+        <button class="floating-menu-item" onclick="quickDiagnostic('backend')">
+            <i class="bi bi-server"></i>
+            后端检测
+        </button>
+        <button class="floating-menu-item" onclick="quickDiagnostic('frontend')">
+            <i class="bi bi-window"></i>
+            前端检测
+        </button>
+        <button class="floating-menu-item" onclick="quickDiagnostic('performance')">
+            <i class="bi bi-speedometer2"></i>
+            性能检测
+        </button>
+        <button class="floating-menu-item" onclick="startFullDiagnosticFromFloat()">
+            <i class="bi bi-play-circle"></i>
+            全面诊断
+        </button>
+        <button class="floating-menu-item" onclick="switchToDiagnostics()">
+            <i class="bi bi-gear"></i>
+            诊断管理
+        </button>
+        <button class="floating-menu-item" onclick="showQuickExport()">
+            <i class="bi bi-download"></i>
+            快速导出
+        </button>
+    </div>
+
+    <!-- JavaScript 引入 -->
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/https://cdn.jsdelivr.net/npm/chart.js@4.0.0/dist/chart.min.js"></script>
+    
+    <script>
+        // 管理后台主类
+        class AdminDashboard {
+            constructor() {
+                this.currentSection = 'dashboard';
+                this.charts = {};
+                this.refreshIntervals = {};
+                this.init();
+            }
+
+            async init() {
+                this.setupNavigation();
+                this.setupCharts();
+                this.loadDashboardData();
+                this.startRealTimeUpdates();
+            }
+
+            setupNavigation() {
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const section = e.target.closest('.nav-link').dataset.section;
+                        this.switchSection(section);
+                    });
+                });
+            }
+
+            switchSection(section) {
+                // 隐藏所有内容区域
+                document.querySelectorAll('.content-section').forEach(el => {
+                    el.style.display = 'none';
+                });
+
+                // 显示目标区域
+                const targetSection = document.getElementById(`${section}-section`);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+
+                // 更新导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector(`[data-section="${section}"]`).classList.add('active');                // 更新页面标题
+                const titles = {
+                    dashboard: '系统概览',
+                    monitoring: '实时监控',
+                    users: '用户管理',
+                    backup: '备份管理',
+                    security: '安全扫描',
+                    performance: '性能优化',
+                    cache: '缓存管理',
+                    diagnostics: '系统诊断',
+                    database: '数据库管理',
+                    logs: '日志查看',
+                    tasks: '任务管理',
+                    settings: '系统设置'
+                };
+                document.getElementById('page-title').textContent = titles[section] || '系统管理';
+
+                this.currentSection = section;
+                this.loadSectionData(section);
+            }            async loadSectionData(section) {
+                switch (section) {
+                    case 'dashboard':
+                        await this.loadDashboardData();
+                        break;
+                    case 'monitoring':
+                        await this.loadMonitoringData();
+                        break;
+                    case 'backup':
+                        await this.loadBackupData();
+                        break;
+                    case 'security':
+                        await this.loadSecurityData();
+                        break;
+                    case 'tasks':
+                        await this.loadTasksData();
+                        break;
+                    case 'logs':
+                        await this.loadLogsData();
+                        break;
+                    case 'diagnostics':
+                        await this.loadDiagnosticsData();
+                        break;
+                }
+            }
+
+            // 加载诊断数据
+            async loadDiagnosticsData() {
+                try {
+                    // 初始化诊断系统
+                    if (!adminDiagnostics) {
+                        adminDiagnostics = new AdminDiagnosticsSystem();
+                    }
+                    
+                    // 更新历史显示
+                    adminDiagnostics.updateHistoryDisplay();
+                    
+                    this.showAlert('诊断系统已就绪', 'success');
+                    
+                } catch (error) {
+                    console.error('加载诊断系统失败:', error);
+                    this.showAlert('诊断系统加载失败', 'danger');
+                }
+            }
+
+            async loadDashboardData() {
+                try {
+                    const response = await fetch('/api/admin/dashboard', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.updateDashboardStats(data.data);
+                    }
+                } catch (error) {
+                    console.error('加载仪表板数据失败:', error);
+                }
+            }
+
+            updateDashboardStats(data) {
+                if (data.system_overview) {
+                    const overview = data.system_overview;
+                    document.getElementById('online-users').textContent = overview.online_users || 0;
+                    document.getElementById('system-load').textContent = (overview.cpu_usage || 0) + '%';
+                    document.getElementById('memory-usage').textContent = (overview.memory_usage || 0) + '%';
+                    document.getElementById('disk-usage').textContent = (overview.disk_usage || 0) + '%';
+                }
+            }
+
+            setupCharts() {
+                // 性能趋势图
+                const perfCtx = document.getElementById('performance-chart');
+                if (perfCtx) {
+                    this.charts.performance = new Chart(perfCtx, {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: 'CPU使用率',
+                                data: [],
+                                borderColor: '#3b82f6',
+                                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                                tension: 0.4
+                            }, {
+                                label: '内存使用率',
+                                data: [],
+                                borderColor: '#059669',
+                                backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // CPU监控图
+                const cpuCtx = document.getElementById('cpu-chart');
+                if (cpuCtx) {
+                    this.charts.cpu = new Chart(cpuCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['已使用', '空闲'],
+                            datasets: [{
+                                data: [0, 100],
+                                backgroundColor: ['#ef4444', '#e5e7eb']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+
+                // 内存监控图
+                const memCtx = document.getElementById('memory-chart');
+                if (memCtx) {
+                    this.charts.memory = new Chart(memCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['已使用', '空闲'],
+                            datasets: [{
+                                data: [0, 100],
+                                backgroundColor: ['#3b82f6', '#e5e7eb']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+            }
+
+            startRealTimeUpdates() {
+                // 每30秒更新一次数据
+                this.refreshIntervals.dashboard = setInterval(() => {
+                    if (this.currentSection === 'dashboard') {
+                        this.loadDashboardData();
+                    }
+                }, 30000);
+
+                // 每10秒更新监控数据
+                this.refreshIntervals.monitoring = setInterval(() => {
+                    if (this.currentSection === 'monitoring') {
+                        this.updateMonitoringCharts();
+                    }
+                }, 10000);
+            }
+
+            async updateMonitoringCharts() {
+                try {
+                    const response = await fetch('/api/admin/monitoring/current', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const metrics = data.data;
+
+                        // 更新CPU图表
+                        if (this.charts.cpu && metrics.cpu_usage !== undefined) {
+                            this.charts.cpu.data.datasets[0].data = [metrics.cpu_usage, 100 - metrics.cpu_usage];
+                            this.charts.cpu.update();
+                        }
+
+                        // 更新内存图表
+                        if (this.charts.memory && metrics.memory_usage !== undefined) {
+                            this.charts.memory.data.datasets[0].data = [metrics.memory_usage, 100 - metrics.memory_usage];
+                            this.charts.memory.update();
+                        }
+
+                        // 更新性能趋势图
+                        if (this.charts.performance) {
+                            const now = new Date().toLocaleTimeString();
+                            const perfChart = this.charts.performance;
+                            
+                            perfChart.data.labels.push(now);
+                            perfChart.data.datasets[0].data.push(metrics.cpu_usage || 0);
+                            perfChart.data.datasets[1].data.push(metrics.memory_usage || 0);
+
+                            // 保持最近20个数据点
+                            if (perfChart.data.labels.length > 20) {
+                                perfChart.data.labels.shift();
+                                perfChart.data.datasets.forEach(dataset => dataset.data.shift());
+                            }
+
+                            perfChart.update();
+                        }
+                    }
+                } catch (error) {
+                    console.error('更新监控图表失败:', error);
+                }
+            }
+
+            async loadBackupData() {
+                try {
+                    const response = await fetch('/api/admin/backup/history', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.updateBackupTable(data.data);
+                    }
+                } catch (error) {
+                    console.error('加载备份数据失败:', error);
+                }
+            }
+
+            updateBackupTable(backups) {
+                const tbody = document.getElementById('backup-history');
+                if (!tbody) return;
+
+                tbody.innerHTML = backups.map(backup => `
+                    <tr>
+                        <td>${new Date(backup.created_at).toLocaleString()}</td>
+                        <td>
+                            <span class="badge bg-${backup.type === 'full' ? 'primary' : 'secondary'}">
+                                ${backup.type === 'full' ? '完整备份' : '增量备份'}
+                            </span>
+                        </td>
+                        <td>${this.formatFileSize(backup.size)}</td>
+                        <td>
+                            <span class="status-badge status-${backup.status === 'completed' ? 'online' : backup.status === 'failed' ? 'offline' : 'warning'}">
+                                ${this.getBackupStatusText(backup.status)}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1" onclick="downloadBackup('${backup.id}')">
+                                <i class="bi bi-download"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteBackup('${backup.id}')">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            async loadSecurityData() {
+                try {
+                    const response = await fetch('/api/admin/security/status', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.updateSecurityStatus(data.data);
+                    }
+                } catch (error) {
+                    console.error('加载安全数据失败:', error);
+                }
+            }
+
+            updateSecurityStatus(status) {
+                const statusDiv = document.getElementById('security-status');
+                if (!statusDiv) return;
+
+                statusDiv.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>安全评分</h6>
+                            <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 me-3">
+                                    <div class="progress-bar bg-${this.getScoreColor(status.security_score)}" 
+                                         style="width: ${status.security_score}%">
+                                        ${status.security_score}/100
+                                    </div>
+                                </div>
+                                <span class="badge bg-${this.getScoreColor(status.security_score)}">
+                                    ${status.security_score}/100
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>最后扫描</h6>
+                            <p class="mb-0">${status.last_scan ? new Date(status.last_scan).toLocaleString() : '从未扫描'}</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3 text-center">
+                            <div class="text-success fs-3">${status.vulnerabilities.low || 0}</div>
+                            <small class="text-muted">低风险</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="text-warning fs-3">${status.vulnerabilities.medium || 0}</div>
+                            <small class="text-muted">中风险</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="text-danger fs-3">${status.vulnerabilities.high || 0}</div>
+                            <small class="text-muted">高风险</small>
+                        </div>
+                        <div class="col-md-3 text-center">
+                            <div class="text-dark fs-3">${status.vulnerabilities.critical || 0}</div>
+                            <small class="text-muted">严重</small>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async loadTasksData() {
+                try {
+                    const response = await fetch('/api/admin/tasks', {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.updateTasksDisplay(data.data);
+                    }
+                } catch (error) {
+                    console.error('加载任务数据失败:', error);
+                }
+            }
+
+            updateTasksDisplay(tasks) {
+                // 更新运行中的任务
+                const runningDiv = document.getElementById('running-tasks');
+                if (runningDiv && tasks.running) {
+                    runningDiv.innerHTML = tasks.running.map(task => `
+                        <div class="task-status mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <strong>${task.name}</strong>
+                                <span class="text-muted">${task.progress}%</span>
+                            </div>
+                            <div class="task-progress">
+                                <div class="task-progress-bar" style="width: ${task.progress}%"></div>
+                            </div>
+                            <small class="text-muted">${task.status}</small>
+                        </div>
+                    `).join('');
+                }
+
+                // 更新计划任务
+                const scheduledTbody = document.getElementById('scheduled-tasks');
+                if (scheduledTbody && tasks.scheduled) {
+                    scheduledTbody.innerHTML = tasks.scheduled.map(task => `
+                        <tr>
+                            <td>${task.name}</td>
+                            <td>${task.schedule}</td>
+                            <td>
+                                <span class="status-badge status-${task.enabled ? 'online' : 'offline'}">
+                                    ${task.enabled ? '启用' : '禁用'}
+                                </span>
+                            </td>
+                            <td>${task.next_run ? new Date(task.next_run).toLocaleString() : '-'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary me-1" onclick="toggleTask('${task.id}')">
+                                    ${task.enabled ? '禁用' : '启用'}
+                                </button>
+                                <button class="btn btn-sm btn-outline-success" onclick="runTaskNow('${task.id}')">
+                                    立即运行
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            }
+
+            async loadLogsData() {
+                try {
+                    const level = document.getElementById('log-level').value;
+                    const response = await fetch(`/api/admin/logs?level=${level}`, {
+                        headers: {
+                            'Authorization': `Bearer ${this.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        this.updateLogsDisplay(data.data);
+                    }
+                } catch (error) {
+                    console.error('加载日志数据失败:', error);
+                }
+            }
+
+            updateLogsDisplay(logs) {
+                const logDisplay = document.getElementById('log-display');
+                if (!logDisplay) return;
+
+                logDisplay.innerHTML = logs.map(log => `
+                    <div class="log-entry">
+                        <span class="log-timestamp">[${new Date(log.timestamp).toLocaleString()}]</span>
+                        <span class="log-level-${log.level}">[${log.level.toUpperCase()}]</span>
+                        ${log.message}
+                    </div>
+                `).join('');
+
+                // 滚动到底部
+                logDisplay.scrollTop = logDisplay.scrollHeight;
+            }
+
+            // 工具方法
+            getAuthToken() {
+                return localStorage.getItem('token') || localStorage.getItem('auth_token') || '';
+            }
+
+            formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            getBackupStatusText(status) {
+                const statusMap = {
+                    completed: '完成',
+                    running: '运行中',
+                    failed: '失败',
+                    pending: '等待中'
+                };
+                return statusMap[status] || status;
+            }
+
+            getScoreColor(score) {
+                if (score >= 80) return 'success';
+                if (score >= 60) return 'warning';
+                return 'danger';
+            }
+
+            showAlert(message, type = 'info') {
+                // 实现消息提示
+                const alert = document.createElement('div');
+                alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+                alert.style.cssText = 'top: 90px; right: 20px; z-index: 9999; min-width: 300px;';
+                alert.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(alert);
+                
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.parentNode.removeChild(alert);
+                    }
+                }, 5000);
+            }
+        }
+
+        // 全局操作函数
+        window.executeQuickAction = async (action) => {
+            const actionMap = {
+                'backup': '备份',
+                'security-scan': '安全扫描',
+                'cache-clear': '缓存清理',
+                'optimize': '性能优化',
+                'restart-services': '重启服务'
+            };
+
+            if (confirm(`确定要执行${actionMap[action]}吗？`)) {
+                try {
+                    const response = await fetch(`/api/admin/quick-action/${action}`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (response.ok) {
+                        adminDashboard.showAlert(`${actionMap[action]}已启动`, 'success');
+                    } else {
+                        adminDashboard.showAlert(`${actionMap[action]}失败`, 'danger');
+                    }
+                } catch (error) {
+                    adminDashboard.showAlert(`${actionMap[action]}失败: ${error.message}`, 'danger');
+                }
+            }
+        };
+
+        window.createBackup = async (type) => {
+            try {
+                const response = await fetch('/api/admin/backup/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                    },
+                    body: JSON.stringify({ type })
+                });
+
+                if (response.ok) {
+                    adminDashboard.showAlert('备份任务已启动', 'success');
+                    setTimeout(() => adminDashboard.loadBackupData(), 2000);
+                }
+            } catch (error) {
+                adminDashboard.showAlert('备份失败: ' + error.message, 'danger');
+            }
+        };
+
+        window.startSecurityScan = async (type) => {
+            try {
+                const response = await fetch('/api/admin/security/scan', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                    },
+                    body: JSON.stringify({ type })
+                });
+
+                if (response.ok) {
+                    adminDashboard.showAlert('安全扫描已启动', 'success');
+                    
+                    // 显示扫描进度
+                    document.getElementById('scan-results').innerHTML = `
+                        <div class="text-center py-4">
+                            <div class="loading-spinner"></div>
+                            <p class="mt-3">正在执行${type === 'full' ? '完整' : type === 'quick' ? '快速' : '漏洞'}扫描...</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                adminDashboard.showAlert('安全扫描失败: ' + error.message, 'danger');
+            }
+        };
+
+        window.refreshLogs = () => {
+            adminDashboard.loadLogsData();
+        };
+
+        window.toggleSidebar = () => {
+            document.getElementById('sidebar').classList.toggle('show');
+        };
+
+        window.logout = () => {
+            if (confirm('确定要退出登录吗？')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('auth_token');
+                window.location.href = '/login.html';
+            }
+        };
+
+        // 其他操作函数
+        window.validateBackups = () => adminDashboard.showAlert('备份验证功能开发中', 'info');
+        window.cleanupBackups = () => adminDashboard.showAlert('备份清理功能开发中', 'info');
+        window.downloadBackup = (id) => adminDashboard.showAlert(`下载备份 ${id}`, 'info');
+        window.deleteBackup = (id) => adminDashboard.showAlert(`删除备份 ${id}`, 'info');
+        window.viewSecurityReport = () => adminDashboard.showAlert('查看安全报告功能开发中', 'info');
+        window.toggleTask = (id) => adminDashboard.showAlert(`切换任务状态 ${id}`, 'info');
+        window.runTaskNow = (id) => adminDashboard.showAlert(`立即运行任务 ${id}`, 'info');
+
+        // 系统诊断类
+        class AdminDiagnosticsSystem {
+            constructor() {
+                this.isRunning = false;
+                this.results = [];
+                this.history = [];
+                this.categories = {
+                    backend: '后端服务检测',
+                    websocket: 'WebSocket连接',
+                    frontend: '前端功能',
+                    performance: '性能分析'
+                };
+                this.loadHistory();
+            }            async startFullDiagnostic() {
+                if (this.isRunning) {
+                    adminDashboard.showAlert('诊断正在进行中', 'warning');
+                    return;
+                }
+
+                this.isRunning = true;
+                this.updateConsoleStatus('运行中');
+                this.logMessage('开始全面系统诊断...', 'info');
+                
+                const startTime = Date.now();
+                this.results = [];
+
+                try {
+                    // 调用系统诊断API获取完整结果
+                    this.logMessage('连接到系统诊断API...', 'info');
+                    const response = await fetch('/api/system/diagnostics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API请求失败: ${response.status} ${response.statusText}`);
+                    }
+
+                    const apiData = await response.json();
+                    
+                    if (!apiData.success) {
+                        throw new Error(apiData.message || '诊断API返回错误');
+                    }
+
+                    const diagnosticsData = apiData.data;
+                    this.logMessage('诊断API调用成功，正在处理结果...', 'success');
+
+                    // 处理各类诊断结果
+                    if (diagnosticsData.categories) {
+                        for (const [category, categoryData] of Object.entries(diagnosticsData.categories)) {
+                            if (this.categories[category]) {
+                                await this.processCategoryResult(category, categoryData);
+                                await this.delay(200); // 视觉效果延迟
+                            }
+                        }
+                    }
+
+                    const duration = Date.now() - startTime;
+                    this.logMessage(`全面诊断完成，耗时 ${duration}ms`, 'success');
+                    
+                    // 保存到历史记录
+                    const totalTests = this.results.length;
+                    const passedTests = this.results.filter(r => r.status === 'pass').length;
+                    this.saveToHistory(`全面诊断 (${passedTests}/${totalTests})`, totalTests, duration);
+                    
+                    // 更新结果显示
+                    this.updateResultsDisplay();
+                    adminDashboard.showAlert(`诊断完成: ${passedTests}/${totalTests} 通过`, 
+                                           passedTests === totalTests ? 'success' : 'warning');
+                    
+                } catch (error) {
+                    this.logMessage(`诊断失败: ${error.message}`, 'error');
+                    adminDashboard.showAlert(`诊断失败: ${error.message}`, 'danger');
+                } finally {
+                    this.isRunning = false;
+                    this.updateConsoleStatus('就绪');
+                }
+            }
+
+            async processCategoryResult(category, categoryData) {
+                this.logMessage(`处理 ${categoryData.name || this.categories[category]}...`, 'info');
+                this.updateCategoryStatus(category, 'testing');
+
+                const categoryResults = [];
+
+                if (categoryData.tests && Array.isArray(categoryData.tests)) {
+                    for (const test of categoryData.tests) {
+                        const result = {
+                            id: test.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase(),
+                            name: test.name,
+                            description: test.details || test.message,
+                            status: test.status,
+                            duration: 0, // API返回的结果没有单独的时长
+                            details: test.details || test.message,
+                            timestamp: new Date().toISOString()
+                        };
+
+                        categoryResults.push(result);
+                        this.results.push(result);
+                    }
+                }
+
+                // 计算分类状态
+                const passedCount = categoryResults.filter(r => r.status === 'pass').length;
+                const totalCount = categoryResults.length;
+                const status = passedCount === totalCount ? 'passed' : 
+                             passedCount > totalCount / 2 ? 'warning' : 'failed';
+
+                this.updateCategoryStatus(category, status);
+                this.logMessage(`${categoryData.name || this.categories[category]} 完成: ${passedCount}/${totalCount} 通过`, 
+                              passedCount === totalCount ? 'success' : 'warning');
+            }            async runCategoryTest(category, updateDisplay = true) {
+                if (!this.categories[category]) return;
+
+                this.logMessage(`开始 ${this.categories[category]}...`, 'info');
+                this.updateCategoryStatus(category, 'testing');
+
+                try {
+                    // 调用系统诊断API获取特定分类的结果
+                    const response = await fetch('/api/system/diagnostics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API请求失败: ${response.status}`);
+                    }
+
+                    const apiData = await response.json();
+                    
+                    if (!apiData.success || !apiData.data || !apiData.data.categories) {
+                        throw new Error('API返回数据格式错误');
+                    }
+
+                    const categoryData = apiData.data.categories[category];
+                    if (!categoryData) {
+                        throw new Error(`未找到分类 ${category} 的诊断数据`);
+                    }
+
+                    // 处理分类结果
+                    await this.processCategoryResult(category, categoryData);
+
+                    if (updateDisplay) {
+                        this.updateResultsDisplay();
+                    }
+
+                } catch (error) {
+                    this.updateCategoryStatus(category, 'failed');
+                    this.logMessage(`${this.categories[category]} 失败: ${error.message}`, 'error');
+                    adminDashboard.showAlert(`${this.categories[category]} 诊断失败: ${error.message}`, 'danger');
+                }
+            }async getCategoryTests(category) {
+                try {
+                    // 调用真实的后端API获取诊断结果
+                    const response = await fetch('/api/system/diagnostics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API请求失败: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (!data.success || !data.data || !data.data.categories) {
+                        throw new Error('API返回数据格式错误');
+                    }
+
+                    const categoryData = data.data.categories[category];
+                    if (!categoryData || !categoryData.tests) {
+                        return [];
+                    }
+
+                    // 将API返回的测试结果转换为前端需要的格式
+                    return categoryData.tests.map(test => ({
+                        id: test.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase(),
+                        name: test.name,
+                        description: test.details || test.message,
+                        status: test.status,
+                        message: test.message,
+                        details: test.details
+                    }));
+
+                } catch (error) {
+                    this.logMessage(`获取${this.categories[category]}失败: ${error.message}`, 'error');
+                    
+                    // 返回空数组，避免中断诊断流程
+                    return [];
+                }
+            }            async runSingleTest(test) {
+                const startTime = Date.now();
+                
+                try {
+                    // 使用从API获取的真实测试结果
+                    const result = {
+                        id: test.id,
+                        name: test.name,
+                        description: test.description,
+                        status: test.status, // 'pass' 或 'fail'
+                        duration: Date.now() - startTime,
+                        details: test.details || test.message,
+                        timestamp: new Date().toISOString()
+                    };
+
+                    this.logMessage(`${test.name}: ${result.status === 'pass' ? '通过' : '失败'}`, 
+                                  result.status === 'pass' ? 'success' : 'error');
+
+                    return result;
+
+                } catch (error) {
+                    return {
+                        id: test.id,
+                        name: test.name,
+                        description: test.description,
+                        status: 'fail',
+                        duration: Date.now() - startTime,
+                        details: `测试异常: ${error.message}`,
+                        timestamp: new Date().toISOString()
+                    };
+                }
+            }
+
+            updateConsoleStatus(status) {
+                const statusElement = document.getElementById('console-status');
+                if (statusElement) {
+                    const statusMap = {
+                        '就绪': { class: 'ready', text: '就绪' },
+                        '运行中': { class: 'running', text: '运行中' },
+                        '错误': { class: 'error', text: '错误' }
+                    };
+                    
+                    const statusInfo = statusMap[status] || statusMap['就绪'];
+                    statusElement.innerHTML = `<span class="status-indicator ${statusInfo.class}"></span>${statusInfo.text}`;
+                }
+            }
+
+            updateCategoryStatus(category, status) {
+                const statusElement = document.getElementById(`${category}-status`);
+                if (statusElement) {
+                    const statusMap = {
+                        'testing': { class: 'testing', text: '测试中' },
+                        'passed': { class: 'passed', text: '通过' },
+                        'failed': { class: 'failed', text: '失败' },
+                        'warning': { class: 'testing', text: '部分通过' }
+                    };
+                    
+                    const statusInfo = statusMap[status] || { class: '', text: '未测试' };
+                    statusElement.className = `category-status ${statusInfo.class}`;
+                    statusElement.textContent = statusInfo.text;
+                }
+            }
+
+            logMessage(message, type = 'info') {
+                const consoleOutput = document.getElementById('console-output');
+                if (consoleOutput) {
+                    const timestamp = new Date().toLocaleTimeString();
+                    const logLine = document.createElement('div');
+                    logLine.className = 'console-line';
+                    logLine.innerHTML = `
+                        <span class="timestamp">[${timestamp}]</span>
+                        <span class="message ${type}">${message}</span>
+                    `;
+                    consoleOutput.appendChild(logLine);
+                    consoleOutput.scrollTop = consoleOutput.scrollHeight;
+                }
+            }
+
+            updateResultsDisplay() {
+                const resultsBody = document.getElementById('results-body');
+                const resultsSummary = document.getElementById('results-summary');
+                
+                if (!resultsBody || this.results.length === 0) return;
+
+                // 更新摘要
+                const passed = this.results.filter(r => r.status === 'pass').length;
+                const failed = this.results.filter(r => r.status === 'fail').length;
+                const total = this.results.length;
+
+                if (resultsSummary) {
+                    resultsSummary.innerHTML = `
+                        <span class="badge bg-success me-1">${passed} 通过</span>
+                        <span class="badge bg-danger me-1">${failed} 失败</span>
+                        <span class="badge bg-secondary">${total} 总计</span>
+                    `;
+                }
+
+                // 更新结果详情
+                resultsBody.innerHTML = this.results.map(result => `
+                    <div class="result-item ${result.status === 'pass' ? 'success' : 'error'}">
+                        <h6>
+                            <i class="bi ${result.status === 'pass' ? 'bi-check-circle text-success' : 'bi-x-circle text-danger'}"></i>
+                            ${result.name}
+                        </h6>
+                        <p class="mb-1 text-muted">${result.description}</p>
+                        <small class="text-muted">${result.details}</small>
+                        <div class="mt-1">
+                            <small class="text-info">耗时: ${result.duration}ms</small>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            saveToHistory(type, testCount, duration) {
+                const historyItem = {
+                    id: Date.now(),
+                    type,
+                    testCount,
+                    duration,
+                    timestamp: new Date().toISOString(),
+                    passed: this.results.filter(r => r.status === 'pass').length,
+                    failed: this.results.filter(r => r.status === 'fail').length
+                };
+
+                this.history.unshift(historyItem);
+                
+                // 限制历史记录数量
+                if (this.history.length > 10) {
+                    this.history = this.history.slice(0, 10);
+                }
+
+                this.saveHistory();
+                this.updateHistoryDisplay();
+            }
+
+            updateHistoryDisplay() {
+                const historyList = document.getElementById('history-list');
+                if (!historyList) return;
+
+                if (this.history.length === 0) {
+                    historyList.innerHTML = `
+                        <div class="text-center text-muted py-3">
+                            <i class="bi bi-clock-history fs-4"></i>
+                            <p>暂无诊断历史记录</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                historyList.innerHTML = this.history.map(item => `
+                    <div class="history-item">
+                        <div class="history-info">
+                            <div class="fw-bold">${item.type}</div>
+                            <div class="history-time">${new Date(item.timestamp).toLocaleString()}</div>
+                            <div class="history-summary">
+                                <span class="text-success">${item.passed}</span> 通过, 
+                                <span class="text-danger">${item.failed}</span> 失败, 
+                                耗时 ${item.duration}ms
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            refreshStatus() {
+                this.logMessage('刷新系统状态...', 'info');
+                // 清除分类状态
+                Object.keys(this.categories).forEach(category => {
+                    this.updateCategoryStatus(category, '');
+                });
+                
+                // 清除结果
+                this.results = [];
+                const resultsBody = document.getElementById('results-body');
+                const resultsSummary = document.getElementById('results-summary');
+                
+                if (resultsBody) {
+                    resultsBody.innerHTML = `
+                        <div class="text-center text-muted py-4">
+                            <i class="bi bi-clipboard-data fs-1"></i>
+                            <p>选择诊断分类或开始全面诊断以查看结果</p>
+                        </div>
+                    `;
+                }
+                
+                if (resultsSummary) {
+                    resultsSummary.innerHTML = '<span class="badge bg-secondary">待开始</span>';
+                }
+                
+                this.logMessage('状态已刷新', 'success');
+            }
+
+            clearHistory() {
+                if (confirm('确定要清空所有诊断历史记录吗？')) {
+                    this.history = [];
+                    this.saveHistory();
+                    this.updateHistoryDisplay();
+                    this.logMessage('历史记录已清空', 'info');
+                }
+            }
+
+            loadHistory() {
+                try {
+                    const saved = localStorage.getItem('admin_diagnostics_history');
+                    if (saved) {
+                        this.history = JSON.parse(saved);
+                    }
+                } catch (error) {
+                    console.warn('加载诊断历史失败:', error);
+                    this.history = [];
+                }
+            }
+
+            saveHistory() {
+                try {
+                    localStorage.setItem('admin_diagnostics_history', JSON.stringify(this.history));
+                } catch (error) {
+                    console.warn('保存诊断历史失败:', error);
+                }
+            }            async getSystemStatus() {
+                try {
+                    const response = await fetch('/api/system/status', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`状态检查失败: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        return data.data;
+                    } else {
+                        throw new Error(data.message || '获取系统状态失败');
+                    }
+
+                } catch (error) {
+                    this.logMessage(`系统状态检查失败: ${error.message}`, 'error');
+                    throw error;
+                }
+            }
+
+            // ==================== 导出功能 ====================
+
+            /**
+             * 导出诊断报告
+             */
+            async exportReport(format = 'json') {
+                try {
+                    this.logMessage(`正在导出${format.toUpperCase()}格式报告...`, 'info');
+                    
+                    const response = await fetch(`/api/system/diagnostics/export?format=${format}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`导出失败: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (!result.success) {
+                        throw new Error(result.message || '导出失败');
+                    }
+
+                    // 触发下载
+                    if (result.data.filename) {
+                        await this.downloadFile(result.data.filename);
+                        this.logMessage(`${format.toUpperCase()}报告导出成功`, 'success');
+                        adminDashboard.showAlert(`${format.toUpperCase()}报告已生成并开始下载`, 'success');
+                    }
+
+                } catch (error) {
+                    this.logMessage(`导出失败: ${error.message}`, 'error');
+                    adminDashboard.showAlert(`导出失败: ${error.message}`, 'danger');
+                }
+            }
+
+            /**
+             * 批量导出多种格式
+             */
+            async exportMultipleFormats() {
+                try {
+                    this.logMessage('正在批量导出多种格式报告...', 'info');
+                    
+                    const formats = ['json', 'csv', 'html', 'txt'];
+                    const formatsParam = formats.join(',');
+                    
+                    const response = await fetch(`/api/system/diagnostics/export?formats=${formatsParam}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`批量导出失败: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (!result.success) {
+                        throw new Error(result.message || '批量导出失败');
+                    }
+
+                    // 下载所有生成的文件
+                    const exportResults = result.data;
+                    let successCount = 0;
+                    
+                    for (const [format, exportResult] of Object.entries(exportResults)) {
+                        if (exportResult.success && exportResult.filename) {
+                            try {
+                                await this.downloadFile(exportResult.filename);
+                                successCount++;
+                                this.logMessage(`${format.toUpperCase()}格式导出成功`, 'success');
+                                await this.delay(500); // 延迟以避免同时下载过多文件
+                            } catch (error) {
+                                this.logMessage(`${format.toUpperCase()}格式下载失败: ${error.message}`, 'error');
+                            }
+                        } else {
+                            this.logMessage(`${format.toUpperCase()}格式导出失败`, 'error');
+                        }
+                    }
+
+                    const message = `批量导出完成，成功：${successCount}/${formats.length}`;
+                    this.logMessage(message, successCount > 0 ? 'success' : 'error');
+                    adminDashboard.showAlert(message, successCount > 0 ? 'success' : 'danger');
+
+                } catch (error) {
+                    this.logMessage(`批量导出失败: ${error.message}`, 'error');
+                    adminDashboard.showAlert(`批量导出失败: ${error.message}`, 'danger');
+                }
+            }
+
+            /**
+             * 下载文件
+             */
+            async downloadFile(filename) {
+                try {
+                    const response = await fetch(`/api/system/diagnostics/download?filename=${encodeURIComponent(filename)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`下载失败: ${response.status} ${response.statusText}`);
+                    }
+
+                    // 获取文件内容并触发下载
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+
+                } catch (error) {
+                    throw new Error(`文件下载失败: ${error.message}`);
+                }
+            }
+
+            /**
+             * 显示下载管理器
+             */
+            showDownloadManager() {
+                const modal = this.createDownloadManagerModal();
+                document.body.appendChild(modal);
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+
+                // 加载下载历史
+                this.loadDownloadHistory(modal);
+
+                // 绑定清理事件
+                modal.addEventListener('hidden.bs.modal', () => {
+                    document.body.removeChild(modal);
+                });
+            }
+
+            /**
+             * 创建下载管理器模态框
+             */
+            createDownloadManagerModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal fade';
+                modal.innerHTML = `
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-folder2-open me-2"></i>下载管理器
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6>已生成的报告文件</h6>
+                                    <button class="btn btn-outline-danger btn-sm" onclick="adminDiagnostics.cleanupTempFiles()">
+                                        <i class="bi bi-trash"></i>清理临时文件
+                                    </button>
+                                </div>
+                                <div id="download-list" class="list-group">
+                                    <div class="text-center py-4">
+                                        <div class="spinner-border text-primary" role="status">
+                                            <span class="visually-hidden">加载中...</span>
+                                        </div>
+                                        <p class="mt-2">正在加载文件列表...</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return modal;
+            }
+
+            /**
+             * 加载下载历史
+             */
+            async loadDownloadHistory(modal) {
+                try {
+                    // 这里可以通过API获取文件列表，暂时显示提示信息
+                    const downloadList = modal.querySelector('#download-list');
+                    
+                    downloadList.innerHTML = `
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">导出功能说明</h6>
+                                <small class="text-muted">信息</small>
+                            </div>
+                            <p class="mb-1">诊断报告将在导出后自动下载到您的设备。</p>
+                            <p class="mb-1">支持的格式：JSON、CSV、HTML、TXT</p>
+                            <small class="text-muted">您可以使用上方的"清理临时文件"按钮清理服务器上的临时文件。</small>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">使用建议</h6>
+                                <small class="text-muted">提示</small>
+                            </div>
+                            <p class="mb-1">• JSON格式：适合程序处理和API集成</p>
+                            <p class="mb-1">• CSV格式：适合Excel和数据分析</p>
+                            <p class="mb-1">• HTML格式：适合浏览器查看和打印</p>
+                            <p class="mb-1">• TXT格式：适合控制台和纯文本查看</p>
+                        </div>
+                    `;
+
+                } catch (error) {
+                    const downloadList = modal.querySelector('#download-list');
+                    downloadList.innerHTML = `
+                        <div class="list-group-item">
+                            <div class="text-center text-danger">
+                                <i class="bi bi-exclamation-triangle fs-4"></i>
+                                <p class="mt-2">加载文件列表失败: ${error.message}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            /**
+             * 清理临时文件
+             */
+            async cleanupTempFiles() {
+                try {
+                    this.logMessage('正在清理临时文件...', 'info');
+                    
+                    const response = await fetch('/api/system/diagnostics/cleanup', {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`清理失败: ${response.status} ${response.statusText}`);
+                    }
+
+                    const result = await response.json();
+                    
+                    if (!result.success) {
+                        throw new Error(result.message || '清理失败');
+                    }
+
+                    const message = `临时文件清理完成，删除了 ${result.data.deleted_count || 0} 个文件`;
+                    this.logMessage(message, 'success');
+                    adminDashboard.showAlert(message, 'success');
+
+                } catch (error) {
+                    this.logMessage(`清理临时文件失败: ${error.message}`, 'error');
+                    adminDashboard.showAlert(`清理临时文件失败: ${error.message}`, 'danger');
+                }
+            }
+
+            // ==================== 快速导出功能 ====================
+
+            /**
+             * 显示快速导出菜单
+             */
+            showQuickExport() {
+                hideFloatingMenu();
+                
+                // 创建快速导出模态框
+                const modal = this.createQuickExportModal();
+                document.body.appendChild(modal);
+                const bsModal = new bootstrap.Modal(modal);
+                bsModal.show();
+
+                // 绑定清理事件
+                modal.addEventListener('hidden.bs.modal', () => {
+                    document.body.removeChild(modal);
+                });
+            }
+
+            /**
+             * 创建快速导出模态框
+             */
+            createQuickExportModal() {
+                const modal = document.createElement('div');
+                modal.className = 'modal fade';
+                modal.innerHTML = `
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-download me-2"></i>快速导出报告
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">选择导出格式</label>
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="exportFormat" id="format-json" value="json" checked>
+                                                <label class="form-check-label" for="format-json">
+                                                    <span class="file-icon json me-2">JSON</span>
+                                                    结构化数据
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="exportFormat" id="format-csv" value="csv">
+                                                <label class="form-check-label" for="format-csv">
+                                                    <span class="file-icon csv me-2">CSV</span>
+                                                    电子表格
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="exportFormat" id="format-html" value="html">
+                                                <label class="form-check-label" for="format-html">
+                                                    <span class="file-icon html me-2">HTML</span>
+                                                    网页格式
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="exportFormat" id="format-txt" value="txt">
+                                                <label class="form-check-label" for="format-txt">
+                                                    <span class="file-icon txt me-2">TXT</span>
+                                                    纯文本
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="runDiagnosticFirst">
+                                        <label class="form-check-label" for="runDiagnosticFirst">
+                                            导出前先运行一次完整诊断
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="export-progress" class="mb-3" style="display: none;">
+                                    <div class="export-status">
+                                        <div class="d-flex align-items-center">
+                                            <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                            <span id="export-status-text">正在处理...</span>
+                                        </div>
+                                        <div class="export-progress mt-2">
+                                            <div class="export-progress-bar" id="export-progress-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" onclick="executeQuickExport(this)">
+                                    <i class="bi bi-download me-1"></i>开始导出
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return modal;
+            }
+
+            /**
+             * 执行快速导出
+             */
+            async executeQuickExport(button) {
+                const modal = button.closest('.modal');
+                const formatRadios = modal.querySelectorAll('input[name="exportFormat"]');
+                const runDiagnosticFirst = modal.querySelector('#runDiagnosticFirst').checked;
+                const progressContainer = modal.querySelector('#export-progress');
+                const statusText = modal.querySelector('#export-status-text');
+                const progressBar = modal.querySelector('#export-progress-bar');
+                
+                let selectedFormat = 'json';
+                formatRadios.forEach(radio => {
+                    if (radio.checked) {
+                        selectedFormat = radio.value;
+                    }
+                });
+
+                try {
+                    // 禁用按钮并显示进度
+                    button.disabled = true;
+                    progressContainer.style.display = 'block';
+                    
+                    // 如果需要先运行诊断
+                    if (runDiagnosticFirst) {
+                        statusText.textContent = '正在运行系统诊断...';
+                        progressBar.style.width = '30%';
+                        
+                        // 确保诊断系统初始化
+                        if (!adminDiagnostics) {
+                            adminDiagnostics = new AdminDiagnosticsSystem();
+                        }
+                        
+                        // 运行诊断（但不显示界面）
+                        await this.runDiagnosticSilently();
+                    }
+                    
+                    statusText.textContent = `正在生成${selectedFormat.toUpperCase()}报告...`;
+                    progressBar.style.width = '70%';
+                    
+                    // 执行导出
+                    await adminDiagnostics.exportReport(selectedFormat);
+                    
+                    statusText.textContent = '导出完成！';
+                    progressBar.style.width = '100%';
+                    
+                    // 成功提示
+                    setTimeout(() => {
+                        const exportStatus = modal.querySelector('.export-status');
+                        exportStatus.className = 'export-status success';
+                        statusText.innerHTML = '<i class="bi bi-check-circle me-1"></i>导出成功，文件已下载';
+                        
+                        // 2秒后关闭模态框
+                        setTimeout(() => {
+                            bootstrap.Modal.getInstance(modal).hide();
+                        }, 2000);
+                    }, 500);
+                    
+                } catch (error) {
+                    // 错误处理
+                    const exportStatus = modal.querySelector('.export-status');
+                    exportStatus.className = 'export-status error';
+                    statusText.innerHTML = `<i class="bi bi-exclamation-triangle me-1"></i>导出失败: ${error.message}`;
+                    progressBar.style.width = '0%';
+                    
+                    // 重新启用按钮
+                    setTimeout(() => {
+                        button.disabled = false;
+                        progressContainer.style.display = 'none';
+                    }, 3000);
+                }
+            }
+
+            /**
+             * 静默运行诊断（不显示界面）
+             */
+            async runDiagnosticSilently() {
+                try {
+                    const response = await fetch('/api/system/diagnostics', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`诊断API调用失败: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    if (!result.success) {
+                        throw new Error(result.message || '诊断失败');
+                    }
+
+                    return result.data;
+                } catch (error) {
+                    console.warn('静默诊断失败:', error);
+                    // 静默诊断失败不影响导出流程，使用现有数据
+                    return null;
+                }
+            }
+        }
+
+        // 全局诊断系统实例
+        let adminDiagnostics;
+
+        // 浮动按钮功能
+        function toggleFloatingMenu() {
+            const menu = document.getElementById('floating-diagnostics-menu');
+            if (menu) {
+                menu.classList.toggle('show');
+            }
+        }
+
+        function hideFloatingMenu() {
+            const menu = document.getElementById('floating-diagnostics-menu');
+            if (menu) {
+                menu.classList.remove('show');
+            }
+        }        function quickDiagnostic(category) {
+            hideFloatingMenu();
+            
+            // 显示加载状态
+            adminDashboard.showAlert(`正在进行${getCategoryDisplayName(category)}...`, 'info');
+            
+            // 如果不在诊断页面，先切换到诊断页面
+            if (adminDashboard.currentSection !== 'diagnostics') {
+                adminDashboard.switchSection('diagnostics');
+                // 等待页面切换完成
+                setTimeout(async () => {
+                    if (adminDiagnostics) {
+                        try {
+                            await adminDiagnostics.runCategoryTest(category);
+                            adminDashboard.showAlert(`${getCategoryDisplayName(category)}完成`, 'success');
+                        } catch (error) {
+                            adminDashboard.showAlert(`${getCategoryDisplayName(category)}失败: ${error.message}`, 'danger');
+                        }
+                    }
+                }, 500);
+            } else {
+                if (adminDiagnostics) {
+                    adminDiagnostics.runCategoryTest(category).then(() => {
+                        adminDashboard.showAlert(`${getCategoryDisplayName(category)}完成`, 'success');
+                    }).catch(error => {
+                        adminDashboard.showAlert(`${getCategoryDisplayName(category)}失败: ${error.message}`, 'danger');
+                    });
+                }
+            }
+        }        function getCategoryDisplayName(category) {
+            const names = {
+                'backend': '后端检测',
+                'frontend': '前端检测', 
+                'performance': '性能检测',
+                'websocket': 'WebSocket检测'
+            };
+            return names[category] || category;
+        }
+
+        async function quickSystemStatus() {
+            hideFloatingMenu();
+            
+            try {
+                adminDashboard.showAlert('正在获取系统状态...', 'info');
+                
+                if (!adminDiagnostics) {
+                    adminDiagnostics = new AdminDiagnosticsSystem();
+                }
+                
+                const status = await adminDiagnostics.getSystemStatus();
+                
+                // 格式化状态信息
+                const statusInfo = `
+                    系统: ${status.system || 'AlingAi Pro'}
+                    状态: ${status.status || 'unknown'}
+                    PHP版本: ${status.php_version || 'N/A'}
+                    内存使用: ${formatBytes(status.memory_usage || 0)}
+                    负载: ${status.load_average ? status.load_average[0] : 'N/A'}
+                `;
+                
+                adminDashboard.showAlert(`系统状态检查完成\n${statusInfo}`, 'success');
+                
+            } catch (error) {
+                adminDashboard.showAlert(`状态检查失败: ${error.message}`, 'danger');
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }function startFullDiagnosticFromFloat() {
+            hideFloatingMenu();
+            
+            // 显示开始状态
+            adminDashboard.showAlert('正在启动全面系统诊断...', 'info');
+            
+            // 如果不在诊断页面，先切换到诊断页面
+            if (adminDashboard.currentSection !== 'diagnostics') {
+                adminDashboard.switchSection('diagnostics');
+                // 等待页面切换完成
+                setTimeout(async () => {
+                    if (adminDiagnostics) {
+                        try {
+                            await adminDiagnostics.startFullDiagnostic();
+                            adminDashboard.showAlert('全面诊断已完成', 'success');
+                        } catch (error) {
+                            adminDashboard.showAlert(`诊断失败: ${error.message}`, 'danger');
+                        }
+                    }
+                }, 500);
+            } else {
+                if (adminDiagnostics) {
+                    adminDiagnostics.startFullDiagnostic().then(() => {
+                        adminDashboard.showAlert('全面诊断已完成', 'success');
+                    }).catch(error => {
+                        adminDashboard.showAlert(`诊断失败: ${error.message}`, 'danger');
+                    });
+                }
+            }
+        }
+
+        function switchToDiagnostics() {
+            hideFloatingMenu();
+            adminDashboard.switchSection('diagnostics');
+        }
+
+        // 点击页面其他地方时隐藏浮动菜单
+        document.addEventListener('click', function(e) {
+            const btn = document.getElementById('floating-diagnostics-btn');
+            const menu = document.getElementById('floating-diagnostics-menu');
+            
+            if (btn && menu && !btn.contains(e.target) && !menu.contains(e.target)) {
+                hideFloatingMenu();
+            }
+        });// 初始化
+        let adminDashboard;
+        document.addEventListener('DOMContentLoaded', () => {
+            adminDashboard = new AdminDashboard();
+            
+            // 初始化诊断系统
+            adminDiagnostics = new AdminDiagnosticsSystem();
+            
+            // 设置日志级别变更事件
+            document.getElementById('log-level').addEventListener('change', () => {
+                adminDashboard.loadLogsData();
+            });
+        });
+
+        // ==================== 快速导出功能 ====================
+
+        /**
+         * 显示快速导出菜单
+         */
+        function showQuickExport() {
+            hideFloatingMenu();
+            
+            // 创建快速导出模态框
+            const modal = createQuickExportModal();
+            document.body.appendChild(modal);
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+
+            // 绑定清理事件
+            modal.addEventListener('hidden.bs.modal', () => {
+                document.body.removeChild(modal);
+            });
+        }
+
+        /**
+         * 创建快速导出模态框
+         */
+        function createQuickExportModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="bi bi-download me-2"></i>快速导出报告
+                            </h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">选择导出格式</label>
+                                <div class="row">
+                                    <div class="col-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="format-json" value="json" checked>
+                                            <label class="form-check-label" for="format-json">
+                                                <span class="file-icon json me-2">JSON</span>
+                                                结构化数据
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="format-csv" value="csv">
+                                            <label class="form-check-label" for="format-csv">
+                                                <span class="file-icon csv me-2">CSV</span>
+                                                电子表格
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="format-html" value="html">
+                                            <label class="form-check-label" for="format-html">
+                                                <span class="file-icon html me-2">HTML</span>
+                                                网页格式
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="exportFormat" id="format-txt" value="txt">
+                                            <label class="form-check-label" for="format-txt">
+                                                <span class="file-icon txt me-2">TXT</span>
+                                                纯文本
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="runDiagnosticFirst">
+                                    <label class="form-check-label" for="runDiagnosticFirst">
+                                        导出前先运行一次完整诊断
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div id="export-progress" class="mb-3" style="display: none;">
+                                <div class="export-status">
+                                    <div class="d-flex align-items-center">
+                                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                                        <span id="export-status-text">正在处理...</span>
+                                    </div>
+                                    <div class="export-progress mt-2">
+                                        <div class="export-progress-bar" id="export-progress-bar" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="executeQuickExport(this)">
+                                <i class="bi bi-download me-1"></i>开始导出
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return modal;
+        }
+
+        /**
+         * 执行快速导出
+         */
+        async function executeQuickExport(button) {
+            const modal = button.closest('.modal');
+            const formatRadios = modal.querySelectorAll('input[name="exportFormat"]');
+            const runDiagnosticFirst = modal.querySelector('#runDiagnosticFirst').checked;
+            const progressContainer = modal.querySelector('#export-progress');
+            const statusText = modal.querySelector('#export-status-text');
+            const progressBar = modal.querySelector('#export-progress-bar');
+            
+            let selectedFormat = 'json';
+            formatRadios.forEach(radio => {
+                if (radio.checked) {
+                    selectedFormat = radio.value;
+                }
+            });
+
+            try {
+                // 禁用按钮并显示进度
+                button.disabled = true;
+                progressContainer.style.display = 'block';
+                
+                // 如果需要先运行诊断
+                if (runDiagnosticFirst) {
+                    statusText.textContent = '正在运行系统诊断...';
+                    progressBar.style.width = '30%';
+                    
+                    // 确保诊断系统初始化
+                    if (!adminDiagnostics) {
+                        adminDiagnostics = new AdminDiagnosticsSystem();
+                    }
+                    
+                    // 运行诊断（但不显示界面）
+                    await runDiagnosticSilently();
+                }
+                
+                statusText.textContent = `正在生成${selectedFormat.toUpperCase()}报告...`;
+                progressBar.style.width = '70%';
+                
+                // 执行导出
+                await adminDiagnostics.exportReport(selectedFormat);
+                
+                statusText.textContent = '导出完成！';
+                progressBar.style.width = '100%';
+                
+                // 成功提示
+                setTimeout(() => {
+                    const exportStatus = modal.querySelector('.export-status');
+                    exportStatus.className = 'export-status success';
+                    statusText.innerHTML = '<i class="bi bi-check-circle me-1"></i>导出成功，文件已下载';
+                    
+                    // 2秒后关闭模态框
+                    setTimeout(() => {
+                        bootstrap.Modal.getInstance(modal).hide();
+                    }, 2000);
+                }, 500);
+                
+            } catch (error) {
+                // 错误处理
+                const exportStatus = modal.querySelector('.export-status');
+                exportStatus.className = 'export-status error';
+                statusText.innerHTML = `<i class="bi bi-exclamation-triangle me-1"></i>导出失败: ${error.message}`;
+                progressBar.style.width = '0%';
+                
+                // 重新启用按钮
+                setTimeout(() => {
+                    button.disabled = false;
+                    progressContainer.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        /**
+         * 静默运行诊断（不显示界面）
+         */
+        async function runDiagnosticSilently() {
+            try {
+                const response = await fetch('/api/system/diagnostics', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminDashboard.getAuthToken()}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`诊断API调用失败: ${response.status}`);
+                }
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || '诊断失败');
+                }
+
+                return result.data;
+            } catch (error) {
+                console.warn('静默诊断失败:', error);
+                // 静默诊断失败不影响导出流程，使用现有数据
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>

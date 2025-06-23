@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>珑凌科技 | 量子安全·智能未来 - AI驱动的企业级安全解决方案</title>
+    
+    <!-- SEO 和元数据 -->
+    <meta name="description" content="珑凌科技 - 全球领先的量子安全基础设施与AI智能解决方案提供商，为企业级客户提供从底层加密到智能决策的全栈安全服务">
+    <meta name="keywords" content="珑凌科技,量子安全,人工智能,AI助手,零信任,企业安全,智能对话,量子计算,数据保护">
+    <meta name="author" content="珑凌科技">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="珑凌科技 | 量子安全·智能未来">
+    <meta property="og:description" content="AI驱动的企业级量子安全解决方案，重新定义数字化安全标准">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gxggm.com">
+    <meta property="og:image" content="/assets/images/og-image.jpg">
+    
+    <!-- PWA 和图标 -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
+    <meta name="theme-color" content="#6C13FF">
+    
+    <!-- 核心框架 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- 字体优化 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind 自定义配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#6C13FF',
+                        'quantum-secondary': '#FF2B75',
+                        'quantum-accent': '#00D4FF',
+                        'quantum-dark': '#0A0016',
+                        'quantum-purple': '#1A003C',
+                        'neural-blue': '#0066FF',
+                        'cyber-green': '#00FF88',
+                        'deep-space': '#0A0A1A'
+                    },
+                    fontFamily: {
+                        'heading': ['Inter', 'sans-serif'],
+                        'mono': ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                        'matrix': 'matrix 20s linear infinite',
+                        'quantum-spin': 'quantum-spin 8s linear infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 核心样式系统 -->
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6C13FF 0%, #FF2B75 50%, #00D4FF 100%);
+            --dark-gradient: linear-gradient(135deg, #0A0016 0%, #1A003C 50%, #0A0A1A 100%);
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --neural-glow: 0 0 30px rgba(108, 19, 255, 0.4);
+        }
+        
+        /* 核心动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 20px rgba(108, 19, 255, 0.4); }
+            to { box-shadow: 0 0 40px rgba(108, 19, 255, 0.8), 0 0 60px rgba(0, 212, 255, 0.3); }
+        }
+        
+        @keyframes matrix {
+            0% { transform: translateY(-100vh); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+        
+        @keyframes quantum-spin {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+        
+        /* 全局样式 */
+        * {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark-gradient);
+            color: rgba(255, 255, 255, 0.9);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* 玻璃态样式 */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+        
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        /* 量子效果 */
+        .quantum-text {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+        
+        .quantum-glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        .quantum-border {
+            border: 2px solid transparent;
+            background: linear-gradient(var(--dark-gradient), var(--dark-gradient)) padding-box,
+                        var(--primary-gradient) border-box;
+        }
+        
+        /* 神经网络效果 */
+        .neural-network {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .neural-node {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00D4FF;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .neural-connection {
+            position: absolute;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #00D4FF, transparent);
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        /* 悬停效果 */
+        .hover-lift {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 智能按钮 */
+        .smart-btn {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .smart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .smart-btn:hover::before {
+            left: 100%;
+        }
+        
+        .smart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--neural-glow);
+        }
+        
+        /* 响应式优化 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+                line-height: 1.2;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+        
+        /* 无障碍优化 */
+        .focus-visible:focus {
+            outline: 2px solid #00D4FF;
+            outline-offset: 2px;
+        }
+        
+        /* 性能优化 */
+        .contain-layout {
+            contain: layout;
+        }
+        
+        .contain-paint {
+            contain: paint;
+        }
+        
+        .will-change-transform {
+            will-change: transform;
+        }
+        
+        /* 加载动画 */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #6C13FF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 滚动指示器 */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary-gradient);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 1000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 页面加载器 -->
+    <div id="pageLoader" class="fixed inset-0 bg-quantum-dark flex items-center justify-center z-[9999]">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <div class="quantum-text text-xl font-heading">正在启动量子系统...</div>
+            <div id="loadingProgress" class="w-64 h-1 bg-gray-700 rounded-full mt-4 mx-auto overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-quantum-primary to-quantum-accent transition-all duration-300 transform origin-left scale-x-0"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 滚动进度指示器 -->
+    <div class="scroll-indicator"></div>
+    
+    <!-- 3D 背景画布 -->
+    <canvas id="quantumCanvas" class="fixed inset-0 -z-10"></canvas>
+    
+    <!-- 神经网络背景 -->
+    <div id="neuralNetwork" class="fixed inset-0 -z-10 neural-network"></div>
+    
+    <!-- 主导航 -->
+    <nav class="fixed top-0 w-full z-50 glass transition-all duration-300" id="mainNav">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-r from-quantum-primary to-quantum-accent flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <span class="quantum-text text-xl font-heading font-bold">珑凌科技</span>
+                </div>
+                
+                <!-- 桌面导航 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-white/80 hover:text-white transition-colors">首页</a>
+                    <a href="#features" class="nav-link text-white/80 hover:text-white transition-colors">产品</a>
+                    <a href="#solutions" class="nav-link text-white/80 hover:text-white transition-colors">解决方案</a>
+                    <a href="#about" class="nav-link text-white/80 hover:text-white transition-colors">关于我们</a>
+                    <a href="#contact" class="nav-link text-white/80 hover:text-white transition-colors">联系</a>
+                </div>
+                
+                <!-- 用户操作 -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button id="themeToggle" class="w-10 h-10 rounded-lg glass flex items-center justify-center hover:bg-white/10 transition-colors">
+                        <i class="fas fa-moon text-white/80"></i>
+                    </button>
+                    <button id="authBtn" class="smart-btn px-6 py-2 rounded-lg">
+                        <i class="fas fa-sign-in-alt mr-2"></i>登录
+                    </button>
+                    <button id="aiChatBtn" class="w-10 h-10 rounded-lg bg-gradient-to-r from-quantum-primary to-quantum-accent flex items-center justify-center hover:shadow-lg transition-all">
+                        <i class="fas fa-robot text-white"></i>
+                    </button>
+                </div>
+                
+                <!-- 移动端菜单按钮 -->
+                <button id="mobileMenuBtn" class="md:hidden w-10 h-10 rounded-lg glass flex items-center justify-center">
+                    <i class="fas fa-bars text-white"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端菜单 -->
+        <div id="mobileMenu" class="md:hidden glass-strong transform -translate-y-full transition-transform duration-300">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex flex-col space-y-4">
+                    <a href="#home" class="nav-link text-white/80 hover:text-white transition-colors py-2">首页</a>
+                    <a href="#features" class="nav-link text-white/80 hover:text-white transition-colors py-2">产品</a>
+                    <a href="#solutions" class="nav-link text-white/80 hover:text-white transition-colors py-2">解决方案</a>
+                    <a href="#about" class="nav-link text-white/80 hover:text-white transition-colors py-2">关于我们</a>
+                    <a href="#contact" class="nav-link text-white/80 hover:text-white transition-colors py-2">联系</a>
+                    <div class="pt-4 border-t border-white/10">
+                        <button class="smart-btn w-full py-3 rounded-lg">
+                            <i class="fas fa-sign-in-alt mr-2"></i>登录 / 注册
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 英雄区域 -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-16">
+        <div class="container mx-auto px-4 text-center">
+            <div class="max-w-4xl mx-auto">
+                <!-- 主标题 -->
+                <h1 class="hero-title text-6xl md:text-7xl font-heading font-bold mb-6 leading-tight">
+                    <span class="quantum-text">量子安全</span><br>
+                    <span class="text-white">智能未来</span>
+                </h1>
+                
+                <!-- 副标题 -->
+                <p class="text-xl md:text-2xl text-white/80 mb-8 leading-relaxed">
+                    AI驱动的企业级量子安全解决方案<br>
+                    重新定义数字化安全标准
+                </p>
+                
+                <!-- 核心特性标签 -->
+                <div class="flex flex-wrap justify-center gap-3 mb-10">
+                    <span class="px-4 py-2 glass rounded-full text-sm font-medium text-white/90">
+                        <i class="fas fa-shield-alt mr-2 text-quantum-accent"></i>零信任架构
+                    </span>
+                    <span class="px-4 py-2 glass rounded-full text-sm font-medium text-white/90">
+                        <i class="fas fa-brain mr-2 text-quantum-secondary"></i>AI智能防护
+                    </span>
+                    <span class="px-4 py-2 glass rounded-full text-sm font-medium text-white/90">
+                        <i class="fas fa-atom mr-2 text-quantum-primary"></i>量子加密
+                    </span>
+                </div>
+                
+                <!-- 行动按钮 -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <button id="startAIChat" class="smart-btn px-8 py-4 rounded-xl text-lg font-semibold shadow-2xl">
+                        <i class="fas fa-robot mr-3"></i>开始AI对话
+                    </button>
+                    <button class="px-8 py-4 rounded-xl border-2 border-white/20 text-white hover:bg-white/10 transition-all font-semibold">
+                        <i class="fas fa-play mr-3"></i>观看演示
+                    </button>
+                </div>
+                
+                <!-- 统计数据 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+                    <div class="text-center">
+                        <div class="quantum-text text-3xl font-bold mb-2" data-count="10000">0+</div>
+                        <div class="text-white/60 text-sm">企业客户</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="quantum-text text-3xl font-bold mb-2" data-count="99.9">0%</div>
+                        <div class="text-white/60 text-sm">系统可用性</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="quantum-text text-3xl font-bold mb-2" data-count="24">0/7</div>
+                        <div class="text-white/60 text-sm">全天候保护</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="quantum-text text-3xl font-bold mb-2" data-count="100">0%</div>
+                        <div class="text-white/60 text-sm">威胁拦截率</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 滚动提示 -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white rounded-full mt-2 animate-pulse"></div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 核心特性 -->
+    <section id="features" class="py-20 relative">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-heading font-bold mb-6">
+                    <span class="quantum-text">核心能力</span>
+                </h2>
+                <p class="text-xl text-white/80 max-w-3xl mx-auto">
+                    集成AI智能、量子安全、零信任架构的下一代企业安全平台
+                </p>
+            </div>
+            
+            <div class="feature-grid grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- AI智能对话 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-quantum-primary to-quantum-secondary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-brain text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">AI智能助手</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        基于大模型的智能对话系统，提供24/7技术支持、安全咨询和威胁分析服务
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>自然语言交互</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>专业安全知识库</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>实时威胁分析</li>
+                    </ul>
+                </div>
+                
+                <!-- 量子安全 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-quantum-accent to-quantum-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-atom text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">量子级加密</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        采用量子抗性加密算法，确保数据在量子计算时代仍然安全无虞
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>后量子密码学</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>密钥动态轮换</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>端到端保护</li>
+                    </ul>
+                </div>
+                
+                <!-- 零信任架构 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-quantum-secondary to-quantum-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-shield-alt text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">零信任安全</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        "永不信任，始终验证"的安全理念，为企业构建全方位安全防护体系
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>身份持续验证</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>最小权限原则</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>动态访问控制</li>
+                    </ul>
+                </div>
+                
+                <!-- 实时监控 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-neural-blue to-cyber-green flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-radar text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">智能监控</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        AI驱动的实时威胁检测和响应系统，提供毫秒级的安全防护
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>行为异常检测</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>自动化响应</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>预测性防护</li>
+                    </ul>
+                </div>
+                
+                <!-- 合规管理 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-quantum-primary to-neural-blue flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-certificate text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">合规保障</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        满足国际安全标准和合规要求，助力企业通过各项安全认证
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>ISO 27001认证</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>SOC 2 Type II</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>GDPR合规</li>
+                    </ul>
+                </div>
+                
+                <!-- 云原生部署 -->
+                <div class="glass rounded-2xl p-8 hover-lift group">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-r from-cyber-green to-quantum-secondary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-cloud text-2xl text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-heading font-bold mb-4 text-white">云原生架构</h3>
+                    <p class="text-white/70 mb-6 leading-relaxed">
+                        基于Kubernetes的云原生架构，支持多云部署和弹性扩展
+                    </p>
+                    <ul class="space-y-2 text-sm text-white/60">
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>容器化部署</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>自动化运维</li>
+                        <li><i class="fas fa-check text-quantum-accent mr-2"></i>多云兼容</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- AI助手悬浮按钮 -->
+    <div id="aiAssistant" class="fixed bottom-6 right-6 z-40">
+        <button id="aiAssistantBtn" class="w-16 h-16 rounded-full bg-gradient-to-r from-quantum-primary to-quantum-accent shadow-2xl flex items-center justify-center hover:scale-110 transition-all quantum-glow">
+            <i class="fas fa-robot text-white text-xl"></i>
+        </button>
+        
+        <!-- AI助手聊天窗口 -->
+        <div id="aiChatWindow" class="absolute bottom-20 right-0 w-80 h-96 glass-strong rounded-2xl shadow-2xl transform scale-0 origin-bottom-right transition-all duration-300">
+            <div class="p-4 border-b border-white/10">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-gradient-to-r from-quantum-primary to-quantum-accent flex items-center justify-center">
+                            <i class="fas fa-robot text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <div class="text-white font-semibold text-sm">AI助手</div>
+                            <div class="text-white/60 text-xs">在线</div>
+                        </div>
+                    </div>
+                    <button id="closeChatBtn" class="text-white/60 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="chatMessages" class="p-4 h-64 overflow-y-auto">
+                <div class="mb-4">
+                    <div class="bg-white/10 rounded-lg p-3 text-sm text-white/90">
+                        您好！我是珑凌科技AI助手，有什么可以帮助您的吗？
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t border-white/10">
+                <div class="flex space-x-2">
+                    <input type="text" id="chatInput" placeholder="输入您的问题..." 
+                           class="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-sm text-white placeholder-white/60 focus:outline-none focus:border-quantum-accent">
+                    <button id="sendChatBtn" class="w-10 h-10 rounded-lg bg-gradient-to-r from-quantum-primary to-quantum-accent flex items-center justify-center">
+                        <i class="fas fa-paper-plane text-white text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 返回顶部按钮 -->
+    <button id="backToTop" class="fixed bottom-6 left-6 w-12 h-12 rounded-full glass flex items-center justify-center opacity-0 pointer-events-none transition-all z-40">
+        <i class="fas fa-arrow-up text-white"></i>
+    </button>
+    
+    <!-- 登录/注册模态框 -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] opacity-0 pointer-events-none transition-all duration-300">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="glass-strong rounded-2xl p-8 w-full max-w-md transform scale-95 transition-all duration-300">
+                <!-- 模态框内容将通过JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- 核心JavaScript模块 -->
+    <script src="assets/js/core/app.js"></script>
+    <script src="assets/js/components/navigation.js"></script>
+    <script src="assets/js/components/ai-assistant.js"></script>
+    <script src="assets/js/components/auth-modal.js"></script>
+    <script src="assets/js/effects/quantum-background.js"></script>
+    <script src="assets/js/effects/neural-network.js"></script>
+    <script src="assets/js/utils/performance.js"></script>
+    <script src="assets/js/utils/accessibility.js"></script>
+    
+    <!-- 页面初始化脚本 -->
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化核心应用
+            if (typeof AlingAiApp !== 'undefined') {
+                window.app = new AlingAiApp();
+            }
+            
+            // 初始化页面功能
+            initializePageFeatures();
+            
+            // 隐藏加载器
+            hidePageLoader();
+            
+            // 启动滚动动画
+            initScrollAnimations();
+            
+            console.log('🚀 珑凌科技官网已完全加载');
+        });
+        
+        // 页面功能初始化
+        function initializePageFeatures() {
+            // 导航功能
+            initNavigation();
+            
+            // AI助手
+            initAIAssistant();
+            
+            // 滚动效果
+            initScrollEffects();
+            
+            // 统计数字动画
+            initCounterAnimation();
+            
+            // 主题切换
+            initThemeToggle();
+        }
+        
+        // 隐藏页面加载器
+        function hidePageLoader() {
+            const loader = document.getElementById('pageLoader');
+            const progress = loader.querySelector('#loadingProgress div');
+            
+            // 完成进度条
+            progress.style.transform = 'scaleX(1)';
+            
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 800);
+        }
+        
+        // 导航功能
+        function initNavigation() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn?.addEventListener('click', () => {
+                mobileMenu.classList.toggle('-translate-y-full');
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = document.querySelector(link.getAttribute('href'));
+                    target?.scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+            
+            // 滚动时导航栏效果
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('mainNav');
+                if (window.scrollY > 100) {
+                    nav.classList.add('glass-strong');
+                } else {
+                    nav.classList.remove('glass-strong');
+                }
+                
+                // 更新滚动进度
+                updateScrollProgress();
+            });
+        }
+        
+        // AI助手功能
+        function initAIAssistant() {
+            const aiBtn = document.getElementById('aiAssistantBtn');
+            const chatWindow = document.getElementById('aiChatWindow');
+            const closeBtn = document.getElementById('closeChatBtn');
+            const sendBtn = document.getElementById('sendChatBtn');
+            const chatInput = document.getElementById('chatInput');
+            
+            aiBtn?.addEventListener('click', () => {
+                chatWindow.classList.toggle('scale-0');
+            });
+            
+            closeBtn?.addEventListener('click', () => {
+                chatWindow.classList.add('scale-0');
+            });
+            
+            // 发送消息
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // 添加用户消息
+                addChatMessage(message, 'user');
+                chatInput.value = '';
+                
+                // 模拟AI回复
+                setTimeout(() => {
+                    const aiResponse = generateAIResponse(message);
+                    addChatMessage(aiResponse, 'ai');
+                }, 1000);
+            }
+            
+            sendBtn?.addEventListener('click', sendMessage);
+            chatInput?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+        }
+        
+        // 添加聊天消息
+        function addChatMessage(message, type) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-4 ${type === 'user' ? 'text-right' : ''}`;
+            
+            const messageBubble = document.createElement('div');
+            messageBubble.className = type === 'user' 
+                ? 'bg-gradient-to-r from-quantum-primary to-quantum-accent rounded-lg p-3 text-sm text-white inline-block'
+                : 'bg-white/10 rounded-lg p-3 text-sm text-white/90 inline-block';
+            messageBubble.textContent = message;
+            
+            messageDiv.appendChild(messageBubble);
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+        
+        // 生成AI回复
+        function generateAIResponse(userMessage) {
+            const responses = [
+                '感谢您的咨询！我们的量子安全解决方案可以为您的企业提供最高级别的数据保护。',
+                '珑凌科技的AI智能系统采用了最新的深度学习技术，能够实时检测和防御各种网络威胁。',
+                '我们的零信任架构确保每一次访问都经过严格验证，为您的数字资产提供全方位保护。',
+                '如需了解更多详情，请联系我们的技术专家团队，我们将为您定制专属的安全解决方案。'
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // 滚动效果
+        function initScrollEffects() {
+            // 返回顶部按钮
+            const backToTop = document.getElementById('backToTop');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.remove('opacity-0', 'pointer-events-none');
+                } else {
+                    backToTop.classList.add('opacity-0', 'pointer-events-none');
+                }
+            });
+            
+            backToTop?.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+        
+        // 更新滚动进度
+        function updateScrollProgress() {
+            const progress = document.querySelector('.scroll-indicator');
+            const scrolled = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            progress.style.transform = `scaleX(${scrolled / 100})`;
+        }
+        
+        // 统计数字动画
+        function initCounterAnimation() {
+            const counters = document.querySelectorAll('[data-count]');
+            
+            const animateCounter = (counter) => {
+                const target = parseInt(counter.getAttribute('data-count'));
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += step;
+                        counter.textContent = Math.floor(current) + (counter.textContent.includes('%') ? '%' : '+');
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + (counter.textContent.includes('%') ? '%' : '+');
+                    }
+                };
+                
+                updateCounter();
+            };
+            
+            // 使用Intersection Observer触发动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounter(entry.target);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            counters.forEach(counter => observer.observe(counter));
+        }
+        
+        // 主题切换
+        function initThemeToggle() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = themeToggle?.querySelector('i');
+            
+            themeToggle?.addEventListener('click', () => {
+                document.body.classList.toggle('light-theme');
+                
+                if (document.body.classList.contains('light-theme')) {
+                    themeIcon.className = 'fas fa-sun text-white/80';
+                } else {
+                    themeIcon.className = 'fas fa-moon text-white/80';
+                }
+            });
+        }
+        
+        // 滚动动画
+        function initScrollAnimations() {
+            // 注册ScrollTrigger插件
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // 特性卡片动画
+            gsap.fromTo('.feature-grid > div', {
+                y: 60,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                stagger: 0.1,
+                scrollTrigger: {
+                    trigger: '.feature-grid',
+                    start: 'top 80%'
+                }
+            });
+            
+            // 标题动画
+            gsap.fromTo('h2', {
+                y: 40,
+                opacity: 0
+            }, {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                scrollTrigger: {
+                    trigger: 'h2',
+                    start: 'top 90%'
+                }
+            });
+        }
+        
+        // 性能优化：懒加载图片
+        function initLazyLoading() {
+            const images = document.querySelectorAll('img[data-src]');
+            
+            const imageObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.classList.remove('opacity-0');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+            
+            images.forEach(img => imageObserver.observe(img));
+        }
+        
+        // Service Worker注册（PWA支持）
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

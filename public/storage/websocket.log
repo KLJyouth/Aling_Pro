@@ -1,0 +1,218 @@
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:49:03] WebSocket服务器启动在端口 8080
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:49:04] 新连接: 683f2780ba115
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:49:07] 连接关闭: 683f2780ba115
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:50:17] 新连接: 683f27c9c97be
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:50:17] 连接关闭: 683f27c9c97be
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:54:05] 新连接: 683f28ade140b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:54:05] WebSocket握手成功: 683f28ade140b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:55:40] 新连接: 683f290c01db3
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:55:40] WebSocket握手成功: 683f290c01db3
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:55:44] 收到消息 (683f290c01db3): {"type":"ping","timestamp":1748969744588}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:55:47] 收到消息 (683f290c01db3): {"type":"chat","content":"这是一条测试聊天消息","user":"TestUser","timestamp":1748969747984}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:55:57] 收到消息 (683f290c01db3): {"type":"notification","content":"系统通知测试","level":"info","timestamp":1748969757300}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:56:05] 收到消息 (683f290c01db3): {"type":"echo","content":"你好","timestamp":1748969765063}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:57:19] 连接关闭: 683f28ade140b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:57:25] 新连接: 683f297559a12
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 16:57:25] WebSocket握手成功: 683f297559a12
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:00:13] 连接关闭: 683f290c01db3
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:02:58] 新连接: 683f2ac2c5109
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:02:58] WebSocket握手成功: 683f2ac2c5109
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:03:00] 收到消息 (683f2ac2c5109): {"type":"ping"}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:03:05] 收到消息 (683f2ac2c5109): {"type":"chat","message":"1"}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:10:21] 新连接: 683f2c7d85325
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:10:21] 连接关闭: 683f2c7d85325
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:13:14] 连接关闭: 683f2ac2c5109
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:13:17] 新连接: 683f2d2d51571
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-03 17:13:17] WebSocket握手成功: 683f2d2d51571
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:17:37] 连接关闭: 683f2d2d51571
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:17:38] 新连接: 683f9eb2e50b8
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:17:38] WebSocket握手成功: 683f9eb2e50b8
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:17:51] 收到消息 (683f9eb2e50b8): {"type":"test","message":"这是一条测试消息","timestamp":"2025-06-04T01:17:51.258Z"}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:18:01] 收到消息 (683f9eb2e50b8): {"type":"ping"}
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:29:22] 连接关闭: 683f9eb2e50b8
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:29:24] 新连接: 683fa1742c5b2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 01:29:24] WebSocket握手成功: 683fa1742c5b2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:00:55] 连接关闭: 683fa1742c5b2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:00:56] 新连接: 683fa8d875e7e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:00:56] WebSocket握手成功: 683fa8d875e7e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:03:07] 新连接: 683fa95b60aee
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:03:07] WebSocket握手成功: 683fa95b60aee
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:03:07] 连接关闭: 683fa95b60aee
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:04:37] 新连接: 683fa9b536ad2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:04:37] 连接关闭: 683fa9b536ad2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:07:43] 新连接: 683faa6feff14
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:07:44] 连接关闭: 683faa6feff14
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:11:03] 新连接: 683fab377c547
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:11:03] 连接关闭: 683fab377c547
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:07] 新连接: 683faca39e91a
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:07] 连接关闭: 683faca39e91a
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:07] 新连接: 683faca3d56a9
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:07] 连接关闭: 683faca3d56a9
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 新连接: 683faca415b94
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 连接关闭: 683faca415b94
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 新连接: 683faca44e140
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 连接关闭: 683faca44e140
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 新连接: 683faca484c74
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:17:08] 连接关闭: 683faca484c74
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:36:47] 新连接: 683fb13f4f2b6
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:36:47] 连接关闭: 683fb13f4f2b6
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:41:49] 新连接: 683fb26d815c4
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:41:49] 连接关闭: 683fb26d815c4
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:48:16] 连接关闭: 683f297559a12
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:48:18] 新连接: 683fb3f2d12d2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:48:18] WebSocket握手成功: 683fb3f2d12d2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:55:33] 连接关闭: 683fa8d875e7e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:55:34] 新连接: 683fb5a64d7a2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:55:34] WebSocket握手成功: 683fb5a64d7a2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:56:27] 新连接: 683fb5db16f50
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 02:56:27] 连接关闭: 683fb5db16f50
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 新连接: 683fb72c2c68a
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 连接关闭: 683fb72c2c68a
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 新连接: 683fb72c6504b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 连接关闭: 683fb72c6504b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 新连接: 683fb72c98415
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 连接关闭: 683fb72c98415
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 新连接: 683fb72ccbd8c
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:04] 连接关闭: 683fb72ccbd8c
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:05] 新连接: 683fb72d0eee3
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:02:05] 连接关闭: 683fb72d0eee3
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 新连接: 683fbd926cd5e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 连接关闭: 683fbd926cd5e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 新连接: 683fbd92a6493
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 连接关闭: 683fbd92a6493
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 新连接: 683fbd92d9941
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:22] 连接关闭: 683fbd92d9941
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:23] 新连接: 683fbd931921f
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:23] 连接关闭: 683fbd931921f
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:23] 新连接: 683fbd9350956
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:29:23] 连接关闭: 683fbd9350956
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:56:28] 连接关闭: 683fb3f2d12d2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:56:31] 新连接: 683fc3ef9d3ad
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:56:32] WebSocket握手成功: 683fc3ef9d3ad
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 03:57:52] 连接关闭: 683fc3ef9d3ad
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:46] 新连接: 683fcacaae095
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:46] 连接关闭: 683fcacaae095
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:46] 新连接: 683fcacae3c92
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:46] 连接关闭: 683fcacae3c92
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 新连接: 683fcacb26939
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 连接关闭: 683fcacb26939
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 新连接: 683fcacb5c00b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 连接关闭: 683fcacb5c00b
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 新连接: 683fcacb8e302
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 04:25:47] 连接关闭: 683fcacb8e302
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 06:53:22] 新连接: 683fed629e30d
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 06:53:22] WebSocket握手成功: 683fed629e30d
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 07:09:38] 连接关闭: 683fed629e30d
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 07:09:42] 新连接: 683ff1367e66e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 07:09:42] WebSocket握手成功: 683ff1367e66e
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 07:18:25] 连接关闭: 683fb5a64d7a2
+PHP Warning:  file_put_contents(E:\Code\AlingAi\AlingAi_pro/storage/websocket.log): Failed to open stream: Resource temporarily unavailable in E:\Code\AlingAi\AlingAi_pro\websocket_simple_react.php on line 29
+[2025-06-04 07:20:48] 连接关闭: 683ff1367e66e

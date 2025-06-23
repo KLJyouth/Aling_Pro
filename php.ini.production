@@ -1,0 +1,39 @@
+; AlingAi Pro 5.0 生产环境PHP配置
+
+; 基础设置
+memory_limit = 512M
+max_execution_time = 300
+max_input_time = 300
+post_max_size = 32M
+upload_max_filesize = 32M
+max_file_uploads = 20
+
+; OPcache设置
+opcache.enable = 1
+opcache.enable_cli = 1
+opcache.memory_consumption = 256
+opcache.interned_strings_buffer = 16
+opcache.max_accelerated_files = 20000
+opcache.validate_timestamps = 0
+opcache.revalidate_freq = 0
+opcache.fast_shutdown = 1
+
+; 安全设置
+expose_php = Off
+display_errors = Off
+display_startup_errors = Off
+log_errors = On
+error_log = /var/log/php_errors.log
+allow_url_fopen = Off
+allow_url_include = Off
+
+; 会话设置
+session.cookie_secure = 1
+session.cookie_httponly = 1
+session.cookie_samesite = Strict
+session.use_strict_mode = 1
+session.gc_maxlifetime = 7200
+
+; 其他优化
+realpath_cache_size = 4096K
+realpath_cache_ttl = 600
