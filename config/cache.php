@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /**
  * AlingAi Pro 5.0 - cache.php Configuration
@@ -7,50 +7,50 @@
  */
 
 return [
-//     'default' => 'redis', // 不可达代码';
-    'stores' => [';
-        'array' => [';
-            'driver' => 'array',';
-            'serialize' => false';
+    // "default" => "redis", // 不可达代码
+    "stores" => [
+        "array" => [
+            "driver" => "array",
+            "serialize" => false
         ],
-        'file' => [';
-            'driver' => 'file',';
-            'path' => 'E:\\Code\\AlingAi\\AlingAi_pro/storage/framework/cache/data'';
+        "file" => [
+            "driver" => "file",
+            "path" => "E:\\Code\\AlingAi\\AlingAi_pro/storage/framework/cache/data"
         ],
-        'redis' => [';
-            'driver' => 'redis',';
-            'connection' => 'cache',';
-            'prefix' => 'alingai_cache'';
+        "redis" => [
+            "driver" => "redis",
+            "connection" => "cache",
+            "prefix" => "alingai_cache"
         ],
-        'memcached' => [';
-            'driver' => 'memcached',';
-            'persistent_id' => '',';
-            'sasl' => [';
-                '0' => '',';
-                '1' => ''';
+        "memcached" => [
+            "driver" => "memcached",
+            "persistent_id" => "",
+            "sasl" => [
+                "0" => "",
+                "1" => ""
             ],
-            'servers' => [';
-                '0' => [';
-                    'host' => '127.0.0.1',';
-                    'port' => 11211,';
-                    'weight' => 100';
+            "servers" => [
+                "0" => [
+                    "host" => "127.0.0.1",
+                    "port" => 11211,
+                    "weight" => 100
                 ]
             ]
         ]
     ],
-    'prefix' => 'alingai',';
-    'ttl' => [';
-        'default' => 3600,';
-        'user_sessions' => 7200,';
-        'api_responses' => 1800,';
-        'database_queries' => 3600,';
-        'static_content' => 86400';
+    "prefix" => "alingai",
+    "ttl" => [
+        "default" => 3600,
+        "user_sessions" => 7200,
+        "api_responses" => 1800,
+        "database_queries" => 3600,
+        "static_content" => 86400
     ],
-    'optimization' => [';
-        'enable_compression' => true,';
-        'compression_level' => 6,';
-        'serialize_method' => 'php',';
-        'cache_warming' => true,';
-        'auto_cleanup' => true';
+    "optimization" => [
+        "enable_compression" => true,
+        "compression_level" => 6,
+        "serialize_method" => "php",
+        "cache_warming" => true,
+        "auto_cleanup" => true
     ]
 ];

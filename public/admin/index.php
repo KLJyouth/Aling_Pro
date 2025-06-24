@@ -1,1 +1,1 @@
-<?php echo " Dashboard\; ?>
+<?php echo "Dashboard"; ?>
