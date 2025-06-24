@@ -1,5 +1,5 @@
 <?php
-namespace AlingAi\AI\Engines\NLP;
+namespace AlingAi\Engines\NLP;
 
 class EnglishTokenizer implements TokenizerInterface
 {

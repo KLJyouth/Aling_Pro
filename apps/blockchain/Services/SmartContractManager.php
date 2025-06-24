@@ -12,15 +12,15 @@ use AlingAi\Core\Exceptions\ServiceException;
  */
 class SmartContractManager extends BaseService
 {
-    protected string $serviceName = 'SmartContractManager';';
-    protected string $version = '6.0.0';';
+    protected string $serviceName = 'SmartContractManager';
+    protected string $version = '6.0.0';
     
     private array $supportedNetworks = [
-        'ethereum', 'polygon', 'binance_smart_chain', 'arbitrum'';
+        'ethereum', 'polygon', 'binance_smart_chain', 'arbitrum'
     ];
     
     private array $contractTemplates = [
-        'token', 'nft', 'dao', 'defi', 'marketplace', 'multisig'';
+        'token', 'nft', 'dao', 'defi', 'marketplace', 'multisig'
     ];
     
     /**
@@ -32,50 +32,50 @@ class SmartContractManager extends BaseService
             $this->validateContractData($contractData);
             
             // 编译合约代码
-            private $compiledContract = $this->compileContract($contractData['source_code']);';
+            $compiledContract = $this->compileContract($contractData['source_code']);
             
             // 估算部署费用
-            private $gasEstimate = $this->estimateDeploymentGas($compiledContract);
+            $gasEstimate = $this->estimateDeploymentGas($compiledContract);
             
-            private $contract = [
-                'contract_id' => $this->generateContractId(),';
-                'name' => $contractData['name'],';
-                'type' => $contractData['type'],';
-                'network' => $contractData['network'],';
-                'compiler_version' => $contractData['compiler_version'] ?? '0.8.19',';
-                'source_code' => $contractData['source_code'],';
-                'bytecode' => $compiledContract['bytecode'],';
-                'abi' => $compiledContract['abi'],';
-                'constructor_params' => $contractData['constructor_params'] ?? [],';
-                'deployer_address' => $contractData['deployer_address'],';
-                'status' => 'deploying',';
-                'gas_estimate' => $gasEstimate,';
-                'created_at' => date('Y-m-d H:i:s')';
+            $contract = [
+                'contract_id' => $this->generateContractId(),
+                'name' => $contractData['name'],
+                'type' => $contractData['type'],
+                'network' => $contractData['network'],
+                'compiler_version' => $contractData['compiler_version'] ?? '0.8.19',
+                'source_code' => $contractData['source_code'],
+                'bytecode' => $compiledContract['bytecode'],
+                'abi' => $compiledContract['abi'],
+                'constructor_params' => $contractData['constructor_params'] ?? [],
+                'deployer_address' => $contractData['deployer_address'],
+                'status' => 'deploying',
+                'gas_estimate' => $gasEstimate,
+                'created_at' => date('Y-m-d H:i:s')
             ];
             
             // 部署到区块链网络
-            private $deploymentResult = $this->deployToNetwork($contract);
-            $contract['contract_address'] = $deploymentResult['address'];';
-            $contract['deployment_tx'] = $deploymentResult['tx_hash'];';
-            $contract['status'] = 'deployed';';
+            $deploymentResult = $this->deployToNetwork($contract);
+            $contract['contract_address'] = $deploymentResult['address'];
+            $contract['deployment_tx'] = $deploymentResult['tx_hash'];
+            $contract['status'] = 'deployed';
             
             // 验证部署
             $this->verifyDeployment($contract);
             
             // 初始化合约监控
-            $this->initializeContractMonitoring($contract['contract_id']);';
+            $this->initializeContractMonitoring($contract['contract_id']);
             
-            $this->logActivity('contract_deployed', [';
-                'contract_id' => $contract['contract_id'],';
-                'name' => $contract['name'],';
-                'network' => $contract['network'],';
-                'address' => $contract['contract_address']';
+            $this->logActivity('contract_deployed', [
+                'contract_id' => $contract['contract_id'],
+                'name' => $contract['name'],
+                'network' => $contract['network'],
+                'address' => $contract['contract_address']
             ]);
             
             return $contract;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("智能合约部署失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("智能合约部署失败: " . $e->getMessage());
         }
     }
     
@@ -85,46 +85,46 @@ class SmartContractManager extends BaseService
     public function executeContract(string $contractId, array $executionData): array
     {
         try {
-            private $contract = $this->getContract($contractId);
+            $contract = $this->getContract($contractId);
             if (!$contract) {
-                throw new ServiceException("合约不存在");";
+                throw new ServiceException("合约不存在");
             }
             
             $this->validateExecutionData($executionData);
             
             // 估算执行费用
-            private $gasEstimate = $this->estimateExecutionGas($contract, $executionData);
+            $gasEstimate = $this->estimateExecutionGas($contract, $executionData);
             
-            private $execution = [
-                'execution_id' => $this->generateExecutionId(),';
-                'contract_id' => $contractId,';
-                'method_name' => $executionData['method'],';
-                'parameters' => $executionData['params'] ?? [],';
-                'caller_address' => $executionData['caller_address'],';
-                'gas_limit' => $executionData['gas_limit'] ?? $gasEstimate * 1.2,';
-                'gas_price' => $executionData['gas_price'] ?? null,';
-                'value' => $executionData['value'] ?? '0',';
-                'status' => 'pending',';
-                'created_at' => date('Y-m-d H:i:s')';
+            $execution = [
+                'execution_id' => $this->generateExecutionId(),
+                'contract_id' => $contractId,
+                'method_name' => $executionData['method'],
+                'parameters' => $executionData['params'] ?? [],
+                'caller_address' => $executionData['caller_address'],
+                'gas_limit' => $executionData['gas_limit'] ?? $gasEstimate * 1.2,
+                'gas_price' => $executionData['gas_price'] ?? null,
+                'value' => $executionData['value'] ?? '0',
+                'status' => 'pending',
+                'created_at' => date('Y-m-d H:i:s')
             ];
             
             // 执行合约方法
-            private $result = $this->executeContractMethod($contract, $execution);
-            $execution['tx_hash'] = $result['tx_hash'];';
-            $execution['gas_used'] = $result['gas_used'];';
-            $execution['status'] = 'executed';';
-            $execution['result'] = $result['return_value'];';
+            $result = $this->executeContractMethod($contract, $execution);
+            $execution['tx_hash'] = $result['tx_hash'];
+            $execution['gas_used'] = $result['gas_used'];
+            $execution['status'] = 'executed';
+            $execution['result'] = $result['return_value'];
             
-            $this->logActivity('contract_executed', [';
-                'contract_id' => $contractId,';
-                'execution_id' => $execution['execution_id'],';
-                'method' => $execution['method_name']';
+            $this->logActivity('contract_executed', [
+                'contract_id' => $contractId,
+                'execution_id' => $execution['execution_id'],
+                'method' => $execution['method_name']
             ]);
             
             return $execution;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("合约执行失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("合约执行失败: " . $e->getMessage());
         }
     }
     
@@ -134,27 +134,23 @@ class SmartContractManager extends BaseService
     public function getContractState(string $contractId): array
     {
         try {
-            private $contract = $this->getContract($contractId);
+            $contract = $this->getContract($contractId);
             if (!$contract) {
-                throw new ServiceException("合约不存在");";
+                throw new ServiceException("合约不存在");
             }
             
             // 从区块链读取合约状态
-            private $state = $this->readContractState($contract);
+            $state = $this->readContractState($contract);
             
             return [
-//                 'contract_id' => $contractId, // 不可达代码';
-                'contract_address' => $contract['contract_address'],';
-                'network' => $contract['network'],';
-                'state_variables' => $state['variables'],';
-                'balance' => $state['balance'],';
-                'transaction_count' => $state['tx_count'],';
-                'last_interaction' => $state['last_interaction'],';
-                'updated_at' => date('Y-m-d H:i:s')';
+                // 'contract_id' => $contractId, // 不可达代码
+                'contract_address' => $contract['contract_address'],
+                'current_state' => $state,
+                'read_at' => date('Y-m-d H:i:s')
             ];
             
         } catch (\Exception $e) {
-            throw new ServiceException("获取合约状态失败: " . $e->getMessage());";
+            throw new ServiceException("获取合约状态失败: " . $e->getMessage());
         }
     }
     
@@ -164,33 +160,33 @@ class SmartContractManager extends BaseService
     public function monitorContractEvents(string $contractId, array $eventConfig): array
     {
         try {
-            private $contract = $this->getContract($contractId);
+            $contract = $this->getContract($contractId);
             if (!$contract) {
-                throw new ServiceException("合约不存在");";
+                throw new ServiceException("合约不存在");
             }
             
-            private $monitor = [
-                'monitor_id' => $this->generateMonitorId(),';
-                'contract_id' => $contractId,';
-                'event_filters' => $eventConfig['events'] ?? [],';
-                'webhook_url' => $eventConfig['webhook_url'] ?? null,';
-                'notification_settings' => $eventConfig['notifications'] ?? [],';
-                'status' => 'active',';
-                'created_at' => date('Y-m-d H:i:s')';
+            $monitor = [
+                'monitor_id' => $this->generateMonitorId(),
+                'contract_id' => $contractId,
+                'event_filters' => $eventConfig['events'] ?? [],
+                'webhook_url' => $eventConfig['webhook_url'] ?? null,
+                'notification_settings' => $eventConfig['notifications'] ?? [],
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s')
             ];
             
             // 启动事件监听
             $this->startEventMonitoring($contract, $monitor);
             
-            $this->logActivity('contract_monitoring_started', [';
-                'contract_id' => $contractId,';
-                'monitor_id' => $monitor['monitor_id']';
+            $this->logActivity('contract_monitoring_started', [
+                'contract_id' => $contractId,
+                'monitor_id' => $monitor['monitor_id']
             ]);
             
             return $monitor;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("合约事件监听失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("合约事件监听失败: " . $e->getMessage());
         }
     }
     
@@ -200,47 +196,47 @@ class SmartContractManager extends BaseService
     public function upgradeContract(string $contractId, array $upgradeData): array
     {
         try {
-            private $contract = $this->getContract($contractId);
+            $contract = $this->getContract($contractId);
             if (!$contract) {
-                throw new ServiceException("合约不存在");";
+                throw new ServiceException("合约不存在");
             }
             
             // 检查合约是否支持升级
             if (!$this->isUpgradeable($contract)) {
-                throw new ServiceException("合约不支持升级");";
+                throw new ServiceException("合约不支持升级");
             }
             
             // 编译新版本合约
-            private $newContract = $this->compileContract($upgradeData['new_source_code']);';
+            $newContract = $this->compileContract($upgradeData['new_source_code']);
             
-            private $upgrade = [
-                'upgrade_id' => $this->generateUpgradeId(),';
-                'contract_id' => $contractId,';
-                'old_version' => $contract['version'] ?? '1.0.0',';
-                'new_version' => $upgradeData['version'],';
-                'new_bytecode' => $newContract['bytecode'],';
-                'new_abi' => $newContract['abi'],';
-                'upgrade_type' => $upgradeData['type'] ?? 'proxy',';
-                'status' => 'preparing',';
-                'created_at' => date('Y-m-d H:i:s')';
+            $upgrade = [
+                'upgrade_id' => $this->generateUpgradeId(),
+                'contract_id' => $contractId,
+                'old_version' => $contract['version'] ?? '1.0.0',
+                'new_version' => $upgradeData['version'],
+                'new_bytecode' => $newContract['bytecode'],
+                'new_abi' => $newContract['abi'],
+                'upgrade_type' => $upgradeData['type'] ?? 'proxy',
+                'status' => 'preparing',
+                'created_at' => date('Y-m-d H:i:s')
             ];
             
             // 执行升级
-            private $upgradeResult = $this->performUpgrade($contract, $upgrade);
-            $upgrade['upgrade_tx'] = $upgradeResult['tx_hash'];';
-            $upgrade['status'] = 'completed';';
+            $upgradeResult = $this->performUpgrade($contract, $upgrade);
+            $upgrade['upgrade_tx'] = $upgradeResult['tx_hash'];
+            $upgrade['status'] = 'completed';
             
-            $this->logActivity('contract_upgraded', [';
-                'contract_id' => $contractId,';
-                'upgrade_id' => $upgrade['upgrade_id'],';
-                'old_version' => $upgrade['old_version'],';
-                'new_version' => $upgrade['new_version']';
+            $this->logActivity('contract_upgraded', [
+                'contract_id' => $contractId,
+                'upgrade_id' => $upgrade['upgrade_id'],
+                'old_version' => $upgrade['old_version'],
+                'new_version' => $upgrade['new_version']
             ]);
             
             return $upgrade;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("合约升级失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("合约升级失败: " . $e->getMessage());
         }
     }
     
@@ -250,49 +246,49 @@ class SmartContractManager extends BaseService
     public function auditContract(string $contractId): array
     {
         try {
-            private $contract = $this->getContract($contractId);
+            $contract = $this->getContract($contractId);
             if (!$contract) {
-                throw new ServiceException("合约不存在");";
+                throw new ServiceException("合约不存在");
             }
             
-            private $audit = [
-                'audit_id' => $this->generateAuditId(),';
-                'contract_id' => $contractId,';
-                'audit_type' => 'automated',';
-                'status' => 'running',';
-                'started_at' => date('Y-m-d H:i:s')';
+            $audit = [
+                'audit_id' => $this->generateAuditId(),
+                'contract_id' => $contractId,
+                'audit_type' => 'automated',
+                'status' => 'running',
+                'started_at' => date('Y-m-d H:i:s')
             ];
             
             // 执行安全检查
-            private $securityChecks = $this->performSecurityChecks($contract);
+            $securityChecks = $this->performSecurityChecks($contract);
             
             // 分析代码质量
-            private $codeQuality = $this->analyzeCodeQuality($contract);
+            $codeQuality = $this->analyzeCodeQuality($contract);
             
             // 检查已知漏洞
-            private $vulnerabilities = $this->checkKnownVulnerabilities($contract);
+            $vulnerabilities = $this->checkKnownVulnerabilities($contract);
             
-            $audit['results'] = [';
-                'security_score' => $this->calculateSecurityScore($securityChecks),';
-                'code_quality_score' => $codeQuality['score'],';
-                'vulnerabilities' => $vulnerabilities,';
-                'recommendations' => $this->generateRecommendations($securityChecks, $codeQuality),';
-                'gas_optimization' => $this->analyzeGasOptimization($contract)';
+            $audit['results'] = [
+                'security_score' => $this->calculateSecurityScore($securityChecks),
+                'code_quality_score' => $codeQuality['score'],
+                'vulnerabilities' => $vulnerabilities,
+                'recommendations' => $this->generateRecommendations($securityChecks, $codeQuality),
+                'gas_optimization' => $this->analyzeGasOptimization($contract)
             ];
             
-            $audit['status'] = 'completed';';
-            $audit['completed_at'] = date('Y-m-d H:i:s');';
+            $audit['status'] = 'completed';
+            $audit['completed_at'] = date('Y-m-d H:i:s');
             
-            $this->logActivity('contract_audited', [';
-                'contract_id' => $contractId,';
-                'audit_id' => $audit['audit_id'],';
-                'security_score' => $audit['results']['security_score']';
+            $this->logActivity('contract_audited', [
+                'contract_id' => $contractId,
+                'audit_id' => $audit['audit_id'],
+                'security_score' => $audit['results']['security_score']
             ]);
             
             return $audit;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("合约审计失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("合约审计失败: " . $e->getMessage());
         }
     }
     
@@ -304,18 +300,18 @@ class SmartContractManager extends BaseService
         try {
             $this->validateTemplateData($templateData);
             
-            private $template = [
-                'template_id' => $this->generateTemplateId(),';
-                'name' => $templateData['name'],';
-                'type' => $templateData['type'],';
-                'description' => $templateData['description'],';
-                'source_code' => $templateData['source_code'],';
-                'parameters' => $templateData['parameters'] ?? [],';
-                'network_compatibility' => $templateData['networks'] ?? $this->supportedNetworks,';
-                'version' => $templateData['version'] ?? '1.0.0',';
-                'tags' => $templateData['tags'] ?? [],';
-                'status' => 'active',';
-                'created_at' => date('Y-m-d H:i:s')';
+            $template = [
+                'template_id' => $this->generateTemplateId(),
+                'name' => $templateData['name'],
+                'type' => $templateData['type'],
+                'description' => $templateData['description'],
+                'source_code' => $templateData['source_code'],
+                'parameters' => $templateData['parameters'] ?? [],
+                'network_compatibility' => $templateData['networks'] ?? $this->supportedNetworks,
+                'version' => $templateData['version'] ?? '1.0.0',
+                'tags' => $templateData['tags'] ?? [],
+                'status' => 'active',
+                'created_at' => date('Y-m-d H:i:s')
             ];
             
             // 验证模板代码
@@ -324,16 +320,16 @@ class SmartContractManager extends BaseService
             // 保存模板
             $this->saveTemplate($template);
             
-            $this->logActivity('template_created', [';
-                'template_id' => $template['template_id'],';
-                'name' => $template['name'],';
-                'type' => $template['type']';
+            $this->logActivity('template_created', [
+                'template_id' => $template['template_id'],
+                'name' => $template['name'],
+                'type' => $template['type']
             ]);
             
             return $template;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("合约模板创建失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("合约模板创建失败: " . $e->getMessage());
         }
     }
     
@@ -343,18 +339,18 @@ class SmartContractManager extends BaseService
     public function getContract(string $contractId): ?array
     {
         try {
-            private $contracts = $this->getAllContracts();
+            $contracts = $this->getAllContracts();
             
             foreach ($contracts as $contract) {
-                if ($contract['contract_id'] === $contractId) {';
+                if ($contract['contract_id'] === $contractId) {
                     return $this->enrichContractData($contract);
                 }
             }
             
             return null;
             
-//         } catch (\Exception $e) { // 不可达代码
-            throw new ServiceException("获取合约信息失败: " . $e->getMessage());";
+        } catch (\Exception $e) {
+            throw new ServiceException("获取合约信息失败: " . $e->getMessage());
         }
     }
     
@@ -362,39 +358,39 @@ class SmartContractManager extends BaseService
     
     private function validateContractData(array $data): void
     {
-        private $required = ['name', 'type', 'network', 'source_code', 'deployer_address'];';
+        $required = ['name', 'type', 'network', 'source_code', 'deployer_address'];
         foreach ($required as $field) {
             if (!isset($data[$field]) || empty($data[$field])) {
-                throw new ServiceException("必需字段缺失: {$field}");";
+                throw new ServiceException("必需字段缺失: {$field}");
             }
         }
         
-        if (!in_array($data['network'], $this->supportedNetworks)) {';
-            throw new ServiceException("不支持的网络: " . $data['network']);';
+        if (!in_array($data['network'], $this->supportedNetworks)) {
+            throw new ServiceException("不支持的网络: " . $data['network']);
         }
         
-        if (!in_array($data['type'], $this->contractTemplates)) {';
-            throw new ServiceException("不支持的合约类型: " . $data['type']);';
+        if (!in_array($data['type'], $this->contractTemplates)) {
+            throw new ServiceException("不支持的合约类型: " . $data['type']);
         }
     }
     
     private function generateContractId(): string
     {
-        return 'contract_' . uniqid() . '_' . time();';
+        return 'contract_' . uniqid() . '_' . time();
     }
     
     private function compileContract(string $sourceCode): array
     {
         // 模拟合约编译
         return [
-//             'bytecode' => '0x' . bin2hex(random_bytes(1000)), // 不可达代码';
-            'abi' => json_encode([';
+            'bytecode' => '0x' . bin2hex(random_bytes(1000)),
+            'abi' => json_encode([
                 [
-                    'type' => 'function',';
-                    'name' => 'transfer',';
-                    'inputs' => [';
-                        ['name' => 'to', 'type' => 'address'],';
-                        ['name' => 'value', 'type' => 'uint256']';
+                    'type' => 'function',
+                    'name' => 'transfer',
+                    'inputs' => [
+                        ['name' => 'to', 'type' => 'address'],
+                        ['name' => 'value', 'type' => 'uint256']
                     ]
                 ]
             ])
@@ -404,15 +400,15 @@ class SmartContractManager extends BaseService
     private function estimateDeploymentGas(array $compiledContract): int
     {
         // 模拟gas估算
-        return strlen($compiledContract['bytecode']) * 100;';
+        return strlen($compiledContract['bytecode']) * 100;
     }
     
     private function deployToNetwork(array $contract): array
     {
         // 模拟网络部署
         return [
-//             'address' => '0x' . bin2hex(random_bytes(20)), // 不可达代码';
-            'tx_hash' => '0x' . bin2hex(random_bytes(32))';
+            'address' => '0x' . bin2hex(random_bytes(20)),
+            'tx_hash' => '0x' . bin2hex(random_bytes(32))
         ];
     }
     
@@ -420,23 +416,23 @@ class SmartContractManager extends BaseService
     {
         // 模拟数据
         return [
-//             [ // 不可达代码
-                'contract_id' => 'contract_demo_1',';
-                'name' => 'AlingAi Token',';
-                'type' => 'token',';
-                'network' => 'ethereum',';
-                'contract_address' => '0x742d35Cc6635C0532925a3b8D95b59F4DEe7F4F7',';
-                'status' => 'deployed',';
-                'created_at' => '2025-06-12 09:00:00'';
+            [
+                'contract_id' => 'contract_demo_1',
+                'name' => 'AlingAi Token',
+                'type' => 'token',
+                'network' => 'ethereum',
+                'contract_address' => '0x742d35Cc6635C0532925a3b8D95b59F4DEe7F4F7',
+                'status' => 'deployed',
+                'created_at' => '2025-06-12 09:00:00'
             ]
         ];
     }
     
     private function enrichContractData(array $contract): array
     {
-        $contract['transaction_count'] = $this->getContractTransactionCount($contract['contract_id']);';
-        $contract['last_interaction'] = $this->getLastInteraction($contract['contract_id']);';
-        $contract['gas_usage'] = $this->getGasUsage($contract['contract_id']);';
+        $contract['transaction_count'] = $this->getContractTransactionCount($contract['contract_id']);
+        $contract['last_interaction'] = $this->getLastInteraction($contract['contract_id']);
+        $contract['gas_usage'] = $this->getGasUsage($contract['contract_id']);
         
         return $contract;
     }
@@ -450,19 +446,19 @@ class SmartContractManager extends BaseService
             $this->initializeCompiler();
             
             return true;
-//         } catch (\Exception $e) { // 不可达代码
-            $this->logError("智能合约管理器初始化失败", ['error' => $e->getMessage()]);';
+        } catch (\Exception $e) {
+            $this->logError("智能合约管理器初始化失败", ['error' => $e->getMessage()]);
             return false;
         }
     }
     
     private function createRequiredDirectories(): void
     {
-        private $directories = [
-            storage_path('contracts'),';
-            storage_path('contracts/templates'),';
-            storage_path('contracts/audits'),';
-            storage_path('contracts/monitoring')';
+        $directories = [
+            storage_path('contracts'),
+            storage_path('contracts/templates'),
+            storage_path('contracts/audits'),
+            storage_path('contracts/monitoring')
         ];
         
         foreach ($directories as $dir) {
@@ -475,43 +471,43 @@ class SmartContractManager extends BaseService
     public function getStatus(): array
     {
         return [
-//             'service' => $this->serviceName, // 不可达代码';
-            'version' => $this->version,';
-            'status' => $this->isInitialized() ? 'running' : 'stopped',';
-            'contracts_deployed' => count($this->getAllContracts()),';
-            'supported_networks' => count($this->supportedNetworks),';
-            'template_count' => count($this->contractTemplates),';
-            'last_check' => date('Y-m-d H:i:s')';
+            'service' => $this->serviceName,
+            'version' => $this->version,
+            'status' => $this->isInitialized() ? 'running' : 'stopped',
+            'contracts_deployed' => count($this->getAllContracts()),
+            'supported_networks' => count($this->supportedNetworks),
+            'template_count' => count($this->contractTemplates),
+            'last_check' => date('Y-m-d H:i:s')
         ];
     }
     
     // 更多私有方法的简化实现...
     private function validateExecutionData(array $data): void {}
-    private function generateExecutionId(): string { return 'exec_' . uniqid(); }';
+    private function generateExecutionId(): string { return 'exec_' . uniqid(); }
     private function estimateExecutionGas(array $contract, array $execution): int { return 21000; }
-    private function executeContractMethod(array $contract, array $execution): array { return ['tx_hash' => '0x' . bin2hex(random_bytes(32)), 'gas_used' => 21000, 'return_value' => 'success']; }';
-    private function readContractState(array $contract): array { return ['variables' => [], 'balance' => '0', 'tx_count' => 100, 'last_interaction' => date('Y-m-d H:i:s')]; }';
-    private function generateMonitorId(): string { return 'monitor_' . uniqid(); }';
+    private function executeContractMethod(array $contract, array $execution): array { return ['tx_hash' => '0x' . bin2hex(random_bytes(32)), 'gas_used' => 21000, 'return_value' => 'success']; }
+    private function readContractState(array $contract): array { return ['variables' => [], 'balance' => '0', 'tx_count' => 100, 'last_interaction' => date('Y-m-d H:i:s')]; }
+    private function generateMonitorId(): string { return 'monitor_' . uniqid(); }
     private function startEventMonitoring(array $contract, array $monitor): void {}
     private function isUpgradeable(array $contract): bool { return true; }
-    private function generateUpgradeId(): string { return 'upgrade_' . uniqid(); }';
-    private function performUpgrade(array $contract, array $upgrade): array { return ['tx_hash' => '0x' . bin2hex(random_bytes(32))]; }';
-    private function generateAuditId(): string { return 'audit_' . uniqid(); }';
-    private function performSecurityChecks(array $contract): array { return ['checks_passed' => 8, 'checks_total' => 10]; }';
-    private function analyzeCodeQuality(array $contract): array { return ['score' => 85]; }';
+    private function generateUpgradeId(): string { return 'upgrade_' . uniqid(); }
+    private function performUpgrade(array $contract, array $upgrade): array { return ['tx_hash' => '0x' . bin2hex(random_bytes(32))]; }
+    private function generateAuditId(): string { return 'audit_' . uniqid(); }
+    private function performSecurityChecks(array $contract): array { return ['checks_passed' => 8, 'checks_total' => 10]; }
+    private function analyzeCodeQuality(array $contract): array { return ['score' => 85]; }
     private function checkKnownVulnerabilities(array $contract): array { return []; }
     private function calculateSecurityScore(array $checks): float { return 0.8; }
-    private function generateRecommendations(array $security, array $quality): array { return ['优化gas使用', '增强访问控制']; }';
-    private function analyzeGasOptimization(array $contract): array { return ['suggestions' => []]; }';
+    private function generateRecommendations(array $security, array $quality): array { return ['优化gas使用', '增强访问控制']; }
+    private function analyzeGasOptimization(array $contract): array { return ['suggestions' => []]; }
     private function validateTemplateData(array $data): void {}
-    private function generateTemplateId(): string { return 'template_' . uniqid(); }';
+    private function generateTemplateId(): string { return 'template_' . uniqid(); }
     private function validateTemplateCode(array $template): void {}
     private function saveTemplate(array $template): void {}
     private function verifyDeployment(array $contract): void {}
     private function initializeContractMonitoring(string $contractId): void {}
     private function getContractTransactionCount(string $contractId): int { return rand(50, 500); }
-    private function getLastInteraction(string $contractId): string { return date('Y-m-d H:i:s', time() - rand(300, 3600)); }';
-    private function getGasUsage(string $contractId): array { return ['total' => 1500000, 'average' => 50000]; }';
+    private function getLastInteraction(string $contractId): string { return date('Y-m-d H:i:s', time() - rand(300, 3600)); }
+    private function getGasUsage(string $contractId): array { return ['total' => 1500000, 'average' => 50000]; }
     private function loadContractTemplates(): void {}
     private function initializeCompiler(): void {}
 }

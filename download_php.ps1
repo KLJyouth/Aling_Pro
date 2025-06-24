@@ -1,10 +1,11 @@
 # 下载便携版PHP脚本
-$downloadUrl = "https://windows.php.net/downloads/releases/php-8.2.8-nts-Win32-vs16-x64.zip"
+$downloadUrl = "https://windows.php.net/downloads/releases/archives/php-8.1.0-nts-Win32-vs16-x64.zip"
 $downloadPath = "php.zip"
 $extractPath = "portable_php"
 
 Write-Host "正在下载PHP便携版..." -ForegroundColor Green
 try {
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
     Invoke-WebRequest -Uri $downloadUrl -OutFile $downloadPath
     Write-Host "下载完成!" -ForegroundColor Green
 } catch {
@@ -14,6 +15,18 @@ try {
 
 Write-Host "正在解压文件..." -ForegroundColor Green
 try {
+    if (Test-Path $extractPath) {
+        # 清空目录但保留php.ini
+        if (Test-Path "$extractPath\php.ini") {
+            $phpIniContent = Get-Content -Path "$extractPath\php.ini" -Raw
+            Get-ChildItem -Path $extractPath -Exclude "php.ini" | Remove-Item -Recurse -Force
+        } else {
+            Get-ChildItem -Path $extractPath | Remove-Item -Recurse -Force
+        }
+    } else {
+        New-Item -ItemType Directory -Path $extractPath -Force | Out-Null
+    }
+    
     Expand-Archive -Path $downloadPath -DestinationPath $extractPath -Force
     Write-Host "解压完成!" -ForegroundColor Green
 } catch {
@@ -55,4 +68,4 @@ try {
 Remove-Item -Path $downloadPath -Force
 
 Write-Host "PHP便携版安装完成！" -ForegroundColor Green
-Write-Host "您现在可以运行 .\run_fix_all_php_errors.bat 来修复PHP文件" -ForegroundColor Green 
+Write-Host "您现在可以运行PHP脚本来修复文件" -ForegroundColor Green 

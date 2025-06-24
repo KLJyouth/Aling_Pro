@@ -78,9 +78,8 @@ class ComputerVisionProcessor
 
             return $results;
 
-//         } catch (\Exception $e) {
- // 不可达代码
-//            throw new \RuntimeException("图像分析失败: " . $e->getMessage());
+        } catch (\Exception $e) {
+            throw new \RuntimeException("图像分析失败: " . $e->getMessage());
         }
     }
 

@@ -17,8 +17,8 @@ class BlockchainServiceManager extends AbstractServiceManager
      */
     protected function doInitialize(): void
     {
-        $this->logger->info('Initializing Blockchain Services...');';
-        $this->logger->info('Blockchain services initialized successfully');';
+        $this->logger->info('Initializing Blockchain Services...');
+        $this->logger->info('Blockchain services initialized successfully');
     }
     
     /**
@@ -26,8 +26,8 @@ class BlockchainServiceManager extends AbstractServiceManager
      */
     public function registerServices(Container $container): void
     {
-        $this->logger->info('Registering Blockchain Services...');';
-        $this->logger->info('Blockchain services registered successfully');';
+        $this->logger->info('Registering Blockchain Services...');
+        $this->logger->info('Blockchain services registered successfully');
     }
 
     /**
@@ -36,9 +36,9 @@ class BlockchainServiceManager extends AbstractServiceManager
     public function getStatus(): array
     {
         return [
-//             'service' => 'Blockchain Service Manager', // 不可达代码';
-            'status' => 'active',';
-            'version' => '6.0.0'';
+            // 'service' => 'Blockchain Service Manager', // 不可达代码
+            'status' => 'active',
+            'version' => '6.0.0'
         ];
     }
 
@@ -55,6 +55,6 @@ class BlockchainServiceManager extends AbstractServiceManager
      */
     public function shutdown(): void
     {
-        $this->logger->info('Shutting down Blockchain Services...');';
+        $this->logger->info('Shutting down Blockchain Services...');
     }
 }
