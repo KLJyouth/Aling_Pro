@@ -46,11 +46,11 @@ function generateApiDocumentation() {
         "openapi" => "3.0.0",
         "info" => [
             "title" => "AlingAi Pro API",
-            "description" => "AlingAi Pro锟斤拷锟斤拷API锟侥碉拷 - 锟斤拷锟斤拷锟矫伙拷锟斤拷锟斤拷锟斤拷锟斤拷锟届、系统锟斤拷氐锟斤拷锟斤拷泄锟斤拷锟?,
-            "version" => "5.0.0",
+            "description" => "AlingAi Pro锟斤拷锟斤拷API锟侥碉拷 - 锟斤拷锟斤拷锟矫伙拷锟斤拷锟斤拷锟斤拷锟斤拷锟届、系统锟斤拷氐锟斤拷锟斤拷泄锟斤拷锟?",
+            "version" => "6.0.0",
             "contact" => [
                 "name" => "AlingAi Team",
-                "email" => "api@alingai.com",
+                "email" => "api@gxggm.com",
                 "url" => "https://alingai.com"
             ],
             "license" => [

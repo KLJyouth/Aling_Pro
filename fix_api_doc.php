@@ -1,33 +1,49 @@
 <?php
 /**
- * ĞŞ¸´APIÎÄµµÖĞµÄÒıÓÃÎÊÌâ
- * ½«
+ * ä¿®å¤APIæ–‡æ¡£æ–‡ä»¶
+ * 
  */
 
-// ¶¨ÒåÒª´¦ÀíµÄÎÄ¼ş
-$file = " public/admin/api/documentation/index.php\;
+// ä¿®å¤APIæ–‡æ¡£æ–‡ä»¶
+$file = 'public/admin/api/documentation/index.php';
 
-// ¶ÁÈ¡ÎÄ¼şÄÚÈİ
+// è¯»å–æ–‡ä»¶å†…å®¹
 $content = file_get_contents($file);
 if ($content === false) {
- die(\ÎŞ·¨¶ÁÈ¡ÎÄ¼ş: $file\n\);
+    die("æ— æ³•è¯»å–æ–‡ä»¶: $file\n");
 }
 
-// ´´½¨±¸·İ
-$backup = $file . \.bak\;
-if (!file_exists($backup)) {
- file_put_contents($backup, $content);
- echo \ÒÑ´´½¨±¸·İ: $backup\n\;
-}
+// åˆ›å»ºå¤‡ä»½
+$backup = $file . '.bak.' . date('YmdHis');
+file_put_contents($backup, $content);
+echo "å·²åˆ›å»ºå¤‡ä»½: $backup\n";
 
-// ĞŞ¸´
-$content = str_replace(\[\\\\\\]\, \[\\\ref\\\]\, $content);
+// ä¿®å¤æè¿°è¡Œä¸­çš„è¯­æ³•é”™è¯¯
+$content = preg_replace(
+    '/("description"\s*=>\s*"AlingAi Pro.*?),/s',
+    '$1",',
+    $content
+);
 
-// ±£´æĞŞ¸´ºóµÄÎÄ¼ş
-if (file_put_contents($file, $content)) {
- echo \ÒÑĞŞ¸´ÎÄ¼ş: $file\n\;
+// æ›´æ–°ç‰ˆæœ¬å·ä¸º6.0.0
+$content = preg_replace(
+    '/"version"\s*=>\s*"5\.0\.0"/',
+    '"version" => "6.0.0"',
+    $content
+);
+
+// æ›´æ–°é‚®ç®±
+$content = preg_replace(
+    '/"email"\s*=>\s*"api@alingai\.com"/',
+    '"email" => "api@gxggm.com"',
+    $content
+);
+
+// ä¿å­˜ä¿®æ”¹åçš„æ–‡ä»¶
+if (file_put_contents($file, $content) !== false) {
+    echo "æ–‡ä»¶å·²æˆåŠŸä¿®å¤: $file\n";
 } else {
- echo \ÎŞ·¨Ğ´ÈëÎÄ¼ş: $file\n\;
+    echo "æ— æ³•å†™å…¥æ–‡ä»¶: $file\n";
 }
 
-echo \ĞŞ¸´Íê³É\n\;
+echo "ä¿®å¤å®Œæˆ\n";
