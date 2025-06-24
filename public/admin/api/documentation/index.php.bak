@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
- * AlingAi Pro 5.0 - API�ĵ�����ϵͳ
- * �Զ�ɨ�������API�ĵ���֧��OpenAPI/Swagger��ʽ
+ * AlingAi Pro 5.0 - API锟侥碉拷锟斤拷锟斤拷系统
+ * 锟皆讹拷扫锟斤拷锟斤拷锟斤拷锟紸PI锟侥碉拷锟斤拷支锟斤拷OpenAPI/Swagger锟斤拷式
  */
 
 declare(strict_types=1);
@@ -21,7 +21,7 @@ require_once __DIR__ . "/../../../../src/Auth/AdminAuthServiceDemo.php";
 
 use AlingAi\Auth\AdminAuthServiceDemo;
 
-// ��Ӧ����
+// 锟斤拷应锟斤拷锟斤拷
 function sendResponse($success, $data = null, $message = "", $code = 200)
 {
     http_response_code($code);
@@ -34,23 +34,23 @@ function sendResponse($success, $data = null, $message = "", $code = 200)
     exit();
 }
 
-// ������
+// 锟斤拷锟斤拷锟斤拷
 function handleError($message, $code = 500) {
     error_log("API Error: $message");
     sendResponse(false, null, $message, $code);
 }
 
-// API�ĵ���������
+// API锟侥碉拷锟斤拷锟斤拷锟斤拷锟斤拷
 function generateApiDocumentation() {
     return [
         "openapi" => "3.0.0",
         "info" => [
             "title" => "AlingAi Pro API",
-            "description" => "AlingAi Pro����API�ĵ� - �����û����������졢ϵͳ��ص����й���",
-            "version" => "5.0.0",
+            "description" => "AlingAi Pro锟斤拷锟斤拷API锟侥碉拷 - 锟斤拷锟斤拷锟矫伙拷锟斤拷锟斤拷锟斤拷锟斤拷锟届、系统锟斤拷氐锟斤拷锟斤拷泄锟斤拷锟?",
+            "version" => "6.0.0",
             "contact" => [
                 "name" => "AlingAi Team",
-                "email" => "api@alingai.com",
+                "email" => "api@gxggm.com",
                 "url" => "https://alingai.com"
             ],
             "license" => [
@@ -61,11 +61,11 @@ function generateApiDocumentation() {
         "servers" => [
             [
                 "url" => "http://localhost",
-                "description" => "���ؿ�������"
+                "description" => "锟斤拷锟截匡拷锟斤拷锟斤拷锟斤拷"
             ],
             [
                 "url" => "https://api.alingai.com",
-                "description" => "��������"
+                "description" => "锟斤拷锟斤拷锟斤拷锟斤拷"
             ]
         ],
         "security" => [
@@ -79,12 +79,12 @@ function generateApiDocumentation() {
 
 function generateApiPaths() {
     return [
-        // ��֤���API
+        // 锟斤拷证锟斤拷锟紸PI
         "/api/auth/login" => [
             "post" => [
-                "tags" => ["��֤"],
-                "summary" => "�û���¼",
-                "description" => "ʹ���û���/�����������е�¼",
+                "tags" => ["锟斤拷证"],
+                "summary" => "锟矫伙拷锟斤拷录",
+                "description" => "使锟斤拷锟矫伙拷锟斤拷/锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟叫碉拷录",
                 "requestBody" => [
                     "required" => true,
                     "content" => [
@@ -93,9 +93,9 @@ function generateApiPaths() {
                                 "type" => "object",
                                 "required" => ["username", "password"],
                                 "properties" => [
-                                    "username" => ["type" => "string", "description" => "�û���������"],
-                                    "password" => ["type" => "string", "description" => "����"],
-                                    "remember" => ["type" => "boolean", "description" => "��ס��¼״̬"]
+                                    "username" => ["type" => "string", "description" => "锟矫伙拷锟斤拷锟斤拷锟斤拷锟斤拷"],
+                                    "password" => ["type" => "string", "description" => "锟斤拷锟斤拷"],
+                                    "remember" => ["type" => "boolean", "description" => "锟斤拷住锟斤拷录状态"]
                                 ]
                             ]
                         ]
@@ -103,14 +103,14 @@ function generateApiPaths() {
                 ],
                 "responses" => [
                     "200" => [
-                        "description" => "��¼�ɹ�",
+                        "description" => "锟斤拷录锟缴癸拷",
                         "content" => [
                             "application/json" => [
                                 "schema" => ["\$ref" => "#/components/schemas/AuthResponse"]
                             ]
                         ]
                     ],
-                    "401" => ["description" => "��֤ʧ��"]
+                    "401" => ["description" => "锟斤拷证失锟斤拷"]
                 ]
             ]
         ]
@@ -160,67 +160,68 @@ function generateApiComponents() {
     ];
 }
 
-// ��Ȩ��֤
+// 锟斤拷权锟斤拷证
 function authenticateRequest() {
     $auth = new AdminAuthServiceDemo();
     
-    // �������л�ȡ��Ȩ��Ϣ
+    // 锟斤拷锟斤拷锟斤拷锟叫伙拷取锟斤拷权锟斤拷息
     $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
     $apiKey = $_SERVER["HTTP_X_API_KEY"] ?? "";
     
     if (empty($authHeader) && empty($apiKey)) {
-        handleError("δ�ṩ��֤��Ϣ", 401);
+        handleError("未锟结供锟斤拷证锟斤拷息", 401);
     }
     
-    // ����Bearer Token
+    // 锟斤拷锟斤拷Bearer Token
     if (!empty($authHeader)) {
         $token = str_replace("Bearer ", "", $authHeader);
         if (!$auth->validateToken($token)) {
-            handleError("��Ч������", 401);
+            handleError("锟斤拷效锟斤拷锟斤拷锟斤拷", 401);
         }
         return $auth->getUserFromToken($token);
     }
     
-    // ����API Key
+    // 锟斤拷锟斤拷API Key
     if (!empty($apiKey)) {
         if (!$auth->validateApiKey($apiKey)) {
-            handleError("��Ч��API��Կ", 401);
+            handleError("锟斤拷效锟斤拷API锟斤拷钥", 401);
         }
         return $auth->getUserFromApiKey($apiKey);
     }
     
-    handleError("��֤ʧ��", 401);
+    handleError("锟斤拷证失锟斤拷", 401);
 }
 
-// ��������
+// 锟斤拷锟斤拷锟斤拷锟斤拷
 function handleRequest() {
     $method = $_SERVER["REQUEST_METHOD"];
     $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
     $pathParts = explode("/", trim($path, "/"));
     $action = $pathParts[count($pathParts) - 1] ?? "";
     
-    // �����OPTIONS����CORSԤ����Ӧ����ǰ�洦��
+    // 锟斤拷锟斤拷锟絆PTIONS锟斤拷锟斤拷CORS预锟斤拷锟斤拷应锟斤拷锟斤拷前锟芥处锟斤拷
     if ($method === "OPTIONS") {
         return;
     }
     
-    // ����·���ͷ����ַ�����
+    // 锟斤拷锟斤拷路锟斤拷锟酵凤拷锟斤拷锟街凤拷锟斤拷锟斤拷
     switch ($action) {
         case "schema":
-            // ��ȡAPI�ĵ��ṹ
-            sendResponse(true, generateApiDocumentation(), "�ɹ���ȡAPI�ĵ�");
+            // 锟斤拷取API锟侥碉拷锟结构
+            sendResponse(true, generateApiDocumentation(), "锟缴癸拷锟斤拷取API锟侥碉拷");
             break;
             
         default:
-            // Ĭ�Ϸ���������API�ĵ�
+            // 默锟较凤拷锟斤拷锟斤拷锟斤拷锟斤拷API锟侥碉拷
             $docs = generateApiDocumentation();
-            sendResponse(true, $docs, "�ɹ���ȡAPI�ĵ�");
+            sendResponse(true, $docs, "锟缴癸拷锟斤拷取API锟侥碉拷");
     }
 }
 
-// ִ��������
+// 执锟斤拷锟斤拷锟斤拷锟斤拷
 try {
     handleRequest();
 } catch (Exception $e) {
-    handleError("��������ʱ��������: " . $e->getMessage(), 500);
+    handleError("锟斤拷锟斤拷锟斤拷锟斤拷时锟斤拷锟斤拷锟斤拷锟斤拷: " . $e->getMessage(), 500);
 }
+

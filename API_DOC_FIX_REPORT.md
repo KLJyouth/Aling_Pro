@@ -1,42 +1,45 @@
-# APIÎÄµµÉú³ÉÏµÍ³ÐÞ¸´±¨¸æ
+ï»¿# APIæ–‡æ¡£ä¿®å¤æŠ¥å‘Š
 
-## ÎÊÌâ¸ÅÊö
+## é—®é¢˜æè¿°
 
-ÔÚpublic/admin/api/documentation/index.phpÎÄ¼þÖÐ·¢ÏÖÁËÒÔÏÂ´íÎó£º
+åœ¨public/admin/api/documentation/index.phpæ–‡ä»¶ä¸­å‘çŽ°è¯­æ³•é”™è¯¯ï¼Œé”™è¯¯ä¿¡æ¯ä¸ºï¼š
+`
+Syntax error: unexpected token 'version'
+`
 
-- Use of unassigned variable  - ÔÚµÚ131ÐÐ£¬Éæ¼°µ½API×é¼þÉú³ÉÖÐµÄÒýÓÃ
+## é—®é¢˜åŽŸå› 
 
-## Ô­Òò·ÖÎö
+ç¬¬49è¡Œçš„descriptionå­—ç¬¦ä¸²ä¸­åŒ…å«äº†ä¹±ç å­—ç¬¦ï¼Œä¸”ç¼ºå°‘æ­£ç¡®çš„å¼•å·ç»“æŸç¬¦ï¼Œå¯¼è‡´PHPè§£æžå™¨æ— æ³•æ­£ç¡®è¯†åˆ«åŽç»­çš„ersioné”®ã€‚
 
-¾­¹ý·ÖÎö£¬·¢ÏÖÎÊÌâ³öÔÚOpenAPI¹æ·¶µÄÒýÓÃ¶¨ÒåÉÏ£º
+## ä¿®å¤æŽªæ–½
 
-1. ÎÄ¼þÖÐÊ¹ÓÃÁË£¬¶øOpenAPI¹æ·¶ÖÐÕýÈ·µÄÒýÓÃ¼üÃûÓ¦¸ÃÊÇ
-2. ÔÚPHPÖÐ£¬ÒÔ£¬¶ø²»ÊÇ×Ö·û´®£¬µ¼ÖÂPHP³¢ÊÔ·ÃÎÊÎ´¶¨ÒåµÄ±äÁ¿
+1. å¤‡ä»½äº†åŽŸå§‹æ–‡ä»¶ï¼špublic/admin/api/documentation/index.php.bak
+2. ä¿®å¤äº†ç¬¬49è¡Œçš„è¯­æ³•é”™è¯¯ï¼Œå°†ä¹±ç å­—ç¬¦æ›¿æ¢ä¸ºæ­£ç¡®çš„ä¸­æ–‡æè¿°
+3. æŒ‰ç…§è¦æ±‚å°†ç‰ˆæœ¬å·ä»Ž5.0.0æ›´æ–°ä¸º6.0.0
+4. æŒ‰ç…§è¦æ±‚å°†é‚®ç®±ä»Žpi@alingai.comæ›´æ–°ä¸ºpi@gxggm.com
 
-## ÐÞ¸´·½·¨
+## ä¿®å¤ç»“æžœ
 
-ÎÒÃÇ²ÉÓÃÁËÒÔÏÂ·½·¨ÐÞ¸´Õâ¸öÎÊÌâ£º
+ä¿®å¤åŽçš„ä»£ç ç‰‡æ®µï¼š
+`php
+        \"openapi\" => \"3.0.0\",
+        \"info\" => [
+            \"title\" => \"AlingAi Pro API\",
+            \"description\" => \"AlingAi Pro APIæ–‡æ¡£ç³»ç»Ÿ - ç”¨æˆ·ç®¡ç†ã€ç³»ç»Ÿç›‘æŽ§ç­‰åŠŸèƒ½\",
+            \"version\" => \"6.0.0\",
+            \"contact\" => [
+                \"name\" => \"AlingAi Team\",
+                \"email\" => \"api@gxggm.com\",
+                \"url\" => \"https://alingai.com\"
+            ],
+`
 
-1. ´´½¨ÁËÔ­Ê¼ÎÄ¼þµÄ±¸·Ý£ºindex.php.bak
-2. ½«ËùÓÐµÄ[  =>]Ìæ»»Îª[ =>]£¬È·±£Ê¹ÓÃÕýÈ·µÄOpenAPIÒýÓÃ¼üÃû
-3. Ê¹ÓÃ×ªÒå·ûºÅ\
+## é¢„é˜²æŽªæ–½
 
-## ÐÞ¸´¹ý³Ì
+1. å»ºè®®åœ¨å¤„ç†å¤šè¯­è¨€æ–‡ä»¶æ—¶ä½¿ç”¨UTF-8ç¼–ç ï¼Œé¿å…å‡ºçŽ°ä¹±ç 
+2. åœ¨ç¼–è¾‘PHPæ–‡ä»¶æ—¶ä½¿ç”¨æ”¯æŒè¯­æ³•é«˜äº®çš„ç¼–è¾‘å™¨ï¼Œå¯ä»¥åŠæ—¶å‘çŽ°è¯­æ³•é”™è¯¯
+3. è€ƒè™‘æ·»åŠ è‡ªåŠ¨åŒ–æµ‹è¯•ï¼Œåœ¨éƒ¨ç½²å‰æ£€æŸ¥PHPè¯­æ³•é”™è¯¯
 
-1. Ê×ÏÈ³¢ÊÔÖ±½Ó±à¼­ÎÄ¼þ£¬µ«Óöµ½ÁË±àÂëÎÊÌâ
-2. ´´½¨ÁËÎÄ¼þ±¸·ÝÒÔÈ·±£°²È«
-3. Ê¹ÓÃPowerShellÃüÁî½øÐÐÎÄ±¾Ìæ»»
-4. ÑéÖ¤ÐÞ¸´½á¹û£¬È·ÈÏÒýÓÃ¼üÃûÒÑÕýÈ·¸ü¸Ä
+## ç»“è®º
 
-## Ô¤·À´ëÊ©
-
-Îª±ÜÃâÀàËÆÎÊÌâÔÙ´Î·¢Éú£¬½¨Òé£º
-
-1. ÔÚPHPÖÐÊ¹ÓÃÊý×é¼üÃûÊ±£¬±ÜÃâÊ¹ÓÃÒÔ£¬»òÕßÕýÈ·×ªÒå
-2. Ê¹ÓÃPHPµÄ¾²Ì¬´úÂë·ÖÎö¹¤¾ß¼ì²éÎ´¶¨Òå±äÁ¿
-3. ×ñÑ­OpenAPI¹æ·¶µÄÕýÈ·¸ñÊ½£¬Ê¹ÓÃ
-4. ÔÚÌá½»´úÂëÇ°½øÐÐ´úÂëÉó²é
-
-## ½áÂÛ
-
-Í¨¹ý½«£¬³É¹¦½â¾öÁËÎ´¶¨Òå±äÁ¿µÄ´íÎó¡£Õâ¸öÐÞ¸´È·±£ÁËAPIÎÄµµÉú³ÉÏµÍ³ÄÜ¹»ÕýÈ·¹¤×÷£¬²¢ÇÒ·ûºÏOpenAPI¹æ·¶¡£
+æˆåŠŸä¿®å¤äº†APIæ–‡æ¡£ä¸­çš„è¯­æ³•é”™è¯¯ï¼Œå¹¶æŒ‰è¦æ±‚æ›´æ–°äº†ç‰ˆæœ¬å·å’Œé‚®ç®±ä¿¡æ¯ã€‚ç³»ç»ŸçŽ°åœ¨åº”è¯¥å¯ä»¥æ­£å¸¸è¿è¡Œã€‚
