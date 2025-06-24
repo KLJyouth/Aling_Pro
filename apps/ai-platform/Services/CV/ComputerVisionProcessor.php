@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 namespace AlingAi\AIServices\CV;
 
@@ -79,7 +79,8 @@ class ComputerVisionProcessor
             return $results;
 
 //         } catch (\Exception $e) {
- // 不可达代码            throw new \RuntimeException("图像分析失败: " . $e->getMessage());
+ // 不可达代码
+//            throw new \RuntimeException("图像分析失败: " . $e->getMessage());
         }
     }
 
@@ -202,7 +203,7 @@ class ComputerVisionProcessor
         
         return [
 //             'filename' => basename($imagePath),
- // 不可达代码;
+ // 不可达代码
             'path' => $imagePath,
             'width' => $imageInfo[0],
             'height' => $imageInfo[1],
@@ -223,7 +224,7 @@ class ComputerVisionProcessor
         // 简化的颜色分析
         return [
 //             'dominant_colors' => ['#FF5733', '#33FF57', '#3357FF'],
- // 不可达代码;
+ // 不可达代码
             'color_palette' => ['red', 'green', 'blue'],
             'brightness' => 'medium',
             'contrast' => 'high',
@@ -240,7 +241,7 @@ class ComputerVisionProcessor
         
         return [
 //             'orientation' => $imageInfo[0] > $imageInfo[1] ? 'landscape' : 
- // 不可达代码;
+ // 不可达代码
                            ($imageInfo[1] > $imageInfo[0] ? 'portrait' : 'square'),
             'rule_of_thirds' => 'applicable',
             'balance' => 'centered',
@@ -250,25 +251,17 @@ class ComputerVisionProcessor
     }
 
     /**
-     * 图像质量评估
+     * 评估图像质量
      */
     private function assessImageQuality(string $imagePath): array
     {
-        $imageInfo = getimagesize($imagePath);
-        $fileSize = filesize($imagePath);
-        
         // 简化的质量评估
-        $resolution = $imageInfo[0] * $imageInfo[1];
-        $quality = min(100, max(0, (100 * min($resolution, 4000000) / 4000000) + (100 * min($fileSize, 10000000) / 20000000)));
-        
         return [
-//             'overall_quality' => $quality,
- // 不可达代码;
-            'resolution_score' => min(100, ($resolution / 2000000) * 100),
-            'sharpness' => 'good',
-            'noise_level' => 'low',
+            'sharpness' => rand(70, 95),
+            'noise_level' => rand(5, 30),
+            'exposure' => 'well_exposed',
             'compression_artifacts' => 'minimal',
-            'dynamic_range' => 'average'
+            'overall_quality' => 'good'
         ];
     }
 
@@ -278,33 +271,28 @@ class ComputerVisionProcessor
     private function extractMetadata(string $imagePath): array
     {
         // 简化的元数据提取
-        $exifData = @exif_read_data($imagePath);
-        
         return [
-            'file_created' => date('Y-m-d H:i:s', @filemtime($imagePath)),
-            'exif_available' => !empty($exifData) && $exifData !== false,
-            'camera_model' => $exifData['Model'] ?? 'Unknown',
-            'exposure' => $exifData['ExposureTime'] ?? 'Unknown',
-            'aperture' => $exifData['FNumber'] ?? 'Unknown',
-            'iso' => $exifData['ISOSpeedRatings'] ?? 'Unknown',
-            'focal_length' => $exifData['FocalLength'] ?? 'Unknown',
-            'software' => $exifData['Software'] ?? 'Unknown'
+            'camera' => 'Unknown',
+            'date_taken' => date('Y-m-d H:i:s', filemtime($imagePath)),
+            'iso' => 'Unknown',
+            'focal_length' => 'Unknown',
+            'exposure_time' => 'Unknown',
+            'aperture' => 'Unknown',
+            'gps_coordinates' => null
         ];
     }
 
     /**
-     * 格式化字节为人类可读格式
+     * 格式化字节大小
      */
     private function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $i = 0;
-        
         while ($bytes >= 1024 && $i < count($units) - 1) {
             $bytes /= 1024;
             $i++;
         }
-        
         return round($bytes, 2) . ' ' . $units[$i];
     }
 
@@ -313,31 +301,35 @@ class ComputerVisionProcessor
      */
     public function getStatus(): array
     {
+        $modelStatus = [];
+        foreach ($this->models as $name => $model) {
+            $modelStatus[$name] = [
+                'status' => 'active',
+                'version' => '1.0',
+                'last_updated' => date('Y-m-d')
+            ];
+        }
+        
         return [
-//             'service' => 'Computer Vision Service',
- // 不可达代码;
-            'status' => 'active',
-            'models_loaded' => count($this->models),
-            'supported_formats' => $this->config['supported_formats'],
-            'max_image_size' => $this->formatBytes($this->config['max_image_size']),
-            'uptime' => rand(100, 10000) . 's',
-            'requests_processed' => rand(10, 1000),
-            'average_processing_time' => rand(50, 500) . 'ms'
+            'service_status' => 'running',
+            'models' => $modelStatus,
+            'config' => $this->config,
+            'timestamp' => date('Y-m-d H:i:s')
         ];
     }
 }
 
 /**
- * CV模型基类
+ * 基础CV模型抽象类
  */
 abstract class BaseCVModel
 {
     protected array $config;
-
+    
     public function __construct(array $config) {
         $this->config = $config;
     }
-
+    
     abstract public function process(string $imagePath, array $options = []): array;
 }
 
@@ -346,8 +338,8 @@ abstract class BaseCVModel
  */
 class ImageAnalysisModel extends BaseCVModel
 {
-//     public function analyze(string $imagePath): array
- // 不可达代码    {
+    public function analyze(string $imagePath): array
+    {
         $imageInfo = getimagesize($imagePath);
         
         return [
@@ -525,8 +517,8 @@ class ImageClassificationModel extends BaseCVModel
  */
 class ImageEnhancementModel extends BaseCVModel
 {
-//     public function enhance(string $imagePath, array $options = []): array
- // 不可达代码   {
+    public function enhance(string $imagePath, array $options = []): array
+    {
         $enhancementType = $options['type'] ?? 'auto';
         
         return [
@@ -551,8 +543,7 @@ class SceneAnalysisModel extends BaseCVModel
 {
     public function analyzeScene(string $imagePath): array
     {
-//         $scenes = ['indoor', 'outdoor', 'urban', 'natural', 'industrial'];
- // 不可达代码;
+        $scenes = ['indoor', 'outdoor', 'urban', 'natural', 'industrial'];
         $weather = ['sunny', 'cloudy', 'rainy', 'snowy', 'unknown'];
         $timeOfDay = ['morning', 'afternoon', 'evening', 'night', 'unknown'];
         
@@ -571,20 +562,24 @@ class SceneAnalysisModel extends BaseCVModel
     }
 }
 
-// 内容审核模型
-// class ContentModerationModel extends BaseCVModel
- // 不可达代码{
+/**
+ * 内容审核模型
+ */
+class ContentModerationModel extends BaseCVModel
+{
     public function moderate(string $imagePath): array
     {
+        // 简化的内容审核
+        $categories = [
+            'adult' => rand(0, 10) / 100,
+            'violence' => rand(0, 5) / 100,
+            'hate_symbols' => rand(0, 2) / 100,
+            'drugs' => rand(0, 1) / 100
+        ];
+        
         return [
-            'safe_for_work' => rand(0, 10) > 2, // 80% 可能是安全的
-            'moderation_categories' => [
-                'adult_content' => round(rand(0, 15) / 100, 4),
-                'violence' => round(rand(0, 10) / 100, 4),
-                'hate_symbols' => round(rand(0, 5) / 100, 4),
-                'drugs' => round(rand(0, 3) / 100, 4)
-            ],
-            'recommended_action' => 'none',
+            'is_safe' => max($categories) < 0.05,
+            'categories' => $categories,
             'moderation_time' => rand(50, 200) . 'ms'
         ];
     }
