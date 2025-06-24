@@ -139,4 +139,23 @@ echo "\n请运行 'php -l' 检查是否还有剩余错误。\n";
 // 检查剩余错误 - Windows PowerShell版本
 echo "\n检查剩余语法错误...\n";
 $command = 'powershell -Command "$errorCount = (Get-ChildItem -Path src -Filter *.php -Recurse | ForEach-Object { php -l $_.FullName } | Select-String -Pattern \"Errors parsing\" | Measure-Object).Count; Write-Output \"PHP文件剩余错误数: $errorCount\""';
-echo shell_exec($command); 
+echo shell_exec($command);
+
+// 修复API文档中的语法错误
+$file = 'public/admin/api/documentation/index.php';
+$content = file_get_contents($file);
+
+// 备份原文件
+file_put_contents($file . '.bak', $content);
+
+// 读取文件的每一行
+$lines = file($file);
+
+// 修复第49行的问题（描述行）
+$lines[48] = '            "description" => "AlingAi Pro API文档系统 - 用户管理、系统监控等功能",'."\n";
+
+// 将修改后的内容写回文件
+file_put_contents($file, implode('', $lines));
+
+echo "文件已修复: $file\n";
+?> 
