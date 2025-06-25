@@ -2,189 +2,292 @@
 /**
  * PHP 8.1语法修复工具
  * 
- * 主要修复:
- * 1. 将错误的方括号 [] 改为正确的圆括号 () 作为函数调用结束符
- * 2. 修复常见的PHP 8.1兼容性问题
+ * 此脚本用于批量修复PHP 8.1语法兼容性问题
  */
 
-// 检查命令行参数
-if ($argc < 2) {
-    echo "用法：php fix_php81_syntax.php <目标文件或目录>\n";
-    exit(1);
-}
+declare(strict_types=1);
 
-$targetPath = $argv[1];
+// 设置脚本运行环境
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
 
-// 检查目标路径是否存在
-if (!file_exists($targetPath)) {
-    echo "错误：指定的路径不存在: {$targetPath}\n";
-    exit(1);
-}
+// 项目根目录
+$rootDir = dirname(__DIR__);
 
-// 计数器
-$totalFiles = 0;
-$fixedFiles = 0;
+// 需要扫描的目录
+$directories = [
+    $rootDir . '/src',
+    $rootDir . '/public',
+    $rootDir . '/ai-engines',
+    $rootDir . '/apps',
+    $rootDir . '/scripts',
+];
 
-// 如果是目录，则递归处理
-if (is_dir($targetPath)) {
-    processDirectory($targetPath);
-} else {
-    // 如果是文件，直接处理
-    $result = processFile($targetPath);
-    $totalFiles++;
-    if ($result) {
-        $fixedFiles++;
-    }
-}
+// 需要忽略的目录
+$ignoreDirs = [
+    'vendor',
+    'node_modules',
+    'storage/logs',
+    'backups',
+];
 
-echo "完成! 共处理 {$totalFiles} 个文件，修复了 {$fixedFiles} 个文件。\n";
+// 统计信息
+$stats = [
+    'files_scanned' => 0,
+    'files_modified' => 0,
+    'total_fixes' => 0,
+    'fixes_by_type' => [
+        'strict_types' => 0,
+        'array_merge' => 0,
+        'function_call' => 0,
+        'is_array' => 0,
+        'string_encoding' => 0,
+        'quotes' => 0,
+        'other' => 0,
+    ],
+];
 
 /**
- * 处理目录
+ * 修复PHP 8.1语法问题
  */
-function processDirectory($dir) {
-    global $totalFiles, $fixedFiles;
+function fixPhp81Syntax(string $file, array &$stats): bool {
+    // 读取文件内容
+    $content = file_get_contents($file);
+    if ($content === false) {
+        return false;
+    }
     
-    $iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS)
-    );
+    $originalContent = $content;
     
-    foreach ($iterator as $file) {
-        if ($file->isFile() && pathinfo($file, PATHINFO_EXTENSION) === 'php') {
-            $result = processFile($file->getPathname());
-            $totalFiles++;
-            if ($result) {
-                $fixedFiles++;
+    // 修复常见语法问题
+    
+    // 1. 修复declare(strict_types=1]
+    $pattern = '/declare\s*\(\s*strict_types\s*=\s*1\s*\]/';
+    $replacement = 'declare(strict_types=1)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['fixes_by_type']['strict_types'] += $count;
+    
+    // 2. 修复数组合并方法 array_merge($array, $array2]
+    $pattern = '/array_merge\s*\(\s*([^,\)]+)\s*,\s*([^\)]+)\]/';
+    $replacement = 'array_merge($1, $2)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['fixes_by_type']['array_merge'] += $count;
+    
+    // 3. 修复其他函数调用中的方括号结束 function_name($param]
+    $pattern = '/([a-zA-Z0-9_]+)\s*\(\s*([^\)\]]+)\s*\]/';
+    $replacement = '$1($2)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['fixes_by_type']['function_call'] += $count;
+    
+    // 4. 修复is_[$var) 变为 is_array($var)
+    $pattern = '/is_\s*\[\s*([^\)]+)\s*\)/';
+    $replacement = 'is_array($1)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['fixes_by_type']['is_array'] += $count;
+    
+    // 5. 修复中文字符编码问题（替换特殊字符）
+    // 常见乱码对照表
+    $encodingFixes = [
+        '?' => '器',
+        '?' => '模',
+        '?' => '型',
+        '?' => '识',
+        '?' => '别',
+        '?' => '码',
+        '?' => '算',
+        '?' => '法',
+        '?' => '入',
+        '?' => '分',
+        '?' => '用',
+        '?' => '空',
+        '?' => '是',
+        '?' => '能',
+        '?' => '功',
+        '?' => '提',
+        '?' => '供',
+        '?' => '据',
+        '?' => '支',
+        '?' => '持',
+        '?' => '性',
+        '?' => '解',
+        '?' => '析',
+        '?' => '检',
+        '?' => '测',
+        '?' => '图',
+        '?' => '像',
+        '?' => '对',
+        '?' => '比',
+        '?' => '生',
+        '?' => '成',
+        '?' => '时',
+        '?' => '间',
+        '?' => '版',
+        '?' => '本',
+        '?' => '系',
+        '?' => '统',
+        '?' => '学',
+        '?' => '习',
+        '?' => '库',
+        '?' => '配',
+        '?' => '置',
+        '?' => '阈',
+        '?' => '值',
+        '?' => '限',
+        '?' => '人',
+        '?' => '脸',
+        '?' => '情',
+        '?' => '结',
+        '?' => '构',
+        '?' => '向',
+        '?' => '量',
+        '?' => '记',
+        '?' => '录',
+        '?' => '特',
+        '?' => '征',
+        '?' => '匹',
+        '?' => '配',
+        '?' => '加',
+        '?' => '速',
+        '?' => '路',
+        '?' => '径',
+        '?' => '点',
+        '?' => '表',
+        '?' => '情',
+        '?' => '活',
+        '?' => '体',
+        '?' => '资',
+        '?' => '源',
+        '?' => '已',
+        '?' => '释',
+        '?' => '放',
+        '?' => '名',
+        '?' => '称',
+        '?' => '缓',
+        '?' => '存',
+        '?' => '未',
+        '?' => '载',
+        '?' => '数',
+        '?' => '面',
+        '?' => '特',
+        '?' => '征',
+        '?' => '抛',
+        '?' => '异',
+        '?' => '常',
+        '?' => '超',
+        '?' => '标',
+        '?' => '大',
+        '?' => '小',
+        '?' => '字',
+        '?' => '符',
+        '?' => '串',
+        '?' => '类',
+        '?' => '型',
+        '?' => '期'
+    ];
+    
+    foreach ($encodingFixes as $from => $to) {
+        $count = substr_count($content, $from);
+        if ($count > 0) {
+            $content = str_replace($from, $to, $content);
+            $stats['fixes_by_type']['string_encoding'] += $count;
+        }
+    }
+    
+    // 6. 修复引号问题 (缺少引号或错误引号)
+    $pattern = '/([\'"])(.*?)(?<!\\\)\1\s*\.\s*([^\'";,\s\(\)\[\]{}]+)/';
+    $replacement = '$1$2$1 . "$3"';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['fixes_by_type']['quotes'] += $count;
+    
+    // 检查是否有修改
+    if ($content !== $originalContent) {
+        // 写回文件
+        if (file_put_contents($file, $content) !== false) {
+            $stats['files_modified']++;
+            $totalFixes = array_sum($stats['fixes_by_type']);
+            $stats['total_fixes'] += $totalFixes;
+            
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/**
+ * 递归扫描目录
+ */
+function scanDirectory(string $dir, array &$stats, array $ignoreDirs): void {
+    if (!is_dir($dir)) {
+        return;
+    }
+    
+    $files = scandir($dir);
+    
+    foreach ($files as $file) {
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
+        
+        $path = $dir . '/' . $file;
+        
+        // 检查是否为忽略目录
+        $shouldIgnore = false;
+        foreach ($ignoreDirs as $ignoreDir) {
+            if (strpos($path, '/' . $ignoreDir . '/') !== false || 
+                strpos($path, '\\' . $ignoreDir . '\\') !== false) {
+                $shouldIgnore = true;
+                break;
+            }
+        }
+        
+        if ($shouldIgnore) {
+            continue;
+        }
+        
+        if (is_dir($path)) {
+            scanDirectory($path, $stats, $ignoreDirs);
+        } elseif (is_file($path) && pathinfo($path, PATHINFO_EXTENSION) === 'php') {
+            $stats['files_scanned']++;
+            
+            $relativePath = str_replace(dirname(__DIR__) . '/', '', $path);
+            echo "处理文件: " . $relativePath;
+            
+            if (fixPhp81Syntax($path, $stats)) {
+                echo " - 已修复\n";
+            } else {
+                echo " - 无需修复\n";
             }
         }
     }
 }
 
-/**
- * 处理单个PHP文件
- */
-function processFile($filePath) {
-    echo "处理文件: {$filePath}\n";
-    
-    // 读取文件内容
-    $content = file_get_contents($filePath);
-    if ($content === false) {
-        echo "  错误：无法读取文件\n";
-        return false;
+// 开始扫描
+echo "开始PHP 8.1语法修复...\n";
+echo "----------------------------\n";
+
+foreach ($directories as $dir) {
+    if (is_dir($dir)) {
+        scanDirectory($dir, $stats, $ignoreDirs);
     }
-    
-    // 保存原始内容用于比较
-    $originalContent = $content;
-    
-    // 执行各种修复
-    $content = fixBracketsAsFunctionTerminator($content);
-    $content = fixVariableSyntax($content);
-    $content = fixArraySyntax($content);
-    $content = fixClassReferenceOperator($content);
-    
-    // 检查是否有修改
-    if ($content === $originalContent) {
-        echo "  无需修改\n";
-        return false;
-    }
-    
-    // 备份原文件
-    $backupPath = $filePath . '.bak.' . date('YmdHis');
-    if (!copy($filePath, $backupPath)) {
-        echo "  警告：无法创建备份文件，跳过此文件\n";
-        return false;
-    }
-    
-    // 写入修复后的内容
-    if (file_put_contents($filePath, $content) === false) {
-        echo "  错误：无法写入文件\n";
-        return false;
-    }
-    
-    echo "  已修复并保存\n";
-    return true;
 }
 
-/**
- * 修复将方括号 [] 用作函数调用结束符的问题
- */
-function fixBracketsAsFunctionTerminator($content) {
-    // 替换函数调用中的方括号结束符
-    // 例如: someFunction($param1, $param2] -> someFunction($param1, $param2)
-    $patterns = [
-        '/(\w+)\s*\(([^)\]]*)\]/' => '$1($2)',  // 函数调用
-        '/\}\s*\(([^)\]]*)\]/' => '}($1)',      // 闭包调用
-        '/\)\s*\->\s*(\w+)\s*\(([^)\]]*)\]/' => ')->$1($2)', // 方法调用
-        '/\$\w+\s*\->\s*(\w+)\s*\(([^)\]]*)\]/' => '$0', // 标记方法调用但不修改，由下面的模式处理
-    ];
-    
-    foreach ($patterns as $pattern => $replacement) {
-        $content = preg_replace($pattern, $replacement, $content);
-    }
-    
-    // 修复对象方法调用，这需要多次迭代
-    $methodCallPattern = '/(\$\w+(?:\[\w+\])*)\s*\->\s*(\w+)\s*\(([^)\]]*)\]/';
-    $methodCallReplacement = '$1->$2($3)';
-    
-    while (preg_match($methodCallPattern, $content)) {
-        $content = preg_replace($methodCallPattern, $methodCallReplacement, $content);
-    }
-    
-    // 修复静态方法调用
-    $staticMethodCallPattern = '/(\w+(?:\\\\w+)*)::\s*(\w+)\s*\(([^)\]]*)\]/';
-    $staticMethodCallReplacement = '$1::$2($3)';
-    
-    while (preg_match($staticMethodCallPattern, $content)) {
-        $content = preg_replace($staticMethodCallPattern, $staticMethodCallReplacement, $content);
-    }
-    
-    // 修复declare语句
-    $content = preg_replace('/declare\s*\(\s*strict_types\s*=\s*1\s*\]/', 'declare(strict_types=1)', $content);
-    
-    return $content;
-}
+// 打印统计信息
+echo "\n===== 修复完成 =====\n";
+echo "扫描文件数: " . $stats['files_scanned'] . "\n";
+echo "修改文件数: " . $stats['files_modified'] . "\n";
+echo "总修复数: " . $stats['total_fixes'] . "\n";
+echo "\n修复类型统计:\n";
+echo "- declare(strict_types): " . $stats['fixes_by_type']['strict_types'] . "\n";
+echo "- array_merge调用: " . $stats['fixes_by_type']['array_merge'] . "\n";
+echo "- 其他函数调用: " . $stats['fixes_by_type']['function_call'] . "\n";
+echo "- is_array修复: " . $stats['fixes_by_type']['is_array'] . "\n";
+echo "- 字符编码问题: " . $stats['fixes_by_type']['string_encoding'] . "\n";
+echo "- 引号和连接修复: " . $stats['fixes_by_type']['quotes'] . "\n";
+echo "- 其他修复: " . $stats['fixes_by_type']['other'] . "\n";
 
-/**
- * 修复变量语法问题
- */
-function fixVariableSyntax($content) {
-    // 修复缺少$符号的变量
-    $patterns = [
-        '/foreach\s*\(\s*(\w+)\s+as\s+(\w+)\s*\)/' => 'foreach ($1 as $$2)', // foreach中缺少$的变量
-        '/foreach\s*\(\s*(\w+)\s+as\s+(\w+)\s*=>\s*(\w+)\s*\)/' => 'foreach ($1 as $2 => $$3)', // foreach键值对中缺少$的变量
-    ];
-    
-    foreach ($patterns as $pattern => $replacement) {
-        $content = preg_replace($pattern, $replacement, $content);
-    }
-    
-    return $content;
-}
-
-/**
- * 修复数组语法问题
- */
-function fixArraySyntax($content) {
-    // 修复旧式数组语法为短数组语法
-    // 例如: array(1, 2, 3) -> [1, 2, 3]
-    $content = preg_replace('/array\s*\(\s*\)/', '[]', $content);
-    
-    // 修复in_array和array_key_exists等函数的括号错误
-    $content = preg_replace('/in_\[([^]]+), ([^]]+)\]/', 'in_array($1, $2)', $content);
-    $content = preg_replace('/array_key_exists\s*\[([^]]+), ([^]]+)\]/', 'array_key_exists($1, $2)', $content);
-    
-    return $content;
-}
-
-/**
- * 修复类引用操作符问题
- */
-function fixClassReferenceOperator($content) {
-    // 修复静态属性访问
-    $content = preg_replace('/(\w+(?:\\\\w+)*)::\$(\w+)\[/', '$1::$$2[', $content);
-    
-    // 修复类常量访问
-    $content = preg_replace('/(\w+(?:\\\\w+)*)::\[(\w+)\]/', '$1::$2', $content);
-    
-    return $content;
+if ($stats['files_modified'] > 0) {
+    echo "\n已成功修复PHP 8.1语法问题！\n";
+} else {
+    echo "\n未发现需要修复的PHP 8.1语法问题。\n";
 } 
