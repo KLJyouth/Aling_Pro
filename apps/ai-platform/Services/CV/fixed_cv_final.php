@@ -1,9 +1,9 @@
-ï»¿<?php
+<?php
 
 namespace AlingAi\AIServices\CV;
 
 /**
- * è®¡ç®—æœºè§†è§‰å¤„ç†æœåŠ¡
+ * ¼ÆËã»úÊÓ¾õ´¦Àí·þÎñ
  */
 class ComputerVisionProcessor
 {
@@ -14,11 +14,11 @@ class ComputerVisionProcessor
     {
         $this->config = array_merge([
             "max_image_size" => 10 * 1024 * 1024, // 10MB
-            "supported_formats" => ["jpg", "jpeg", "png", "gif", "bmp", "webp"],
+            "supported_formats" => ["jpg", "jpeg", "png", "gif", "bmp", "webp"], 
             "default_quality" => 85,
             "timeout" => 60
-        ], $config);
+        ],  $config];
         
-        $this->initializeModels();
+        $this->initializeModels(];
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 use PDO;
 
 /**
  * Migration: Migration_2024_12_19_120000_CreateUsersTable
  * 
- * 创建用户表
+ * 创建用户�?
  */
 /**
- * Migration_2024_12_19_120000_CreateUsersTable 类
+ * Migration_2024_12_19_120000_CreateUsersTable �?
  *
  * @package 
  */
@@ -77,18 +77,18 @@ class Migration_2024_12_19_120000_CreateUsersTable
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 deleted_at TIMESTAMP NULL,
-                INDEX idx_email (email),
-                INDEX idx_username (username),
-                INDEX idx_status (status),
-                INDEX idx_role (role),
-                INDEX idx_verification_token (verification_token),
-                INDEX idx_reset_token (reset_token),
-                INDEX idx_created_at (created_at),
+                INDEX idx_email (email],
+                INDEX idx_username (username],
+                INDEX idx_status (status],
+                INDEX idx_role (role],
+                INDEX idx_verification_token (verification_token],
+                INDEX idx_reset_token (reset_token],
+                INDEX idx_created_at (created_at],
                 INDEX idx_deleted_at (deleted_at)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ";
         
-        $this->db->exec($sql);
+        $this->db->exec($sql];
     }
 
     /**
@@ -106,6 +106,6 @@ class Migration_2024_12_19_120000_CreateUsersTable
 
     public function down(): void
     {
-        $this->db->exec("DROP TABLE IF EXISTS users");
+        $this->db->exec("DROP TABLE IF EXISTS users"];
     }
 }

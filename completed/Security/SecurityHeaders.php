@@ -5,24 +5,24 @@ namespace App\Security;
 use App\Core\Response;
 
 /**
- * SecurityHeaders 类
+ * SecurityHeaders �?
  * 
- * 安全头管理，设置HTTP安全头
+ * 安全头管理，设置HTTP安全�?
  *
  * @package App\Security
  */
 class SecurityHeaders
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
-     * 应用安全头
+     * 应用安全�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

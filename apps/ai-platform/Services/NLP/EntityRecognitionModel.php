@@ -21,8 +21,8 @@ class EntityRecognitionModel extends BaseNLPModel
                 $entities[] = [
                     'text' => $name,
                     'type' => 'PERSON',
-                    'confidence' => round(rand(75, 98) / 100, 2),
-                    'start_pos' => strpos($text, $name),
+                    'confidence' => round(rand(75, 98) / 100, 2],
+                    'start_pos' => strpos($text, $name],
                     'end_pos' => strpos($text, $name) + strlen($name)
                 ];
             }
@@ -34,8 +34,8 @@ class EntityRecognitionModel extends BaseNLPModel
                 $entities[] = [
                     'text' => $date,
                     'type' => 'DATE',
-                    'confidence' => round(rand(85, 99) / 100, 2),
-                    'start_pos' => strpos($text, $date),
+                    'confidence' => round(rand(85, 99) / 100, 2],
+                    'start_pos' => strpos($text, $date],
                     'end_pos' => strpos($text, $date) + strlen($date)
                 ];
             }
@@ -48,8 +48,8 @@ class EntityRecognitionModel extends BaseNLPModel
                 $entities[] = [
                     'text' => $location,
                     'type' => 'LOCATION',
-                    'confidence' => round(rand(80, 95) / 100, 2),
-                    'start_pos' => stripos($text, $location),
+                    'confidence' => round(rand(80, 95) / 100, 2],
+                    'start_pos' => stripos($text, $location],
                     'end_pos' => stripos($text, $location) + strlen($location)
                 ];
             }
@@ -60,7 +60,7 @@ class EntityRecognitionModel extends BaseNLPModel
             'message' => '实体识别完成',
             'data' => [
                 'entities' => $entities,
-                'entity_count' => count($entities),
+                'entity_count' => count($entities],
                 'processing_time' => rand(40, 180) . 'ms'
             ]
         ];
@@ -71,6 +71,6 @@ class EntityRecognitionModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->recognizeEntities($text, $options);
+        return $this->recognizeEntities($text, $options];
     }
 }

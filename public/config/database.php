@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * AlingAi Pro 5.0 - database.php Configuration
+ * Updated: 2025-06-21
+ */
+
+return [
+    'default' => 'sqlite',
+    'connections' => [
+        'mysql' => [
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => '3306',
+            'database' => 'alingai_pro',
+            'username' => 'root',
+            'password' => '',
+            'unix_socket' => '',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => 'InnoDB',
+            'options' => [
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_STRINGIFY_FETCHES => false,
+                PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]
+        ], 
+        'sqlite' => [
+            'driver' => 'sqlite',
+            'database' => __DIR__ . '/../database/database.sqlite',
+            'prefix' => '',
+            'foreign_key_constraints' => true
+        ], 
+        'redis' => [
+            'driver' => 'redis',
+            'host' => '127.0.0.1',
+            'password' => null,
+            'port' => 6379,
+            'database' => 0
+        ]
+    ], 
+    'migrations' => 'migrations',
+    'redis' => [
+        'client' => 'predis',
+        'default' => [
+            'host' => '127.0.0.1',
+            'password' => null,
+            'port' => 6379,
+            'database' => 0
+        ], 
+        'cache' => [
+            'host' => '127.0.0.1',
+            'password' => null,
+            'port' => 6379,
+            'database' => 1
+        ]
+    ]
+];

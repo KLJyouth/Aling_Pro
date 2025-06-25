@@ -1,6 +1,6 @@
 <?php
 /**
- * AlingAi Pro 5.0 - 简化WebSocket实时数据推送服务
+ * AlingAi Pro 5.0 - 简化WebSocket实时数据推送服�?
  * 提供管理系统实时数据更新功能
  */
 
@@ -16,60 +16,60 @@ class AdminWebSocketServer implements MessageComponentInterface
     public function __construct() {
         $this->clients = new \SplObjectStorage;
         $this->adminClients = new \SplObjectStorage;
-        $this->logger = new \AlingAi\Utils\Logger('WebSocket');
-        $this->dataProvider = new AdminDataProvider();
+        $this->logger = new \AlingAi\Utils\Logger('WebSocket'];
+        $this->dataProvider = new AdminDataProvider(];
         
-        // 启动定时数据推送
-        $this->startDataPushTimer();
+        // 启动定时数据推�?
+        $this->startDataPushTimer(];
     }
     
     public function onOpen(ConnectionInterface $conn) {
-        $this->clients->attach($conn);
-        $this->logger->info("New WebSocket connection: {$conn->resourceId}");
+        $this->clients->attach($conn];
+        $this->logger->info("New WebSocket connection: {$conn->resourceId}"];
         
         // 发送初始化数据
-        $this->sendInitialData($conn);
+        $this->sendInitialData($conn];
     }
     
     public function onMessage(ConnectionInterface $from, $msg) {
-        $data = json_decode($msg, true);
+        $data = json_decode($msg, true];
         
         if (!$data || !isset($data['type'])) {
-            $this->sendError($from, 'Invalid message format');
+            $this->sendError($from, 'Invalid message format'];
             return;
         }
         
         switch ($data['type']) {
             case 'auth':
-                $this->handleAuth($from, $data);
+                $this->handleAuth($from, $data];
                 break;
                 
             case 'subscribe':
-                $this->handleSubscription($from, $data);
+                $this->handleSubscription($from, $data];
                 break;
                 
             case 'request_data':
-                $this->handleDataRequest($from, $data);
+                $this->handleDataRequest($from, $data];
                 break;
                 
             case 'admin_action':
-                $this->handleAdminAction($from, $data);
+                $this->handleAdminAction($from, $data];
                 break;
                 
             default:
-                $this->sendError($from, 'Unknown message type');
+                $this->sendError($from, 'Unknown message type'];
         }
     }
     
     public function onClose(ConnectionInterface $conn) {
-        $this->clients->detach($conn);
-        $this->adminClients->detach($conn);
-        $this->logger->info("Connection closed: {$conn->resourceId}");
+        $this->clients->detach($conn];
+        $this->adminClients->detach($conn];
+        $this->logger->info("Connection closed: {$conn->resourceId}"];
     }
     
     public function onError(ConnectionInterface $conn, \Exception $e) {
-        $this->logger->error("WebSocket error: " . $e->getMessage());
-        $conn->close();
+        $this->logger->error("WebSocket error: " . $e->getMessage()];
+        $conn->close(];
     }
     
     /**
@@ -77,30 +77,30 @@ class AdminWebSocketServer implements MessageComponentInterface
      */
     private function handleAuth(ConnectionInterface $conn, array $data) {
         if (!isset($data['token'])) {
-            $this->sendError($conn, 'Missing auth token');
+            $this->sendError($conn, 'Missing auth token'];
             return;
         }
         
         // 验证管理员token
-        $admin = $this->validateAdminToken($data['token']);
+        $admin = $this->validateAdminToken($data['token']];
         if (!$admin) {
-            $this->sendError($conn, 'Invalid admin token');
+            $this->sendError($conn, 'Invalid admin token'];
             return;
         }
         
-        // 添加到管理员客户端列表
-        $this->adminClients->attach($conn, $admin);
+        // 添加到管理员客户端列�?
+        $this->adminClients->attach($conn, $admin];
         
         $this->send($conn, [
             'type' => 'auth_success',
             'admin' => [
-                'id' => $admin['id'],
-                'name' => $admin['name'],
+                'id' => $admin['id'], 
+                'name' => $admin['name'], 
                 'role' => $admin['role']
             ]
-        ]);
+        ]];
         
-        $this->logger->info("Admin authenticated: {$admin['name']} ({$conn->resourceId})");
+        $this->logger->info("Admin authenticated: {$admin['name']} ({$conn->resourceId})"];
     }
     
     /**
@@ -108,7 +108,7 @@ class AdminWebSocketServer implements MessageComponentInterface
      */
     private function handleSubscription(ConnectionInterface $conn, array $data) {
         if (!$this->isAdminClient($conn)) {
-            $this->sendError($conn, 'Admin authentication required');
+            $this->sendError($conn, 'Admin authentication required'];
             return;
         }
         
@@ -118,7 +118,7 @@ class AdminWebSocketServer implements MessageComponentInterface
         $this->send($conn, [
             'type' => 'subscription_success',
             'channels' => $channels
-        ]);
+        ]];
     }
     
     /**
@@ -126,87 +126,87 @@ class AdminWebSocketServer implements MessageComponentInterface
      */
     private function handleDataRequest(ConnectionInterface $conn, array $data) {
         if (!$this->isAdminClient($conn)) {
-            $this->sendError($conn, 'Admin authentication required');
+            $this->sendError($conn, 'Admin authentication required'];
             return;
         }
         
         $requestType = $data['request'] ?? '';
-        $responseData = $this->dataProvider->getData($requestType);
+        $responseData = $this->dataProvider->getData($requestType];
         
         $this->send($conn, [
             'type' => 'data_response',
             'request' => $requestType,
             'data' => $responseData
-        ]);
+        ]];
     }
     
     /**
-     * 处理管理员操作
+     * 处理管理员操�?
      */
     private function handleAdminAction(ConnectionInterface $conn, array $data) {
         if (!$this->isAdminClient($conn)) {
-            $this->sendError($conn, 'Admin authentication required');
+            $this->sendError($conn, 'Admin authentication required'];
             return;
         }
         
         $action = $data['action'] ?? '';
-        $result = $this->executeAdminAction($action, $data['params'] ?? []);
+        $result = $this->executeAdminAction($action, $data['params'] ?? []];
         
         $this->send($conn, [
             'type' => 'action_response',
             'action' => $action,
             'result' => $result
-        ]);
+        ]];
         
         // 广播更新给所有管理员
         $this->broadcastToAdmins([
             'type' => 'admin_update',
             'action' => $action,
             'data' => $result
-        ]);
+        ]];
     }
     
     /**
-     * 启动定时数据推送
+     * 启动定时数据推�?
      */
     private function startDataPushTimer() {
         // 使用React/Socket的Timer (这里简化为示例)
         // 在实际实现中应该使用适当的定时器
-        $loop = \React\EventLoop\Factory::create();
+        $loop = \React\EventLoop\Factory::create(];
         
         $loop->addPeriodicTimer(5, function() {
-            $this->pushSystemMetrics();
-        });
+            $this->pushSystemMetrics(];
+        }];
         
         $loop->addPeriodicTimer(30, function() {
-            $this->pushDetailedStatistics();
-        });
+            $this->pushDetailedStatistics(];
+        }];
     }
     
     /**
-     * 推送系统指标
+     * 推送系统指�?
      */
     private function pushSystemMetrics() {
-        $metrics = $this->dataProvider->getSystemMetrics();
+        $metrics = $this->dataProvider->getSystemMetrics(];
         
         $this->broadcastToAdmins([
             'type' => 'system_metrics',
             'data' => $metrics,
             'timestamp' => time()
-        ]);
+        ]];
     }
     
     /**
-     * 推送详细统计
+     * 推送详细统�?
      */
     private function pushDetailedStatistics() {
-        $stats = $this->dataProvider->getDetailedStatistics();
+        $stats = $this->dataProvider->getDetailedStatistics(];
         
         $this->broadcastToAdmins([
             'type' => 'detailed_stats',
             'data' => $stats,
             'timestamp' => time()
-        ]);
+        ]];
     }
     
     /**
@@ -215,11 +215,11 @@ class AdminWebSocketServer implements MessageComponentInterface
     private function validateAdminToken(string $token): ?array
     {
         try {
-            // 简化的token验证 - 实际应该使用JWT或其他安全方法
-            $adminService = new \AlingAi\Services\AdminService();
-            return $adminService->validateToken($token);
+            // 简化的token验证 - 实际应该使用JWT或其他安全方�?
+            $adminService = new \AlingAi\Services\AdminService(];
+            return $adminService->validateToken($token];
         } catch (Exception $e) {
-            $this->logger->error("Token validation error: " . $e->getMessage());
+            $this->logger->error("Token validation error: " . $e->getMessage()];
             return null;
         }
     }
@@ -229,7 +229,7 @@ class AdminWebSocketServer implements MessageComponentInterface
      */
     private function isAdminClient(ConnectionInterface $conn): bool
     {
-        return $this->adminClients->contains($conn);
+        return $this->adminClients->contains($conn];
     }
     
     /**
@@ -237,26 +237,26 @@ class AdminWebSocketServer implements MessageComponentInterface
      */
     private function broadcastToAdmins(array $message) {
         foreach ($this->adminClients as $client) {
-            $this->send($client, $message);
+            $this->send($client, $message];
         }
     }
     
     /**
-     * 发送消息
+     * 发送消�?
      */
     private function send(ConnectionInterface $conn, array $data) {
-        $conn->send(json_encode($data));
+        $conn->send(json_encode($data)];
     }
     
     /**
-     * 发送错误消息
+     * 发送错误消�?
      */
     private function sendError(ConnectionInterface $conn, string $error) {
         $this->send($conn, [
             'type' => 'error',
             'message' => $error,
             'timestamp' => time()
-        ]);
+        ]];
     }
     
     /**
@@ -267,17 +267,17 @@ class AdminWebSocketServer implements MessageComponentInterface
             'type' => 'connection_established',
             'server_time' => time(),
             'server_version' => '5.0.0'
-        ]);
+        ]];
     }
     
     /**
-     * 执行管理员操作
+     * 执行管理员操�?
      */
     private function executeAdminAction(string $action, array $params): array
     {
         try {
-            $adminService = new \AlingAi\Services\AdminService();
-            return $adminService->executeAction($action, $params);
+            $adminService = new \AlingAi\Services\AdminService(];
+            return $adminService->executeAction($action, $params];
         } catch (Exception $e) {
             return [
                 'error' => $e->getMessage()
@@ -287,14 +287,14 @@ class AdminWebSocketServer implements MessageComponentInterface
 }
 
 /**
- * 管理员数据提供者
+ * 管理员数据提供�?
  */
 class AdminDataProvider
 {
     private $logger;
     
     public function __construct() {
-        $this->logger = new \AlingAi\Utils\Logger('DataProvider');
+        $this->logger = new \AlingAi\Utils\Logger('DataProvider'];
     }
     
     /**
@@ -332,64 +332,64 @@ class AdminDataProvider
     {
         switch ($type) {
             case 'dashboard':
-                return $this->getDashboardData();
+                return $this->getDashboardData(];
             case 'users':
-                return $this->getUserData();
+                return $this->getUserData(];
             case 'system':
-                return $this->getSystemData();
+                return $this->getSystemData(];
             case 'api':
-                return $this->getApiData();
+                return $this->getApiData(];
             default:
                 return ['error' => 'Unknown data type'];
         }
     }
     
-    // 各种数据获取方法的简化实现
+    // 各种数据获取方法的简化实�?
     private function getCpuUsage(): float
     {
-        // 简化的CPU使用率获取
-        return round(mt_rand(10, 80) + mt_rand(0, 100) / 100, 2);
+        // 简化的CPU使用率获�?
+        return round(mt_rand(10, 80) + mt_rand(0, 100) / 100, 2];
     }
     
     private function getMemoryUsage(): float
     {
-        return round(memory_get_usage() / 1024 / 1024, 2);
+        return round(memory_get_usage() / 1024 / 1024, 2];
     }
     
     private function getDiskUsage(): float
     {
-        $free = disk_free_space('.');
-        $total = disk_total_space('.');
-        return round(($total - $free) / $total * 100, 2);
+        $free = disk_free_space('.'];
+        $total = disk_total_space('.'];
+        return round(($total - $free) / $total * 100, 2];
     }
     
     private function getActiveUserCount(): int
     {
         // 从缓存或数据库获取活跃用户数
-        return mt_rand(50, 200);
+        return mt_rand(50, 200];
     }
     
     private function getApiRequestCount(): int
     {
         // 获取API请求计数
-        return mt_rand(1000, 5000);
+        return mt_rand(1000, 5000];
     }
     
     private function getErrorRate(): float
     {
-        return round(mt_rand(0, 5) + mt_rand(0, 100) / 100, 2);
+        return round(mt_rand(0, 5) + mt_rand(0, 100) / 100, 2];
     }
     
     private function getAverageResponseTime(): float
     {
-        return round(mt_rand(50, 200) + mt_rand(0, 100) / 100, 2);
+        return round(mt_rand(50, 200) + mt_rand(0, 100) / 100, 2];
     }
     
     private function getUserStatistics(): array
     {
         return [
-            'active' => mt_rand(500, 2000),
-            'new_today' => mt_rand(10, 50),
+            'active' => mt_rand(500, 2000],
+            'new_today' => mt_rand(10, 50],
             'premium' => mt_rand(100, 500)
         ];
     }
@@ -397,11 +397,11 @@ class AdminDataProvider
     private function getApiStatistics(): array
     {
         return [
-            'success_rate' => round(mt_rand(95, 99) + mt_rand(0, 100) / 100, 2),
-            'avg_response_time' => round(mt_rand(100, 300), 2),
+            'success_rate' => round(mt_rand(95, 99) + mt_rand(0, 100) / 100, 2],
+            'avg_response_time' => round(mt_rand(100, 300], 2],
             'top_endpoints' => [
-                '/api/chat/send' => mt_rand(100, 500),
-                '/api/user/profile' => mt_rand(50, 200),
+                '/api/chat/send' => mt_rand(100, 500],
+                '/api/user/profile' => mt_rand(50, 200],
                 '/api/auth/login' => mt_rand(30, 100)
             ]
         ];
@@ -410,15 +410,15 @@ class AdminDataProvider
     private function getThirdPartyStatistics(): array
     {
         return [
-            'services_failed' => mt_rand(0, 3),
-            'avg_response_time' => round(mt_rand(200, 800), 2)
+            'services_failed' => mt_rand(0, 3],
+            'avg_response_time' => round(mt_rand(200, 800], 2)
         ];
     }
     
     private function getSecurityStatistics(): array
     {
         return [
-            'suspicious_activity' => mt_rand(5, 20),
+            'suspicious_activity' => mt_rand(5, 20],
             'failed_logins' => mt_rand(20, 80)
         ];
     }
@@ -426,8 +426,8 @@ class AdminDataProvider
     private function getPerformanceStatistics(): array
     {
         return [
-            'db_query_time' => round(mt_rand(10, 50), 2),
-            'page_load_time' => round(mt_rand(500, 1500), 2)
+            'db_query_time' => round(mt_rand(10, 50], 2],
+            'page_load_time' => round(mt_rand(500, 1500], 2)
         ];
     }
     
@@ -435,36 +435,37 @@ class AdminDataProvider
     {
         return array_merge(
             $this->getDetailedStatistics()
-        );
+        ];
     }
     
     private function getUserData(): array
     {
-        return $this->getUserStatistics();
+        return $this->getUserStatistics(];
     }
     
     private function getSystemData(): array
     {
-        return $this->getSystemMetrics();
+        return $this->getSystemMetrics(];
     }
     
     private function getApiData(): array
     {
-        return $this->getApiStatistics();
+        return $this->getApiStatistics(];
     }
 }
 
-// 如果直接访问此文件，启动WebSocket服务器
+// 如果直接访问此文件，启动WebSocket服务�?
 if (basename(__FILE__) === basename($_SERVER['SCRIPT_NAME'])) {
     $server = IoServer::factory(
         new HttpServer(
             new WsServer(
                 new AdminWebSocketServer()
             )
-        ),
+        ],
         8080
-    );
+    ];
     
     echo "Admin WebSocket Server started on port 8080\n";
-    $server->run();
+    $server->run(];
 }
+

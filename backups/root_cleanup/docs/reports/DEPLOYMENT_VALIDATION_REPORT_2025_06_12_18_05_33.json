@@ -1,0 +1,14 @@
+﻿{
+    "passed_checks":  19,
+    "errors":  [
+                   "PHP not installed or not in PATH"
+               ],
+    "timestamp":  "2025-06-12 18:05:33",
+    "warnings":  [
+                     "Health check found some non-critical issues"
+                 ],
+    "failed_checks":  1,
+    "version":  "6.0.0",
+    "success_rate":  95,
+    "total_checks":  20
+}

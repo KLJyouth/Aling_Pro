@@ -6,7 +6,7 @@ use App\AI\NaturalLanguage;
 use App\Core\Cache;
 
 /**
- * Chatbot 类
+ * Chatbot �?
  * 
  * 聊天机器人组件，提供会话交互功能
  *
@@ -15,7 +15,7 @@ use App\Core\Cache;
 class Chatbot
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -45,7 +45,7 @@ class Chatbot
     }
 
     /**
-     * 记住上下文
+     * 记住上下�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -56,7 +56,7 @@ class Chatbot
     }
 
     /**
-     * 加载个性
+     * 加载个�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -67,7 +67,7 @@ class Chatbot
     }
 
     /**
-     * 训练聊天机器人
+     * 训练聊天机器�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -1,0 +1,76 @@
+{
+    "dashboard": {
+        "id": null,
+        "title": "AlingAi Pro \u7cfb\u7edf\u76d1\u63a7",
+        "tags": [
+            "alingai",
+            "monitoring"
+        ],
+        "timezone": "browser",
+        "panels": [
+            {
+                "id": 1,
+                "title": "\u7cfb\u7edf CPU \u4f7f\u7528\u7387",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "100 - (avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100)",
+                        "legendFormat": "CPU Usage %"
+                    }
+                ],
+                "alert": {
+                    "conditions": [
+                        {
+                            "query": [
+                                "A",
+                                "5m",
+                                "now"
+                            ],
+                            "reducer": {
+                                "type": "avg"
+                            },
+                            "evaluator": {
+                                "params": [
+                                    80
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "id": 2,
+                "title": "\u5185\u5b58\u4f7f\u7528\u7387",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "(1 - (node_memory_MemAvailable_bytes \/ node_memory_MemTotal_bytes)) * 100",
+                        "legendFormat": "Memory Usage %"
+                    }
+                ]
+            },
+            {
+                "id": 3,
+                "title": "API \u54cd\u5e94\u65f6\u95f4",
+                "type": "graph",
+                "targets": [
+                    {
+                        "expr": "avg(http_request_duration_seconds{job=\"alingai-app\"})",
+                        "legendFormat": "Response Time"
+                    }
+                ]
+            },
+            {
+                "id": 4,
+                "title": "\u6570\u636e\u5e93\u8fde\u63a5\u6570",
+                "type": "singlestat",
+                "targets": [
+                    {
+                        "expr": "mysql_global_status_threads_connected",
+                        "legendFormat": "Connections"
+                    }
+                ]
+            }
+        ]
+    }
+}

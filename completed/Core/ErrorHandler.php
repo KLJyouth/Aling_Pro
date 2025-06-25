@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Pro\Core;
 
@@ -11,14 +11,14 @@ use AlingAi\Pro\Exceptions\BaseException;
 use Throwable;
 
 /**
- * 全局错误处理器
+ * 全局错误处理�?
  * 
  * 统一处理系统中的所有异常和错误
  * 
  * @package AlingAi\Pro\Core
  */
 /**
- * ErrorHandler 类
+ * ErrorHandler �?
  *
  * @package AlingAi\Pro\Core
  */
@@ -78,18 +78,18 @@ class ErrorHandler
         ServerRequestInterface $request
     ): ResponseInterface {
         // 记录错误日志
-        $this->logException($exception, $request);
+        $this->logException($exception, $request];
 
-        // 根据异常类型返回适当的响应
+        // 根据异常类型返回适当的响�?
         if ($exception instanceof BaseException) {
-            return $this->handleCustomException($exception, $request);
+            return $this->handleCustomException($exception, $request];
         }
 
-        return $this->handleGenericException($exception, $request);
+        return $this->handleGenericException($exception, $request];
     }
 
     /**
-     * 处理自定义异常
+     * 处理自定义异�?
      */
     /**
 
@@ -109,7 +109,7 @@ class ErrorHandler
         BaseException $exception, 
         ServerRequestInterface $request
     ): ResponseInterface {
-        $statusCode = $exception->getStatusCode();
+        $statusCode = $exception->getStatusCode(];
         $response = [
             'success' => false,
             'code' => $statusCode,
@@ -118,12 +118,12 @@ class ErrorHandler
             'meta' => $this->getErrorMeta($request)
         ];
 
-        // 添加详细错误信息（如果有）
+        // 添加详细错误信息（如果有�?
         if ($exception->hasDetails()) {
-            $response['details'] = $exception->getDetails();
+            $response['details'] = $exception->getDetails(];
         }
 
-        // 调试模式下添加更多信息
+        // 调试模式下添加更多信�?
         if ($this->debug) {
             $response['debug'] = [
                 'file' => $exception->getFile(),
@@ -132,7 +132,7 @@ class ErrorHandler
             ];
         }
 
-        return $this->createJsonResponse($response, $statusCode);
+        return $this->createJsonResponse($response, $statusCode];
     }
 
     /**
@@ -156,8 +156,8 @@ class ErrorHandler
         Throwable $exception, 
         ServerRequestInterface $request
     ): ResponseInterface {
-        $statusCode = $this->getStatusCodeFromException($exception);
-        $message = $this->debug ? $exception->getMessage() : '服务器内部错误';
+        $statusCode = $this->getStatusCodeFromException($exception];
+        $message = $this->debug ? $exception->getMessage() : '服务器内部错�?;
 
         $response = [
             'success' => false,
@@ -168,14 +168,14 @@ class ErrorHandler
 
         if ($this->debug) {
             $response['debug'] = [
-                'exception' => get_class($exception),
+                'exception' => get_class($exception],
                 'file' => $exception->getFile(),
                 'line' => $exception->getLine(),
                 'trace' => $exception->getTraceAsString()
             ];
         }
 
-        return $this->createJsonResponse($response, $statusCode);
+        return $this->createJsonResponse($response, $statusCode];
     }
 
     /**
@@ -198,27 +198,27 @@ class ErrorHandler
     private function logException(Throwable $exception, ServerRequestInterface $request): void
     {
         $context = [
-            'exception' => get_class($exception),
+            'exception' => get_class($exception],
             'message' => $exception->getMessage(),
             'file' => $exception->getFile(),
             'line' => $exception->getLine(),
             'request' => [
                 'method' => $request->getMethod(),
                 'uri' => (string) $request->getUri(),
-                'headers' => $this->sanitizeHeaders($request->getHeaders()),
-                'user_agent' => $request->getHeaderLine('User-Agent'),
+                'headers' => $this->sanitizeHeaders($request->getHeaders()],
+                'user_agent' => $request->getHeaderLine('User-Agent'],
                 'ip' => $this->getClientIp($request)
             ]
         ];
 
-        // 根据异常类型选择不同的日志级别
+        // 根据异常类型选择不同的日志级�?
         if ($exception instanceof BaseException) {
-            $level = $this->getLogLevelFromException($exception);
+            $level = $this->getLogLevelFromException($exception];
         } else {
             $level = 'error';
         }
 
-        $this->logger->log($level, $exception->getMessage(), $context);
+        $this->logger->log($level, $exception->getMessage(), $context];
     }
 
     /**
@@ -269,11 +269,11 @@ class ErrorHandler
     private function getLogLevelFromException(BaseException $exception): string
     {
         return match ($exception->getStatusCode()) {
-            400, 422 => 'warning',  // 客户端错误
+            400, 422 => 'warning',  // 客户端错�?
             401, 403 => 'notice',   // 认证/授权错误
-            404 => 'info',          // 资源不存在
+            404 => 'info',          // 资源不存�?
             429 => 'warning',       // 限流
-            default => 'error'      // 服务器错误
+            default => 'error'      // 服务器错�?
         };
     }
 
@@ -364,8 +364,8 @@ class ErrorHandler
     private function getErrorMeta(ServerRequestInterface $request): array
     {
         return [
-            'timestamp' => (new \DateTime())->format('c'),
-            'request_id' => $this->generateRequestId($request),
+            'timestamp' => (new \DateTime())->format('c'],
+            'request_id' => $this->generateRequestId($request],
             'path' => $request->getUri()->getPath(),
             'method' => $request->getMethod()
         ];
@@ -389,7 +389,7 @@ class ErrorHandler
     private function generateRequestId(ServerRequestInterface $request): string
     {
         return $request->getHeaderLine('X-Request-ID') 
-            ?: 'req_' . uniqid() . '_' . time();
+            ?: 'req_' . uniqid() . '_' . time(];
     }
 
     /**
@@ -411,12 +411,12 @@ class ErrorHandler
 
     private function createJsonResponse(array $data, int $statusCode): ResponseInterface
     {
-        $response = new \Slim\Psr7\Response();
-        $response->getBody()->write(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        $response = new \Slim\Psr7\Response(];
+        $response->getBody()->write(json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)];
         
         return $response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus($statusCode);
+            ->withStatus($statusCode];
     }
 
     /**
@@ -475,7 +475,7 @@ class ErrorHandler
             'file' => $file,
             'line' => $line,
             'error_type' => $errorType
-        ]);
+        ]];
 
         return true;
     }
@@ -495,14 +495,15 @@ class ErrorHandler
 
     public function handleFatalError(): void
     {
-        $error = error_get_last();
+        $error = error_get_last(];
         if ($error && ($error['type'] & (E_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR))) {
             $this->logger->critical('PHP Fatal Error', [
-                'message' => $error['message'],
-                'file' => $error['file'],
-                'line' => $error['line'],
+                'message' => $error['message'], 
+                'file' => $error['file'], 
+                'line' => $error['line'], 
                 'type' => $error['type']
-            ]);
+            ]];
         }
     }
 }
+

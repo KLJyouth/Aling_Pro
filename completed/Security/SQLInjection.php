@@ -5,7 +5,7 @@ namespace App\Security;
 use App\Core\Database;
 
 /**
- * SQLInjection 类
+ * SQLInjection �?
  * 
  * SQL注入防护，检测和防止SQL注入攻击
  *
@@ -14,11 +14,11 @@ use App\Core\Database;
 class SQLInjection
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**

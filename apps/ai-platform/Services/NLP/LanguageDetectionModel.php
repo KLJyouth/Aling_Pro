@@ -3,8 +3,7 @@
 namespace AlingAi\AIServices\NLP;
 
 /**
- * 语言检测模型
- */
+ * 语言检测模�? */
 class LanguageDetectionModel extends BaseNLPModel
 {
     /**
@@ -12,21 +11,19 @@ class LanguageDetectionModel extends BaseNLPModel
      */
     public function detectLanguage(string $text, array $options = []): array
     {
-        // 模拟语言检测结果
-        $languages = [
-            'en' => ['name' => 'English', 'confidence' => 0],
-            'zh' => ['name' => 'Chinese', 'confidence' => 0],
-            'es' => ['name' => 'Spanish', 'confidence' => 0],
-            'fr' => ['name' => 'French', 'confidence' => 0],
-            'de' => ['name' => 'German', 'confidence' => 0],
-            'ja' => ['name' => 'Japanese', 'confidence' => 0],
+        // 模拟语言检测结�?        $languages = [
+            'en' => ['name' => 'English', 'confidence' => 0], 
+            'zh' => ['name' => 'Chinese', 'confidence' => 0], 
+            'es' => ['name' => 'Spanish', 'confidence' => 0], 
+            'fr' => ['name' => 'French', 'confidence' => 0], 
+            'de' => ['name' => 'German', 'confidence' => 0], 
+            'ja' => ['name' => 'Japanese', 'confidence' => 0], 
             'ru' => ['name' => 'Russian', 'confidence' => 0]
         ];
         
-        // 基于字符集的简单检测
-        $hasChineseChars = preg_match('/[\x{4e00}-\x{9fa5}]/u', $text);
-        $hasJapaneseChars = preg_match('/[\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/u', $text);
-        $hasCyrillicChars = preg_match('/[\x{0400}-\x{04FF}]/u', $text);
+        // 基于字符集的简单检�?        $hasChineseChars = preg_match('/[\x{4e00}-\x{9fa5}]/u', $text];
+        $hasJapaneseChars = preg_match('/[\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/u', $text];
+        $hasCyrillicChars = preg_match('/[\x{0400}-\x{04FF}]/u', $text];
         
         if ($hasChineseChars) {
             $languages['zh']['confidence'] = 0.9;
@@ -35,8 +32,7 @@ class LanguageDetectionModel extends BaseNLPModel
         } elseif ($hasCyrillicChars) {
             $languages['ru']['confidence'] = 0.85;
         } else {
-            // 简单的英文/西班牙语/法语/德语检测
-            $languages['en']['confidence'] = 0.4;
+            // 简单的英文/西班牙语/法语/德语检�?            $languages['en']['confidence'] = 0.4;
             $languages['es']['confidence'] = 0.2;
             $languages['fr']['confidence'] = 0.2;
             $languages['de']['confidence'] = 0.2;
@@ -65,17 +61,17 @@ class LanguageDetectionModel extends BaseNLPModel
         // 排序并找出最可能的语言
         uasort($languages, function($a, $b) {
             return $b['confidence'] <=> $a['confidence'];
-        });
+        }];
         
-        $detectedLanguage = array_key_first($languages);
+        $detectedLanguage = array_key_first($languages];
         
         return [
             'success' => true,
-            'message' => '语言检测完成',
+            'message' => '语言检测完�?,
             'data' => [
                 'detected_language' => $detectedLanguage,
-                'language_name' => $languages[$detectedLanguage]['name'],
-                'confidence' => $languages[$detectedLanguage]['confidence'],
+                'language_name' => $languages[$detectedLanguage]['name'], 
+                'confidence' => $languages[$detectedLanguage]['confidence'], 
                 'all_languages' => $languages,
                 'processing_time' => rand(20, 100) . 'ms'
             ]
@@ -87,6 +83,6 @@ class LanguageDetectionModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->detectLanguage($text, $options);
+        return $this->detectLanguage($text, $options];
     }
 }

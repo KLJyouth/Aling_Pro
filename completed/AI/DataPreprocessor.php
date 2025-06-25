@@ -5,7 +5,7 @@ namespace App\AI;
 use App\Core\Database;
 
 /**
- * DataPreprocessor 类
+ * DataPreprocessor �?
  * 
  * 数据预处理器，用于准备AI训练数据
  *
@@ -14,7 +14,7 @@ use App\Core\Database;
 class DataPreprocessor
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -33,7 +33,7 @@ class DataPreprocessor
     }
 
     /**
-     * 规范化数据
+     * 规范化数�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -66,7 +66,7 @@ class DataPreprocessor
     }
 
     /**
-     * 平衡数据集
+     * 平衡数据�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

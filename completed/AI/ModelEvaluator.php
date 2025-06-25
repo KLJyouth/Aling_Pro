@@ -5,7 +5,7 @@ namespace App\AI;
 use App\AI\MachineLearning;
 
 /**
- * ModelEvaluator 类
+ * ModelEvaluator �?
  * 
  * 模型评估器，用于评估AI模型性能
  *
@@ -14,7 +14,7 @@ use App\AI\MachineLearning;
 class ModelEvaluator
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -77,7 +77,7 @@ class ModelEvaluator
     }
 
     /**
-     * 可视化结果
+     * 可视化结�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

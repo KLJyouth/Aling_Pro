@@ -1,0 +1,23 @@
+@echo off
+REM ???PHP?????????
+
+echo ????PHP??...
+
+if "%1"=="" (
+    echo ??: fix_php_simple.bat [PHP????]
+    exit /b 1
+)
+
+set FILE_PATH=%1
+set BACKUP_PATH=%FILE_PATH%.bak
+
+echo ??????: %FILE_PATH%
+
+REM ????
+copy "%FILE_PATH%" "%BACKUP_PATH%" > nul
+echo ????: %BACKUP_PATH%
+
+REM ??PowerShell????????????
+powershell -Command "$content = Get-Content -Path '%FILE_PATH%' -Raw; $content = $content -replace '\\'';\s*$', '\\'','; $content = $content -replace '\";\s*$', '\",'; Set-Content -Path '%FILE_PATH%' -Value $content -NoNewline"
+
+echo ??????: %FILE_PATH%

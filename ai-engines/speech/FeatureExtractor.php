@@ -1,17 +1,17 @@
 <?php
 /**
  * 文件名：FeatureExtractor.php
- * 功能描述：特征提取器类 - 负责从音频信号中提取声学特征
- * 创建时间：2025-01-XX
+ * 功能描述：特征提取器�?- 负责从音频信号中提取声学特征
+ * 创建时间�?025-01-XX
  * 最后修改：2025-01-XX
- * 版本：1.0.0
+ * 版本�?.0.0
  * 
  * @package AlingAi\Engines\Speech
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Engines\Speech;
 
@@ -28,44 +28,36 @@ use AlingAi\Core\Logger\LoggerInterface;
 class FeatureExtractor
 {
     /**
-     * @var array 提取器配置
-     */
+     * @var array 提取器配�?     */
     private array $config;
     
     /**
-     * @var LoggerInterface|null 日志记录器
-     */
+     * @var LoggerInterface|null 日志记录�?     */
     private ?LoggerInterface $logger;
 
     /**
-     * @var array 支持的特征类型
-     */
+     * @var array 支持的特征类�?     */
     private const SUPPORTED_FEATURE_TYPES = [
         'mfcc',         // 梅尔频率倒谱系数
         'fbank',        // 滤波器组能量特征
-        'plp',          // 感知线性预测
-        'spectrogram',  // 频谱图
-        'raw_waveform', // 原始波形
+        'plp',          // 感知线性预�?        'spectrogram',  // 频谱�?        'raw_waveform', // 原始波形
         'pitch'         // 基频特征
     ];
     
     /**
-     * 构造函数
-     *
-     * @param array $config 提取器配置
-     * @param LoggerInterface|null $logger 日志记录器
-     */
+     * 构造函�?     *
+     * @param array $config 提取器配�?     * @param LoggerInterface|null $logger 日志记录�?     */
     public function __construct(array $config, ?LoggerInterface $logger = null)
     {
-        $this->validateConfig($config);
+        $this->validateConfig($config];
         $this->config = $config;
         $this->logger = $logger;
         
         if ($this->logger) {
             $this->logger->info('特征提取器初始化完成', [
-                'feature_type' => $this->config['feature_type'],
+                'feature_type' => $this->config['feature_type'], 
                 'sample_rate' => $this->config['sample_rate']
-            ]);
+            ]];
         }
     }
 
@@ -73,33 +65,29 @@ class FeatureExtractor
      * 验证配置
      *
      * @param array $config 配置数组
-     * @throws InvalidArgumentException 配置无效时抛出异常
-     */
+     * @throws InvalidArgumentException 配置无效时抛出异�?     */
     private function validateConfig(array $config): void
     {
         // 验证必要的配置项
         if (!isset($config['feature_type'])) {
-            throw new InvalidArgumentException('必须指定特征类型(feature_type)');
+            throw new InvalidArgumentException('必须指定特征类型(feature_type)'];
         }
 
         // 验证特征类型
-        if (!in_array($config['feature_type'], self::SUPPORTED_FEATURE_TYPES)) {
+        if (!in_[$config['feature_type'],  self::SUPPORTED_FEATURE_TYPES)) {
             throw new InvalidArgumentException(sprintf(
                 '不支持的特征类型: %s。支持的类型: %s',
-                $config['feature_type'],
+                $config['feature_type'], 
                 implode(', ', self::SUPPORTED_FEATURE_TYPES)
-            ));
+            )];
         }
 
-        // 验证采样率
-        if (!isset($config['sample_rate'])) {
-            $config['sample_rate'] = 16000; // 默认采样率
-        } elseif (!is_numeric($config['sample_rate']) || $config['sample_rate'] <= 0) {
-            throw new InvalidArgumentException('采样率必须是正数');
+        // 验证采样�?        if (!isset($config['sample_rate'])) {
+            $config['sample_rate'] = 16000; // 默认采样�?        } elseif (!is_numeric($config['sample_rate']) || $config['sample_rate'] <= 0) {
+            throw new InvalidArgumentException('采样率必须是正数'];
         }
 
-        // 设置默认窗口大小和步长
-        if (!isset($config['window_size'])) {
+        // 设置默认窗口大小和步�?        if (!isset($config['window_size'])) {
             $config['window_size'] = 25; // 默认25ms窗口
         }
         if (!isset($config['window_step'])) {
@@ -108,105 +96,94 @@ class FeatureExtractor
     }
 
     /**
-     * 从音频文件提取特征
-     *
+     * 从音频文件提取特�?     *
      * @param string $audioFilePath 音频文件路径
-     * @return array 提取的特征
-     * @throws Exception 提取失败时抛出异常
-     */
+     * @return array 提取的特�?     * @throws Exception 提取失败时抛出异�?     */
     public function extractFromFile(string $audioFilePath): array
     {
         if (!file_exists($audioFilePath)) {
-            throw new InvalidArgumentException('音频文件不存在: ' . $audioFilePath);
+            throw new InvalidArgumentException('音频文件不存�? ' . $audioFilePath];
         }
 
         if ($this->logger) {
-            $this->logger->debug('从音频文件提取特征', ['file' => $audioFilePath]);
+            $this->logger->debug('从音频文件提取特�?, ['file' => $audioFilePath]];
         }
 
         // 读取音频文件
-        $audioData = $this->readAudioFile($audioFilePath);
+        $audioData = $this->readAudioFile($audioFilePath];
         
         // 提取特征
-        return $this->extractFromAudio($audioData);
+        return $this->extractFromAudio($audioData];
     }
 
     /**
-     * 从音频数据提取特征
-     *
+     * 从音频数据提取特�?     *
      * @param array $audioData 音频数据
-     * @return array 提取的特征
-     */
+     * @return array 提取的特�?     */
     public function extractFromAudio(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('从音频数据提取特征', [
-                'data_length' => count($audioData),
+            $this->logger->debug('从音频数据提取特�?, [
+                'data_length' => count($audioData],
                 'feature_type' => $this->config['feature_type']
-            ]);
+            ]];
         }
 
         try {
-            // 预处理音频
-            $preprocessedAudio = $this->preprocessAudio($audioData);
+            // 预处理音�?            $preprocessedAudio = $this->preprocessAudio($audioData];
             
-            // 根据特征类型选择不同的提取方法
-            switch ($this->config['feature_type']) {
+            // 根据特征类型选择不同的提取方�?            switch ($this->config['feature_type']) {
                 case 'mfcc':
-                    return $this->extractMfcc($preprocessedAudio);
+                    return $this->extractMfcc($preprocessedAudio];
                 case 'fbank':
-                    return $this->extractFbank($preprocessedAudio);
+                    return $this->extractFbank($preprocessedAudio];
                 case 'plp':
-                    return $this->extractPlp($preprocessedAudio);
+                    return $this->extractPlp($preprocessedAudio];
                 case 'spectrogram':
-                    return $this->extractSpectrogram($preprocessedAudio);
+                    return $this->extractSpectrogram($preprocessedAudio];
                 case 'raw_waveform':
-                    return $this->extractRawWaveform($preprocessedAudio);
+                    return $this->extractRawWaveform($preprocessedAudio];
                 case 'pitch':
-                    return $this->extractPitch($preprocessedAudio);
+                    return $this->extractPitch($preprocessedAudio];
                 default:
-                    throw new RuntimeException('不支持的特征类型: ' . $this->config['feature_type']);
+                    throw new RuntimeException('不支持的特征类型: ' . $this->config['feature_type']];
             }
         } catch (Exception $e) {
             if ($this->logger) {
-                $this->logger->error('特征提取失败', ['error' => $e->getMessage()]);
+                $this->logger->error('特征提取失败', ['error' => $e->getMessage()]];
             }
             throw $e;
         }
     }
 
     /**
-     * 预处理音频数据
-     *
+     * 预处理音频数�?     *
      * @param array $audioData 原始音频数据
-     * @return array 预处理后的音频数据
-     */
+     * @return array 预处理后的音频数�?     */
     private function preprocessAudio(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('预处理音频数据', [
-                'data_length' => count($audioData),
+            $this->logger->debug('预处理音频数�?, [
+                'data_length' => count($audioData],
                 'preprocess_options' => $this->getPreprocessOptions()
-            ]);
+            ]];
         }
 
-        // 应用预处理步骤
-        $processed = $audioData;
+        // 应用预处理步�?        $processed = $audioData;
 
-        // 1. 预加重(Pre-emphasis)
+        // 1. 预加�?Pre-emphasis)
         if ($this->config['pre_emphasis'] ?? true) {
             $preemphCoef = $this->config['pre_emphasis_coef'] ?? 0.97;
-            $processed = $this->applyPreEmphasis($processed, $preemphCoef);
+            $processed = $this->applyPreEmphasis($processed, $preemphCoef];
         }
 
-        // 2. 端点检测(VAD)
+        // 2. 端点检�?VAD)
         if ($this->config['vad'] ?? false) {
-            $processed = $this->applyVad($processed);
+            $processed = $this->applyVad($processed];
         }
 
-        // 3. 归一化
-        if ($this->config['normalize'] ?? true) {
-            $processed = $this->normalizeAudio($processed);
+        // 3. 归一�?        if ($this->config['normalize'] ?? true) {
+            $processed = $this->normalizeAudio($processed];
         }
 
         return $processed;
@@ -228,18 +205,16 @@ class FeatureExtractor
     }
     
     /**
-     * 应用预加重滤波
-     *
+     * 应用预加重滤�?     *
      * @param array $audioData 音频数据
-     * @param float $coefficient 预加重系数
-     * @return array 处理后的音频数据
+     * @param float $coefficient 预加重系�?     * @return array 处理后的音频数据
      */
     private function applyPreEmphasis(array $audioData, float $coefficient): array
     {
         $result = [];
         $result[0] = $audioData[0];
         
-        for ($i = 1; $i < count($audioData); $i++) {
+        for ($i = 1; $i < count($audioData]; $i++) {
             $result[$i] = $audioData[$i] - $coefficient * $audioData[$i - 1];
         }
         
@@ -247,7 +222,7 @@ class FeatureExtractor
     }
 
     /**
-     * 应用语音活动检测(VAD)
+     * 应用语音活动检�?VAD)
      *
      * @param array $audioData 音频数据
      * @return array 处理后的音频数据
@@ -260,29 +235,24 @@ class FeatureExtractor
     }
 
     /**
-     * 归一化音频数据
-     *
+     * 归一化音频数�?     *
      * @param array $audioData 音频数据
-     * @return array 归一化后的音频数据
-     */
+     * @return array 归一化后的音频数�?     */
     private function normalizeAudio(array $audioData): array
     {
-        // 找出最大绝对值
-        $maxAbs = 0;
+        // 找出最大绝对�?        $maxAbs = 0;
         foreach ($audioData as $sample) {
-            $abs = abs($sample);
+            $abs = abs($sample];
             if ($abs > $maxAbs) {
                 $maxAbs = $abs;
             }
         }
         
-        // 如果最大值为0，直接返回
-        if ($maxAbs === 0) {
+        // 如果最大值为0，直接返�?        if ($maxAbs === 0) {
             return $audioData;
         }
         
-        // 归一化
-        $result = [];
+        // 归一�?        $result = [];
         foreach ($audioData as $sample) {
             $result[] = $sample / $maxAbs;
         }
@@ -291,62 +261,55 @@ class FeatureExtractor
     }
 
     /**
-     * 从音频文件读取数据
-     *
+     * 从音频文件读取数�?     *
      * @param string $audioFilePath 音频文件路径
      * @return array 音频数据
      */
     private function readAudioFile(string $audioFilePath): array
     {
-        // 模拟读取音频文件的过程
-        // 实际应该使用音频处理库来读取不同格式的音频文件
-        
+        // 模拟读取音频文件的过�?        // 实际应该使用音频处理库来读取不同格式的音频文�?        
         if ($this->logger) {
-            $this->logger->debug('读取音频文件', ['file' => $audioFilePath]);
+            $this->logger->debug('读取音频文件', ['file' => $audioFilePath]];
         }
         
-        // 返回模拟的音频数据
-        return array_fill(0, 16000, 0); // 模拟1秒的静音
+        // 返回模拟的音频数�?        return array_fill(0, 16000, 0]; // 模拟1秒的静音
     }
 
     /**
      * 提取MFCC特征
      *
-     * @param array $audioData 预处理后的音频数据
-     * @return array MFCC特征
+     * @param array $audioData 预处理后的音频数�?     * @return array MFCC特征
      */
     private function extractMfcc(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取MFCC特征');
+            $this->logger->debug('提取MFCC特征'];
         }
         
-        // 帧分割
-        $frames = $this->splitIntoFrames($audioData);
+        // 帧分�?        $frames = $this->splitIntoFrames($audioData];
         
-        // 应用窗函数
-        $windowedFrames = $this->applyWindow($frames);
+        // 应用窗函�?        $windowedFrames = $this->applyWindow($frames];
         
         // FFT变换
-        $spectrums = $this->computeFft($windowedFrames);
+        $spectrums = $this->computeFft($windowedFrames];
         
         // 应用梅尔滤波器组
-        $melFilterbankEnergies = $this->applyMelFilterbank($spectrums);
+        $melFilterbankEnergies = $this->applyMelFilterbank($spectrums];
         
         // 对数变换
-        $logMelFilterbankEnergies = $this->applyLog($melFilterbankEnergies);
+        $logMelFilterbankEnergies = $this->applyLog($melFilterbankEnergies];
         
         // 离散余弦变换(DCT)
-        $mfccs = $this->applyDct($logMelFilterbankEnergies);
+        $mfccs = $this->applyDct($logMelFilterbankEnergies];
         
         // 提取最终特征（通常取前12-13个系数，加上能量项）
         $numCoeffs = $this->config['num_cepstral'] ?? 13;
-        $features = $this->extractCoefficients($mfccs, $numCoeffs);
+        $features = $this->extractCoefficients($mfccs, $numCoeffs];
         
         return [
             'features' => $features,
             'feature_type' => 'mfcc',
-            'num_frames' => count($features),
+            'num_frames' => count($features],
             'feature_dim' => count($features[0] ?? [])
         ];
     }
@@ -354,60 +317,56 @@ class FeatureExtractor
     /**
      * 提取滤波器组能量特征(Fbank)
      *
-     * @param array $audioData 预处理后的音频数据
-     * @return array Fbank特征
+     * @param array $audioData 预处理后的音频数�?     * @return array Fbank特征
      */
     private function extractFbank(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取滤波器组能量特征');
+            $this->logger->debug('提取滤波器组能量特征'];
         }
         
-        // 帧分割
-        $frames = $this->splitIntoFrames($audioData);
+        // 帧分�?        $frames = $this->splitIntoFrames($audioData];
         
-        // 应用窗函数
-        $windowedFrames = $this->applyWindow($frames);
+        // 应用窗函�?        $windowedFrames = $this->applyWindow($frames];
         
         // FFT变换
-        $spectrums = $this->computeFft($windowedFrames);
+        $spectrums = $this->computeFft($windowedFrames];
         
         // 应用梅尔滤波器组
-        $melFilterbankEnergies = $this->applyMelFilterbank($spectrums);
+        $melFilterbankEnergies = $this->applyMelFilterbank($spectrums];
         
         // 对数变换
-        $logMelFilterbankEnergies = $this->applyLog($melFilterbankEnergies);
+        $logMelFilterbankEnergies = $this->applyLog($melFilterbankEnergies];
         
         return [
             'features' => $logMelFilterbankEnergies,
             'feature_type' => 'fbank',
-            'num_frames' => count($logMelFilterbankEnergies),
+            'num_frames' => count($logMelFilterbankEnergies],
             'feature_dim' => count($logMelFilterbankEnergies[0] ?? [])
         ];
     }
 
     /**
-     * 提取感知线性预测(PLP)特征
+     * 提取感知线性预�?PLP)特征
      *
-     * @param array $audioData 预处理后的音频数据
-     * @return array PLP特征
+     * @param array $audioData 预处理后的音频数�?     * @return array PLP特征
      */
     private function extractPlp(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取感知线性预测特征');
+            $this->logger->debug('提取感知线性预测特�?];
         }
         
         // PLP提取过程(简化版)
         // 实际应该实现完整的PLP算法
         
         // 返回模拟特征
-        $numFrames = (int)(count($audioData) / ($this->config['window_step'] * $this->config['sample_rate'] / 1000));
+        $numFrames = (int)(count($audioData) / ($this->config['window_step'] * $this->config['sample_rate'] / 1000)];
         $featureDim = 13;
         $features = [];
         
         for ($i = 0; $i < $numFrames; $i++) {
-            $features[$i] = array_fill(0, $featureDim, 0);
+            $features[$i] = array_fill(0, $featureDim, 0];
         }
         
         return [
@@ -419,28 +378,22 @@ class FeatureExtractor
     }
 
     /**
-     * 提取频谱图特征
-     *
-     * @param array $audioData 预处理后的音频数据
-     * @return array 频谱图特征
-     */
+     * 提取频谱图特�?     *
+     * @param array $audioData 预处理后的音频数�?     * @return array 频谱图特�?     */
     private function extractSpectrogram(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取频谱图特征');
+            $this->logger->debug('提取频谱图特�?];
         }
         
-        // 帧分割
-        $frames = $this->splitIntoFrames($audioData);
+        // 帧分�?        $frames = $this->splitIntoFrames($audioData];
         
-        // 应用窗函数
-        $windowedFrames = $this->applyWindow($frames);
+        // 应用窗函�?        $windowedFrames = $this->applyWindow($frames];
         
         // FFT变换
-        $spectrums = $this->computeFft($windowedFrames);
+        $spectrums = $this->computeFft($windowedFrames];
         
-        // 计算功率谱
-        $powerSpectrums = [];
+        // 计算功率�?        $powerSpectrums = [];
         foreach ($spectrums as $spectrum) {
             $powerSpectrum = [];
             foreach ($spectrum as $bin) {
@@ -452,7 +405,7 @@ class FeatureExtractor
         return [
             'features' => $powerSpectrums,
             'feature_type' => 'spectrogram',
-            'num_frames' => count($powerSpectrums),
+            'num_frames' => count($powerSpectrums],
             'feature_dim' => count($powerSpectrums[0] ?? [])
         ];
     }
@@ -460,22 +413,20 @@ class FeatureExtractor
     /**
      * 提取原始波形特征
      *
-     * @param array $audioData 预处理后的音频数据
-     * @return array 原始波形特征
+     * @param array $audioData 预处理后的音频数�?     * @return array 原始波形特征
      */
     private function extractRawWaveform(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取原始波形特征');
+            $this->logger->debug('提取原始波形特征'];
         }
         
-        // 帧分割
-        $frames = $this->splitIntoFrames($audioData);
+        // 帧分�?        $frames = $this->splitIntoFrames($audioData];
         
         return [
             'features' => $frames,
             'feature_type' => 'raw_waveform',
-            'num_frames' => count($frames),
+            'num_frames' => count($frames],
             'feature_dim' => count($frames[0] ?? [])
         ];
     }
@@ -483,27 +434,24 @@ class FeatureExtractor
     /**
      * 提取基频特征
      *
-     * @param array $audioData 预处理后的音频数据
-     * @return array 基频特征
+     * @param array $audioData 预处理后的音频数�?     * @return array 基频特征
      */
     private function extractPitch(array $audioData): array
     {
         if ($this->logger) {
-            $this->logger->debug('提取基频特征');
+            $this->logger->debug('提取基频特征'];
         }
         
         // 基频提取(简化版)
-        // 实际应该实现自相关或RAPT等基频提取算法
-        
-        // 帧分割
-        $frames = $this->splitIntoFrames($audioData);
+        // 实际应该实现自相关或RAPT等基频提取算�?        
+        // 帧分�?        $frames = $this->splitIntoFrames($audioData];
         
         // 模拟基频提取结果
         $pitchFeatures = [];
         foreach ($frames as $frame) {
-            // 随机基频值(模拟)
+            // 随机基频�?模拟)
             $pitchFeatures[] = [
-                'f0' => rand(80, 400), // Hz
+                'f0' => rand(80, 400], // Hz
                 'voiced_prob' => rand(0, 100) / 100.0
             ];
         }
@@ -511,22 +459,21 @@ class FeatureExtractor
         return [
             'features' => $pitchFeatures,
             'feature_type' => 'pitch',
-            'num_frames' => count($pitchFeatures),
+            'num_frames' => count($pitchFeatures],
             'feature_dim' => 2 // f0和voiced_prob
         ];
     }
 
     /**
-     * 将音频分割成帧
-     *
+     * 将音频分割成�?     *
      * @param array $audioData 音频数据
      * @return array 分帧后的数据
      */
     private function splitIntoFrames(array $audioData): array
     {
-        // 计算帧长和帧移(采样点数)
-        $windowSize = (int)($this->config['window_size'] * $this->config['sample_rate'] / 1000);
-        $windowStep = (int)($this->config['window_step'] * $this->config['sample_rate'] / 1000);
+        // 计算帧长和帧�?采样点数)
+        $windowSize = (int)($this->config['window_size'] * $this->config['sample_rate'] / 1000];
+        $windowStep = (int)($this->config['window_step'] * $this->config['sample_rate'] / 1000];
         
         // 计算帧数
         $numFrames = (int)((count($audioData) - $windowSize) / $windowStep) + 1;
@@ -535,30 +482,26 @@ class FeatureExtractor
         $frames = [];
         for ($i = 0; $i < $numFrames; $i++) {
             $startIdx = $i * $windowStep;
-            $frames[$i] = array_slice($audioData, $startIdx, $windowSize);
+            $frames[$i] = array_slice($audioData, $startIdx, $windowSize];
         }
         
         return $frames;
     }
 
     /**
-     * 应用窗函数
-     *
+     * 应用窗函�?     *
      * @param array $frames 分帧后的数据
-     * @return array 应用窗函数后的数据
-     */
+     * @return array 应用窗函数后的数�?     */
     private function applyWindow(array $frames): array
     {
-        // 窗函数类型
-        $windowType = $this->config['window_type'] ?? 'hamming';
+        // 窗函数类�?        $windowType = $this->config['window_type'] ?? 'hamming';
         
         $windowedFrames = [];
         foreach ($frames as $frame) {
-            $frameLength = count($frame);
-            $window = $this->generateWindow($frameLength, $windowType);
+            $frameLength = count($frame];
+            $window = $this->generateWindow($frameLength, $windowType];
             
-            // 应用窗函数
-            $windowedFrame = [];
+            // 应用窗函�?            $windowedFrame = [];
             for ($i = 0; $i < $frameLength; $i++) {
                 $windowedFrame[$i] = $frame[$i] * $window[$i];
             }
@@ -570,12 +513,8 @@ class FeatureExtractor
     }
 
     /**
-     * 生成窗函数
-     *
-     * @param int $length 窗长度
-     * @param string $type 窗类型
-     * @return array 窗函数
-     */
+     * 生成窗函�?     *
+     * @param int $length 窗长�?     * @param string $type 窗类�?     * @return array 窗函�?     */
     private function generateWindow(int $length, string $type): array
     {
         $window = [];
@@ -583,31 +522,29 @@ class FeatureExtractor
         switch ($type) {
             case 'hamming':
                 for ($i = 0; $i < $length; $i++) {
-                    $window[$i] = 0.54 - 0.46 * cos(2 * M_PI * $i / ($length - 1));
+                    $window[$i] = 0.54 - 0.46 * cos(2 * M_PI * $i / ($length - 1)];
                 }
                 break;
                 
             case 'hanning':
                 for ($i = 0; $i < $length; $i++) {
-                    $window[$i] = 0.5 * (1 - cos(2 * M_PI * $i / ($length - 1)));
+                    $window[$i] = 0.5 * (1 - cos(2 * M_PI * $i / ($length - 1))];
                 }
                 break;
                 
             case 'blackman':
                 for ($i = 0; $i < $length; $i++) {
-                    $window[$i] = 0.42 - 0.5 * cos(2 * M_PI * $i / ($length - 1)) + 0.08 * cos(4 * M_PI * $i / ($length - 1));
+                    $window[$i] = 0.42 - 0.5 * cos(2 * M_PI * $i / ($length - 1)) + 0.08 * cos(4 * M_PI * $i / ($length - 1)];
                 }
                 break;
                 
             case 'rectangular':
-                // 矩形窗
-                $window = array_fill(0, $length, 1.0);
+                // 矩形�?                $window = array_fill(0, $length, 1.0];
                 break;
                 
             default:
-                // 默认使用汉明窗
-                for ($i = 0; $i < $length; $i++) {
-                    $window[$i] = 0.54 - 0.46 * cos(2 * M_PI * $i / ($length - 1));
+                // 默认使用汉明�?                for ($i = 0; $i < $length; $i++) {
+                    $window[$i] = 0.54 - 0.46 * cos(2 * M_PI * $i / ($length - 1)];
                 }
         }
         
@@ -617,8 +554,7 @@ class FeatureExtractor
     /**
      * 计算FFT
      *
-     * @param array $windowedFrames 加窗后的帧
-     * @return array FFT结果
+     * @param array $windowedFrames 加窗后的�?     * @return array FFT结果
      */
     private function computeFft(array $windowedFrames): array
     {
@@ -627,12 +563,11 @@ class FeatureExtractor
         
         $spectrums = [];
         foreach ($windowedFrames as $frame) {
-            // 生成模拟的频谱
-            $frameLength = count($frame);
-            $fftSize = $this->config['fft_size'] ?? (1 << (int)ceil(log($frameLength, 2)));
+            // 生成模拟的频�?            $frameLength = count($frame];
+            $fftSize = $this->config['fft_size'] ?? (1 << (int)ceil(log($frameLength, 2))];
             
-            // 模拟频谱(仅用于演示)
-            $spectrum = array_fill(0, $fftSize / 2 + 1, 0);
+            // 模拟频谱(仅用于演�?
+            $spectrum = array_fill(0, $fftSize / 2 + 1, 0];
             $spectrums[] = $spectrum;
         }
         
@@ -654,8 +589,7 @@ class FeatureExtractor
         $filterbankEnergies = [];
         
         foreach ($spectrums as $spectrum) {
-        // 生成模拟的滤波器组能量
-            $filterbankEnergies[] = array_fill(0, $numFilters, 0);
+        // 生成模拟的滤波器组能�?            $filterbankEnergies[] = array_fill(0, $numFilters, 0];
         }
         
         return $filterbankEnergies;
@@ -676,8 +610,8 @@ class FeatureExtractor
             $logFrame = [];
             foreach ($frame as $energy) {
                 // 防止对数为负无穷
-                $energy = max($energy, 1e-10);
-                $logFrame[] = log($energy);
+                $energy = max($energy, 1e-10];
+                $logFrame[] = log($energy];
             }
             $logEnergies[] = $logFrame;
         }
@@ -699,8 +633,8 @@ class FeatureExtractor
         $dctResults = [];
         
         foreach ($logMelFilterbankEnergies as $frame) {
-            $numFilters = count($frame);
-            $dctFrame = array_fill(0, $numFilters, 0);
+            $numFilters = count($frame];
+            $dctFrame = array_fill(0, $numFilters, 0];
             $dctResults[] = $dctFrame;
         }
         
@@ -712,14 +646,13 @@ class FeatureExtractor
      *
      * @param array $mfccs 所有MFCC系数
      * @param int $numCoeffs 要提取的系数数量
-     * @return array 提取的系数
-     */
+     * @return array 提取的系�?     */
     private function extractCoefficients(array $mfccs, int $numCoeffs): array
     {
         $features = [];
         
         foreach ($mfccs as $frame) {
-            $features[] = array_slice($frame, 0, $numCoeffs);
+            $features[] = array_slice($frame, 0, $numCoeffs];
         }
         
         return $features;
@@ -728,8 +661,7 @@ class FeatureExtractor
     /**
      * 获取配置
      *
-     * @return array 提取器配置
-     */
+     * @return array 提取器配�?     */
     public function getConfig(): array
     {
         return $this->config;
@@ -742,7 +674,8 @@ class FeatureExtractor
      */
     public function setConfig(array $config): void
     {
-        $this->validateConfig($config);
+        $this->validateConfig($config];
         $this->config = $config;
     }
 } 
+

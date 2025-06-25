@@ -1,0 +1,268 @@
+{
+    "timestamp": "2025-06-05 13:52:20",
+    "thresholds": {
+        "cpu_usage": 80,
+        "memory_usage": 85,
+        "disk_usage": 90,
+        "response_time": 2000,
+        "error_rate": 5,
+        "connection_count": 400,
+        "cache_hit_rate": 85
+    },
+    "configuration": {
+        "system_metrics": {
+            "cpu": {
+                "metrics": [
+                    "usage_percent",
+                    "load_average"
+                ],
+                "interval": 60,
+                "threshold": 80
+            },
+            "memory": {
+                "metrics": [
+                    "total",
+                    "used",
+                    "free",
+                    "cached"
+                ],
+                "interval": 60,
+                "threshold": 85
+            },
+            "disk": {
+                "metrics": [
+                    "total",
+                    "used",
+                    "free",
+                    "io_read",
+                    "io_write"
+                ],
+                "interval": 300,
+                "threshold": 90
+            },
+            "network": {
+                "metrics": [
+                    "bytes_in",
+                    "bytes_out",
+                    "packets_in",
+                    "packets_out"
+                ],
+                "interval": 60,
+                "threshold": null
+            }
+        },
+        "database_metrics": {
+            "connections": {
+                "metrics": [
+                    "active_connections",
+                    "max_connections",
+                    "connection_errors"
+                ],
+                "interval": 120,
+                "threshold": 400
+            },
+            "performance": {
+                "metrics": [
+                    "query_time",
+                    "slow_queries",
+                    "innodb_buffer_pool_hit_rate"
+                ],
+                "interval": 300,
+                "threshold": null
+            },
+            "replication": {
+                "metrics": [
+                    "slave_lag",
+                    "slave_status"
+                ],
+                "interval": 60,
+                "threshold": null
+            },
+            "storage": {
+                "metrics": [
+                    "table_size",
+                    "index_size",
+                    "data_free"
+                ],
+                "interval": 3600,
+                "threshold": null
+            }
+        },
+        "application_metrics": {
+            "api_performance": {
+                "metrics": [
+                    "response_time",
+                    "throughput",
+                    "error_rate"
+                ],
+                "interval": 60,
+                "endpoints": [
+                    "\/api\/chat",
+                    "\/api\/auth",
+                    "\/api\/user"
+                ],
+                "threshold_response_time": 2000,
+                "threshold_error_rate": 5
+            },
+            "cache_performance": {
+                "metrics": [
+                    "hit_rate",
+                    "miss_rate",
+                    "memory_usage",
+                    "evicted_keys"
+                ],
+                "interval": 120,
+                "threshold": 85
+            },
+            "user_activity": {
+                "metrics": [
+                    "active_users",
+                    "new_registrations",
+                    "login_attempts"
+                ],
+                "interval": 300,
+                "threshold": null
+            },
+            "security_events": {
+                "metrics": [
+                    "failed_logins",
+                    "suspicious_requests",
+                    "blocked_ips"
+                ],
+                "interval": 60,
+                "threshold": 10
+            }
+        },
+        "log_management": {
+            "log_levels": [
+                "ERROR",
+                "WARNING",
+                "INFO"
+            ],
+            "log_rotation": {
+                "max_size": "100MB",
+                "max_files": 7,
+                "compress": true
+            },
+            "log_sources": {
+                "application": {
+                    "path": ".\/logs\/app.log",
+                    "level": "INFO",
+                    "format": "json"
+                },
+                "error": {
+                    "path": ".\/logs\/error.log",
+                    "level": "ERROR",
+                    "format": "json"
+                },
+                "access": {
+                    "path": ".\/logs\/access.log",
+                    "level": "INFO",
+                    "format": "combined"
+                },
+                "security": {
+                    "path": ".\/logs\/security.log",
+                    "level": "WARNING",
+                    "format": "json"
+                }
+            },
+            "log_analysis": {
+                "patterns": {
+                    "error_patterns": [
+                        "ERROR",
+                        "FATAL",
+                        "Exception"
+                    ],
+                    "security_patterns": [
+                        "SQL injection",
+                        "XSS",
+                        "CSRF",
+                        "Unauthorized"
+                    ],
+                    "performance_patterns": [
+                        "slow query",
+                        "timeout",
+                        "memory limit"
+                    ]
+                },
+                "alert_threshold": 5
+            }
+        },
+        "alert_system": {
+            "notification_channels": {
+                "email": {
+                    "enabled": true,
+                    "smtp_host": "smtp.gmail.com",
+                    "smtp_port": 587,
+                    "username": "aoteman2024@gmail.com",
+                    "recipients": [
+                        "admin@alingai.com",
+                        "ops@alingai.com"
+                    ]
+                },
+                "webhook": {
+                    "enabled": true,
+                    "url": "https:\/\/your-domain.com\/webhook\/alerts",
+                    "timeout": 10
+                },
+                "log": {
+                    "enabled": true,
+                    "path": ".\/logs\/alerts.log"
+                }
+            },
+            "alert_rules": {
+                "critical": {
+                    "conditions": [
+                        "cpu_usage > 90",
+                        "memory_usage > 95",
+                        "disk_usage > 95",
+                        "database_connections > 450",
+                        "error_rate > 10"
+                    ],
+                    "notification_delay": 0,
+                    "channels": [
+                        "email",
+                        "webhook",
+                        "log"
+                    ]
+                },
+                "warning": {
+                    "conditions": [
+                        "cpu_usage > 80",
+                        "memory_usage > 85",
+                        "response_time > 2000",
+                        "cache_hit_rate < 85"
+                    ],
+                    "notification_delay": 300,
+                    "channels": [
+                        "log",
+                        "webhook"
+                    ]
+                },
+                "info": {
+                    "conditions": [
+                        "new_user_registration",
+                        "system_startup",
+                        "backup_completed"
+                    ],
+                    "notification_delay": 0,
+                    "channels": [
+                        "log"
+                    ]
+                }
+            },
+            "escalation": {
+                "warning_to_critical": 1800,
+                "max_notifications": 5,
+                "cooldown_period": 3600
+            }
+        }
+    },
+    "config_files": [
+        "prometheus.monitoring.yml",
+        "grafana.dashboard.json",
+        "system_monitor.php",
+        "alert_manager.php",
+        "setup_monitoring_tasks.bat"
+    ]
+}

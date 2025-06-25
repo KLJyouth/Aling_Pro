@@ -1,0 +1,15 @@
+{
+    "name": "alingai/pro",
+    "description": "AlingAi Pro System",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "monolog/monolog": "^2.0",
+        "ext-gd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+} 

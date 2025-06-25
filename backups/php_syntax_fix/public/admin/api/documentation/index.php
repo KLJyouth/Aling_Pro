@@ -1,0 +1,233 @@
+﻿<?php
+/**
+ * AlingAi Pro 6.0 - API文档生成系统
+ * 自动扫描并生成API文档，支持OpenAPI/Swagger格式
+ */
+
+declare(strict_types=1);
+
+header("Content-Type: application/json; charset=utf-8");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
+    http_response_code(200);
+    exit();
+}
+
+require_once __DIR__ . "/../../../../vendor/autoload.php";
+require_once __DIR__ . "/../../../../src/Auth/AdminAuthServiceDemo.php";
+
+use AlingAi\Auth\AdminAuthServiceDemo;
+
+// 响应数据
+function sendResponse($success, $data = null, $message = "", $code = 200)
+{
+    http_response_code($code);
+    echo json_encode([
+        "success" => $success,
+        "data" => $data,
+        "message" => $message,
+        "timestamp" => date("Y-m-d H:i:s")
+    ], JSON_UNESCAPED_UNICODE);
+    exit();
+}
+
+// 错误处理
+function handleError($message, $code = 500) {
+    error_log("API Error: $message");
+    sendResponse(false, null, $message, $code);
+}
+
+// API文档生成器
+function generateApiDocumentation() {
+    return [
+        "openapi" => "3.0.0",
+        "info" => [
+            "title" => "AlingAi Pro API",
+            "description" => "AlingAi Pro API文档系统 - 用户管理、系统监控等功能",
+            "version" => "6.0.0",
+            "contact" => [
+                "name" => "AlingAi Team",
+                "email" => "api@gxggm.com",
+                "url" => "https://alingai.com"
+            ],
+            "license" => [
+                "name" => "MIT",
+                "url" => "https://opensource.org/licenses/MIT"
+            ]
+        ],
+        "servers" => [
+            [
+                "url" => "http://localhost",
+                "description" => "本地开发环境"
+            ],
+            [
+                "url" => "https://api.alingai.com",
+                "description" => "生产环境"
+            ]
+        ],
+        "security" => [
+            ["bearerAuth" => []],
+            ["apiKey" => []]
+        ],
+        "paths" => generateApiPaths(),
+        "components" => generateApiComponents()
+    ];
+}
+
+function generateApiPaths() {
+    return [
+        // 认证相关API
+        "/api/auth/login" => [
+            "post" => [
+                "tags" => ["认证"],
+                "summary" => "用户登录",
+                "description" => "使用用户名/密码进行用户登录",
+                "requestBody" => [
+                    "required" => true,
+                    "content" => [
+                        "application/json" => [
+                            "schema" => [
+                                "type" => "object",
+                                "required" => ["username", "password"],
+                                "properties" => [
+                                    "username" => ["type" => "string", "description" => "用户名或邮箱"],
+                                    "password" => ["type" => "string", "description" => "密码"],
+                                    "remember" => ["type" => "boolean", "description" => "记住登录状态"]
+                                ]
+                            ]
+                        ]
+                    ]
+                ],
+                "responses" => [
+                    "200" => [
+                        "description" => "登录成功",
+                        "content" => [
+                            "application/json" => [
+                                "schema" => ["\$ref" => "#/components/schemas/AuthResponse"]
+                            ]
+                        ]
+                    ],
+                    "401" => ["description" => "认证失败"]
+                ]
+            ]
+        ]
+    ];
+}
+
+function generateApiComponents() {
+    return [
+        "schemas" => [
+            "AuthResponse" => [
+                "type" => "object",
+                "properties" => [
+                    "success" => ["type" => "boolean"],
+                    "data" => [
+                        "type" => "object",
+                        "properties" => [
+                            "token" => ["type" => "string"],
+                            "user" => ["\$ref" => "#/components/schemas/User"]
+                        ]
+                    ],
+                    "message" => ["type" => "string"]
+                ]
+            ],
+            "User" => [
+                "type" => "object",
+                "properties" => [
+                    "id" => ["type" => "integer"],
+                    "username" => ["type" => "string"],
+                    "email" => ["type" => "string"],
+                    "avatar" => ["type" => "string"],
+                    "role" => ["type" => "string"]
+                ]
+            ]
+        ],
+        "securitySchemes" => [
+            "bearerAuth" => [
+                "type" => "http",
+                "scheme" => "bearer",
+                "bearerFormat" => "JWT"
+            ],
+            "apiKey" => [
+                "type" => "apiKey",
+                "in" => "header",
+                "name" => "X-API-Key"
+            ]
+        ]
+    ];
+}
+
+// 授权验证
+function authenticateRequest() {
+    $auth = new AdminAuthServiceDemo();
+    
+    // 尝试获取授权信息
+    $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
+    $apiKey = $_SERVER["HTTP_X_API_KEY"] ?? "";
+    
+    if (empty($authHeader) && empty($apiKey)) {
+        handleError("未提供认证信息", 401);
+    }
+    
+    // 检查Bearer Token
+    if (!empty($authHeader)) {
+        $token = str_replace("Bearer ", "", $authHeader);
+        if (!$auth->validateToken($token)) {
+            handleError("无效令牌", 401);
+        }
+        return $auth->getUserFromToken($token);
+    }
+    
+    // 检查API Key
+    if (!empty($apiKey)) {
+        if (!$auth->validateApiKey($apiKey)) {
+            handleError("无效的API密钥", 401);
+        }
+        return $auth->getUserFromApiKey($apiKey);
+    }
+    
+    handleError("认证失败", 401);
+}
+
+// 生产环境
+function handleRequest() {
+    $method = $_SERVER["REQUEST_METHOD"];
+    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+    $pathParts = explode("/", trim($path, "/"));
+    $action = $pathParts[count($pathParts) - 1] ?? "";
+    
+    // 处理OPTIONS请求的CORS预检响应和前置处理
+    if ($method === "OPTIONS") {
+        return;
+    }
+    
+    // 根据路径和方法分发请求
+    switch ($action) {
+        case "schema":
+            // 获取API文档结构
+            sendResponse(true, generateApiDocumentation(), "成功获取API文档");
+                        break;
+            
+                    default:
+            // 默认返回完整的API文档
+            $docs = generateApiDocumentation();
+            sendResponse(true, $docs, "成功获取API文档");
+    }
+}
+
+// 执生产环境
+try {
+    handleRequest();
+} catch (Exception $e) {
+    handleError("处理请求时发生错误: " . $e->getMessage(), 500);
+}
+
+
+
+
+
+
+

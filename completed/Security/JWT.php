@@ -19,12 +19,12 @@ class JWTManager
     public function generateToken(array $payload): string
     {
         $payload['exp'] = time() + $this->expiresIn;
-        return JWT::encode($payload, $this->secretKey, $this->algorithm);
+        return JWT::encode($payload, $this->secretKey, $this->algorithm];
     }
 
     public function decodeToken(string $token): object
     {
-        return JWT::decode($token, new Key($this->secretKey, $this->algorithm));
+        return JWT::decode($token, new Key($this->secretKey, $this->algorithm)];
     }
 
     public function getExpiresIn(): int

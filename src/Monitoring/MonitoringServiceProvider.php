@@ -11,7 +11,7 @@ use AlingAi\Monitoring\Alert\Channel\SmsChannel;
 use AlingAi\Monitoring\Alert\Channel\WebhookChannel;
 use AlingAi\Monitoring\HealthCheck\HealthCheckService;
 use AlingAi\Monitoring\Scheduler\MonitoringScheduler;
-use Psr\Container\ContainerInterface;
+use AlingAi\Core\Container;
 use Psr\Log\LoggerInterface;
 use PDO;
 
@@ -23,16 +23,16 @@ class MonitoringServiceProvider
     /**
      * 注册服务
      */
-    public function register(ContainerInterface $container): void
+    public function register(Container $container): void
     {
         // 注册配置
-        $container->set(GatewayConfig::class, function(ContainerInterface $c) {
+        $container->set(GatewayConfig::class, function(Container $c) {
             $configPath = $c->get('config')['monitoring']['config_path'] ?? __DIR__ . '/../../config/monitoring.json';
             return new GatewayConfig($configPath, $c->get(LoggerInterface::class));
         });
         
         // 注册存储
-        $container->set(MetricsStorageInterface::class, function(ContainerInterface $c) {
+        $container->set(MetricsStorageInterface::class, function(Container $c) {
             $dbConfig = $c->get('config')['monitoring']['database'] ?? [];
             
             $dsn = sprintf(
@@ -59,7 +59,7 @@ class MonitoringServiceProvider
         });
         
         // 注册告警管理器
-        $container->set(AlertManager::class, function(ContainerInterface $c) {
+        $container->set(AlertManager::class, function(Container $c) {
             $alertManager = new AlertManager($c->get(LoggerInterface::class));
             
             // 添加告警通道
@@ -98,7 +98,7 @@ class MonitoringServiceProvider
         });
         
         // 注册API网关
-        $container->set(ApiGateway::class, function(ContainerInterface $c) {
+        $container->set(ApiGateway::class, function(Container $c) {
             return new ApiGateway(
                 $c->get(MetricsStorageInterface::class),
                 $c->get(GatewayConfig::class),
@@ -107,7 +107,7 @@ class MonitoringServiceProvider
         });
         
         // 注册健康检查服务
-        $container->set(HealthCheckService::class, function(ContainerInterface $c) {
+        $container->set(HealthCheckService::class, function(Container $c) {
             return new HealthCheckService(
                 $c->get(MetricsStorageInterface::class),
                 $c->get(ApiGateway::class),
@@ -117,7 +117,7 @@ class MonitoringServiceProvider
         });
         
         // 注册监控调度器
-        $container->set(MonitoringScheduler::class, function(ContainerInterface $c) {
+        $container->set(MonitoringScheduler::class, function(Container $c) {
             return new MonitoringScheduler(
                 $c->get(HealthCheckService::class),
                 $c->get(MetricsStorageInterface::class),
@@ -130,7 +130,7 @@ class MonitoringServiceProvider
     /**
      * 启动服务
      */
-    public function boot(ContainerInterface $container): void
+    public function boot(Container $container): void
     {
         // 如果需要在应用启动时执行一些操作，可以在这里实现
         // 例如，启动监控调度器
@@ -146,7 +146,7 @@ class MonitoringServiceProvider
     /**
      * 在后台启动调度器
      */
-    private function startSchedulerInBackground(ContainerInterface $container): void
+    private function startSchedulerInBackground(Container $container): void
     {
         $logger = $container->get(LoggerInterface::class);
         

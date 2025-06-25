@@ -6,7 +6,7 @@ use App\AI\MachineLearning;
 use App\Core\Database;
 
 /**
- * ModelTrainer 类
+ * ModelTrainer �?
  * 
  * 模型训练器，用于训练和微调AI模型
  *
@@ -15,7 +15,7 @@ use App\Core\Database;
 class ModelTrainer
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -56,7 +56,7 @@ class ModelTrainer
     }
 
     /**
-     * 分割数据集
+     * 分割数据�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

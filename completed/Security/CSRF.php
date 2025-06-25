@@ -5,7 +5,7 @@ namespace App\Security;
 use App\Core\Session;
 
 /**
- * CSRF 类
+ * CSRF �?
  * 
  * CSRF防护，生成和验证CSRF令牌
  *
@@ -14,11 +14,11 @@ use App\Core\Session;
 class CSRF
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
@@ -55,7 +55,7 @@ class CSRF
     }
 
     /**
-     * 获取令牌值
+     * 获取令牌�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

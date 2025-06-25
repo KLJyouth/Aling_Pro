@@ -14,7 +14,7 @@
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Core;
 
@@ -43,7 +43,7 @@ use AlingAi\Services\AuthService;
  * Integrates all Three Complete Compilation components
  */
 /**
- * AlingAiProApplication ç±»
+ * AlingAiProApplication ç±?
  *
  * @package AlingAi\Core
  */
@@ -61,7 +61,7 @@ class AlingAiProApplication implements RequestHandlerInterface
      */
     public static function create(): self
     {
-        return new self();
+        return new self(];
     }
     
     /**
@@ -82,13 +82,13 @@ class AlingAiProApplication implements RequestHandlerInterface
     public function __construct()
     {
         // Initialize core components
-        $this->initializeContainer();
-        $this->initializeLogger();
-        $this->registerServices();
-        $this->initializeApplication();
-        $this->configureMiddleware();
-        $this->setupRouting();
-        $this->performSystemInitialization();
+        $this->initializeContainer(];
+        $this->initializeLogger(];
+        $this->registerServices(];
+        $this->initializeApplication(];
+        $this->configureMiddleware(];
+        $this->setupRouting(];
+        $this->performSystemInitialization(];
     }
     
     /**
@@ -106,12 +106,12 @@ class AlingAiProApplication implements RequestHandlerInterface
 
     private function initializeContainer(): void
     {
-        $this->container = new Container();
+        $this->container = new Container(];
         
         // Register core services
         $this->container->set('logger', function() {
             return $this->logger;
-        });
+        }];
     }
     
     /**
@@ -129,30 +129,30 @@ class AlingAiProApplication implements RequestHandlerInterface
 
     private function initializeLogger(): void
     {
-        $this->logger = new Logger('AlingAiPro');
+        $this->logger = new Logger('AlingAiPro'];
         
         // Development handler
         if (getenv('APP_ENV') === 'development') {
-            $this->logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
+            $this->logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG)];
         }
         
         // Production handlers
         $logPath = APP_ROOT . '/storage/logs';
         if (!is_dir($logPath)) {
-            mkdir($logPath, 0755, true);
+            mkdir($logPath, 0755, true];
         }
         
         $this->logger->pushHandler(new RotatingFileHandler(
             $logPath . '/application.log',
             0,
             Logger::INFO
-        ));
+        )];
         
         $this->logger->pushHandler(new RotatingFileHandler(
             $logPath . '/error.log',
             0,
             Logger::ERROR
-        ));
+        )];
     }
     
     /**
@@ -172,54 +172,54 @@ class AlingAiProApplication implements RequestHandlerInterface
     {
         // Database Service
         $this->container->set(DatabaseService::class, function() {
-            return new DatabaseService();
-        });
+            return new DatabaseService(];
+        }];
         
         // Cache Service
         $this->container->set(CacheService::class, function() {
-            return new CacheService();
-        });
+            return new CacheService(];
+        }];
         
         // Auth Service
         $this->container->set(AuthService::class, function() {
             return new AuthService(
-                $this->container->get(DatabaseService::class),
+                $this->container->get(DatabaseService::class],
                 $this->container->get(CacheService::class)
-            );
-        });
+            ];
+        }];
         
         // Frontend Controller
         $this->container->set(FrontendController::class, function() {
             return new FrontendController(
-                $this->container->get(DatabaseService::class),
+                $this->container->get(DatabaseService::class],
                 $this->container->get(AuthService::class)
-            );
-        });
+            ];
+        }];
         
         // 3D Threat Visualization Controller
         $this->container->set(Enhanced3DThreatVisualizationController::class, function() {
             return new Enhanced3DThreatVisualizationController(
                 $this->container->get(DatabaseService::class)
-            );
-        });
+            ];
+        }];
         
         // Enhanced Agent Coordinator
         $this->container->set(EnhancedAgentCoordinator::class, function() {
             $coordinator = new EnhancedAgentCoordinator(
                 $this->container->get(DatabaseService::class)
-            );
+            ];
             $this->agentCoordinator = $coordinator;
             return $coordinator;
-        });
+        }];
         
         // Database Config Migration Service
         $this->container->set(DatabaseConfigMigrationService::class, function() {
             $service = new DatabaseConfigMigrationService(
                 $this->container->get(DatabaseService::class)
-            );
+            ];
             $this->configMigration = $service;
             return $service;
-        });
+        }];
     }
     
     /**
@@ -237,23 +237,23 @@ class AlingAiProApplication implements RequestHandlerInterface
 
     private function initializeApplication(): void
     {
-        AppFactory::setContainer($this->container);
-        $this->app = AppFactory::create();
+        AppFactory::setContainer($this->container];
+        $this->app = AppFactory::create(];
         
         // Add routing middleware
-        $this->app->addRoutingMiddleware();
+        $this->app->addRoutingMiddleware(];
         
         // Add error middleware
         $errorMiddleware = $this->app->addErrorMiddleware(
             getenv('APP_ENV') === 'development',
             true,
             true
-        );
+        ];
         
         $errorMiddleware->setErrorHandler(
             \Slim\Exception\HttpNotFoundException::class,
             [$this, 'handleNotFound']
-        );
+        ];
     }
     
     /**
@@ -273,29 +273,29 @@ class AlingAiProApplication implements RequestHandlerInterface
     {
         // CORS middleware
         $this->app->add(function (ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-            $response = $handler->handle($request);
+            $response = $handler->handle($request];
             
             return $response
                 ->withHeader('Access-Control-Allow-Origin', '*')
                 ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS')
-                ->withHeader('Access-Control-Allow-Credentials', 'true');
-        });
+                ->withHeader('Access-Control-Allow-Credentials', 'true'];
+        }];
         
         // Security headers middleware
         $this->app->add(function (ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface {
-            $response = $handler->handle($request);
+            $response = $handler->handle($request];
             
             return $response
                 ->withHeader('X-Content-Type-Options', 'nosniff')
                 ->withHeader('X-Frame-Options', 'DENY')
                 ->withHeader('X-XSS-Protection', '1; mode=block')
                 ->withHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
-                ->withHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *");
-        });
+                ->withHeader('Content-Security-Policy', "default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: *"];
+        }];
         
         // Body parsing middleware
-        $this->app->addBodyParsingMiddleware();
+        $this->app->addBodyParsingMiddleware(];
     }
     
     /**
@@ -314,15 +314,15 @@ class AlingAiProApplication implements RequestHandlerInterface
     private function setupRouting(): void
     {
         $this->router = new CompleteRouterIntegration(
-            $this->container->get(FrontendController::class),
-            $this->container->get(Enhanced3DThreatVisualizationController::class),
-            $this->container->get(EnhancedAgentCoordinator::class),
+            $this->container->get(FrontendController::class],
+            $this->container->get(Enhanced3DThreatVisualizationController::class],
+            $this->container->get(EnhancedAgentCoordinator::class],
             $this->container->get(DatabaseConfigMigrationService::class)
-        );
+        ];
         
-        $this->router->registerRoutes($this->app);
+        $this->router->registerRoutes($this->app];
         
-        $this->logger->info('Complete router integration initialized with all enhanced components');
+        $this->logger->info('Complete router integration initialized with all enhanced components'];
     }
     
     /**
@@ -343,17 +343,17 @@ class AlingAiProApplication implements RequestHandlerInterface
         try {
             // Check and migrate configuration if needed
             if ($this->configMigration && file_exists(APP_ROOT . '/.env')) {
-                $envVars = $this->parseEnvFile(APP_ROOT . '/.env');
+                $envVars = $this->parseEnvFile(APP_ROOT . '/.env'];
                 if (!empty($envVars)) {
-                    $this->configMigration->migrateFromEnv($envVars);
-                    $this->logger->info('Configuration migration completed successfully');
+                    $this->configMigration->migrateFromEnv($envVars];
+                    $this->logger->info('Configuration migration completed successfully'];
                 }
             }
             
             // Initialize AI agent system
             if ($this->agentCoordinator) {
-                $this->agentCoordinator->initializeAgentSystem();
-                $this->logger->info('AI Agent System initialized');
+                $this->agentCoordinator->initializeAgentSystem(];
+                $this->logger->info('AI Agent System initialized'];
             }
             
             // Log system startup
@@ -361,15 +361,15 @@ class AlingAiProApplication implements RequestHandlerInterface
                 'version' => APP_VERSION,
                 'environment' => getenv('APP_ENV') ?: 'production',
                 'php_version' => PHP_VERSION,
-                'memory_limit' => ini_get('memory_limit'),
+                'memory_limit' => ini_get('memory_limit'],
                 'timestamp' => date('Y-m-d H:i:s')
-            ]);
+            ]];
             
         } catch (\Exception $e) {
             $this->logger->error('System initialization error: ' . $e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString()
-            ]);
+            ]];
         }
     }
     
@@ -395,12 +395,12 @@ class AlingAiProApplication implements RequestHandlerInterface
         }
         
         $envVars = [];
-        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES];
         
         foreach ($lines as $line) {
-            if (strpos($line, '=') !== false && !str_starts_with(trim($line), '#')) {
-                [$key, $value] = explode('=', $line, 2);
-                $envVars[trim($key)] = trim($value, '"\'');
+            if (strpos($line, '=') !== false && !str_starts_with(trim($line], '#')) {
+                [$key, $value] = explode('=', $line, 2];
+                $envVars[trim($key)] = trim($value, '"\''];
             }
         }
         
@@ -428,23 +428,23 @@ class AlingAiProApplication implements RequestHandlerInterface
 
     public function handleNotFound(ServerRequestInterface $request, \Throwable $exception, bool $displayErrorDetails): ResponseInterface
     {
-        $response = $this->app->getResponseFactory()->createResponse(404);
+        $response = $this->app->getResponseFactory()->createResponse(404];
         
         // Check if this is an API request
-        $path = $request->getUri()->getPath();
+        $path = $request->getUri()->getPath(];
         if (str_starts_with($path, '/api/')) {
             $response->getBody()->write(json_encode([
                 'error' => 'Not Found',
                 'message' => 'The requested API endpoint was not found',
                 'path' => $path
-            ]));
-            return $response->withHeader('Content-Type', 'application/json');
+            ])];
+            return $response->withHeader('Content-Type', 'application/json'];
         }
         
         // For web requests, redirect to main page
         return $response
             ->withHeader('Location', '/')
-            ->withStatus(302);
+            ->withStatus(302];
     }
     
     /**
@@ -464,7 +464,7 @@ class AlingAiProApplication implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return $this->app->handle($request);
+        return $this->app->handle($request];
     }
     
     /**
@@ -483,25 +483,25 @@ class AlingAiProApplication implements RequestHandlerInterface
     public function run(): void
     {
         try {
-            $this->app->run();
+            $this->app->run(];
         } catch (\Throwable $e) {
             $this->logger->error('Application runtime error: ' . $e->getMessage(), [
                 'exception' => $e,
                 'trace' => $e->getTraceAsString(),
                 'request_uri' => $_SERVER['REQUEST_URI'] ?? 'unknown',
                 'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown'
-            ]);
+            ]];
             
             // Show friendly error page in production
             if (getenv('APP_ENV') !== 'development') {
-                http_response_code(500);
-                header('Content-Type: application/json');
+                http_response_code(500];
+                header('Content-Type: application/json'];
                 echo json_encode([
                     'error' => 'Internal Server Error',
                     'message' => 'An unexpected error occurred. Please try again later.',
-                    'timestamp' => date('Y-m-d H:i:s'),
+                    'timestamp' => date('Y-m-d H:i:s'],
                     'support' => 'Contact system administrator if the problem persists'
-                ]);
+                ]];
             } else {
                 throw $e;
             }
@@ -564,10 +564,10 @@ class AlingAiProApplication implements RequestHandlerInterface
             'version' => APP_VERSION,
             'environment' => getenv('APP_ENV') ?: 'production',
             'php_version' => PHP_VERSION,
-            'memory_usage' => memory_get_usage(true),
-            'memory_peak' => memory_get_peak_usage(true),
+            'memory_usage' => memory_get_usage(true],
+            'memory_peak' => memory_get_peak_usage(true],
             'uptime' => time() - (int)APP_START_TIME,
-            'timestamp' => date('Y-m-d H:i:s'),
+            'timestamp' => date('Y-m-d H:i:s'],
             'components' => [
                 'frontend_controller' => 'active',
                 'agent_coordinator' => 'active',
@@ -578,3 +578,4 @@ class AlingAiProApplication implements RequestHandlerInterface
         ];
     }
 }
+

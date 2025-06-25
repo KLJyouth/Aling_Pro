@@ -7,11 +7,11 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 
 /**
- * 增强的智能体协调器
- * 实现企业级AI任务分配和协调功能
+ * 增强的智能体协调�?
+ * 实现企业级AI任务分配和协调功�?
  */
 /**
- * EnhancedAgentCoordinator 类
+ * EnhancedAgentCoordinator �?
  *
  * @package AlingAi\AI
  */
@@ -53,10 +53,10 @@ class EnhancedAgentCoordinator
         $this->httpClient = $httpClient ?? new Client([
             'timeout' => 30,
             'verify' => false // 生产环境中应该设置为true
-        ]);
+        ]];
         $this->deepseekApiUrl = $_ENV['DEEPSEEK_API_URL'] ?? 'https://api.deepseek.com/v1/chat/completions';
         $this->apiKey = $_ENV['DEEPSEEK_API_KEY'] ?? '';
-        $this->initializeAgents();
+        $this->initializeAgents(];
     }
 
     /**
@@ -76,22 +76,22 @@ class EnhancedAgentCoordinator
     {
         $this->agents = [
             'content_generator' => [
-                'name' => '内容生成智能体',
-                'capabilities' => ['content_creation', 'writing', 'translation'],
+                'name' => '内容生成智能�?,
+                'capabilities' => ['content_creation', 'writing', 'translation'], 
                 'load' => 0,
                 'max_concurrent_tasks' => 5,
                 'performance_score' => 100
-            ],
+            ], 
             'data_analyzer' => [
-                'name' => '数据分析智能体',
-                'capabilities' => ['data_analysis', 'statistics', 'reporting'],
+                'name' => '数据分析智能�?,
+                'capabilities' => ['data_analysis', 'statistics', 'reporting'], 
                 'load' => 0,
                 'max_concurrent_tasks' => 3,
                 'performance_score' => 100
-            ],
+            ], 
             'code_assistant' => [
-                'name' => '代码助手智能体',
-                'capabilities' => ['coding', 'debugging', 'code_review'],
+                'name' => '代码助手智能�?,
+                'capabilities' => ['coding', 'debugging', 'code_review'], 
                 'load' => 0,
                 'max_concurrent_tasks' => 4,
                 'performance_score' => 100
@@ -100,7 +100,7 @@ class EnhancedAgentCoordinator
     }
 
     /**
-     * 获取系统状态
+     * 获取系统状�?
      */
     /**
 
@@ -116,8 +116,8 @@ class EnhancedAgentCoordinator
     {
         return [
             'status' => $this->coordinatorStatus,
-            'active_agents' => count($this->agents),
-            'queue_length' => count($this->taskQueue),
+            'active_agents' => count($this->agents],
+            'queue_length' => count($this->taskQueue],
             'total_processed' => $this->getTotalProcessedTasks(),
             'performance_summary' => $this->getPerformanceSummary()
         ];
@@ -138,7 +138,7 @@ class EnhancedAgentCoordinator
 
     private function getTotalProcessedTasks(): int
     {
-        return array_sum(array_column($this->performanceMetrics, 'completed_tasks'));
+        return array_sum(array_column($this->performanceMetrics, 'completed_tasks')];
     }
 
     /**
@@ -164,12 +164,12 @@ class EnhancedAgentCoordinator
             ];
         }
 
-        $totalTasks = $this->getTotalProcessedTasks();
-        $totalResponseTime = array_sum(array_column($this->performanceMetrics, 'avg_response_time'));
+        $totalTasks = $this->getTotalProcessedTasks(];
+        $totalResponseTime = array_sum(array_column($this->performanceMetrics, 'avg_response_time')];
         $avgResponseTime = $totalTasks > 0 ? $totalResponseTime / count($this->performanceMetrics) : 0;
 
         return [
-            'average_response_time' => round($avgResponseTime, 2),
+            'average_response_time' => round($avgResponseTime, 2],
             'success_rate' => 95.5,
             'total_tasks' => $totalTasks
         ];
@@ -195,31 +195,31 @@ class EnhancedAgentCoordinator
     public function assignTask(string $taskDescription, array $context = []): array
     {
         try {
-            $this->logger->info('开始任务分配', ['task' => $taskDescription]);
+            $this->logger->info('开始任务分�?, ['task' => $taskDescription]];
             
             // 使用DeepSeek API进行任务分析
-            $taskAnalysis = $this->analyzeTaskWithDeepSeek($taskDescription, $context);
+            $taskAnalysis = $this->analyzeTaskWithDeepSeek($taskDescription, $context];
             
             // 选择最佳智能体
-            $selectedAgent = $this->selectBestAgent($taskAnalysis);
+            $selectedAgent = $this->selectBestAgent($taskAnalysis];
             
             if (!$selectedAgent) {
-                throw new \Exception('无法找到合适的智能体处理此任务');
+                throw new \Exception('无法找到合适的智能体处理此任务'];
             }
 
             // 生成任务ID
-            $taskId = $this->generateTaskId();
+            $taskId = $this->generateTaskId(];
             
             // 执行任务分配
-            $assignmentResult = $this->executeTaskAssignment($taskId, $selectedAgent, $taskAnalysis);
+            $assignmentResult = $this->executeTaskAssignment($taskId, $selectedAgent, $taskAnalysis];
             
             // 更新性能指标
             $this->updatePerformanceMetrics($selectedAgent, [
                 'task_id' => $taskId,
-                'completion_time' => microtime(true),
+                'completion_time' => microtime(true],
                 'success' => true,
                 'confidence' => $taskAnalysis['confidence'] ?? 0
-            ]);
+            ]];
             
             return [
                 'success' => true,
@@ -230,7 +230,7 @@ class EnhancedAgentCoordinator
             ];
             
         } catch (\Exception $e) {
-            $this->logger->error('任务分配失败', ['error' => $e->getMessage()]);
+            $this->logger->error('任务分配失败', ['error' => $e->getMessage()]];
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
@@ -254,36 +254,36 @@ class EnhancedAgentCoordinator
 
     private function analyzeTaskWithDeepSeek(string $taskDescription, array $context): array
     {
-        $prompt = $this->buildTaskAnalysisPrompt($taskDescription, $context);
+        $prompt = $this->buildTaskAnalysisPrompt($taskDescription, $context];
         
         try {
             $response = $this->httpClient->post($this->deepseekApiUrl, [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->apiKey,
                     'Content-Type' => 'application/json',
-                ],
+                ], 
                 'json' => [
                     'model' => 'deepseek-chat',
                     'messages' => [
                         ['role' => 'user', 'content' => $prompt]
-                    ],
+                    ], 
                     'max_tokens' => 500,
                     'temperature' => 0.3
-                ],
+                ], 
                 'verify' => false
-            ]);
+            ]];
 
-            $data = json_decode($response->getBody()->getContents(), true);
+            $data = json_decode($response->getBody()->getContents(), true];
             
             if (isset($data['choices'][0]['message']['content'])) {
-                return $this->parseTaskAnalysis($data['choices'][0]['message']['content']);
+                return $this->parseTaskAnalysis($data['choices'][0]['message']['content']];
             }
             
-            throw new \Exception('DeepSeek API响应格式错误');
+            throw new \Exception('DeepSeek API响应格式错误'];
             
         } catch (RequestException $e) {
-            $this->logger->warning('DeepSeek API调用失败，使用本地分析', ['error' => $e->getMessage()]);
-            return $this->fallbackTaskAnalysis($taskDescription, $context);
+            $this->logger->warning('DeepSeek API调用失败，使用本地分�?, ['error' => $e->getMessage()]];
+            return $this->fallbackTaskAnalysis($taskDescription, $context];
         }
     }
 
@@ -306,7 +306,7 @@ class EnhancedAgentCoordinator
 
     private function buildTaskAnalysisPrompt(string $taskDescription, array $context): string
     {
-        $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE) : '无';
+        $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE) : '�?;
         
         return "请分析以下任务并提供JSON格式的分析结果：
 
@@ -315,11 +315,11 @@ class EnhancedAgentCoordinator
 
 请返回JSON格式，包含以下字段：
 - task_type: 任务类型
-- complexity: 复杂度（1-10）
+- complexity: 复杂度（1-10�?
 - required_capabilities: 所需能力列表
 - estimated_time: 预估处理时间（分钟）
-- confidence: 分析置信度（0-1）
-- priority: 优先级（low/medium/high）";
+- confidence: 分析置信度（0-1�?
+- priority: 优先级（low/medium/high�?;
     }
 
     /**
@@ -341,20 +341,20 @@ class EnhancedAgentCoordinator
     {
         // 尝试提取JSON
         if (preg_match('/\{.*\}/s', $content, $matches)) {
-            $json = json_decode($matches[0], true);
+            $json = json_decode($matches[0],  true];
             if ($json) {
                 return array_merge([
                     'task_type' => 'general',
                     'complexity' => 5,
-                    'required_capabilities' => ['general'],
+                    'required_capabilities' => ['general'], 
                     'estimated_time' => 10,
                     'confidence' => 0.8,
                     'priority' => 'medium'
-                ], $json);
+                ],  $json];
             }
         }
         
-        return $this->fallbackTaskAnalysis('', []);
+        return $this->fallbackTaskAnalysis('', []];
     }
 
     /**
@@ -388,7 +388,7 @@ class EnhancedAgentCoordinator
         return [
             'task_type' => $isCodeTask ? 'coding' : 'general',
             'complexity' => 5,
-            'required_capabilities' => $isCodeTask ? ['coding'] : ['general'],
+            'required_capabilities' => $isCodeTask ? ['coding'] : ['general'], 
             'estimated_time' => 10,
             'confidence' => 0.7,
             'priority' => 'medium'
@@ -420,7 +420,7 @@ class EnhancedAgentCoordinator
                 continue; // 智能体已满载
             }
 
-            $score = $this->calculateAgentScore($agent, $taskAnalysis);
+            $score = $this->calculateAgentScore($agent, $taskAnalysis];
             if ($score > $bestScore) {
                 $bestScore = $score;
                 $bestAgent = $agentId;
@@ -431,7 +431,7 @@ class EnhancedAgentCoordinator
     }
 
     /**
-     * 计算智能体匹配分数
+     * 计算智能体匹配分�?
      */
     /**
 
@@ -453,7 +453,7 @@ class EnhancedAgentCoordinator
         $requiredCapabilities = $taskAnalysis['required_capabilities'] ?? [];
 
         foreach ($requiredCapabilities as $capability) {
-            if (in_array($capability, $agent['capabilities'])) {
+            if (in_[$capability, $agent['capabilities'])) {
                 $capabilityScore += 10;
             }
         }
@@ -485,7 +485,7 @@ class EnhancedAgentCoordinator
 
     private function executeTaskAssignment(string $taskId, string $agentId, array $taskAnalysis): array
     {
-        // 增加智能体负载
+        // 增加智能体负�?
         $this->agents[$agentId]['load']++;
         
         // 将任务添加到队列
@@ -499,7 +499,7 @@ class EnhancedAgentCoordinator
 
         return [
             'task_id' => $taskId,
-            'agent' => $this->agents[$agentId]['name'],
+            'agent' => $this->agents[$agentId]['name'], 
             'status' => 'assigned',
             'estimated_completion' => date('Y-m-d H:i:s', strtotime('+' . $taskAnalysis['estimated_time'] . ' minutes'))
         ];
@@ -536,7 +536,7 @@ class EnhancedAgentCoordinator
         $this->performanceMetrics[$agentId]['completed_tasks']++;
         
         if (isset($metrics['completion_time'])) {
-            $responseTime = $metrics['completion_time'] - (microtime(true) - 1);
+            $responseTime = $metrics['completion_time'] - (microtime(true) - 1];
             $this->performanceMetrics[$agentId]['total_response_time'] += $responseTime;
             $this->performanceMetrics[$agentId]['avg_response_time'] = 
                 $this->performanceMetrics[$agentId]['total_response_time'] / 
@@ -559,7 +559,7 @@ class EnhancedAgentCoordinator
 
     private function generateTaskId(): string
     {
-        return 'task_' . uniqid() . '_' . time();
+        return 'task_' . uniqid() . '_' . time(];
     }
 
     /**
@@ -578,8 +578,8 @@ class EnhancedAgentCoordinator
     public function getAgentPerformanceReport(): array
     {
         $report = [
-            'total_agents' => count($this->agents),
-            'active_tasks' => count($this->taskQueue),
+            'total_agents' => count($this->agents],
+            'active_tasks' => count($this->taskQueue],
             'total_tasks' => 0,
             'agents' => []
         ];
@@ -592,10 +592,10 @@ class EnhancedAgentCoordinator
             ];
 
             $report['agents'][$agentId] = [
-                'name' => $agent['name'],
+                'name' => $agent['name'], 
                 'status' => $agent['load'] > 0 ? 'busy' : 'idle',
-                'current_load' => $agent['load'],
-                'max_capacity' => $agent['max_concurrent_tasks'],
+                'current_load' => $agent['load'], 
+                'max_capacity' => $agent['max_concurrent_tasks'], 
                 'performance' => $metrics
             ];
 
@@ -606,7 +606,7 @@ class EnhancedAgentCoordinator
     }
 
     /**
-     * 获取任务队列状态
+     * 获取任务队列状�?
      */
     /**
 
@@ -621,10 +621,10 @@ class EnhancedAgentCoordinator
     public function getTaskQueueStatus(): array
     {
         return [
-            'total_tasks' => count($this->taskQueue),
+            'total_tasks' => count($this->taskQueue],
             'pending_tasks' => count(array_filter($this->taskQueue, function($task) {
                 return $task['status'] === 'assigned';
-            })),
+            })],
             'tasks' => array_values($this->taskQueue)
         ];
     }
@@ -655,17 +655,17 @@ class EnhancedAgentCoordinator
         $task = $this->taskQueue[$taskId];
         $agentId = $task['agent_id'];
 
-        // 减少智能体负载
+        // 减少智能体负�?
         if ($this->agents[$agentId]['load'] > 0) {
             $this->agents[$agentId]['load']--;
         }
 
-        // 更新任务状态
+        // 更新任务状�?
         $this->taskQueue[$taskId]['status'] = 'completed';
-        $this->taskQueue[$taskId]['completed_at'] = date('Y-m-d H:i:s');
+        $this->taskQueue[$taskId]['completed_at'] = date('Y-m-d H:i:s'];
         $this->taskQueue[$taskId]['result'] = $result;
 
-        $this->logger->info('任务完成', ['task_id' => $taskId, 'agent' => $agentId]);
+        $this->logger->info('任务完成', ['task_id' => $taskId, 'agent' => $agentId]];
 
         return true;
     }
@@ -685,17 +685,18 @@ class EnhancedAgentCoordinator
 
     public function getHealthStatus(): array
     {
-        $totalLoad = array_sum(array_column($this->agents, 'load'));
-        $maxCapacity = array_sum(array_column($this->agents, 'max_concurrent_tasks'));
+        $totalLoad = array_sum(array_column($this->agents, 'load')];
+        $maxCapacity = array_sum(array_column($this->agents, 'max_concurrent_tasks')];
         $utilization = $maxCapacity > 0 ? ($totalLoad / $maxCapacity) * 100 : 0;
 
         return [
-            'status' => $utilization < 80 ? 'healthy' : ($utilization < 95 ? 'warning' : 'critical'),
-            'utilization_rate' => round($utilization, 2),
+            'status' => $utilization < 80 ? 'healthy' : ($utilization < 95 ? 'warning' : 'critical'],
+            'utilization_rate' => round($utilization, 2],
             'active_agents' => count(array_filter($this->agents, function($agent) {
                 return $agent['load'] > 0;
-            })),
+            })],
             'queue_health' => count($this->taskQueue) < 100 ? 'good' : 'high_load'
         ];
     }
 }
+

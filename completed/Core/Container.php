@@ -4,16 +4,16 @@ namespace App\Core;
 
 
 /**
- * Container 类
+ * Container �?
  * 
- * 依赖注入容器，负责管理类的依赖和实例化
+ * 依赖注入容器，负责管理类的依赖和实例�?
  *
  * @package App\Core
  */
 class Container
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Container
     }
 
     /**
-     * 绑定接口到实现
+     * 绑定接口到实�?
      *
      * @return mixed
      */

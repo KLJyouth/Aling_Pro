@@ -1,18 +1,18 @@
-ï»¿<?php
+<?php
 /**
- * ç®€åŒ–WebSocketè·¯ç”±å¤„ç†å™¨
- * å¤„ç† /ws è·¯å¾„çš„WebSocketè¿žæŽ¥
+ * ¼ò»¯WebSocketÂ·ÓÉ´¦ÀíÆ÷
+ * ´¦Àí /ws Â·¾¶µÄWebSocketÁ¬½Ó
  */
 
-// è®¾ç½®å“åº”å¤´
-header('HTTP/1.1 101 Switching Protocols');
-header('Upgrade: websocket');
-header('Connection: Upgrade');
-header('Sec-WebSocket-Accept: ' . base64_encode(pack('H*', sha1($_SERVER['HTTP_SEC_WEBSOCKET_KEY'] . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11'))));
+// ÉèÖÃÏìÓ¦Í·
+header('HTTP/1.1 101 Switching Protocols'];
+header('Upgrade: websocket'];
+header('Connection: Upgrade'];
+header('Sec-WebSocket-Accept: ' . base64_encode(pack('H*', sha1($_SERVER['HTTP_SEC_WEBSOCKET_KEY'] . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')))];
 
-// æ¨¡æ‹ŸWebSocketå¤„ç†ï¼ˆéœ€è¦å®žé™…çš„WebSocketåº“ï¼‰
-echo "WebSocketå‡çº§æˆåŠŸ\n";
+// Ä£ÄâWebSocket´¦Àí£¨ÐèÒªÊµ¼ÊµÄWebSocket¿â£©
+echo "WebSocketÉý¼¶³É¹¦\n";
 
-// è¿™é‡Œåº”è¯¥å»ºç«‹çœŸå®žçš„WebSocketè¿žæŽ¥
-// ç”±äºŽPHPå†…ç½®æœåŠ¡å™¨é™åˆ¶ï¼Œè¿™åªæ˜¯ä¸€ä¸ªå ä½ç¬¦
+// ÕâÀïÓ¦¸Ã½¨Á¢ÕæÊµµÄWebSocketÁ¬½Ó
+// ÓÉÓÚPHPÄÚÖÃ·þÎñÆ÷ÏÞÖÆ£¬ÕâÖ»ÊÇÒ»¸öÕ¼Î»·û
 exit;

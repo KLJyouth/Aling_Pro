@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * AlingAi Pro API - Login Endpoint
  * 
@@ -7,31 +7,31 @@
 
 // Verify request method
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
+    http_response_code(405];
     echo json_encode([
         'success' => false,
         'message' => 'Method Not Allowed',
         'timestamp' => date('Y-m-d H:i:s')
-    ]);
+    ]];
     exit;
 }
 
 // Get request data
-$data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'], true];
 
 // Validate required fields
 if (!isset($data['email']) || !isset($data['password'])) {
-    http_response_code(400);
+    http_response_code(400];
     echo json_encode([
         'success' => false,
         'message' => 'Missing required login information',
         'timestamp' => date('Y-m-d H:i:s')
-    ]);
+    ]];
     exit;
 }
 
 // Simple sanitization
-$email = filter_var($data['email'], FILTER_SANITIZE_EMAIL);
+$email = filter_var($data['email'],  FILTER_SANITIZE_EMAIL];
 $password = $data['password']; // In production, should validate password strength
 
 // In a real implementation, we would:
@@ -41,10 +41,10 @@ $password = $data['password']; // In production, should validate password streng
 // 4. Log the login attempt
 
 // For demo purposes, we'll just return a success response with fake token
-$token = 'sample_token_' . time();
+$token = 'sample_token_' . time(];
 
 // Return the login response
-http_response_code(200);
+http_response_code(200];
 echo json_encode([
     'success' => true,
     'message' => 'Login successful',
@@ -57,7 +57,7 @@ echo json_encode([
             'role' => 'user',
             'last_login' => date('Y-m-d H:i:s')
         ]
-    ],
+    ], 
     'timestamp' => date('Y-m-d H:i:s')
-]);
+]];
 exit;

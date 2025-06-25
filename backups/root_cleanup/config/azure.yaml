@@ -1,0 +1,13 @@
+name: alingai-pro
+metadata:
+  template: alingai-pro@1.0.0
+services:
+  web:
+    project: .
+    language: php
+    host: appservice
+infra:
+  provider: bicep
+  path: infra
+pipeline:
+  provider: github

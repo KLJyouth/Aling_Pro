@@ -1,13 +1,13 @@
 <?php
 /**
  * 文件系统数据库管理器
- * 用于在没有传统数据库时提供数据存储功能
+ * 用于在没有传统数据库时提供数据存储功�?
  */
 
 namespace AlingAi\Database;
 
 /**
- * FileSystemDB 类
+ * FileSystemDB �?
  *
  * @package AlingAi\Database
  */
@@ -37,8 +37,8 @@ class FileSystemDB
     public function __construct($dataPath = null)
     {
         $this->dataPath = $dataPath ?: __DIR__ . '/../../storage/data';
-        $this->ensureDataPath();
-        $this->initializeTables();
+        $this->ensureDataPath(];
+        $this->initializeTables(];
     }
     
     /**
@@ -57,7 +57,7 @@ class FileSystemDB
     private function ensureDataPath()
     {
         if (!is_dir($this->dataPath)) {
-            mkdir($this->dataPath, 0755, true);
+            mkdir($this->dataPath, 0755, true];
         }
     }
     
@@ -94,7 +94,7 @@ class FileSystemDB
                     'created_at' => 'datetime',
                     'updated_at' => 'datetime'
                 ]
-            ],
+            ], 
             'conversations' => [
                 'file' => 'conversations.json',
                 'schema' => [
@@ -110,7 +110,7 @@ class FileSystemDB
                     'created_at' => 'datetime',
                     'updated_at' => 'datetime'
                 ]
-            ],
+            ], 
             'messages' => [
                 'file' => 'messages.json',
                 'schema' => [
@@ -125,7 +125,7 @@ class FileSystemDB
                     'deleted_at' => 'datetime',
                     'created_at' => 'datetime'
                 ]
-            ],
+            ], 
             'chat_sessions' => [
                 'file' => 'chat_sessions.json',
                 'schema' => [
@@ -136,7 +136,7 @@ class FileSystemDB
                     'created_at' => 'datetime',
                     'updated_at' => 'datetime'
                 ]
-            ],
+            ], 
             'chat_messages' => [
                 'file' => 'chat_messages.json',
                 'schema' => [
@@ -149,7 +149,7 @@ class FileSystemDB
                     'tokens_used' => 'integer',
                     'created_at' => 'datetime'
                 ]
-            ],
+            ], 
             'system_settings' => [
                 'file' => 'system_settings.json',
                 'schema' => [
@@ -159,7 +159,7 @@ class FileSystemDB
                     'type' => 'string',
                     'updated_at' => 'datetime'
                 ]
-            ],
+            ], 
             'system_metrics' => [
                 'file' => 'system_metrics.json',
                 'schema' => [
@@ -171,7 +171,7 @@ class FileSystemDB
                     'status' => 'string',
                     'recorded_at' => 'datetime'
                 ]
-            ],
+            ], 
             'ai_conversations' => [
                 'file' => 'ai_conversations.json',
                 'schema' => [
@@ -184,7 +184,7 @@ class FileSystemDB
                     'response_time' => 'float',
                     'created_at' => 'datetime'
                 ]
-            ],
+            ], 
             'email_logs' => [
                 'file' => 'email_logs.json',
                 'schema' => [
@@ -200,7 +200,7 @@ class FileSystemDB
         
         // 初始化表文件
         foreach ($this->tables as $table => $config) {
-            $this->initializeTable($table);
+            $this->initializeTable($table];
         }
     }
     
@@ -221,26 +221,26 @@ class FileSystemDB
 
     private function initializeTable($tableName)
     {
-        $filePath = $this->getTablePath($tableName);
+        $filePath = $this->getTablePath($tableName];
         
         if (!file_exists($filePath)) {
             // 创建空表结构
             $emptyTable = [
                 'meta' => [
                     'table' => $tableName,
-                    'schema' => $this->tables[$tableName]['schema'],
+                    'schema' => $this->tables[$tableName]['schema'], 
                     'auto_increment' => 1,
                     'created_at' => date('Y-m-d H:i:s')
-                ],
+                ], 
                 'data' => []
             ];
             
-            file_put_contents($filePath, json_encode($emptyTable, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            file_put_contents($filePath, json_encode($emptyTable, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)];
         }
     }
     
     /**
-     * 获取表文件路径
+     * 获取表文件路�?
      */
     /**
 
@@ -260,7 +260,7 @@ class FileSystemDB
     }
     
     /**
-     * 读取表数据
+     * 读取表数�?
      */
     /**
 
@@ -276,18 +276,18 @@ class FileSystemDB
 
     private function readTable($tableName)
     {
-        $filePath = $this->getTablePath($tableName);
+        $filePath = $this->getTablePath($tableName];
         
         if (!file_exists($filePath)) {
-            $this->initializeTable($tableName);
+            $this->initializeTable($tableName];
         }
         
-        $content = file_get_contents($filePath);
-        return json_decode($content, true) ?: ['meta' => [], 'data' => []];
+        $content = file_get_contents($filePath];
+        return json_decode($content, true) ?: ['meta' => [],  'data' => []];
     }
     
     /**
-     * 写入表数据
+     * 写入表数�?
      */
     /**
 
@@ -305,10 +305,10 @@ class FileSystemDB
 
     private function writeTable($tableName, $tableData)
     {
-        $filePath = $this->getTablePath($tableName);
-        $tableData['meta']['updated_at'] = date('Y-m-d H:i:s');
+        $filePath = $this->getTablePath($tableName];
+        $tableData['meta']['updated_at'] = date('Y-m-d H:i:s'];
         
-        return file_put_contents($filePath, json_encode($tableData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        return file_put_contents($filePath, json_encode($tableData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)];
     }
     
     /**
@@ -331,26 +331,26 @@ class FileSystemDB
     public function insert($tableName, $data)
     {
         if (!isset($this->tables[$tableName])) {
-            throw new \Exception("Table {$tableName} does not exist");
+            throw new \Exception("Table {$tableName} does not exist"];
         }
         
-        $table = $this->readTable($tableName);
+        $table = $this->readTable($tableName];
           // 自动设置ID
         if (!isset($data['id'])) {
             $data['id'] = $table['meta']['auto_increment'] ?? 1;
             $table['meta']['auto_increment'] = $data['id'] + 1;
         }
         
-        // 设置时间戳
+        // 设置时间�?
         if (!isset($data['created_at'])) {
-            $data['created_at'] = date('Y-m-d H:i:s');
+            $data['created_at'] = date('Y-m-d H:i:s'];
         }
         if (!isset($data['updated_at'])) {
-            $data['updated_at'] = date('Y-m-d H:i:s');
+            $data['updated_at'] = date('Y-m-d H:i:s'];
         }
         
         $table['data'][] = $data;
-        $this->writeTable($tableName, $table);
+        $this->writeTable($tableName, $table];
         
         return $data['id'];
     }
@@ -376,13 +376,13 @@ class FileSystemDB
 
      */
 
-    public function select($tableName, $conditions = [], $limit = null, $offset = 0)
+    public function select($tableName, $conditions = [],  $limit = null, $offset = 0)
     {
         if (!isset($this->tables[$tableName])) {
-            throw new \Exception("Table {$tableName} does not exist");
+            throw new \Exception("Table {$tableName} does not exist"];
         }
         
-        $table = $this->readTable($tableName);
+        $table = $this->readTable($tableName];
         $results = $table['data'];
         
         // 应用条件过滤
@@ -394,19 +394,19 @@ class FileSystemDB
                     }
                 }
                 return true;
-            });
+            }];
         }
         
         // 应用分页
         if ($offset > 0) {
-            $results = array_slice($results, $offset);
+            $results = array_slice($results, $offset];
         }
         
         if ($limit !== null) {
-            $results = array_slice($results, 0, $limit);
+            $results = array_slice($results, 0, $limit];
         }
         
-        return array_values($results);
+        return array_values($results];
     }
     
     /**
@@ -428,7 +428,7 @@ class FileSystemDB
 
     public function selectOne($tableName, $conditions = [])
     {
-        $results = $this->select($tableName, $conditions, 1);
+        $results = $this->select($tableName, $conditions, 1];
         return !empty($results) ? $results[0] : null;
     }
     
@@ -454,10 +454,10 @@ class FileSystemDB
     public function update($tableName, $conditions, $data)
     {
         if (!isset($this->tables[$tableName])) {
-            throw new \Exception("Table {$tableName} does not exist");
+            throw new \Exception("Table {$tableName} does not exist"];
         }
         
-        $table = $this->readTable($tableName);
+        $table = $this->readTable($tableName];
         $updated = 0;
         
         foreach ($table['data'] as &$row) {
@@ -473,13 +473,13 @@ class FileSystemDB
                 foreach ($data as $key => $value) {
                     $row[$key] = $value;
                 }
-                $row['updated_at'] = date('Y-m-d H:i:s');
+                $row['updated_at'] = date('Y-m-d H:i:s'];
                 $updated++;
             }
         }
         
         if ($updated > 0) {
-            $this->writeTable($tableName, $table);
+            $this->writeTable($tableName, $table];
         }
         
         return $updated;
@@ -505,33 +505,33 @@ class FileSystemDB
     public function delete($tableName, $conditions)
     {
         if (!isset($this->tables[$tableName])) {
-            throw new \Exception("Table {$tableName} does not exist");
+            throw new \Exception("Table {$tableName} does not exist"];
         }
         
-        $table = $this->readTable($tableName);
-        $originalCount = count($table['data']);
+        $table = $this->readTable($tableName];
+        $originalCount = count($table['data']];
         
-        $table['data'] = array_filter($table['data'], function($row) use ($conditions) {
+        $table['data'] = array_filter($table['data'],  function($row) use ($conditions) {
             foreach ($conditions as $key => $value) {
                 if (!isset($row[$key]) || $row[$key] != $value) {
-                    return true; // 保留不匹配的行
+                    return true; // 保留不匹配的�?
                 }
             }
             return false; // 删除匹配的行
-        });
+        }];
         
-        $table['data'] = array_values($table['data']); // 重新索引
-        $deleted = $originalCount - count($table['data']);
+        $table['data'] = array_values($table['data']]; // 重新索引
+        $deleted = $originalCount - count($table['data']];
         
         if ($deleted > 0) {
-            $this->writeTable($tableName, $table);
+            $this->writeTable($tableName, $table];
         }
         
         return $deleted;
     }
     
     /**
-     * 获取表统计信息
+     * 获取表统计信�?
      */
     /**
 
@@ -548,14 +548,14 @@ class FileSystemDB
     public function getTableStats($tableName)
     {
         if (!isset($this->tables[$tableName])) {
-            throw new \Exception("Table {$tableName} does not exist");
+            throw new \Exception("Table {$tableName} does not exist"];
         }
         
-        $table = $this->readTable($tableName);
+        $table = $this->readTable($tableName];
         
         return [
             'table' => $tableName,
-            'record_count' => count($table['data']),
+            'record_count' => count($table['data']],
             'auto_increment' => $table['meta']['auto_increment'] ?? 1,
             'created_at' => $table['meta']['created_at'] ?? null,
             'updated_at' => $table['meta']['updated_at'] ?? null
@@ -563,7 +563,7 @@ class FileSystemDB
     }
     
     /**
-     * 获取所有表的统计信息
+     * 获取所有表的统计信�?
      */
     /**
 
@@ -579,7 +579,7 @@ class FileSystemDB
     {
         $stats = [];
         foreach (array_keys($this->tables) as $tableName) {
-            $stats[$tableName] = $this->getTableStats($tableName);
+            $stats[$tableName] = $this->getTableStats($tableName];
         }
         return $stats;
     }
@@ -604,17 +604,17 @@ class FileSystemDB
         $backupPath = $backupPath ?: $this->dataPath . '/../backup';
         
         if (!is_dir($backupPath)) {
-            mkdir($backupPath, 0755, true);
+            mkdir($backupPath, 0755, true];
         }
         
         $backupFile = $backupPath . '/backup_' . date('Y-m-d_H-i-s') . '.json';
         
         $allData = [];
         foreach (array_keys($this->tables) as $tableName) {
-            $allData[$tableName] = $this->readTable($tableName);
+            $allData[$tableName] = $this->readTable($tableName];
         }
         
-        file_put_contents($backupFile, json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        file_put_contents($backupFile, json_encode($allData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)];
         
         return $backupFile;
     }
@@ -637,18 +637,18 @@ class FileSystemDB
     public function restore($backupFile)
     {
         if (!file_exists($backupFile)) {
-            throw new \Exception("Backup file does not exist: {$backupFile}");
+            throw new \Exception("Backup file does not exist: {$backupFile}"];
         }
         
-        $backupData = json_decode(file_get_contents($backupFile), true);
+        $backupData = json_decode(file_get_contents($backupFile], true];
         
         if (!$backupData) {
-            throw new \Exception("Invalid backup file format");
+            throw new \Exception("Invalid backup file format"];
         }
         
         foreach ($backupData as $tableName => $tableData) {
             if (isset($this->tables[$tableName])) {
-                $this->writeTable($tableName, $tableData);
+                $this->writeTable($tableName, $tableData];
             }
         }
         

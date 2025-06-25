@@ -1,12 +1,12 @@
-ï»¿<?php
-declare(strict_types=1);
+<?php
+declare(strict_types=1];
 
 /**
- * æ–‡ä»¶åï¼šVoiceIdentifier.php
- * åŠŸèƒ½æè¿°ï¼šå£°çº¹è¯†åˆ«å™¨ - æä¾›å£°çº¹è¯†åˆ«å’Œè¯´è¯äººéªŒè¯åŠŸèƒ½
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼şÃû£ºVoiceIdentifier.php
+ * ¹¦ÄÜÃèÊö£ºÉùÎÆÊ¶±ğÆ÷ - Ìá¹©ÉùÎÆÊ¶±ğºÍËµ»°ÈËÑéÖ¤¹¦ÄÜ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóĞŞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  * 
  * @package AlingAi\AI\Engines\Speech
  * @author AlingAi Team
@@ -19,385 +19,385 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * å£°çº¹è¯†åˆ«å™¨ç±»
+ * ÉùÎÆÊ¶±ğÆ÷Àà
  * 
- * æä¾›å£°çº¹è¯†åˆ«å’Œè¯´è¯äººéªŒè¯çš„åŠŸèƒ½
+ * Ìá¹©ÉùÎÆÊ¶±ğºÍËµ»°ÈËÑéÖ¤µÄ¹¦ÄÜ
  */
 class VoiceIdentifier
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊı
      */
     private array $config;
     
     /**
-     * å½“å‰ä½¿ç”¨çš„å£°çº¹è¯†åˆ«æ¨¡å‹
+     * µ±Ç°Ê¹ÓÃµÄÉùÎÆÊ¶±ğÄ£ĞÍ
      */
     private ?object $model = null;
     
     /**
-     * æ„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êı
      * 
-     * @param array $config é…ç½®å‚æ•°
+     * @param array $config ÅäÖÃ²ÎÊı
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
-        $this->initializeModel();
+        $this->config = array_merge($this->getDefaultConfig(), $config];
+        $this->initializeModel(];
     }
     
     /**
-     * è·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      * 
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
         return [
-            'model' => 'default',  // å£°çº¹è¯†åˆ«æ¨¡å‹ï¼šdefault, high_accuracy, fast
-            'sample_rate' => 16000,  // é‡‡æ ·ç‡ï¼ˆHzï¼‰
-            'embedding_size' => 192,  // å£°çº¹ç‰¹å¾å‘é‡ç»´åº¦
-            'min_audio_length' => 3.0,  // æœ€å°éŸ³é¢‘é•¿åº¦ï¼ˆç§’ï¼‰
-            'min_confidence' => 0.6,  // æœ€å°ç½®ä¿¡åº¦é˜ˆå€¼
-            'detect_replay' => true,  // æ˜¯å¦æ£€æµ‹é‡æ”¾æ”»å‡»
-            'speaker_diarization' => false,  // æ˜¯å¦è¿›è¡Œè¯´è¯äººåˆ†ç¦»
-            'max_speakers' => 3,  // æœ€å¤§è¯´è¯äººæ•°é‡
-            'api_key' => '',  // APIå¯†é’¥ï¼ˆå¦‚æœä½¿ç”¨å¤–éƒ¨æœåŠ¡ï¼‰
-            'api_endpoint' => '',  // APIç«¯ç‚¹ï¼ˆå¦‚æœä½¿ç”¨å¤–éƒ¨æœåŠ¡ï¼‰
-            'use_local_model' => true,  // æ˜¯å¦ä½¿ç”¨æœ¬åœ°æ¨¡å‹
-            'local_model_path' => '',  // æœ¬åœ°æ¨¡å‹è·¯å¾„
-            'storage_path' => './storage/voice_prints',  // å£°çº¹å­˜å‚¨è·¯å¾„
-            'cache_results' => false,  // æ˜¯å¦ç¼“å­˜è¯†åˆ«ç»“æœ
-            'cache_dir' => './cache',  // ç¼“å­˜ç›®å½•
-            'log_level' => 'info'  // æ—¥å¿—çº§åˆ«ï¼šdebug, info, warning, error
+            'model' => 'default',  // ÉùÎÆÊ¶±ğÄ£ĞÍ£ºdefault, high_accuracy, fast
+            'sample_rate' => 16000,  // ²ÉÑùÂÊ£¨Hz£©
+            'embedding_size' => 192,  // ÉùÎÆÌØÕ÷ÏòÁ¿Î¬¶È
+            'min_audio_length' => 3.0,  // ×îĞ¡ÒôÆµ³¤¶È£¨Ãë£©
+            'min_confidence' => 0.6,  // ×îĞ¡ÖÃĞÅ¶ÈãĞÖµ
+            'detect_replay' => true,  // ÊÇ·ñ¼ì²âÖØ·Å¹¥»÷
+            'speaker_diarization' => false,  // ÊÇ·ñ½øĞĞËµ»°ÈË·ÖÀë
+            'max_speakers' => 3,  // ×î´óËµ»°ÈËÊıÁ¿
+            'api_key' => '',  // APIÃÜÔ¿£¨Èç¹ûÊ¹ÓÃÍâ²¿·şÎñ£©
+            'api_endpoint' => '',  // API¶Ëµã£¨Èç¹ûÊ¹ÓÃÍâ²¿·şÎñ£©
+            'use_local_model' => true,  // ÊÇ·ñÊ¹ÓÃ±¾µØÄ£ĞÍ
+            'local_model_path' => '',  // ±¾µØÄ£ĞÍÂ·¾¶
+            'storage_path' => './storage/voice_prints',  // ÉùÎÆ´æ´¢Â·¾¶
+            'cache_results' => false,  // ÊÇ·ñ»º´æÊ¶±ğ½á¹û
+            'cache_dir' => './cache',  // »º´æÄ¿Â¼
+            'log_level' => 'info'  // ÈÕÖ¾¼¶±ğ£ºdebug, info, warning, error
         ];
     }
     
     /**
-     * åˆå§‹åŒ–å£°çº¹è¯†åˆ«æ¨¡å‹
+     * ³õÊ¼»¯ÉùÎÆÊ¶±ğÄ£ĞÍ
      * 
-     * @throws Exception æ¨¡å‹åŠ è½½å¤±è´¥æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @throws Exception Ä£ĞÍ¼ÓÔØÊ§°ÜÊ±Å×³öÒì³£
      */
     private function initializeModel(): void
     {
-        // æ¨¡æ‹Ÿæ¨¡å‹åˆå§‹åŒ–è¿‡ç¨‹
+        // Ä£ÄâÄ£ĞÍ³õÊ¼»¯¹ı³Ì
         try {
             if ($this->config['use_local_model']) {
-                // åŠ è½½æœ¬åœ°æ¨¡å‹
+                // ¼ÓÔØ±¾µØÄ£ĞÍ
                 $modelPath = !empty($this->config['local_model_path']) 
                     ? $this->config['local_model_path'] 
                     : __DIR__ . '/models/voiceprint_' . $this->config['model'] . '.onnx';
                 
-                // åœ¨å®é™…å®ç°ä¸­ï¼Œè¿™é‡Œä¼šåŠ è½½æ¨¡å‹æ–‡ä»¶å¹¶åˆå§‹åŒ–
-                // $this->model = new VoiceprintModel($modelPath);
+                // ÔÚÊµ¼ÊÊµÏÖÖĞ£¬ÕâÀï»á¼ÓÔØÄ£ĞÍÎÄ¼ş²¢³õÊ¼»¯
+                // $this->model = new VoiceprintModel($modelPath];
                 $this->model = (object)['name' => 'VoiceprintModel', 'path' => $modelPath];
             } else {
-                // ä½¿ç”¨APIæœåŠ¡
+                // Ê¹ÓÃAPI·şÎñ
                 if (empty($this->config['api_key']) || empty($this->config['api_endpoint'])) {
-                    throw new InvalidArgumentException('ä½¿ç”¨å¤–éƒ¨APIæœåŠ¡æ—¶å¿…é¡»æä¾›api_keyå’Œapi_endpoint');
+                    throw new InvalidArgumentException('Ê¹ÓÃÍâ²¿API·şÎñÊ±±ØĞëÌá¹©api_keyºÍapi_endpoint'];
                 }
                 
-                // åœ¨å®é™…å®ç°ä¸­ï¼Œè¿™é‡Œä¼šåˆå§‹åŒ–APIå®¢æˆ·ç«¯
-                // $this->model = new VoiceprintApiClient($this->config['api_endpoint'], $this->config['api_key']);
+                // ÔÚÊµ¼ÊÊµÏÖÖĞ£¬ÕâÀï»á³õÊ¼»¯API¿Í»§¶Ë
+                // $this->model = new VoiceprintApiClient($this->config['api_endpoint'],  $this->config['api_key']];
                 $this->model = (object)[
                     'name' => 'VoiceprintApiClient', 
                     'endpoint' => $this->config['api_endpoint']
                 ];
             }
         } catch (Exception $e) {
-            throw new Exception('å£°çº¹è¯†åˆ«æ¨¡å‹åˆå§‹åŒ–å¤±è´¥ï¼š' . $e->getMessage());
+            throw new Exception('ÉùÎÆÊ¶±ğÄ£ĞÍ³õÊ¼»¯Ê§°Ü£º' . $e->getMessage()];
         }
     }
     
     /**
-     * ä»éŸ³é¢‘æå–å£°çº¹ç‰¹å¾å‘é‡
+     * ´ÓÒôÆµÌáÈ¡ÉùÎÆÌØÕ÷ÏòÁ¿
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @return array å£°çº¹ç‰¹å¾å‘é‡
-     * @throws InvalidArgumentException éŸ³é¢‘æ–‡ä»¶æ— æ•ˆæ—¶æŠ›å‡ºå¼‚å¸¸
-     * @throws Exception ç‰¹å¾æå–å¤±è´¥æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @return array ÉùÎÆÌØÕ÷ÏòÁ¿
+     * @throws InvalidArgumentException ÒôÆµÎÄ¼şÎŞĞ§Ê±Å×³öÒì³£
+     * @throws Exception ÌØÕ÷ÌáÈ¡Ê§°ÜÊ±Å×³öÒì³£
      */
     public function extractVoicePrint(string $audioPath): array
     {
-        // éªŒè¯éŸ³é¢‘æ–‡ä»¶
-        $this->validateAudio($audioPath);
+        // ÑéÖ¤ÒôÆµÎÄ¼ş
+        $this->validateAudio($audioPath];
         
-        // æå–å£°çº¹ç‰¹å¾
+        // ÌáÈ¡ÉùÎÆÌØÕ÷
         try {
-            // åœ¨å®é™…å®ç°ä¸­ï¼Œè¿™é‡Œä¼šè°ƒç”¨æ¨¡å‹å¤„ç†éŸ³é¢‘å¹¶æå–ç‰¹å¾
-            // æ¨¡æ‹Ÿç‰¹å¾æå–è¿‡ç¨‹
-            // return $this->model->extractFeatures($audioPath);
+            // ÔÚÊµ¼ÊÊµÏÖÖĞ£¬ÕâÀï»áµ÷ÓÃÄ£ĞÍ´¦ÀíÒôÆµ²¢ÌáÈ¡ÌØÕ÷
+            // Ä£ÄâÌØÕ÷ÌáÈ¡¹ı³Ì
+            // return $this->model->extractFeatures($audioPath];
             
-            // ç”Ÿæˆæ¨¡æ‹Ÿæ•°æ®
+            // Éú³ÉÄ£ÄâÊı¾İ
             $embeddingSize = $this->config['embedding_size'];
             $embedding = [];
             
-            // ç”Ÿæˆéšæœºç‰¹å¾å‘é‡ï¼ˆå®é™…åº”ç”¨ä¸­ä¼šæ˜¯çœŸå®çš„ç‰¹å¾å‘é‡ï¼‰
+            // Éú³ÉËæ»úÌØÕ÷ÏòÁ¿£¨Êµ¼ÊÓ¦ÓÃÖĞ»áÊÇÕæÊµµÄÌØÕ÷ÏòÁ¿£©
             for ($i = 0; $i < $embeddingSize; $i++) {
                 $embedding[] = (float) mt_rand(-100, 100) / 100;
             }
             
-            // å½’ä¸€åŒ–ç‰¹å¾å‘é‡
-            $norm = sqrt(array_sum(array_map(function($x) { return $x * $x; }, $embedding)));
-            $embedding = array_map(function($x) use ($norm) { return $x / $norm; }, $embedding);
+            // ¹éÒ»»¯ÌØÕ÷ÏòÁ¿
+            $norm = sqrt(array_sum(array_map(function($x) { return $x * $x; }, $embedding))];
+            $embedding = array_map(function($x) use ($norm) { return $x / $norm; }, $embedding];
             
             return [
                 'embedding' => $embedding,
                 'dimensionality' => $embeddingSize,
                 'audio_info' => [
-                    'duration' => 5.2,  // å‡å®šéŸ³é¢‘é•¿åº¦ï¼ˆç§’ï¼‰
+                    'duration' => 5.2,  // ¼Ù¶¨ÒôÆµ³¤¶È£¨Ãë£©
                     'sample_rate' => $this->config['sample_rate']
                 ]
             ];
         } catch (Exception $e) {
-            throw new Exception('å£°çº¹ç‰¹å¾æå–å¤±è´¥ï¼š' . $e->getMessage());
+            throw new Exception('ÉùÎÆÌØÕ÷ÌáÈ¡Ê§°Ü£º' . $e->getMessage()];
         }
     }
     
     /**
-     * éªŒè¯éŸ³é¢‘æ–‡ä»¶
+     * ÑéÖ¤ÒôÆµÎÄ¼ş
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @throws InvalidArgumentException éŸ³é¢‘æ–‡ä»¶æ— æ•ˆæ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @throws InvalidArgumentException ÒôÆµÎÄ¼şÎŞĞ§Ê±Å×³öÒì³£
      */
     private function validateAudio(string $audioPath): void
     {
         if (!file_exists($audioPath)) {
-            throw new InvalidArgumentException('éŸ³é¢‘æ–‡ä»¶ä¸å­˜åœ¨ï¼š' . $audioPath);
+            throw new InvalidArgumentException('ÒôÆµÎÄ¼ş²»´æÔÚ£º' . $audioPath];
         }
         
-        // æ£€æŸ¥æ–‡ä»¶å¤§å°
-        $fileSize = filesize($audioPath);
+        // ¼ì²éÎÄ¼ş´óĞ¡
+        $fileSize = filesize($audioPath];
         if ($fileSize <= 0) {
-            throw new InvalidArgumentException('éŸ³é¢‘æ–‡ä»¶ä¸ºç©ºï¼š' . $audioPath);
+            throw new InvalidArgumentException('ÒôÆµÎÄ¼şÎª¿Õ£º' . $audioPath];
         }
         
-        // åœ¨å®é™…åº”ç”¨ä¸­ï¼Œè¿™é‡Œä¼šæ£€æŸ¥éŸ³é¢‘æ ¼å¼ã€é‡‡æ ·ç‡ã€å£°é“æ•°ç­‰
-        // å¹¶å¯èƒ½è¿›è¡ŒéŸ³é¢‘é¢„å¤„ç†ï¼ˆæ ¼å¼è½¬æ¢ã€é‡é‡‡æ ·ç­‰ï¼‰
+        // ÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬ÕâÀï»á¼ì²éÒôÆµ¸ñÊ½¡¢²ÉÑùÂÊ¡¢ÉùµÀÊıµÈ
+        // ²¢¿ÉÄÜ½øĞĞÒôÆµÔ¤´¦Àí£¨¸ñÊ½×ª»»¡¢ÖØ²ÉÑùµÈ£©
     }
     
     /**
-     * æ³¨å†Œå£°çº¹
+     * ×¢²áÉùÎÆ
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @param string $speakerId è¯´è¯äººID
-     * @param array $metadata å…ƒæ•°æ®ï¼ˆå¯é€‰ï¼‰
-     * @return bool æ³¨å†Œæ˜¯å¦æˆåŠŸ
-     * @throws Exception æ³¨å†Œå¤±è´¥æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @param string $speakerId Ëµ»°ÈËID
+     * @param array $metadata ÔªÊı¾İ£¨¿ÉÑ¡£©
+     * @return bool ×¢²áÊÇ·ñ³É¹¦
+     * @throws Exception ×¢²áÊ§°ÜÊ±Å×³öÒì³£
      */
     public function enrollSpeaker(string $audioPath, string $speakerId, array $metadata = []): bool
     {
-        // æå–å£°çº¹ç‰¹å¾
-        $voicePrint = $this->extractVoicePrint($audioPath);
+        // ÌáÈ¡ÉùÎÆÌØÕ÷
+        $voicePrint = $this->extractVoicePrint($audioPath];
         
-        // å­˜å‚¨å£°çº¹
+        // ´æ´¢ÉùÎÆ
         try {
             $voicePrintData = [
                 'speaker_id' => $speakerId,
-                'embedding' => $voicePrint['embedding'],
+                'embedding' => $voicePrint['embedding'], 
                 'metadata' => $metadata,
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => date('Y-m-d H:i:s'],
                 'audio_info' => $voicePrint['audio_info']
             ];
             
-            // ç¡®ä¿å­˜å‚¨ç›®å½•å­˜åœ¨
+            // È·±£´æ´¢Ä¿Â¼´æÔÚ
             $storagePath = $this->config['storage_path'];
             if (!is_dir($storagePath) && !mkdir($storagePath, 0755, true)) {
-                throw new Exception('æ— æ³•åˆ›å»ºå£°çº¹å­˜å‚¨ç›®å½•ï¼š' . $storagePath);
+                throw new Exception('ÎŞ·¨´´½¨ÉùÎÆ´æ´¢Ä¿Â¼£º' . $storagePath];
             }
             
-            // ä¿å­˜å£°çº¹æ•°æ®
+            // ±£´æÉùÎÆÊı¾İ
             $filePath = $storagePath . '/' . $speakerId . '.json';
-            $saved = file_put_contents($filePath, json_encode($voicePrintData, JSON_PRETTY_PRINT));
+            $saved = file_put_contents($filePath, json_encode($voicePrintData, JSON_PRETTY_PRINT)];
             
             return $saved !== false;
         } catch (Exception $e) {
-            throw new Exception('å£°çº¹æ³¨å†Œå¤±è´¥ï¼š' . $e->getMessage());
+            throw new Exception('ÉùÎÆ×¢²áÊ§°Ü£º' . $e->getMessage()];
         }
     }
     
     /**
-     * éªŒè¯è¯´è¯äººèº«ä»½
+     * ÑéÖ¤Ëµ»°ÈËÉí·İ
      * 
-     * @param string $audioPath å¾…éªŒè¯çš„éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @param string $speakerId å·²æ³¨å†Œçš„è¯´è¯äººID
-     * @return array éªŒè¯ç»“æœï¼ŒåŒ…å«åŒ¹é…åˆ†æ•°å’Œæ˜¯å¦é€šè¿‡éªŒè¯
-     * @throws InvalidArgumentException å‚æ•°æ— æ•ˆæ—¶æŠ›å‡ºå¼‚å¸¸
-     * @throws Exception éªŒè¯è¿‡ç¨‹å‡ºé”™æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ´ıÑéÖ¤µÄÒôÆµÎÄ¼şÂ·¾¶
+     * @param string $speakerId ÒÑ×¢²áµÄËµ»°ÈËID
+     * @return array ÑéÖ¤½á¹û£¬°üº¬Æ¥Åä·ÖÊıºÍÊÇ·ñÍ¨¹ıÑéÖ¤
+     * @throws InvalidArgumentException ²ÎÊıÎŞĞ§Ê±Å×³öÒì³£
+     * @throws Exception ÑéÖ¤¹ı³Ì³ö´íÊ±Å×³öÒì³£
      */
     public function verifySpeaker(string $audioPath, string $speakerId): array
     {
-        // è·å–å¾…éªŒè¯éŸ³é¢‘çš„å£°çº¹ç‰¹å¾
-        $testVoicePrint = $this->extractVoicePrint($audioPath);
+        // »ñÈ¡´ıÑéÖ¤ÒôÆµµÄÉùÎÆÌØÕ÷
+        $testVoicePrint = $this->extractVoicePrint($audioPath];
         
-        // åŠ è½½å·²æ³¨å†Œçš„å£°çº¹
-        $enrolledVoicePrint = $this->loadEnrolledVoicePrint($speakerId);
+        // ¼ÓÔØÒÑ×¢²áµÄÉùÎÆ
+        $enrolledVoicePrint = $this->loadEnrolledVoicePrint($speakerId];
         
-        // æ£€æµ‹é‡æ”¾æ”»å‡»ï¼ˆå¦‚æœå¯ç”¨ï¼‰
+        // ¼ì²âÖØ·Å¹¥»÷£¨Èç¹ûÆôÓÃ£©
         if ($this->config['detect_replay']) {
-            $isReplay = $this->detectReplayAttack($audioPath);
+            $isReplay = $this->detectReplayAttack($audioPath];
             if ($isReplay) {
                 return [
                     'match' => false,
                     'score' => 0.0,
-                    'message' => 'æ£€æµ‹åˆ°é‡æ”¾æ”»å‡»',
+                    'message' => '¼ì²âµ½ÖØ·Å¹¥»÷',
                     'is_replay' => true
                 ];
             }
         }
         
-        // è®¡ç®—ç›¸ä¼¼åº¦
+        // ¼ÆËãÏàËÆ¶È
         $score = $this->calculateSimilarity(
-            $testVoicePrint['embedding'], 
+            $testVoicePrint['embedding'],  
             $enrolledVoicePrint['embedding']
-        );
+        ];
         
-        // åˆ¤æ–­æ˜¯å¦åŒ¹é…
+        // ÅĞ¶ÏÊÇ·ñÆ¥Åä
         $isMatch = $score >= $this->config['min_confidence'];
         
         return [
             'match' => $isMatch,
             'score' => $score,
-            'message' => $isMatch ? 'å£°çº¹éªŒè¯é€šè¿‡' : 'å£°çº¹ä¸åŒ¹é…',
+            'message' => $isMatch ? 'ÉùÎÆÑéÖ¤Í¨¹ı' : 'ÉùÎÆ²»Æ¥Åä',
             'is_replay' => false
         ];
     }
     
     /**
-     * åŠ è½½å·²æ³¨å†Œçš„å£°çº¹
+     * ¼ÓÔØÒÑ×¢²áµÄÉùÎÆ
      * 
-     * @param string $speakerId è¯´è¯äººID
-     * @return array å£°çº¹æ•°æ®
-     * @throws InvalidArgumentException è¯´è¯äººæœªæ³¨å†Œæ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $speakerId Ëµ»°ÈËID
+     * @return array ÉùÎÆÊı¾İ
+     * @throws InvalidArgumentException Ëµ»°ÈËÎ´×¢²áÊ±Å×³öÒì³£
      */
     private function loadEnrolledVoicePrint(string $speakerId): array
     {
         $filePath = $this->config['storage_path'] . '/' . $speakerId . '.json';
         
         if (!file_exists($filePath)) {
-            throw new InvalidArgumentException('è¯´è¯äººæœªæ³¨å†Œï¼š' . $speakerId);
+            throw new InvalidArgumentException('Ëµ»°ÈËÎ´×¢²á£º' . $speakerId];
         }
         
-        $data = json_decode(file_get_contents($filePath), true);
+        $data = json_decode(file_get_contents($filePath], true];
         
         if ($data === null) {
-            throw new InvalidArgumentException('å£°çº¹æ•°æ®æ— æ•ˆï¼š' . $speakerId);
+            throw new InvalidArgumentException('ÉùÎÆÊı¾İÎŞĞ§£º' . $speakerId];
         }
         
         return $data;
     }
     
     /**
-     * è®¡ç®—ä¸¤ä¸ªå£°çº¹ç‰¹å¾å‘é‡ä¹‹é—´çš„ç›¸ä¼¼åº¦
+     * ¼ÆËãÁ½¸öÉùÎÆÌØÕ÷ÏòÁ¿Ö®¼äµÄÏàËÆ¶È
      * 
-     * @param array $embedding1 ç¬¬ä¸€ä¸ªç‰¹å¾å‘é‡
-     * @param array $embedding2 ç¬¬äºŒä¸ªç‰¹å¾å‘é‡
-     * @return float ç›¸ä¼¼åº¦åˆ†æ•°ï¼ˆ0-1ä¹‹é—´ï¼‰
+     * @param array $embedding1 µÚÒ»¸öÌØÕ÷ÏòÁ¿
+     * @param array $embedding2 µÚ¶ş¸öÌØÕ÷ÏòÁ¿
+     * @return float ÏàËÆ¶È·ÖÊı£¨0-1Ö®¼ä£©
      */
     private function calculateSimilarity(array $embedding1, array $embedding2): float
     {
-        // ç¡®ä¿ä¸¤ä¸ªå‘é‡çš„ç»´åº¦ç›¸åŒ
+        // È·±£Á½¸öÏòÁ¿µÄÎ¬¶ÈÏàÍ¬
         if (count($embedding1) != count($embedding2)) {
-            throw new InvalidArgumentException('ç‰¹å¾å‘é‡ç»´åº¦ä¸åŒ¹é…');
+            throw new InvalidArgumentException('ÌØÕ÷ÏòÁ¿Î¬¶È²»Æ¥Åä'];
         }
         
-        // è®¡ç®—ä½™å¼¦ç›¸ä¼¼åº¦
+        // ¼ÆËãÓàÏÒÏàËÆ¶È
         $dotProduct = 0;
         $norm1 = 0;
         $norm2 = 0;
         
-        for ($i = 0; $i < count($embedding1); $i++) {
+        for ($i = 0; $i < count($embedding1]; $i++) {
             $dotProduct += $embedding1[$i] * $embedding2[$i];
             $norm1 += $embedding1[$i] * $embedding1[$i];
             $norm2 += $embedding2[$i] * $embedding2[$i];
         }
         
-        $norm1 = sqrt($norm1);
-        $norm2 = sqrt($norm2);
+        $norm1 = sqrt($norm1];
+        $norm2 = sqrt($norm2];
         
         if ($norm1 == 0 || $norm2 == 0) {
             return 0.0;
         }
         
-        // ä½™å¼¦ç›¸ä¼¼åº¦çš„èŒƒå›´æ˜¯[-1, 1]ï¼Œæˆ‘ä»¬è½¬æ¢ä¸º[0, 1]
-        $similarity = $dotProduct / ($norm1 * $norm2);
+        // ÓàÏÒÏàËÆ¶ÈµÄ·¶Î§ÊÇ[-1, 1]£¬ÎÒÃÇ×ª»»Îª[0, 1]
+        $similarity = $dotProduct / ($norm1 * $norm2];
         return ($similarity + 1) / 2;
     }
     
     /**
-     * æ£€æµ‹é‡æ”¾æ”»å‡»
+     * ¼ì²âÖØ·Å¹¥»÷
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @return bool æ˜¯å¦æ£€æµ‹åˆ°é‡æ”¾æ”»å‡»
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @return bool ÊÇ·ñ¼ì²âµ½ÖØ·Å¹¥»÷
      */
     private function detectReplayAttack(string $audioPath): bool
     {
-        // å®é™…åº”ç”¨ä¸­ï¼Œè¿™é‡Œä¼šåŒ…å«å¤æ‚çš„é‡æ”¾æ”»å‡»æ£€æµ‹ç®—æ³•
-        // å¯èƒ½ä¼šåˆ†æéŸ³é¢‘çš„é¢‘è°±ç‰¹æ€§ã€ç¯å¢ƒå™ªå£°ã€è¯´è¯äººæ´»æ€§ç­‰
+        // Êµ¼ÊÓ¦ÓÃÖĞ£¬ÕâÀï»á°üº¬¸´ÔÓµÄÖØ·Å¹¥»÷¼ì²âËã·¨
+        // ¿ÉÄÜ»á·ÖÎöÒôÆµµÄÆµÆ×ÌØĞÔ¡¢»·¾³ÔëÉù¡¢Ëµ»°ÈË»îĞÔµÈ
         
-        // æ¨¡æ‹Ÿå®ç°ï¼Œéšæœºè¿”å›ç»“æœï¼ˆå®é™…åº”ç”¨ä¸­ä¸åº”è¯¥è¿™æ ·åšï¼‰
-        return mt_rand(0, 100) < 5; // 5% çš„æ¦‚ç‡æ£€æµ‹ä¸ºé‡æ”¾æ”»å‡»
+        // Ä£ÄâÊµÏÖ£¬Ëæ»ú·µ»Ø½á¹û£¨Êµ¼ÊÓ¦ÓÃÖĞ²»Ó¦¸ÃÕâÑù×ö£©
+        return mt_rand(0, 100) < 5; // 5% µÄ¸ÅÂÊ¼ì²âÎªÖØ·Å¹¥»÷
     }
     
     /**
-     * è¯†åˆ«æœªçŸ¥è¯´è¯äºº
+     * Ê¶±ğÎ´ÖªËµ»°ÈË
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @return array è¯†åˆ«ç»“æœï¼ŒåŒ…å«å¯èƒ½çš„è¯´è¯äººIDåˆ—è¡¨åŠå…¶åŒ¹é…åˆ†æ•°
-     * @throws Exception è¯†åˆ«è¿‡ç¨‹å‡ºé”™æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @return array Ê¶±ğ½á¹û£¬°üº¬¿ÉÄÜµÄËµ»°ÈËIDÁĞ±í¼°ÆäÆ¥Åä·ÖÊı
+     * @throws Exception Ê¶±ğ¹ı³Ì³ö´íÊ±Å×³öÒì³£
      */
     public function identifySpeaker(string $audioPath): array
     {
-        // æå–å£°çº¹ç‰¹å¾
-        $testVoicePrint = $this->extractVoicePrint($audioPath);
+        // ÌáÈ¡ÉùÎÆÌØÕ÷
+        $testVoicePrint = $this->extractVoicePrint($audioPath];
         
-        // è·å–æ‰€æœ‰å·²æ³¨å†Œçš„è¯´è¯äºº
-        $enrolledSpeakers = $this->getAllEnrolledSpeakers();
+        // »ñÈ¡ËùÓĞÒÑ×¢²áµÄËµ»°ÈË
+        $enrolledSpeakers = $this->getAllEnrolledSpeakers(];
         
         if (empty($enrolledSpeakers)) {
             return [
                 'identified' => false,
-                'message' => 'æ²¡æœ‰å·²æ³¨å†Œçš„è¯´è¯äºº',
+                'message' => 'Ã»ÓĞÒÑ×¢²áµÄËµ»°ÈË',
                 'candidates' => []
             ];
         }
         
-        // è®¡ç®—ä¸æ¯ä¸ªå·²æ³¨å†Œè¯´è¯äººçš„ç›¸ä¼¼åº¦
+        // ¼ÆËãÓëÃ¿¸öÒÑ×¢²áËµ»°ÈËµÄÏàËÆ¶È
         $results = [];
         foreach ($enrolledSpeakers as $speaker) {
             $score = $this->calculateSimilarity(
-                $testVoicePrint['embedding'],
+                $testVoicePrint['embedding'], 
                 $speaker['embedding']
-            );
+            ];
             
             $results[] = [
-                'speaker_id' => $speaker['speaker_id'],
+                'speaker_id' => $speaker['speaker_id'], 
                 'score' => $score,
                 'metadata' => $speaker['metadata'] ?? []
             ];
         }
         
-        // æŒ‰ç›¸ä¼¼åº¦åˆ†æ•°æ’åº
+        // °´ÏàËÆ¶È·ÖÊıÅÅĞò
         usort($results, function($a, $b) {
             return $b['score'] <=> $a['score'];
-        });
+        }];
         
-        // åˆ¤æ–­æ˜¯å¦è¯†åˆ«åˆ°è¯´è¯äºº
+        // ÅĞ¶ÏÊÇ·ñÊ¶±ğµ½Ëµ»°ÈË
         $bestMatch = $results[0];
         $identified = $bestMatch['score'] >= $this->config['min_confidence'];
         
         return [
             'identified' => $identified,
             'best_match' => $bestMatch,
-            'message' => $identified ? 'å·²è¯†åˆ«è¯´è¯äºº' : 'æœªèƒ½è¯†åˆ«è¯´è¯äºº',
-            'candidates' => array_slice($results, 0, 5) // è¿”å›å‰5ä¸ªæœ€å¯èƒ½çš„ç»“æœ
+            'message' => $identified ? 'ÒÑÊ¶±ğËµ»°ÈË' : 'Î´ÄÜÊ¶±ğËµ»°ÈË',
+            'candidates' => array_slice($results, 0, 5) // ·µ»ØÇ°5¸ö×î¿ÉÄÜµÄ½á¹û
         ];
     }
     
     /**
-     * è·å–æ‰€æœ‰å·²æ³¨å†Œçš„è¯´è¯äºº
+     * »ñÈ¡ËùÓĞÒÑ×¢²áµÄËµ»°ÈË
      * 
-     * @return array å·²æ³¨å†Œè¯´è¯äººåˆ—è¡¨
+     * @return array ÒÑ×¢²áËµ»°ÈËÁĞ±í
      */
     private function getAllEnrolledSpeakers(): array
     {
@@ -408,15 +408,15 @@ class VoiceIdentifier
             return $speakers;
         }
         
-        $files = glob($storagePath . '/*.json');
+        $files = glob($storagePath . '/*.json'];
         foreach ($files as $file) {
             try {
-                $data = json_decode(file_get_contents($file), true);
+                $data = json_decode(file_get_contents($file], true];
                 if ($data && isset($data['speaker_id']) && isset($data['embedding'])) {
                     $speakers[] = $data;
                 }
             } catch (Exception $e) {
-                // å¿½ç•¥æ— æ³•è§£æçš„æ–‡ä»¶
+                // ºöÂÔÎŞ·¨½âÎöµÄÎÄ¼ş
                 continue;
             }
         }
@@ -425,32 +425,32 @@ class VoiceIdentifier
     }
     
     /**
-     * è¯´è¯äººåˆ†ç¦»ï¼ˆåˆ†ä¸ºå¤šä¸ªè¯´è¯äººï¼‰
+     * Ëµ»°ÈË·ÖÀë£¨·ÖÎª¶à¸öËµ»°ÈË£©
      * 
-     * @param string $audioPath éŸ³é¢‘æ–‡ä»¶è·¯å¾„
-     * @return array åˆ†ç¦»ç»“æœï¼ŒåŒ…å«æ¯æ®µçš„è¯´è¯äººIDå’Œæ—¶é—´æˆ³
-     * @throws Exception åˆ†ç¦»è¿‡ç¨‹å‡ºé”™æ—¶æŠ›å‡ºå¼‚å¸¸
+     * @param string $audioPath ÒôÆµÎÄ¼şÂ·¾¶
+     * @return array ·ÖÀë½á¹û£¬°üº¬Ã¿¶ÎµÄËµ»°ÈËIDºÍÊ±¼ä´Á
+     * @throws Exception ·ÖÀë¹ı³Ì³ö´íÊ±Å×³öÒì³£
      */
     public function diarizeSpeakers(string $audioPath): array
     {
         if (!$this->config['speaker_diarization']) {
-            throw new InvalidArgumentException('è¯´è¯äººåˆ†ç¦»åŠŸèƒ½æœªå¯ç”¨');
+            throw new InvalidArgumentException('Ëµ»°ÈË·ÖÀë¹¦ÄÜÎ´ÆôÓÃ'];
         }
         
-        // éªŒè¯éŸ³é¢‘æ–‡ä»¶
-        $this->validateAudio($audioPath);
+        // ÑéÖ¤ÒôÆµÎÄ¼ş
+        $this->validateAudio($audioPath];
         
-        // æ¨¡æ‹Ÿè¯´è¯äººåˆ†ç¦»è¿‡ç¨‹
-        // åœ¨å®é™…åº”ç”¨ä¸­ï¼Œè¿™é‡Œä¼šæ¶‰åŠå¤æ‚çš„è¯­éŸ³åˆ†æ®µå’Œèšç±»ç®—æ³•
+        // Ä£ÄâËµ»°ÈË·ÖÀë¹ı³Ì
+        // ÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬ÕâÀï»áÉæ¼°¸´ÔÓµÄÓïÒô·Ö¶ÎºÍ¾ÛÀàËã·¨
         
         $segments = [];
-        $audioDuration = 120; // æ¨¡æ‹Ÿ120ç§’çš„éŸ³é¢‘
+        $audioDuration = 120; // Ä£Äâ120ÃëµÄÒôÆµ
         $currentTime = 0;
         
-        // ç”Ÿæˆæ¨¡æ‹Ÿåˆ†æ®µæ•°æ®
+        // Éú³ÉÄ£Äâ·Ö¶ÎÊı¾İ
         while ($currentTime < $audioDuration) {
-            $segmentDuration = mt_rand(3, 15); // æ¯æ®µ3-15ç§’
-            $speakerId = 'speaker_' . mt_rand(1, $this->config['max_speakers']);
+            $segmentDuration = mt_rand(3, 15]; // Ã¿¶Î3-15Ãë
+            $speakerId = 'speaker_' . mt_rand(1, $this->config['max_speakers']];
             
             $segments[] = [
                 'start_time' => $currentTime,
@@ -464,24 +464,24 @@ class VoiceIdentifier
         
         return [
             'audio_path' => $audioPath,
-            'num_speakers' => min($this->config['max_speakers'], 3), // å‡è®¾è¯†åˆ«åˆ°çš„è¯´è¯äººæ•°é‡
+            'num_speakers' => min($this->config['max_speakers'],  3], // ¼ÙÉèÊ¶±ğµ½µÄËµ»°ÈËÊıÁ¿
             'segments' => $segments,
             'audio_duration' => $audioDuration
         ];
     }
     
     /**
-     * æ›´æ–°é…ç½®
+     * ¸üĞÂÅäÖÃ
      * 
-     * @param array $newConfig æ–°é…ç½®
-     * @return bool æ›´æ–°æ˜¯å¦æˆåŠŸ
+     * @param array $newConfig ĞÂÅäÖÃ
+     * @return bool ¸üĞÂÊÇ·ñ³É¹¦
      */
     public function updateConfig(array $newConfig): bool
     {
         $oldConfig = $this->config;
-        $this->config = array_merge($this->config, $newConfig);
+        $this->config = array_merge($this->config, $newConfig];
         
-        // å¦‚æœæ¨¡å‹ç›¸å…³çš„é…ç½®å‘ç”Ÿå˜åŒ–ï¼Œé‡æ–°åˆå§‹åŒ–æ¨¡å‹
+        // Èç¹ûÄ£ĞÍÏà¹ØµÄÅäÖÃ·¢Éú±ä»¯£¬ÖØĞÂ³õÊ¼»¯Ä£ĞÍ
         $modelConfigKeys = ['model', 'use_local_model', 'local_model_path', 'api_key', 'api_endpoint'];
         $needReinitialize = false;
         
@@ -494,9 +494,9 @@ class VoiceIdentifier
         
         if ($needReinitialize) {
             try {
-                $this->initializeModel();
+                $this->initializeModel(];
             } catch (Exception $e) {
-                // å¦‚æœåˆå§‹åŒ–å¤±è´¥ï¼Œå›é€€åˆ°åŸé…ç½®
+                // Èç¹û³õÊ¼»¯Ê§°Ü£¬»ØÍËµ½Ô­ÅäÖÃ
                 $this->config = $oldConfig;
                 return false;
             }
@@ -506,9 +506,9 @@ class VoiceIdentifier
     }
     
     /**
-     * è·å–å½“å‰é…ç½®
+     * »ñÈ¡µ±Ç°ÅäÖÃ
      * 
-     * @return array å½“å‰é…ç½®
+     * @return array µ±Ç°ÅäÖÃ
      */
     public function getConfig(): array
     {
@@ -516,10 +516,10 @@ class VoiceIdentifier
     }
     
     /**
-     * åˆ é™¤æ³¨å†Œçš„å£°çº¹
+     * É¾³ı×¢²áµÄÉùÎÆ
      * 
-     * @param string $speakerId è¯´è¯äººID
-     * @return bool åˆ é™¤æ˜¯å¦æˆåŠŸ
+     * @param string $speakerId Ëµ»°ÈËID
+     * @return bool É¾³ıÊÇ·ñ³É¹¦
      */
     public function deleteSpeaker(string $speakerId): bool
     {
@@ -529,13 +529,13 @@ class VoiceIdentifier
             return false;
         }
         
-        return unlink($filePath);
+        return unlink($filePath];
     }
     
     /**
-     * æ¸…ç†æ‰€æœ‰ç¼“å­˜
+     * ÇåÀíËùÓĞ»º´æ
      * 
-     * @return bool æ¸…ç†æ˜¯å¦æˆåŠŸ
+     * @return bool ÇåÀíÊÇ·ñ³É¹¦
      */
     public function clearCache(): bool
     {
@@ -543,16 +543,17 @@ class VoiceIdentifier
             return true;
         }
         
-        $files = glob($this->config['cache_dir'] . '/*');
+        $files = glob($this->config['cache_dir'] . '/*'];
         $success = true;
         
         foreach ($files as $file) {
             if (is_file($file)) {
-                $success &= unlink($file);
+                $success &= unlink($file];
             }
         }
         
         return $success;
     }
 }
+
 

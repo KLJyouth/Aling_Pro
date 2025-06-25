@@ -1,12 +1,12 @@
-ï»¿<?php
-declare(strict_types=1);
+<?php
+declare(strict_types=1];
 
 /**
- * æ–‡ä»¶åï¼šKeywordExtractor.php
- * åŠŸèƒ½æè¿°ï¼šå…³é”®è¯æå–å™¨ - å®ç°æ–‡æœ¬å…³é”®è¯æå–åŠŸèƒ½
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼şÃû£ºKeywordExtractor.php
+ * ¹¦ÄÜÃèÊö£º¹Ø¼ü´ÊÌáÈ¡Æ÷ - ÊµÏÖÎÄ±¾¹Ø¼ü´ÊÌáÈ¡¹¦ÄÜ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóĞŞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
@@ -19,48 +19,48 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * å…³é”®è¯æå–å™¨
+ * ¹Ø¼ü´ÊÌáÈ¡Æ÷
  *
- * å®ç°æ–‡æœ¬å…³é”®è¯æå–åŠŸèƒ½ï¼Œæ”¯æŒå¤šç§æå–ç®—æ³•å’Œè¯­è¨€
+ * ÊµÏÖÎÄ±¾¹Ø¼ü´ÊÌáÈ¡¹¦ÄÜ£¬Ö§³Ö¶àÖÖÌáÈ¡Ëã·¨ºÍÓïÑÔ
  */
 class KeywordExtractor
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊı
      */
     private array $config;
 
     /**
-     * åœç”¨è¯åˆ—è¡¨
+     * Í£ÓÃ´ÊÁĞ±í
      */
     private array $stopwords = [];
 
     /**
-     * å…³é”®è¯æå–ç»“æœç¼“å­˜
+     * ¹Ø¼ü´ÊÌáÈ¡½á¹û»º´æ
      */
     private array $cache = [];
     
     /**
-     * æ„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êı
      *
-     * @param array $config é…ç½®å‚æ•°
+     * @param array $config ÅäÖÃ²ÎÊı
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
-        $this->loadStopwords();
+        $this->config = array_merge($this->getDefaultConfig(), $config];
+        $this->loadStopwords(];
     }
     
     /**
-     * è·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      *
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
         return [
             'default_language' => 'zh-CN',
-            'supported_languages' => ['zh-CN', 'en-US'],
+            'supported_languages' => ['zh-CN', 'en-US'], 
             'default_algorithm' => 'tfidf',
             'max_keywords' => 10,
             'min_word_length' => 2,
@@ -70,11 +70,11 @@ class KeywordExtractor
     }
     
     /**
-     * åŠ è½½åœç”¨è¯
+     * ¼ÓÔØÍ£ÓÃ´Ê
      */
     private function loadStopwords(): void
     {
-        // è‹±æ–‡åœç”¨è¯
+        // Ó¢ÎÄÍ£ÓÃ´Ê
         $this->stopwords['en-US'] = [
             'a', 'an', 'the', 'and', 'or', 'but', 'if', 'then', 'else', 'when',
             'at', 'from', 'by', 'on', 'off', 'for', 'in', 'out', 'over', 'to', 'into', 'with',
@@ -84,59 +84,59 @@ class KeywordExtractor
             'this', 'that', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 'our', 'their'
         ];
         
-        // ä¸­æ–‡åœç”¨è¯
+        // ÖĞÎÄÍ£ÓÃ´Ê
         $this->stopwords['zh-CN'] = [
-            'çš„', 'äº†', 'å’Œ', 'æ˜¯', 'å°±', 'éƒ½', 'è€Œ', 'åŠ', 'ä¸', 'è¿™', 'é‚£', 'æœ‰', 'åœ¨', 'ä¸­',
-            'ä¸º', 'å¯¹', 'ä¹Ÿ', 'ä»¥', 'ä¹‹', 'äº', 'ä¸Š', 'ä¸‹', 'ä½†', 'å¦‚', 'å› ', 'ç”±', 'æ‰€', 'å·²',
-            'è¢«', 'å…¶', 'ä»', 'æˆ–', 'æŸ', 'å„', 'æ¯', 'å½“', 'æˆ‘', 'ä½ ', 'ä»–', 'å¥¹', 'å®ƒ', 'ä»¬'
+            'µÄ', 'ÁË', 'ºÍ', 'ÊÇ', '¾Í', '¶¼', '¶ø', '¼°', 'Óë', 'Õâ', 'ÄÇ', 'ÓĞ', 'ÔÚ', 'ÖĞ',
+            'Îª', '¶Ô', 'Ò²', 'ÒÔ', 'Ö®', 'ÓÚ', 'ÉÏ', 'ÏÂ', 'µ«', 'Èç', 'Òò', 'ÓÉ', 'Ëù', 'ÒÑ',
+            '±»', 'Æä', '´Ó', '»ò', 'Ä³', '¸÷', 'Ã¿', 'µ±', 'ÎÒ', 'Äã', 'Ëû', 'Ëı', 'Ëü', 'ÃÇ'
         ];
     }
     
     /**
-     * æå–å…³é”®è¯
+     * ÌáÈ¡¹Ø¼ü´Ê
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array å…³é”®è¯æ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param array $options Ñ¡Ïî
+     * @return array ¹Ø¼ü´ÊÊı×é
      */
     public function extract(string $text, array $options = []): array
     {
-        // åˆå¹¶é€‰é¡¹
+        // ºÏ²¢Ñ¡Ïî
         $options = array_merge([
-            'language' => $this->config['default_language'],
-            'algorithm' => $this->config['default_algorithm'],
-            'max_keywords' => $this->config['max_keywords'],
+            'language' => $this->config['default_language'], 
+            'algorithm' => $this->config['default_algorithm'], 
+            'max_keywords' => $this->config['max_keywords'], 
             'min_word_length' => $this->config['min_word_length']
-        ], $options);
+        ],  $options];
         
-        // æ£€æŸ¥ç¼“å­˜
-        $cacheKey = md5($text . json_encode($options));
+        // ¼ì²é»º´æ
+        $cacheKey = md5($text . json_encode($options)];
         if ($this->config['use_cache'] && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
         
-        // æ£€æµ‹è¯­è¨€
+        // ¼ì²âÓïÑÔ
         if ($options['language'] === 'auto') {
-            $options['language'] = $this->detectLanguage($text);
+            $options['language'] = $this->detectLanguage($text];
         }
         
-        // æ ¹æ®ç®—æ³•æå–å…³é”®è¯
+        // ¸ù¾İËã·¨ÌáÈ¡¹Ø¼ü´Ê
         $keywords = [];
         switch ($options['algorithm']) {
             case 'tfidf':
-                $keywords = $this->extractByTfIdf($text, $options);
+                $keywords = $this->extractByTfIdf($text, $options];
                 break;
             case 'textrank':
-                $keywords = $this->extractByTextRank($text, $options);
+                $keywords = $this->extractByTextRank($text, $options];
                 break;
             case 'rake':
-                $keywords = $this->extractByRake($text, $options);
+                $keywords = $this->extractByRake($text, $options];
                 break;
             default:
-                throw new InvalidArgumentException("ä¸æ”¯æŒçš„å…³é”®è¯æå–ç®—æ³•: {$options['algorithm']}");
+                throw new InvalidArgumentException("²»Ö§³ÖµÄ¹Ø¼ü´ÊÌáÈ¡Ëã·¨: {$options['algorithm']}"];
         }
         
-        // ç¼“å­˜ç»“æœ
+        // »º´æ½á¹û
         if ($this->config['use_cache']) {
             $this->cache[$cacheKey] = $keywords;
         }
@@ -145,38 +145,38 @@ class KeywordExtractor
     }
     
     /**
-     * ä½¿ç”¨TF-IDFç®—æ³•æå–å…³é”®è¯
+     * Ê¹ÓÃTF-IDFËã·¨ÌáÈ¡¹Ø¼ü´Ê
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array å…³é”®è¯æ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param array $options Ñ¡Ïî
+     * @return array ¹Ø¼ü´ÊÊı×é
      */
     private function extractByTfIdf(string $text, array $options): array
     {
-        // åˆ†è¯
-        $tokens = $this->tokenize($text, $options['language']);
+        // ·Ö´Ê
+        $tokens = $this->tokenize($text, $options['language']];
         
-        // è¿‡æ»¤åœç”¨è¯å’ŒçŸ­è¯
-        $filteredTokens = $this->filterTokens($tokens, $options);
+        // ¹ıÂËÍ£ÓÃ´ÊºÍ¶Ì´Ê
+        $filteredTokens = $this->filterTokens($tokens, $options];
         
-        // è®¡ç®—è¯é¢‘
-        $termFrequency = array_count_values($filteredTokens);
+        // ¼ÆËã´ÊÆµ
+        $termFrequency = array_count_values($filteredTokens];
         
-        // è®¡ç®—TF-IDFå€¼
+        // ¼ÆËãTF-IDFÖµ
         $tfidfScores = [];
-        $documentCount = 1; // åœ¨å®é™…åº”ç”¨ä¸­ï¼Œè¿™åº”è¯¥æ˜¯è¯­æ–™åº“ä¸­çš„æ–‡æ¡£æ•°é‡
+        $documentCount = 1; // ÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬ÕâÓ¦¸ÃÊÇÓïÁÏ¿âÖĞµÄÎÄµµÊıÁ¿
         
         foreach ($termFrequency as $term => $frequency) {
-            // ç®€åŒ–ç‰ˆTF-IDFè®¡ç®—ï¼Œåœ¨å®é™…åº”ç”¨ä¸­åº”è¯¥ä½¿ç”¨æ›´å¤æ‚çš„å…¬å¼
-            $tf = $frequency / count($filteredTokens);
-            $idf = log($documentCount / 1); // ç®€åŒ–ç‰ˆIDF
+            // ¼ò»¯°æTF-IDF¼ÆËã£¬ÔÚÊµ¼ÊÓ¦ÓÃÖĞÓ¦¸ÃÊ¹ÓÃ¸ü¸´ÔÓµÄ¹«Ê½
+            $tf = $frequency / count($filteredTokens];
+            $idf = log($documentCount / 1]; // ¼ò»¯°æIDF
             $tfidfScores[$term] = $tf * $idf;
         }
         
-        // æŒ‰åˆ†æ•°æ’åº
-        arsort($tfidfScores);
+        // °´·ÖÊıÅÅĞò
+        arsort($tfidfScores];
         
-        // æå–å‰Nä¸ªå…³é”®è¯
+        // ÌáÈ¡Ç°N¸ö¹Ø¼ü´Ê
         $keywords = [];
         $count = 0;
         foreach ($tfidfScores as $term => $score) {
@@ -186,7 +186,7 @@ class KeywordExtractor
             
             $keywords[] = [
                 'keyword' => $term,
-                'score' => round($score, 4),
+                'score' => round($score, 4],
                 'algorithm' => 'tfidf'
             ];
             
@@ -197,34 +197,34 @@ class KeywordExtractor
     }
     
     /**
-     * ä½¿ç”¨TextRankç®—æ³•æå–å…³é”®è¯
+     * Ê¹ÓÃTextRankËã·¨ÌáÈ¡¹Ø¼ü´Ê
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array å…³é”®è¯æ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param array $options Ñ¡Ïî
+     * @return array ¹Ø¼ü´ÊÊı×é
      */
     private function extractByTextRank(string $text, array $options): array
     {
-        // åˆ†è¯
-        $tokens = $this->tokenize($text, $options['language']);
+        // ·Ö´Ê
+        $tokens = $this->tokenize($text, $options['language']];
         
-        // è¿‡æ»¤åœç”¨è¯å’ŒçŸ­è¯
-        $filteredTokens = $this->filterTokens($tokens, $options);
+        // ¹ıÂËÍ£ÓÃ´ÊºÍ¶Ì´Ê
+        $filteredTokens = $this->filterTokens($tokens, $options];
         
-        // æ„å»ºè¯å…±ç°çŸ©é˜µ
+        // ¹¹½¨´Ê¹²ÏÖ¾ØÕó
         $cooccurrenceMatrix = [];
-        $window = 5; // å…±ç°çª—å£å¤§å°
+        $window = 5; // ¹²ÏÖ´°¿Ú´óĞ¡
         
-        for ($i = 0; $i < count($filteredTokens); $i++) {
+        for ($i = 0; $i < count($filteredTokens]; $i++) {
             $word = $filteredTokens[$i];
             
-            // åˆå§‹åŒ–çŸ©é˜µ
+            // ³õÊ¼»¯¾ØÕó
             if (!isset($cooccurrenceMatrix[$word])) {
                 $cooccurrenceMatrix[$word] = [];
             }
             
-            // æ£€æŸ¥çª—å£å†…çš„è¯
-            for ($j = max(0, $i - $window); $j <= min(count($filteredTokens) - 1, $i + $window); $j++) {
+            // ¼ì²é´°¿ÚÄÚµÄ´Ê
+            for ($j = max(0, $i - $window]; $j <= min(count($filteredTokens) - 1, $i + $window]; $j++) {
                 if ($i == $j) {
                     continue;
                 }
@@ -239,15 +239,15 @@ class KeywordExtractor
             }
         }
         
-        // åˆå§‹åŒ–TextRankåˆ†æ•°
+        // ³õÊ¼»¯TextRank·ÖÊı
         $scores = [];
-        $uniqueTokens = array_unique($filteredTokens);
+        $uniqueTokens = array_unique($filteredTokens];
         
         foreach ($uniqueTokens as $token) {
             $scores[$token] = 1.0;
         }
         
-        // TextRankè¿­ä»£
+        // TextRankµü´ú
         $damping = 0.85;
         $iterations = 10;
         $threshold = 0.0001;
@@ -262,28 +262,28 @@ class KeywordExtractor
                 foreach ($cooccurrenceMatrix as $coword => $edges) {
                     if (isset($edges[$token])) {
                         $weight = $edges[$token];
-                        $outSum = array_sum($cooccurrenceMatrix[$coword]);
+                        $outSum = array_sum($cooccurrenceMatrix[$coword]];
                         $newScore += $damping * $weight * $scores[$coword] / $outSum;
                     }
                 }
                 
-                $change = abs($newScore - $scores[$token]);
-                $maxChange = max($maxChange, $change);
+                $change = abs($newScore - $scores[$token]];
+                $maxChange = max($maxChange, $change];
                 $newScores[$token] = $newScore;
             }
             
             $scores = $newScores;
             
-            // å¦‚æœå˜åŒ–å°äºé˜ˆå€¼ï¼Œæå‰ç»“æŸè¿­ä»£
+            // Èç¹û±ä»¯Ğ¡ÓÚãĞÖµ£¬ÌáÇ°½áÊøµü´ú
             if ($maxChange < $threshold) {
                 break;
             }
         }
         
-        // æŒ‰åˆ†æ•°æ’åº
-        arsort($scores);
+        // °´·ÖÊıÅÅĞò
+        arsort($scores];
         
-        // æå–å‰Nä¸ªå…³é”®è¯
+        // ÌáÈ¡Ç°N¸ö¹Ø¼ü´Ê
         $keywords = [];
         $count = 0;
         foreach ($scores as $term => $score) {
@@ -293,7 +293,7 @@ class KeywordExtractor
             
             $keywords[] = [
                 'keyword' => $term,
-                'score' => round($score, 4),
+                'score' => round($score, 4],
                 'algorithm' => 'textrank'
             ];
             
@@ -304,56 +304,56 @@ class KeywordExtractor
     }
     
     /**
-     * ä½¿ç”¨RAKEç®—æ³•æå–å…³é”®è¯
+     * Ê¹ÓÃRAKEËã·¨ÌáÈ¡¹Ø¼ü´Ê
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array å…³é”®è¯æ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param array $options Ñ¡Ïî
+     * @return array ¹Ø¼ü´ÊÊı×é
      */
     private function extractByRake(string $text, array $options): array
     {
-        // åˆ†å¥
-        $sentences = $this->splitSentences($text, $options['language']);
+        // ·Ö¾ä
+        $sentences = $this->splitSentences($text, $options['language']];
         
-        // æå–å€™é€‰çŸ­è¯­
+        // ÌáÈ¡ºòÑ¡¶ÌÓï
         $candidatePhrases = [];
         
         foreach ($sentences as $sentence) {
-            // ä½¿ç”¨åœç”¨è¯å’Œæ ‡ç‚¹ç¬¦å·ä½œä¸ºåˆ†éš”ç¬¦
-            $phrases = preg_split('/[' . $this->getPunctuationPattern() . ']+/u', $sentence);
+            // Ê¹ÓÃÍ£ÓÃ´ÊºÍ±êµã·ûºÅ×÷Îª·Ö¸ô·û
+            $phrases = preg_split('/[' . $this->getPunctuationPattern() . ']+/u', $sentence];
             
             foreach ($phrases as $phrase) {
-                $phrase = trim($phrase);
+                $phrase = trim($phrase];
                 if (empty($phrase)) {
                     continue;
                 }
                 
-                $words = explode(' ', $phrase);
+                $words = explode(' ', $phrase];
                 $filteredWords = [];
                 
-                // è¿‡æ»¤åœç”¨è¯å’ŒçŸ­è¯
+                // ¹ıÂËÍ£ÓÃ´ÊºÍ¶Ì´Ê
                 foreach ($words as $word) {
-                    $word = trim($word);
+                    $word = trim($word];
                     if (!empty($word) && 
-                        !in_array(mb_strtolower($word), $this->stopwords[$options['language']]) && 
+                        !in_[mb_strtolower($word], $this->stopwords[$options['language']]) && 
                         mb_strlen($word) >= $options['min_word_length']) {
                         $filteredWords[] = $word;
                     }
                 }
                 
                 if (!empty($filteredWords)) {
-                    $candidatePhrases[] = implode(' ', $filteredWords);
+                    $candidatePhrases[] = implode(' ', $filteredWords];
                 }
             }
         }
         
-        // è®¡ç®—è¯é¢‘å’Œè¯å…±ç°åº¦
+        // ¼ÆËã´ÊÆµºÍ´Ê¹²ÏÖ¶È
         $wordFrequency = [];
         $wordDegree = [];
         
         foreach ($candidatePhrases as $phrase) {
-            $words = explode(' ', $phrase);
-            $wordCount = count($words);
+            $words = explode(' ', $phrase];
+            $wordCount = count($words];
             
             foreach ($words as $word) {
                 if (!isset($wordFrequency[$word])) {
@@ -366,16 +366,16 @@ class KeywordExtractor
             }
         }
         
-        // è®¡ç®—æ¯ä¸ªè¯çš„åˆ†æ•°
+        // ¼ÆËãÃ¿¸ö´ÊµÄ·ÖÊı
         $wordScores = [];
         foreach ($wordFrequency as $word => $freq) {
             $wordScores[$word] = $wordDegree[$word] / $freq;
         }
         
-        // è®¡ç®—çŸ­è¯­åˆ†æ•°
+        // ¼ÆËã¶ÌÓï·ÖÊı
         $phraseScores = [];
         foreach ($candidatePhrases as $phrase) {
-            $words = explode(' ', $phrase);
+            $words = explode(' ', $phrase];
             $score = 0;
             
             foreach ($words as $word) {
@@ -385,10 +385,10 @@ class KeywordExtractor
             $phraseScores[$phrase] = $score;
         }
         
-        // æŒ‰åˆ†æ•°æ’åº
-        arsort($phraseScores);
+        // °´·ÖÊıÅÅĞò
+        arsort($phraseScores];
         
-        // æå–å‰Nä¸ªå…³é”®çŸ­è¯­
+        // ÌáÈ¡Ç°N¸ö¹Ø¼ü¶ÌÓï
         $keywords = [];
         $count = 0;
         foreach ($phraseScores as $phrase => $score) {
@@ -398,7 +398,7 @@ class KeywordExtractor
             
             $keywords[] = [
                 'keyword' => $phrase,
-                'score' => round($score, 4),
+                'score' => round($score, 4],
                 'algorithm' => 'rake'
             ];
             
@@ -409,33 +409,33 @@ class KeywordExtractor
     }
     
     /**
-     * åˆ†è¯
+     * ·Ö´Ê
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param string $language è¯­è¨€
-     * @return array è¯å…ƒæ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param string $language ÓïÑÔ
+     * @return array ´ÊÔªÊı×é
      */
     private function tokenize(string $text, string $language): array
     {
-        // ç®€å•åˆ†è¯å®ç°ï¼Œå®é™…åº”ç”¨ä¸­åº”è¯¥ä½¿ç”¨ä¸“ä¸šçš„åˆ†è¯å™¨
+        // ¼òµ¥·Ö´ÊÊµÏÖ£¬Êµ¼ÊÓ¦ÓÃÖĞÓ¦¸ÃÊ¹ÓÃ×¨ÒµµÄ·Ö´ÊÆ÷
         if ($language === 'zh-CN') {
-            // ä¸­æ–‡åˆ†è¯ï¼ˆç®€åŒ–ç‰ˆï¼‰
-            $text = preg_replace('/[^\p{Han}]/u', ' ', $text);
-            $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
-            return array_filter($chars);
+            // ÖĞÎÄ·Ö´Ê£¨¼ò»¯°æ£©
+            $text = preg_replace('/[^\p{Han}]/u', ' ', $text];
+            $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY];
+            return array_filter($chars];
         } else {
-            // è‹±æ–‡åˆ†è¯
-            $text = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $text);
-            return array_filter(explode(' ', $text));
+            // Ó¢ÎÄ·Ö´Ê
+            $text = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $text];
+            return array_filter(explode(' ', $text)];
         }
     }
     
     /**
-     * è¿‡æ»¤è¯å…ƒ
+     * ¹ıÂË´ÊÔª
      *
-     * @param array $tokens è¯å…ƒæ•°ç»„
-     * @param array $options é€‰é¡¹
-     * @return array è¿‡æ»¤åçš„è¯å…ƒæ•°ç»„
+     * @param array $tokens ´ÊÔªÊı×é
+     * @param array $options Ñ¡Ïî
+     * @return array ¹ıÂËºóµÄ´ÊÔªÊı×é
      */
     private function filterTokens(array $tokens, array $options): array
     {
@@ -444,32 +444,32 @@ class KeywordExtractor
         
         return array_filter($tokens, function($token) use ($language, $minWordLength) {
             return mb_strlen($token) >= $minWordLength && 
-                   !in_array(mb_strtolower($token), $this->stopwords[$language]);
-        });
+                   !in_[mb_strtolower($token], $this->stopwords[$language]];
+        }];
     }
     
     /**
-     * åˆ†å¥
+     * ·Ö¾ä
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param string $language è¯­è¨€
-     * @return array å¥å­æ•°ç»„
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @param string $language ÓïÑÔ
+     * @return array ¾ä×ÓÊı×é
      */
     private function splitSentences(string $text, string $language): array
     {
         if ($language === 'zh-CN') {
-            // ä¸­æ–‡åˆ†å¥
-            return preg_split('/[ã€‚ï¼ï¼Ÿ]/u', $text);
+            // ÖĞÎÄ·Ö¾ä
+            return preg_split('/[¡££¡£¿]/u', $text];
         } else {
-            // è‹±æ–‡åˆ†å¥
-            return preg_split('/[.!?]/u', $text);
+            // Ó¢ÎÄ·Ö¾ä
+            return preg_split('/[.!?]/u', $text];
         }
     }
     
     /**
-     * è·å–æ ‡ç‚¹ç¬¦å·æ­£åˆ™è¡¨è¾¾å¼
+     * »ñÈ¡±êµã·ûºÅÕıÔò±í´ïÊ½
      *
-     * @return string æ­£åˆ™è¡¨è¾¾å¼
+     * @return string ÕıÔò±í´ïÊ½
      */
     private function getPunctuationPattern(): string
     {
@@ -477,29 +477,29 @@ class KeywordExtractor
     }
     
     /**
-     * æ£€æµ‹è¯­è¨€
+     * ¼ì²âÓïÑÔ
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @return string è¯­è¨€ä»£ç 
+     * @param string $text ÎÄ±¾ÄÚÈİ
+     * @return string ÓïÑÔ´úÂë
      */
     private function detectLanguage(string $text): string
     {
-        // ç®€å•è¯­è¨€æ£€æµ‹ï¼šè®¡ç®—ä¸­æ–‡å­—ç¬¦æ¯”ä¾‹
-        $totalChars = mb_strlen($text);
+        // ¼òµ¥ÓïÑÔ¼ì²â£º¼ÆËãÖĞÎÄ×Ö·û±ÈÀı
+        $totalChars = mb_strlen($text];
         if ($totalChars === 0) {
             return $this->config['default_language'];
         }
         
-        $chineseChars = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text);
+        $chineseChars = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text];
         $chineseRatio = $chineseChars / $totalChars;
         
         return $chineseRatio > 0.1 ? 'zh-CN' : 'en-US';
     }
     
     /**
-     * è·å–é…ç½®
+     * »ñÈ¡ÅäÖÃ
      *
-     * @return array é…ç½®
+     * @return array ÅäÖÃ
      */
     public function getConfig(): array
     {
@@ -507,20 +507,21 @@ class KeywordExtractor
     }
     
     /**
-     * è®¾ç½®é…ç½®
+     * ÉèÖÃÅäÖÃ
      *
-     * @param array $config é…ç½®
+     * @param array $config ÅäÖÃ
      */
     public function setConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config = array_merge($this->config, $config];
     }
     
     /**
-     * æ¸…é™¤ç¼“å­˜
+     * Çå³ı»º´æ
      */
     public function clearCache(): void
     {
         $this->cache = [];
     }
 }
+

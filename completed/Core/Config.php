@@ -4,16 +4,16 @@ namespace App\Core;
 
 
 /**
- * Config 类
+ * Config �?
  * 
- * 配置管理类，负责加载和访问配置
+ * 配置管理类，负责加载和访问配�?
  *
  * @package App\Core
  */
 class Config
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Config
     }
 
     /**
-     * 获取配置项
+     * 获取配置�?
      *
      * @return mixed
      */
@@ -31,7 +31,7 @@ class Config
     }
 
     /**
-     * 设置配置项
+     * 设置配置�?
      *
      * @return mixed
      */

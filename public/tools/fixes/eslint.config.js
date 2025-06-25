@@ -1,0 +1,123 @@
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import eslintPluginVue from 'eslint-plugin-vue';
+import eslintPluginImport from 'eslint-plugin-import';
+import eslintPluginSecurity from 'eslint-plugin-security';
+import eslintPluginSonarjs from 'eslint-plugin-sonarjs';
+import prettierConfig from 'eslint-config-prettier';
+
+export default [
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  eslintPluginVue.configs['vue3-recommended'],
+  ...tseslint.configs.recommendedRequiringTypeChecking,
+  prettierConfig,
+  {
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.json',
+        extraFileExtensions: ['.vue']
+      },
+    },
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+      'vue': eslintPluginVue,
+      'import': eslintPluginImport,
+      'security': eslintPluginSecurity,
+      'sonarjs': eslintPluginSonarjs
+    },
+    rules: {
+      // TypeScript 规则
+      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      
+      // Vue 规则
+      'vue/html-closing-bracket-newline': ['error', {
+        'singleline': 'never',
+        'multiline': 'always'
+      }],
+      'vue/html-closing-bracket-spacing': 'error',
+      'vue/html-indent': ['error', 2],
+      'vue/html-quotes': ['error', 'double'],
+      'vue/max-attributes-per-line': ['error', {
+        'singleline': 3,
+        'multiline': 1
+      }],
+      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      'vue/require-default-prop': 'error',
+      'vue/require-prop-types': 'error',
+      'vue/order-in-components': 'error',
+      
+      // 一般规则
+      'no-console': 'warn',
+      'no-debugger': 'error',
+      'no-alert': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+      'prefer-arrow-callback': 'error',
+      'arrow-spacing': 'error',
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
+      'comma-dangle': ['error', 'always-multiline'],
+      'semi': ['error', 'always'],
+      'quotes': ['error', 'single'],
+      'indent': ['error', 2],
+      'max-len': ['error', { 'code': 100 }],
+      
+      // 导入规则
+      'import/order': ['error', {
+        'groups': [
+          'builtin',
+          'external', 
+          'internal',
+          'parent',
+          'sibling',
+          'index'
+        ],
+        'newlines-between': 'always'
+      }],
+      'import/no-unresolved': 'error',
+      'import/no-duplicates': 'error',
+      
+      // 安全规则
+      'security/detect-object-injection': 'warn',
+      'security/detect-unsafe-regex': 'error',
+      'security/detect-buffer-noassert': 'error',
+      'security/detect-eval-with-expression': 'error',
+      
+      // SonarJS 规则
+      'sonarjs/cognitive-complexity': ['error', 15],
+      'sonarjs/no-duplicate-string': ['error', 3],
+      'sonarjs/no-identical-functions': 'error',
+      'sonarjs/prefer-immediate-return': 'error'
+    }
+  },
+  {
+    files: ['**/*.vue'],
+    languageOptions: {
+      parser: eslintPluginVue.parser
+    }
+  },
+  {
+    files: ['**/*.js'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-var-requires': 'off'
+    }
+  },
+  {
+    files: ['**/*.test.ts', '**/*.test.js', '**/*.spec.ts', '**/*.spec.js'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'sonarjs/no-duplicate-string': 'off'
+    }
+  }
+]; 

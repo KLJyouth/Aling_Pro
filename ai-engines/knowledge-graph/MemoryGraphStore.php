@@ -1,60 +1,60 @@
-ï»¿<?php
+<?php
 /**
- * æ–‡ä»¶åï¼šMemoryGraphStore.php
- * åŠŸèƒ½æè¿°ï¼šå†…å­˜çŸ¥è¯†å›¾è°±å­˜å‚¨å®ç°
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼şÃû£ºMemoryGraphStore.php
+ * ¹¦ÄÜÃèÊö£ºÄÚ´æÖªÊ¶Í¼Æ×´æ´¢ÊµÏÖ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóĞŞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
 /**
- * å†…å­˜çŸ¥è¯†å›¾è°±å­˜å‚¨å®ç°
+ * ÄÚ´æÖªÊ¶Í¼Æ×´æ´¢ÊµÏÖ
  * 
- * ä½¿ç”¨å†…å­˜æ•°ç»„å­˜å‚¨çŸ¥è¯†å›¾è°±æ•°æ®ï¼Œé€‚ç”¨äºæµ‹è¯•å’Œå°è§„æ¨¡åº”ç”¨
+ * Ê¹ÓÃÄÚ´æÊı×é´æ´¢ÖªÊ¶Í¼Æ×Êı¾İ£¬ÊÊÓÃÓÚ²âÊÔºÍĞ¡¹æÄ£Ó¦ÓÃ
  */
 class MemoryGraphStore implements GraphStoreInterface
 {
     /**
-     * å®ä½“å­˜å‚¨
+     * ÊµÌå´æ´¢
      * @var array
      */
     private array $entities = [];
     
     /**
-     * å…³ç³»å­˜å‚¨
+     * ¹ØÏµ´æ´¢
      * @var array
      */
     private array $relations = [];
     
     /**
-     * æ„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êı
      * 
-     * @param array $data åˆå§‹æ•°æ®
+     * @param array $data ³õÊ¼Êı¾İ
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = []]
     {
-        if (isset($data['entities'])) {
+        if (isset($data['entities']]) {
             $this->entities = $data['entities'];
         }
         
-        if (isset($data['relations'])) {
+        if (isset($data['relations']]) {
             $this->relations = $data['relations'];
         }
     }
     
     /**
-     * è·å–å®ä½“é€šè¿‡ID
+     * »ñÈ¡ÊµÌåÍ¨¹ıID
      * 
-     * @param string $entityId å®ä½“ID
-     * @return array|null å®ä½“æ•°æ®ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™è¿”å›null
+     * @param string $entityId ÊµÌåID
+     * @return array|null ÊµÌåÊı¾İ£¬Èç¹û²»´æÔÚÔò·µ»Ønull
      */
     public function getEntityById(string $entityId): ?array
     {
@@ -62,21 +62,21 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * è·å–æ‰€æœ‰å®ä½“
+     * »ñÈ¡ËùÓĞÊµÌå
      * 
-     * @return array æ‰€æœ‰å®ä½“çš„åˆ—è¡¨
+     * @return array ËùÓĞÊµÌåµÄÁĞ±í
      */
     public function getAllEntities(): array
     {
-        return array_values($this->entities);
+        return array_values($this->entities];
     }
     
     /**
-     * è·å–ä¸æŒ‡å®šå®ä½“æœ‰æŒ‡å®šå…³ç³»çš„å®ä½“åˆ—è¡¨
+     * »ñÈ¡ÓëÖ¸¶¨ÊµÌåÓĞÖ¸¶¨¹ØÏµµÄÊµÌåÁĞ±í
      * 
-     * @param string $entityId å®ä½“ID
-     * @param string $relationType å…³ç³»ç±»å‹
-     * @return array ç›¸å…³å®ä½“åˆ—è¡¨
+     * @param string $entityId ÊµÌåID
+     * @param string $relationType ¹ØÏµÀàĞÍ
+     * @return array Ïà¹ØÊµÌåÁĞ±í
      */
     public function getRelatedEntities(string $entityId, string $relationType): array
     {
@@ -84,9 +84,9 @@ class MemoryGraphStore implements GraphStoreInterface
         
         foreach ($this->relations as $relation) {
             if ($relation['source_id'] === $entityId && $relation['type'] === $relationType) {
-                $entity = $this->getEntityById($relation['target_id']);
+                $entity = $this->getEntityById($relation['target_id']];
                 if ($entity) {
-                    // å°†å…³ç³»ç½®ä¿¡åº¦æ·»åŠ åˆ°å®ä½“ä¸­
+                    // ½«¹ØÏµÖÃĞÅ¶ÈÌí¼Óµ½ÊµÌåÖĞ
                     $entity['confidence'] = $relation['confidence'];
                     $result[] = $entity;
                 }
@@ -97,11 +97,11 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * è·å–ä¸æŒ‡å®šå®ä½“æœ‰æŒ‡å®šå…³ç³»çš„å®ä½“åˆ—è¡¨ï¼ˆåå‘ï¼‰
+     * »ñÈ¡ÓëÖ¸¶¨ÊµÌåÓĞÖ¸¶¨¹ØÏµµÄÊµÌåÁĞ±í£¨·´Ïò£©
      * 
-     * @param string $relationType å…³ç³»ç±»å‹
-     * @param string $targetEntityId ç›®æ ‡å®ä½“ID
-     * @return array ç›¸å…³å®ä½“åˆ—è¡¨
+     * @param string $relationType ¹ØÏµÀàĞÍ
+     * @param string $targetEntityId Ä¿±êÊµÌåID
+     * @return array Ïà¹ØÊµÌåÁĞ±í
      */
     public function getEntitiesWithRelation(string $relationType, string $targetEntityId): array
     {
@@ -109,9 +109,9 @@ class MemoryGraphStore implements GraphStoreInterface
         
         foreach ($this->relations as $relation) {
             if ($relation['target_id'] === $targetEntityId && $relation['type'] === $relationType) {
-                $entity = $this->getEntityById($relation['source_id']);
+                $entity = $this->getEntityById($relation['source_id']];
                 if ($entity) {
-                    // å°†å…³ç³»ç½®ä¿¡åº¦æ·»åŠ åˆ°å®ä½“ä¸­
+                    // ½«¹ØÏµÖÃĞÅ¶ÈÌí¼Óµ½ÊµÌåÖĞ
                     $entity['confidence'] = $relation['confidence'];
                     $result[] = $entity;
                 }
@@ -122,12 +122,12 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * è·å–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„å…³ç³»
+     * »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄ¹ØÏµ
      * 
-     * @param string $sourceEntityId æºå®ä½“ID
-     * @param string $targetEntityId ç›®æ ‡å®ä½“ID
-     * @param string|null $relationType å…³ç³»ç±»å‹ï¼Œå¦‚æœä¸ºnullåˆ™è¿”å›ç¬¬ä¸€ä¸ªæ‰¾åˆ°çš„å…³ç³»
-     * @return array|null å…³ç³»æ•°æ®ï¼Œå¦‚æœä¸å­˜åœ¨åˆ™è¿”å›null
+     * @param string $sourceEntityId Ô´ÊµÌåID
+     * @param string $targetEntityId Ä¿±êÊµÌåID
+     * @param string|null $relationType ¹ØÏµÀàĞÍ£¬Èç¹ûÎªnullÔò·µ»ØµÚÒ»¸öÕÒµ½µÄ¹ØÏµ
+     * @return array|null ¹ØÏµÊı¾İ£¬Èç¹û²»´æÔÚÔò·µ»Ønull
      */
     public function getRelationBetween(string $sourceEntityId, string $targetEntityId, ?string $relationType = null): ?array
     {
@@ -143,11 +143,11 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * è·å–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ‰€æœ‰å…³ç³»
+     * »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄËùÓĞ¹ØÏµ
      * 
-     * @param string $sourceEntityId æºå®ä½“ID
-     * @param string $targetEntityId ç›®æ ‡å®ä½“ID
-     * @return array å…³ç³»æ•°æ®åˆ—è¡¨
+     * @param string $sourceEntityId Ô´ÊµÌåID
+     * @param string $targetEntityId Ä¿±êÊµÌåID
+     * @return array ¹ØÏµÊı¾İÁĞ±í
      */
     public function getRelationsBetween(string $sourceEntityId, string $targetEntityId): array
     {
@@ -163,14 +163,14 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * æ·»åŠ å®ä½“
+     * Ìí¼ÓÊµÌå
      * 
-     * @param array $entityData å®ä½“æ•°æ®
-     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
+     * @param array $entityData ÊµÌåÊı¾İ
+     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
      */
     public function addEntity(array $entityData): bool
     {
-        if (!isset($entityData['id'])) {
+        if (!isset($entityData['id']]) {
             return false;
         }
         
@@ -179,67 +179,67 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * æ›´æ–°å®ä½“
+     * ¸üĞÂÊµÌå
      * 
-     * @param string $entityId å®ä½“ID
-     * @param array $data æ›´æ–°çš„æ•°æ®
-     * @return bool æ˜¯å¦æ›´æ–°æˆåŠŸ
+     * @param string $entityId ÊµÌåID
+     * @param array $data ¸üĞÂµÄÊı¾İ
+     * @return bool ÊÇ·ñ¸üĞÂ³É¹¦
      */
     public function updateEntity(string $entityId, array $data): bool
     {
-        if (!isset($this->entities[$entityId])) {
+        if (!isset($this->entities[$entityId]]) {
             return false;
         }
         
-        $this->entities[$entityId] = array_merge($this->entities[$entityId], $data);
+        $this->entities[$entityId] = array_merge($this->entities[$entityId],  $data];
         return true;
     }
     
     /**
-     * åˆ é™¤å®ä½“
+     * É¾³ıÊµÌå
      * 
-     * @param string $entityId å®ä½“ID
-     * @return bool æ˜¯å¦åˆ é™¤æˆåŠŸ
+     * @param string $entityId ÊµÌåID
+     * @return bool ÊÇ·ñÉ¾³ı³É¹¦
      */
     public function deleteEntity(string $entityId): bool
     {
-        if (!isset($this->entities[$entityId])) {
+        if (!isset($this->entities[$entityId]]) {
             return false;
         }
         
-        unset($this->entities[$entityId]);
+        unset($this->entities[$entityId]];
         
-        // åŒæ—¶åˆ é™¤ç›¸å…³çš„å…³ç³»
+        // Í¬Ê±É¾³ıÏà¹ØµÄ¹ØÏµ
         foreach ($this->relations as $relation) {
             if ($relation['source_id'] === $entityId || $relation['target_id'] === $entityId) {
-                unset($this->relations[$relation['id']]);
+                unset($this->relations[$relation['id']]];
             }
         }
         
-        // é‡æ–°ç´¢å¼•å…³ç³»æ•°ç»„
-        $this->relations = array_values($this->relations);
+        // ÖØĞÂË÷Òı¹ØÏµÊı×é
+        $this->relations = array_values($this->relations];
         
         return true;
     }
     
     /**
-     * æ·»åŠ å…³ç³»
+     * Ìí¼Ó¹ØÏµ
      * 
-     * @param array $relationData å…³ç³»æ•°æ®
-     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
+     * @param array $relationData ¹ØÏµÊı¾İ
+     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
      */
     public function addRelation(array $relationData): bool
     {
-        if (!isset($relationData['id']) || !isset($relationData['source_id']) || !isset($relationData['target_id']) || !isset($relationData['type'])) {
+        if (!isset($relationData['id']] || !isset($relationData['source_id']] || !isset($relationData['target_id']] || !isset($relationData['type']]) {
             return false;
         }
         
-        // æ£€æŸ¥æºå®ä½“å’Œç›®æ ‡å®ä½“æ˜¯å¦å­˜åœ¨
-        if (!isset($this->entities[$relationData['source_id']]) || !isset($this->entities[$relationData['target_id']])) {
+        // ¼ì²éÔ´ÊµÌåºÍÄ¿±êÊµÌåÊÇ·ñ´æÔÚ
+        if (!isset($this->entities[$relationData['source_id']]] || !isset($this->entities[$relationData['target_id']]]) {
             return false;
         }
         
-        // æ£€æŸ¥æ˜¯å¦å·²å­˜åœ¨ç›¸åŒçš„å…³ç³»
+        // ¼ì²éÊÇ·ñÒÑ´æÔÚÏàÍ¬µÄ¹ØÏµ
         foreach ($this->relations as $relation) {
             if ($relation['source_id'] === $relationData['source_id'] && 
                 $relation['target_id'] === $relationData['target_id'] && 
@@ -253,17 +253,17 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * æ›´æ–°å…³ç³»
+     * ¸üĞÂ¹ØÏµ
      * 
-     * @param string $relationId å…³ç³»ID
-     * @param array $data æ›´æ–°çš„æ•°æ®
-     * @return bool æ˜¯å¦æ›´æ–°æˆåŠŸ
+     * @param string $relationId ¹ØÏµID
+     * @param array $data ¸üĞÂµÄÊı¾İ
+     * @return bool ÊÇ·ñ¸üĞÂ³É¹¦
      */
     public function updateRelation(string $relationId, array $data): bool
     {
         foreach ($this->relations as $relation) {
             if ($relation['id'] === $relationId) {
-                $this->relations[] = array_merge($relation, $data);
+                $this->relations[] = array_merge($relation, $data];
                 return true;
             }
         }
@@ -272,17 +272,17 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * åˆ é™¤å…³ç³»
+     * É¾³ı¹ØÏµ
      * 
-     * @param string $relationId å…³ç³»ID
-     * @return bool æ˜¯å¦åˆ é™¤æˆåŠŸ
+     * @param string $relationId ¹ØÏµID
+     * @return bool ÊÇ·ñÉ¾³ı³É¹¦
      */
     public function deleteRelation(string $relationId): bool
     {
         foreach ($this->relations as $relation) {
             if ($relation['id'] === $relationId) {
-                unset($this->relations[$relation['id']]);
-                $this->relations = array_values($this->relations);
+                unset($this->relations[$relation['id']]];
+                $this->relations = array_values($this->relations];
                 return true;
             }
         }
@@ -291,12 +291,12 @@ class MemoryGraphStore implements GraphStoreInterface
     }
     
     /**
-     * æŸ¥è¯¢å®ä½“
+     * ²éÑ¯ÊµÌå
      * 
-     * @param array $query æŸ¥è¯¢æ¡ä»¶
-     * @param int $limit é™åˆ¶ç»“æœæ•°é‡
-     * @param int $offset ç»“æœåç§»é‡
-     * @return array ç¬¦åˆæ¡ä»¶çš„å®ä½“åˆ—è¡¨
+     * @param array $query ²éÑ¯Ìõ¼ş
+     * @param int $limit ÏŞÖÆ½á¹ûÊıÁ¿
+     * @param int $offset ½á¹ûÆ«ÒÆÁ¿
+     * @return array ·ûºÏÌõ¼şµÄÊµÌåÁĞ±í
      */
     public function queryEntities(array $query, int $limit = 100, int $offset = 0): array
     {
@@ -306,7 +306,7 @@ class MemoryGraphStore implements GraphStoreInterface
             $match = true;
             
             foreach ($query as $key => $value) {
-                if (!isset($entity[$key]) || $entity[$key] !== $value) {
+                if (!isset($entity[$key]] || $entity[$key] !== $value) {
                     $match = false;
                     break;
                 }
@@ -316,21 +316,21 @@ class MemoryGraphStore implements GraphStoreInterface
                 $result[] = $entity;
             }
             
-            if (count($result) >= $offset + $limit) {
+            if (count($result] >= $offset + $limit) {
                 break;
             }
         }
         
-        return array_slice($result, $offset, $limit);
+        return array_slice($result, $offset, $limit];
     }
     
     /**
-     * æŸ¥è¯¢å…³ç³»
+     * ²éÑ¯¹ØÏµ
      * 
-     * @param array $query æŸ¥è¯¢æ¡ä»¶
-     * @param int $limit é™åˆ¶ç»“æœæ•°é‡
-     * @param int $offset ç»“æœåç§»é‡
-     * @return array ç¬¦åˆæ¡ä»¶çš„å…³ç³»åˆ—è¡¨
+     * @param array $query ²éÑ¯Ìõ¼ş
+     * @param int $limit ÏŞÖÆ½á¹ûÊıÁ¿
+     * @param int $offset ½á¹ûÆ«ÒÆÁ¿
+     * @return array ·ûºÏÌõ¼şµÄ¹ØÏµÁĞ±í
      */
     public function queryRelations(array $query, int $limit = 100, int $offset = 0): array
     {
@@ -340,7 +340,7 @@ class MemoryGraphStore implements GraphStoreInterface
             $match = true;
             
             foreach ($query as $key => $value) {
-                if (!isset($relation[$key]) || $relation[$key] !== $value) {
+                if (!isset($relation[$key]] || $relation[$key] !== $value) {
                     $match = false;
                     break;
                 }
@@ -350,11 +350,12 @@ class MemoryGraphStore implements GraphStoreInterface
                 $result[] = $relation;
             }
             
-            if (count($result) >= $offset + $limit) {
+            if (count($result] >= $offset + $limit) {
                 break;
             }
         }
         
-        return array_slice($result, $offset, $limit);
+        return array_slice($result, $offset, $limit];
     }
 }
+

@@ -5,7 +5,7 @@ namespace App\Security;
 use App\Core\Config;
 
 /**
- * Encryption 类
+ * Encryption �?
  * 
  * 加密工具，提供数据加密和解密功能
  *
@@ -14,11 +14,11 @@ use App\Core\Config;
 class Encryption
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**

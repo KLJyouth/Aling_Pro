@@ -1,0 +1,79 @@
+{
+    "timestamp": "2025-06-05 13:48:38",
+    "system_analysis": {
+        "memory": {
+            "total": 31.69,
+            "recommendation": "high_performance",
+            "php_memory": "512M",
+            "cache_size": "1024MB"
+        },
+        "cpu": {
+            "cores": 12,
+            "threads": 16,
+            "recommendation": "high_concurrency",
+            "worker_processes": 12,
+            "max_connections": 1000
+        }
+    },
+    "optimizations": {
+        "memory": {
+            "total": 31.69,
+            "recommendation": "high_performance",
+            "php_memory": "512M",
+            "cache_size": "1024MB"
+        },
+        "cpu": {
+            "cores": 12,
+            "threads": 16,
+            "recommendation": "high_concurrency",
+            "worker_processes": 12,
+            "max_connections": 1000
+        },
+        "disk": {
+            "type": "HDD",
+            "recommendation": "standard_io"
+        },
+        "database": {
+            "innodb_buffer_pool_size": "1G",
+            "innodb_log_file_size": "256M",
+            "max_connections": 500,
+            "query_cache_size": "64M",
+            "tmp_table_size": "64M",
+            "max_heap_table_size": "64M"
+        },
+        "cache": {
+            "redis": {
+                "maxmemory": "1024MB",
+                "maxmemory_policy": "allkeys-lru",
+                "timeout": 300,
+                "tcp_keepalive": 300,
+                "save_900": 1,
+                "save_300": 10,
+                "save_60": 10000
+            },
+            "opcache": {
+                "opcache.memory_consumption": "512",
+                "opcache.max_accelerated_files": 4000,
+                "opcache.revalidate_freq": 60,
+                "opcache.enable_cli": 1
+            }
+        },
+        "application": {
+            "max_execution_time": 60,
+            "memory_limit": "512M",
+            "post_max_size": "50M",
+            "upload_max_filesize": "50M",
+            "max_file_uploads": 20,
+            "max_input_vars": 3000,
+            "session_gc_maxlifetime": 1440,
+            "worker_processes": 12,
+            "max_connections": 1000
+        }
+    },
+    "config_files": [
+        "mysql.optimized.cnf",
+        "redis.optimized.conf",
+        "php.optimized.ini",
+        "nginx.optimized.conf"
+    ]
+}

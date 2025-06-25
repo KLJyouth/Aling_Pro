@@ -4,7 +4,7 @@ namespace App\Core;
 
 
 /**
- * Session 类
+ * Session �?
  * 
  * 会话管理类，负责管理用户会话
  *
@@ -13,7 +13,7 @@ namespace App\Core;
 class Session
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -41,7 +41,7 @@ class Session
     }
 
     /**
-     * 检查会话数据是否存在
+     * 检查会话数据是否存�?
      *
      * @return mixed
      */

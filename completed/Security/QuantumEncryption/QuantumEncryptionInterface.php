@@ -11,11 +11,11 @@ interface QuantumEncryptionInterface
 {
     // 接口方法定义
     /**
-     * 获取所有资源
+     * 获取所有资�?
      *
      * @return array
      */
-    public function getAll();
+    public function getAll(];
 
     /**
      * 根据ID获取资源
@@ -23,15 +23,15 @@ interface QuantumEncryptionInterface
      * @param int $id
      * @return mixed
      */
-    public function getById($id);
+    public function getById($id];
 
     /**
-     * 创建新资源
+     * 创建新资�?
      *
      * @param array $data
      * @return mixed
      */
-    public function create(array $data);
+    public function create(array $data];
 
     /**
      * 更新资源
@@ -40,7 +40,7 @@ interface QuantumEncryptionInterface
      * @param array $data
      * @return mixed
      */
-    public function update($id, array $data);
+    public function update($id, array $data];
 
     /**
      * 删除资源
@@ -48,5 +48,5 @@ interface QuantumEncryptionInterface
      * @param int $id
      * @return bool
      */
-    public function delete($id);
+    public function delete($id];
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Database;
 
@@ -19,7 +19,7 @@ use AlingAi\Services\PerformanceMonitorService;
  * @since 2024-12-19
  */
 /**
- * MigrationManager 类
+ * MigrationManager �?
  *
  * @package AlingAi\Database
  */
@@ -52,10 +52,10 @@ class MigrationManager
     public function __construct(array $config = [])
     {
         $this->config = $config;
-        $this->monitor = new PerformanceMonitorService();
+        $this->monitor = new PerformanceMonitorService(];
         $this->migrationsPath = __DIR__ . '/Migrations';
-        $this->initializeDatabase();
-        $this->ensureMigrationsTable();
+        $this->initializeDatabase(];
+        $this->ensureMigrationsTable(];
     }
 
     /**
@@ -77,25 +77,25 @@ class MigrationManager
             $dsn = "mysql:host={$this->config['host']};dbname={$this->config['database']};charset=utf8mb4";
             $this->db = new PDO(
                 $dsn,
-                $this->config['username'],
-                $this->config['password'],
+                $this->config['username'], 
+                $this->config['password'], 
                 [
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES => false
                 ]
-            );
+            ];
             
             // 设置 SQL 模式
-            $this->db->exec("SET sql_mode = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'");
+            $this->db->exec("SET sql_mode = 'STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'"];
             
         } catch (PDOException $e) {
-            throw new Exception("Database connection failed: " . $e->getMessage());
+            throw new Exception("Database connection failed: " . $e->getMessage()];
         }
     }
 
     /**
-     * 确保迁移表存在
+     * 确保迁移表存�?
      */
     /**
 
@@ -119,11 +119,11 @@ class MigrationManager
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         ";
         
-        $this->db->exec($sql);
+        $this->db->exec($sql];
     }
 
     /**
-     * 运行所有待执行的迁移
+     * 运行所有待执行的迁�?
      */
     /**
 
@@ -138,43 +138,43 @@ class MigrationManager
     public function migrate(): array
     {
         try {
-            $startTime = microtime(true);
-            $pendingMigrations = $this->getPendingMigrations();
+            $startTime = microtime(true];
+            $pendingMigrations = $this->getPendingMigrations(];
             
             if (empty($pendingMigrations)) {
                 return [
                     'status' => 'success',
                     'message' => 'No pending migrations',
-                    'executed' => [],
+                    'executed' => [], 
                     'execution_time' => 0
                 ];
             }
 
-            $this->db->beginTransaction();
+            $this->db->beginTransaction(];
             
             try {
-                $batch = $this->getNextBatch();
+                $batch = $this->getNextBatch(];
                 $executed = [];
                 
                 foreach ($pendingMigrations as $migration) {
-                    $this->executeMigration($migration, $batch);
+                    $this->executeMigration($migration, $batch];
                     $executed[] = $migration;
                     
                     $this->monitor->logEvent('migration_executed', [
                         'migration' => $migration,
                         'batch' => $batch
-                    ]);
+                    ]];
                 }
                 
-                $this->db->commit();
+                $this->db->commit(];
                 
                 $executionTime = (microtime(true) - $startTime) * 1000;
                 
                 $this->monitor->logEvent('migrations_completed', [
-                    'count' => count($executed),
+                    'count' => count($executed],
                     'batch' => $batch,
                     'execution_time' => $executionTime
-                ]);
+                ]];
                 
                 return [
                     'status' => 'success',
@@ -185,7 +185,7 @@ class MigrationManager
                 ];
                 
             } catch (Exception $e) {
-                $this->db->rollBack();
+                $this->db->rollBack(];
                 throw $e;
             }
             
@@ -193,19 +193,19 @@ class MigrationManager
             $this->monitor->logError('Migration failed', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
-            ]);
+            ]];
             
             return [
                 'status' => 'error',
                 'message' => 'Migration failed: ' . $e->getMessage(),
-                'executed' => $executed ?? [],
+                'executed' => $executed ?? [], 
                 'execution_time' => 0
             ];
         }
     }
 
     /**
-     * 获取迁移状态
+     * 获取迁移状�?
      */
     /**
 
@@ -219,20 +219,20 @@ class MigrationManager
 
     public function getStatus(): array
     {
-        $allMigrations = $this->getAllMigrationFiles();
-        $executedMigrations = $this->getExecutedMigrations();
-        $pendingMigrations = $this->getPendingMigrations();
+        $allMigrations = $this->getAllMigrationFiles(];
+        $executedMigrations = $this->getExecutedMigrations(];
+        $pendingMigrations = $this->getPendingMigrations(];
         
         return [
-            'total_migrations' => count($allMigrations),
-            'executed_migrations' => count($executedMigrations),
-            'pending_migrations' => count($pendingMigrations),
+            'total_migrations' => count($allMigrations],
+            'executed_migrations' => count($executedMigrations],
+            'pending_migrations' => count($pendingMigrations],
             'last_batch' => $this->getLastBatch(),
             'pending' => $pendingMigrations,
             'executed' => array_map(function($m) {
                 return [
-                    'migration' => $m['migration'],
-                    'batch' => $m['batch'],
+                    'migration' => $m['migration'], 
+                    'batch' => $m['batch'], 
                     'executed_at' => $m['executed_at']
                 ];
             }, $executedMigrations)
@@ -254,14 +254,14 @@ class MigrationManager
 
     private function getPendingMigrations(): array
     {
-        $allMigrations = $this->getAllMigrationFiles();
-        $executedMigrations = array_column($this->getExecutedMigrations(), 'migration');
+        $allMigrations = $this->getAllMigrationFiles(];
+        $executedMigrations = array_column($this->getExecutedMigrations(), 'migration'];
         
-        return array_diff($allMigrations, $executedMigrations);
+        return array_diff($allMigrations, $executedMigrations];
     }
 
     /**
-     * 获取所有迁移文件
+     * 获取所有迁移文�?
      */
     /**
 
@@ -279,16 +279,16 @@ class MigrationManager
             return [];
         }
         
-        $files = scandir($this->migrationsPath);
+        $files = scandir($this->migrationsPath];
         $migrations = [];
         
         foreach ($files as $file) {
             if (preg_match('/^\d{4}_\d{2}_\d{2}_\d{6}_.*\.php$/', $file)) {
-                $migrations[] = basename($file, '.php');
+                $migrations[] = basename($file, '.php'];
             }
         }
         
-        sort($migrations);
+        sort($migrations];
         return $migrations;
     }
 
@@ -307,9 +307,9 @@ class MigrationManager
 
     private function getExecutedMigrations(): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM {$this->migrationsTable} ORDER BY id");
-        $stmt->execute();
-        return $stmt->fetchAll();
+        $stmt = $this->db->prepare("SELECT * FROM {$this->migrationsTable} ORDER BY id"];
+        $stmt->execute(];
+        return $stmt->fetchAll(];
     }
 
     /**
@@ -334,32 +334,32 @@ class MigrationManager
         $migrationFile = $this->migrationsPath . '/' . $migration . '.php';
         
         if (!file_exists($migrationFile)) {
-            throw new Exception("Migration file not found: {$migration}");
+            throw new Exception("Migration file not found: {$migration}"];
         }
         
         require_once $migrationFile;
         
-        $className = $this->getMigrationClassName($migration);
+        $className = $this->getMigrationClassName($migration];
         
         if (!class_exists($className)) {
-            throw new Exception("Migration class not found: {$className}");
+            throw new Exception("Migration class not found: {$className}"];
         }
         
-        $migrationInstance = new $className($this->db);
+        $migrationInstance = new $className($this->db];
         
         if (!method_exists($migrationInstance, 'up')) {
-            throw new Exception("Migration {$className} does not have an 'up' method");
+            throw new Exception("Migration {$className} does not have an 'up' method"];
         }
         
         // 执行迁移
-        $migrationInstance->up();
+        $migrationInstance->up(];
         
         // 记录迁移
         $stmt = $this->db->prepare("
             INSERT INTO {$this->migrationsTable} (migration, batch) 
             VALUES (?, ?)
-        ");
-        $stmt->execute([$migration, $batch]);
+        "];
+        $stmt->execute([$migration, $batch]];
     }
 
     /**
@@ -377,9 +377,9 @@ class MigrationManager
 
     private function getNextBatch(): int
     {
-        $stmt = $this->db->prepare("SELECT MAX(batch) as max_batch FROM {$this->migrationsTable}");
-        $stmt->execute();
-        $result = $stmt->fetch();
+        $stmt = $this->db->prepare("SELECT MAX(batch) as max_batch FROM {$this->migrationsTable}"];
+        $stmt->execute(];
+        $result = $stmt->fetch(];
         
         return ($result['max_batch'] ?? 0) + 1;
     }
@@ -399,9 +399,9 @@ class MigrationManager
 
     private function getLastBatch(): int
     {
-        $stmt = $this->db->prepare("SELECT MAX(batch) as max_batch FROM {$this->migrationsTable}");
-        $stmt->execute();
-        $result = $stmt->fetch();
+        $stmt = $this->db->prepare("SELECT MAX(batch) as max_batch FROM {$this->migrationsTable}"];
+        $stmt->execute(];
+        $result = $stmt->fetch(];
         
         return $result['max_batch'] ?? 0;
     }
@@ -423,18 +423,18 @@ class MigrationManager
 
     private function getMigrationClassName(string $migration): string
     {
-        $parts = explode('_', $migration);
+        $parts = explode('_', $migration];
         if (count($parts) >= 4) {
-            // 移除前4个部分（日期时间）
-            $nameParts = array_slice($parts, 4);
-            return 'Migration_' . implode('_', array_slice($parts, 0, 4)) . '_' . $this->toCamelCase(implode('_', $nameParts));
+            // 移除�?个部分（日期时间�?
+            $nameParts = array_slice($parts, 4];
+            return 'Migration_' . implode('_', array_slice($parts, 0, 4)) . '_' . $this->toCamelCase(implode('_', $nameParts)];
         }
         
         return 'Migration_' . $migration;
     }
 
     /**
-     * 转换为驼峰命名
+     * 转换为驼峰命�?
      */
     /**
 
@@ -450,7 +450,7 @@ class MigrationManager
 
     private function toCamelCase(string $str): string
     {
-        return str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $str)));
+        return str_replace(' ', '', ucwords(str_replace(['_', '-'],  ' ', $str))];
     }
 
     /**
@@ -469,7 +469,7 @@ class MigrationManager
     public function checkConnection(): bool
     {
         try {
-            $this->db->query('SELECT 1');
+            $this->db->query('SELECT 1'];
             return true;
         } catch (Exception $e) {
             return false;
@@ -477,7 +477,7 @@ class MigrationManager
     }
 
     /**
-     * 获取数据库信息
+     * 获取数据库信�?
      */
     /**
 
@@ -510,3 +510,4 @@ class MigrationManager
         }
     }
 }
+

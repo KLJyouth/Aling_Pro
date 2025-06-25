@@ -5,7 +5,7 @@ namespace App\AI;
 use App\Core\AIManager;
 
 /**
- * NaturalLanguage 类
+ * NaturalLanguage �?
  * 
  * 自然语言处理组件，提供NLP相关功能
  *
@@ -14,7 +14,7 @@ use App\Core\AIManager;
 class NaturalLanguage
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {

@@ -69,7 +69,7 @@ try {
             // 如果某个步骤失败，停止安装
             echo json_encode([
                 'success' => false,
-                'message' => "安装失败在步骤: {$description}",
+                'message' => "安装失败在步骤 {$description}",
                 'error' => $e->getMessage(),
                 'progress' => $progress
             ]);
@@ -159,7 +159,7 @@ function executeInstallStep($step, $databaseConfig, $adminConfig) {
             return finalizeInstallation();
             
         default:
-            throw new Exception("未知的安装步骤: {$step}");
+            throw new Exception("未知的安装步骤 {$step}");
     }
 }
 
@@ -180,7 +180,7 @@ function createConfigFile($databaseConfig, $adminConfig) {
         $configContent = "<?php\n";
         $configContent .= "/**\n";
         $configContent .= " * AlingAi Pro 系统配置文件\n";
-        $configContent .= " * 自动生成于 " . date('Y-m-d H:i:s') . "\n";
+        $configContent .= " * 自动生成于" . date('Y-m-d H:i:s') . "\n";
         $configContent .= " */\n\n";
         $configContent .= "return [\n";
         
@@ -200,7 +200,7 @@ function createConfigFile($databaseConfig, $adminConfig) {
             $configContent .= "        'collation' => 'utf8mb4_general_ci',\n";
         }
         
-        $configContent .= "    ],\n\n";
+        $configContent .= "    ], \n\n";
         
         // 系统配置
         $configContent .= "    'system' => [\n";
@@ -210,27 +210,27 @@ function createConfigFile($databaseConfig, $adminConfig) {
         $configContent .= "        'version' => '5.1.0',\n";
         $configContent .= "        'secret_key' => '" . bin2hex(random_bytes(32)) . "',\n";
         $configContent .= "        'session_lifetime' => 7200,\n";
-        $configContent .= "    ],\n\n";
+        $configContent .= "    ], \n\n";
         
         // 安全配置
         $configContent .= "    'security' => [\n";
         $configContent .= "        'password_hash_algo' => PASSWORD_BCRYPT,\n";
-        $configContent .= "        'password_hash_options' => ['cost' => 12],\n";
+        $configContent .= "        'password_hash_options' => ['cost' => 12], \n";
         $configContent .= "        'jwt_secret' => '" . bin2hex(random_bytes(32)) . "',\n";
         $configContent .= "        'jwt_expiration' => 3600,\n";
         $configContent .= "        'api_rate_limit' => 60,\n";
         $configContent .= "        'enable_csrf' => true,\n";
-        $configContent .= "    ],\n\n";
+        $configContent .= "    ], \n\n";
         
         // 路径配置
         $configContent .= "    'paths' => [\n";
-        $configContent .= "        'base' => dirname(__DIR__),\n";
+        $configContent .= "        'base' => dirname(__DIR__), \n";
         $configContent .= "        'public' => dirname(__DIR__) . '/public',\n";
         $configContent .= "        'storage' => dirname(__DIR__) . '/storage',\n";
         $configContent .= "        'logs' => dirname(__DIR__) . '/storage/logs',\n";
         $configContent .= "        'cache' => dirname(__DIR__) . '/storage/cache',\n";
         $configContent .= "        'uploads' => dirname(__DIR__) . '/public/uploads',\n";
-        $configContent .= "    ],\n";
+        $configContent .= "    ], \n";
         
         $configContent .= "];\n";
         
@@ -270,7 +270,7 @@ function setupDatabase($config) {
             
             return [
                 'message' => 'SQLite数据库设置成功',
-                'details' => "数据库文件位置: {$dbPath}"
+                'details' => "数据库文件位置 {$dbPath}"
             ];
         } else {
             // MySQL/MariaDB数据库
@@ -298,7 +298,7 @@ function setupDatabase($config) {
             
             return [
                 'message' => '数据库设置成功',
-                'details' => "已连接到数据库: {$database}"
+                'details' => "已连接到数据库 {$database}"
             ];
         }
     } catch (PDOException $e) {
@@ -463,3 +463,5 @@ function finalizeInstallation() {
     }
 }
 ?>
+
+

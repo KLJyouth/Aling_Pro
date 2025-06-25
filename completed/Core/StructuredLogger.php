@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Pro\Core;
 
@@ -16,12 +16,12 @@ use Monolog\Processor\MemoryUsageProcessor;
 use Monolog\Processor\ProcessIdProcessor;
 
 /**
- * 结构化日志系统
+ * 结构化日志系�?
  * 
  * 提供统一的日志记录接口和配置
  */
 /**
- * LoggerFactory 类
+ * LoggerFactory �?
  *
  * @package AlingAi\Pro\Core
  */
@@ -61,37 +61,37 @@ class LoggerFactory
                 'app' => [
                     'level' => LogLevel::INFO,
                     'file' => 'app.log'
-                ],
+                ], 
                 'api' => [
                     'level' => LogLevel::INFO,
                     'file' => 'api.log'
-                ],
+                ], 
                 'auth' => [
                     'level' => LogLevel::INFO,
                     'file' => 'auth.log'
-                ],
+                ], 
                 'database' => [
                     'level' => LogLevel::WARNING,
                     'file' => 'database.log'
-                ],
+                ], 
                 'cache' => [
                     'level' => LogLevel::INFO,
                     'file' => 'cache.log'
-                ],
+                ], 
                 'security' => [
                     'level' => LogLevel::WARNING,
                     'file' => 'security.log'
-                ],
+                ], 
                 'performance' => [
                     'level' => LogLevel::INFO,
                     'file' => 'performance.log'
                 ]
             ]
-        ], $config);
+        ],  $config];
 
         // 确保日志目录存在
         if (!is_dir($this->config['log_path'])) {
-            mkdir($this->config['log_path'], 0755, true);
+            mkdir($this->config['log_path'],  0755, true];
         }
     }
 
@@ -115,14 +115,14 @@ class LoggerFactory
         $channel = $channel ?: $this->config['default_channel'];
         
         if (!isset($this->loggers[$channel])) {
-            $this->loggers[$channel] = $this->createLogger($channel);
+            $this->loggers[$channel] = $this->createLogger($channel];
         }
 
         return $this->loggers[$channel];
     }
 
     /**
-     * 创建日志器
+     * 创建日志�?
      */
     /**
 
@@ -139,24 +139,24 @@ class LoggerFactory
     private function createLogger(string $channel): Logger
     {
         $channelConfig = $this->config['channels'][$channel] ?? $this->config['channels']['app'];
-        $logger = new Logger($channel);
+        $logger = new Logger($channel];
 
-        // 添加文件处理器
-        $this->addFileHandler($logger, $channel, $channelConfig);
+        // 添加文件处理�?
+        $this->addFileHandler($logger, $channel, $channelConfig];
 
         // 添加控制台处理器（如果启用）
         if ($this->config['enable_console']) {
-            $this->addConsoleHandler($logger, $channelConfig);
+            $this->addConsoleHandler($logger, $channelConfig];
         }
 
-        // 添加处理器
-        $this->addProcessors($logger);
+        // 添加处理�?
+        $this->addProcessors($logger];
 
         return $logger;
     }
 
     /**
-     * 添加文件处理器
+     * 添加文件处理�?
      */
     /**
 
@@ -180,15 +180,15 @@ class LoggerFactory
         
         $handler = new RotatingFileHandler(
             $filename,
-            $this->config['max_files'],
+            $this->config['max_files'], 
             $config['level']
-        );
+        ];
 
         if ($this->config['enable_json']) {
-            $handler->setFormatter(new JsonFormatter());
+            $handler->setFormatter(new JsonFormatter()];
         }
 
-        $logger->pushHandler($handler);
+        $logger->pushHandler($handler];
     }
 
     /**
@@ -210,12 +210,12 @@ class LoggerFactory
 
     private function addConsoleHandler(Logger $logger, array $config): void
     {
-        $handler = new StreamHandler('php://stdout', $config['level']);
-        $logger->pushHandler($handler);
+        $handler = new StreamHandler('php://stdout', $config['level']];
+        $logger->pushHandler($handler];
     }
 
     /**
-     * 添加处理器
+     * 添加处理�?
      */
     /**
 
@@ -231,25 +231,25 @@ class LoggerFactory
 
     private function addProcessors(Logger $logger): void
     {
-        $logger->pushProcessor(new UidProcessor());
-        $logger->pushProcessor(new WebProcessor());
-        $logger->pushProcessor(new MemoryUsageProcessor());
-        $logger->pushProcessor(new ProcessIdProcessor());
+        $logger->pushProcessor(new UidProcessor()];
+        $logger->pushProcessor(new WebProcessor()];
+        $logger->pushProcessor(new MemoryUsageProcessor()];
+        $logger->pushProcessor(new ProcessIdProcessor()];
         
         // 添加自定义处理器
         $logger->pushProcessor(function ($record) {
             $record['extra']['app'] = 'AlingAi_Pro';
             $record['extra']['version'] = '1.0.0';
-            $record['extra']['timestamp'] = microtime(true);
+            $record['extra']['timestamp'] = microtime(true];
             return $record;
-        });
+        }];
     }
 }
 
 /**
  * 结构化日志记录器
  * 
- * 提供便捷的日志记录方法
+ * 提供便捷的日志记录方�?
  */
 class StructuredLogger
 {
@@ -311,7 +311,7 @@ class StructuredLogger
     public function logApiRequest(
         string $method,
         string $path,
-        array $params = [],
+        array $params = [], 
         float $responseTime = null,
         int $statusCode = null,
         string $userId = null
@@ -320,13 +320,13 @@ class StructuredLogger
             'type' => 'api_request',
             'http_method' => $method,
             'path' => $path,
-            'params' => $this->sanitizeParams($params),
+            'params' => $this->sanitizeParams($params],
             'response_time_ms' => $responseTime ? round($responseTime * 1000, 2) : null,
             'status_code' => $statusCode,
             'user_id' => $userId
-        ]);
+        ]];
 
-        $level = $this->getLogLevelFromStatusCode($statusCode);
+        $level = $this->getLogLevelFromStatusCode($statusCode];
         $message = "API {$method} {$path}";
         
         if ($statusCode) {
@@ -337,7 +337,7 @@ class StructuredLogger
             $message .= " (" . round($responseTime * 1000, 2) . "ms)";
         }
 
-        $this->logger->log($level, $message, $context);
+        $this->logger->log($level, $message, $context];
     }
 
     /**
@@ -364,7 +364,7 @@ class StructuredLogger
     public function logUserAction(
         string $action,
         string $userId,
-        array $data = [],
+        array $data = [], 
         string $ip = null
     ): void {
         $context = array_merge($this->defaultContext, [
@@ -373,9 +373,9 @@ class StructuredLogger
             'user_id' => $userId,
             'data' => $data,
             'ip_address' => $ip
-        ]);
+        ]];
 
-        $this->logger->info("用户行为: {$action}", $context);
+        $this->logger->info("用户行为: {$action}", $context];
     }
 
     /**
@@ -404,7 +404,7 @@ class StructuredLogger
     public function logSecurityEvent(
         string $event,
         string $severity = 'medium',
-        array $details = [],
+        array $details = [], 
         string $ip = null,
         string $userId = null
     ): void {
@@ -415,14 +415,14 @@ class StructuredLogger
             'details' => $details,
             'ip_address' => $ip,
             'user_id' => $userId
-        ]);
+        ]];
 
-        $level = $this->getLogLevelFromSeverity($severity);
-        $this->logger->log($level, "安全事件: {$event}", $context);
+        $level = $this->getLogLevelFromSeverity($severity];
+        $this->logger->log($level, "安全事件: {$event}", $context];
     }
 
     /**
-     * 记录数据库操作
+     * 记录数据库操�?
      */
     /**
 
@@ -444,7 +444,7 @@ class StructuredLogger
 
     public function logDatabaseQuery(
         string $query,
-        array $bindings = [],
+        array $bindings = [], 
         float $executionTime = null,
         string $connection = 'default'
     ): void {
@@ -454,19 +454,19 @@ class StructuredLogger
             'bindings' => $bindings,
             'execution_time_ms' => $executionTime ? round($executionTime * 1000, 2) : null,
             'connection' => $connection
-        ]);
+        ]];
 
         $level = LogLevel::DEBUG;
-        if ($executionTime && $executionTime > 1.0) { // 慢查询
+        if ($executionTime && $executionTime > 1.0) { // 慢查�?
             $level = LogLevel::WARNING;
         }
 
-        $message = "数据库查询";
+        $message = "数据库查�?;
         if ($executionTime) {
             $message .= " (" . round($executionTime * 1000, 2) . "ms)";
         }
 
-        $this->logger->log($level, $message, $context);
+        $this->logger->log($level, $message, $context];
     }
 
     /**
@@ -502,14 +502,14 @@ class StructuredLogger
             'key' => $key,
             'hit' => $hit,
             'execution_time_ms' => $executionTime ? round($executionTime * 1000, 2) : null
-        ]);
+        ]];
 
         $message = "缓存{$operation}: {$key}";
         if ($hit !== null) {
-            $message .= $hit ? ' (命中)' : ' (未命中)';
+            $message .= $hit ? ' (命中)' : ' (未命�?';
         }
 
-        $this->logger->info($message, $context);
+        $this->logger->info($message, $context];
     }
 
     /**
@@ -545,14 +545,14 @@ class StructuredLogger
             'value' => $value,
             'unit' => $unit,
             'tags' => $tags
-        ]);
+        ]];
 
         $message = "性能指标 {$metric}: {$value}";
         if ($unit) {
             $message .= " {$unit}";
         }
 
-        $this->logger->info($message, $context);
+        $this->logger->info($message, $context];
     }
 
     /**
@@ -576,7 +576,7 @@ class StructuredLogger
 
     public function logBusinessEvent(
         string $event,
-        array $data = [],
+        array $data = [], 
         string $userId = null
     ): void {
         $context = array_merge($this->defaultContext, [
@@ -584,9 +584,9 @@ class StructuredLogger
             'event' => $event,
             'data' => $data,
             'user_id' => $userId
-        ]);
+        ]];
 
-        $this->logger->info("业务事件: {$event}", $context);
+        $this->logger->info("业务事件: {$event}", $context];
     }
 
     /**
@@ -695,9 +695,10 @@ class StructuredLogger
     public function __call(string $method, array $arguments)
     {
         if (method_exists($this->logger, $method)) {
-            return call_user_func_array([$this->logger, $method], $arguments);
+            return call_user_func_[[$this->logger, $method],  $arguments];
         }
 
-        throw new \BadMethodCallException("方法 {$method} 不存在");
+        throw new \BadMethodCallException("方法 {$method} 不存�?];
     }
 }
+

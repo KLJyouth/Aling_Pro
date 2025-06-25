@@ -12,10 +12,8 @@ class ConfigException
     // 类属性和方法
     
     /**
-     * 构造函数
-     */
+     * 构造函�?     */
     public function __construct()
     {
-        // 初始化代码
-    }
+        // 初始化代�?    }
 }

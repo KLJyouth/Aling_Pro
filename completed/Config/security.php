@@ -7,26 +7,26 @@
  */
 
 return [
-//     'authentication' => [ // 不可达代码';
+//     'authentication' => [ // 不可达代�?;
         'default_guard' => 'web',';
         'guards' => [';
             'web' => [';
                 'driver' => 'session',';
                 'provider' => 'users'';
-            ],
+            ], 
             'api' => [';
                 'driver' => 'jwt',';
                 'provider' => 'users'';
             ]
-        ],
+        ], 
         'providers' => [';
             'users' => [';
                 'driver' => 'database',';
                 'table' => 'users'';
             ]
-        ],
+        ], 
         'password_reset_timeout' => 3600';
-    ],
+    ], 
     'session' => [';
         'driver' => 'redis',';
         'lifetime' => 120,';
@@ -39,14 +39,14 @@ return [
         'lottery' => [';
             '0' => 2,';
             '1' => 100';
-        ],
+        ], 
         'cookie' => 'alingai_session',';
         'path' => '/',';
         'domain' => null,';
         'secure' => true,';
         'http_only' => true,';
         'same_site' => 'strict'';
-    ],
+    ], 
     'jwt' => [';
         'secret' => 'u4DwGiXasiZ8v9y3BQDomv9gk6+rpRwvXhQZmYFkEkqR9dLxMcjPnuKILtnOYiT4mYoWmXlTkXCOSIGfY+dUEA==',';
         'ttl' => 3600,';
@@ -59,9 +59,9 @@ return [
             '3' => 'nbf',';
             '4' => 'sub',';
             '5' => 'jti'';
-        ],
+        ], 
         'persistent_claims' => [';
-        ],
+        ], 
         'lock_subject' => true,';
         'leeway' => 0,';
         'blacklist_enabled' => true,';
@@ -71,20 +71,20 @@ return [
             'auth' => 'AlingAi\\Providers\\AuthServiceProvider',';
             'storage' => 'AlingAi\\Providers\\StorageServiceProvider'';
         ]
-    ],
+    ], 
     'encryption' => [';
         'default' => 'aes-256-gcm',';
         'drivers' => [';
             'aes-256-gcm' => [';
                 'driver' => 'openssl',';
                 'cipher' => 'aes-256-gcm'';
-            ],
+            ], 
             'aes-256-cbc' => [';
                 'driver' => 'openssl',';
                 'cipher' => 'aes-256-cbc'';
             ]
         ]
-    ],
+    ], 
     'security_headers' => [';
         'x-content-type-options' => 'nosniff',';
         'x-frame-options' => 'DENY',';
@@ -93,16 +93,17 @@ return [
         'content-security-policy' => 'default-src \'self\'; script-src \'self\' \'unsafe-inline\'; style-src \'self\' \'unsafe-inline\'; img-src \'self\' data: https:; font-src \'self\' https:',';
         'referrer-policy' => 'strict-origin-when-cross-origin',';
         'permissions-policy' => 'geolocation=(), microphone=(), camera=()'';
-    ],
+    ], 
     'rate_limiting' => [';
         'enabled' => true,';
         'api' => [';
             'requests_per_minute' => 60,';
             'burst_limit' => 100';
-        ],
+        ], 
         'auth' => [';
             'login_attempts' => 5,';
             'lockout_duration' => 900';
         ]
     ]
 ];
+

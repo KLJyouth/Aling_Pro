@@ -1,11 +1,11 @@
-ï»¿<?php declare(strict_types=1);
+<?php declare(strict_types=1];
 
 /**
- * æ–‡ä»¶åï¼šTokenizerInterface.php
- * åŠŸèƒ½æè¿°ï¼šåˆ†è¯å™¨æŽ¥å£ - å®šä¹‰æ‰€æœ‰åˆ†è¯å™¨å¿…é¡»å®žçŽ°çš„æ–¹æ³•
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åŽä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼þÃû£ºTokenizerInterface.php
+ * ¹¦ÄÜÃèÊö£º·Ö´ÊÆ÷½Ó¿Ú - ¶¨ÒåËùÓÐ·Ö´ÊÆ÷±ØÐëÊµÏÖµÄ·½·¨
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóÐÞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  *
  * @package AlingAi\Engines\NLP
  * @author AlingAi Team
@@ -15,95 +15,95 @@
 namespace AlingAi\Engines\NLP;
 
 /**
- * åˆ†è¯å™¨æŽ¥å£
+ * ·Ö´ÊÆ÷½Ó¿Ú
  *
- * æ‰€æœ‰åˆ†è¯å™¨éƒ½å¿…é¡»å®žçŽ°è¿™ä¸ªæŽ¥å£ï¼Œæä¾›åŸºæœ¬çš„æ–‡æœ¬åˆ†è¯åŠŸèƒ½
+ * ËùÓÐ·Ö´ÊÆ÷¶¼±ØÐëÊµÏÖÕâ¸ö½Ó¿Ú£¬Ìá¹©»ù±¾µÄÎÄ±¾·Ö´Ê¹¦ÄÜ
  */
 interface TokenizerInterface
 {
     /**
-     * åˆ†è¯æ–¹æ³•ï¼Œå°†æ–‡æœ¬åˆ†å‰²ä¸ºè¯å…ƒï¼ˆtokenï¼‰
+     * ·Ö´Ê·½·¨£¬½«ÎÄ±¾·Ö¸îÎª´ÊÔª£¨token£©
      *
-     * @param string $text è¦åˆ†è¯çš„æ–‡æœ¬
-     * @param array $options åˆ†è¯é€‰é¡¹
-     * @return array åˆ†è¯ç»“æžœæ•°ç»„ï¼Œæ¯ä¸ªå…ƒç´ åŒ…å«è¯å…ƒæ–‡æœ¬ã€ä½ç½®ã€ç±»åž‹ç­‰ä¿¡æ¯
+     * @param string $text Òª·Ö´ÊµÄÎÄ±¾
+     * @param array $options ·Ö´ÊÑ¡Ïî
+     * @return array ·Ö´Ê½á¹ûÊý×é£¬Ã¿¸öÔªËØ°üº¬´ÊÔªÎÄ±¾¡¢Î»ÖÃ¡¢ÀàÐÍµÈÐÅÏ¢
      */
     public function tokenize(string $text, array $options = []): array;
     
     /**
-     * èŽ·å–åœç”¨è¯åˆ—è¡¨
+     * »ñÈ¡Í£ÓÃ´ÊÁÐ±í
      *
-     * @param string|null $language è¯­è¨€ä»£ç ï¼Œä¸ºnullæ—¶è¿”å›žå½“å‰è®¾ç½®çš„è¯­è¨€
-     * @return array åœç”¨è¯åˆ—è¡¨
+     * @param string|null $language ÓïÑÔ´úÂë£¬ÎªnullÊ±·µ»Øµ±Ç°ÉèÖÃµÄÓïÑÔ
+     * @return array Í£ÓÃ´ÊÁÐ±í
      */
     public function getStopwords(?string $language = null): array;
     
     /**
-     * æ·»åŠ è‡ªå®šä¹‰åœç”¨è¯
+     * Ìí¼Ó×Ô¶¨ÒåÍ£ÓÃ´Ê
      *
-     * @param array $words è¦æ·»åŠ çš„åœç”¨è¯
-     * @param string|null $language è¯­è¨€ä»£ç ï¼Œä¸ºnullæ—¶ä½¿ç”¨å½“å‰è®¾ç½®çš„è¯­è¨€
-     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
+     * @param array $words ÒªÌí¼ÓµÄÍ£ÓÃ´Ê
+     * @param string|null $language ÓïÑÔ´úÂë£¬ÎªnullÊ±Ê¹ÓÃµ±Ç°ÉèÖÃµÄÓïÑÔ
+     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
      */
     public function addStopwords(array $words, ?string $language = null): bool;
     
     /**
-     * ç§»é™¤åœç”¨è¯
+     * ÒÆ³ýÍ£ÓÃ´Ê
      *
-     * @param array $words è¦ç§»é™¤çš„åœç”¨è¯
-     * @param string|null $language è¯­è¨€ä»£ç ï¼Œä¸ºnullæ—¶ä½¿ç”¨å½“å‰è®¾ç½®çš„è¯­è¨€
-     * @return bool æ˜¯å¦ç§»é™¤æˆåŠŸ
+     * @param array $words ÒªÒÆ³ýµÄÍ£ÓÃ´Ê
+     * @param string|null $language ÓïÑÔ´úÂë£¬ÎªnullÊ±Ê¹ÓÃµ±Ç°ÉèÖÃµÄÓïÑÔ
+     * @return bool ÊÇ·ñÒÆ³ý³É¹¦
      */
     public function removeStopwords(array $words, ?string $language = null): bool;
     
     /**
-     * å°†åˆ†è¯ç»“æžœè½¬æ¢ä¸ºå­—ç¬¦ä¸²
+     * ½«·Ö´Ê½á¹û×ª»»Îª×Ö·û´®
      *
-     * @param array $tokens åˆ†è¯ç»“æžœ
-     * @param string $delimiter åˆ†éš”ç¬¦
-     * @return string è½¬æ¢åŽçš„å­—ç¬¦ä¸²
+     * @param array $tokens ·Ö´Ê½á¹û
+     * @param string $delimiter ·Ö¸ô·û
+     * @return string ×ª»»ºóµÄ×Ö·û´®
      */
     public function tokensToString(array $tokens, string $delimiter = ' '): string;
     
     /**
-     * è¿‡æ»¤åˆ†è¯ç»“æžœ
+     * ¹ýÂË·Ö´Ê½á¹û
      *
-     * @param array $tokens åŽŸå§‹åˆ†è¯ç»“æžœ
-     * @param array $options è¿‡æ»¤é€‰é¡¹ï¼Œå¦‚ç§»é™¤åœç”¨è¯ã€æ ‡ç‚¹ç­‰
-     * @return array è¿‡æ»¤åŽçš„åˆ†è¯ç»“æžœ
+     * @param array $tokens Ô­Ê¼·Ö´Ê½á¹û
+     * @param array $options ¹ýÂËÑ¡Ïî£¬ÈçÒÆ³ýÍ£ÓÃ´Ê¡¢±êµãµÈ
+     * @return array ¹ýÂËºóµÄ·Ö´Ê½á¹û
      */
     public function filterTokens(array $tokens, array $options = []): array;
     
     /**
-     * èŽ·å–åˆ†è¯å™¨ä¿¡æ¯
+     * »ñÈ¡·Ö´ÊÆ÷ÐÅÏ¢
      *
-     * @return array åˆ†è¯å™¨ä¿¡æ¯ï¼ŒåŒ…å«åç§°ã€ç‰ˆæœ¬ã€æ”¯æŒè¯­è¨€ç­‰
+     * @return array ·Ö´ÊÆ÷ÐÅÏ¢£¬°üº¬Ãû³Æ¡¢°æ±¾¡¢Ö§³ÖÓïÑÔµÈ
      */
     public function getTokenizerInfo(): array;
     
     /**
-     * æ£€æµ‹è¯­è¨€
+     * ¼ì²âÓïÑÔ
      *
-     * @param string $text è¦æ£€æµ‹çš„æ–‡æœ¬
-     * @return string|null æ£€æµ‹åˆ°çš„è¯­è¨€ä»£ç ï¼Œå¦‚æ— æ³•æ£€æµ‹åˆ™è¿”å›žnull
+     * @param string $text Òª¼ì²âµÄÎÄ±¾
+     * @return string|null ¼ì²âµ½µÄÓïÑÔ´úÂë£¬ÈçÎÞ·¨¼ì²âÔò·µ»Ønull
      */
     public function detectLanguage(string $text): ?string;
     
     /**
-     * èŽ·å–è¯å¹²
+     * »ñÈ¡´Ê¸É
      * 
-     * @param string $word è¦æå–è¯å¹²çš„å•è¯
-     * @param string|null $language è¯­è¨€ä»£ç ï¼Œä¸ºnullæ—¶ä½¿ç”¨å½“å‰è®¾ç½®çš„è¯­è¨€
-     * @return string æå–çš„è¯å¹²
+     * @param string $word ÒªÌáÈ¡´Ê¸ÉµÄµ¥´Ê
+     * @param string|null $language ÓïÑÔ´úÂë£¬ÎªnullÊ±Ê¹ÓÃµ±Ç°ÉèÖÃµÄÓïÑÔ
+     * @return string ÌáÈ¡µÄ´Ê¸É
      */
     public function stem(string $word, ?string $language = null): string;
     
     /**
-     * è¯å½¢è¿˜åŽŸ
+     * ´ÊÐÎ»¹Ô­
      * 
-     * @param string $word è¦è¿˜åŽŸçš„å•è¯
-     * @param string|null $language è¯­è¨€ä»£ç ï¼Œä¸ºnullæ—¶ä½¿ç”¨å½“å‰è®¾ç½®çš„è¯­è¨€
-     * @return string è¿˜åŽŸåŽçš„è¯å½¢ï¼ˆè¯å…ƒï¼‰
+     * @param string $word Òª»¹Ô­µÄµ¥´Ê
+     * @param string|null $language ÓïÑÔ´úÂë£¬ÎªnullÊ±Ê¹ÓÃµ±Ç°ÉèÖÃµÄÓïÑÔ
+     * @return string »¹Ô­ºóµÄ´ÊÐÎ£¨´ÊÔª£©
      */
     public function lemmatize(string $word, ?string $language = null): string;
 }

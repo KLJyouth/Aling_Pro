@@ -61,7 +61,7 @@ class ComputerVisionAPI
      * @param CacheManager|null $cache 缓存管理器
      * @throws Exception 初始化失败时抛出异常
      */
-    public function __construct(array $config = [], ?LoggerInterface $logger = null, ?CacheManager $cache = null)
+    public function __construct(array $config = [],  ?LoggerInterface $logger = null, ?CacheManager $cache = null)
     {
         $this->logger = $logger;
         $this->cache = $cache;
@@ -73,7 +73,7 @@ class ComputerVisionAPI
             if ($this->logger) {
                 $this->logger->info('计算机视觉API初始化成功', [
                     'config' => [
-                        'api_version' => $this->config['api_version'],
+                        'api_version' => $this->config['api_version'], 
                         'cache_enabled' => $this->config['cache_enabled']
                     ]
                 ]);
@@ -389,7 +389,7 @@ class ComputerVisionAPI
             
             $result = [
                 'similarity' => $similarity,
-                'is_similar' => $similarity > $mergedOptions['confidence_threshold'],
+                'is_similar' => $similarity > $mergedOptions['confidence_threshold'], 
                 'comparison_details' => [
                     'method' => 'feature_based',
                     'feature_dimension' => count($features1),
@@ -487,7 +487,7 @@ class ComputerVisionAPI
         }
         
         if (filesize($imagePath) > $this->config['max_image_size']) {
-            throw new InvalidArgumentException("图像文件过大: " . filesize($imagePath) . " 字节 (最大: {$this->config['max_image_size']} 字节)");
+            throw new InvalidArgumentException("图像文件过大: " . filesize($imagePath) . " 字节 (最大 " . $this->config['max_image_size'] . " 字节)");
         }
     }
 
@@ -548,3 +548,4 @@ class ComputerVisionAPI
         }
     }
 } 
+

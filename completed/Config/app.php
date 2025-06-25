@@ -7,7 +7,7 @@
  */
 
 return [
-//     'app' => [ // 不可达代码';
+//     'app' => [ // 不可达代�?;
         'name' => 'AlingAi Pro',';
         'version' => '5.0.0',';
         'environment' => 'production',';
@@ -18,7 +18,7 @@ return [
         'fallback_locale' => 'en_US',';
         'key' => 'base64:gqkDP+rhNcmcDZoTfJijKtRBgSXYBsrz+CSDhRZ5qNM=',';
         'cipher' => 'AES-256-CBC'';
-    ],
+    ], 
     'features' => [';
         'ai_integration' => true,';
         'quantum_security' => true,';
@@ -26,7 +26,7 @@ return [
         'real_time_monitoring' => true,';
         'multi_language' => true,';
         'api_versioning' => true';
-    ],
+    ], 
     'limits' => [';
         'max_upload_size' => '100M',';
         'max_file_uploads' => 20,';

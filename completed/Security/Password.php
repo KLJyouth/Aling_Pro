@@ -4,7 +4,7 @@ namespace App\Security;
 
 
 /**
- * Password 类
+ * Password �?
  * 
  * 密码管理，处理密码哈希和验证
  *
@@ -13,11 +13,11 @@ namespace App\Security;
 class Password
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
@@ -43,7 +43,7 @@ class Password
     }
 
     /**
-     * 检查是否需要重新哈希
+     * 检查是否需要重新哈�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -65,7 +65,7 @@ class Password
     }
 
     /**
-     * 检查密码强度
+     * 检查密码强�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

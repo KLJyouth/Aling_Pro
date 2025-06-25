@@ -6,16 +6,16 @@ use App\Core\Config;
 use App\Core\Cache;
 
 /**
- * AIManager 类
+ * AIManager �?
  * 
- * AI管理器，负责协调各种AI组件和服务
+ * AI管理器，负责协调各种AI组件和服�?
  *
  * @package App\AI
  */
 class AIManager
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -67,7 +67,7 @@ class AIManager
     }
 
     /**
-     * 获取可用的AI提供商
+     * 获取可用的AI提供�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

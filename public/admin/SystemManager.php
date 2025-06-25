@@ -1,12 +1,12 @@
 <?php
 /**
- * 系统管理器 - 整合所有测试、检查、调试功能
- * 增强版 - 包含智能监控、AI服务、安全监控等功能
+ * 系统管理�?- 整合所有测试、检查、调试功�?
+ * 增强�?- 包含智能监控、AI服务、安全监控等功能
  * @version 2.1.0
  * @author AlingAi Team
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Admin;
 
@@ -22,9 +22,9 @@ class SystemManager
     private $securityLevel = 'high';
     
     public function __construct() {
-        $this->startTime = microtime(true);
-        $this->initializeLogger();
-        $this->initializeDatabase();
+        $this->startTime = microtime(true];
+        $this->initializeLogger(];
+        $this->initializeDatabase(];
     }
     
     /**
@@ -32,7 +32,7 @@ class SystemManager
      */
     private function initializeLogger(): void
     {
-        $this->logger = new SimpleLogger();
+        $this->logger = new SimpleLogger(];
     }
     
     /**
@@ -42,27 +42,27 @@ class SystemManager
     {
         try {
             $dbPath = __DIR__ . '/../../storage/database/admin.sqlite';
-            $dbDir = dirname($dbPath);
+            $dbDir = dirname($dbPath];
             
             if (!is_dir($dbDir)) {
-                mkdir($dbDir, 0755, true);
+                mkdir($dbDir, 0755, true];
             }
             
-            $this->db = new PDO("sqlite:{$dbPath}");
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db = new PDO("sqlite:{$dbPath}"];
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
         } catch (Exception $e) {
-            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]);
+            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]];
             $this->db = null;
         }
     }
     
     /**
-     * 获取系统状态
+     * 获取系统状�?
      */
     public function getSystemStatus(): array
     {
         $status = [
-            'timestamp' => date('Y-m-d H:i:s'),
+            'timestamp' => date('Y-m-d H:i:s'],
             'uptime' => $this->getUptime(),
             'database' => $this->checkDatabase(),
             'files' => $this->checkFiles(),
@@ -82,21 +82,21 @@ class SystemManager
     }
     
     /**
-     * 系统健康检查
+     * 系统健康检�?
      */
     public function systemHealthCheck(): array
     {
-        $status = $this->getSystemStatus();
+        $status = $this->getSystemStatus(];
         
         $health = [
             'overall_health' => 'good',
-            'critical_issues' => [],
-            'warnings' => [],
+            'critical_issues' => [], 
+            'warnings' => [], 
             'recommendations' => []
         ];
         
         if ($status['database']['status'] !== 'ok') {
-            $health['critical_issues'][] = '数据库连接失败';
+            $health['critical_issues'][] = '数据库连接失�?;
             $health['overall_health'] = 'critical';
         }
         
@@ -126,7 +126,7 @@ class SystemManager
     }
 
     /**
-     * 高级系统健康检查
+     * 高级系统健康检�?
      */
     public function getAdvancedSystemHealth(): array
     {
@@ -138,13 +138,13 @@ class SystemManager
                 'ai_service' => $this->checkAIServiceHealth(),
                 'security_system' => $this->checkSecuritySystemHealth(),
                 'file_system' => $this->checkFileSystemHealth()
-            ],
+            ], 
             'recommendations' => $this->getHealthRecommendations()
         ];
     }
 
     /**
-     * AI服务状态监控
+     * AI服务状态监�?
      */
     public function getAIServicesStatus(): array
     {
@@ -219,18 +219,18 @@ class SystemManager
     {
         try {
             if (!$this->db) {
-                return ['status' => 'error', 'message' => '数据库连接失败'];
+                return ['status' => 'error', 'message' => '数据库连接失�?];
             }
             
-            $this->db->query('SELECT 1');
-            return ['status' => 'ok', 'message' => '数据库连接正常'];
+            $this->db->query('SELECT 1'];
+            return ['status' => 'ok', 'message' => '数据库连接正�?];
         } catch (Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
     
     /**
-     * 检查关键文件
+     * 检查关键文�?
      */
     public function checkFiles(): array
     {
@@ -244,7 +244,7 @@ class SystemManager
         $errors = [];
         foreach ($files as $file) {
             if (!file_exists($file)) {
-                $errors[] = "文件不存在: {$file}";
+                $errors[] = "文件不存�? {$file}";
             }
         }
         
@@ -252,7 +252,7 @@ class SystemManager
     }
     
     /**
-     * 检查文件权限
+     * 检查文件权�?
      */
     public function checkPermissions(): array
     {
@@ -265,7 +265,7 @@ class SystemManager
         $errors = [];
         foreach ($dirs as $dir) {
             if (!is_writable($dir)) {
-                $errors[] = "目录不可写: {$dir}";
+                $errors[] = "目录不可�? {$dir}";
             }
         }
         
@@ -280,15 +280,15 @@ class SystemManager
         $results = [];
         
         if ($testType === 'all' || $testType === 'database') {
-            $results['database'] = $this->testDatabase();
+            $results['database'] = $this->testDatabase(];
         }
         
         if ($testType === 'all' || $testType === 'performance') {
-            $results['performance'] = $this->testPerformance();
+            $results['performance'] = $this->testPerformance(];
         }
         
         if ($testType === 'all' || $testType === 'security') {
-            $results['security'] = $this->testSecurity();
+            $results['security'] = $this->testSecurity(];
         }
         
         return $results;
@@ -301,34 +301,34 @@ class SystemManager
     {
         return [
             'version' => PHP_VERSION,
-            'memory_limit' => ini_get('memory_limit'),
-            'max_execution_time' => ini_get('max_execution_time'),
+            'memory_limit' => ini_get('memory_limit'],
+            'max_execution_time' => ini_get('max_execution_time'],
             'timezone' => date_default_timezone_get()
         ];
     }
     
     /**
-     * 修复数据库问题
+     * 修复数据库问�?
      */
     public function fixDatabase(): array
     {
         try {
             if (!$this->db) {
-                $this->initializeDatabase();
+                $this->initializeDatabase(];
             }
             
-            // 创建基本表结构
+            // 创建基本表结�?
             $this->db->exec("
                 CREATE TABLE IF NOT EXISTS system_logs (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    level VARCHAR(20),
+                    level VARCHAR(20],
                     message TEXT,
                     context TEXT,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
-            ");
+            "];
             
-            return ['status' => 'success', 'message' => '数据库修复完成'];
+            return ['status' => 'success', 'message' => '数据库修复完�?];
         } catch (Exception $e) {
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
@@ -342,13 +342,13 @@ class SystemManager
         $results = [];
         
         // 清理临时文件
-        $results['temp_cleanup'] = $this->cleanTempFiles();
+        $results['temp_cleanup'] = $this->cleanTempFiles(];
         
         // 清理日志文件
-        $results['log_cleanup'] = $this->cleanLogFiles();
+        $results['log_cleanup'] = $this->cleanLogFiles(];
         
         // 清理缓存
-        $results['cache_cleanup'] = $this->cleanCache();
+        $results['cache_cleanup'] = $this->cleanCache(];
         
         return $results;
     }
@@ -361,18 +361,18 @@ class SystemManager
         $logFile = __DIR__ . '/../../storage/logs/admin.log';
         
         if (!file_exists($logFile)) {
-            return ['status' => 'error', 'message' => '日志文件不存在'];
+            return ['status' => 'error', 'message' => '日志文件不存�?];
         }
         
-        $logs = file_get_contents($logFile);
+        $logs = file_get_contents($logFile];
         $exportFile = __DIR__ . '/../../storage/exports/logs_' . date('Y-m-d_H-i-s') . '.log';
         
-        $exportDir = dirname($exportFile);
+        $exportDir = dirname($exportFile];
         if (!is_dir($exportDir)) {
-            mkdir($exportDir, 0755, true);
+            mkdir($exportDir, 0755, true];
         }
         
-        file_put_contents($exportFile, $logs);
+        file_put_contents($exportFile, $logs];
         
         return [
             'message' => '日志导出完成',
@@ -390,14 +390,14 @@ class SystemManager
         $tests = [];
         
         // 测试连接
-        $tests['connection'] = $this->checkDatabase();
+        $tests['connection'] = $this->checkDatabase(];
         
         // 测试读写
         try {
             if ($this->db) {
-                $this->db->exec("CREATE TEMPORARY TABLE test_table (id INTEGER)");
-                $this->db->exec("INSERT INTO test_table (id) VALUES (1)");
-                $this->db->query("SELECT * FROM test_table");
+                $this->db->exec("CREATE TEMPORARY TABLE test_table (id INTEGER)"];
+                $this->db->exec("INSERT INTO test_table (id) VALUES (1)"];
+                $this->db->query("SELECT * FROM test_table"];
                 $tests['read_write'] = ['status' => 'ok', 'message' => '读写测试成功'];
             } else {
                 $tests['read_write'] = ['status' => 'error', 'message' => '无数据库连接'];
@@ -411,17 +411,17 @@ class SystemManager
     
     private function testPerformance(): array
     {
-        $start = microtime(true);
+        $start = microtime(true];
         
         // 性能测试
         for ($i = 0; $i < 1000; $i++) {
-            $dummy = md5((string)$i);
+            $dummy = md5((string)$i];
         }
         
         $executionTime = microtime(true) - $start;
         
         return [
-            'memory_usage' => memory_get_usage(true),
+            'memory_usage' => memory_get_usage(true],
             'status' => $executionTime < 0.1 ? 'good' : 'slow'
         ];
     }
@@ -437,7 +437,7 @@ class SystemManager
     private function checkDirectoryTraversal(): array
     {
         $testPath = '../../../etc/passwd';
-        $realPath = realpath($testPath);
+        $realPath = realpath($testPath];
         
         return [
             'message' => $realPath ? '存在目录遍历风险' : '目录遍历测试通过'
@@ -451,8 +451,8 @@ class SystemManager
         }
         
         try {
-            $stmt = $this->db->prepare("SELECT ? AS test");
-            $stmt->execute(["'; DROP TABLE test; --"]);
+            $stmt = $this->db->prepare("SELECT ? AS test"];
+            $stmt->execute(["'; DROP TABLE test; --"]];
             
             return ['status' => 'ok', 'message' => 'SQL注入防护正常'];
         } catch (Exception $e) {
@@ -462,52 +462,52 @@ class SystemManager
     
     private function cleanTempFiles(): array
     {
-        $tempDir = sys_get_temp_dir();
+        $tempDir = sys_get_temp_dir(];
         $cleaned = 0;
         
-        $files = glob($tempDir . '/alingai_*');
+        $files = glob($tempDir . '/alingai_*'];
         foreach ($files as $file) {
             if (is_file($file) && (time() - filemtime($file)) > 3600) {
-                @unlink($file);
+                @unlink($file];
                 $cleaned++;
             }
         }
         
-        return ['cleaned' => $cleaned, 'message' => "清理了 {$cleaned} 个临时文件"];
+        return ['cleaned' => $cleaned, 'message' => "清理�?{$cleaned} 个临时文�?];
     }
     
     private function cleanLogFiles(): array
     {
         $logDir = __DIR__ . '/../../storage/logs/';
-        $this->cleanDirectory($logDir, 7 * 24 * 3600); // 7天前的日志
+        $this->cleanDirectory($logDir, 7 * 24 * 3600]; // 7天前的日�?
         
-        return ['message' => '清理了过期日志文件'];
+        return ['message' => '清理了过期日志文�?];
     }
     
     private function cleanCache(): array
     {
         $cacheDir = __DIR__ . '/../../storage/cache/';
-        $this->cleanDirectory($cacheDir, 24 * 3600); // 1天前的缓存
+        $this->cleanDirectory($cacheDir, 24 * 3600]; // 1天前的缓�?
         
-        return ['message' => '清理了过期缓存文件'];
+        return ['message' => '清理了过期缓存文�?];
     }
     
     private function getUptime(): string
     {
         $uptime = time() - $this->startTime;
-        return gmdate('H:i:s', (int)$uptime);
+        return gmdate('H:i:s', (int)$uptime];
     }
     
     private function cleanDirectory(string $dir, int $maxAge): void
     {
         if (!is_dir($dir)) return;
         
-        $files = glob($dir . '/*');
-        $now = time();
+        $files = glob($dir . '/*'];
+        $now = time(];
         
         foreach ($files as $file) {
             if (is_file($file) && ($now - filemtime($file)) > $maxAge) {
-                @unlink($file);
+                @unlink($file];
             }
         }
     }
@@ -526,31 +526,31 @@ class SystemManager
         $scores[] = $this->checkSecuritySystemHealth()['status'] === 'healthy' ? 15 : 0;
         $scores[] = $this->checkFileSystemHealth()['status'] === 'healthy' ? 10 : 0;
         
-        return array_sum($scores);
+        return array_sum($scores];
     }
 
     private function checkDatabaseHealth(): array
     {
         try {
             if (!$this->db) {
-                return ['status' => 'error', 'message' => '数据库连接失败', 'metrics' => []];
+                return ['status' => 'error', 'message' => '数据库连接失�?, 'metrics' => []];
             }
             
-            $start = microtime(true);
-            $this->db->query('SELECT 1');
+            $start = microtime(true];
+            $this->db->query('SELECT 1'];
             $responseTime = (microtime(true) - $start) * 1000;
             
             return [
-                'message' => '数据库运行正常',
+                'message' => '数据库运行正�?,
                 'metrics' => [
-                    'response_time_ms' => round($responseTime, 2),
+                    'response_time_ms' => round($responseTime, 2],
                     'connection_status' => 'active',
                     'last_check' => date('Y-m-d H:i:s')
                 ]
             ];
         } catch (Exception $e) {
             return [
-                'message' => '数据库健康检查失败: ' . $e->getMessage(),
+                'message' => '数据库健康检查失�? ' . $e->getMessage(),
                 'metrics' => []
             ];
         }
@@ -561,10 +561,10 @@ class SystemManager
         $cacheDir = __DIR__ . '/../../storage/cache/';
         
         return [
-            'message' => is_dir($cacheDir) ? '缓存系统正常' : '缓存目录不存在或不可写',
+            'message' => is_dir($cacheDir) ? '缓存系统正常' : '缓存目录不存在或不可�?,
             'metrics' => [
                 'cache_directory' => $cacheDir,
-                'is_writable' => is_writable($cacheDir),
+                'is_writable' => is_writable($cacheDir],
                 'cache_size_mb' => $this->getDirSize($cacheDir) / 1024 / 1024,
                 'last_check' => date('Y-m-d H:i:s')
             ]
@@ -573,13 +573,13 @@ class SystemManager
 
     private function checkWebSocketHealth(): array
     {
-        // 模拟WebSocket健康检查
+        // 模拟WebSocket健康检�?
         return [
             'message' => 'WebSocket服务正常',
             'metrics' => [
-                'active_connections' => rand(10, 100),
-                'message_queue_size' => rand(0, 50),
-                'last_heartbeat' => date('Y-m-d H:i:s'),
+                'active_connections' => rand(10, 100],
+                'message_queue_size' => rand(0, 50],
+                'last_heartbeat' => date('Y-m-d H:i:s'],
                 'uptime_hours' => rand(1, 72)
             ]
         ];
@@ -590,9 +590,9 @@ class SystemManager
         return [
             'message' => 'AI服务运行正常',
             'metrics' => [
-                'api_response_time_ms' => rand(100, 500),
-                'success_rate_percent' => rand(95, 99),
-                'active_models' => rand(3, 8),
+                'api_response_time_ms' => rand(100, 500],
+                'success_rate_percent' => rand(95, 99],
+                'active_models' => rand(3, 8],
                 'queue_length' => rand(0, 20)
             ]
         ];
@@ -605,7 +605,7 @@ class SystemManager
             'metrics' => [
                 'firewall_status' => 'active',
                 'intrusion_detection' => 'active',
-                'last_security_scan' => date('Y-m-d H:i:s', strtotime('-1 hour')),
+                'last_security_scan' => date('Y-m-d H:i:s', strtotime('-1 hour')],
                 'blocked_attempts_24h' => rand(10, 100)
             ]
         ];
@@ -614,16 +614,16 @@ class SystemManager
     private function checkFileSystemHealth(): array
     {
         $storageDir = __DIR__ . '/../../storage/';
-        $totalSpace = disk_total_space($storageDir);
-        $freeSpace = disk_free_space($storageDir);
+        $totalSpace = disk_total_space($storageDir];
+        $freeSpace = disk_free_space($storageDir];
         $usedPercent = (($totalSpace - $freeSpace) / $totalSpace) * 100;
         
         return [
             'message' => $usedPercent < 90 ? '文件系统正常' : '磁盘空间不足',
             'metrics' => [
-                'total_space_gb' => round($totalSpace / 1024 / 1024 / 1024, 2),
-                'free_space_gb' => round($freeSpace / 1024 / 1024 / 1024, 2),
-                'used_percent' => round($usedPercent, 2),
+                'total_space_gb' => round($totalSpace / 1024 / 1024 / 1024, 2],
+                'free_space_gb' => round($freeSpace / 1024 / 1024 / 1024, 2],
+                'used_percent' => round($usedPercent, 2],
                 'last_check' => date('Y-m-d H:i:s')
             ]
         ];
@@ -639,13 +639,13 @@ class SystemManager
     }
 
     // ==========================================
-    // AI服务监控子方法
+    // AI服务监控子方�?
     // ==========================================
 
     private function checkDeepSeekAPI(): array
     {
         return [
-            'response_time_ms' => rand(200, 800),
+            'response_time_ms' => rand(200, 800],
             'success_rate' => rand(95, 99) . '%',
             'last_request' => date('Y-m-d H:i:s', strtotime('-' . rand(1, 30) . ' minutes'))
         ];
@@ -663,7 +663,7 @@ class SystemManager
     private function checkVisionService(): array
     {
         return [
-            'image_processing_time_ms' => rand(500, 2000),
+            'image_processing_time_ms' => rand(500, 2000],
             'recognition_accuracy' => rand(90, 96) . '%',
             'supported_formats' => ['JPEG', 'PNG', 'WebP', 'GIF']
         ];
@@ -681,8 +681,8 @@ class SystemManager
     private function checkKnowledgeGraph(): array
     {
         return [
-            'total_entities' => rand(10000, 50000),
-            'relationships' => rand(50000, 200000),
+            'total_entities' => rand(10000, 50000],
+            'relationships' => rand(50000, 200000],
             'query_response_time_ms' => rand(50, 200)
         ];
     }
@@ -691,7 +691,7 @@ class SystemManager
     {
         return [
             'recommendation_accuracy' => rand(85, 95) . '%',
-            'processing_time_ms' => rand(100, 400),
+            'processing_time_ms' => rand(100, 400],
             'active_algorithms' => rand(3, 7)
         ];
     }
@@ -699,7 +699,7 @@ class SystemManager
     private function getAIPerformanceMetrics(): array
     {
         return [
-            'average_response_time_ms' => rand(200, 600),
+            'average_response_time_ms' => rand(200, 600],
             'success_rate' => rand(95, 99) . '%',
             'error_rate' => rand(1, 5) . '%',
             'throughput_per_second' => rand(10, 100)
@@ -707,7 +707,7 @@ class SystemManager
     }
 
     // ==========================================
-    // 安全监控子方法  
+    // 安全监控子方�? 
     // ==========================================
 
     private function getCurrentThreatLevel(): string
@@ -722,13 +722,13 @@ class SystemManager
             [
                 'type' => 'Brute Force Attack',
                 'severity' => 'Medium',
-                'source_ip' => '192.168.1.' . rand(1, 255),
+                'source_ip' => '192.168.1.' . rand(1, 255],
                 'timestamp' => date('Y-m-d H:i:s', strtotime('-' . rand(1, 60) . ' minutes'))
-            ],
+            ], 
             [
                 'type' => 'SQL Injection Attempt',
                 'severity' => 'High',
-                'source_ip' => '10.0.0.' . rand(1, 255),
+                'source_ip' => '10.0.0.' . rand(1, 255],
                 'timestamp' => date('Y-m-d H:i:s', strtotime('-' . rand(1, 120) . ' minutes'))
             ]
         ];
@@ -736,14 +736,14 @@ class SystemManager
 
     private function calculateSecurityScore(): int
     {
-        return rand(75, 95);
+        return rand(75, 95];
     }
 
     private function getZeroTrustStatus(): array
     {
         return [
             'coverage' => rand(85, 98) . '%',
-            'policies_active' => rand(15, 25),
+            'policies_active' => rand(15, 25],
             'last_policy_update' => date('Y-m-d', strtotime('-' . rand(1, 7) . ' days'))
         ];
     }
@@ -752,7 +752,7 @@ class SystemManager
     {
         return [
             'iso27001_status' => 'Compliant',
-            'last_audit' => date('Y-m-d', strtotime('-' . rand(30, 90) . ' days')),
+            'last_audit' => date('Y-m-d', strtotime('-' . rand(30, 90) . ' days')],
             'next_review' => date('Y-m-d', strtotime('+' . rand(60, 180) . ' days'))
         ];
     }
@@ -760,8 +760,8 @@ class SystemManager
     private function getIncidentResponseStatus(): array
     {
         return [
-            'active_incidents' => rand(0, 3),
-            'resolved_24h' => rand(5, 15),
+            'active_incidents' => rand(0, 3],
+            'resolved_24h' => rand(5, 15],
             'team_availability' => rand(80, 100) . '%'
         ];
     }
@@ -769,22 +769,22 @@ class SystemManager
     private function getDataClassificationStatus(): array
     {
         return [
-            'sensitive_data_gb' => rand(100, 1000),
+            'sensitive_data_gb' => rand(100, 1000],
             'encryption_coverage' => rand(90, 99) . '%',
             'access_controls_active' => rand(95, 100) . '%'
         ];
     }
 
     // ==========================================
-    // 性能指标子方法
+    // 性能指标子方�?
     // ==========================================
 
     private function getResponseTimeMetrics(): array
     {
         return [
-            'p95_ms' => rand(1000, 2000),
-            'p99_ms' => rand(1000, 2000),
-            'min_ms' => rand(50, 100),
+            'p95_ms' => rand(1000, 2000],
+            'p99_ms' => rand(1000, 2000],
+            'min_ms' => rand(50, 100],
             'max_ms' => rand(2000, 5000)
         ];
     }
@@ -792,8 +792,8 @@ class SystemManager
     private function getThroughputMetrics(): array
     {
         return [
-            'peak_rps' => rand(200, 500),
-            'total_requests_24h' => rand(100000, 500000),
+            'peak_rps' => rand(200, 500],
+            'total_requests_24h' => rand(100000, 500000],
             'data_transfer_mbps' => rand(10, 100)
         ];
     }
@@ -801,8 +801,8 @@ class SystemManager
     private function getResourceUtilization(): array
     {
         return [
-            'memory_percent' => rand(30, 70),
-            'disk_io_percent' => rand(10, 50),
+            'memory_percent' => rand(30, 70],
+            'disk_io_percent' => rand(10, 50],
             'network_utilization_percent' => rand(15, 60)
         ];
     }
@@ -816,7 +816,7 @@ class SystemManager
             'CPU intensive operations detected'
         ];
         
-        return array_slice($bottlenecks, 0, rand(1, 3));
+        return array_slice($bottlenecks, 0, rand(1, 3)];
     }
 
     private function getOptimizationSuggestions(): array
@@ -830,13 +830,13 @@ class SystemManager
     }
 
     // ==========================================
-    // 威胁情报子方法
+    // 威胁情报子方�?
     // ==========================================
 
     private function getGlobalThreatData(): array
     {
         return [
-            'new_vulnerabilities_24h' => rand(5, 25),
+            'new_vulnerabilities_24h' => rand(5, 25],
             'global_attack_trends' => [
                 'Ransomware' => rand(20, 40) . '%',
                 'Phishing' => rand(25, 45) . '%',
@@ -849,8 +849,8 @@ class SystemManager
     private function getLocalThreatData(): array
     {
         return [
-            'suspicious_activities' => rand(10, 50),
-            'failed_login_attempts' => rand(50, 200),
+            'suspicious_activities' => rand(10, 50],
+            'failed_login_attempts' => rand(50, 200],
             'malware_detections' => rand(0, 10)
         ];
     }
@@ -858,8 +858,8 @@ class SystemManager
     private function analyzeThreatPatterns(): array
     {
         return [
-            'common_attack_vectors' => ['Web Application', 'Email', 'Network'],
-            'target_locations' => ['Login Pages', 'API Endpoints', 'File Uploads'],
+            'common_attack_vectors' => ['Web Application', 'Email', 'Network'], 
+            'target_locations' => ['Login Pages', 'API Endpoints', 'File Uploads'], 
             'attack_frequency_trend' => rand(-10, 25) . '% compared to last week'
         ];
     }
@@ -872,7 +872,7 @@ class SystemManager
                 'Increase monitoring frequency',
                 'Update security policies',
                 'Review access controls'
-            ],
+            ], 
             'forecast_period' => '7 days'
         ];
     }
@@ -887,15 +887,15 @@ class SystemManager
     }
 
     // ==========================================
-    // 业务指标子方法
+    // 业务指标子方�?
     // ==========================================
 
     private function getUserActivityMetrics(): array
     {
         return [
-            'new_registrations_24h' => rand(10, 100),
-            'session_duration_minutes' => rand(15, 45),
-            'bounce_rate_percent' => rand(20, 40),
+            'new_registrations_24h' => rand(10, 100],
+            'session_duration_minutes' => rand(15, 45],
+            'bounce_rate_percent' => rand(20, 40],
             'user_engagement_score' => rand(60, 90)
         ];
     }
@@ -903,9 +903,9 @@ class SystemManager
     private function getAPIUsageMetrics(): array
     {
         return [
-            'unique_api_consumers' => rand(50, 500),
-            'rate_limit_exceeded' => rand(0, 100),
-            'api_error_rate_percent' => rand(1, 5),
+            'unique_api_consumers' => rand(50, 500],
+            'rate_limit_exceeded' => rand(0, 100],
+            'api_error_rate_percent' => rand(1, 5],
             'most_used_endpoints' => [
                 '/api/chat' => rand(30, 50) . '%',
                 '/api/search' => rand(20, 35) . '%',
@@ -917,9 +917,9 @@ class SystemManager
     private function getConversationAnalytics(): array
     {
         return [
-            'average_conversation_length' => rand(5, 20),
+            'average_conversation_length' => rand(5, 20],
             'successful_resolution_rate' => rand(80, 95) . '%',
-            'user_satisfaction_rating' => round(rand(40, 48) / 10, 1),
+            'user_satisfaction_rating' => round(rand(40, 48) / 10, 1],
             'popular_topics' => [
                 'Technical Support' => rand(25, 40) . '%',
                 'Product Information' => rand(20, 35) . '%',
@@ -931,14 +931,14 @@ class SystemManager
     private function getErrorRateMetrics(): array
     {
         return [
-            'error_rate_percent' => rand(1, 5),
-            'critical_errors' => rand(0, 10),
+            'error_rate_percent' => rand(1, 5],
+            'critical_errors' => rand(0, 10],
             'error_categories' => [
                 'Network Timeout' => rand(30, 50) . '%',
                 'Database Error' => rand(10, 25) . '%',
                 'API Rate Limit' => rand(15, 30) . '%',
                 'Authentication Failed' => rand(10, 20) . '%'
-            ],
+            ], 
             'mean_time_to_resolution_minutes' => rand(15, 60)
         ];
     }
@@ -946,12 +946,12 @@ class SystemManager
     private function getSatisfactionScores(): array
     {
         return [
-            'nps_score' => rand(60, 85),
+            'nps_score' => rand(60, 85],
             'csat_score' => rand(85, 95) . '%',
-            'feedback_volume_24h' => rand(50, 200),
+            'feedback_volume_24h' => rand(50, 200],
             'satisfaction_trends' => [
-                'last_week' => round(rand(40, 45) / 10, 1),
-                'last_month' => round(rand(38, 43) / 10, 1),
+                'last_week' => round(rand(40, 45) / 10, 1],
+                'last_month' => round(rand(38, 43) / 10, 1],
                 'improvement_percent' => rand(2, 15) . '%'
             ]
         ];
@@ -964,38 +964,38 @@ class SystemManager
         $size = 0;
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS)
-        );
+        ];
         
         foreach ($files as $file) {
             if ($file->isFile()) {
-                $size += $file->getSize();
+                $size += $file->getSize(];
             }
         }
         return $size;
     }
 
     /**
-     * 获取WebSocket连接状态
+     * 获取WebSocket连接状�?
      */
     public function getWebSocketStatus(): array
     {
         try {
-            // 模拟WebSocket服务器状态检查
+            // 模拟WebSocket服务器状态检�?
             $connections = [
-                'active_connections' => rand(150, 300),
-                'peak_connections' => rand(400, 600),
-                'total_messages_sent' => rand(10000, 50000),
-                'total_messages_received' => rand(8000, 40000),
-                'connection_errors' => rand(0, 5),
-                'server_uptime' => time() - strtotime('-2 days'),
+                'active_connections' => rand(150, 300],
+                'peak_connections' => rand(400, 600],
+                'total_messages_sent' => rand(10000, 50000],
+                'total_messages_received' => rand(8000, 40000],
+                'connection_errors' => rand(0, 5],
+                'server_uptime' => time() - strtotime('-2 days'],
                 'average_response_time' => rand(50, 200) . 'ms'
             ];
 
             $channels = [
-                'chat' => ['active' => rand(80, 150), 'peak' => rand(200, 300)],
-                'notifications' => ['active' => rand(50, 100), 'peak' => rand(150, 250)],
-                'ai_responses' => ['active' => rand(30, 80), 'peak' => rand(100, 180)],
-                'system_updates' => ['active' => rand(10, 30), 'peak' => rand(50, 100)]
+                'chat' => ['active' => rand(80, 150], 'peak' => rand(200, 300)], 
+                'notifications' => ['active' => rand(50, 100], 'peak' => rand(150, 250)], 
+                'ai_responses' => ['active' => rand(30, 80], 'peak' => rand(100, 180)], 
+                'system_updates' => ['active' => rand(10, 30], 'peak' => rand(50, 100)]
             ];
 
             return [
@@ -1005,11 +1005,11 @@ class SystemManager
                     'cpu_usage' => rand(10, 30) . '%',
                     'memory_usage' => rand(200, 500) . 'MB',
                     'network_throughput' => rand(50, 200) . 'Mbps'
-                ],
+                ], 
                 'last_updated' => date('Y-m-d H:i:s')
             ];
         } catch (Exception $e) {
-            $this->logger->error('WebSocket状态获取失败', ['error' => $e->getMessage()]);
+            $this->logger->error('WebSocket状态获取失�?, ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -1021,12 +1021,12 @@ class SystemManager
     {
         try {
             $chatStats = [
-                'total_conversations' => rand(1000, 5000),
-                'active_conversations' => rand(50, 200),
-                'messages_today' => rand(500, 2000),
+                'total_conversations' => rand(1000, 5000],
+                'active_conversations' => rand(50, 200],
+                'messages_today' => rand(500, 2000],
                 'average_response_time' => rand(500, 1500) . 'ms',
                 'ai_accuracy_rate' => rand(85, 98) . '%',
-                'user_satisfaction' => round(rand(40, 48) / 10, 1),
+                'user_satisfaction' => round(rand(40, 48) / 10, 1],
                 'conversation_completion_rate' => rand(75, 95) . '%'
             ];
 
@@ -1056,14 +1056,14 @@ class SystemManager
                 'language_distribution' => $languages,
                 'quality_metrics' => $qualityMetrics,
                 'real_time_metrics' => [
-                    'current_active_users' => rand(20, 100),
-                    'messages_per_minute' => rand(10, 50),
+                    'current_active_users' => rand(20, 100],
+                    'messages_per_minute' => rand(10, 50],
                     'ai_processing_queue' => rand(0, 10)
-                ],
+                ], 
                 'last_updated' => date('Y-m-d H:i:s')
             ];
         } catch (Exception $e) {
-            $this->logger->error('聊天系统监控获取失败', ['error' => $e->getMessage()]);
+            $this->logger->error('聊天系统监控获取失败', ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -1078,7 +1078,7 @@ class SystemManager
                 'today' => '今日',
                 'week' => '本周',
                 'month' => '本月',
-                'quarter' => '本季度'
+                'quarter' => '本季�?
             ];
 
             $multiplier = [
@@ -1097,81 +1097,81 @@ class SystemManager
                     'total_conversations' => rand(50, 300) * $multiplier,
                     'ai_interactions' => rand(100, 600) * $multiplier,
                     'system_uptime' => rand(950, 999) / 10 . '%'
-                ],
+                ], 
                 'performance_metrics' => [
                     'average_response_time' => rand(300, 800) . 'ms',
                     'error_rate' => rand(1, 25) / 10 . '%',
                     'api_success_rate' => rand(970, 998) / 10 . '%',
                     'database_query_time' => rand(10, 50) . 'ms',
                     'cache_hit_rate' => rand(80, 95) . '%'
-                ],
+                ], 
                 'user_engagement' => [
                     'session_duration' => rand(5, 30) . ' 分钟',
-                    'pages_per_session' => rand(3, 10),
+                    'pages_per_session' => rand(3, 10],
                     'bounce_rate' => rand(10, 40) . '%',
                     'return_user_rate' => rand(60, 85) . '%'
-                ],
+                ], 
                 'ai_performance' => [
                     'model_accuracy' => rand(85, 95) . '%',
                     'response_quality' => round(rand(42, 48) / 10, 1) . '/5',
                     'processing_speed' => rand(200, 600) . 'ms',
                     'context_retention' => rand(80, 95) . '%'
-                ],
+                ], 
                 'system_health' => [
                     'cpu_usage' => rand(20, 60) . '%',
                     'memory_usage' => rand(40, 80) . '%',
                     'disk_usage' => rand(30, 70) . '%',
                     'network_latency' => rand(10, 50) . 'ms'
-                ],
+                ], 
                 'trends' => [
                     'user_growth' => '+' . rand(5, 25) . '%',
                     'engagement_change' => '+' . rand(0, 15) . '%',
                     'performance_change' => '+' . rand(0, 10) . '%'
-                ],
+                ], 
                 'generated_at' => date('Y-m-d H:i:s')
             ];
 
             return $report;
         } catch (Exception $e) {
-            $this->logger->error('分析报告生成失败', ['error' => $e->getMessage()]);
+            $this->logger->error('分析报告生成失败', ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
 
     /**
-     * 获取实时数据流
+     * 获取实时数据�?
      */
     public function getRealTimeDataStream(): array
     {
         try {
-            $currentTime = time();
+            $currentTime = time(];
             $timePoints = [];
             
-            // 生成最近30分钟的数据点
+            // 生成最�?0分钟的数据点
             for ($i = 29; $i >= 0; $i--) {
-                $timestamp = $currentTime - ($i * 60);
+                $timestamp = $currentTime - ($i * 60];
                 $timePoints[] = [
-                    'timestamp' => date('H:i', $timestamp),
-                    'users_online' => rand(50, 200),
-                    'cpu_usage' => rand(10, 80),
-                    'memory_usage' => rand(30, 90),
-                    'requests_per_minute' => rand(20, 100),
-                    'response_time' => rand(100, 500),
-                    'error_count' => rand(0, 5),
-                    'ai_requests' => rand(5, 30),
+                    'timestamp' => date('H:i', $timestamp],
+                    'users_online' => rand(50, 200],
+                    'cpu_usage' => rand(10, 80],
+                    'memory_usage' => rand(30, 90],
+                    'requests_per_minute' => rand(20, 100],
+                    'response_time' => rand(100, 500],
+                    'error_count' => rand(0, 5],
+                    'ai_requests' => rand(5, 30],
                     'websocket_connections' => rand(20, 150)
                 ];
             }
 
             $realTimeMetrics = [
-                'current_timestamp' => date('Y-m-d H:i:s'),
-                'system_load' => round(rand(1, 8) / 10, 2),
-                'active_processes' => rand(50, 200),
+                'current_timestamp' => date('Y-m-d H:i:s'],
+                'system_load' => round(rand(1, 8) / 10, 2],
+                'active_processes' => rand(50, 200],
                 'network_io' => [
                     'bytes_in' => rand(1000, 10000) . ' KB/s',
                     'bytes_out' => rand(500, 5000) . ' KB/s'
-                ],
-                'database_connections' => rand(5, 50),
+                ], 
+                'database_connections' => rand(5, 50],
                 'cache_operations' => rand(100, 1000) . '/min',
                 'queue_size' => rand(0, 20)
             ];
@@ -1180,14 +1180,14 @@ class SystemManager
             if (rand(1, 10) > 8) {
                 $alerts[] = [
                     'type' => 'warning',
-                    'message' => 'CPU使用率较高',
+                    'message' => 'CPU使用率较�?,
                     'timestamp' => date('H:i:s')
                 ];
             }
             if (rand(1, 15) > 13) {
                 $alerts[] = [
                     'type' => 'info',
-                    'message' => '新用户连接激增',
+                    'message' => '新用户连接激�?,
                     'timestamp' => date('H:i:s')
                 ];
             }
@@ -1199,7 +1199,7 @@ class SystemManager
                 'next_update' => date('Y-m-d H:i:s', time() + 30)
             ];
         } catch (Exception $e) {
-            $this->logger->error('实时数据流获取失败', ['error' => $e->getMessage()]);
+            $this->logger->error('实时数据流获取失�?, ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -1211,47 +1211,47 @@ class SystemManager
     {
         try {
             $cacheStats = [
-                'total_keys' => rand(1000, 10000),
+                'total_keys' => rand(1000, 10000],
                 'memory_usage' => rand(50, 500) . 'MB',
                 'hit_ratio' => rand(75, 95) . '%',
                 'miss_ratio' => rand(5, 25) . '%',
-                'evictions' => rand(10, 100),
-                'expired_keys' => rand(20, 200),
+                'evictions' => rand(10, 100],
+                'expired_keys' => rand(20, 200],
                 'avg_ttl' => rand(300, 3600) . 's'
             ];
 
             $cacheTypes = [
                 'user_sessions' => [
-                    'count' => rand(100, 500),
+                    'count' => rand(100, 500],
                     'hit_rate' => rand(80, 95) . '%',
                     'avg_size' => rand(1, 5) . 'KB'
-                ],
+                ], 
                 'api_responses' => [
-                    'count' => rand(200, 1000),
+                    'count' => rand(200, 1000],
                     'hit_rate' => rand(70, 90) . '%',
                     'avg_size' => rand(2, 10) . 'KB'
-                ],
+                ], 
                 'database_queries' => [
-                    'count' => rand(500, 2000),
+                    'count' => rand(500, 2000],
                     'hit_rate' => rand(85, 98) . '%',
                     'avg_size' => round(rand(5, 30) / 10, 1) . 'KB'
-                ],
+                ], 
                 'ai_model_cache' => [
-                    'count' => rand(50, 200),
+                    'count' => rand(50, 200],
                     'hit_rate' => rand(60, 85) . '%',
                     'avg_size' => rand(10, 100) . 'KB'
                 ]
             ];
 
             $performance = [
-                'ops_per_second' => rand(1000, 5000),
+                'ops_per_second' => rand(1000, 5000],
                 'avg_response_time' => rand(1, 10) . 'ms',
                 'peak_memory' => rand(100, 800) . 'MB',
                 'connections' => rand(10, 100)
             ];
 
             $recommendations = [];
-            $hitRate = (int)str_replace('%', '', $cacheStats['hit_ratio']);
+            $hitRate = (int)str_replace('%', '', $cacheStats['hit_ratio']];
             if ($hitRate < 80) {
                 $recommendations[] = '建议优化缓存策略以提高命中率';
             }
@@ -1267,14 +1267,14 @@ class SystemManager
                 'performance' => $performance,
                 'recommendations' => $recommendations,
                 'cluster_info' => [
-                    'nodes' => rand(1, 5),
+                    'nodes' => rand(1, 5],
                     'total_memory' => rand(1, 10) . 'GB',
                     'replication_factor' => rand(1, 3)
-                ],
+                ], 
                 'last_updated' => date('Y-m-d H:i:s')
             ];
         } catch (Exception $e) {
-            $this->logger->error('缓存管理数据获取失败', ['error' => $e->getMessage()]);
+            $this->logger->error('缓存管理数据获取失败', ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -1286,12 +1286,12 @@ class SystemManager
     {
         try {
             $dbStats = [
-                'total_connections' => rand(10, 100),
-                'active_connections' => rand(5, 50),
-                'queries_per_second' => rand(50, 500),
-                'slow_queries' => rand(0, 10),
+                'total_connections' => rand(10, 100],
+                'active_connections' => rand(5, 50],
+                'queries_per_second' => rand(50, 500],
+                'slow_queries' => rand(0, 10],
                 'avg_query_time' => rand(10, 100) . 'ms',
-                'deadlocks' => rand(0, 3),
+                'deadlocks' => rand(0, 3],
                 'buffer_hit_ratio' => rand(85, 99) . '%'
             ];
 
@@ -1300,22 +1300,22 @@ class SystemManager
                     [
                         'query' => 'SELECT * FROM users WHERE created_at > ?',
                         'avg_time' => rand(200, 1000) . 'ms',
-                        'execution_count' => rand(10, 100),
+                        'execution_count' => rand(10, 100],
                         'suggestion' => '添加created_at索引'
-                    ],
+                    ], 
                     [
                         'query' => 'SELECT COUNT(*) FROM messages m JOIN users u ON...',
                         'avg_time' => rand(300, 800) . 'ms',
-                        'execution_count' => rand(5, 50),
+                        'execution_count' => rand(5, 50],
                         'suggestion' => '优化JOIN条件'
-                    ],
+                    ], 
                     [
                         'query' => 'UPDATE conversation_stats SET last_message_time = ?',
                         'avg_time' => rand(150, 400) . 'ms',
-                        'execution_count' => rand(20, 200),
+                        'execution_count' => rand(20, 200],
                         'suggestion' => '考虑批量更新'
                     ]
-                ],
+                ], 
                 'query_distribution' => [
                     'SELECT' => rand(60, 80) . '%',
                     'INSERT' => rand(10, 20) . '%',
@@ -1325,19 +1325,19 @@ class SystemManager
             ];
 
             $indexAnalysis = [
-                'total_indexes' => rand(20, 100),
-                'unused_indexes' => rand(0, 5),
+                'total_indexes' => rand(20, 100],
+                'unused_indexes' => rand(0, 5],
                 'missing_indexes' => [
                     'users.email' => '提高登录查询性能',
                     'messages.conversation_id' => '优化消息查询',
-                    'ai_responses.created_at' => '加速时间范围查询'
-                ],
+                    'ai_responses.created_at' => '加速时间范围查�?
+                ], 
                 'index_efficiency' => rand(75, 95) . '%'
             ];
 
             $storageInfo = [
                 'database_size' => rand(100, 1000) . 'MB',
-                'table_count' => rand(15, 50),
+                'table_count' => rand(15, 50],
                 'largest_table' => 'messages (' . rand(50, 300) . 'MB)',
                 'fragmentation' => rand(5, 25) . '%',
                 'growth_rate' => rand(1, 10) . 'MB/day'
@@ -1345,8 +1345,8 @@ class SystemManager
 
             $optimizationSuggestions = [
                 '为messages表的conversation_id字段添加索引',
-                '考虑对历史数据进行分区',
-                '优化频繁执行的复杂查询',
+                '考虑对历史数据进行分�?,
+                '优化频繁执行的复杂查�?,
                 '调整数据库连接池大小',
                 '启用查询结果缓存'
             ];
@@ -1355,16 +1355,16 @@ class SystemManager
                 'query_analysis' => $queryAnalysis,
                 'index_analysis' => $indexAnalysis,
                 'storage_info' => $storageInfo,
-                'optimization_suggestions' => array_slice($optimizationSuggestions, 0, rand(2, 4)),
+                'optimization_suggestions' => array_slice($optimizationSuggestions, 0, rand(2, 4)],
                 'performance_trend' => [
                     'last_hour' => '+' . rand(0, 10) . '%',
                     'last_day' => '+' . rand(0, 15) . '%',
                     'last_week' => '+' . rand(0, 20) . '%'
-                ],
+                ], 
                 'last_updated' => date('Y-m-d H:i:s')
             ];
         } catch (Exception $e) {
-            $this->logger->error('数据库性能分析失败', ['error' => $e->getMessage()]);
+            $this->logger->error('数据库性能分析失败', ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
@@ -1376,36 +1376,36 @@ class SystemManager
     {
         try {
             $apiStats = [
-                'total_requests' => rand(10000, 50000),
-                'requests_per_hour' => rand(500, 2000),
+                'total_requests' => rand(10000, 50000],
+                'requests_per_hour' => rand(500, 2000],
                 'success_rate' => rand(950, 998) / 10 . '%',
                 'error_rate' => rand(2, 50) / 10 . '%',
                 'avg_response_time' => rand(100, 500) . 'ms',
-                'peak_requests' => rand(3000, 8000),
+                'peak_requests' => rand(3000, 8000],
                 'unique_clients' => rand(100, 1000)
             ];
 
             $endpointStats = [
                 '/api/chat/send' => [
-                    'requests' => rand(5000, 15000),
+                    'requests' => rand(5000, 15000],
                     'avg_time' => rand(200, 800) . 'ms',
                     'error_rate' => rand(1, 5) . '%',
                     'popularity' => rand(25, 40) . '%'
-                ],
+                ], 
                 '/api/ai/completion' => [
-                    'requests' => rand(3000, 10000),
+                    'requests' => rand(3000, 10000],
                     'avg_time' => rand(500, 1500) . 'ms',
                     'error_rate' => rand(2, 8) . '%',
                     'popularity' => rand(15, 25) . '%'
-                ],
+                ], 
                 '/api/user/profile' => [
-                    'requests' => rand(2000, 8000),
+                    'requests' => rand(2000, 8000],
                     'avg_time' => rand(50, 200) . 'ms',
                     'error_rate' => rand(5, 30) / 10 . '%',
                     'popularity' => rand(10, 20) . '%'
-                ],
+                ], 
                 '/api/system/status' => [
-                    'requests' => rand(1000, 5000),
+                    'requests' => rand(1000, 5000],
                     'avg_time' => rand(30, 150) . 'ms',
                     'error_rate' => rand(1, 20) / 10 . '%',
                     'popularity' => rand(5, 15) . '%'
@@ -1414,15 +1414,15 @@ class SystemManager
 
             $errorAnalysis = [
                 'common_errors' => [
-                    '400 Bad Request' => rand(10, 100),
-                    '401 Unauthorized' => rand(5, 50),
-                    '429 Rate Limited' => rand(2, 30),
-                    '500 Internal Error' => rand(1, 20),
+                    '400 Bad Request' => rand(10, 100],
+                    '401 Unauthorized' => rand(5, 50],
+                    '429 Rate Limited' => rand(2, 30],
+                    '500 Internal Error' => rand(1, 20],
                     '503 Service Unavailable' => rand(0, 10)
-                ],
+                ], 
                 'error_trends' => [
-                    'increasing' => ['429 Rate Limited'],
-                    'decreasing' => ['500 Internal Error'],
+                    'increasing' => ['429 Rate Limited'], 
+                    'decreasing' => ['500 Internal Error'], 
                     'stable' => ['400 Bad Request', '401 Unauthorized']
                 ]
             ];
@@ -1433,7 +1433,7 @@ class SystemManager
                     'Mobile App' => rand(20, 35) . '%',
                     'API Client' => rand(10, 25) . '%',
                     'Bot/Crawler' => rand(1, 10) . '%'
-                ],
+                ], 
                 'geographic_distribution' => [
                     'China' => rand(60, 80) . '%',
                     'United States' => rand(10, 20) . '%',
@@ -1452,8 +1452,8 @@ class SystemManager
 
             $recommendations = [
                 '考虑为高频API端点添加缓存',
-                '优化AI完成接口的响应时间',
-                '增加速率限制以防止滥用',
+                '优化AI完成接口的响应时�?,
+                '增加速率限制以防止滥�?,
                 '监控并优化慢查询',
                 '考虑API版本管理策略'
             ];
@@ -1463,59 +1463,59 @@ class SystemManager
                 'error_analysis' => $errorAnalysis,
                 'client_analysis' => $clientAnalysis,
                 'performance_metrics' => $performanceMetrics,
-                'recommendations' => array_slice($recommendations, 0, rand(2, 4)),
+                'recommendations' => array_slice($recommendations, 0, rand(2, 4)],
                 'time_distribution' => [
                     'peak_hours' => '14:00-16:00, 20:00-22:00',
                     'low_traffic' => '02:00-06:00',
                     'weekend_factor' => rand(70, 90) . '%'
-                ],
+                ], 
                 'last_updated' => date('Y-m-d H:i:s')
             ];
         } catch (Exception $e) {
-            $this->logger->error('API使用分析失败', ['error' => $e->getMessage()]);
+            $this->logger->error('API使用分析失败', ['error' => $e->getMessage()]];
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
 
     /**
-     * 高级安全检查 - 检查系统安全漏洞
-     * @return array 安全检查结果
+     * 高级安全检�?- 检查系统安全漏�?
+     * @return array 安全检查结�?
      */
     public function advancedSecurityCheck(): array
     {
-        $this->logger->info('执行高级安全检查');
+        $this->logger->info('执行高级安全检�?];
         
         $results = [
-            'timestamp' => date('Y-m-d H:i:s'),
+            'timestamp' => date('Y-m-d H:i:s'],
             'overall_status' => 'secure',
-            'checks' => [],
+            'checks' => [], 
             'vulnerabilities_found' => 0,
             'critical_issues' => 0,
             'recommendations' => []
         ];
         
-        // 检查文件权限
-        $filePermissionsCheck = $this->checkFilePermissions();
+        // 检查文件权�?
+        $filePermissionsCheck = $this->checkFilePermissions(];
         $results['checks']['file_permissions'] = $filePermissionsCheck;
         
-        // 检查配置文件安全
-        $configSecurityCheck = $this->checkConfigSecurity();
+        // 检查配置文件安�?
+        $configSecurityCheck = $this->checkConfigSecurity(];
         $results['checks']['config_security'] = $configSecurityCheck;
         
         // 检查依赖项安全
-        $dependencyCheck = $this->checkDependencySecurity();
+        $dependencyCheck = $this->checkDependencySecurity(];
         $results['checks']['dependencies'] = $dependencyCheck;
         
         // 检查API安全
-        $apiSecurityCheck = $this->checkAPISecurity();
+        $apiSecurityCheck = $this->checkAPISecurity(];
         $results['checks']['api_security'] = $apiSecurityCheck;
         
         // 检查数据库安全
-        $dbSecurityCheck = $this->checkDatabaseSecurity();
+        $dbSecurityCheck = $this->checkDatabaseSecurity(];
         $results['checks']['database_security'] = $dbSecurityCheck;
         
-        // 检查会话安全
-        $sessionSecurityCheck = $this->checkSessionSecurity();
+        // 检查会话安�?
+        $sessionSecurityCheck = $this->checkSessionSecurity(];
         $results['checks']['session_security'] = $sessionSecurityCheck;
         
         // 统计问题数量
@@ -1533,7 +1533,7 @@ class SystemManager
             }
         }
         
-        // 确定整体状态
+        // 确定整体状�?
         if ($results['critical_issues'] > 0) {
             $results['overall_status'] = 'critical';
         } else if ($results['vulnerabilities_found'] > 0) {
@@ -1544,13 +1544,13 @@ class SystemManager
     }
     
     /**
-     * 检查文件权限安全
+     * 检查文件权限安�?
      */
     private function checkFilePermissions(): array
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
@@ -1562,7 +1562,7 @@ class SystemManager
         
         foreach ($criticalFiles as $file) {
             if (file_exists($file)) {
-                $perms = fileperms($file);
+                $perms = fileperms($file];
                 $worldWritable = ($perms & 0x0002) > 0;
                 
                 if ($worldWritable) {
@@ -1578,31 +1578,31 @@ class SystemManager
     }
     
     /**
-     * 检查配置文件安全
+     * 检查配置文件安�?
      */
     private function checkConfigSecurity(): array
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
-        // 检查敏感配置是否暴露
+        // 检查敏感配置是否暴�?
         $envFile = __DIR__ . '/../../.env';
         if (file_exists($envFile)) {
-            $envContent = file_get_contents($envFile);
+            $envContent = file_get_contents($envFile];
             
             if (strpos($envContent, 'APP_DEBUG=true') !== false) {
                 $result['status'] = 'vulnerable';
                 $result['issues'][] = "生产环境中启用了调试模式";
-                $result['recommendation'] = "在生产环境中禁用调试模式，设置 APP_DEBUG=false";
+                $result['recommendation'] = "在生产环境中禁用调试模式，设�?APP_DEBUG=false";
             }
             
             if (strpos($envContent, 'APP_ENV=local') !== false || strpos($envContent, 'APP_ENV=development') !== false) {
                 $result['status'] = 'vulnerable';
                 $result['issues'][] = "环境配置不是生产环境";
-                $result['recommendation'] = "在生产服务器上设置 APP_ENV=production";
+                $result['recommendation'] = "在生产服务器上设�?APP_ENV=production";
             }
         }
         
@@ -1616,7 +1616,7 @@ class SystemManager
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
@@ -1631,7 +1631,7 @@ class SystemManager
         
         // 模拟检查依赖项安全漏洞
         // 实际实现应调用安全API或使用工具如Snyk
-        $result['message'] = "依赖项安全检查完成，未发现已知漏洞";
+        $result['message'] = "依赖项安全检查完成，未发现已知漏�?;
         
         return $result;
     }
@@ -1643,17 +1643,17 @@ class SystemManager
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
         // 检查API路由配置
         $apiRoutesFile = __DIR__ . '/../../routes/api.php';
         if (file_exists($apiRoutesFile)) {
-            $routesContent = file_get_contents($apiRoutesFile);
+            $routesContent = file_get_contents($apiRoutesFile];
             
-            // 检查是否有未受保护的路由
-            if (preg_match('/Route::(\w+)\([^,]+,[^,]+\);/i', $routesContent)) {
+            // 检查是否有未受保护的路�?
+            if (preg_match('/Route::(\w+)\([^,]+,[^,]+\];/i', $routesContent)) {
                 $result['status'] = 'vulnerable';
                 $result['issues'][] = "发现可能未受保护的API路由";
                 $result['recommendation'] = "确保所有API路由都受到适当的中间件保护";
@@ -1670,23 +1670,23 @@ class SystemManager
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
         if ($this->db) {
             try {
                 // 检查是否使用默认数据库用户
-                $dbConfig = $this->db->query("SELECT user()")->fetchColumn();
-                if (strpos(strtolower($dbConfig), 'root@') !== false) {
+                $dbConfig = $this->db->query("SELECT user()")->fetchColumn(];
+                if (strpos(strtolower($dbConfig], 'root@') !== false) {
                     $result['status'] = 'vulnerable';
                     $result['severity'] = 'critical';
-                    $result['issues'][] = "数据库使用root用户，这是一个安全风险";
-                    $result['recommendation'] = "创建一个具有最小权限的专用数据库用户";
+                    $result['issues'][] = "数据库使用root用户，这是一个安全风�?;
+                    $result['recommendation'] = "创建一个具有最小权限的专用数据库用�?;
                 }
             } catch (Exception $e) {
                 $result['status'] = 'unknown';
-                $result['issues'][] = "无法检查数据库用户: " . $e->getMessage();
+                $result['issues'][] = "无法检查数据库用户: " . $e->getMessage(];
             }
         }
         
@@ -1694,46 +1694,46 @@ class SystemManager
     }
     
     /**
-     * 检查会话安全
+     * 检查会话安�?
      */
     private function checkSessionSecurity(): array
     {
         $result = [
             'status' => 'secure',
-            'issues' => [],
+            'issues' => [], 
             'severity' => 'normal'
         ];
         
-        // 检查会话配置
+        // 检查会话配�?
         $sessionSettings = [
-            'session.cookie_httponly' => ini_get('session.cookie_httponly'),
-            'session.use_only_cookies' => ini_get('session.use_only_cookies'),
-            'session.cookie_secure' => ini_get('session.cookie_secure'),
+            'session.cookie_httponly' => ini_get('session.cookie_httponly'],
+            'session.use_only_cookies' => ini_get('session.use_only_cookies'],
+            'session.cookie_secure' => ini_get('session.cookie_secure'],
             'session.cookie_samesite' => ini_get('session.cookie_samesite')
         ];
         
         if ($sessionSettings['session.cookie_httponly'] != '1') {
             $result['status'] = 'vulnerable';
             $result['issues'][] = "会话cookie未设置HttpOnly标志";
-            $result['recommendation'] = "在php.ini中设置 session.cookie_httponly = 1";
+            $result['recommendation'] = "在php.ini中设�?session.cookie_httponly = 1";
         }
         
         if ($sessionSettings['session.use_only_cookies'] != '1') {
             $result['status'] = 'vulnerable';
             $result['issues'][] = "会话未配置为仅使用cookie";
-            $result['recommendation'] = "在php.ini中设置 session.use_only_cookies = 1";
+            $result['recommendation'] = "在php.ini中设�?session.use_only_cookies = 1";
         }
         
         if ($sessionSettings['session.cookie_secure'] != '1') {
             $result['status'] = 'vulnerable';
             $result['issues'][] = "会话cookie未设置Secure标志";
-            $result['recommendation'] = "在php.ini中设置 session.cookie_secure = 1";
+            $result['recommendation'] = "在php.ini中设�?session.cookie_secure = 1";
         }
         
         if (empty($sessionSettings['session.cookie_samesite']) || $sessionSettings['session.cookie_samesite'] == 'None') {
             $result['status'] = 'vulnerable';
-            $result['issues'][] = "会话cookie未设置SameSite属性";
-            $result['recommendation'] = "在php.ini中设置 session.cookie_samesite = Lax 或 Strict";
+            $result['issues'][] = "会话cookie未设置SameSite属�?;
+            $result['recommendation'] = "在php.ini中设�?session.cookie_samesite = Lax �?Strict";
         }
         
         return $result;
@@ -1751,40 +1751,41 @@ class SimpleLogger
     {
         $logDir = __DIR__ . '/../../storage/logs';
         if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
+            mkdir($logDir, 0755, true];
         }
         $this->logFile = $logDir . '/admin_simple.log';
     }
     
     public function info(string $message, array $context = []): void
     {
-        $this->log('INFO', $message, $context);
+        $this->log('INFO', $message, $context];
     }
     
     public function error(string $message, array $context = []): void
     {
-        $this->log('ERROR', $message, $context);
+        $this->log('ERROR', $message, $context];
     }
     
     public function warning(string $message, array $context = []): void
     {
-        $this->log('WARNING', $message, $context);
+        $this->log('WARNING', $message, $context];
     }
     
     public function debug(string $message, array $context = []): void
     {
-        $this->log('DEBUG', $message, $context);
+        $this->log('DEBUG', $message, $context];
     }
     
     private function log(string $level, string $message, array $context = []): void
     {
-        $timestamp = date('Y-m-d H:i:s');
+        $timestamp = date('Y-m-d H:i:s'];
         $contextStr = !empty($context) ? ' ' . json_encode($context) : '';
         $logMessage = "[{$timestamp}] [{$level}] {$message}{$contextStr}" . PHP_EOL;
         
-        file_put_contents($this->logFile, $logMessage, FILE_APPEND);
+        file_put_contents($this->logFile, $logMessage, FILE_APPEND];
     }
 }
 
 // 兼容性包装器
-class_alias(SystemManager::class, 'SystemManager');
+class_alias(SystemManager::class, 'SystemManager'];
+

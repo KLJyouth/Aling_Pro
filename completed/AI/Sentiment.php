@@ -5,7 +5,7 @@ namespace App\AI;
 use App\AI\NaturalLanguage;
 
 /**
- * Sentiment 类
+ * Sentiment �?
  * 
  * 情感分析组件，分析文本情感倾向
  *
@@ -14,7 +14,7 @@ use App\AI\NaturalLanguage;
 class Sentiment
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -55,7 +55,7 @@ class Sentiment
     }
 
     /**
-     * 检测讽刺
+     * 检测讽�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -212,6 +212,11 @@
                     <i class="bi bi-shield-check"></i> 风控管理
                 </button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="operations-tab" data-bs-toggle="tab" data-bs-target="#operations" type="button" role="tab">
+                    <i class="bi bi-gear-wide-connected"></i> IT运维中心
+                </button>
+            </li>
         </ul>
 
         <!-- 内容区域 -->
@@ -374,6 +379,53 @@
                         <div id="risk-control-content" class="loading">
                             <div class="spinner"></div>
                             <p>加载风控数据...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- IT运维中心 -->
+            <div class="tab-pane fade" id="operations" role="tabpanel">
+                <div class="content-area">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h4><i class="bi bi-gear-wide-connected"></i> IT运维中心</h4>
+                        <a href="operations/" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-up-right"></i> 进入IT运维中心
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0">安全管理</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>提供全面的系统安全管理功能，包括安全概览、权限管理、备份管理、用户管理和角色管理。</p>
+                                    <a href="operations/security/" class="btn btn-primary">进入模块</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header bg-success text-white">
+                                    <h5 class="card-title mb-0">运维报告</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>提供全面的系统运行状态报告功能，包括报告概览、系统性能报告、安全审计报告、错误统计报告和自定义报告。</p>
+                                    <a href="operations/reports/" class="btn btn-success">进入模块</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="card-title mb-0">日志管理</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p>提供全面的系统日志收集、存储、分析和管理功能，包括日志概览、系统日志、错误日志、访问日志和安全日志管理。</p>
+                                    <a href="operations/logs/" class="btn btn-info">进入模块</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

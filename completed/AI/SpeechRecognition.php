@@ -5,7 +5,7 @@ namespace App\AI;
 use App\Core\AIManager;
 
 /**
- * SpeechRecognition 类
+ * SpeechRecognition �?
  * 
  * 语音识别组件，提供语音转文本功能
  *
@@ -14,7 +14,7 @@ use App\Core\AIManager;
 class SpeechRecognition
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -55,7 +55,7 @@ class SpeechRecognition
     }
 
     /**
-     * 说话者识别
+     * 说话者识�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

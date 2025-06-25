@@ -5,7 +5,7 @@ namespace App\Security;
 use App\Core\Authentication;
 
 /**
- * Authorization 类
+ * Authorization �?
  * 
  * 授权管理，处理用户权限和访问控制
  *
@@ -14,11 +14,11 @@ use App\Core\Authentication;
 class Authorization
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
@@ -33,7 +33,7 @@ class Authorization
     }
 
     /**
-     * 检查用户是否没有权限
+     * 检查用户是否没有权�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -77,7 +77,7 @@ class Authorization
     }
 
     /**
-     * 检查授权
+     * 检查授�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

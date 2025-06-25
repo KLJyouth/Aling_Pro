@@ -1,5 +1,6 @@
 <?php
-// 简单测试页面
-echo "Test page is working!";";
-phpinfo();
+// 简单测试页�?
+echo "Test page is working!";
+";
+phpinfo(];
 ?>

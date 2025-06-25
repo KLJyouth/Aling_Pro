@@ -11,7 +11,7 @@ use AlingAi\Services\CacheService;
 use Psr\Log\LoggerInterface;
 
 /**
- * PermissionManager 类
+ * PermissionManager �?
  *
  * @package AlingAi\Security
  */
@@ -69,11 +69,11 @@ class PermissionManager
         $this->db = $db;
         $this->cache = $cache;
         $this->logger = $logger;
-        $this->initializePermissions();
+        $this->initializePermissions(];
     }
     
     /**
-     * 初始化权限系统
+     * 初始化权限系�?
      */
     /**
 
@@ -87,12 +87,12 @@ class PermissionManager
 
     private function initializePermissions(): void
     {
-        $this->createPermissionTables();
-        $this->seedDefaultPermissions();
+        $this->createPermissionTables(];
+        $this->seedDefaultPermissions(];
     }
     
     /**
-     * 创建权限表
+     * 创建权限�?
      */
     /**
 
@@ -121,17 +121,17 @@ class PermissionManager
         ";
         
         try {
-            $this->db->execute($sql);
-            $this->logger->info("权限表创建成功");
+            $this->db->execute($sql];
+            $this->logger->info("权限表创建成�?];
         } catch (\Exception $e) {
             if (strpos($e->getMessage(), 'already exists') === false) {
-                $this->logger->error("权限表创建失败: " . $e->getMessage());
+                $this->logger->error("权限表创建失�? " . $e->getMessage()];
             }
         }
     }
     
     /**
-     * 初始化默认权限
+     * 初始化默认权�?
      */
     /**
 
@@ -147,30 +147,30 @@ class PermissionManager
     {
         $defaultPermissions = [
             [
-                'user_id' => 1, // 假设第一个用户是超级管理员
+                'user_id' => 1, // 假设第一个用户是超级管理�?
                 'module' => self::MODULE_USER_MANAGEMENT,
                 'permission_level' => self::LEVEL_SUPER_ADMIN
-            ],
+            ], 
             [
                 'user_id' => 1,
                 'module' => self::MODULE_SYSTEM_MONITOR,
                 'permission_level' => self::LEVEL_SUPER_ADMIN
-            ],
+            ], 
             [
                 'user_id' => 1,
                 'module' => self::MODULE_BACKUP_MANAGE,
                 'permission_level' => self::LEVEL_SUPER_ADMIN
-            ],
+            ], 
             [
                 'user_id' => 1,
                 'module' => self::MODULE_SECURITY_SCAN,
                 'permission_level' => self::LEVEL_SUPER_ADMIN
-            ],
+            ], 
             [
                 'user_id' => 1,
                 'module' => self::MODULE_PERFORMANCE_TEST,
                 'permission_level' => self::LEVEL_SUPER_ADMIN
-            ],
+            ], 
             [
                 'user_id' => 1,
                 'module' => self::MODULE_SYSTEM_CONFIG,
@@ -180,10 +180,10 @@ class PermissionManager
         
         foreach ($defaultPermissions as $permission) {
             $this->grantPermission(
-                $permission['user_id'],
-                $permission['module'],
+                $permission['user_id'], 
+                $permission['module'], 
                 $permission['permission_level']
-            );
+            ];
         }
     }
     
@@ -215,40 +215,40 @@ class PermissionManager
             $existing = $this->db->query(
                 "SELECT id FROM user_permissions WHERE user_id = ? AND module = ?",
                 [$userId, $module]
-            );
+            ];
             
             if ($existing) {
                 // 更新现有权限
                 $result = $this->db->update('user_permissions', [
                     'permission_level' => $level,
                     'granted_by' => $grantedBy,
-                    'granted_at' => date('Y-m-d H:i:s'),
+                    'granted_at' => date('Y-m-d H:i:s'],
                     'is_active' => 1
-                ], [
+                ],  [
                     'user_id' => $userId,
                     'module' => $module
-                ]);
+                ]];
             } else {
-                // 创建新权限记录
+                // 创建新权限记�?
                 $result = $this->db->insert('user_permissions', [
                     'user_id' => $userId,
                     'module' => $module,
                     'permission_level' => $level,
                     'granted_by' => $grantedBy,
-                    'granted_at' => date('Y-m-d H:i:s'),
+                    'granted_at' => date('Y-m-d H:i:s'],
                     'is_active' => 1
-                ]);
+                ]];
             }
             
             if ($result) {
                 // 清除用户权限缓存
                 $cacheKey = "user_permissions_{$userId}";
-                $this->cache->delete($cacheKey);
+                $this->cache->delete($cacheKey];
                 $this->logger->info("权限授予成功", [
                     'user_id' => $userId,
                     'module' => $module,
                     'level' => $level
-                ]);
+                ]];
                 return true;
             }
             
@@ -258,7 +258,7 @@ class PermissionManager
                 'user_id' => $userId,
                 'module' => $module,
                 'level' => $level
-            ]);
+            ]];
             return false;
         }
     }
@@ -285,19 +285,19 @@ class PermissionManager
         try {
             $result = $this->db->update('user_permissions', [
                 'is_active' => 0
-            ], [
+            ],  [
                 'user_id' => $userId,
                 'module' => $module
-            ]);
+            ]];
             
             if ($result) {
                 // 清除缓存
                 $cacheKey = "user_permissions_{$userId}";
-                $this->cache->delete($cacheKey);
+                $this->cache->delete($cacheKey];
                 $this->logger->info("权限撤销成功", [
                     'user_id' => $userId,
                     'module' => $module
-                ]);
+                ]];
                 return true;
             }
             
@@ -306,13 +306,13 @@ class PermissionManager
             $this->logger->error("权限撤销失败: " . $e->getMessage(), [
                 'user_id' => $userId,
                 'module' => $module
-            ]);
+            ]];
             return false;
         }
     }
     
     /**
-     * 检查用户权限
+     * 检查用户权�?
      */
     /**
 
@@ -333,9 +333,9 @@ class PermissionManager
     public function hasPermission(int $userId, string $module, int $requiredLevel = self::LEVEL_USER): bool
     {
         try {
-            // 检查缓存
+            // 检查缓�?
             $cacheKey = "user_permissions_{$userId}";
-            $permissions = $this->cache->get($cacheKey);
+            $permissions = $this->cache->get($cacheKey];
             
             if (!$permissions) {
                 // 从数据库获取权限
@@ -345,7 +345,7 @@ class PermissionManager
                 ) ?: [];
                 
                 // 缓存结果
-                $this->cache->set($cacheKey, $permissions, 3600); // 缓存1小时
+                $this->cache->set($cacheKey, $permissions, 3600]; // 缓存1小时
             }
             
             foreach ($permissions as $permission) {
@@ -356,17 +356,17 @@ class PermissionManager
             
             return false;
         } catch (\Exception $e) {
-            $this->logger->error("权限检查失败: " . $e->getMessage(), [
+            $this->logger->error("权限检查失�? " . $e->getMessage(), [
                 'user_id' => $userId,
                 'module' => $module,
                 'required_level' => $requiredLevel
-            ]);
+            ]];
             return false;
         }
     }
     
     /**
-     * 获取用户所有权限
+     * 获取用户所有权�?
      */
     /**
 
@@ -384,7 +384,7 @@ class PermissionManager
     {
         try {
             $cacheKey = "user_permissions_{$userId}";
-            $permissions = $this->cache->get($cacheKey);
+            $permissions = $this->cache->get($cacheKey];
             
             if (!$permissions) {
                 $permissions = $this->db->query(
@@ -392,20 +392,20 @@ class PermissionManager
                     [$userId]
                 ) ?: [];
                 
-                $this->cache->set($cacheKey, $permissions, 3600);
+                $this->cache->set($cacheKey, $permissions, 3600];
             }
             
             return $permissions;
         } catch (\Exception $e) {
             $this->logger->error("获取用户权限失败: " . $e->getMessage(), [
                 'user_id' => $userId
-            ]);
+            ]];
             return [];
         }
     }
     
     /**
-     * 权限中间件验证
+     * 权限中间件验�?
      */
     /**
 
@@ -425,7 +425,7 @@ class PermissionManager
 
     public function validatePermission(int $userId, string $module, int $requiredLevel): array
     {
-        $hasPermission = $this->hasPermission($userId, $module, $requiredLevel);
+        $hasPermission = $this->hasPermission($userId, $module, $requiredLevel];
         
         if (!$hasPermission) {
             return [
@@ -470,7 +470,7 @@ class PermissionManager
 
     public function getUserPermissionLevel(int $userId, string $module): int
     {
-        $permissions = $this->getUserPermissions($userId);
+        $permissions = $this->getUserPermissions($userId];
         
         foreach ($permissions as $permission) {
             if ($permission['module'] === $module) {
@@ -618,7 +618,7 @@ class PermissionManager
                 ]
             ];
         } catch (\Exception $e) {
-            $this->logger->error("获取权限统计失败: " . $e->getMessage());
+            $this->logger->error("获取权限统计失败: " . $e->getMessage()];
             return [
                 'success' => false,
                 'error' => $e->getMessage()
@@ -644,18 +644,18 @@ class PermissionManager
         try {
             $result = $this->db->execute(
                 "UPDATE user_permissions SET is_active = 0 WHERE expires_at IS NOT NULL AND expires_at < NOW()"
-            );
+            ];
             
-            $this->logger->info("清理过期权限完成", ['affected_rows' => $result]);
+            $this->logger->info("清理过期权限完成", ['affected_rows' => $result]];
             return $result;
         } catch (\Exception $e) {
-            $this->logger->error("清理过期权限失败: " . $e->getMessage());
+            $this->logger->error("清理过期权限失败: " . $e->getMessage()];
             return 0;
         }
     }
     
     /**
-     * 获取所有权限列表
+     * 获取所有权限列�?
      */
     /**
 
@@ -671,7 +671,7 @@ class PermissionManager
     {
         $cacheKey = 'permissions_all_list';
         
-        // 尝试从缓存获取
+        // 尝试从缓存获�?
         if ($cached = $this->cache->get($cacheKey)) {
             return $cached;
         }
@@ -685,35 +685,36 @@ class PermissionManager
                 LEFT JOIN users u ON up.user_id = u.id
                 WHERE up.is_active = 1
                 ORDER BY up.user_id, up.module
-            ");
-              // 格式化权限数据
+            "];
+              // 格式化权限数�?
             $formattedPermissions = [];
-            if (is_array($permissions)) {
+            if (is_[$permissions)) {
                 foreach ($permissions as $perm) {
                     $formattedPermissions[] = [
-                        'id' => $perm['id'],
-                        'user_id' => $perm['user_id'],
+                        'id' => $perm['id'], 
+                        'user_id' => $perm['user_id'], 
                         'username' => $perm['username'] ?? 'Unknown',
                         'email' => $perm['email'] ?? '',
-                        'module' => $perm['module'],
-                        'module_name' => $this->getModuleName($perm['module']),
-                        'permission_level' => $perm['permission_level'],
-                        'level_name' => $this->getLevelName($perm['permission_level']),
-                        'granted_at' => $perm['granted_at'],
-                        'granted_by' => $perm['granted_by'],
+                        'module' => $perm['module'], 
+                        'module_name' => $this->getModuleName($perm['module']],
+                        'permission_level' => $perm['permission_level'], 
+                        'level_name' => $this->getLevelName($perm['permission_level']],
+                        'granted_at' => $perm['granted_at'], 
+                        'granted_by' => $perm['granted_by'], 
                         'expires_at' => $perm['expires_at']
                     ];
                 }
             }
             
             // 缓存结果
-            $this->cache->set($cacheKey, $formattedPermissions, 300);
+            $this->cache->set($cacheKey, $formattedPermissions, 300];
             
             return $formattedPermissions;
             
         } catch (\Exception $e) {
-            $this->logger->error("获取所有权限失败: " . $e->getMessage());
+            $this->logger->error("获取所有权限失�? " . $e->getMessage()];
             return [];
         }
     }
 }
+

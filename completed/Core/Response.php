@@ -4,7 +4,7 @@ namespace App\Core;
 
 
 /**
- * Response 类
+ * Response �?
  * 
  * 响应类，封装HTTP响应
  *
@@ -13,7 +13,7 @@ namespace App\Core;
 class Response
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -41,7 +41,7 @@ class Response
     }
 
     /**
-     * 返回重定向响应
+     * 返回重定向响�?
      *
      * @return mixed
      */
@@ -71,7 +71,7 @@ class Response
     }
 
     /**
-     * 设置响应头
+     * 设置响应�?
      *
      * @return mixed
      */

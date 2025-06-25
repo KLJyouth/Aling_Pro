@@ -1,12 +1,12 @@
-ï»¿<?php
-declare(strict_types=1);
+<?php
+declare(strict_types=1];
 
 /**
- * æ–‡ä»¶åï¼šTextAnalysisEngine.php
- * åŠŸèƒ½æè¿°ï¼šæ–‡æœ¬åˆ†æžå¼•æ“Ž - é›†æˆå¤šç§NLPåŠŸèƒ½çš„æ ¸å¿ƒå¼•æ“Ž
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åŽä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼þÃû£ºTextAnalysisEngine.php
+ * ¹¦ÄÜÃèÊö£ºÎÄ±¾·ÖÎöÒýÇæ - ¼¯³É¶àÖÖNLP¹¦ÄÜµÄºËÐÄÒýÇæ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóÐÞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
@@ -20,85 +20,85 @@ use InvalidArgumentException;
 use AlingAi\Core\Logger\LoggerInterface;
 
 /**
- * æ–‡æœ¬åˆ†æžå¼•æ“Ž
+ * ÎÄ±¾·ÖÎöÒýÇæ
  *
- * é›†æˆå¤šç§NLPåŠŸèƒ½çš„æ ¸å¿ƒå¼•æ“Žï¼ŒåŒ…æ‹¬åˆ†è¯ã€è¯æ€§æ ‡æ³¨ã€å‘½åå®žä½“è¯†åˆ«ã€æƒ…æ„Ÿåˆ†æžã€æ–‡æœ¬åˆ†ç±»ã€å…³é”®è¯æå–å’Œæ–‡æœ¬æ‘˜è¦ç­‰åŠŸèƒ½
+ * ¼¯³É¶àÖÖNLP¹¦ÄÜµÄºËÐÄÒýÇæ£¬°üÀ¨·Ö´Ê¡¢´ÊÐÔ±ê×¢¡¢ÃüÃûÊµÌåÊ¶±ð¡¢Çé¸Ð·ÖÎö¡¢ÎÄ±¾·ÖÀà¡¢¹Ø¼ü´ÊÌáÈ¡ºÍÎÄ±¾ÕªÒªµÈ¹¦ÄÜ
  */
 class TextAnalysisEngine
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊý
      */
     private array $config;
 
     /**
-     * åˆ†è¯å™¨
+     * ·Ö´ÊÆ÷
      */
     private ?TokenizerInterface $tokenizer = null;
 
     /**
-     * è¯æ€§æ ‡æ³¨å™¨
+     * ´ÊÐÔ±ê×¢Æ÷
      */
     private ?POSTagger $posTagger = null;
 
     /**
-     * å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹
+     * ÃüÃûÊµÌåÊ¶±ðÄ£ÐÍ
      */
     private ?NERModel $nerModel = null;
 
     /**
-     * æƒ…æ„Ÿåˆ†æžå™¨
+     * Çé¸Ð·ÖÎöÆ÷
      */
     private ?SentimentAnalyzer $sentimentAnalyzer = null;
 
     /**
-     * æ–‡æœ¬åˆ†ç±»å™¨
+     * ÎÄ±¾·ÖÀàÆ÷
      */
     private ?TextClassifier $textClassifier = null;
 
     /**
-     * å…³é”®è¯æå–å™¨
+     * ¹Ø¼ü´ÊÌáÈ¡Æ÷
      */
     private ?KeywordExtractor $keywordExtractor = null;
 
     /**
-     * æ–‡æœ¬æ‘˜è¦å™¨
+     * ÎÄ±¾ÕªÒªÆ÷
      */
     private ?TextSummarizer $textSummarizer = null;
 
     /**
-     * æ—¥å¿—è®°å½•å™¨
+     * ÈÕÖ¾¼ÇÂ¼Æ÷
      */
     private ?LoggerInterface $logger = null;
     
     /**
-     * æž„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êý
      *
-     * @param array $config é…ç½®å‚æ•°
-     * @param LoggerInterface|null $logger æ—¥å¿—è®°å½•å™¨
+     * @param array $config ÅäÖÃ²ÎÊý
+     * @param LoggerInterface|null $logger ÈÕÖ¾¼ÇÂ¼Æ÷
      */
-    public function __construct(array $config = [], ?LoggerInterface $logger = null)
+    public function __construct(array $config = [],  ?LoggerInterface $logger = null)
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->config = array_merge($this->getDefaultConfig(), $config];
         $this->logger = $logger;
         
         if ($this->logger) {
-            $this->logger->info('æ–‡æœ¬åˆ†æžå¼•æ“Žåˆå§‹åŒ–æˆåŠŸ', [
+            $this->logger->info('ÎÄ±¾·ÖÎöÒýÇæ³õÊ¼»¯³É¹¦', [
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
         }
     }
     
     /**
-     * èŽ·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      *
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
         return [
             'default_language' => 'zh-CN',
-            'supported_languages' => ['zh-CN', 'en-US'],
+            'supported_languages' => ['zh-CN', 'en-US'], 
             'use_cache' => true,
             'cache_ttl' => 3600,
             'tokenizer' => 'universal',
@@ -112,9 +112,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–åˆ†è¯å™¨
+     * »ñÈ¡·Ö´ÊÆ÷
      *
-     * @return TokenizerInterface åˆ†è¯å™¨å®žä¾‹
+     * @return TokenizerInterface ·Ö´ÊÆ÷ÊµÀý
      */
     public function getTokenizer(): TokenizerInterface
     {
@@ -123,21 +123,21 @@ class TextAnalysisEngine
             
             switch ($tokenizerType) {
                 case 'chinese':
-                    $this->tokenizer = new ChineseTokenizer();
+                    $this->tokenizer = new ChineseTokenizer(];
                     break;
                 case 'english':
-                    $this->tokenizer = new EnglishTokenizer();
+                    $this->tokenizer = new EnglishTokenizer(];
                     break;
                 case 'universal':
                 default:
                     $this->tokenizer = new UniversalTokenizer([
                         'default_language' => $this->config['default_language']
-                    ]);
+                    ]];
                     break;
             }
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–åˆ†è¯å™¨', ['type' => $tokenizerType]);
+                $this->logger->debug('³õÊ¼»¯·Ö´ÊÆ÷', ['type' => $tokenizerType]];
             }
         }
         
@@ -145,19 +145,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–è¯æ€§æ ‡æ³¨å™¨
+     * »ñÈ¡´ÊÐÔ±ê×¢Æ÷
      *
-     * @return POSTagger è¯æ€§æ ‡æ³¨å™¨å®žä¾‹
+     * @return POSTagger ´ÊÐÔ±ê×¢Æ÷ÊµÀý
      */
     public function getPosTagger(): POSTagger
     {
         if ($this->posTagger === null) {
             $this->posTagger = new POSTagger([
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–è¯æ€§æ ‡æ³¨å™¨');
+                $this->logger->debug('³õÊ¼»¯´ÊÐÔ±ê×¢Æ÷'];
             }
         }
         
@@ -165,19 +165,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹
+     * »ñÈ¡ÃüÃûÊµÌåÊ¶±ðÄ£ÐÍ
      *
-     * @return NERModel å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹å®žä¾‹
+     * @return NERModel ÃüÃûÊµÌåÊ¶±ðÄ£ÐÍÊµÀý
      */
     public function getNerModel(): NERModel
     {
         if ($this->nerModel === null) {
             $this->nerModel = new NERModel([
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹');
+                $this->logger->debug('³õÊ¼»¯ÃüÃûÊµÌåÊ¶±ðÄ£ÐÍ'];
             }
         }
         
@@ -185,19 +185,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–æƒ…æ„Ÿåˆ†æžå™¨
+     * »ñÈ¡Çé¸Ð·ÖÎöÆ÷
      *
-     * @return SentimentAnalyzer æƒ…æ„Ÿåˆ†æžå™¨å®žä¾‹
+     * @return SentimentAnalyzer Çé¸Ð·ÖÎöÆ÷ÊµÀý
      */
     public function getSentimentAnalyzer(): SentimentAnalyzer
     {
         if ($this->sentimentAnalyzer === null) {
             $this->sentimentAnalyzer = new SentimentAnalyzer([
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–æƒ…æ„Ÿåˆ†æžå™¨');
+                $this->logger->debug('³õÊ¼»¯Çé¸Ð·ÖÎöÆ÷'];
             }
         }
         
@@ -205,19 +205,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–æ–‡æœ¬åˆ†ç±»å™¨
+     * »ñÈ¡ÎÄ±¾·ÖÀàÆ÷
      *
-     * @return TextClassifier æ–‡æœ¬åˆ†ç±»å™¨å®žä¾‹
+     * @return TextClassifier ÎÄ±¾·ÖÀàÆ÷ÊµÀý
      */
     public function getTextClassifier(): TextClassifier
     {
         if ($this->textClassifier === null) {
             $this->textClassifier = new TextClassifier([
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–æ–‡æœ¬åˆ†ç±»å™¨');
+                $this->logger->debug('³õÊ¼»¯ÎÄ±¾·ÖÀàÆ÷'];
             }
         }
         
@@ -225,19 +225,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–å…³é”®è¯æå–å™¨
+     * »ñÈ¡¹Ø¼ü´ÊÌáÈ¡Æ÷
      *
-     * @return KeywordExtractor å…³é”®è¯æå–å™¨å®žä¾‹
+     * @return KeywordExtractor ¹Ø¼ü´ÊÌáÈ¡Æ÷ÊµÀý
      */
     public function getKeywordExtractor(): KeywordExtractor
     {
         if ($this->keywordExtractor === null) {
             $this->keywordExtractor = new KeywordExtractor([
                 'default_language' => $this->config['default_language']
-            ]);
+            ]];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–å…³é”®è¯æå–å™¨');
+                $this->logger->debug('³õÊ¼»¯¹Ø¼ü´ÊÌáÈ¡Æ÷'];
             }
         }
         
@@ -245,19 +245,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–æ–‡æœ¬æ‘˜è¦å™¨
+     * »ñÈ¡ÎÄ±¾ÕªÒªÆ÷
      *
-     * @return TextSummarizer æ–‡æœ¬æ‘˜è¦å™¨å®žä¾‹
+     * @return TextSummarizer ÎÄ±¾ÕªÒªÆ÷ÊµÀý
      */
     public function getTextSummarizer(): TextSummarizer
     {
         if ($this->textSummarizer === null) {
             $this->textSummarizer = new TextSummarizer([
                 'default_language' => $this->config['default_language']
-            ], $this->getTokenizer());
+            ],  $this->getTokenizer()];
             
             if ($this->logger) {
-                $this->logger->debug('åˆå§‹åŒ–æ–‡æœ¬æ‘˜è¦å™¨');
+                $this->logger->debug('³õÊ¼»¯ÎÄ±¾ÕªÒªÆ÷'];
             }
         }
         
@@ -265,120 +265,120 @@ class TextAnalysisEngine
     }
     
     /**
-     * åˆ†è¯
+     * ·Ö´Ê
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array åˆ†è¯ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ·Ö´Ê½á¹û
      */
     public function tokenize(string $text, array $options = []): array
     {
-        $tokenizer = $this->getTokenizer();
-        return $tokenizer->tokenize($text, $options);
+        $tokenizer = $this->getTokenizer(];
+        return $tokenizer->tokenize($text, $options];
     }
     
     /**
-     * è¯æ€§æ ‡æ³¨
+     * ´ÊÐÔ±ê×¢
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array è¯æ€§æ ‡æ³¨ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ´ÊÐÔ±ê×¢½á¹û
      */
     public function tagPOS(string $text, array $options = []): array
     {
-        $tokens = $this->tokenize($text, $options);
-        $posTagger = $this->getPosTagger();
+        $tokens = $this->tokenize($text, $options];
+        $posTagger = $this->getPosTagger(];
         
         $language = $options['language'] ?? $this->config['default_language'];
-        return $posTagger->tag($tokens, $language);
+        return $posTagger->tag($tokens, $language];
     }
     
     /**
-     * å‘½åå®žä½“è¯†åˆ«
+     * ÃüÃûÊµÌåÊ¶±ð
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array å‘½åå®žä½“è¯†åˆ«ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ÃüÃûÊµÌåÊ¶±ð½á¹û
      */
     public function recognizeEntities(string $text, array $options = []): array
     {
-        $tokens = $this->tokenize($text, $options);
-        $nerModel = $this->getNerModel();
+        $tokens = $this->tokenize($text, $options];
+        $nerModel = $this->getNerModel(];
         
         $language = $options['language'] ?? $this->config['default_language'];
-        return $nerModel->recognize($tokens, $language);
+        return $nerModel->recognize($tokens, $language];
     }
     
     /**
-     * æƒ…æ„Ÿåˆ†æž
+     * Çé¸Ð·ÖÎö
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array æƒ…æ„Ÿåˆ†æžç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array Çé¸Ð·ÖÎö½á¹û
      */
     public function analyzeSentiment(string $text, array $options = []): array
     {
-        $tokens = $this->tokenize($text, $options);
-        $sentimentAnalyzer = $this->getSentimentAnalyzer();
+        $tokens = $this->tokenize($text, $options];
+        $sentimentAnalyzer = $this->getSentimentAnalyzer(];
         
         $language = $options['language'] ?? $this->config['default_language'];
-        return $sentimentAnalyzer->analyze($text, $tokens, $language);
+        return $sentimentAnalyzer->analyze($text, $tokens, $language];
     }
     
     /**
-     * æ–‡æœ¬åˆ†ç±»
+     * ÎÄ±¾·ÖÀà
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array æ–‡æœ¬åˆ†ç±»ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ÎÄ±¾·ÖÀà½á¹û
      */
     public function classifyText(string $text, array $options = []): array
     {
-        $textClassifier = $this->getTextClassifier();
-        return $textClassifier->classify($text, $options);
+        $textClassifier = $this->getTextClassifier(];
+        return $textClassifier->classify($text, $options];
     }
     
     /**
-     * å…³é”®è¯æå–
+     * ¹Ø¼ü´ÊÌáÈ¡
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array å…³é”®è¯æå–ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ¹Ø¼ü´ÊÌáÈ¡½á¹û
      */
     public function extractKeywords(string $text, array $options = []): array
     {
-        $keywordExtractor = $this->getKeywordExtractor();
-        return $keywordExtractor->extract($text, $options);
+        $keywordExtractor = $this->getKeywordExtractor(];
+        return $keywordExtractor->extract($text, $options];
     }
     
     /**
-     * æ–‡æœ¬æ‘˜è¦
+     * ÎÄ±¾ÕªÒª
      *
-     * @param string $text æ–‡æœ¬
-     * @param string|null $title æ ‡é¢˜
-     * @param array $options é€‰é¡¹
-     * @return array æ–‡æœ¬æ‘˜è¦ç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param string|null $title ±êÌâ
+     * @param array $options Ñ¡Ïî
+     * @return array ÎÄ±¾ÕªÒª½á¹û
      */
     public function summarizeText(string $text, ?string $title = null, array $options = []): array
     {
-        $textSummarizer = $this->getTextSummarizer();
-        return $textSummarizer->summarize($text, $title, $options);
+        $textSummarizer = $this->getTextSummarizer(];
+        return $textSummarizer->summarize($text, $title, $options];
     }
     
     /**
-     * ç»¼åˆåˆ†æž
+     * ×ÛºÏ·ÖÎö
      *
-     * @param string $text æ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array ç»¼åˆåˆ†æžç»“æžœ
+     * @param string $text ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ×ÛºÏ·ÖÎö½á¹û
      */
     public function analyze(string $text, array $options = []): array
     {
-        $startTime = microtime(true);
+        $startTime = microtime(true];
         
-        // åˆå¹¶é€‰é¡¹
+        // ºÏ²¢Ñ¡Ïî
         $options = array_merge([
-            'language' => $this->config['default_language'],
+            'language' => $this->config['default_language'], 
             'include_tokens' => false,
             'include_pos' => true,
             'include_entities' => true,
@@ -386,54 +386,54 @@ class TextAnalysisEngine
             'include_keywords' => true,
             'include_summary' => true,
             'include_classification' => false
-        ], $options);
+        ],  $options];
         
         $result = [
             'text' => $text,
-            'language' => $options['language'],
+            'language' => $options['language'], 
             'length' => mb_strlen($text)
         ];
         
-        // åˆ†è¯
-        $tokens = $this->tokenize($text, $options);
+        // ·Ö´Ê
+        $tokens = $this->tokenize($text, $options];
         if ($options['include_tokens']) {
             $result['tokens'] = $tokens;
         }
         
-        // è¯æ€§æ ‡æ³¨
+        // ´ÊÐÔ±ê×¢
         if ($options['include_pos']) {
-            $result['pos_tags'] = $this->getPosTagger()->tag($tokens, $options['language']);
+            $result['pos_tags'] = $this->getPosTagger()->tag($tokens, $options['language']];
         }
         
-        // å‘½åå®žä½“è¯†åˆ«
+        // ÃüÃûÊµÌåÊ¶±ð
         if ($options['include_entities']) {
-            $result['entities'] = $this->getNerModel()->recognize($tokens, $options['language']);
+            $result['entities'] = $this->getNerModel()->recognize($tokens, $options['language']];
         }
         
-        // æƒ…æ„Ÿåˆ†æž
+        // Çé¸Ð·ÖÎö
         if ($options['include_sentiment']) {
-            $result['sentiment'] = $this->getSentimentAnalyzer()->analyze($text, $tokens, $options['language']);
+            $result['sentiment'] = $this->getSentimentAnalyzer()->analyze($text, $tokens, $options['language']];
         }
         
-        // å…³é”®è¯æå–
+        // ¹Ø¼ü´ÊÌáÈ¡
         if ($options['include_keywords']) {
             $result['keywords'] = $this->getKeywordExtractor()->extract($text, [
                 'language' => $options['language']
-            ]);
+            ]];
         }
         
-        // æ–‡æœ¬æ‘˜è¦
+        // ÎÄ±¾ÕªÒª
         if ($options['include_summary']) {
             $result['summary'] = $this->getTextSummarizer()->summarize($text, null, [
                 'language' => $options['language']
-            ]);
+            ]];
         }
         
-        // æ–‡æœ¬åˆ†ç±»
+        // ÎÄ±¾·ÖÀà
         if ($options['include_classification']) {
             $result['classification'] = $this->getTextClassifier()->classify($text, [
                 'language' => $options['language']
-            ]);
+            ]];
         }
         
         $result['processing_time'] = microtime(true) - $startTime;
@@ -442,9 +442,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * èŽ·å–é…ç½®
+     * »ñÈ¡ÅäÖÃ
      *
-     * @return array é…ç½®
+     * @return array ÅäÖÃ
      */
     public function getConfig(): array
     {
@@ -452,19 +452,19 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®é…ç½®
+     * ÉèÖÃÅäÖÃ
      *
-     * @param array $config é…ç½®
+     * @param array $config ÅäÖÃ
      */
     public function setConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config = array_merge($this->config, $config];
     }
     
     /**
-     * è®¾ç½®åˆ†è¯å™¨
+     * ÉèÖÃ·Ö´ÊÆ÷
      *
-     * @param TokenizerInterface $tokenizer åˆ†è¯å™¨
+     * @param TokenizerInterface $tokenizer ·Ö´ÊÆ÷
      */
     public function setTokenizer(TokenizerInterface $tokenizer): void
     {
@@ -472,9 +472,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®è¯æ€§æ ‡æ³¨å™¨
+     * ÉèÖÃ´ÊÐÔ±ê×¢Æ÷
      *
-     * @param POSTagger $posTagger è¯æ€§æ ‡æ³¨å™¨
+     * @param POSTagger $posTagger ´ÊÐÔ±ê×¢Æ÷
      */
     public function setPosTagger(POSTagger $posTagger): void
     {
@@ -482,9 +482,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹
+     * ÉèÖÃÃüÃûÊµÌåÊ¶±ðÄ£ÐÍ
      *
-     * @param NERModel $nerModel å‘½åå®žä½“è¯†åˆ«æ¨¡åž‹
+     * @param NERModel $nerModel ÃüÃûÊµÌåÊ¶±ðÄ£ÐÍ
      */
     public function setNerModel(NERModel $nerModel): void
     {
@@ -492,9 +492,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®æƒ…æ„Ÿåˆ†æžå™¨
+     * ÉèÖÃÇé¸Ð·ÖÎöÆ÷
      *
-     * @param SentimentAnalyzer $sentimentAnalyzer æƒ…æ„Ÿåˆ†æžå™¨
+     * @param SentimentAnalyzer $sentimentAnalyzer Çé¸Ð·ÖÎöÆ÷
      */
     public function setSentimentAnalyzer(SentimentAnalyzer $sentimentAnalyzer): void
     {
@@ -502,9 +502,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®æ–‡æœ¬åˆ†ç±»å™¨
+     * ÉèÖÃÎÄ±¾·ÖÀàÆ÷
      *
-     * @param TextClassifier $textClassifier æ–‡æœ¬åˆ†ç±»å™¨
+     * @param TextClassifier $textClassifier ÎÄ±¾·ÖÀàÆ÷
      */
     public function setTextClassifier(TextClassifier $textClassifier): void
     {
@@ -512,9 +512,9 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®å…³é”®è¯æå–å™¨
+     * ÉèÖÃ¹Ø¼ü´ÊÌáÈ¡Æ÷
      *
-     * @param KeywordExtractor $keywordExtractor å…³é”®è¯æå–å™¨
+     * @param KeywordExtractor $keywordExtractor ¹Ø¼ü´ÊÌáÈ¡Æ÷
      */
     public function setKeywordExtractor(KeywordExtractor $keywordExtractor): void
     {
@@ -522,12 +522,13 @@ class TextAnalysisEngine
     }
     
     /**
-     * è®¾ç½®æ–‡æœ¬æ‘˜è¦å™¨
+     * ÉèÖÃÎÄ±¾ÕªÒªÆ÷
      *
-     * @param TextSummarizer $textSummarizer æ–‡æœ¬æ‘˜è¦å™¨
+     * @param TextSummarizer $textSummarizer ÎÄ±¾ÕªÒªÆ÷
      */
     public function setTextSummarizer(TextSummarizer $textSummarizer): void
     {
         $this->textSummarizer = $textSummarizer;
     }
 }
+

@@ -6,24 +6,24 @@ use App\Core\Cache;
 use App\Core\Request;
 
 /**
- * RateLimiter 类
+ * RateLimiter �?
  * 
- * 速率限制器，防止暴力攻击和滥用
+ * 速率限制器，防止暴力攻击和滥�?
  *
  * @package App\Security
  */
 class RateLimiter
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
-     * 尝试操作并增加计数
+     * 尝试操作并增加计�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -34,7 +34,7 @@ class RateLimiter
     }
 
     /**
-     * 检查是否超过尝试次数
+     * 检查是否超过尝试次�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Security;
 
@@ -12,16 +12,16 @@ use Psr\Log\LoggerInterface;
  * 全球安全情报系统
  * 
  * 三完编译 - 核心组件
- * 功能特性:
+ * 功能特�?
  * - 全球威胁情报收集
- * - 3D威胁可视化数据生成
+ * - 3D威胁可视化数据生�?
  * - 智能威胁模式分析
  * - 地理位置威胁映射
  * - 实时威胁态势感知
- * - AI驱动的威胁预测
+ * - AI驱动的威胁预�?
  */
 /**
- * GlobalThreatIntelligence 类
+ * GlobalThreatIntelligence �?
  *
  * @package AlingAi\Security
  */
@@ -86,13 +86,13 @@ class GlobalThreatIntelligence
         $this->database = $database;
         $this->aiService = $aiService;
         $this->logger = $logger;
-        $this->config = array_merge($this->getDefaultConfig(), $config);
-        $this->initializeThreatSources();
+        $this->config = array_merge($this->getDefaultConfig(), $config];
+        $this->initializeThreatSources(];
         $this->geoThreatMap = [];
     }
 
     /**
-     * 获取全球威胁态势3D可视化数据
+     * 获取全球威胁态势3D可视化数�?
      */
     /**
 
@@ -107,38 +107,38 @@ class GlobalThreatIntelligence
     public function getGlobal3DThreatVisualization(): array
     {
         try {
-            $this->logger->info('生成全球3D威胁可视化数据');
+            $this->logger->info('生成全球3D威胁可视化数�?];
 
             // 收集威胁数据
-            $threatData = $this->collectGlobalThreatData();
+            $threatData = $this->collectGlobalThreatData(];
             
             // 生成地理威胁映射
-            $geoThreatMap = $this->generateGeoThreatMap($threatData);
+            $geoThreatMap = $this->generateGeoThreatMap($threatData];
             
             // 分析威胁趋势
-            $threatTrends = $this->analyzeThreatTrends($threatData);
+            $threatTrends = $this->analyzeThreatTrends($threatData];
             
             // 生成3D可视化坐标系
-            $visualization3D = $this->generate3DVisualizationData($geoThreatMap, $threatTrends);
+            $visualization3D = $this->generate3DVisualizationData($geoThreatMap, $threatTrends];
             
             // AI预测威胁走向
-            $aiPredictions = $this->predictThreatEvolution($threatData);
+            $aiPredictions = $this->predictThreatEvolution($threatData];
             
             return [
                 'timestamp' => time(),
-                'global_threat_level' => $this->calculateGlobalThreatLevel($threatData),
+                'global_threat_level' => $this->calculateGlobalThreatLevel($threatData],
                 'threat_data' => $threatData,
                 'geo_threat_map' => $geoThreatMap,
                 'threat_trends' => $threatTrends,
                 'visualization_3d' => $visualization3D,
                 'ai_predictions' => $aiPredictions,
-                'active_threats_count' => count($threatData),
-                'high_risk_regions' => $this->identifyHighRiskRegions($geoThreatMap),
-                'threat_vectors' => $this->analyzeThreatVectors($threatData),
+                'active_threats_count' => count($threatData],
+                'high_risk_regions' => $this->identifyHighRiskRegions($geoThreatMap],
+                'threat_vectors' => $this->analyzeThreatVectors($threatData],
                 'defense_recommendations' => $this->generateDefenseRecommendations($threatData)
             ];
         } catch (\Exception $e) {
-            $this->logger->error('生成3D威胁可视化失败: ' . $e->getMessage());
+            $this->logger->error('生成3D威胁可视化失�? ' . $e->getMessage()];
             return [
                 'error' => '威胁数据生成失败',
                 'timestamp' => time(),
@@ -164,29 +164,29 @@ class GlobalThreatIntelligence
     {
         $threats = [];
         
-        // 从安全日志收集威胁
+        // 从安全日志收集威�?
         $securityLogs = $this->database->select('security_logs', [
             'ip', 'threat_level', 'threat_type', 'country', 'risk_score', 'created_at'
-        ], [
+        ],  [
             'created_at' => ['>=', date('Y-m-d H:i:s', strtotime('-24 hours'))]
-        ]);
+        ]];
 
         foreach ($securityLogs as $log) {
             $threats[] = [
-                'id' => uniqid('threat_'),
-                'type' => $this->classifyThreatType($log),
-                'source_ip' => $log['ip'],
-                'country' => $log['country'] ?? $this->getIPCountry($log['ip']),
-                'intensity' => $this->calculateThreatIntensity($log),
-                'timestamp' => strtotime($log['created_at']),
-                'risk_score' => $log['risk_score'],
-                'coordinates' => $this->getGeoCoordinates($log['ip']),
+                'id' => uniqid('threat_'],
+                'type' => $this->classifyThreatType($log],
+                'source_ip' => $log['ip'], 
+                'country' => $log['country'] ?? $this->getIPCountry($log['ip']],
+                'intensity' => $this->calculateThreatIntensity($log],
+                'timestamp' => strtotime($log['created_at']],
+                'risk_score' => $log['risk_score'], 
+                'coordinates' => $this->getGeoCoordinates($log['ip']],
                 'vector' => $this->determineThreatVector($log)
             ];
         }
 
         // 添加模拟全球威胁情报（用于演示）
-        $threats = array_merge($threats, $this->generateSimulatedGlobalThreats());
+        $threats = array_merge($threats, $this->generateSimulatedGlobalThreats()];
 
         return $threats;
     }
@@ -216,17 +216,17 @@ class GlobalThreatIntelligence
             if (!isset($geoMap[$country])) {
                 $geoMap[$country] = [
                     'country' => $country,
-                    'coordinates' => $threat['coordinates'],
+                    'coordinates' => $threat['coordinates'], 
                     'threat_count' => 0,
                     'total_risk_score' => 0,
-                    'threat_types' => [],
+                    'threat_types' => [], 
                     'intensity_distribution' => [
                         self::INTENSITY_LOW => 0,
                         self::INTENSITY_MEDIUM => 0,
                         self::INTENSITY_HIGH => 0,
                         self::INTENSITY_CRITICAL => 0,
                         self::INTENSITY_EXTREME => 0
-                    ],
+                    ], 
                     'recent_threats' => []
                 ];
             }
@@ -242,19 +242,19 @@ class GlobalThreatIntelligence
             }
         }
 
-        // 计算威胁密度和危险等级
+        // 计算威胁密度和危险等�?
         foreach ($geoMap as $country => &$data) {
-            $data['average_risk_score'] = $data['total_risk_score'] / max($data['threat_count'], 1);
-            $data['threat_density'] = $this->calculateThreatDensity($data);
-            $data['danger_level'] = $this->calculateDangerLevel($data);
-            $data['dominant_threat_type'] = $this->getDominantThreatType($data['threat_types']);
+            $data['average_risk_score'] = $data['total_risk_score'] / max($data['threat_count'],  1];
+            $data['threat_density'] = $this->calculateThreatDensity($data];
+            $data['danger_level'] = $this->calculateDangerLevel($data];
+            $data['dominant_threat_type'] = $this->getDominantThreatType($data['threat_types']];
         }
 
         return $geoMap;
     }
 
     /**
-     * 生成3D可视化数据
+     * 生成3D可视化数�?
      */
     /**
 
@@ -275,36 +275,36 @@ class GlobalThreatIntelligence
         $visualization = [
             'global_sphere' => [
                 'radius' => 100,
-                'threat_nodes' => [],
-                'connection_lines' => [],
-                'threat_clusters' => [],
+                'threat_nodes' => [], 
+                'connection_lines' => [], 
+                'threat_clusters' => [], 
                 'heat_zones' => []
-            ],
+            ], 
             'threat_layers' => [
-                'surface_threats' => [],
-                'network_threats' => [],
-                'application_threats' => [],
+                'surface_threats' => [], 
+                'network_threats' => [], 
+                'application_threats' => [], 
                 'data_threats' => []
-            ],
-            'animation_sequences' => [],
+            ], 
+            'animation_sequences' => [], 
             'interactive_elements' => []
         ];
 
         // 生成威胁节点
         foreach ($geoMap as $country => $data) {
-            $coordinates = $this->convertToSphereCoordinates($data['coordinates']);
+            $coordinates = $this->convertToSphereCoordinates($data['coordinates']];
             
             $node = [
                 'id' => 'node_' . $country,
                 'position' => $coordinates,
-                'size' => min(max($data['threat_count'] / 10, 0.5), 5.0),
-                'color' => $this->getThreatColor($data['danger_level']),
+                'size' => min(max($data['threat_count'] / 10, 0.5], 5.0],
+                'color' => $this->getThreatColor($data['danger_level']],
                 'intensity' => $data['average_risk_score'] / 100,
-                'pulsation_speed' => $this->calculatePulsationSpeed($data),
-                'threat_types' => array_keys($data['threat_types']),
+                'pulsation_speed' => $this->calculatePulsationSpeed($data],
+                'threat_types' => array_keys($data['threat_types']],
                 'info' => [
                     'country' => $country,
-                    'threats' => $data['threat_count'],
+                    'threats' => $data['threat_count'], 
                     'risk_level' => $data['danger_level']
                 ]
             ];
@@ -312,14 +312,14 @@ class GlobalThreatIntelligence
             $visualization['global_sphere']['threat_nodes'][] = $node;
         }
 
-        // 生成连接线（攻击路径）
-        $visualization['global_sphere']['connection_lines'] = $this->generateAttackPathLines($geoMap);
+        // 生成连接线（攻击路径�?
+        $visualization['global_sphere']['connection_lines'] = $this->generateAttackPathLines($geoMap];
         
         // 生成热力区域
-        $visualization['global_sphere']['heat_zones'] = $this->generateHeatZones($geoMap);
+        $visualization['global_sphere']['heat_zones'] = $this->generateHeatZones($geoMap];
         
         // 生成动画序列
-        $visualization['animation_sequences'] = $this->generateThreatAnimations($trends);
+        $visualization['animation_sequences'] = $this->generateThreatAnimations($trends];
 
         return $visualization;
     }
@@ -342,26 +342,26 @@ class GlobalThreatIntelligence
     private function predictThreatEvolution(array $threatData): array
     {
         try {
-            $analysisPrompt = $this->buildThreatAnalysisPrompt($threatData);
+            $analysisPrompt = $this->buildThreatAnalysisPrompt($threatData];
             
             $aiResponse = $this->aiService->analyzeContent($analysisPrompt, [
                 'temperature' => 0.7,
                 'max_tokens' => 1500,
                 'response_format' => 'json'
-            ]);
+            ]];
 
             return [
-                'next_24h_prediction' => $this->extractPredictionData($aiResponse, '24h'),
-                'next_week_prediction' => $this->extractPredictionData($aiResponse, '7d'),
-                'threat_pattern_analysis' => $this->analyzeThreatPatterns($threatData),
-                'emerging_threats' => $this->identifyEmergingThreats($threatData),
-                'risk_evolution' => $this->predictRiskEvolution($threatData),
+                'next_24h_prediction' => $this->extractPredictionData($aiResponse, '24h'],
+                'next_week_prediction' => $this->extractPredictionData($aiResponse, '7d'],
+                'threat_pattern_analysis' => $this->analyzeThreatPatterns($threatData],
+                'emerging_threats' => $this->identifyEmergingThreats($threatData],
+                'risk_evolution' => $this->predictRiskEvolution($threatData],
                 'recommended_actions' => $this->generateActionRecommendations($aiResponse)
             ];
         } catch (\Exception $e) {
-            $this->logger->error('AI威胁预测失败: ' . $e->getMessage());
+            $this->logger->error('AI威胁预测失败: ' . $e->getMessage()];
             return [
-                'error' => 'AI预测服务暂时不可用',
+                'error' => 'AI预测服务暂时不可�?,
                 'fallback_analysis' => $this->generateFallbackPrediction($threatData)
             ];
         }
@@ -388,9 +388,9 @@ class GlobalThreatIntelligence
             return 'low';
         }
 
-        $totalRisk = array_sum(array_column($threatData, 'risk_score'));
-        $averageRisk = $totalRisk / count($threatData);
-        $criticalThreats = count(array_filter($threatData, fn($t) => $t['intensity'] >= self::INTENSITY_CRITICAL));
+        $totalRisk = array_sum(array_column($threatData, 'risk_score')];
+        $averageRisk = $totalRisk / count($threatData];
+        $criticalThreats = count(array_filter($threatData, fn($t) => $t['intensity'] >= self::INTENSITY_CRITICAL)];
 
         if ($criticalThreats > 10 || $averageRisk > 80) {
             return 'extreme';
@@ -421,32 +421,32 @@ class GlobalThreatIntelligence
     private function analyzeThreatTrends(array $threatData): array
     {
         $trends = [
-            'hourly_distribution' => [],
-            'threat_type_trends' => [],
-            'geographic_trends' => [],
+            'hourly_distribution' => [], 
+            'threat_type_trends' => [], 
+            'geographic_trends' => [], 
             'intensity_trends' => []
         ];
 
-        // 按小时分析威胁分布
+        // 按小时分析威胁分�?
         for ($hour = 0; $hour < 24; $hour++) {
             $hourThreats = array_filter($threatData, function($threat) use ($hour) {
                 return date('H', $threat['timestamp']) == $hour;
-            });
+            }];
             
             $trends['hourly_distribution'][$hour] = [
                 'hour' => $hour,
-                'count' => count($hourThreats),
+                'count' => count($hourThreats],
                 'average_intensity' => $this->calculateAverageIntensity($hourThreats)
             ];
         }
 
         // 威胁类型趋势
-        $threatTypes = array_column($threatData, 'type');
-        $trends['threat_type_trends'] = array_count_values($threatTypes);
+        $threatTypes = array_column($threatData, 'type'];
+        $trends['threat_type_trends'] = array_count_values($threatTypes];
 
         // 地理趋势
-        $countries = array_column($threatData, 'country');
-        $trends['geographic_trends'] = array_count_values($countries);
+        $countries = array_column($threatData, 'country'];
+        $trends['geographic_trends'] = array_count_values($countries];
 
         return $trends;
     }
@@ -468,32 +468,32 @@ class GlobalThreatIntelligence
     {
         $simulatedThreats = [];
         $threatCountries = [
-            'CN' => ['lat' => 35.8617, 'lng' => 104.1954],
-            'US' => ['lat' => 37.0902, 'lng' => -95.7129],
-            'RU' => ['lat' => 61.5240, 'lng' => 105.3188],
-            'DE' => ['lat' => 51.1657, 'lng' => 10.4515],
-            'BR' => ['lat' => -14.2350, 'lng' => -51.9253],
-            'IN' => ['lat' => 20.5937, 'lng' => 78.9629],
-            'JP' => ['lat' => 36.2048, 'lng' => 138.2529],
+            'CN' => ['lat' => 35.8617, 'lng' => 104.1954], 
+            'US' => ['lat' => 37.0902, 'lng' => -95.7129], 
+            'RU' => ['lat' => 61.5240, 'lng' => 105.3188], 
+            'DE' => ['lat' => 51.1657, 'lng' => 10.4515], 
+            'BR' => ['lat' => -14.2350, 'lng' => -51.9253], 
+            'IN' => ['lat' => 20.5937, 'lng' => 78.9629], 
+            'JP' => ['lat' => 36.2048, 'lng' => 138.2529], 
             'KR' => ['lat' => 35.9078, 'lng' => 127.7669]
         ];
 
         foreach ($threatCountries as $country => $coords) {
-            $threatCount = rand(5, 25);
+            $threatCount = rand(5, 25];
             
             for ($i = 0; $i < $threatCount; $i++) {
                 $simulatedThreats[] = [
-                    'id' => uniqid('sim_threat_'),
+                    'id' => uniqid('sim_threat_'],
                     'type' => $this->getRandomThreatType(),
                     'source_ip' => $this->generateRandomIP(),
                     'country' => $country,
-                    'intensity' => rand(1, 5),
-                    'timestamp' => time() - rand(0, 86400),
-                    'risk_score' => rand(10, 100),
+                    'intensity' => rand(1, 5],
+                    'timestamp' => time() - rand(0, 86400],
+                    'risk_score' => rand(10, 100],
                     'coordinates' => [
-                        'lat' => $coords['lat'] + (rand(-500, 500) / 100),
+                        'lat' => $coords['lat'] + (rand(-500, 500) / 100],
                         'lng' => $coords['lng'] + (rand(-500, 500) / 100)
-                    ],
+                    ], 
                     'vector' => $this->generateRandomThreatVector()
                 ];
             }
@@ -523,13 +523,13 @@ class GlobalThreatIntelligence
                 'honeypot_data' => true,
                 'ip_reputation' => true,
                 'malware_feeds' => true
-            ],
+            ], 
             'visualization_settings' => [
                 'sphere_radius' => 100,
                 'max_nodes' => 200,
                 'animation_speed' => 1.0,
                 'color_scheme' => 'thermal'
-            ],
+            ], 
             'ai_prediction_config' => [
                 'model_temperature' => 0.7,
                 'prediction_horizon_hours' => 24,
@@ -584,7 +584,7 @@ class GlobalThreatIntelligence
             return $log['threat_type'];
         }
         
-        // 简单的启发式分类
+        // 简单的启发式分�?
         $riskScore = $log['risk_score'] ?? 0;
         
         if ($riskScore > 80) {
@@ -648,7 +648,7 @@ class GlobalThreatIntelligence
     private function getIPCountry(string $ip): string
     {
         // 简化的IP地理位置查询
-        $ipParts = explode('.', $ip);
+        $ipParts = explode('.', $ip];
         if (count($ipParts) !== 4) return 'Unknown';
         
         $firstOctet = (int)$ipParts[0];
@@ -684,14 +684,14 @@ class GlobalThreatIntelligence
 
     private function getGeoCoordinates(string $ip): array
     {
-        $country = $this->getIPCountry($ip);
+        $country = $this->getIPCountry($ip];
         
         // 简化的国家坐标映射
         $coordinates = [
-            'US' => ['lat' => 37.0902, 'lng' => -95.7129],
-            'CN' => ['lat' => 35.8617, 'lng' => 104.1954],
-            'RU' => ['lat' => 61.5240, 'lng' => 105.3188],
-            'JP' => ['lat' => 36.2048, 'lng' => 138.2529],
+            'US' => ['lat' => 37.0902, 'lng' => -95.7129], 
+            'CN' => ['lat' => 35.8617, 'lng' => 104.1954], 
+            'RU' => ['lat' => 61.5240, 'lng' => 105.3188], 
+            'JP' => ['lat' => 36.2048, 'lng' => 138.2529], 
             'KR' => ['lat' => 35.9078, 'lng' => 127.7669]
         ];
         
@@ -768,7 +768,7 @@ class GlobalThreatIntelligence
 
     private function generateRandomIP(): string
     {
-        return rand(1, 255) . '.' . rand(1, 255) . '.' . rand(1, 255) . '.' . rand(1, 255);
+        return rand(1, 255) . '.' . rand(1, 255) . '.' . rand(1, 255) . '.' . rand(1, 255];
     }
 
     /**
@@ -812,13 +812,13 @@ class GlobalThreatIntelligence
 
     private function convertToSphereCoordinates(array $geoCoords): array
     {
-        $lat = deg2rad($geoCoords['lat']);
-        $lng = deg2rad($geoCoords['lng']);
+        $lat = deg2rad($geoCoords['lat']];
+        $lng = deg2rad($geoCoords['lng']];
         $radius = 100;
         
         return [
-            'x' => $radius * cos($lat) * cos($lng),
-            'y' => $radius * sin($lat),
+            'x' => $radius * cos($lat) * cos($lng],
+            'y' => $radius * sin($lat],
             'z' => $radius * cos($lat) * sin($lng)
         ];
     }
@@ -874,7 +874,7 @@ class GlobalThreatIntelligence
 
     private function calculatePulsationSpeed(array $data): float
     {
-        return min(max($data['average_risk_score'] / 50, 0.1), 2.0);
+        return min(max($data['average_risk_score'] / 50, 0.1], 2.0];
     }
 
     /**
@@ -970,13 +970,13 @@ class GlobalThreatIntelligence
     private function buildThreatAnalysisPrompt(array $threatData): string
     {
         $threatSummary = [
-            'total_threats' => count($threatData),
-            'threat_types' => array_count_values(array_column($threatData, 'type')),
-            'average_risk' => array_sum(array_column($threatData, 'risk_score')) / max(count($threatData), 1),
+            'total_threats' => count($threatData],
+            'threat_types' => array_count_values(array_column($threatData, 'type')],
+            'average_risk' => array_sum(array_column($threatData, 'risk_score')) / max(count($threatData], 1],
             'countries_affected' => count(array_unique(array_column($threatData, 'country')))
         ];
 
-        return "请分析以下威胁数据并提供预测:\n" . json_encode($threatSummary, JSON_PRETTY_PRINT);
+        return "请分析以下威胁数据并提供预测:\n" . json_encode($threatSummary, JSON_PRETTY_PRINT];
     }
 
     /**
@@ -1002,8 +1002,8 @@ class GlobalThreatIntelligence
 
     private function extractPredictionData(string $aiResponse, string $timeframe): array
     {
-        // 从AI响应中提取预测数据
-        return ['prediction' => 'AI分析中...'];
+        // 从AI响应中提取预测数�?
+        return ['prediction' => 'AI分析�?..'];
     }
 
     /**
@@ -1026,7 +1026,7 @@ class GlobalThreatIntelligence
 
     private function analyzeThreatPatterns(array $threatData): array
     {
-        return ['patterns' => '模式分析中...'];
+        return ['patterns' => '模式分析�?..'];
     }
 
     /**
@@ -1049,7 +1049,7 @@ class GlobalThreatIntelligence
 
     private function identifyEmergingThreats(array $threatData): array
     {
-        return ['emerging' => '新兴威胁识别中...'];
+        return ['emerging' => '新兴威胁识别�?..'];
     }
 
     /**
@@ -1072,7 +1072,7 @@ class GlobalThreatIntelligence
 
     private function predictRiskEvolution(array $threatData): array
     {
-        return ['evolution' => '风险演进预测中...'];
+        return ['evolution' => '风险演进预测�?..'];
     }
 
     /**
@@ -1095,7 +1095,7 @@ class GlobalThreatIntelligence
 
     private function generateActionRecommendations(string $aiResponse): array
     {
-        return ['recommendations' => '生成建议中...'];
+        return ['recommendations' => '生成建议�?..'];
     }
 
     /**
@@ -1141,7 +1141,7 @@ class GlobalThreatIntelligence
 
     private function calculateThreatDensity(array $data): float
     {
-        return min($data['threat_count'] / 10.0, 1.0);
+        return min($data['threat_count'] / 10.0, 1.0];
     }
 
     /**
@@ -1195,7 +1195,7 @@ class GlobalThreatIntelligence
     {
         if (empty($threatTypes)) return 'unknown';
         
-        return array_search(max($threatTypes), $threatTypes);
+        return array_search(max($threatTypes], $threatTypes];
     }
 
     /**
@@ -1224,8 +1224,8 @@ class GlobalThreatIntelligence
             if ($data['danger_level'] === 'critical' || $data['danger_level'] === 'extreme') {
                 $highRiskRegions[] = [
                     'country' => $country,
-                    'risk_score' => $data['average_risk_score'],
-                    'threat_count' => $data['threat_count'],
+                    'risk_score' => $data['average_risk_score'], 
+                    'threat_count' => $data['threat_count'], 
                     'dominant_threat' => $data['dominant_threat_type']
                 ];
             }
@@ -1254,8 +1254,8 @@ class GlobalThreatIntelligence
 
     private function analyzeThreatVectors(array $threatData): array
     {
-        $vectors = array_column($threatData, 'vector');
-        return array_count_values($vectors);
+        $vectors = array_column($threatData, 'vector'];
+        return array_count_values($vectors];
     }
 
     /**
@@ -1280,13 +1280,13 @@ class GlobalThreatIntelligence
     {
         return [
             'immediate_actions' => [
-                '加强监控高风险IP段',
-                '更新威胁检测规则',
+                '加强监控高风险IP�?,
+                '更新威胁检测规�?,
                 '增加安全日志分析频率'
-            ],
+            ], 
             'strategic_actions' => [
-                '部署额外的蜜罐节点',
-                '增强AI威胁检测能力',
+                '部署额外的蜜罐节�?,
+                '增强AI威胁检测能�?,
                 '建立威胁情报共享机制'
             ]
         ];
@@ -1314,7 +1314,8 @@ class GlobalThreatIntelligence
     {
         if (empty($threats)) return 0.0;
         
-        $totalIntensity = array_sum(array_column($threats, 'intensity'));
-        return $totalIntensity / count($threats);
+        $totalIntensity = array_sum(array_column($threats, 'intensity')];
+        return $totalIntensity / count($threats];
     }
 }
+

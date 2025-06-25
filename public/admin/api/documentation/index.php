@@ -1,19 +1,19 @@
-ï»¿<?php
+<?php
 /**
- * AlingAi Pro 6.0 - APIæ–‡æ¡£ç”Ÿæˆç³»ç»Ÿ
- * è‡ªåŠ¨æ‰«æå¹¶ç”ŸæˆAPIæ–‡æ¡£ï¼Œæ”¯æŒOpenAPI/Swaggeræ ¼å¼
+ * AlingAi Pro 6.0 - APIÎÄµµÉú³ÉÏµÍ³
+ * ×Ô¶¯É¨Ãè²¢Éú³ÉAPIÎÄµµ£¬Ö§³ÖOpenAPI/Swagger¸ñÊ½
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
-header("Content-Type: application/json; charset=utf-8");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json;charset=utf-8"];
+header("Access-Control-Allow-Origin: *"];
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"];
+header("Access-Control-Allow-Headers: Content-Type, Authorization"];
 
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(200);
-    exit();
+if ($_SERVER["REQUEST_METHOD"] === "OPTIONS"] {
+    http_response_code(200];
+    exit(];
 }
 
 require_once __DIR__ . "/../../../../vendor/autoload.php";
@@ -21,57 +21,57 @@ require_once __DIR__ . "/../../../../src/Auth/AdminAuthServiceDemo.php";
 
 use AlingAi\Auth\AdminAuthServiceDemo;
 
-// å“åº”æ•°æ®
-function sendResponse($success, $data = null, $message = "", $code = 200)
+// ÏìÓ¦Êý¾Ý
+function sendResponse($success, $data = null, $message = ", $code = 200]
 {
-    http_response_code($code);
+    http_response_code($code];
     echo json_encode([
         "success" => $success,
         "data" => $data,
         "message" => $message,
-        "timestamp" => date("Y-m-d H:i:s")
-    ], JSON_UNESCAPED_UNICODE);
-    exit();
+        "timestamp" => date("Y-m-d H:i:s"]
+    ],  JSON_UNESCAPED_UNICODE];
+    exit(];
 }
 
-// é”™è¯¯å¤„ç†
-function handleError($message, $code = 500) {
-    error_log("API Error: $message");
-    sendResponse(false, null, $message, $code);
+// ´íÎó´¦Àí
+function handleError($message, $code = 500] {
+    error_log("API Error: $message"];
+    sendResponse(false, null, $message, $code];
 }
 
-// APIæ–‡æ¡£ç”Ÿæˆå™¨
+// APIÎÄµµÉú³ÉÆ÷
 function generateApiDocumentation() {
     return [
         "openapi" => "3.0.0",
         "info" => [
             "title" => "AlingAi Pro API",
-            "description" => "AlingAi Pro APIæ–‡æ¡£ç³»ç»Ÿ - ç”¨æˆ·ç®¡ç†ã€ç³»ç»Ÿç›‘æŽ§ç­‰åŠŸèƒ½",
+            "description" => "AlingAi Pro APIÎÄµµÏµÍ³ - ÓÃ»§¹ÜÀí¡¢ÏµÍ³¼à¿ØµÈ¹¦ÄÜ",
             "version" => "6.0.0",
             "contact" => [
                 "name" => "AlingAi Team",
                 "email" => "api@gxggm.com",
                 "url" => "https://alingai.com"
-            ],
+            ], 
             "license" => [
                 "name" => "MIT",
                 "url" => "https://opensource.org/licenses/MIT"
             ]
-        ],
+        ], 
         "servers" => [
             [
                 "url" => "http://localhost",
-                "description" => "æœ¬åœ°å¼€å‘çŽ¯å¢ƒ"
-            ],
+                "description" => "±¾µØ¿ª·¢»·¾³"
+            ], 
             [
                 "url" => "https://api.alingai.com",
-                "description" => "ç”Ÿäº§çŽ¯å¢ƒ"
+                "description" => "Éú²ú»·¾³"
             ]
-        ],
+        ], 
         "security" => [
-            ["bearerAuth" => []],
+            ["bearerAuth" => []], 
             ["apiKey" => []]
-        ],
+        ], 
         "paths" => generateApiPaths(),
         "components" => generateApiComponents()
     ];
@@ -79,38 +79,38 @@ function generateApiDocumentation() {
 
 function generateApiPaths() {
     return [
-        // è®¤è¯ç›¸å…³API
+        // ÈÏÖ¤Ïà¹ØAPI
         "/api/auth/login" => [
             "post" => [
-                "tags" => ["è®¤è¯"],
-                "summary" => "ç”¨æˆ·ç™»å½•",
-                "description" => "ä½¿ç”¨ç”¨æˆ·å/å¯†ç è¿›è¡Œç”¨æˆ·ç™»å½•",
+                "tags" => ["ÈÏÖ¤"], 
+                "summary" => "ÓÃ»§µÇÂ¼",
+                "description" => "Ê¹ÓÃÓÃ»§Ãû/ÃÜÂë½øÐÐÓÃ»§µÇÂ¼",
                 "requestBody" => [
                     "required" => true,
                     "content" => [
                         "application/json" => [
                             "schema" => [
                                 "type" => "object",
-                                "required" => ["username", "password"],
+                                "required" => ["username", "password"], 
                                 "properties" => [
-                                    "username" => ["type" => "string", "description" => "ç”¨æˆ·åæˆ–é‚®ç®±"],
-                                    "password" => ["type" => "string", "description" => "å¯†ç "],
-                                    "remember" => ["type" => "boolean", "description" => "è®°ä½ç™»å½•çŠ¶æ€"]
+                                    "username" => ["type" => "string", "description" => "ÓÃ»§Ãû»òÓÊÏä"], 
+                                    "password" => ["type" => "string", "description" => "ÃÜÂë"], 
+                                    "remember" => ["type" => "boolean", "description" => "¼Ç×¡µÇÂ¼×´Ì¬"]
                                 ]
                             ]
                         ]
                     ]
-                ],
+                ], 
                 "responses" => [
                     "200" => [
-                        "description" => "ç™»å½•æˆåŠŸ",
+                        "description" => "µÇÂ¼³É¹¦",
                         "content" => [
                             "application/json" => [
                                 "schema" => ["\$ref" => "#/components/schemas/AuthResponse"]
                             ]
                         ]
-                    ],
-                    "401" => ["description" => "è®¤è¯å¤±è´¥"]
+                    ], 
+                    "401" => ["description" => "ÈÏÖ¤Ê§°Ü"]
                 ]
             ]
         ]
@@ -123,34 +123,34 @@ function generateApiComponents() {
             "AuthResponse" => [
                 "type" => "object",
                 "properties" => [
-                    "success" => ["type" => "boolean"],
+                    "success" => ["type" => "boolean"], 
                     "data" => [
                         "type" => "object",
                         "properties" => [
-                            "token" => ["type" => "string"],
+                            "token" => ["type" => "string"], 
                             "user" => ["\$ref" => "#/components/schemas/User"]
                         ]
-                    ],
+                    ], 
                     "message" => ["type" => "string"]
                 ]
-            ],
+            ], 
             "User" => [
                 "type" => "object",
                 "properties" => [
-                    "id" => ["type" => "integer"],
-                    "username" => ["type" => "string"],
-                    "email" => ["type" => "string"],
-                    "avatar" => ["type" => "string"],
+                    "id" => ["type" => "integer"], 
+                    "username" => ["type" => "string"], 
+                    "email" => ["type" => "string"], 
+                    "avatar" => ["type" => "string"], 
                     "role" => ["type" => "string"]
                 ]
             ]
-        ],
+        ], 
         "securitySchemes" => [
             "bearerAuth" => [
                 "type" => "http",
                 "scheme" => "bearer",
                 "bearerFormat" => "JWT"
-            ],
+            ], 
             "apiKey" => [
                 "type" => "apiKey",
                 "in" => "header",
@@ -160,70 +160,72 @@ function generateApiComponents() {
     ];
 }
 
-// æŽˆæƒéªŒè¯
+// ÊÚÈ¨ÑéÖ¤
 function authenticateRequest() {
-    $auth = new AdminAuthServiceDemo();
+    $auth = new AdminAuthServiceDemo(];
     
-    // å°è¯•èŽ·å–æŽˆæƒä¿¡æ¯
-    $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
-    $apiKey = $_SERVER["HTTP_X_API_KEY"] ?? "";
+    // ³¢ÊÔ»ñÈ¡ÊÚÈ¨ÐÅÏ¢
+    $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? ";
+    $apiKey = $_SERVER["HTTP_X_API_KEY"] ?? ";
     
-    if (empty($authHeader) && empty($apiKey)) {
-        handleError("æœªæä¾›è®¤è¯ä¿¡æ¯", 401);
+    if (empty($authHeader] && empty($apiKey]] {
+        handleError("Î´Ìá¹©ÈÏÖ¤ÐÅÏ¢", 401];
     }
     
-    // æ£€æŸ¥Bearer Token
-    if (!empty($authHeader)) {
-        $token = str_replace("Bearer ", "", $authHeader);
-        if (!$auth->validateToken($token)) {
-            handleError("æ— æ•ˆä»¤ç‰Œ", 401);
+    // ¼ì²éBearer Token
+    if (!empty($authHeader]] {
+        $token = str_replace("Bearer ", ", $authHeader];
+        if (!$auth->validateToken($token]] {
+            handleError("ÎÞÐ§ÁîÅÆ", 401];
         }
-        return $auth->getUserFromToken($token);
+        return $auth->getUserFromToken($token];
     }
     
-    // æ£€æŸ¥API Key
-    if (!empty($apiKey)) {
-        if (!$auth->validateApiKey($apiKey)) {
-            handleError("æ— æ•ˆçš„APIå¯†é’¥", 401);
+    // ¼ì²éAPI Key
+    if (!empty($apiKey]] {
+        if (!$auth->validateApiKey($apiKey]] {
+            handleError("ÎÞÐ§µÄAPIÃÜÔ¿", 401];
         }
-        return $auth->getUserFromApiKey($apiKey);
+        return $auth->getUserFromApiKey($apiKey];
     }
     
-    handleError("è®¤è¯å¤±è´¥", 401);
+    handleError("ÈÏÖ¤Ê§°Ü", 401];
 }
 
-// ç”Ÿäº§çŽ¯å¢ƒ
+// Éú²ú»·¾³
 function handleRequest() {
     $method = $_SERVER["REQUEST_METHOD"];
-    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    $pathParts = explode("/", trim($path, "/"));
-    $action = $pathParts[count($pathParts) - 1] ?? "";
+    $path = parse_url($_SERVER["REQUEST_URI"],  PHP_URL_PATH];
+    $pathParts = explode("/", trim($path, "/"]];
+    $action = $pathParts[count($pathParts] - 1] ?? ";
     
-    // å¤„ç†OPTIONSè¯·æ±‚çš„CORSé¢„æ£€å“åº”å’Œå‰ç½®å¤„ç†
-    if ($method === "OPTIONS") {
+    // ´¦ÀíOPTIONSÇëÇóµÄCORSÔ¤¼ìÏìÓ¦ºÍÇ°ÖÃ´¦Àí
+    if ($method === "OPTIONS"] {
         return;
     }
     
-    // æ ¹æ®è·¯å¾„å’Œæ–¹æ³•åˆ†å‘è¯·æ±‚
-    switch ($action) {
+    // ¸ù¾ÝÂ·¾¶ºÍ·½·¨·Ö·¢ÇëÇó
+    switch ($action] {
         case "schema":
-            // èŽ·å–APIæ–‡æ¡£ç»“æž„
-            sendResponse(true, generateApiDocumentation(), "æˆåŠŸèŽ·å–APIæ–‡æ¡£");
+            // »ñÈ¡APIÎÄµµ½á¹¹
+            sendResponse(true, generateApiDocumentation(), "³É¹¦»ñÈ¡APIÎÄµµ"];
                         break;
             
                     default:
-            // é»˜è®¤è¿”å›žå®Œæ•´çš„APIæ–‡æ¡£
-            $docs = generateApiDocumentation();
-            sendResponse(true, $docs, "æˆåŠŸèŽ·å–APIæ–‡æ¡£");
+            // Ä¬ÈÏ·µ»ØÍêÕûµÄAPIÎÄµµ
+            $docs = generateApiDocumentation(];
+            sendResponse(true, $docs, "³É¹¦»ñÈ¡APIÎÄµµ"];
     }
 }
 
-// æ‰§ç”Ÿäº§çŽ¯å¢ƒ
+// Ö´Éú²ú»·¾³
 try {
-    handleRequest();
-} catch (Exception $e) {
-    handleError("å¤„ç†è¯·æ±‚æ—¶å‘ç”Ÿé”™è¯¯: " . $e->getMessage(), 500);
+    handleRequest(];
+} catch (Exception $e] {
+    handleError("´¦ÀíÇëÇóÊ±·¢Éú´íÎó: " . $e->getMessage(), 500];
 }
+
+
 
 
 

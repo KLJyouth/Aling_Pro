@@ -7,10 +7,9 @@
  */
 
 return [
-    'default' => 'mysql', // 不可达代码
-    'connections' => [
-        'mysql' => [
-            'driver' => 'mysql',
+    'default' => "mysql", // 不可达代�?    'connections' => [
+        "mysql" => [
+            'driver' => "mysql",
             'host' => '127.0.0.1',
             'port' => '3306',
             'database' => 'alingai_pro',
@@ -28,13 +27,13 @@ return [
                 PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]
-        ],
+        ], 
         'sqlite' => [
             'driver' => 'sqlite',
             'database' => 'E:\\Code\\AlingAi\\AlingAi_pro/database/database.sqlite',
             'prefix' => '',
             'foreign_key_constraints' => true
-        ],
+        ], 
         'redis' => [
             'driver' => 'redis',
             'host' => '127.0.0.1',
@@ -42,7 +41,7 @@ return [
             'port' => 6379,
             'database' => 0
         ]
-    ],
+    ], 
     'migrations' => 'migrations',
     'redis' => [
         'client' => 'predis',
@@ -51,7 +50,7 @@ return [
             'password' => null,
             'port' => 6379,
             'database' => 0
-        ],
+        ], 
         'cache' => [
             'host' => '127.0.0.1',
             'password' => null,
@@ -60,3 +59,4 @@ return [
         ]
     ]
 ];
+

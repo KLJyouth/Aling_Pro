@@ -1,0 +1,180 @@
+<?php
+
+/**
+ * AlingAi Pro PHP 8.1 语法兼容性修复工具
+ * 
+ * 这个脚本用于自动修复以下常见语法错误：
+ * 1. 构造函数中的重复括号: __construct((param)) -> __construct(param)
+ * 2. 函数内部错误使用private关键字: private $var -> $var
+ * 3. 行尾多余的单引号和分号: 'value','; -> 'value',
+ * 4. 函数参数中的多余括号: function test(()) -> function test()
+ * 5. 数组语法错误: 'key' => value,'; -> 'key' => value,
+ * 6. 命名空间一致性: AlingAI\ 和 AlingAiPro\ -> AlingAi\
+ * 7. 修复缺少对应catch块的try语句
+ */
+
+// 设置脚本最大执行时间
+set_time_limit(300);
+
+// 源代码目录
+$srcDir = __DIR__ . '/src';
+
+// 统计信息
+$stats = [
+    'files_scanned' => 0,
+    'files_modified' => 0,
+    'errors_fixed' => [
+        'double_parentheses' => 0,
+        'private_in_function' => 0,
+        'extra_quotes' => 0,
+        'empty_parentheses' => 0,
+        'array_syntax' => 0,
+        'namespace' => 0,
+        'try_catch' => 0
+    ]
+];
+
+// 递归扫描目录
+function scanDirectory($dir, &$stats) {
+    $items = scandir($dir);
+    
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+        
+        $path = $dir . '/' . $item;
+        
+        if (is_dir($path)) {
+            scanDirectory($path, $stats);
+        } elseif (pathinfo($path, PATHINFO_EXTENSION) === 'php') {
+            fixFile($path, $stats);
+        }
+    }
+}
+
+// 修复文件
+function fixFile($file, &$stats) {
+    echo "检查文件: " . $file . PHP_EOL;
+    $stats['files_scanned']++;
+    
+    $content = file_get_contents($file);
+    $originalContent = $content;
+    
+    // 1. 修复构造函数中的重复括号
+    $pattern = '/function\s+__construct\s*\(\(([^)]*)\)\)/s';
+    $replacement = 'function __construct($1)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['double_parentheses'] += $count;
+    
+    // 2. 修复函数内部错误使用private关键字
+    $pattern = '/(function\s+[a-zA-Z0-9_]+\s*\([^)]*\)\s*{[^}]*?)private\s+(\$[a-zA-Z0-9_]+)/s';
+    $replacement = '$1$2';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['private_in_function'] += $count;
+    
+    // 3. 修复行尾多余的单引号和分号
+    $pattern = '/\';\s*$/m';
+    $replacement = '\'';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['extra_quotes'] += $count;
+    
+    $pattern = '/";$/m';
+    $replacement = '"';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['extra_quotes'] += $count;
+    
+    // 4. 修复函数参数中的多余括号
+    $pattern = '/function\s+([a-zA-Z0-9_]+)\s*\(\(\)\)/s';
+    $replacement = 'function $1()';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['empty_parentheses'] += $count;
+    
+    // 5. 修复函数参数中的多余括号 - 带参数版本
+    $pattern = '/function\s+([a-zA-Z0-9_]+)\s*\(\(([^)]+)\)\)/s';
+    $replacement = 'function $1($2)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['empty_parentheses'] += $count;
+    
+    // 6. 修复数组语法错误 - 行尾多余的引号和分号
+    $pattern = '/=>([^,\n\r\]]*),\';/s';
+    $replacement = '=>$1,';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['array_syntax'] += $count;
+    
+    // 7. 修复命名空间一致性问题
+    $pattern = '/namespace\s+AlingAI\\\\/s';
+    $replacement = 'namespace AlingAi\\\\';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['namespace'] += $count;
+    
+    $pattern = '/namespace\s+AlingAiPro\\\\/s';
+    $replacement = 'namespace AlingAi\\\\';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['namespace'] += $count;
+    
+    $pattern = '/use\s+AlingAI\\\\/s';
+    $replacement = 'use AlingAi\\\\';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['namespace'] += $count;
+    
+    $pattern = '/use\s+AlingAiPro\\\\/s';
+    $replacement = 'use AlingAi\\\\';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['namespace'] += $count;
+    
+    // 8. 修复缺少对应catch块的try语句
+    $tryPattern = '/try\s*{[^}]*}\s*(?!catch|finally)/s';
+    if (preg_match($tryPattern, $content)) {
+        $content = preg_replace($tryPattern, '$0 catch (\Exception $e) { /* 自动添加的catch块 */ }', $content, -1, $count);
+        $stats['errors_fixed']['try_catch'] += $count;
+    }
+    
+    // 9. 修复魔术方法中的重复括号
+    $pattern = '/function\s+__([a-zA-Z0-9_]+)\s*\(\(\)\)/s';
+    $replacement = 'function __$1()';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['double_parentheses'] += $count;
+    
+    // 10. 修复魔术方法中的重复括号 - 带参数版本
+    $pattern = '/function\s+__([a-zA-Z0-9_]+)\s*\(\(([^)]+)\)\)/s';
+    $replacement = 'function __$1($2)';
+    $content = preg_replace($pattern, $replacement, $content, -1, $count);
+    $stats['errors_fixed']['double_parentheses'] += $count;
+    
+    // 如果内容有变化，保存文件
+    if ($content !== $originalContent) {
+        echo "修复文件: " . $file . PHP_EOL;
+        file_put_contents($file, $content);
+        $stats['files_modified']++;
+    }
+}
+
+// 开始扫描
+echo "开始扫描并修复PHP文件...\n";
+$startTime = microtime(true);
+
+scanDirectory($srcDir, $stats);
+
+$endTime = microtime(true);
+$executionTime = round($endTime - $startTime, 2);
+
+// 输出统计信息
+echo "\n修复完成! 执行时间: {$executionTime} 秒\n";
+echo "扫描文件数: {$stats['files_scanned']}\n";
+echo "修改文件数: {$stats['files_modified']}\n";
+echo "修复错误数:\n";
+echo "  - 构造函数重复括号: {$stats['errors_fixed']['double_parentheses']}\n";
+echo "  - 函数内private关键字: {$stats['errors_fixed']['private_in_function']}\n";
+echo "  - 多余引号和分号: {$stats['errors_fixed']['extra_quotes']}\n";
+echo "  - 函数参数多余括号: {$stats['errors_fixed']['empty_parentheses']}\n";
+echo "  - 数组语法错误: {$stats['errors_fixed']['array_syntax']}\n";
+echo "  - 命名空间问题: {$stats['errors_fixed']['namespace']}\n";
+echo "  - 缺少catch块: {$stats['errors_fixed']['try_catch']}\n";
+
+echo "\n请运行 'php -l' 检查是否还有剩余错误。\n";
+
+// 检查剩余错误 - Windows PowerShell版本
+echo "\n检查剩余语法错误...\n";
+$command = 'powershell -Command "$errorCount = (Get-ChildItem -Path src -Filter *.php -Recurse | ForEach-Object { php -l $_.FullName } | Select-String -Pattern \"Errors parsing\" | Measure-Object).Count; Write-Output \"PHP文件剩余错误数: $errorCount\""';
+echo shell_exec($command); 

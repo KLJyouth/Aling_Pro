@@ -1,11 +1,11 @@
-ï»¿<?php
+<?php
 require_once 'config.php';
 require_once 'libs/CryptoHelper.php';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ç™»å½•ç¤ºä¾‹</title>
+    <title>µÇÂ¼Ê¾Àı</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .admin-bypass-field {
@@ -22,36 +22,36 @@ require_once 'libs/CryptoHelper.php';
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        <h4>ç³»ç»Ÿç™»å½•</h4>
+                        <h4>ÏµÍ³µÇÂ¼</h4>
                     </div>
                     <div class="card-body">
                         <form action="auth.php" method="post">
                             <input type="hidden" name="csrf_token" value="<?= CryptoHelper::generateCsrfToken() ?>">
                             
-                            <?php if (defined('ADMIN_BYPASS_HASH')): ?>
+                            <?php if (defined('ADMIN_BYPASS_HASH'): ?>
                             <div class="mb-3 admin-bypass-field" style="display: none;">
-                                <label for="admin_bypass" class="form-label">ç®¡ç†å‘˜è·³è¿‡å¯†ç </label>
+                                <label for="admin_bypass" class="form-label">¹ÜÀíÔ±Ìø¹ıÃÜÂë</label>
                                 <input type="password" class="form-control" id="admin_bypass" name="admin_bypass">
-                                <small class="text-muted">ä»…é™ç´§æ€¥æƒ…å†µä¸‹ä½¿ç”¨</small>
+                                <small class="text-muted">½öÏŞ½ô¼±Çé¿öÏÂÊ¹ÓÃ</small>
                             </div>
-                            <?php endif; ?>
+                            <?php endif;?>
                             
                             <div class="mb-3">
-                                <label for="username" class="form-label">ç”¨æˆ·å</label>
+                                <label for="username" class="form-label">ÓÃ»§Ãû</label>
                                 <input type="text" class="form-control" id="username" name="username" required>
                             </div>
                             <div class="mb-3">
-                                <label for="password" class="form-label">å¯†ç </label>
+                                <label for="password" class="form-label">ÃÜÂë</label>
                                 <input type="password" class="form-control" id="password" name="password" required>
                             </div>
                             
-                            <?php if (defined('ADMIN_BYPASS_HASH')): ?>
+                            <?php if (defined('ADMIN_BYPASS_HASH'): ?>
                             <div class="mb-3 text-end">
-                                <a href="#" class="text-muted small" id="toggleBypass">ç®¡ç†å‘˜å…¥å£</a>
+                                <a href="#" class="text-muted small" id="toggleBypass">¹ÜÀíÔ±Èë¿Ú</a>
                             </div>
-                            <?php endif; ?>
+                            <?php endif;?>
                             
-                            <button type="submit" class="btn btn-primary w-100">ç™»å½•</button>
+                            <button type="submit" class="btn btn-primary w-100">µÇÂ¼</button>
                         </form>
                     </div>
                 </div>
@@ -59,14 +59,15 @@ require_once 'libs/CryptoHelper.php';
         </div>
     </div>
 
-    <?php if (defined('ADMIN_BYPASS_HASH')): ?>
+    <?php if (defined('ADMIN_BYPASS_HASH'): ?>
     <script>
-        document.getElementById('toggleBypass').addEventListener('click', function(e) {
-            e.preventDefault();
-            const field = document.querySelector('.admin-bypass-field');
+        document.getElementById('toggleBypass'].addEventListener('click', function(e) {
+            e.preventDefault(];
+            const field = document.querySelector('.admin-bypass-field'];
             field.style.display = field.style.display === 'none' ? 'block' : 'none';
-        });
+        }];
     </script>
-    <?php endif; ?>
+    <?php endif;?>
 </body>
 </html>
+

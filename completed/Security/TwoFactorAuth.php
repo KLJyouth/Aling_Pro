@@ -6,7 +6,7 @@ use App\Core\Session;
 use App\Models\User;
 
 /**
- * TwoFactorAuth 类
+ * TwoFactorAuth �?
  * 
  * 双因素认证，提供额外的安全层
  *
@@ -15,15 +15,15 @@ use App\Models\User;
 class TwoFactorAuth
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
-     * 启用双因素认证
+     * 启用双因素认�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -34,7 +34,7 @@ class TwoFactorAuth
     }
 
     /**
-     * 禁用双因素认证
+     * 禁用双因素认�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -67,7 +67,7 @@ class TwoFactorAuth
     }
 
     /**
-     * 获取QR码
+     * 获取QR�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -1,17 +1,17 @@
 <?php
 /**
  * 文件名：SynthesisAcousticModel.php
- * 功能描述：语音合成声学模型 - 生成声学特征
- * 创建时间：2025-01-XX
+ * 功能描述：语音合成声学模�?- 生成声学特征
+ * 创建时间�?025-01-XX
  * 最后修改：2025-01-XX
- * 版本：1.0.0
+ * 版本�?.0.0
  * 
  * @package AlingAi\AI\Engines\Speech
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\Speech;
 
@@ -36,16 +36,16 @@ class SynthesisAcousticModel
     private array $modelInstances = [];
     
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct(array $config = [])
     {
         $this->config = $config;
-        $this->initialize();
+        $this->initialize(];
     }
     
     /**
-     * 初始化模型
+     * 初始化模�?
      */
     private function initialize(): void
     {
@@ -64,12 +64,12 @@ class SynthesisAcousticModel
      */
     public function generate(array $phonemes, array $voiceModel, array $params = []): array
     {
-        // 获取语言和声音
+        // 获取语言和声�?
         $language = $voiceModel['model_path'] ?? '';
         $voice = $voiceModel['name'] ?? '';
         
         // 加载模型
-        $model = $this->loadModel($language);
+        $model = $this->loadModel($language];
         
         // 处理生成参数
         $speed = $params['speed'] ?? 1.0;
@@ -77,30 +77,30 @@ class SynthesisAcousticModel
         $emotion = $params['emotion'] ?? 'neutral';
         
         // 应用情感向量
-        $emotionVector = $this->getEmotionVector($emotion);
+        $emotionVector = $this->getEmotionVector($emotion];
         
-        // 生成每个音素的声学特征
+        // 生成每个音素的声学特�?
         $features = [];
         foreach ($phonemes as $phonemeSeq) {
-            $phonemeFeatures = $this->generatePhonemeFeatures($phonemeSeq, $model, $voiceModel);
-            $features = array_merge($features, $phonemeFeatures);
+            $phonemeFeatures = $this->generatePhonemeFeatures($phonemeSeq, $model, $voiceModel];
+            $features = array_merge($features, $phonemeFeatures];
         }
         
         // 应用速度调整
         if ($speed != 1.0) {
-            $features = $this->adjustSpeed($features, $speed);
+            $features = $this->adjustSpeed($features, $speed];
         }
         
         // 应用音高调整
         if ($pitch != 1.0) {
-            $features = $this->adjustPitch($features, $pitch);
+            $features = $this->adjustPitch($features, $pitch];
         }
         
         // 应用情感向量
-        $features = $this->applyEmotion($features, $emotionVector);
+        $features = $this->applyEmotion($features, $emotionVector];
         
         // 平滑过渡
-        $features = $this->smoothTransitions($features);
+        $features = $this->smoothTransitions($features];
         
         return $features;
     }
@@ -110,7 +110,7 @@ class SynthesisAcousticModel
      */
     private function loadModel(string $modelPath): object
     {
-        // 检查模型是否已经加载
+        // 检查模型是否已经加�?
         if (isset($this->modelInstances[$modelPath])) {
             return $this->modelInstances[$modelPath];
         }
@@ -141,22 +141,22 @@ class SynthesisAcousticModel
     {
         $features = [];
         
-        // 提取音素和持续时间
+        // 提取音素和持续时�?
         $phonemes = $phonemeSeq['phonemes'] ?? [];
         
         // 模拟特征生成
         // 在实际应用中，这里会使用深度学习模型进行推理
         foreach ($phonemes as $phoneme) {
-            // 为每个音素生成80维的梅尔频谱图特征
-            $melSpec = array_fill(0, 80, 0);
+            // 为每个音素生�?0维的梅尔频谱图特�?
+            $melSpec = array_fill(0, 80, 0];
             for ($i = 0; $i < 80; $i++) {
                 $melSpec[$i] = (rand(0, 1000) / 1000.0) - 0.5;
             }
             
             // 生成持续时间（帧数）
-            $duration = rand(3, 15);
+            $duration = rand(3, 15];
             
-            // 创建特征帧
+            // 创建特征�?
             for ($i = 0; $i < $duration; $i++) {
                 $features[] = [
                     'mel_spec' => $melSpec,
@@ -177,11 +177,11 @@ class SynthesisAcousticModel
     {
         // 定义情感向量
         $emotions = [
-            'neutral' => array_fill(0, 8, 0),
-            'happy' => [0.8, 0.6, 0.2, 0, 0, 0, 0, 0],
-            'sad' => [0, 0, 0, 0.7, 0.5, 0.3, 0, 0],
-            'angry' => [0.3, 0, 0, 0, 0, 0.5, 0.8, 0.6],
-            'surprised' => [0.7, 0.3, 0, 0, 0, 0, 0.5, 0],
+            'neutral' => array_fill(0, 8, 0],
+            'happy' => [0.8, 0.6, 0.2, 0, 0, 0, 0, 0], 
+            'sad' => [0, 0, 0, 0.7, 0.5, 0.3, 0, 0], 
+            'angry' => [0.3, 0, 0, 0, 0, 0.5, 0.8, 0.6], 
+            'surprised' => [0.7, 0.3, 0, 0, 0, 0, 0.5, 0], 
             'calm' => [0.1, 0.2, 0.5, 0.3, 0, 0, 0, 0]
         ];
         
@@ -203,7 +203,7 @@ class SynthesisAcousticModel
             // 加快速度，减少帧
             $step = $speed;
             $newFeatures = [];
-            for ($i = 0; $i < count($features); $i += $step) {
+            for ($i = 0; $i < count($features]; $i += $step) {
                 $index = (int)$i;
                 if ($index < count($features)) {
                     $newFeatures[] = $features[$index];
@@ -214,10 +214,10 @@ class SynthesisAcousticModel
             // 减慢速度，增加帧
             $step = 1 / $speed;
             $newFeatures = [];
-            for ($i = 0; $i < count($features); $i++) {
+            for ($i = 0; $i < count($features]; $i++) {
                 $newFeatures[] = $features[$i];
                 // 插入额外的帧
-                $extraFrames = (int)($step - 1);
+                $extraFrames = (int)($step - 1];
                 for ($j = 0; $j < $extraFrames; $j++) {
                     $newFeatures[] = $features[$i];
                 }
@@ -240,19 +240,19 @@ class SynthesisAcousticModel
         $adjustedFeatures = $features;
         
         // 简单模拟：对每个梅尔频谱图进行移位
-        $shift = (int)(($pitch - 1.0) * 10);
+        $shift = (int)(($pitch - 1.0) * 10];
         
         foreach ($adjustedFeatures as &$feature) {
             $melSpec = $feature['mel_spec'];
             
             if ($shift > 0) {
                 // 音高提高
-                array_unshift($melSpec, ...array_fill(0, $shift, 0));
-                $melSpec = array_slice($melSpec, 0, 80);
+                array_unshift($melSpec, ...array_fill(0, $shift, 0)];
+                $melSpec = array_slice($melSpec, 0, 80];
             } else if ($shift < 0) {
                 // 音高降低
-                $melSpec = array_slice($melSpec, abs($shift));
-                $melSpec = array_merge($melSpec, array_fill(0, abs($shift), 0));
+                $melSpec = array_slice($melSpec, abs($shift)];
+                $melSpec = array_merge($melSpec, array_fill(0, abs($shift], 0)];
             }
             
             $feature['mel_spec'] = $melSpec;
@@ -266,7 +266,7 @@ class SynthesisAcousticModel
      */
     private function applyEmotion(array $features, array $emotionVector): array
     {
-        // 检查是否是中性情感
+        // 检查是否是中性情�?
         $isNeutral = true;
         foreach ($emotionVector as $value) {
             if ($value != 0) {
@@ -284,8 +284,8 @@ class SynthesisAcousticModel
         foreach ($features as &$feature) {
             $melSpec = $feature['mel_spec'];
             
-            // 简单模拟：将情感向量与梅尔频谱图混合
-            for ($i = 0; $i < min(count($emotionVector), count($melSpec)); $i++) {
+            // 简单模拟：将情感向量与梅尔频谱图混�?
+            for ($i = 0; $i < min(count($emotionVector], count($melSpec)]; $i++) {
                 $melSpec[$i] += $emotionVector[$i] * 0.2;
             }
             
@@ -301,7 +301,7 @@ class SynthesisAcousticModel
     private function smoothTransitions(array $features): array
     {
         // 模拟平滑过渡处理
-        // 在实际应用中，这会使用更复杂的算法
+        // 在实际应用中，这会使用更复杂的算�?
         
         // 简单模拟：对相邻帧的梅尔频谱图进行平均
         for ($i = 1; $i < count($features) - 1; $i++) {
@@ -309,7 +309,7 @@ class SynthesisAcousticModel
             $currSpec = $features[$i]['mel_spec'];
             $nextSpec = $features[$i + 1]['mel_spec'];
             
-            for ($j = 0; $j < count($currSpec); $j++) {
+            for ($j = 0; $j < count($currSpec]; $j++) {
                 $features[$i]['mel_spec'][$j] = ($prevSpec[$j] + $currSpec[$j] + $nextSpec[$j]) / 3;
             }
         }
@@ -342,15 +342,16 @@ class SynthesisAcousticModel
     public function releaseModel(string $modelPath): void
     {
         if (isset($this->modelInstances[$modelPath])) {
-            unset($this->modelInstances[$modelPath]);
+            unset($this->modelInstances[$modelPath]];
         }
     }
     
     /**
-     * 释放所有模型资源
+     * 释放所有模型资�?
      */
     public function releaseAllModels(): void
     {
         $this->modelInstances = [];
     }
 } 
+

@@ -4,7 +4,7 @@ namespace App\Security;
 
 
 /**
- * XSS 类
+ * XSS �?
  * 
  * XSS防护，过滤和清理输入
  *
@@ -13,15 +13,15 @@ namespace App\Security;
 class XSS
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
-     * 清理可能包含XSS的输入
+     * 清理可能包含XSS的输�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -54,7 +54,7 @@ class XSS
     }
 
     /**
-     * 检查内容是否安全
+     * 检查内容是否安�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -1,5 +1,5 @@
 <?php
-// 创建必要的目录
+// 创建必要的目�?
 
 // 定义需要创建的目录
 $directories = [
@@ -24,14 +24,14 @@ foreach ($directories as $dir) {
             echo "创建目录失败: $dir<br>";
         }
     } else {
-        echo "目录已存在: $dir<br>";
+        echo "目录已存�? $dir<br>";
     }
 }
 
 // 创建测试文件
 $testFile = __DIR__ . '/../storage/logs/test.log';
-file_put_contents($testFile, date('Y-m-d H:i:s') . " - Test log entry\n", FILE_APPEND);
+file_put_contents($testFile, date('Y-m-d H:i:s') . " - Test log entry\n", FILE_APPEND];
 echo "创建测试日志文件: ../storage/logs/test.log<br>";
 
-echo "<p>目录创建完成！</p>";
+echo "<p>目录创建完成�?/p>";
 ?> 

@@ -4,7 +4,7 @@ namespace App\Core;
 
 
 /**
- * Request 类
+ * Request �?
  * 
  * 请求类，封装HTTP请求
  *
@@ -13,7 +13,7 @@ namespace App\Core;
 class Request
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -31,7 +31,7 @@ class Request
     }
 
     /**
-     * 获取所有输入
+     * 获取所有输�?
      *
      * @return mixed
      */

@@ -1,0 +1,79 @@
+{
+    "name": "alingai/pro",
+    "description": "AlingAi Pro 6.0 - Enterprise-Grade AI Platform with Government & Enterprise Solutions",
+    "type": "project",
+    "license": "MIT",
+    "version": "6.0.0",    "require": {
+        "php": ">=8.1.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*",
+        "ext-pdo": "*",
+        "firebase/php-jwt": "^6.11",
+        "guzzlehttp/guzzle": "^7.8",
+        "monolog/monolog": "^2.9",
+        "nesbot/carbon": "^2.72",
+        "nyholm/psr7": "^1.8",
+        "php-di/php-di": "7.0",
+        "phpmailer/phpmailer": "^6.8",
+        "predis/predis": "^1.1",
+        "psr/http-message": "^1.1",
+        "ramsey/uuid": "^4.7",
+        "ratchet/pawl": "^0.4.2",
+        "ratchet/rfc6455": "^0.4.0",
+        "react/http": "^1.10",
+        "react/socket": "^1.15",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.12",
+        "twig/twig": "^3.8",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "phpstan/phpstan": "^1.10",
+        "fakerphp/faker": "^1.23"
+    },    "autoload": {
+        "psr-4": {
+            "AlingAi\\": "src/",
+            "AlingAI\\": "src/",
+            "AlingAi\\Government\\": "apps/government/",
+            "AlingAi\\Enterprise\\": "apps/enterprise/",
+            "AlingAi\\AI\\": "apps/ai-platform/",
+            "AlingAi\\AIServices\\": "apps/ai-platform/Services/",
+            "AlingAi\\Blockchain\\": "apps/blockchain/",
+            "AlingAi\\Security\\": "apps/security/",
+            "AlingAi\\Analytics\\": "analytics/",
+            "AlingAi\\Infrastructure\\": "infrastructure/",
+            "Ratchet\\": "src/WebSocket/"
+        },
+        "files": [
+            "src/helpers.php",
+            "bootstrap/app.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/",
+            "Tests\\Unit\\": "tests/Unit/",
+            "Tests\\Feature\\": "tests/Feature/",
+            "Tests\\Integration\\": "tests/Integration/"
+        }
+    },
+    "scripts": {
+        "serve": "php -S localhost:8000 -t public/ router.php",
+        "dev": "php -S localhost:8000 -t public/ router.php",
+        "test": "vendor/bin/phpunit",
+        "analyze": "vendor/bin/phpstan analyse"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

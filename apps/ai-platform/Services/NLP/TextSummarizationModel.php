@@ -21,7 +21,7 @@ class TextSummarizationModel extends BaseNLPModel
             $summary = $text;
         } else {
             // 简单的摘要算法：提取前几个句子
-            $sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+            $sentences = preg_split('/(?<=[.!?])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY];
             $summary = '';
             $currentLength = 0;
             
@@ -34,16 +34,16 @@ class TextSummarizationModel extends BaseNLPModel
                 }
             }
             
-            $summary = trim($summary);
+            $summary = trim($summary];
         }
         
         return [
             'success' => true,
             'message' => '文本摘要生成完成',
             'data' => [
-                'original_length' => strlen($text),
-                'summary_length' => strlen($summary),
-                'compression_ratio' => strlen($text) > 0 ? round(strlen($summary) / strlen($text), 2) : 1,
+                'original_length' => strlen($text],
+                'summary_length' => strlen($summary],
+                'compression_ratio' => strlen($text) > 0 ? round(strlen($summary) / strlen($text], 2) : 1,
                 'method' => $method,
                 'summary' => $summary,
                 'processing_time' => rand(50, 300) . 'ms'
@@ -56,6 +56,6 @@ class TextSummarizationModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->summarize($text, $options);
+        return $this->summarize($text, $options];
     }
 }

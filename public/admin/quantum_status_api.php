@@ -3,34 +3,34 @@
  * AlingAI Pro 5.0 - 零信任实时状态监控API
  * 为量子登录系统提供实时状态和安全监控
  */
-session_start();
-header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: no-cache, must-revalidate');
-header('Access-Control-Allow-Origin: *');
+session_start(];
+header('Content-Type: application/json; charset=utf-8'];
+header('Cache-Control: no-cache, must-revalidate'];
+header('Access-Control-Allow-Origin: *'];
 
-// 获取系统状态
+// 获取系统状�?
 function getSystemStatus() {
     $status = [
         'timestamp' => time(),
-        'datetime' => date('Y-m-d H:i:s'),
+        'datetime' => date('Y-m-d H:i:s'],
         'system' => [
             'quantum_gateway' => 'online',
             'zero_trust_engine' => 'active',
             'security_level' => 'maximum',
             'trust_score' => 95.7
-        ],
+        ], 
         'authentication' => [
             'active_sessions' => getActiveSessions(),
             'failed_attempts' => getFailedAttempts(),
             'trust_validations' => getTrustValidations(),
             'device_registrations' => getDeviceRegistrations()
-        ],
+        ], 
         'security_metrics' => [
             'threat_level' => 'low',
             'anomaly_detection' => 'normal',
             'firewall_status' => 'active',
             'encryption_level' => 'quantum-grade'
-        ],
+        ], 
         'performance' => [
             'response_time' => round(microtime(true) * 1000) % 100 . 'ms',
             'cpu_usage' => rand(15, 35) . '%',
@@ -42,31 +42,31 @@ function getSystemStatus() {
     return $status;
 }
 
-// 获取活跃会话数
+// 获取活跃会话�?
 function getActiveSessions() {
-    $sessionDir = session_save_path() ?: sys_get_temp_dir();
-    $sessionFiles = glob($sessionDir . '/sess_*');
-    return count($sessionFiles ?: []);
+    $sessionDir = session_save_path() ?: sys_get_temp_dir(];
+    $sessionFiles = glob($sessionDir . '/sess_*'];
+    return count($sessionFiles ?: []];
 }
 
 // 获取失败尝试次数（模拟）
 function getFailedAttempts() {
     $logFile = __DIR__ . '/../../storage/logs/security.log';
     if (file_exists($logFile)) {
-        $content = file_get_contents($logFile);
-        return substr_count($content, 'FAILED_LOGIN');
+        $content = file_get_contents($logFile];
+        return substr_count($content, 'FAILED_LOGIN'];
     }
-    return rand(0, 5);
+    return rand(0, 5];
 }
 
 // 获取信任验证次数
 function getTrustValidations() {
-    return rand(150, 300);
+    return rand(150, 300];
 }
 
-// 获取设备注册数
+// 获取设备注册�?
 function getDeviceRegistrations() {
-    return rand(25, 50);
+    return rand(25, 50];
 }
 
 // 获取量子挑战统计
@@ -82,36 +82,36 @@ function getQuantumChallengeStats() {
 function getSecurityEvents() {
     $events = [
         [
-            'time' => date('H:i:s', time() - rand(60, 3600)),
+            'time' => date('H:i:s', time() - rand(60, 3600)],
             'type' => 'success',
             'event' => '量子验证成功',
             'user' => 'admin',
             'risk' => 'low'
-        ],
+        ], 
         [
-            'time' => date('H:i:s', time() - rand(60, 7200)),
+            'time' => date('H:i:s', time() - rand(60, 7200)],
             'type' => 'warning',
             'event' => '设备指纹变更',
             'user' => 'alingai',
             'risk' => 'medium'
-        ],
+        ], 
         [
-            'time' => date('H:i:s', time() - rand(60, 10800)),
+            'time' => date('H:i:s', time() - rand(60, 10800)],
             'type' => 'info',
             'event' => '环境合规检查通过',
             'user' => 'system',
             'risk' => 'low'
-        ],
+        ], 
         [
-            'time' => date('H:i:s', time() - rand(60, 14400)),
+            'time' => date('H:i:s', time() - rand(60, 14400)],
             'type' => 'success',
-            'event' => '零信任验证完成',
+            'event' => '零信任验证完�?,
             'user' => 'root',
             'risk' => 'low'
         ]
     ];
     
-    return array_slice($events, 0, rand(2, 4));
+    return array_slice($events, 0, rand(2, 4)];
 }
 
 // 处理不同的API请求
@@ -119,36 +119,37 @@ $endpoint = $_GET['endpoint'] ?? 'status';
 
 switch ($endpoint) {
     case 'status':
-        echo json_encode(getSystemStatus(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        echo json_encode(getSystemStatus(), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE];
         break;
         
     case 'quantum_stats':
         echo json_encode([
             'quantum_challenges' => getQuantumChallengeStats(),
             'timestamp' => time()
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        ],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE];
         break;
         
     case 'security_events':
         echo json_encode([
             'events' => getSecurityEvents(),
             'timestamp' => time()
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        ],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE];
         break;
         
     case 'health_check':
         echo json_encode([
             'status' => 'healthy',
             'timestamp' => time()
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        ],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE];
         break;
         
     default:
-        http_response_code(404);
+        http_response_code(404];
         echo json_encode([
             'error' => '未知的API端点',
             'timestamp' => time()
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        ],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE];
 }
 ?>
+
 

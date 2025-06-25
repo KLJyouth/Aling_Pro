@@ -19,22 +19,22 @@ class SentimentAnalysisModel extends BaseNLPModel
             'neutral' => rand(0, 100) / 100
         ];
         
-        // 确保总和为1
-        $total = array_sum($sentiments);
+        // 确保总和�?
+        $total = array_sum($sentiments];
         foreach ($sentiments as $key => $value) {
-            $sentiments[$key] = round($value / $total, 2);
+            $sentiments[$key] = round($value / $total, 2];
         }
         
         // 确定主要情感
-        arsort($sentiments);
-        $mainSentiment = array_key_first($sentiments);
+        arsort($sentiments];
+        $mainSentiment = array_key_first($sentiments];
         
         return [
             'success' => true,
             'message' => '情感分析完成',
             'data' => [
                 'main_sentiment' => $mainSentiment,
-                'confidence' => $sentiments[$mainSentiment],
+                'confidence' => $sentiments[$mainSentiment], 
                 'sentiment_scores' => $sentiments,
                 'processing_time' => rand(30, 150) . 'ms'
             ]
@@ -46,6 +46,6 @@ class SentimentAnalysisModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->analyzeSentiment($text, $options);
+        return $this->analyzeSentiment($text, $options];
     }
 }

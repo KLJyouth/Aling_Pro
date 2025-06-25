@@ -1,18 +1,18 @@
-ï»¿<?php
+<?php
 /**
- * æ•°æ®åº“è¿ç§»å’Œåˆå§‹åŒ–è„šæœ¬
- * ç”¨äºŽåˆ›å»ºé»˜è®¤è®¾ç½®å’Œåˆå§‹æ•°æ®
+ * Êý¾Ý¿âÇ¨ÒÆºÍ³õÊ¼»¯½Å±¾
+ * ÓÃÓÚ´´½¨Ä¬ÈÏÉèÖÃºÍ³õÊ¼Êý¾Ý
  */
 
 class DatabaseMigration {
     private $pdo;
     
     public function __construct($databaseConfig) {
-        $this->pdo = $this->getDatabaseConnection($databaseConfig);
+        $this->pdo = $this->getDatabaseConnection($databaseConfig];
     }
     
     /**
-     * è¿è¡Œæ‰€æœ‰è¿ç§»
+     * ÔËÐÐËùÓÐÇ¨ÒÆ
      */
     public function runMigrations() {
         $migrations = [
@@ -22,15 +22,15 @@ class DatabaseMigration {
         ];
         
         foreach ($migrations as $migration) {
-            $this->$migration();
+            $this->$migration(];
         }
     }
     
     /**
-     * åˆ›å»ºæ•°æ®è¡¨
+     * ´´½¨Êý¾Ý±í
      */
     private function createTables() {
-        // ç”¨æˆ·è¡¨
+        // ÓÃ»§±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,9 +47,9 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        ");
+        "];
         
-        // èŠå¤©ä¼šè¯è¡¨
+        // ÁÄÌì»á»°±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS chats (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -66,9 +66,9 @@ class DatabaseMigration {
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
-        ");
+        "];
         
-        // æ¶ˆæ¯è¡¨
+        // ÏûÏ¢±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -84,9 +84,9 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (chat_id) REFERENCES chats(id) ON DELETE CASCADE
             )
-        ");
+        "];
         
-        // è®¾ç½®è¡¨
+        // ÉèÖÃ±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS settings (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -100,9 +100,9 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
             )
-        ");
+        "];
         
-        // æ–‡ä»¶è¡¨
+        // ÎÄ¼þ±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS files (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -118,9 +118,9 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
-        ");
+        "];
         
-        // APIä½¿ç”¨è®°å½•è¡¨
+        // APIÊ¹ÓÃ¼ÇÂ¼±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS api_usage (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -134,9 +134,9 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
-        ");
+        "];
         
-        // ç³»ç»Ÿæ—¥å¿—è¡¨
+        // ÏµÍ³ÈÕÖ¾±í
         $this->pdo->exec("
             CREATE TABLE IF NOT EXISTS system_logs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,92 +149,92 @@ class DatabaseMigration {
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
             )
-        ");
+        "];
     }
     
     /**
-     * æ’å…¥é»˜è®¤è®¾ç½®
+     * ²åÈëÄ¬ÈÏÉèÖÃ
      */
     private function insertDefaultSettings() {
         $defaultSettings = [
-            // ç³»ç»Ÿè®¾ç½®
-            ['site_name', 'AlingAi', 'string', 'system', 'ç½‘ç«™åç§°', 1, 1],
-            ['site_description', 'AIæ™ºèƒ½åŠ©æ‰‹', 'string', 'system', 'ç½‘ç«™æè¿°', 1, 2],
-            ['site_logo', '/assets/images/logo.png', 'string', 'system', 'ç½‘ç«™Logo', 1, 3],
-            ['site_favicon', '/assets/images/favicon.ico', 'string', 'system', 'ç½‘ç«™å›¾æ ‡', 1, 4],
-            ['timezone', 'Asia/Shanghai', 'string', 'system', 'ç³»ç»Ÿæ—¶åŒº', 0, 5],
-            ['language', 'zh-CN', 'string', 'system', 'é»˜è®¤è¯­è¨€', 1, 6],
-            ['debug_mode', 'false', 'boolean', 'system', 'è°ƒè¯•æ¨¡å¼', 0, 7],
-            ['maintenance_mode', 'false', 'boolean', 'system', 'ç»´æŠ¤æ¨¡å¼', 0, 8],
+            // ÏµÍ³ÉèÖÃ
+            ['site_name', 'AlingAi', 'string', 'system', 'ÍøÕ¾Ãû³Æ', 1, 1], 
+            ['site_description', 'AIÖÇÄÜÖúÊÖ', 'string', 'system', 'ÍøÕ¾ÃèÊö', 1, 2], 
+            ['site_logo', '/assets/images/logo.png', 'string', 'system', 'ÍøÕ¾Logo', 1, 3], 
+            ['site_favicon', '/assets/images/favicon.ico', 'string', 'system', 'ÍøÕ¾Í¼±ê', 1, 4], 
+            ['timezone', 'Asia/Shanghai', 'string', 'system', 'ÏµÍ³Ê±Çø', 0, 5], 
+            ['language', 'zh-CN', 'string', 'system', 'Ä¬ÈÏÓïÑÔ', 1, 6], 
+            ['debug_mode', 'false', 'boolean', 'system', 'µ÷ÊÔÄ£Ê½', 0, 7], 
+            ['maintenance_mode', 'false', 'boolean', 'system', 'Î¬»¤Ä£Ê½', 0, 8], 
             
-            // OpenAIè®¾ç½®
-            ['openai_api_key', '', 'string', 'openai', 'OpenAI APIå¯†é’¥', 0, 10],
-            ['openai_base_url', 'https://api.openai.com/v1', 'string', 'openai', 'OpenAI APIåœ°å€', 0, 11],
-            ['default_model', 'gpt-3.5-turbo', 'string', 'openai', 'é»˜è®¤æ¨¡åž‹', 1, 12],
-            ['max_tokens', '2048', 'integer', 'openai', 'æœ€å¤§tokenæ•°', 1, 13],
-            ['temperature', '0.7', 'decimal', 'openai', 'æ¸©åº¦å‚æ•°', 1, 14],
-            ['stream_response', 'true', 'boolean', 'openai', 'æµå¼å“åº”', 1, 15],
+            // OpenAIÉèÖÃ
+            ['openai_api_key', '', 'string', 'openai', 'OpenAI APIÃÜÔ¿', 0, 10], 
+            ['openai_base_url', 'https://api.openai.com/v1', 'string', 'openai', 'OpenAI APIµØÖ·', 0, 11], 
+            ['default_model', 'gpt-3.5-turbo', 'string', 'openai', 'Ä¬ÈÏÄ£ÐÍ', 1, 12], 
+            ['max_tokens', '2048', 'integer', 'openai', '×î´ótokenÊý', 1, 13], 
+            ['temperature', '0.7', 'decimal', 'openai', 'ÎÂ¶È²ÎÊý', 1, 14], 
+            ['stream_response', 'true', 'boolean', 'openai', 'Á÷Ê½ÏìÓ¦', 1, 15], 
             
-            // ç”¨æˆ·è®¾ç½®
-            ['allow_registration', 'false', 'boolean', 'user', 'å…è®¸ç”¨æˆ·æ³¨å†Œ', 1, 20],
-            ['require_email_verification', 'false', 'boolean', 'user', 'éœ€è¦é‚®ç®±éªŒè¯', 0, 21],
-            ['default_user_role', 'user', 'string', 'user', 'é»˜è®¤ç”¨æˆ·è§’è‰²', 0, 22],
-            ['max_chats_per_user', '100', 'integer', 'user', 'æ¯ç”¨æˆ·æœ€å¤§å¯¹è¯æ•°', 1, 23],
-            ['max_messages_per_chat', '1000', 'integer', 'user', 'æ¯å¯¹è¯æœ€å¤§æ¶ˆæ¯æ•°', 1, 24],
+            // ÓÃ»§ÉèÖÃ
+            ['allow_registration', 'false', 'boolean', 'user', 'ÔÊÐíÓÃ»§×¢²á', 1, 20], 
+            ['require_email_verification', 'false', 'boolean', 'user', 'ÐèÒªÓÊÏäÑéÖ¤', 0, 21], 
+            ['default_user_role', 'user', 'string', 'user', 'Ä¬ÈÏÓÃ»§½ÇÉ«', 0, 22], 
+            ['max_chats_per_user', '100', 'integer', 'user', 'Ã¿ÓÃ»§×î´ó¶Ô»°Êý', 1, 23], 
+            ['max_messages_per_chat', '1000', 'integer', 'user', 'Ã¿¶Ô»°×î´óÏûÏ¢Êý', 1, 24], 
             
-            // å®‰å…¨è®¾ç½®
-            ['session_lifetime', '7200', 'integer', 'security', 'ä¼šè¯ç”Ÿå‘½å‘¨æœŸï¼ˆç§’ï¼‰', 0, 30],
-            ['password_min_length', '8', 'integer', 'security', 'å¯†ç æœ€å°é•¿åº¦', 1, 31],
-            ['max_login_attempts', '5', 'integer', 'security', 'æœ€å¤§ç™»å½•å°è¯•æ¬¡æ•°', 1, 32],
-            ['lockout_duration', '900', 'integer', 'security', 'é”å®šæ—¶é•¿ï¼ˆç§’ï¼‰', 1, 33],
-            ['rate_limit_requests', '60', 'integer', 'security', 'è¯·æ±‚é¢‘çŽ‡é™åˆ¶', 1, 34],
-            ['rate_limit_window', '3600', 'integer', 'security', 'é¢‘çŽ‡é™åˆ¶çª—å£ï¼ˆç§’ï¼‰', 1, 35],
+            // °²È«ÉèÖÃ
+            ['session_lifetime', '7200', 'integer', 'security', '»á»°ÉúÃüÖÜÆÚ£¨Ãë£©', 0, 30], 
+            ['password_min_length', '8', 'integer', 'security', 'ÃÜÂë×îÐ¡³¤¶È', 1, 31], 
+            ['max_login_attempts', '5', 'integer', 'security', '×î´óµÇÂ¼³¢ÊÔ´ÎÊý', 1, 32], 
+            ['lockout_duration', '900', 'integer', 'security', 'Ëø¶¨Ê±³¤£¨Ãë£©', 1, 33], 
+            ['rate_limit_requests', '60', 'integer', 'security', 'ÇëÇóÆµÂÊÏÞÖÆ', 1, 34], 
+            ['rate_limit_window', '3600', 'integer', 'security', 'ÆµÂÊÏÞÖÆ´°¿Ú£¨Ãë£©', 1, 35], 
             
-            // æ–‡ä»¶è®¾ç½®
-            ['upload_max_size', '10485760', 'integer', 'file', 'æœ€å¤§ä¸Šä¼ æ–‡ä»¶å¤§å°ï¼ˆå­—èŠ‚ï¼‰', 1, 40],
-            ['allowed_file_types', 'jpg,jpeg,png,gif,pdf,txt,doc,docx', 'string', 'file', 'å…è®¸çš„æ–‡ä»¶ç±»åž‹', 1, 41],
-            ['storage_path', '/storage/uploads', 'string', 'file', 'æ–‡ä»¶å­˜å‚¨è·¯å¾„', 0, 42],
+            // ÎÄ¼þÉèÖÃ
+            ['upload_max_size', '10485760', 'integer', 'file', '×î´óÉÏ´«ÎÄ¼þ´óÐ¡£¨×Ö½Ú£©', 1, 40], 
+            ['allowed_file_types', 'jpg,jpeg,png,gif,pdf,txt,doc,docx', 'string', 'file', 'ÔÊÐíµÄÎÄ¼þÀàÐÍ', 1, 41], 
+            ['storage_path', '/storage/uploads', 'string', 'file', 'ÎÄ¼þ´æ´¢Â·¾¶', 0, 42], 
             
-            // é‚®ä»¶è®¾ç½®
-            ['mail_driver', 'smtp', 'string', 'mail', 'é‚®ä»¶é©±åŠ¨', 0, 50],
-            ['mail_host', '', 'string', 'mail', 'SMTPä¸»æœº', 0, 51],
-            ['mail_port', '587', 'integer', 'mail', 'SMTPç«¯å£', 0, 52],
-            ['mail_username', '', 'string', 'mail', 'SMTPç”¨æˆ·å', 0, 53],
-            ['mail_password', '', 'string', 'mail', 'SMTPå¯†ç ', 0, 54],
-            ['mail_encryption', 'tls', 'string', 'mail', 'åŠ å¯†æ–¹å¼', 0, 55],
-            ['mail_from_address', '', 'string', 'mail', 'å‘ä»¶äººé‚®ç®±', 0, 56],
-            ['mail_from_name', 'AlingAi', 'string', 'mail', 'å‘ä»¶äººåç§°', 0, 57],
+            // ÓÊ¼þÉèÖÃ
+            ['mail_driver', 'smtp', 'string', 'mail', 'ÓÊ¼þÇý¶¯', 0, 50], 
+            ['mail_host', '', 'string', 'mail', 'SMTPÖ÷»ú', 0, 51], 
+            ['mail_port', '587', 'integer', 'mail', 'SMTP¶Ë¿Ú', 0, 52], 
+            ['mail_username', '', 'string', 'mail', 'SMTPÓÃ»§Ãû', 0, 53], 
+            ['mail_password', '', 'string', 'mail', 'SMTPÃÜÂë', 0, 54], 
+            ['mail_encryption', 'tls', 'string', 'mail', '¼ÓÃÜ·½Ê½', 0, 55], 
+            ['mail_from_address', '', 'string', 'mail', '·¢¼þÈËÓÊÏä', 0, 56], 
+            ['mail_from_name', 'AlingAi', 'string', 'mail', '·¢¼þÈËÃû³Æ', 0, 57], 
             
-            // ç¼“å­˜è®¾ç½®
-            ['cache_driver', 'file', 'string', 'cache', 'ç¼“å­˜é©±åŠ¨', 0, 60],
-            ['cache_ttl', '3600', 'integer', 'cache', 'ç¼“å­˜ç”Ÿå­˜æ—¶é—´ï¼ˆç§’ï¼‰', 0, 61],
-            ['cache_prefix', 'alingai_', 'string', 'cache', 'ç¼“å­˜å‰ç¼€', 0, 62],
+            // »º´æÉèÖÃ
+            ['cache_driver', 'file', 'string', 'cache', '»º´æÇý¶¯', 0, 60], 
+            ['cache_ttl', '3600', 'integer', 'cache', '»º´æÉú´æÊ±¼ä£¨Ãë£©', 0, 61], 
+            ['cache_prefix', 'alingai_', 'string', 'cache', '»º´æÇ°×º', 0, 62], 
             
-            // ç•Œé¢è®¾ç½®
-            ['theme', 'light', 'string', 'ui', 'é»˜è®¤ä¸»é¢˜', 1, 70],
-            ['sidebar_collapsed', 'false', 'boolean', 'ui', 'ä¾§è¾¹æ é»˜è®¤æŠ˜å ', 1, 71],
-            ['show_word_count', 'true', 'boolean', 'ui', 'æ˜¾ç¤ºå­—æ•°ç»Ÿè®¡', 1, 72],
-            ['auto_save_interval', '30', 'integer', 'ui', 'è‡ªåŠ¨ä¿å­˜é—´éš”ï¼ˆç§’ï¼‰', 1, 73],
-            ['syntax_highlighting', 'true', 'boolean', 'ui', 'ä»£ç è¯­æ³•é«˜äº®', 1, 74],
+            // ½çÃæÉèÖÃ
+            ['theme', 'light', 'string', 'ui', 'Ä¬ÈÏÖ÷Ìâ', 1, 70], 
+            ['sidebar_collapsed', 'false', 'boolean', 'ui', '²à±ßÀ¸Ä¬ÈÏÕÛµþ', 1, 71], 
+            ['show_word_count', 'true', 'boolean', 'ui', 'ÏÔÊ¾×ÖÊýÍ³¼Æ', 1, 72], 
+            ['auto_save_interval', '30', 'integer', 'ui', '×Ô¶¯±£´æ¼ä¸ô£¨Ãë£©', 1, 73], 
+            ['syntax_highlighting', 'true', 'boolean', 'ui', '´úÂëÓï·¨¸ßÁÁ', 1, 74], 
             
-            // ç»Ÿè®¡è®¾ç½®
-            ['enable_analytics', 'false', 'boolean', 'analytics', 'å¯ç”¨åˆ†æžç»Ÿè®¡', 1, 80],
-            ['analytics_provider', '', 'string', 'analytics', 'åˆ†æžæœåŠ¡æä¾›å•†', 0, 81],
-            ['analytics_tracking_id', '', 'string', 'analytics', 'è·Ÿè¸ªID', 0, 82]
+            // Í³¼ÆÉèÖÃ
+            ['enable_analytics', 'false', 'boolean', 'analytics', 'ÆôÓÃ·ÖÎöÍ³¼Æ', 1, 80], 
+            ['analytics_provider', '', 'string', 'analytics', '·ÖÎö·þÎñÌá¹©ÉÌ', 0, 81], 
+            ['analytics_tracking_id', '', 'string', 'analytics', '¸ú×ÙID', 0, 82]
         ];
         
         $stmt = $this->pdo->prepare("
             INSERT OR IGNORE INTO settings (key, value, type, category, description, is_public, sort_order) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
+        "];
         
         foreach ($defaultSettings as $setting) {
-            $stmt->execute($setting);
+            $stmt->execute($setting];
         }
     }
     
     /**
-     * åˆ›å»ºç´¢å¼•
+     * ´´½¨Ë÷Òý
      */
     private function createIndexes() {
         $indexes = [
@@ -258,15 +258,15 @@ class DatabaseMigration {
         ];
         
         foreach ($indexes as $index) {
-            $this->pdo->exec($index);
+            $this->pdo->exec($index];
         }
     }
     
     /**
-     * èŽ·å–æ•°æ®åº“è¿žæŽ¥
+     * »ñÈ¡Êý¾Ý¿âÁ¬½Ó
      * 
-     * @param array $config æ•°æ®åº“é…ç½®
-     * @return PDO æ•°æ®åº“è¿žæŽ¥å¯¹è±¡
+     * @param array $config Êý¾Ý¿âÅäÖÃ
+     * @return PDO Êý¾Ý¿âÁ¬½Ó¶ÔÏó
      */
     private function getDatabaseConnection($config) {
         $dsn = "sqlite:" . $config['database'];
@@ -277,10 +277,10 @@ class DatabaseMigration {
         ];
         
         try {
-            $pdo = new PDO($dsn, null, null, $options);
+            $pdo = new PDO($dsn, null, null, $options];
             return $pdo;
         } catch (PDOException $e) {
-            die("æ•°æ®åº“è¿žæŽ¥å¤±è´¥: " . $e->getMessage());
+            die("Êý¾Ý¿âÁ¬½ÓÊ§°Ü: " . $e->getMessage()];
         }
     }
 }

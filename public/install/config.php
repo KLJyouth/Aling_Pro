@@ -1,7 +1,7 @@
-ï»¿<?php
+<?php
 /**
- * å®‰è£…é…ç½®ç®¡ç†ç±»
- * å¤„ç†å®‰è£…è¿‡ç¨‹ä¸­çš„é…ç½®ç®¡ç†
+ * °²×°ÅäÖÃ¹ÜÀíÀà
+ * ´¦Àí°²×°¹ý³ÌÖÐµÄÅäÖÃ¹ÜÀí
  */
 
 class InstallConfig {
@@ -10,34 +10,34 @@ class InstallConfig {
     private array $config = [];
     
     public function __construct() {
-        $this->configFile = dirname(__DIR__, 2) . "/.env";
-        $this->tempConfigFile = dirname(__DIR__, 2) . "/.env.install";
+        $this->configFile = dirname(__DIR__, 2] . "/.env";
+        $this->tempConfigFile = dirname(__DIR__, 2] . "/.env.install";
     }
     
     /**
-     * ç”Ÿæˆåº”ç”¨å¯†é’¥
+     * Éú³ÉÓ¦ÓÃÃÜÔ¿
      */
     public function generateAppKey() {
-        return "base64:" . base64_encode(random_bytes(32));
+        return "base64:" . base64_encode(random_bytes(32]];
     }
     
     /**
-     * ç”ŸæˆJWTå¯†é’¥
+     * Éú³ÉJWTÃÜÔ¿
      */
     public function generateJwtSecret() {
-        return bin2hex(random_bytes(32));
+        return bin2hex(random_bytes(32]];
     }
     
     /**
-     * åˆ›å»ºé…ç½®æ–‡ä»¶
+     * ´´½¨ÅäÖÃÎÄ¼þ
      */
-    public function createConfig($databaseConfig, $adminConfig) {
-        $appKey = $this->generateAppKey();
-        $jwtSecret = $this->generateJwtSecret();
+    public function createConfig($databaseConfig, $adminConfig] {
+        $appKey = $this->generateAppKey(];
+        $jwtSecret = $this->generateJwtSecret(];
         
         $config = [];
         
-        // åº”ç”¨é…ç½®
+        // Ó¦ÓÃÅäÖÃ
         $config["APP_NAME"] = $adminConfig["site_name"] ?? "AlingAi Pro";
         $config["APP_ENV"] = "production";
         $config["APP_DEBUG"] = "false";
@@ -46,53 +46,53 @@ class InstallConfig {
         $config["APP_TIMEZONE"] = "Asia/Shanghai";
         $config["APP_LOCALE"] = "zh-CN";
         
-        // æ•°æ®åº“é…ç½®
-        $this->addDatabaseConfig($config, $databaseConfig);
+        // Êý¾Ý¿âÅäÖÃ
+        $this->addDatabaseConfig($config, $databaseConfig];
         
-        // å®‰å…¨é…ç½®
+        // °²È«ÅäÖÃ
         $config["JWT_SECRET"] = $jwtSecret;
         $config["JWT_EXPIRY"] = "3600";
         $config["SESSION_LIFETIME"] = "7200";
         $config["BCRYPT_ROUNDS"] = "12";
         
-        // OpenAIé…ç½®
-        $config["OPENAI_API_KEY"] = "";
+        // OpenAIÅäÖÃ
+        $config["OPENAI_API_KEY"] = ";
         $config["OPENAI_BASE_URL"] = "https://api.openai.com/v1";
         $config["OPENAI_MODEL"] = "gpt-3.5-turbo";
         $config["OPENAI_MAX_TOKENS"] = "2048";
         $config["OPENAI_TEMPERATURE"] = "0.7";
         
-        // ç¼“å­˜é…ç½®
+        // »º´æÅäÖÃ
         $config["CACHE_DRIVER"] = "file";
         $config["CACHE_PREFIX"] = "alingai_";
         $config["CACHE_TTL"] = "3600";
         
-        // æ–‡ä»¶é…ç½®
-        $config["UPLOAD_MAX_SIZE"] = "10485760"; // 10MB
+        // ÎÄ¼þÅäÖÃ
+        $config["UPLOAD_MAX_SIZE"] = "10485760";// 10MB
         $config["UPLOAD_PATH"] = "storage/uploads";
         $config["ALLOWED_FILE_TYPES"] = "jpg,jpeg,png,gif,pdf,txt,doc,docx";
         
-        // æ—¥å¿—é…ç½®
+        // ÈÕÖ¾ÅäÖÃ
         $config["LOG_LEVEL"] = "info";
         $config["LOG_PATH"] = "storage/logs";
         $config["LOG_MAX_FILES"] = "30";
         
-        // WebSocketé…ç½®
+        // WebSocketÅäÖÃ
         $config["WEBSOCKET_HOST"] = "localhost";
         $config["WEBSOCKET_PORT"] = "8080";
         $config["WEBSOCKET_SSL"] = "false";
         
-        // é‚®ä»¶é…ç½®
+        // ÓÊ¼þÅäÖÃ
         $config["MAIL_DRIVER"] = "smtp";
-        $config["MAIL_HOST"] = "";
+        $config["MAIL_HOST"] = ";
         $config["MAIL_PORT"] = "587";
-        $config["MAIL_USERNAME"] = "";
-        $config["MAIL_PASSWORD"] = "";
+        $config["MAIL_USERNAME"] = ";
+        $config["MAIL_PASSWORD"] = ";
         $config["MAIL_ENCRYPTION"] = "tls";
-        $config["MAIL_FROM_ADDRESS"] = $adminConfig["email"] ?? "";
+        $config["MAIL_FROM_ADDRESS"] = $adminConfig["email"] ?? ";
         $config["MAIL_FROM_NAME"] = $config["APP_NAME"];
         
-        // å®‰å…¨å’Œé™åˆ¶é…ç½®
+        // °²È«ºÍÏÞÖÆÅäÖÃ
         $config["RATE_LIMIT_REQUESTS"] = "60";
         $config["RATE_LIMIT_WINDOW"] = "3600";
         $config["MAX_LOGIN_ATTEMPTS"] = "5";
@@ -100,38 +100,38 @@ class InstallConfig {
         $config["PASSWORD_MIN_LENGTH"] = "8";
         $config["API_REQUEST_TIMEOUT"] = "30";
         
-        // åŠŸèƒ½å¼€å…³
+        // ¹¦ÄÜ¿ª¹Ø
         $config["ALLOW_REGISTRATION"] = "false";
         $config["REQUIRE_EMAIL_VERIFICATION"] = "false";
         $config["ENABLE_API_DOCS"] = "true";
         $config["ENABLE_DEBUG_TOOLBAR"] = "false";
         $config["ENABLE_ANALYTICS"] = "false";
         
-        // å†™å…¥é…ç½®æ–‡ä»¶
-        return $this->writeConfigFile($config);
+        // Ð´ÈëÅäÖÃÎÄ¼þ
+        return $this->writeConfigFile($config];
     }
     
     /**
-     * æ·»åŠ æ•°æ®åº“é…ç½®
+     * Ìí¼ÓÊý¾Ý¿âÅäÖÃ
      */
-    private function addDatabaseConfig(&$config, $databaseConfig) {
+    private function addDatabaseConfig(&$config, $databaseConfig] {
         $config["DB_CONNECTION"] = $databaseConfig["type"];
         
-        if ($databaseConfig["type"] === "sqlite") {
+        if ($databaseConfig["type"] === "sqlite"] {
             $config["DB_DATABASE"] = "storage/database.db";
         } else {
             $config["DB_HOST"] = $databaseConfig["host"];
-            $config["DB_PORT"] = $databaseConfig["port"] ?? $this->getDefaultPort($databaseConfig["type"]);
+            $config["DB_PORT"] = $databaseConfig["port"] ?? $this->getDefaultPort($databaseConfig["type"]];
             $config["DB_DATABASE"] = $databaseConfig["database"];
             $config["DB_USERNAME"] = $databaseConfig["username"];
-            $config["DB_PASSWORD"] = $databaseConfig["password"] ?? "";
+            $config["DB_PASSWORD"] = $databaseConfig["password"] ?? ";
             
-            // æ•°æ®åº“ç‰¹å®šé…ç½®
-            if ($databaseConfig["type"] === "mysql") {
+            // Êý¾Ý¿âÌØ¶¨ÅäÖÃ
+            if ($databaseConfig["type"] === "mysql"] {
                 $config["DB_CHARSET"] = "utf8mb4";
                 $config["DB_COLLATION"] = "utf8mb4_unicode_ci";
                 $config["DB_STRICT"] = "true";
-            } elseif ($databaseConfig["type"] === "pgsql") {
+            } elseif ($databaseConfig["type"] === "pgsql"] {
                 $config["DB_CHARSET"] = "utf8";
                 $config["DB_SCHEMA"] = "public";
             }
@@ -139,10 +139,10 @@ class InstallConfig {
     }
     
     /**
-     * èŽ·å–æ•°æ®åº“é»˜è®¤ç«¯å£
+     * »ñÈ¡Êý¾Ý¿âÄ¬ÈÏ¶Ë¿Ú
      */
-    private function getDefaultPort($type) {
-        switch ($type) {
+    private function getDefaultPort($type] {
+        switch ($type] {
             case "mysql":
                 return "3306";
             case "pgsql":
@@ -155,11 +155,11 @@ class InstallConfig {
     }
     
     /**
-     * å†™å…¥é…ç½®æ–‡ä»¶
+     * Ð´ÈëÅäÖÃÎÄ¼þ
      */
-    private function writeConfigFile($config) {
+    private function writeConfigFile($config] {
         $content = "# AlingAi Pro Configuration File\n";
-        $content .= "# Generated: " . date("Y-m-d H:i:s") . "\n";
+        $content .= "# Generated: " . date("Y-m-d H:i:s"] . "\n";
         $content .= "# DO NOT EDIT THIS FILE MANUALLY\n\n";
         
         $categories = [
@@ -171,32 +171,32 @@ class InstallConfig {
             "OPENAI_" => "# OpenAI Configuration",
             "CACHE_" => "# Cache Configuration",
             "UPLOAD_" => "# File Upload Configuration",
-            "ALLOWED_" => "",
+            "ALLOWED_" => ",
             "LOG_" => "# Logging Configuration",
             "WEBSOCKET_" => "# WebSocket Configuration",
             "MAIL_" => "# Mail Configuration",
             "RATE_" => "# Security and Rate Limiting",
-            "MAX_" => "",
-            "LOCKOUT_" => "",
-            "PASSWORD_" => "",
-            "API_" => "",
+            "MAX_" => ",
+            "LOCKOUT_" => ",
+            "PASSWORD_" => ",
+            "API_" => ",
             "ALLOW_" => "# Feature Toggles",
-            "REQUIRE_" => "",
-            "ENABLE_" => ""
+            "REQUIRE_" => ",
+            "ENABLE_" => "
         ];
         
-        // æŒ‰ç±»åˆ«åˆ†ç»„è¾“å‡ºé…ç½®
-        $lastPrefix = "";
-        foreach ($config as $key => $value) {
-            $prefix = "";
-            foreach (array_keys($categories) as $categoryPrefix) {
-                if (strpos($key, $categoryPrefix) === 0) {
+        // °´Àà±ð·Ö×éÊä³öÅäÖÃ
+        $lastPrefix = ";
+        foreach ($config as $key => $value] {
+            $prefix = ";
+            foreach (array_keys($categories] as $categoryPrefix] {
+                if (strpos($key, $categoryPrefix] === 0] {
                     $prefix = $categoryPrefix;
                     break;
                 }
             }
             
-            if ($prefix !== $lastPrefix && !empty($categories[$prefix])) {
+            if ($prefix !== $lastPrefix && !empty($categories[$prefix]]] {
                 $content .= "\n" . $categories[$prefix] . "\n";
                 $lastPrefix = $prefix;
             }
@@ -204,37 +204,37 @@ class InstallConfig {
             $content .= "{$key}=\"{$value}\"\n";
         }
         
-        // å†™å…¥ä¸´æ—¶é…ç½®æ–‡ä»¶
-        if (file_put_contents($this->tempConfigFile, $content)) {
-            // å¦‚æžœæˆåŠŸï¼Œåˆ™ç§»åŠ¨åˆ°æ­£å¼é…ç½®æ–‡ä»¶
-            if (file_exists($this->configFile)) {
-                // å¤‡ä»½çŽ°æœ‰é…ç½®
-                $backupFile = $this->configFile . "." . date("YmdHis") . ".bak";
-                rename($this->configFile, $backupFile);
+        // Ð´ÈëÁÙÊ±ÅäÖÃÎÄ¼þ
+        if (file_put_contents($this->tempConfigFile, $content]] {
+            // Èç¹û³É¹¦£¬ÔòÒÆ¶¯µ½ÕýÊ½ÅäÖÃÎÄ¼þ
+            if (file_exists($this->configFile]] {
+                // ±¸·ÝÏÖÓÐÅäÖÃ
+                $backupFile = $this->configFile . "." . date("YmdHis"] . ".bak";
+                rename($this->configFile, $backupFile];
             }
             
-            return rename($this->tempConfigFile, $this->configFile);
+            return rename($this->tempConfigFile, $this->configFile];
         }
         
         return false;
     }
     
     /**
-     * æµ‹è¯•æ•°æ®åº“è¿žæŽ¥
+     * ²âÊÔÊý¾Ý¿âÁ¬½Ó
      */
-    public function testDatabaseConnection($databaseConfig) {
+    public function testDatabaseConnection($databaseConfig] {
         try {
-            if ($databaseConfig["type"] === "sqlite") {
-                $dbPath = dirname(__DIR__, 2) . "/" . ($databaseConfig["database"] ?? "storage/database.db");
-                $pdo = new PDO("sqlite:{$dbPath}");
+            if ($databaseConfig["type"] === "sqlite"] {
+                $dbPath = dirname(__DIR__, 2] . "/" . ($databaseConfig["database"] ?? "storage/database.db"];
+                $pdo = new PDO("sqlite:{$dbPath}"];
             } else {
                 $host = $databaseConfig["host"];
-                $port = $databaseConfig["port"] ?? $this->getDefaultPort($databaseConfig["type"]);
+                $port = $databaseConfig["port"] ?? $this->getDefaultPort($databaseConfig["type"]];
                 $database = $databaseConfig["database"];
                 $username = $databaseConfig["username"];
-                $password = $databaseConfig["password"] ?? "";
+                $password = $databaseConfig["password"] ?? ";
                 
-                switch ($databaseConfig["type"]) {
+                switch ($databaseConfig["type"]] {
                     case "mysql":
                         $dsn = "mysql:host={$host};port={$port};charset=utf8mb4";
                         break;
@@ -245,16 +245,17 @@ class InstallConfig {
                         $dsn = "sqlsrv:Server={$host},{$port}";
                         break;
                     default:
-                        throw new Exception("ä¸æ”¯æŒçš„æ•°æ®åº“ç±»åž‹");
+                        throw new Exception("²»Ö§³ÖµÄÊý¾Ý¿âÀàÐÍ"];
                 }
                 
-                $pdo = new PDO($dsn, $username, $password);
+                $pdo = new PDO($dsn, $username, $password];
             }
             
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return ["success" => true, "message" => "æ•°æ®åº“è¿žæŽ¥æˆåŠŸ"];
-        } catch (Exception $e) {
-            return ["success" => false, "message" => "æ•°æ®åº“è¿žæŽ¥å¤±è´¥: " . $e->getMessage()];
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
+            return ["success" => true, "message" => "Êý¾Ý¿âÁ¬½Ó³É¹¦"];
+        } catch (Exception $e] {
+            return ["success" => false, "message" => "Êý¾Ý¿âÁ¬½ÓÊ§°Ü: " . $e->getMessage()];
         }
     }
 }
+

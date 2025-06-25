@@ -6,20 +6,20 @@ use App\Core\Config;
 use App\Core\Request;
 
 /**
- * Firewall 类
+ * Firewall �?
  * 
- * 应用防火墙，提供基本的安全防护
+ * 应用防火墙，提供基本的安全防�?
  *
  * @package App\Security
  */
 class Firewall
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**
@@ -34,7 +34,7 @@ class Firewall
     }
 
     /**
-     * 检查IP是否被允许
+     * 检查IP是否被允�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed
@@ -56,7 +56,7 @@ class Firewall
     }
 
     /**
-     * 检测常见攻击模式
+     * 检测常见攻击模�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

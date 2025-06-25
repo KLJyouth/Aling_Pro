@@ -1,11 +1,11 @@
-ï»¿<?php
+<?php
 /**
  * AlingAi Pro - Chat Message API
  * 
  * Processes chat messages and returns AI responses
  */
 
-header('Content-Type: application/json');
+header('Content-Type: application/json'];
 
 // Check authentication
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
@@ -18,57 +18,57 @@ if (preg_match('/Bearer\s+(.*)$/i', $authHeader, $matches)) {
 // In a real implementation, validate the token
 // For demo purposes, we'll just check if token is provided
 if (empty($token) && !isset($_GET['token'])) {
-    http_response_code(401);
+    http_response_code(401];
     echo json_encode([
         'success' => false,
         'message' => 'Authentication required'
-    ]);
+    ]];
     exit;
 }
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405); // Method Not Allowed
+    http_response_code(405]; // Method Not Allowed
     echo json_encode([
         'success' => false,
         'message' => 'Method not allowed. Use POST.'
-    ]);
+    ]];
     exit;
 }
 
 // Get JSON data
-$json = file_get_contents('php://input');
-$data = json_decode($json, true);
+$json = file_get_contents('php://input'];
+$data = json_decode($json, true];
 
 // Validate input
 if (!isset($data['message'])) {
-    http_response_code(400);
+    http_response_code(400];
     echo json_encode([
         'success' => false,
         'message' => 'Missing message content'
-    ]);
+    ]];
     exit;
 }
 
 // Extract data
-$message = trim($data['message']);
+$message = trim($data['message']];
 $sessionId = $data['session_id'] ?? 'default';
 $model = $data['model'] ?? 'gpt-4';
 
 // Mock responses based on message content
 $responses = [
-    'hello' => 'ä½ å¥½ï¼æˆ‘æ˜¯AlingAiåŠ©æ‰‹ã€‚æœ‰ä»€ä¹ˆæˆ‘å¯ä»¥å¸®åŠ©ä½ çš„å—ï¼Ÿ',
-    'hi' => 'ä½ å¥½ï¼è¯·é—®ä»Šå¤©æœ‰ä»€ä¹ˆéœ€è¦æˆ‘å¸®å¿™çš„å—ï¼Ÿ',
-    'ä½ å¥½' => 'ä½ å¥½ï¼æœ‰ä»€ä¹ˆæˆ‘èƒ½å¸®åŠ©æ‚¨çš„å—ï¼Ÿ',
-    'help' => 'æˆ‘æ˜¯AlingAiæ™ºèƒ½åŠ©æ‰‹ï¼Œå¯ä»¥å›žç­”é—®é¢˜ã€æä¾›ä¿¡æ¯ã€å¸®åŠ©ç¼–å†™ä»£ç ã€åˆ†æžæ•°æ®ç­‰ã€‚è¯·ç›´æŽ¥å‘Šè¯‰æˆ‘æ‚¨éœ€è¦ä»€ä¹ˆå¸®åŠ©ã€‚',
-    'å¸®åŠ©' => 'æˆ‘æ˜¯AlingAiæ™ºèƒ½åŠ©æ‰‹ï¼Œèƒ½å¤Ÿå›žç­”é—®é¢˜ã€ç¿»è¯‘æ–‡æœ¬ã€ç¼–å†™ä»£ç ã€åˆ†æžæ•°æ®ç­‰ã€‚è¯·ç›´æŽ¥å‘Šè¯‰æˆ‘æ‚¨çš„éœ€æ±‚ã€‚',
-    'what can you do' => 'æˆ‘å¯ä»¥ï¼š\n- å›žç­”å„ç§çŸ¥è¯†é—®é¢˜\n- å¸®åŠ©ç¼–å†™å’Œè°ƒè¯•ä»£ç \n- åˆ†æžæ•°æ®å’Œæä¾›è§è§£\n- åˆ›å»ºæ–‡æœ¬å†…å®¹\n- ç¿»è¯‘å¤šç§è¯­è¨€\n- æ€»ç»“é•¿æ–‡æœ¬\nè¯·ç›´æŽ¥å‘Šè¯‰æˆ‘æ‚¨éœ€è¦ä»€ä¹ˆå¸®åŠ©ã€‚',
-    'who are you' => 'æˆ‘æ˜¯AlingAiåŠ©æ‰‹ï¼Œä¸€ä¸ªåŸºäºŽå…ˆè¿›å¤§åž‹è¯­è¨€æ¨¡åž‹çš„äººå·¥æ™ºèƒ½ã€‚æˆ‘è¢«è®¾è®¡ç”¨æ¥å¸®åŠ©å›žç­”é—®é¢˜ã€æä¾›ä¿¡æ¯å’ŒååŠ©å„ç§ä»»åŠ¡ã€‚',
-    'ä½ æ˜¯è°' => 'æˆ‘æ˜¯AlingAiåŠ©æ‰‹ï¼Œä¸€ä¸ªç”±AlingAiå…¬å¸å¼€å‘çš„äººå·¥æ™ºèƒ½åŠ©æ‰‹ã€‚æˆ‘ä½¿ç”¨å…ˆè¿›çš„å¤§åž‹è¯­è¨€æ¨¡åž‹ï¼Œå¯ä»¥å¸®åŠ©æ‚¨å›žç­”é—®é¢˜ã€å®Œæˆä»»åŠ¡å’Œæä¾›å„ç§ä¿¡æ¯ã€‚'
+    'hello' => 'ÄãºÃ£¡ÎÒÊÇAlingAiÖúÊÖ¡£ÓÐÊ²Ã´ÎÒ¿ÉÒÔ°ïÖúÄãµÄÂð£¿',
+    'hi' => 'ÄãºÃ£¡ÇëÎÊ½ñÌìÓÐÊ²Ã´ÐèÒªÎÒ°ïÃ¦µÄÂð£¿',
+    'ÄãºÃ' => 'ÄãºÃ£¡ÓÐÊ²Ã´ÎÒÄÜ°ïÖúÄúµÄÂð£¿',
+    'help' => 'ÎÒÊÇAlingAiÖÇÄÜÖúÊÖ£¬¿ÉÒÔ»Ø´ðÎÊÌâ¡¢Ìá¹©ÐÅÏ¢¡¢°ïÖú±àÐ´´úÂë¡¢·ÖÎöÊý¾ÝµÈ¡£ÇëÖ±½Ó¸æËßÎÒÄúÐèÒªÊ²Ã´°ïÖú¡£',
+    '°ïÖú' => 'ÎÒÊÇAlingAiÖÇÄÜÖúÊÖ£¬ÄÜ¹»»Ø´ðÎÊÌâ¡¢·­ÒëÎÄ±¾¡¢±àÐ´´úÂë¡¢·ÖÎöÊý¾ÝµÈ¡£ÇëÖ±½Ó¸æËßÎÒÄúµÄÐèÇó¡£',
+    'what can you do' => 'ÎÒ¿ÉÒÔ£º\n- »Ø´ð¸÷ÖÖÖªÊ¶ÎÊÌâ\n- °ïÖú±àÐ´ºÍµ÷ÊÔ´úÂë\n- ·ÖÎöÊý¾ÝºÍÌá¹©¼û½â\n- ´´½¨ÎÄ±¾ÄÚÈÝ\n- ·­Òë¶àÖÖÓïÑÔ\n- ×Ü½á³¤ÎÄ±¾\nÇëÖ±½Ó¸æËßÎÒÄúÐèÒªÊ²Ã´°ïÖú¡£',
+    'who are you' => 'ÎÒÊÇAlingAiÖúÊÖ£¬Ò»¸ö»ùÓÚÏÈ½ø´óÐÍÓïÑÔÄ£ÐÍµÄÈË¹¤ÖÇÄÜ¡£ÎÒ±»Éè¼ÆÓÃÀ´°ïÖú»Ø´ðÎÊÌâ¡¢Ìá¹©ÐÅÏ¢ºÍÐ­Öú¸÷ÖÖÈÎÎñ¡£',
+    'ÄãÊÇË­' => 'ÎÒÊÇAlingAiÖúÊÖ£¬Ò»¸öÓÉAlingAi¹«Ë¾¿ª·¢µÄÈË¹¤ÖÇÄÜÖúÊÖ¡£ÎÒÊ¹ÓÃÏÈ½øµÄ´óÐÍÓïÑÔÄ£ÐÍ£¬¿ÉÒÔ°ïÖúÄú»Ø´ðÎÊÌâ¡¢Íê³ÉÈÎÎñºÍÌá¹©¸÷ÖÖÐÅÏ¢¡£'
 ];
 
 // Check if the message contains any of our keyword triggers
-$response = 'æˆ‘ç†è§£æ‚¨çš„é—®é¢˜æ˜¯å…³äºŽ"' . $message . '"ã€‚è®©æˆ‘æ¥å›žç­”ï¼š\n\næ ¹æ®æˆ‘æ‰€æŽŒæ¡çš„ä¿¡æ¯ï¼Œè¿™æ˜¯ä¸€ä¸ªå¤æ‚çš„è¯é¢˜ï¼Œæ¶‰åŠå¤šä¸ªæ–¹é¢ã€‚é¦–å…ˆï¼Œæˆ‘ä»¬éœ€è¦è€ƒè™‘åŸºæœ¬åŽŸç†å’ŒèƒŒæ™¯çŸ¥è¯†ï¼Œç„¶åŽå†æ·±å…¥ç»†èŠ‚ã€‚\n\næ‚¨æˆ–è®¸ä¼šå¯¹è¿™ä¸ªé¢†åŸŸçš„æœ€æ–°ç ”ç©¶å’Œå‘å±•æ„Ÿå…´è¶£ã€‚æˆ‘æŽ¨èæ‚¨å‚è€ƒå‡ ç¯‡ç›¸å…³æ–‡çŒ®å’Œèµ„æºæ¥èŽ·å–æ›´å…¨é¢çš„ç†è§£ã€‚å¦‚æžœæ‚¨æœ‰æ›´å…·ä½“çš„é—®é¢˜ï¼Œè¯·å‘Šè¯‰æˆ‘ï¼Œæˆ‘ä¼šæä¾›æ›´æœ‰é’ˆå¯¹æ€§çš„å›žç­”ã€‚';
+$response = 'ÎÒÀí½âÄúµÄÎÊÌâÊÇ¹ØÓÚ"' . $message . '"¡£ÈÃÎÒÀ´»Ø´ð£º\n\n¸ù¾ÝÎÒËùÕÆÎÕµÄÐÅÏ¢£¬ÕâÊÇÒ»¸ö¸´ÔÓµÄ»°Ìâ£¬Éæ¼°¶à¸ö·½Ãæ¡£Ê×ÏÈ£¬ÎÒÃÇÐèÒª¿¼ÂÇ»ù±¾Ô­ÀíºÍ±³¾°ÖªÊ¶£¬È»ºóÔÙÉîÈëÏ¸½Ú¡£\n\nÄú»òÐí»á¶ÔÕâ¸öÁìÓòµÄ×îÐÂÑÐ¾¿ºÍ·¢Õ¹¸ÐÐËÈ¤¡£ÎÒÍÆ¼öÄú²Î¿¼¼¸ÆªÏà¹ØÎÄÏ×ºÍ×ÊÔ´À´»ñÈ¡¸üÈ«ÃæµÄÀí½â¡£Èç¹ûÄúÓÐ¸ü¾ßÌåµÄÎÊÌâ£¬Çë¸æËßÎÒ£¬ÎÒ»áÌá¹©¸üÓÐÕë¶ÔÐÔµÄ»Ø´ð¡£';
 
 foreach ($responses as $keyword => $reply) {
     if (stripos($message, $keyword) !== false) {
@@ -78,13 +78,13 @@ foreach ($responses as $keyword => $reply) {
 }
 
 // Add some delay to simulate processing
-usleep(rand(300000, 800000)); // 300-800ms
+usleep(rand(300000, 800000)]; // 300-800ms
 
 // Mock response time calculation
 $processingTime = rand(200, 700) / 1000; // 200-700ms
 
 // Generate message ID
-$messageId = 'msg_' . time() . '_' . rand(1000, 9999);
+$messageId = 'msg_' . time() . '_' . rand(1000, 9999];
 
 // Return chat response
 echo json_encode([
@@ -94,7 +94,7 @@ echo json_encode([
         'session_id' => $sessionId,
         'reply' => $response,
         'model' => $model,
-        'timestamp' => date('Y-m-d H:i:s'),
+        'timestamp' => date('Y-m-d H:i:s'],
         'processing_time' => $processingTime,
         'tokens' => [
             'prompt' => strlen($message) / 4, // Rough approximation
@@ -102,4 +102,4 @@ echo json_encode([
             'total' => (strlen($message) + strlen($response)) / 4 // Rough approximation
         ]
     ]
-]);
+]];

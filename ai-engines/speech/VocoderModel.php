@@ -2,26 +2,26 @@
 /**
  * 文件名：VocoderModel.php
  * 功能描述：声码器模型 - 将声学特征转换为音频波形
- * 创建时间：2025-01-XX
+ * 创建时间�?025-01-XX
  * 最后修改：2025-01-XX
- * 版本：1.0.0
+ * 版本�?.0.0
  * 
  * @package AlingAi\AI\Engines\Speech
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\Speech;
 
 use Exception;
 
 /**
- * 声码器模型
+ * 声码器模�?
  * 
  * 将声学特征（如梅尔频谱图）转换为音频波形
- * 支持多种声码器模型，如WaveNet、HiFi-GAN等
+ * 支持多种声码器模型，如WaveNet、HiFi-GAN�?
  */
 class VocoderModel
 {
@@ -36,21 +36,21 @@ class VocoderModel
     private array $modelInstances = [];
     
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct(array $config = [])
     {
         $this->config = $config;
-        $this->initialize();
+        $this->initialize(];
     }
     
     /**
-     * 初始化模型
+     * 初始化模�?
      */
     private function initialize(): void
     {
         // 模型初始化逻辑
-        // 在实际应用中，这里会加载预训练的声码器模型
+        // 在实际应用中，这里会加载预训练的声码器模�?
     }
     
     /**
@@ -67,20 +67,20 @@ class VocoderModel
         $sampleRate = $params['sample_rate'] ?? 22050;
         $volume = $params['volume'] ?? 1.0;
         
-        // 加载默认声码器模型
-        $model = $this->loadModel('default');
+        // 加载默认声码器模�?
+        $model = $this->loadModel('default'];
         
-        // 检查特征
+        // 检查特�?
         if (empty($features)) {
-            throw new Exception('特征数据为空');
+            throw new Exception('特征数据为空'];
         }
         
         // 生成音频波形
-        $waveform = $this->generateWaveform($features, $model);
+        $waveform = $this->generateWaveform($features, $model];
         
         // 应用音量调整
         if ($volume != 1.0) {
-            $waveform = $this->adjustVolume($waveform, $volume);
+            $waveform = $this->adjustVolume($waveform, $volume];
         }
         
         // 创建音频数据
@@ -99,7 +99,7 @@ class VocoderModel
      */
     private function loadModel(string $modelName): object
     {
-        // 检查模型是否已经加载
+        // 检查模型是否已经加�?
         if (isset($this->modelInstances[$modelName])) {
             return $this->modelInstances[$modelName];
         }
@@ -113,10 +113,10 @@ class VocoderModel
                 'model_type' => 'hifi-gan',
                 'hidden_size' => 512,
                 'kernel_size' => 7,
-                'upsample_rates' => [8, 8, 2, 2],
-                'upsample_kernel_sizes' => [16, 16, 4, 4],
-                'resblock_kernel_sizes' => [3, 7, 11],
-                'resblock_dilation_sizes' => [[1, 3, 5], [1, 3, 5], [1, 3, 5]]
+                'upsample_rates' => [8, 8, 2, 2], 
+                'upsample_kernel_sizes' => [16, 16, 4, 4], 
+                'resblock_kernel_sizes' => [3, 7, 11], 
+                'resblock_dilation_sizes' => [[1, 3, 5],  [1, 3, 5],  [1, 3, 5]]
             ]
         ];
         
@@ -135,16 +135,16 @@ class VocoderModel
         // 在实际应用中，这里会使用深度学习模型进行推理
         
         // 计算总帧数和每帧采样点数
-        $totalFrames = count($features);
+        $totalFrames = count($features];
         $samplesPerFrame = 256; // 假设每帧对应256个采样点
         
         // 创建波形数组
         $waveform = [];
         
-        // 生成每帧的波形
+        // 生成每帧的波�?
         foreach ($features as $frameIndex => $feature) {
-            $frameWaveform = $this->generateFrameWaveform($feature, $model, $samplesPerFrame);
-            $waveform = array_merge($waveform, $frameWaveform);
+            $frameWaveform = $this->generateFrameWaveform($feature, $model, $samplesPerFrame];
+            $waveform = array_merge($waveform, $frameWaveform];
         }
         
         return $waveform;
@@ -161,21 +161,21 @@ class VocoderModel
         // 在实际应用中，这里会使用复杂的声码器算法
         $frameWaveform = [];
         
-        // 生成简单的正弦波作为示例
-        $frequency = 440; // A4音符的频率
+        // 生成简单的正弦波作为示�?
+        $frequency = 440; // A4音符的频�?
         $amplitude = 0.5;
         $sampleRate = $this->config['sample_rate'] ?? 22050;
         
         for ($i = 0; $i < $samplesPerFrame; $i++) {
             $time = $i / $sampleRate;
-            $sample = $amplitude * sin(2 * M_PI * $frequency * $time);
+            $sample = $amplitude * sin(2 * M_PI * $frequency * $time];
             
             // 添加一些随机噪声以模拟自然声音
-            $noise = (rand(-100, 100) / 1000);
+            $noise = (rand(-100, 100) / 1000];
             $sample += $noise;
             
-            // 确保样本值在[-1, 1]范围内
-            $sample = max(-1, min(1, $sample));
+            // 确保样本值在[-1, 1]范围�?
+            $sample = max(-1, min(1, $sample)];
             
             $frameWaveform[] = $sample;
         }
@@ -189,11 +189,11 @@ class VocoderModel
     private function adjustVolume(array $waveform, float $volume): array
     {
         // 应用音量调整
-        for ($i = 0; $i < count($waveform); $i++) {
+        for ($i = 0; $i < count($waveform]; $i++) {
             $waveform[$i] *= $volume;
             
-            // 确保样本值在[-1, 1]范围内
-            $waveform[$i] = max(-1, min(1, $waveform[$i]));
+            // 确保样本值在[-1, 1]范围�?
+            $waveform[$i] = max(-1, min(1, $waveform[$i])];
         }
         
         return $waveform;
@@ -211,14 +211,14 @@ class VocoderModel
         $maxValue = pow(2, $bitDepth - 1) - 1;
         
         foreach ($samples as $sample) {
-            $pcmSample = (int)round($sample * $maxValue);
+            $pcmSample = (int)round($sample * $maxValue];
             $pcm[] = $pcmSample;
         }
         
         return [
             'samples' => $pcm,
-            'sample_rate' => $audio['sample_rate'],
-            'channels' => $audio['channels'],
+            'sample_rate' => $audio['sample_rate'], 
+            'channels' => $audio['channels'], 
             'bit_depth' => $bitDepth
         ];
     }
@@ -229,12 +229,12 @@ class VocoderModel
     public function saveAsWAV(array $audio, string $outputPath): bool
     {
         // 转换为PCM
-        $pcm = $this->toPCM($audio);
+        $pcm = $this->toPCM($audio];
         
         // 模拟WAV文件保存
         // 在实际应用中，这里会使用音频库创建WAV文件
-        $data = json_encode($pcm);
-        file_put_contents($outputPath, $data);
+        $data = json_encode($pcm];
+        file_put_contents($outputPath, $data];
         
         return true;
     }
@@ -264,15 +264,16 @@ class VocoderModel
     public function releaseModel(string $modelName): void
     {
         if (isset($this->modelInstances[$modelName])) {
-            unset($this->modelInstances[$modelName]);
+            unset($this->modelInstances[$modelName]];
         }
     }
     
     /**
-     * 释放所有模型资源
+     * 释放所有模型资�?
      */
     public function releaseAllModels(): void
     {
         $this->modelInstances = [];
     }
 } 
+

@@ -16,15 +16,14 @@ class TranslationModel extends BaseNLPModel
         $sourceLanguage = $options['source_language'] ?? 'auto';
         $targetLanguage = $options['target_language'] ?? 'en';
         
-        // 如果源语言是自动检测，则使用语言检测模型
-        if ($sourceLanguage === 'auto') {
-            $languageDetector = new LanguageDetectionModel($this->config);
-            $detectionResult = $languageDetector->detectLanguage($text);
+        // 如果源语言是自动检测，则使用语言检测模�?        if ($sourceLanguage === 'auto') {
+            $languageDetector = new LanguageDetectionModel($this->config];
+            $detectionResult = $languageDetector->detectLanguage($text];
             $sourceLanguage = $detectionResult['data']['detected_language'];
         }
         
         // 模拟翻译结果
-        $translatedText = $this->mockTranslation($text, $sourceLanguage, $targetLanguage);
+        $translatedText = $this->mockTranslation($text, $sourceLanguage, $targetLanguage];
         
         return [
             'success' => true,
@@ -44,40 +43,39 @@ class TranslationModel extends BaseNLPModel
      */
     private function mockTranslation(string $text, string $sourceLanguage, string $targetLanguage): string
     {
-        // 如果源语言和目标语言相同，则不需要翻译
-        if ($sourceLanguage === $targetLanguage) {
+        // 如果源语言和目标语言相同，则不需要翻�?        if ($sourceLanguage === $targetLanguage) {
             return $text;
         }
         
         // 简单的模拟翻译
         $translations = [
             'en' => [
-                'zh' => '这是一个英文到中文的模拟翻译示例。',
+                'zh' => '这是一个英文到中文的模拟翻译示例�?,
                 'es' => 'Este es un ejemplo de traducción simulada de inglés a español.',
                 'fr' => 'Voici un exemple de traduction simulée de l\'anglais vers le français.',
                 'de' => 'Dies ist ein Beispiel für eine simulierte Übersetzung von Englisch nach Deutsch.'
-            ],
+            ], 
             'zh' => [
                 'en' => 'This is a simulated translation example from Chinese to English.',
                 'es' => 'Este es un ejemplo de traducción simulada del chino al español.',
                 'fr' => 'Voici un exemple de traduction simulée du chinois vers le français.',
                 'de' => 'Dies ist ein Beispiel für eine simulierte Übersetzung von Chinesisch nach Deutsch.'
-            ],
+            ], 
             'es' => [
                 'en' => 'This is a simulated translation example from Spanish to English.',
-                'zh' => '这是一个西班牙语到中文的模拟翻译示例。',
+                'zh' => '这是一个西班牙语到中文的模拟翻译示例�?,
                 'fr' => 'Voici un exemple de traduction simulée de l\'espagnol vers le français.',
                 'de' => 'Dies ist ein Beispiel für eine simulierte Übersetzung von Spanisch nach Deutsch.'
-            ],
+            ], 
             'fr' => [
                 'en' => 'This is a simulated translation example from French to English.',
-                'zh' => '这是一个法语到中文的模拟翻译示例。',
+                'zh' => '这是一个法语到中文的模拟翻译示例�?,
                 'es' => 'Este es un ejemplo de traducción simulada del francés al español.',
                 'de' => 'Dies ist ein Beispiel für eine simulierte Übersetzung von Französisch nach Deutsch.'
-            ],
+            ], 
             'de' => [
                 'en' => 'This is a simulated translation example from German to English.',
-                'zh' => '这是一个德语到中文的模拟翻译示例。',
+                'zh' => '这是一个德语到中文的模拟翻译示例�?,
                 'es' => 'Este es un ejemplo de traducción simulada del alemán al español.',
                 'fr' => 'Voici un exemple de traduction simulée de l\'allemand vers le français.'
             ]
@@ -89,7 +87,7 @@ class TranslationModel extends BaseNLPModel
         }
         
         // 如果没有对应的模拟翻译，则返回原文并添加说明
-        return $text . ' [模拟翻译：从 ' . $sourceLanguage . ' 翻译到 ' . $targetLanguage . ']';
+        return $text . ' [模拟翻译：从 ' . $sourceLanguage . ' 翻译�?' . $targetLanguage . ']';
     }
 
     /**
@@ -97,6 +95,6 @@ class TranslationModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->translate($text, $options);
+        return $this->translate($text, $options];
     }
 }

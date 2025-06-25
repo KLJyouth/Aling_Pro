@@ -14,14 +14,12 @@ class AuthenticationMiddleware
     // 类属性和方法
     
     /**
-     * 构造函数
-     */
+     * 构造函�?     */
     public function __construct()
     {
-        // 初始化代码
-    }
+        // 初始化代�?    }
     /**
-     * 处理传入的请求
+     * 处理传入的请�?
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
@@ -31,7 +29,7 @@ class AuthenticationMiddleware
     {
         // 请求前的处理逻辑
         
-        $response = $next($request);
+        $response = $next($request];
         
         // 请求后的处理逻辑
         

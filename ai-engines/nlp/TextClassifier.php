@@ -1,12 +1,12 @@
-ï»¿<?php
-declare(strict_types=1);
+<?php
+declare(strict_types=1];
 
 /**
- * æ–‡ä»¶åï¼šTextClassifier.php
- * åŠŸèƒ½æè¿°ï¼šæ–‡æœ¬åˆ†ç±»å™¨ - å®žçŽ°æ–‡æœ¬åˆ†ç±»åŠŸèƒ½
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åŽä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼þÃû£ºTextClassifier.php
+ * ¹¦ÄÜÃèÊö£ºÎÄ±¾·ÖÀàÆ÷ - ÊµÏÖÎÄ±¾·ÖÀà¹¦ÄÜ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóÐÞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
@@ -19,52 +19,52 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * æ–‡æœ¬åˆ†ç±»å™¨
+ * ÎÄ±¾·ÖÀàÆ÷
  *
- * å®žçŽ°æ–‡æœ¬åˆ†ç±»åŠŸèƒ½ï¼Œæ”¯æŒå¤šç§åˆ†ç±»æ–¹æ³•å’Œç±»åˆ«
+ * ÊµÏÖÎÄ±¾·ÖÀà¹¦ÄÜ£¬Ö§³Ö¶àÖÖ·ÖÀà·½·¨ºÍÀà±ð
  */
 class TextClassifier
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊý
      */
     private array $config;
 
     /**
-     * åˆ†ç±»æ¨¡åž‹
+     * ·ÖÀàÄ£ÐÍ
      */
     private array $models = [];
 
     /**
-     * ç‰¹å¾æå–å™¨
+     * ÌØÕ÷ÌáÈ¡Æ÷
      */
     private array $featureExtractors = [];
 
     /**
-     * åˆ†ç±»ç»“æžœç¼“å­˜
+     * ·ÖÀà½á¹û»º´æ
      */
     private array $cache = [];
     
     /**
-     * æž„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êý
      *
-     * @param array $config é…ç½®å‚æ•°
+     * @param array $config ÅäÖÃ²ÎÊý
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->config = array_merge($this->getDefaultConfig(), $config];
     }
     
     /**
-     * èŽ·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      *
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
         return [
             'default_language' => 'zh-CN',
-            'supported_languages' => ['zh-CN', 'en-US'],
+            'supported_languages' => ['zh-CN', 'en-US'], 
             'default_algorithm' => 'naive_bayes',
             'use_cache' => true,
             'cache_ttl' => 3600,
@@ -73,45 +73,45 @@ class TextClassifier
     }
     
     /**
-     * åˆ†ç±»æ–‡æœ¬
+     * ·ÖÀàÎÄ±¾
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array åˆ†ç±»ç»“æžœ
+     * @param string $text ÎÄ±¾ÄÚÈÝ
+     * @param array $options Ñ¡Ïî
+     * @return array ·ÖÀà½á¹û
      */
     public function classify(string $text, array $options = []): array
     {
-        // åˆå¹¶é€‰é¡¹
+        // ºÏ²¢Ñ¡Ïî
         $options = array_merge([
-            'language' => $this->config['default_language'],
-            'algorithm' => $this->config['default_algorithm'],
-            'categories' => [],
+            'language' => $this->config['default_language'], 
+            'algorithm' => $this->config['default_algorithm'], 
+            'categories' => [], 
             'min_confidence' => $this->config['min_confidence']
-        ], $options);
+        ],  $options];
         
-        // æ£€æŸ¥ç¼“å­˜
-        $cacheKey = md5($text . json_encode($options));
+        // ¼ì²é»º´æ
+        $cacheKey = md5($text . json_encode($options)];
         if ($this->config['use_cache'] && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
         
-        // æ ¹æ®ç®—æ³•åˆ†ç±»
+        // ¸ù¾ÝËã·¨·ÖÀà
         $result = [];
         switch ($options['algorithm']) {
             case 'naive_bayes':
-                $result = $this->classifyWithNaiveBayes($text, $options);
+                $result = $this->classifyWithNaiveBayes($text, $options];
                 break;
             case 'svm':
-                $result = $this->classifyWithSVM($text, $options);
+                $result = $this->classifyWithSVM($text, $options];
                 break;
             case 'neural_network':
-                $result = $this->classifyWithNeuralNetwork($text, $options);
+                $result = $this->classifyWithNeuralNetwork($text, $options];
                 break;
             default:
-                throw new InvalidArgumentException("ä¸æ”¯æŒçš„åˆ†ç±»ç®—æ³•: {$options['algorithm']}");
+                throw new InvalidArgumentException("²»Ö§³ÖµÄ·ÖÀàËã·¨: {$options['algorithm']}"];
         }
         
-        // ç¼“å­˜ç»“æžœ
+        // »º´æ½á¹û
         if ($this->config['use_cache']) {
             $this->cache[$cacheKey] = $result;
         }
@@ -120,24 +120,24 @@ class TextClassifier
     }
     
     /**
-     * ä½¿ç”¨æœ´ç´ è´å¶æ–¯ç®—æ³•åˆ†ç±»
+     * Ê¹ÓÃÆÓËØ±´Ò¶Ë¹Ëã·¨·ÖÀà
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array åˆ†ç±»ç»“æžœ
+     * @param string $text ÎÄ±¾ÄÚÈÝ
+     * @param array $options Ñ¡Ïî
+     * @return array ·ÖÀà½á¹û
      */
     private function classifyWithNaiveBayes(string $text, array $options): array
     {
-        // æå–ç‰¹å¾
-        $features = $this->extractFeatures($text, $options['language']);
+        // ÌáÈ¡ÌØÕ÷
+        $features = $this->extractFeatures($text, $options['language']];
         
-        // åŠ è½½æ¨¡åž‹
-        $model = $this->loadModel('naive_bayes', $options['language']);
+        // ¼ÓÔØÄ£ÐÍ
+        $model = $this->loadModel('naive_bayes', $options['language']];
         
-        // å¦‚æžœæŒ‡å®šäº†ç±»åˆ«ï¼Œåªè®¡ç®—è¿™äº›ç±»åˆ«çš„æ¦‚çŽ‡
-        $categories = $options['categories'] ?: array_keys($model['categories']);
+        // Èç¹ûÖ¸¶¨ÁËÀà±ð£¬Ö»¼ÆËãÕâÐ©Àà±ðµÄ¸ÅÂÊ
+        $categories = $options['categories'] ?: array_keys($model['categories']];
         
-        // è®¡ç®—æ¯ä¸ªç±»åˆ«çš„æ¦‚çŽ‡
+        // ¼ÆËãÃ¿¸öÀà±ðµÄ¸ÅÂÊ
         $scores = [];
         foreach ($categories as $category) {
             if (!isset($model['categories'][$category])) {
@@ -155,13 +155,13 @@ class TextClassifier
             $scores[$category] = $score;
         }
         
-        // å½’ä¸€åŒ–åˆ†æ•°
-        $maxScore = max($scores);
+        // ¹éÒ»»¯·ÖÊý
+        $maxScore = max($scores];
         $expScores = [];
         $sumExp = 0;
         
         foreach ($scores as $category => $score) {
-            $expScores[$category] = exp($score - $maxScore);
+            $expScores[$category] = exp($score - $maxScore];
             $sumExp += $expScores[$category];
         }
         
@@ -170,10 +170,10 @@ class TextClassifier
             $probabilities[$category] = $expScore / $sumExp;
         }
         
-        // æŽ’åº
-        arsort($probabilities);
+        // ÅÅÐò
+        arsort($probabilities];
         
-        // æž„å»ºç»“æžœ
+        // ¹¹½¨½á¹û
         $predictions = [];
         foreach ($probabilities as $category => $probability) {
             if ($probability >= $options['min_confidence']) {
@@ -193,24 +193,24 @@ class TextClassifier
     }
     
     /**
-     * ä½¿ç”¨SVMç®—æ³•åˆ†ç±»
+     * Ê¹ÓÃSVMËã·¨·ÖÀà
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array åˆ†ç±»ç»“æžœ
+     * @param string $text ÎÄ±¾ÄÚÈÝ
+     * @param array $options Ñ¡Ïî
+     * @return array ·ÖÀà½á¹û
      */
     private function classifyWithSVM(string $text, array $options): array
     {
-        // æå–ç‰¹å¾
-        $features = $this->extractFeatures($text, $options['language']);
+        // ÌáÈ¡ÌØÕ÷
+        $features = $this->extractFeatures($text, $options['language']];
         
-        // åŠ è½½æ¨¡åž‹
-        $model = $this->loadModel('svm', $options['language']);
+        // ¼ÓÔØÄ£ÐÍ
+        $model = $this->loadModel('svm', $options['language']];
         
-        // å¦‚æžœæŒ‡å®šäº†ç±»åˆ«ï¼Œåªè®¡ç®—è¿™äº›ç±»åˆ«çš„æ¦‚çŽ‡
-        $categories = $options['categories'] ?: array_keys($model['categories']);
+        // Èç¹ûÖ¸¶¨ÁËÀà±ð£¬Ö»¼ÆËãÕâÐ©Àà±ðµÄ¸ÅÂÊ
+        $categories = $options['categories'] ?: array_keys($model['categories']];
         
-        // è®¡ç®—æ¯ä¸ªç±»åˆ«çš„å¾—åˆ†
+        // ¼ÆËãÃ¿¸öÀà±ðµÄµÃ·Ö
         $scores = [];
         foreach ($categories as $category) {
             if (!isset($model['categories'][$category])) {
@@ -228,13 +228,13 @@ class TextClassifier
             $scores[$category] = $score;
         }
         
-        // è½¬æ¢ä¸ºæ¦‚çŽ‡
-        $maxScore = max($scores);
+        // ×ª»»Îª¸ÅÂÊ
+        $maxScore = max($scores];
         $expScores = [];
         $sumExp = 0;
         
         foreach ($scores as $category => $score) {
-            $expScores[$category] = exp($score - $maxScore);
+            $expScores[$category] = exp($score - $maxScore];
             $sumExp += $expScores[$category];
         }
         
@@ -243,10 +243,10 @@ class TextClassifier
             $probabilities[$category] = $expScore / $sumExp;
         }
         
-        // æŽ’åº
-        arsort($probabilities);
+        // ÅÅÐò
+        arsort($probabilities];
         
-        // æž„å»ºç»“æžœ
+        // ¹¹½¨½á¹û
         $predictions = [];
         foreach ($probabilities as $category => $probability) {
             if ($probability >= $options['min_confidence']) {
@@ -266,24 +266,24 @@ class TextClassifier
     }
     
     /**
-     * ä½¿ç”¨ç¥žç»ç½‘ç»œç®—æ³•åˆ†ç±»
+     * Ê¹ÓÃÉñ¾­ÍøÂçËã·¨·ÖÀà
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param array $options é€‰é¡¹
-     * @return array åˆ†ç±»ç»“æžœ
+     * @param string $text ÎÄ±¾ÄÚÈÝ
+     * @param array $options Ñ¡Ïî
+     * @return array ·ÖÀà½á¹û
      */
     private function classifyWithNeuralNetwork(string $text, array $options): array
     {
-        // æå–ç‰¹å¾
-        $features = $this->extractFeatures($text, $options['language']);
+        // ÌáÈ¡ÌØÕ÷
+        $features = $this->extractFeatures($text, $options['language']];
         
-        // åŠ è½½æ¨¡åž‹
-        $model = $this->loadModel('neural_network', $options['language']);
+        // ¼ÓÔØÄ£ÐÍ
+        $model = $this->loadModel('neural_network', $options['language']];
         
-        // å¦‚æžœæŒ‡å®šäº†ç±»åˆ«ï¼Œåªè®¡ç®—è¿™äº›ç±»åˆ«çš„æ¦‚çŽ‡
-        $categories = $options['categories'] ?: array_keys($model['categories']);
+        // Èç¹ûÖ¸¶¨ÁËÀà±ð£¬Ö»¼ÆËãÕâÐ©Àà±ðµÄ¸ÅÂÊ
+        $categories = $options['categories'] ?: array_keys($model['categories']];
         
-        // è®¡ç®—æ¯ä¸ªç±»åˆ«çš„å¾—åˆ†
+        // ¼ÆËãÃ¿¸öÀà±ðµÄµÃ·Ö
         $scores = [];
         foreach ($categories as $category) {
             if (!isset($model['categories'][$category])) {
@@ -301,13 +301,13 @@ class TextClassifier
             $scores[$category] = $score;
         }
         
-        // åº”ç”¨softmaxå‡½æ•°
-        $maxScore = max($scores);
+        // Ó¦ÓÃsoftmaxº¯Êý
+        $maxScore = max($scores];
         $expScores = [];
         $sumExp = 0;
         
         foreach ($scores as $category => $score) {
-            $expScores[$category] = exp($score - $maxScore);
+            $expScores[$category] = exp($score - $maxScore];
             $sumExp += $expScores[$category];
         }
         
@@ -316,10 +316,10 @@ class TextClassifier
             $probabilities[$category] = $expScore / $sumExp;
         }
         
-        // æŽ’åº
-        arsort($probabilities);
+        // ÅÅÐò
+        arsort($probabilities];
         
-        // æž„å»ºç»“æžœ
+        // ¹¹½¨½á¹û
         $predictions = [];
         foreach ($probabilities as $category => $probability) {
             if ($probability >= $options['min_confidence']) {
@@ -339,46 +339,46 @@ class TextClassifier
     }
     
     /**
-     * æå–ç‰¹å¾
+     * ÌáÈ¡ÌØÕ÷
      *
-     * @param string $text æ–‡æœ¬å†…å®¹
-     * @param string $language è¯­è¨€
-     * @return array ç‰¹å¾å‘é‡
+     * @param string $text ÎÄ±¾ÄÚÈÝ
+     * @param string $language ÓïÑÔ
+     * @return array ÌØÕ÷ÏòÁ¿
      */
     private function extractFeatures(string $text, string $language): array
     {
-        // èŽ·å–ç‰¹å¾æå–å™¨
-        $extractor = $this->getFeatureExtractor($language);
+        // »ñÈ¡ÌØÕ÷ÌáÈ¡Æ÷
+        $extractor = $this->getFeatureExtractor($language];
         
-        // æå–ç‰¹å¾
-        return $extractor->extract($text);
+        // ÌáÈ¡ÌØÕ÷
+        return $extractor->extract($text];
     }
     
     /**
-     * èŽ·å–ç‰¹å¾æå–å™¨
+     * »ñÈ¡ÌØÕ÷ÌáÈ¡Æ÷
      *
-     * @param string $language è¯­è¨€
-     * @return object ç‰¹å¾æå–å™¨
+     * @param string $language ÓïÑÔ
+     * @return object ÌØÕ÷ÌáÈ¡Æ÷
      */
     private function getFeatureExtractor(string $language): object
     {
         if (!isset($this->featureExtractors[$language])) {
-            // åˆ›å»ºç‰¹å¾æå–å™¨
-            $this->featureExtractors[$language] = $this->createFeatureExtractor($language);
+            // ´´½¨ÌØÕ÷ÌáÈ¡Æ÷
+            $this->featureExtractors[$language] = $this->createFeatureExtractor($language];
         }
         
         return $this->featureExtractors[$language];
     }
     
     /**
-     * åˆ›å»ºç‰¹å¾æå–å™¨
+     * ´´½¨ÌØÕ÷ÌáÈ¡Æ÷
      *
-     * @param string $language è¯­è¨€
-     * @return object ç‰¹å¾æå–å™¨
+     * @param string $language ÓïÑÔ
+     * @return object ÌØÕ÷ÌáÈ¡Æ÷
      */
     private function createFeatureExtractor(string $language): object
     {
-        // ç®€å•çš„ç‰¹å¾æå–å™¨å®žçŽ°
+        // ¼òµ¥µÄÌØÕ÷ÌáÈ¡Æ÷ÊµÏÖ
         return new class($language) {
             private string $language;
             
@@ -389,15 +389,15 @@ class TextClassifier
             
             public function extract(string $text): array
             {
-                // ç®€å•çš„è¯è¢‹æ¨¡åž‹
+                // ¼òµ¥µÄ´Ê´üÄ£ÐÍ
                 $features = [];
                 
-                // åˆ†è¯
-                $tokens = $this->tokenize($text);
+                // ·Ö´Ê
+                $tokens = $this->tokenize($text];
                 
-                // ç»Ÿè®¡è¯é¢‘
+                // Í³¼Æ´ÊÆµ
                 foreach ($tokens as $token) {
-                    $token = mb_strtolower($token);
+                    $token = mb_strtolower($token];
                     if (!isset($features[$token])) {
                         $features[$token] = 0;
                     }
@@ -410,152 +410,152 @@ class TextClassifier
             private function tokenize(string $text): array
             {
                 if ($this->language === 'zh-CN') {
-                    // ä¸­æ–‡åˆ†è¯ï¼ˆç®€åŒ–ç‰ˆï¼‰
-                    $text = preg_replace('/[^\p{Han}]/u', ' ', $text);
-                    $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
-                    return array_filter($chars);
+                    // ÖÐÎÄ·Ö´Ê£¨¼ò»¯°æ£©
+                    $text = preg_replace('/[^\p{Han}]/u', ' ', $text];
+                    $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY];
+                    return array_filter($chars];
                 } else {
-                    // è‹±æ–‡åˆ†è¯
-                    $text = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $text);
-                    return array_filter(explode(' ', $text));
+                    // Ó¢ÎÄ·Ö´Ê
+                    $text = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $text];
+                    return array_filter(explode(' ', $text)];
                 }
             }
         };
     }
     
     /**
-     * åŠ è½½æ¨¡åž‹
+     * ¼ÓÔØÄ£ÐÍ
      *
-     * @param string $algorithm ç®—æ³•
-     * @param string $language è¯­è¨€
-     * @return array æ¨¡åž‹æ•°æ®
+     * @param string $algorithm Ëã·¨
+     * @param string $language ÓïÑÔ
+     * @return array Ä£ÐÍÊý¾Ý
      */
     private function loadModel(string $algorithm, string $language): array
     {
         $key = "{$algorithm}_{$language}";
         
         if (!isset($this->models[$key])) {
-            // åŠ è½½æ¨¡åž‹
-            $this->models[$key] = $this->createDummyModel($algorithm, $language);
+            // ¼ÓÔØÄ£ÐÍ
+            $this->models[$key] = $this->createDummyModel($algorithm, $language];
         }
         
         return $this->models[$key];
     }
     
     /**
-     * åˆ›å»ºè™šæ‹Ÿæ¨¡åž‹
+     * ´´½¨ÐéÄâÄ£ÐÍ
      *
-     * @param string $algorithm ç®—æ³•
-     * @param string $language è¯­è¨€
-     * @return array æ¨¡åž‹æ•°æ®
+     * @param string $algorithm Ëã·¨
+     * @param string $language ÓïÑÔ
+     * @return array Ä£ÐÍÊý¾Ý
      */
     private function createDummyModel(string $algorithm, string $language): array
     {
-        // åˆ›å»ºä¸€ä¸ªç®€å•çš„è™šæ‹Ÿæ¨¡åž‹ç”¨äºŽæ¼”ç¤º
+        // ´´½¨Ò»¸ö¼òµ¥µÄÐéÄâÄ£ÐÍÓÃÓÚÑÝÊ¾
         $model = [
             'algorithm' => $algorithm,
             'language' => $language,
-            'categories' => [],
+            'categories' => [], 
             'smoothing' => 0.01
         ];
         
-        // æ·»åŠ ä¸€äº›è™šæ‹Ÿç±»åˆ«
-        $categories = ['ç§‘æŠ€', 'ä½“è‚²', 'å¨±ä¹', 'æ”¿æ²»', 'ç»æµŽ'];
+        // Ìí¼ÓÒ»Ð©ÐéÄâÀà±ð
+        $categories = ['¿Æ¼¼', 'ÌåÓý', 'ÓéÀÖ', 'ÕþÖÎ', '¾­¼Ã'];
         
         foreach ($categories as $category) {
             $model['categories'][$category] = [
-                'prior_probability' => log(1 / count($categories)),
-                'feature_probabilities' => [],
-                'weights' => [],
+                'prior_probability' => log(1 / count($categories)],
+                'feature_probabilities' => [], 
+                'weights' => [], 
                 'bias' => 0
             ];
             
-            // æ·»åŠ ä¸€äº›è™šæ‹Ÿç‰¹å¾
+            // Ìí¼ÓÒ»Ð©ÐéÄâÌØÕ÷
             for ($i = 0; $i < 10; $i++) {
                 $feature = "feature_{$i}";
                 $model['categories'][$category]['feature_probabilities'][$feature] = rand(1, 100) / 100;
-                $model['categories'][$category]['weights'][$feature] = (rand(-100, 100) / 100);
+                $model['categories'][$category]['weights'][$feature] = (rand(-100, 100) / 100];
             }
             
-            $model['categories'][$category]['bias'] = (rand(-100, 100) / 100);
+            $model['categories'][$category]['bias'] = (rand(-100, 100) / 100];
         }
         
         return $model;
     }
     
     /**
-     * è®­ç»ƒæ¨¡åž‹
+     * ÑµÁ·Ä£ÐÍ
      *
-     * @param array $trainingData è®­ç»ƒæ•°æ®
-     * @param array $options é€‰é¡¹
-     * @return bool æ˜¯å¦æˆåŠŸ
+     * @param array $trainingData ÑµÁ·Êý¾Ý
+     * @param array $options Ñ¡Ïî
+     * @return bool ÊÇ·ñ³É¹¦
      */
     public function train(array $trainingData, array $options = []): bool
     {
-        // åˆå¹¶é€‰é¡¹
+        // ºÏ²¢Ñ¡Ïî
         $options = array_merge([
-            'language' => $this->config['default_language'],
-            'algorithm' => $this->config['default_algorithm'],
+            'language' => $this->config['default_language'], 
+            'algorithm' => $this->config['default_algorithm'], 
             'iterations' => 100,
             'learning_rate' => 0.01
-        ], $options);
+        ],  $options];
         
-        // æ ¹æ®ç®—æ³•è®­ç»ƒæ¨¡åž‹
+        // ¸ù¾ÝËã·¨ÑµÁ·Ä£ÐÍ
         switch ($options['algorithm']) {
             case 'naive_bayes':
-                return $this->trainNaiveBayes($trainingData, $options);
+                return $this->trainNaiveBayes($trainingData, $options];
             case 'svm':
-                return $this->trainSVM($trainingData, $options);
+                return $this->trainSVM($trainingData, $options];
             case 'neural_network':
-                return $this->trainNeuralNetwork($trainingData, $options);
+                return $this->trainNeuralNetwork($trainingData, $options];
             default:
-                throw new InvalidArgumentException("ä¸æ”¯æŒçš„åˆ†ç±»ç®—æ³•: {$options['algorithm']}");
+                throw new InvalidArgumentException("²»Ö§³ÖµÄ·ÖÀàËã·¨: {$options['algorithm']}"];
         }
     }
     
     /**
-     * è®­ç»ƒæœ´ç´ è´å¶æ–¯æ¨¡åž‹
+     * ÑµÁ·ÆÓËØ±´Ò¶Ë¹Ä£ÐÍ
      *
-     * @param array $trainingData è®­ç»ƒæ•°æ®
-     * @param array $options é€‰é¡¹
-     * @return bool æ˜¯å¦æˆåŠŸ
+     * @param array $trainingData ÑµÁ·Êý¾Ý
+     * @param array $options Ñ¡Ïî
+     * @return bool ÊÇ·ñ³É¹¦
      */
     private function trainNaiveBayes(array $trainingData, array $options): bool
     {
-        // å®žé™…åº”ç”¨ä¸­åº”è¯¥å®žçŽ°çœŸæ­£çš„æœ´ç´ è´å¶æ–¯è®­ç»ƒç®—æ³•
+        // Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊµÏÖÕæÕýµÄÆÓËØ±´Ò¶Ë¹ÑµÁ·Ëã·¨
         return true;
     }
     
     /**
-     * è®­ç»ƒSVMæ¨¡åž‹
+     * ÑµÁ·SVMÄ£ÐÍ
      *
-     * @param array $trainingData è®­ç»ƒæ•°æ®
-     * @param array $options é€‰é¡¹
-     * @return bool æ˜¯å¦æˆåŠŸ
+     * @param array $trainingData ÑµÁ·Êý¾Ý
+     * @param array $options Ñ¡Ïî
+     * @return bool ÊÇ·ñ³É¹¦
      */
     private function trainSVM(array $trainingData, array $options): bool
     {
-        // å®žé™…åº”ç”¨ä¸­åº”è¯¥å®žçŽ°çœŸæ­£çš„SVMè®­ç»ƒç®—æ³•
+        // Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊµÏÖÕæÕýµÄSVMÑµÁ·Ëã·¨
         return true;
     }
     
     /**
-     * è®­ç»ƒç¥žç»ç½‘ç»œæ¨¡åž‹
+     * ÑµÁ·Éñ¾­ÍøÂçÄ£ÐÍ
      *
-     * @param array $trainingData è®­ç»ƒæ•°æ®
-     * @param array $options é€‰é¡¹
-     * @return bool æ˜¯å¦æˆåŠŸ
+     * @param array $trainingData ÑµÁ·Êý¾Ý
+     * @param array $options Ñ¡Ïî
+     * @return bool ÊÇ·ñ³É¹¦
      */
     private function trainNeuralNetwork(array $trainingData, array $options): bool
     {
-        // å®žé™…åº”ç”¨ä¸­åº”è¯¥å®žçŽ°çœŸæ­£çš„ç¥žç»ç½‘ç»œè®­ç»ƒç®—æ³•
+        // Êµ¼ÊÓ¦ÓÃÖÐÓ¦¸ÃÊµÏÖÕæÕýµÄÉñ¾­ÍøÂçÑµÁ·Ëã·¨
         return true;
     }
     
     /**
-     * èŽ·å–é…ç½®
+     * »ñÈ¡ÅäÖÃ
      *
-     * @return array é…ç½®
+     * @return array ÅäÖÃ
      */
     public function getConfig(): array
     {
@@ -563,20 +563,21 @@ class TextClassifier
     }
     
     /**
-     * è®¾ç½®é…ç½®
+     * ÉèÖÃÅäÖÃ
      *
-     * @param array $config é…ç½®
+     * @param array $config ÅäÖÃ
      */
     public function setConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config = array_merge($this->config, $config];
     }
     
     /**
-     * æ¸…é™¤ç¼“å­˜
+     * Çå³ý»º´æ
      */
     public function clearCache(): void
     {
         $this->cache = [];
     }
 }
+

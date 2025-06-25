@@ -6,16 +6,16 @@ use App\Core\AIManager;
 use App\Core\Database;
 
 /**
- * MachineLearning 类
+ * MachineLearning �?
  * 
- * 机器学习组件，提供ML模型训练和预测功能
+ * 机器学习组件，提供ML模型训练和预测功�?
  *
  * @package App\AI
  */
 class MachineLearning
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -78,7 +78,7 @@ class MachineLearning
     }
 
     /**
-     * 数据预处理
+     * 数据预处�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

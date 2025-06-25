@@ -17,9 +17,9 @@ class NaturalLanguageProcessor
             'max_tokens' => 4096,
             'temperature' => 0.7,
             'timeout' => 30
-        ], $config);
+        ],  $config];
         
-        $this->initializeModels();
+        $this->initializeModels(];
     }
 
     /**
@@ -28,13 +28,13 @@ class NaturalLanguageProcessor
     private function initializeModels(): void
     {
         $this->models = [
-            'text_analysis' => new TextAnalysisModel($this->config),
-            'sentiment_analysis' => new SentimentAnalysisModel($this->config),
-            'entity_extraction' => new EntityExtractionModel($this->config),
-            'text_classification' => new TextClassificationModel($this->config),
-            'language_detection' => new LanguageDetectionModel($this->config),
-            'text_summarization' => new TextSummarizationModel($this->config),
-            'question_answering' => new QuestionAnsweringModel($this->config),
+            'text_analysis' => new TextAnalysisModel($this->config],
+            'sentiment_analysis' => new SentimentAnalysisModel($this->config],
+            'entity_extraction' => new EntityExtractionModel($this->config],
+            'text_classification' => new TextClassificationModel($this->config],
+            'language_detection' => new LanguageDetectionModel($this->config],
+            'text_summarization' => new TextSummarizationModel($this->config],
+            'question_answering' => new QuestionAnsweringModel($this->config],
             'text_generation' => new TextGenerationModel($this->config)
         ];
     }
@@ -47,31 +47,31 @@ class NaturalLanguageProcessor
         try {
             $results = [
                 'text' => $text,
-                'length' => strlen($text),
-                'word_count' => str_word_count($text),
-                'sentiment' => $this->models['sentiment_analysis']->analyze($text),
-                'entities' => $this->models['entity_extraction']->extract($text),
-                'language' => $this->models['language_detection']->detect($text),
-                'classification' => $this->models['text_classification']->classify($text),
-                'keywords' => $this->extractKeywords($text),
-                'readability' => $this->calculateReadability($text),
+                'length' => strlen($text],
+                'word_count' => str_word_count($text],
+                'sentiment' => $this->models['sentiment_analysis']->analyze($text],
+                'entities' => $this->models['entity_extraction']->extract($text],
+                'language' => $this->models['language_detection']->detect($text],
+                'classification' => $this->models['text_classification']->classify($text],
+                'keywords' => $this->extractKeywords($text],
+                'readability' => $this->calculateReadability($text],
                 'analysis_time' => date('Y-m-d H:i:s')
             ];
 
-            // 如果需要详细分析
+            // 如果需要详细分�?
             if ($options['detailed'] ?? false) {
                 $results['detailed_analysis'] = [
-                    'sentence_count' => substr_count($text, '.') + substr_count($text, '!') + substr_count($text, '?'),
+                    'sentence_count' => substr_count($text, '.') + substr_count($text, '!') + substr_count($text, '?'],
                     'paragraph_count' => substr_count($text, "\n\n") + 1,
-                    'complexity_score' => $this->calculateComplexity($text),
-                    'tone_analysis' => $this->analyzeTone($text),
+                    'complexity_score' => $this->calculateComplexity($text],
+                    'tone_analysis' => $this->analyzeTone($text],
                     'topics' => $this->extractTopics($text)
                 ];
             }
 
             return $results;
         } catch (\Exception $e) {
-            throw new \RuntimeException("文本分析失败: " . $e->getMessage());
+            throw new \RuntimeException("文本分析失败: " . $e->getMessage()];
         }
     }
 } 

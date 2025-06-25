@@ -1,17 +1,17 @@
 <?php
 /**
  * 文件名：KnowledgeGraphEngine.php
- * 功能描述：知识图谱引擎 - 实现知识图谱的核心功能
- * 创建时间：2025-01-XX
+ * 功能描述：知识图谱引�?- 实现知识图谱的核心功�?
+ * 创建时间�?025-01-XX
  * 最后修改：2025-01-XX
- * 版本：1.0.0
+ * 版本�?.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
@@ -25,7 +25,7 @@ use AlingAi\Utils\PerformanceMonitor;
  * 知识图谱引擎
  * 
  * 提供知识图谱的构建、查询、推理和维护功能
- * 支持多种知识表示和推理方法
+ * 支持多种知识表示和推理方�?
  */
 class KnowledgeGraphEngine
 {
@@ -44,7 +44,7 @@ class KnowledgeGraphEngine
     private $queryProcessor;
     
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct(
         LoggerInterface $logger,
@@ -55,9 +55,9 @@ class KnowledgeGraphEngine
         $this->logger = $logger;
         $this->cache = $cache;
         $this->monitor = $monitor;
-        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->config = array_merge($this->getDefaultConfig(), $config];
         
-        $this->initializeComponents();
+        $this->initializeComponents(];
     }
     
     /**
@@ -90,26 +90,26 @@ class KnowledgeGraphEngine
     }
     
     /**
-     * 初始化组件
+     * 初始化组�?
      */
     private function initializeComponents(): void
     {
         try {
-            $this->graphStore = $this->createGraphStore();
-            $this->entityExtractor = $this->createEntityExtractor();
-            $this->relationExtractor = $this->createRelationExtractor();
-            $this->reasoningEngine = $this->createReasoningEngine();
-            $this->queryProcessor = $this->createQueryProcessor();
+            $this->graphStore = $this->createGraphStore(];
+            $this->entityExtractor = $this->createEntityExtractor(];
+            $this->relationExtractor = $this->createRelationExtractor(];
+            $this->reasoningEngine = $this->createReasoningEngine(];
+            $this->queryProcessor = $this->createQueryProcessor(];
             
-            $this->logger->info('KnowledgeGraphEngine components initialized successfully');
+            $this->logger->info('KnowledgeGraphEngine components initialized successfully'];
         } catch (Exception $e) {
-            $this->logger->error('Failed to initialize KnowledgeGraphEngine components: ' . $e->getMessage());
-            throw new Exception('组件初始化失败: ' . $e->getMessage());
+            $this->logger->error('Failed to initialize KnowledgeGraphEngine components: ' . $e->getMessage()];
+            throw new Exception('组件初始化失�? ' . $e->getMessage()];
         }
     }
     
     /**
-     * 创建图存储
+     * 创建图存�?
      */
     private function createGraphStore()
     {
@@ -117,29 +117,29 @@ class KnowledgeGraphEngine
         
         switch ($storeType) {
             case 'neo4j':
-                return new Neo4jGraphStore($this->config['database']);
+                return new Neo4jGraphStore($this->config['database']];
             case 'rdf':
-                return new RDFGraphStore($this->config['database']);
+                return new RDFGraphStore($this->config['database']];
             case 'memory':
             default:
-                return new MemoryGraphStore();
+                return new MemoryGraphStore(];
         }
     }
     
     /**
-     * 创建实体提取器
+     * 创建实体提取�?
      */
     private function createEntityExtractor()
     {
-        return new EntityExtractor($this->config);
+        return new EntityExtractor($this->config];
     }
     
     /**
-     * 创建关系提取器
+     * 创建关系提取�?
      */
     private function createRelationExtractor()
     {
-        return new RelationExtractor($this->config);
+        return new RelationExtractor($this->config];
     }
     
     /**
@@ -147,19 +147,19 @@ class KnowledgeGraphEngine
      */
     private function createReasoningEngine()
     {
-        return new ReasoningEngine($this->config);
+        return new ReasoningEngine($this->config];
     }
     
     /**
-     * 创建查询处理器
+     * 创建查询处理�?
      */
     private function createQueryProcessor()
     {
-        return new QueryProcessor($this->config);
+        return new QueryProcessor($this->config];
     }
     
     /**
-     * 从文本构建知识图谱
+     * 从文本构建知识图�?
      * 
      * @param string $text 输入文本
      * @param array $options 构建选项
@@ -168,31 +168,31 @@ class KnowledgeGraphEngine
      */
     public function buildFromText(string $text, array $options = []): array
     {
-        $this->monitor->start('build_from_text');
+        $this->monitor->start('build_from_text'];
         
         try {
             // 验证文本
             if (empty($text)) {
-                throw new InvalidArgumentException('文本不能为空');
+                throw new InvalidArgumentException('文本不能为空'];
             }
             
             // 处理选项
-            $options = array_merge($this->getDefaultBuildOptions(), $options);
+            $options = array_merge($this->getDefaultBuildOptions(), $options];
             
             // 提取实体
-            $entities = $this->entityExtractor->extract($text, $options);
+            $entities = $this->entityExtractor->extract($text, $options];
             
             // 提取关系
-            $relations = $this->relationExtractor->extract($text, $entities, $options);
+            $relations = $this->relationExtractor->extract($text, $entities, $options];
             
             // 添加到图存储
-            $addedEntities = $this->addEntities($entities, $options);
-            $addedRelations = $this->addRelations($relations, $options);
+            $addedEntities = $this->addEntities($entities, $options];
+            $addedRelations = $this->addRelations($relations, $options];
             
             // 执行推理
             $inferredRelations = [];
             if ($options['enable_reasoning']) {
-                $inferredRelations = $this->reason($addedEntities, $addedRelations, $options);
+                $inferredRelations = $this->reason($addedEntities, $addedRelations, $options];
             }
             
             $result = [
@@ -202,22 +202,22 @@ class KnowledgeGraphEngine
                 'processing_time' => 0
             ];
             
-            $this->monitor->end('build_from_text');
-            $result['processing_time'] = $this->monitor->getDuration('build_from_text');
+            $this->monitor->end('build_from_text'];
+            $result['processing_time'] = $this->monitor->getDuration('build_from_text'];
             
             $this->logger->info('Knowledge graph built from text', [
-                'text_length' => strlen($text),
-                'entity_count' => count($addedEntities),
-                'relation_count' => count($addedRelations),
-                'inferred_relation_count' => count($inferredRelations),
+                'text_length' => strlen($text],
+                'entity_count' => count($addedEntities],
+                'relation_count' => count($addedRelations],
+                'inferred_relation_count' => count($inferredRelations],
                 'processing_time' => $result['processing_time']
-            ]);
+            ]];
             
             return $result;
             
         } catch (Exception $e) {
-            $this->monitor->end('build_from_text');
-            $this->logger->error('Knowledge graph building failed: ' . $e->getMessage());
+            $this->monitor->end('build_from_text'];
+            $this->logger->error('Knowledge graph building failed: ' . $e->getMessage()];
             throw $e;
         }
     }
@@ -228,11 +228,11 @@ class KnowledgeGraphEngine
     private function getDefaultBuildOptions(): array
     {
         return [
-            'confidence_threshold' => $this->config['default_confidence_threshold'],
-            'enable_entity_linking' => $this->config['enable_entity_linking'],
-            'enable_relation_prediction' => $this->config['enable_relation_prediction'],
-            'enable_reasoning' => $this->config['enable_reasoning'],
-            'reasoning_depth' => $this->config['reasoning_depth'],
+            'confidence_threshold' => $this->config['default_confidence_threshold'], 
+            'enable_entity_linking' => $this->config['enable_entity_linking'], 
+            'enable_relation_prediction' => $this->config['enable_relation_prediction'], 
+            'enable_reasoning' => $this->config['enable_reasoning'], 
+            'reasoning_depth' => $this->config['reasoning_depth'], 
             'language' => 'en',
             'domain' => 'general',
             'context' => []
@@ -248,7 +248,7 @@ class KnowledgeGraphEngine
         
         foreach ($entities as $entity) {
             if ($entity['confidence'] >= $options['confidence_threshold']) {
-                $entityId = $this->graphStore->addEntity($entity);
+                $entityId = $this->graphStore->addEntity($entity];
                 $entity['id'] = $entityId;
                 $addedEntities[] = $entity;
             }
@@ -266,7 +266,7 @@ class KnowledgeGraphEngine
         
         foreach ($relations as $relation) {
             if ($relation['confidence'] >= $options['confidence_threshold']) {
-                $relationId = $this->graphStore->addRelation($relation);
+                $relationId = $this->graphStore->addRelation($relation];
                 $relation['id'] = $relationId;
                 $addedRelations[] = $relation;
             }
@@ -280,7 +280,7 @@ class KnowledgeGraphEngine
      */
     private function reason(array $entities, array $relations, array $options): array
     {
-        $this->monitor->start('reasoning');
+        $this->monitor->start('reasoning'];
         
         // 执行推理
         $inferredRelations = $this->reasoningEngine->infer(
@@ -288,19 +288,19 @@ class KnowledgeGraphEngine
             $relations,
             $this->graphStore,
             $options['reasoning_depth']
-        );
+        ];
         
         // 添加推理关系到图存储
         $addedInferredRelations = [];
         foreach ($inferredRelations as $relation) {
             if ($relation['confidence'] >= $options['confidence_threshold']) {
-                $relationId = $this->graphStore->addRelation($relation, true);
+                $relationId = $this->graphStore->addRelation($relation, true];
                 $relation['id'] = $relationId;
                 $addedInferredRelations[] = $relation;
             }
         }
         
-        $this->monitor->end('reasoning');
+        $this->monitor->end('reasoning'];
         
         return $addedInferredRelations;
     }
@@ -308,51 +308,51 @@ class KnowledgeGraphEngine
     /**
      * 查询知识图谱
      * 
-     * @param string $query 查询字符串
+     * @param string $query 查询字符�?
      * @param string $queryType 查询类型 (natural, sparql, cypher)
      * @param array $options 查询选项
      * @return array 查询结果
      */
     public function query(string $query, string $queryType = 'natural', array $options = []): array
     {
-        $this->monitor->start('query');
+        $this->monitor->start('query'];
         
         try {
             // 处理选项
-            $options = array_merge($this->getDefaultQueryOptions(), $options);
+            $options = array_merge($this->getDefaultQueryOptions(), $options];
             
             // 处理查询
-            $processedQuery = $this->queryProcessor->process($query, $queryType);
+            $processedQuery = $this->queryProcessor->process($query, $queryType];
             
             // 执行查询
-            $queryResults = $this->graphStore->query($processedQuery, $queryType);
+            $queryResults = $this->graphStore->query($processedQuery, $queryType];
             
-            // 格式化结果
-            $formattedResults = $this->formatQueryResults($queryResults, $options);
+            // 格式化结�?
+            $formattedResults = $this->formatQueryResults($queryResults, $options];
             
             $result = [
                 'query' => $query,
                 'query_type' => $queryType,
                 'results' => $formattedResults,
-                'result_count' => count($formattedResults),
+                'result_count' => count($formattedResults],
                 'processing_time' => 0
             ];
             
-            $this->monitor->end('query');
-            $result['processing_time'] = $this->monitor->getDuration('query');
+            $this->monitor->end('query'];
+            $result['processing_time'] = $this->monitor->getDuration('query'];
             
             $this->logger->info('Knowledge graph query executed', [
                 'query' => $query,
                 'query_type' => $queryType,
-                'result_count' => count($formattedResults),
+                'result_count' => count($formattedResults],
                 'processing_time' => $result['processing_time']
-            ]);
+            ]];
             
             return $result;
             
         } catch (Exception $e) {
-            $this->monitor->end('query');
-            $this->logger->error('Knowledge graph query failed: ' . $e->getMessage());
+            $this->monitor->end('query'];
+            $this->logger->error('Knowledge graph query failed: ' . $e->getMessage()];
             throw $e;
         }
     }
@@ -374,7 +374,7 @@ class KnowledgeGraphEngine
     }
     
     /**
-     * 格式化查询结果
+     * 格式化查询结�?
      */
     private function formatQueryResults(array $results, array $options): array
     {
@@ -386,15 +386,15 @@ class KnowledgeGraphEngine
                 continue;
             }
             
-            // 格式化结果
+            // 格式化结�?
             $formattedResult = $result;
             
             if (!$options['include_metadata']) {
-                unset($formattedResult['metadata']);
+                unset($formattedResult['metadata']];
             }
             
             if (!$options['include_confidence']) {
-                unset($formattedResult['confidence']);
+                unset($formattedResult['confidence']];
             }
             
             $formattedResults[] = $formattedResult;
@@ -404,7 +404,7 @@ class KnowledgeGraphEngine
         $limit = $options['limit'];
         $offset = $options['offset'];
         
-        return array_slice($formattedResults, $offset, $limit);
+        return array_slice($formattedResults, $offset, $limit];
     }
     
     /**
@@ -415,8 +415,8 @@ class KnowledgeGraphEngine
      */
     public function addEntity(array $entity): string
     {
-        $this->validateEntity($entity);
-        return $this->graphStore->addEntity($entity);
+        $this->validateEntity($entity];
+        return $this->graphStore->addEntity($entity];
     }
     
     /**
@@ -427,8 +427,8 @@ class KnowledgeGraphEngine
      */
     public function addRelation(array $relation): string
     {
-        $this->validateRelation($relation);
-        return $this->graphStore->addRelation($relation);
+        $this->validateRelation($relation];
+        return $this->graphStore->addRelation($relation];
     }
     
     /**
@@ -437,11 +437,11 @@ class KnowledgeGraphEngine
     private function validateEntity(array $entity): void
     {
         if (!isset($entity['type'])) {
-            throw new InvalidArgumentException('实体必须指定类型');
+            throw new InvalidArgumentException('实体必须指定类型'];
         }
         
         if (!isset($entity['name'])) {
-            throw new InvalidArgumentException('实体必须指定名称');
+            throw new InvalidArgumentException('实体必须指定名称'];
         }
     }
     
@@ -451,15 +451,15 @@ class KnowledgeGraphEngine
     private function validateRelation(array $relation): void
     {
         if (!isset($relation['type'])) {
-            throw new InvalidArgumentException('关系必须指定类型');
+            throw new InvalidArgumentException('关系必须指定类型'];
         }
         
         if (!isset($relation['source'])) {
-            throw new InvalidArgumentException('关系必须指定源实体');
+            throw new InvalidArgumentException('关系必须指定源实�?];
         }
         
         if (!isset($relation['target'])) {
-            throw new InvalidArgumentException('关系必须指定目标实体');
+            throw new InvalidArgumentException('关系必须指定目标实体'];
         }
     }
     
@@ -471,7 +471,7 @@ class KnowledgeGraphEngine
      */
     public function getEntity(string $entityId): ?array
     {
-        return $this->graphStore->getEntity($entityId);
+        return $this->graphStore->getEntity($entityId];
     }
     
     /**
@@ -482,7 +482,7 @@ class KnowledgeGraphEngine
      */
     public function getRelation(string $relationId): ?array
     {
-        return $this->graphStore->getRelation($relationId);
+        return $this->graphStore->getRelation($relationId];
     }
     
     /**
@@ -494,7 +494,7 @@ class KnowledgeGraphEngine
      */
     public function updateEntity(string $entityId, array $data): bool
     {
-        return $this->graphStore->updateEntity($entityId, $data);
+        return $this->graphStore->updateEntity($entityId, $data];
     }
     
     /**
@@ -506,7 +506,7 @@ class KnowledgeGraphEngine
      */
     public function updateRelation(string $relationId, array $data): bool
     {
-        return $this->graphStore->updateRelation($relationId, $data);
+        return $this->graphStore->updateRelation($relationId, $data];
     }
     
     /**
@@ -517,7 +517,7 @@ class KnowledgeGraphEngine
      */
     public function deleteEntity(string $entityId): bool
     {
-        return $this->graphStore->deleteEntity($entityId);
+        return $this->graphStore->deleteEntity($entityId];
     }
     
     /**
@@ -528,7 +528,7 @@ class KnowledgeGraphEngine
      */
     public function deleteRelation(string $relationId): bool
     {
-        return $this->graphStore->deleteRelation($relationId);
+        return $this->graphStore->deleteRelation($relationId];
     }
     
     /**
@@ -540,7 +540,7 @@ class KnowledgeGraphEngine
      */
     public function getEntityRelations(string $entityId, string $direction = 'both'): array
     {
-        return $this->graphStore->getEntityRelations($entityId, $direction);
+        return $this->graphStore->getEntityRelations($entityId, $direction];
     }
     
     /**
@@ -552,31 +552,31 @@ class KnowledgeGraphEngine
      */
     public function importGraph(string $filePath, string $format = 'json'): array
     {
-        $this->monitor->start('import_graph');
+        $this->monitor->start('import_graph'];
         
         try {
             if (!file_exists($filePath)) {
-                throw new InvalidArgumentException('文件不存在: ' . $filePath);
+                throw new InvalidArgumentException('文件不存�? ' . $filePath];
             }
             
-            $importResult = $this->graphStore->importGraph($filePath, $format);
+            $importResult = $this->graphStore->importGraph($filePath, $format];
             
-            $this->monitor->end('import_graph');
-            $importResult['processing_time'] = $this->monitor->getDuration('import_graph');
+            $this->monitor->end('import_graph'];
+            $importResult['processing_time'] = $this->monitor->getDuration('import_graph'];
             
             $this->logger->info('Knowledge graph imported', [
                 'file_path' => $filePath,
                 'format' => $format,
-                'entity_count' => $importResult['entity_count'],
-                'relation_count' => $importResult['relation_count'],
+                'entity_count' => $importResult['entity_count'], 
+                'relation_count' => $importResult['relation_count'], 
                 'processing_time' => $importResult['processing_time']
-            ]);
+            ]];
             
             return $importResult;
             
         } catch (Exception $e) {
-            $this->monitor->end('import_graph');
-            $this->logger->error('Knowledge graph import failed: ' . $e->getMessage());
+            $this->monitor->end('import_graph'];
+            $this->logger->error('Knowledge graph import failed: ' . $e->getMessage()];
             throw $e;
         }
     }
@@ -590,27 +590,27 @@ class KnowledgeGraphEngine
      */
     public function exportGraph(string $filePath, string $format = 'json'): array
     {
-        $this->monitor->start('export_graph');
+        $this->monitor->start('export_graph'];
         
         try {
-            $exportResult = $this->graphStore->exportGraph($filePath, $format);
+            $exportResult = $this->graphStore->exportGraph($filePath, $format];
             
-            $this->monitor->end('export_graph');
-            $exportResult['processing_time'] = $this->monitor->getDuration('export_graph');
+            $this->monitor->end('export_graph'];
+            $exportResult['processing_time'] = $this->monitor->getDuration('export_graph'];
             
             $this->logger->info('Knowledge graph exported', [
                 'file_path' => $filePath,
                 'format' => $format,
-                'entity_count' => $exportResult['entity_count'],
-                'relation_count' => $exportResult['relation_count'],
+                'entity_count' => $exportResult['entity_count'], 
+                'relation_count' => $exportResult['relation_count'], 
                 'processing_time' => $exportResult['processing_time']
-            ]);
+            ]];
             
             return $exportResult;
             
         } catch (Exception $e) {
-            $this->monitor->end('export_graph');
-            $this->logger->error('Knowledge graph export failed: ' . $e->getMessage());
+            $this->monitor->end('export_graph'];
+            $this->logger->error('Knowledge graph export failed: ' . $e->getMessage()];
             throw $e;
         }
     }
@@ -622,7 +622,7 @@ class KnowledgeGraphEngine
      */
     public function getStatistics(): array
     {
-        return $this->graphStore->getStatistics();
+        return $this->graphStore->getStatistics(];
     }
     
     /**
@@ -632,7 +632,7 @@ class KnowledgeGraphEngine
      */
     public function clearGraph(): bool
     {
-        return $this->graphStore->clearGraph();
+        return $this->graphStore->clearGraph(];
     }
     
     /**
@@ -640,7 +640,7 @@ class KnowledgeGraphEngine
      */
     public function getPerformanceStats(): array
     {
-        return $this->monitor->getStats();
+        return $this->monitor->getStats(];
     }
     
     /**
@@ -649,8 +649,9 @@ class KnowledgeGraphEngine
     public function clearCache(): void
     {
         if ($this->config['cache_enabled']) {
-            $this->cache->clear();
-            $this->logger->info('KnowledgeGraphEngine cache cleared');
+            $this->cache->clear(];
+            $this->logger->info('KnowledgeGraphEngine cache cleared'];
         }
     }
 }
+

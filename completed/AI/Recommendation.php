@@ -6,7 +6,7 @@ use App\AI\MachineLearning;
 use App\Core\Database;
 
 /**
- * Recommendation 类
+ * Recommendation �?
  * 
  * 推荐系统组件，提供个性化推荐功能
  *
@@ -15,7 +15,7 @@ use App\Core\Database;
 class Recommendation
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -56,7 +56,7 @@ class Recommendation
     }
 
     /**
-     * 计算相似度
+     * 计算相似�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

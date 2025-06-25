@@ -1,0 +1,748 @@
+开始执行所有代码完善脚本: 2025-06-18 04:41:16
+[2025-06-18 04:41:16] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Models
+[2025-06-18 04:41:16] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Controllers
+[2025-06-18 04:41:16] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Services
+[2025-06-18 04:41:17] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Middleware
+[2025-06-18 04:41:17] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Utils
+[2025-06-18 04:41:17] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Config
+[2025-06-18 04:41:17] 创建子目录: E:\Code\AlingAi\AlingAi_pro/completed/Tests
+[2025-06-18 04:41:17] 复制配置文件: .eslintrc.json
+[2025-06-18 04:41:17] 复制配置文件: .php-cs-fixer.php
+[2025-06-18 04:41:17] 复制配置文件: .prettierrc.json
+[2025-06-18 04:41:17] 复制配置文件: app.php
+[2025-06-18 04:41:17] 复制配置文件: assets.php
+[2025-06-18 04:41:17] 复制配置文件: azure.yaml
+[2025-06-18 04:41:17] 复制配置文件: cache.php
+[2025-06-18 04:41:17] 复制配置文件: cache_production.php
+[2025-06-18 04:41:17] 复制配置文件: core_architecture.php
+[2025-06-18 04:41:17] 复制配置文件: core_architecture_routes.php
+[2025-06-18 04:41:17] 复制配置文件: database.php
+[2025-06-18 04:41:17] 复制配置文件: database_local.php
+[2025-06-18 04:41:17] 复制配置文件: database_pool.php
+[2025-06-18 04:41:17] 复制配置文件: logging.php
+[2025-06-18 04:41:17] 复制配置文件: logging_production.php
+[2025-06-18 04:41:17] 复制配置文件: mysql-optimization.cnf
+[2025-06-18 04:41:17] 复制配置文件: opcache.ini
+[2025-06-18 04:41:17] 复制配置文件: performance.php
+[2025-06-18 04:41:17] 复制配置文件: performance_monitoring.json
+[2025-06-18 04:41:17] 复制配置文件: performance_production.php
+[2025-06-18 04:41:17] 复制配置文件: php-fpm-alingai.conf
+[2025-06-18 04:41:17] 复制配置文件: php-optimization.ini
+[2025-06-18 04:41:17] 复制配置文件: phpstan.neon
+[2025-06-18 04:41:17] 复制配置文件: phpunit.xml
+[2025-06-18 04:41:17] 复制配置文件: preload.php
+[2025-06-18 04:41:17] 复制配置文件: production.ini
+[2025-06-18 04:41:17] 复制配置文件: production.json
+[2025-06-18 04:41:17] 复制配置文件: production.php
+[2025-06-18 04:41:17] 复制配置文件: quantum_encryption.php
+[2025-06-18 04:41:17] 复制配置文件: redis.production.conf
+[2025-06-18 04:41:17] 复制配置文件: routes.php
+[2025-06-18 04:41:17] 复制配置文件: routes_backup.php
+[2025-06-18 04:41:17] 复制配置文件: routes_backup_fixed.php
+[2025-06-18 04:41:17] 复制配置文件: routes_enhanced.php
+[2025-06-18 04:41:17] 复制配置文件: routes_simple.php
+[2025-06-18 04:41:17] 复制配置文件: security.php
+[2025-06-18 04:41:17] 复制配置文件: security_production.php
+[2025-06-18 04:41:17] 复制配置文件: websocket.php
+[2025-06-18 04:41:17] 开始执行脚本: complete_core_files.php
+[2025-06-18 04:41:17] 脚本输出:
+开始完善Core目录代码...
+[2025-06-18 04:41:17] 读取现有文件: Application.php
+[2025-06-18 04:41:17] 已完善Core类: Application.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Container.php
+[2025-06-18 04:41:17] 已完善Core类: Container.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: ServiceProvider.php
+[2025-06-18 04:41:17] 已完善Core类: ServiceProvider.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Config.php
+[2025-06-18 04:41:17] 已完善Core类: Config.php
+[2025-06-18 04:41:17] 读取现有文件: Router.php
+[2025-06-18 04:41:17] 已完善Core类: Router.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Request.php
+[2025-06-18 04:41:17] 已完善Core类: Request.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Response.php
+[2025-06-18 04:41:17] 已完善Core类: Response.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: View.php
+[2025-06-18 04:41:17] 已完善Core类: View.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Session.php
+[2025-06-18 04:41:17] 已完善Core类: Session.php
+[2025-06-18 04:41:17] 文件不存在，将创建新文件: Validator.php
+[2025-06-18 04:41:17] 已完善Core类: Validator.php
+[2025-06-18 04:41:17] Core目录代码完善完成，耗时: 0.02 秒
+
+完成！Core目录代码已完善。查看日志文件获取详细信息: E:\Code\AlingAi\AlingAi_pro/core_completion.log
+[2025-06-18 04:41:17] 脚本执行成功: complete_core_files.php
+[2025-06-18 04:41:17] 开始执行脚本: complete_security_files.php
+[2025-06-18 04:41:18] 脚本输出:
+开始完善Security目录代码...
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Firewall.php
+[2025-06-18 04:41:18] 已完善Security类: Firewall.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: CSRF.php
+[2025-06-18 04:41:18] 已完善Security类: CSRF.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: XSS.php
+[2025-06-18 04:41:18] 已完善Security类: XSS.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: SQLInjection.php
+[2025-06-18 04:41:18] 已完善Security类: SQLInjection.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Authentication.php
+[2025-06-18 04:41:18] 已完善Security类: Authentication.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Authorization.php
+[2025-06-18 04:41:18] 已完善Security类: Authorization.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Encryption.php
+[2025-06-18 04:41:18] 已完善Security类: Encryption.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Password.php
+[2025-06-18 04:41:18] 已完善Security类: Password.php
+[2025-06-18 04:41:18] 读取现有文件: JWT.php
+[2025-06-18 04:41:18] 已完善Security类: JWT.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: RateLimiter.php
+[2025-06-18 04:41:18] 已完善Security类: RateLimiter.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: TwoFactorAuth.php
+[2025-06-18 04:41:18] 已完善Security类: TwoFactorAuth.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: SecurityHeaders.php
+[2025-06-18 04:41:18] 已完善Security类: SecurityHeaders.php
+[2025-06-18 04:41:18] Security目录代码完善完成，耗时: 0.03 秒
+
+完成！Security目录代码已完善。查看日志文件获取详细信息: E:\Code\AlingAi\AlingAi_pro/security_completion.log
+[2025-06-18 04:41:18] 脚本执行成功: complete_security_files.php
+[2025-06-18 04:41:18] 开始执行脚本: complete_ai_files.php
+[2025-06-18 04:41:18] 脚本输出:
+开始完善AI目录代码...
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: AIManager.php
+[2025-06-18 04:41:18] 已完善AI类: AIManager.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: NaturalLanguage.php
+[2025-06-18 04:41:18] 已完善AI类: NaturalLanguage.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: ComputerVision.php
+[2025-06-18 04:41:18] 已完善AI类: ComputerVision.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: MachineLearning.php
+[2025-06-18 04:41:18] 已完善AI类: MachineLearning.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: DeepLearning.php
+[2025-06-18 04:41:18] 已完善AI类: DeepLearning.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Recommendation.php
+[2025-06-18 04:41:18] 已完善AI类: Recommendation.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: SpeechRecognition.php
+[2025-06-18 04:41:18] 已完善AI类: SpeechRecognition.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: TextToSpeech.php
+[2025-06-18 04:41:18] 已完善AI类: TextToSpeech.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Chatbot.php
+[2025-06-18 04:41:18] 已完善AI类: Chatbot.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: Sentiment.php
+[2025-06-18 04:41:18] 已完善AI类: Sentiment.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: EntityRecognition.php
+[2025-06-18 04:41:18] 已完善AI类: EntityRecognition.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: ModelTrainer.php
+[2025-06-18 04:41:18] 已完善AI类: ModelTrainer.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: DataPreprocessor.php
+[2025-06-18 04:41:18] 已完善AI类: DataPreprocessor.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: ModelEvaluator.php
+[2025-06-18 04:41:18] 已完善AI类: ModelEvaluator.php
+[2025-06-18 04:41:18] 文件不存在，将创建新文件: AIProvider.php
+[2025-06-18 04:41:18] 已完善AI类: AIProvider.php
+[2025-06-18 04:41:18] AI目录代码完善完成，耗时: 0.03 秒
+
+完成！AI目录代码已完善。查看日志文件获取详细信息: E:\Code\AlingAi\AlingAi_pro/ai_completion.log
+[2025-06-18 04:41:18] 脚本执行成功: complete_ai_files.php
+[2025-06-18 04:41:18] 开始执行脚本: code_completion_plan.php
+[2025-06-18 04:41:20] 脚本输出:
+开始执行代码完善计划...
+[2025-06-18 04:41:19] 目录不存在: E:\Code\AlingAi\AlingAi_pro/src/AgentScheduler
+[2025-06-18 04:41:19] 开始完善目录: Security
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/AdvancedSecuritySystem.php
+[2025-06-18 04:41:19]   - 类名: AdvancedSecuritySystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/AntiCrawlerSystem.php
+[2025-06-18 04:41:19]   - 类名: AntiCrawlerSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Client/ApiClient.php
+[2025-06-18 04:41:19]   - 类名: ApiClient
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Client
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/DeepSeekAgentIntegration.php
+[2025-06-18 04:41:19]   - 类名: DeepSeekAgentIntegration
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Enhanced3DThreatVisualizationSystem.php
+[2025-06-18 04:41:19]   - 类名: Enhanced3DThreatVisualizationSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/EnhancedAntiCrawlerSystem.php
+[2025-06-18 04:41:19]   - 类名: EnhancedAntiCrawlerSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Exceptions/AuthenticationFailedException.php
+[2025-06-18 04:41:19]   - 类名: AuthenticationFailedException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Exceptions/CryptoException.php
+[2025-06-18 04:41:19]   - 类名: CryptoException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Exceptions/InvalidKeyException.php
+[2025-06-18 04:41:19]   - 类名: InvalidKeyException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/GlobalSituationAwarenessSystem.php
+[2025-06-18 04:41:19]   - 类名: GlobalSituationAwarenessSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/GlobalThreatIntelligence.php
+[2025-06-18 04:41:19]   - 类名: GlobalThreatIntelligence
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/IntelligentSecuritySystem.php
+[2025-06-18 04:41:19]   - 类名: IntelligentSecuritySystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/IntelligentThreatDetectionService.php
+[2025-06-18 04:41:19]   - 类名: IntelligentThreatDetectionService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Interfaces/QuantumCryptoInterface.php
+[2025-06-18 04:41:19]   - 类名:
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Interfaces
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/JWT.php
+[2025-06-18 04:41:19]   - 类名: JWTManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/Middleware/QuantumAPISecurityMiddleware.php
+[2025-06-18 04:41:19]   - 类名: QuantumAPISecurityMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/PermissionManager.php
+[2025-06-18 04:41:19]   - 类名: PermissionManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/PermissionManagerNew.php
+[2025-06-18 04:41:19]   - 类名: PermissionManagerNew
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumCrypto/PostQuantumCryptographyEngine.php
+[2025-06-18 04:41:19]   - 类名: PostQuantumCryptographyEngine
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumCrypto
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumCrypto/QuantumCryptographySystem.php
+[2025-06-18 04:41:19]   - 类名: QuantumCryptographySystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumCrypto
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumCryptoValidator.php
+[2025-06-18 04:41:19]   - 类名: QuantumCryptoValidator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumCryptographyService.php
+[2025-06-18 04:41:19]   - 类名: QuantumCryptographyService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/Algorithms/SM2Engine.php
+[2025-06-18 04:41:19]   - 类名: SM2Engine
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\Algorithms
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/Algorithms/SM3Engine.php
+[2025-06-18 04:41:19]   - 类名: SM3Engine
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\Algorithms
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/Algorithms/SM4Engine.php
+[2025-06-18 04:41:19]   - 类名: SM4Engine
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\Algorithms
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/Algorithms/SM4Engine_backup.php
+[2025-06-18 04:41:19]   - 类名: SM4Engine_backup
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\Algorithms
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/Algorithms/SM4Engine_patched.php
+[2025-06-18 04:41:19]   - 类名: SM4Engine_patched
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\Algorithms
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/CompleteQuantumEncryptionSystem.php
+[2025-06-18 04:41:19]   - 类名: CompleteQuantumEncryptionSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/DeepTransformationQuantumSystem.php
+[2025-06-18 04:41:19]   - 类名: DeepTransformationQuantumSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/FinalCompleteQuantumEncryptionSystem.php
+[2025-06-18 04:41:19]   - 类名: FinalCompleteQuantumEncryptionSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QKD/BB84Protocol.php
+[2025-06-18 04:41:19]   - 类名: BB84Protocol
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QKD
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QKD/ClassicalChannel.php
+[2025-06-18 04:41:19]   - 类名: ClassicalChannel
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QKD
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QKD/QuantumChannel.php
+[2025-06-18 04:41:19]   - 类名: QuantumChannel
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QKD
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QKD/QuantumKeyDistribution.php
+[2025-06-18 04:41:19]   - 类名: QuantumKeyDistribution
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QKD
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumCryptoFactory.php
+[2025-06-18 04:41:19]   - 类名: QuantumCryptoFactory
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumEncryptionIntegrationService.php
+[2025-06-18 04:41:19]   - 类名: QuantumEncryptionIntegrationService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumEncryptionInterface.php
+[2025-06-18 04:41:19]   - 类名:
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumEncryptionSystem.php
+[2025-06-18 04:41:19]   - 类名: QuantumEncryptionSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumRandom/QuantumRandomGenerator.php
+[2025-06-18 04:41:19]   - 类名: QuantumRandomGenerator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QuantumRandom
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/QuantumEncryption/QuantumRandom/RealQuantumRandomGenerator.php
+[2025-06-18 04:41:19]   - 类名: RealQuantumRandomGenerator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security\QuantumEncryption\QuantumRandom
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/RealTimeNetworkMonitor.php
+[2025-06-18 04:41:19]   - 类名: RealTimeNetworkMonitor
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/SecurityServices.php
+[2025-06-18 04:41:19]   - 类名: CSRFProtection
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/SimpleWebSocketSecurityServer.php
+[2025-06-18 04:41:19]   - 类名: SimpleWebSocketSecurityServer
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/SuperAntiCrawlerSystem.php
+[2025-06-18 04:41:19]   - 类名: SuperAntiCrawlerSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/WebSocketSecurityServer.php
+[2025-06-18 04:41:19]   - 类名: WebSocketSecurityServer
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Security/ZeroTrustSecurityService.php
+[2025-06-18 04:41:19]   - 类名: ZeroTrustSecurityService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 完成目录: Security
+[2025-06-18 04:41:19] 开始完善目录: Auth
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Auth/AdminAuthService.php
+[2025-06-18 04:41:19]   - 类名: AdminAuthService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Auth
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Auth/AdminAuthServiceDemo.php
+[2025-06-18 04:41:19]   - 类名: AdminAuthServiceDemo
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Auth
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 完成目录: Auth
+[2025-06-18 04:41:19] 开始完善目录: Core
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AdminController.php
+[2025-06-18 04:41:19]   - 类名: AdminController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AlingAiProApplication.php
+[2025-06-18 04:41:19]   - 类名: AlingAiProApplication
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AlingAiProApplication_backup.php
+[2025-06-18 04:41:19]   - 类名: AlingAiProApplication
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AlingAiProApplication_fixed.php
+[2025-06-18 04:41:19]   - 类名: AlingAiProApplication_fixed
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApiController.php
+[2025-06-18 04:41:19]   - 类名: ApiController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApiHandler.php
+[2025-06-18 04:41:19]   - 类名: ApiHandler
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApiRouteManager.php
+[2025-06-18 04:41:19]   - 类名: ApiRouteManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApiRouter.php
+[2025-06-18 04:41:19]   - 类名: ApiRouter
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApiRoutes.php
+[2025-06-18 04:41:19]   - 类名: ApiRoutes
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Application.php
+[2025-06-18 04:41:19]   - 类名: Application
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ApplicationV5.php
+[2025-06-18 04:41:19]   - 类名: ApplicationV5
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Application_fixed.php
+[2025-06-18 04:41:19]   - 类名: Application
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AuthController.php
+[2025-06-18 04:41:19]   - 类名: AuthController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/AuthMiddleware.php
+[2025-06-18 04:41:19]   - 类名: AuthMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/BackupController.php
+[2025-06-18 04:41:19]   - 类名: BackupController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Cache/CacheManager.php
+[2025-06-18 04:41:19]   - 类名: CacheManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Cache
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/CacheController.php
+[2025-06-18 04:41:19]   - 类名: CacheController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ChatController.php
+[2025-06-18 04:41:19]   - 类名: ChatController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/CompleteAPIRouter.php
+[2025-06-18 04:41:19]   - 类名: CompleteAPIRouter
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/CompleteRouterIntegration.php
+[2025-06-18 04:41:19]   - 类名: CompleteRouterIntegration
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Config/ConfigManager.php
+[2025-06-18 04:41:19]   - 类名: ConfigManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Config
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ConfigController.php
+[2025-06-18 04:41:19]   - 类名: ConfigController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/CronController.php
+[2025-06-18 04:41:19]   - 类名: CronController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Database/DatabaseAdapter.php
+[2025-06-18 04:41:19]   - 类名: DatabaseAdapter
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Database/DatabaseInterface.php
+[2025-06-18 04:41:19]   - 类名:
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Database/DatabaseManager.php
+[2025-06-18 04:41:19]   - 类名: DatabaseManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/DatabaseController.php
+[2025-06-18 04:41:19]   - 类名: DatabaseController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/DatabaseManager.php
+[2025-06-18 04:41:19]   - 类名: DatabaseManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Documentation/APIDocumentationGenerator.php
+[2025-06-18 04:41:19]   - 类名: APIDocumentationGenerator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Documentation
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ErrorHandler.php
+[2025-06-18 04:41:19]   - 类名: ErrorHandler
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Pro\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Exceptions/ConfigException.php
+[2025-06-18 04:41:19]   - 类名: ConfigException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Exceptions/ConfigurationException.php
+[2025-06-18 04:41:19]   - 类名: ConfigurationException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Exceptions/SecurityException.php
+[2025-06-18 04:41:19]   - 类名: SecurityException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Exceptions/ServiceException.php
+[2025-06-18 04:41:19]   - 类名: ServiceException
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Exceptions
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/FileController.php
+[2025-06-18 04:41:19]   - 类名: FileController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/JsonResponse.php
+[2025-06-18 04:41:19]   - 类名: JsonResponse
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Middleware/AuthenticationMiddleware.php
+[2025-06-18 04:41:19]   - 类名: AuthenticationMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Middleware/CorsMiddleware.php
+[2025-06-18 04:41:19]   - 类名: CorsMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Middleware/MiddlewareInterface.php
+[2025-06-18 04:41:19]   - 类名:
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Middleware/RateLimitMiddleware.php
+[2025-06-18 04:41:19]   - 类名: RateLimitMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Request.php
+[2025-06-18 04:41:19]   - 类名: Request
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Http/Response.php
+[2025-06-18 04:41:19]   - 类名: Response
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Http
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/LogController.php
+[2025-06-18 04:41:19]   - 类名: LogController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Logging/Logger.php
+[2025-06-18 04:41:19]   - 类名: Logger
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Logging
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/MailController.php
+[2025-06-18 04:41:19]   - 类名: MailController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Middleware/CorsMiddleware.php
+[2025-06-18 04:41:19]   - 类名: CorsMiddleware
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Middleware
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Monitoring/PerformanceMonitor.php
+[2025-06-18 04:41:19]   - 类名: PerformanceMonitor
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Monitoring
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/NotificationController.php
+[2025-06-18 04:41:19]   - 类名: NotificationController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/PluginController.php
+[2025-06-18 04:41:19]   - 类名: PluginController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/QueueController.php
+[2025-06-18 04:41:19]   - 类名: QueueController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/RouteIntegrationManager.php
+[2025-06-18 04:41:19]   - 类名: RouteIntegrationManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Router.php
+[2025-06-18 04:41:19]   - 类名: Router
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Security/AuthenticationManager.php
+[2025-06-18 04:41:19]   - 类名: AuthenticationManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Security/SecurityManager.php
+[2025-06-18 04:41:19]   - 类名: SecurityManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Security/ZeroTrustManager.php
+[2025-06-18 04:41:19]   - 类名: ZeroTrustManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Security
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/SecurityController.php
+[2025-06-18 04:41:19]   - 类名: SecurityController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/SelfEvolutionSystem.php
+[2025-06-18 04:41:19]   - 类名: SelfEvolutionSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Services/AbstractServiceManager.php
+[2025-06-18 04:41:19]   - 类名: AbstractServiceManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Services
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/Services/BaseService.php
+[2025-06-18 04:41:19]   - 类名: BaseService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core\Services
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/SessionController.php
+[2025-06-18 04:41:19]   - 类名: SessionController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/SettingController.php
+[2025-06-18 04:41:19]   - 类名: SettingController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/StatisticsController.php
+[2025-06-18 04:41:19]   - 类名: StatisticsController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/StructuredLogger.php
+[2025-06-18 04:41:19]   - 类名: LoggerFactory
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Pro\Core
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/SystemController.php
+[2025-06-18 04:41:19]   - 类名: SystemController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/TaskController.php
+[2025-06-18 04:41:19]   - 类名: TaskController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/ThemeController.php
+[2025-06-18 04:41:19]   - 类名: ThemeController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/UserController.php
+[2025-06-18 04:41:19]   - 类名: UserController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Core/WebhookController.php
+[2025-06-18 04:41:19]   - 类名: WebhookController
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Core
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 完成目录: Core
+[2025-06-18 04:41:19] 开始完善目录: AI
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/AgentScheduler/IntelligentAgentCoordinator.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentCoordinator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI\AgentScheduler
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/AgentScheduler/IntelligentAgentScheduler.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentScheduler
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI\AgentScheduler
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/AgentScheduler/IntelligentAgentScheduler_backup.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentScheduler_backup
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI\AgentScheduler
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/AgentScheduler/IntelligentAgentScheduler_new.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentScheduler_new
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI\AgentScheduler
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/DecisionEngine/IntelligentDecisionEngine.php
+[2025-06-18 04:41:19]   - 类名: IntelligentDecisionEngine
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI\DecisionEngine
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/DeepSeekAgentIntegration.php
+[2025-06-18 04:41:19]   - 类名: DeepSeekAgentIntegration
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/DeepSeekAgentOrchestrationService.php
+[2025-06-18 04:41:19]   - 类名: DeepSeekAgentOrchestrationService
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/EnhancedAgentCoordinator.php
+[2025-06-18 04:41:19]   - 类名: EnhancedAgentCoordinator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/EnhancedAgentCoordinator_fixed.php
+[2025-06-18 04:41:19]   - 类名: EnhancedAgentCoordinator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/IntelligentAgentCoordinator.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentCoordinator
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/IntelligentAgentSystem.php
+[2025-06-18 04:41:19]   - 类名: IntelligentAgentSystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/SelfEvolvingAISystem.php
+[2025-06-18 04:41:19]   - 类名: SelfEvolvingAISystem
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/AI/SelfLearningFramework.php
+[2025-06-18 04:41:19]   - 类名: SelfLearningFramework
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\AI
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 完成目录: AI
+[2025-06-18 04:41:19] 开始完善目录: Database
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/AutoDatabaseManager.php
+[2025-06-18 04:41:19]   - 类名: AutoDatabaseManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/ConnectionPool.php
+[2025-06-18 04:41:19]   - 类名: DatabaseConnectionPool
+[2025-06-18 04:41:19]   - 命名空间:
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/CoreMigrationManager.php
+[2025-06-18 04:41:19]   - 类名: CoreMigrationManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/DatabaseManager.php
+[2025-06-18 04:41:19]   - 类名: DatabaseManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/DatabaseManagerSimple.php
+[2025-06-18 04:41:19]   - 类名: DatabaseManagerSimple
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/DatabaseOptimizer.php
+[2025-06-18 04:41:19]   - 类名: DatabaseOptimizer
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Pro\Database
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/FileDatabase.php
+[2025-06-18 04:41:19]   - 类名: FileDatabase
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/FileSystemDB.php
+[2025-06-18 04:41:19]   - 类名: FileSystemDB
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/IntelligentDatabaseManager.php
+[2025-06-18 04:41:19]   - 类名: IntelligentDatabaseManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migration.php
+[2025-06-18 04:41:19]   - 类名: Migration
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/MigrationManager.php
+[2025-06-18 04:41:19]   - 类名: MigrationManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/MigrationManager_new.php
+[2025-06-18 04:41:19]   - 类名: MigrationManager
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migrations/2024_12_19_120000_create_users_table.php
+[2025-06-18 04:41:19]   - 类名: Migration_2024_12_19_120000_CreateUsersTable
+[2025-06-18 04:41:19]   - 命名空间:
+[2025-06-18 04:41:19]   - 已添加文档注释
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migrations/CreateBlockchainTables.php
+[2025-06-18 04:41:19]   - 类名: CreateBlockchainTables
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database\Migrations
+[2025-06-18 04:41:19]   - 已完善基本结构
+[2025-06-18 04:41:19] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migrations/CreateCollaborationTables.php
+[2025-06-18 04:41:19]   - 类名: CreateCollaborationTables
+[2025-06-18 04:41:19]   - 命名空间: AlingAi\Database\Migrations
+[2025-06-18 04:41:20]   - 已完善基本结构
+[2025-06-18 04:41:20] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migrations/CreateCoreArchitectureTables.php
+[2025-06-18 04:41:20]   - 类名: CreateCoreArchitectureTables
+[2025-06-18 04:41:20]   - 命名空间: AlingAi\Database\Migrations
+[2025-06-18 04:41:20]   - 已完善基本结构
+[2025-06-18 04:41:20] 处理文件: E:\Code\AlingAi\AlingAi_pro/src/Database/Migrations/CreateDataExchangeTables.php
+[2025-06-18 04:41:20]   - 类名: CreateDataExchangeTables
+[2025-06-18 04:41:20]   - 命名空间: AlingAi\Database\Migrations
+[2025-06-18 04:41:20]   - 已完善基本结构
+[2025-06-18 04:41:20] 完成目录: Database
+[2025-06-18 04:41:20] 代码完善计划执行完成，耗时: 0.72 秒
+
+完成！代码完善计划已执行。查看日志文件获取详细信息: E:\Code\AlingAi\AlingAi_pro/code_completion.log
+[2025-06-18 04:41:20] 脚本执行成功: code_completion_plan.php
+[2025-06-18 04:41:20] 生成项目README文件
+[2025-06-18 04:41:20] 生成composer.json文件
+[2025-06-18 04:41:20] 生成.env.example文件
+[2025-06-18 04:41:20] 生成完成报告: E:\Code\AlingAi\AlingAi_pro/COMPLETION_REPORT.md
+[2025-06-18 04:41:20] 所有代码完善脚本执行完成，耗时: 3.46 秒

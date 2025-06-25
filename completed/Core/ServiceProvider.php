@@ -5,16 +5,16 @@ namespace App\Core;
 use App\Core\Container;
 
 /**
- * ServiceProvider 类
+ * ServiceProvider �?
  * 
- * 服务提供者基类，用于注册服务到容器
+ * 服务提供者基类，用于注册服务到容�?
  *
  * @package App\Core
  */
 class ServiceProvider
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class ServiceProvider
     }
 
     /**
-     * 注册服务到容器
+     * 注册服务到容�?
      *
      * @return mixed
      */

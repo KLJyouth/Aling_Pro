@@ -5,7 +5,7 @@ namespace App\AI;
 use App\Core\Config;
 
 /**
- * AIProvider 类
+ * AIProvider �?
  * 
  * AI提供商接口，用于集成外部AI服务
  *
@@ -14,7 +14,7 @@ use App\Core\Config;
 class AIProvider
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {

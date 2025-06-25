@@ -11,7 +11,7 @@ class SimpleAdminDatabaseMigrator
     
     public function __construct() {
         $this->dbPath = __DIR__ . '/../../../database/admin_system.db';
-        $this->initializeDatabase();
+        $this->initializeDatabase(];
     }
     
     /**
@@ -19,53 +19,50 @@ class SimpleAdminDatabaseMigrator
      */
     private function initializeDatabase(): void {
         try {
-            // 确保数据库目录存在
-            $dbDir = dirname($this->dbPath);
+            // 确保数据库目录存�?            $dbDir = dirname($this->dbPath];
             if (!is_dir($dbDir)) {
-                mkdir($dbDir, 0755, true);
-                echo "✅ Created database directory: {$dbDir}\n";
+                mkdir($dbDir, 0755, true];
+                echo "�?Created database directory: {$dbDir}\n";
             }
             
-            $this->pdo = new PDO("sqlite:{$this->dbPath}");
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->pdo->exec('PRAGMA foreign_keys = ON');
+            $this->pdo = new PDO("sqlite:{$this->dbPath}"];
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
+            $this->pdo->exec('PRAGMA foreign_keys = ON'];
             
-            echo "✅ Database connection established\n";
+            echo "�?Database connection established\n";
         } catch (Exception $e) {
-            echo "❌ Database connection failed: " . $e->getMessage() . "\n";
+            echo "�?Database connection failed: " . $e->getMessage() . "\n";
             throw $e;
         }
     }
     
     /**
-     * 执行所有迁移
-     */
+     * 执行所有迁�?     */
     public function runMigrations(): array
     {
         echo "🚀 Starting Admin Database Migrations...\n\n";
         
         $migrations = [
-            '001_create_admin_users_table' => [$this, 'createAdminUsersTable'],
-            '002_create_admin_tokens_table' => [$this, 'createAdminTokensTable'],
-            '003_create_admin_permissions_table' => [$this, 'createAdminPermissionsTable'],
-            '004_create_admin_user_permissions_table' => [$this, 'createAdminUserPermissionsTable'],
-            '005_create_admin_api_keys_table' => [$this, 'createAdminApiKeysTable'],
-            '006_create_admin_third_party_services_table' => [$this, 'createAdminThirdPartyServicesTable'],
-            '007_create_admin_system_logs_table' => [$this, 'createAdminSystemLogsTable'],
-            '008_create_admin_monitoring_metrics_table' => [$this, 'createAdminMonitoringMetricsTable'],
-            '009_create_admin_risk_control_rules_table' => [$this, 'createAdminRiskControlRulesTable'],
-            '010_create_admin_risk_control_events_table' => [$this, 'createAdminRiskControlEventsTable'],
-            '011_create_admin_email_templates_table' => [$this, 'createAdminEmailTemplatesTable'],
-            '012_create_admin_email_queue_table' => [$this, 'createAdminEmailQueueTable'],
-            '013_create_admin_chat_monitoring_table' => [$this, 'createAdminChatMonitoringTable'],
-            '014_create_admin_sensitive_words_table' => [$this, 'createAdminSensitiveWordsTable'],
+            '001_create_admin_users_table' => [$this, 'createAdminUsersTable'], 
+            '002_create_admin_tokens_table' => [$this, 'createAdminTokensTable'], 
+            '003_create_admin_permissions_table' => [$this, 'createAdminPermissionsTable'], 
+            '004_create_admin_user_permissions_table' => [$this, 'createAdminUserPermissionsTable'], 
+            '005_create_admin_api_keys_table' => [$this, 'createAdminApiKeysTable'], 
+            '006_create_admin_third_party_services_table' => [$this, 'createAdminThirdPartyServicesTable'], 
+            '007_create_admin_system_logs_table' => [$this, 'createAdminSystemLogsTable'], 
+            '008_create_admin_monitoring_metrics_table' => [$this, 'createAdminMonitoringMetricsTable'], 
+            '009_create_admin_risk_control_rules_table' => [$this, 'createAdminRiskControlRulesTable'], 
+            '010_create_admin_risk_control_events_table' => [$this, 'createAdminRiskControlEventsTable'], 
+            '011_create_admin_email_templates_table' => [$this, 'createAdminEmailTemplatesTable'], 
+            '012_create_admin_email_queue_table' => [$this, 'createAdminEmailQueueTable'], 
+            '013_create_admin_chat_monitoring_table' => [$this, 'createAdminChatMonitoringTable'], 
+            '014_create_admin_sensitive_words_table' => [$this, 'createAdminSensitiveWordsTable'], 
             '015_insert_default_data' => [$this, 'insertDefaultData']
         ];
         
         $results = [];
         
-        // 创建迁移记录表
-        $this->createMigrationsTable();
+        // 创建迁移记录�?        $this->createMigrationsTable(];
         
         foreach ($migrations as $migrationName => $migrationMethod) {
             if ($this->isMigrationExecuted($migrationName)) {
@@ -76,13 +73,13 @@ class SimpleAdminDatabaseMigrator
             
             try {
                 echo "🔄 Executing migration: {$migrationName}\n";
-                call_user_func($migrationMethod);
-                $this->recordMigration($migrationName);
-                echo "✅ Migration completed: {$migrationName}\n";
+                call_user_func($migrationMethod];
+                $this->recordMigration($migrationName];
+                echo "�?Migration completed: {$migrationName}\n";
                 $results[$migrationName] = ['status' => 'success', 'message' => 'Migration completed'];
             } catch (Exception $e) {
                 $error = "Migration failed: {$e->getMessage()}";
-                echo "❌ {$error}\n";
+                echo "�?{$error}\n";
                 $results[$migrationName] = ['status' => 'failed', 'message' => $error];
             }
         }
@@ -91,8 +88,7 @@ class SimpleAdminDatabaseMigrator
     }
     
     /**
-     * 创建迁移记录表
-     */
+     * 创建迁移记录�?     */
     private function createMigrationsTable(): void {
         $sql = "
         CREATE TABLE IF NOT EXISTS admin_migrations (
@@ -101,7 +97,7 @@ class SimpleAdminDatabaseMigrator
             executed_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
     }
     
     /**
@@ -109,8 +105,8 @@ class SimpleAdminDatabaseMigrator
      */
     private function isMigrationExecuted(string $migrationName): bool
     {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM admin_migrations WHERE migration = ?");
-        $stmt->execute([$migrationName]);
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM admin_migrations WHERE migration = ?"];
+        $stmt->execute([$migrationName]];
         return $stmt->fetchColumn() > 0;
     }
     
@@ -118,13 +114,12 @@ class SimpleAdminDatabaseMigrator
      * 记录迁移执行
      */
     private function recordMigration(string $migrationName): void {
-        $stmt = $this->pdo->prepare("INSERT INTO admin_migrations (migration) VALUES (?)");
-        $stmt->execute([$migrationName]);
+        $stmt = $this->pdo->prepare("INSERT INTO admin_migrations (migration) VALUES (?)"];
+        $stmt->execute([$migrationName]];
     }
     
     /**
-     * 迁移001：创建管理员用户表
-     */
+     * 迁移001：创建管理员用户�?     */
     private function createAdminUsersTable(): void {
         $sql = "
         CREATE TABLE admin_users (
@@ -137,7 +132,7 @@ class SimpleAdminDatabaseMigrator
             is_admin BOOLEAN DEFAULT TRUE,
             is_active BOOLEAN DEFAULT TRUE,
             last_login_at DATETIME,
-            last_login_ip VARCHAR(45),
+            last_login_ip VARCHAR(45],
             login_attempts INTEGER DEFAULT 0,
             locked_until DATETIME,
             profile_data TEXT,
@@ -146,40 +141,39 @@ class SimpleAdminDatabaseMigrator
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_users_username ON admin_users(username)");
-        $this->pdo->exec("CREATE INDEX idx_admin_users_email ON admin_users(email)");
-        $this->pdo->exec("CREATE INDEX idx_admin_users_role ON admin_users(role)");
+        $this->pdo->exec("CREATE INDEX idx_admin_users_username ON admin_users(username)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_users_email ON admin_users(email)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_users_role ON admin_users(role)"];
     }
     
     /**
-     * 迁移002：创建管理员Token表
-     */
+     * 迁移002：创建管理员Token�?     */
     private function createAdminTokensTable(): void {
         $sql = "
         CREATE TABLE admin_tokens (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             token_id VARCHAR(255) UNIQUE NOT NULL,
-            token_type VARCHAR(20) NOT NULL CHECK(token_type IN ('access', 'refresh')),
+            token_type VARCHAR(20) NOT NULL CHECK(token_type IN ('access', 'refresh')],
             token_hash VARCHAR(255) NOT NULL,
             expires_at DATETIME NOT NULL,
             is_revoked BOOLEAN DEFAULT FALSE,
             device_info TEXT,
-            ip_address VARCHAR(45),
+            ip_address VARCHAR(45],
             user_agent TEXT,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             last_used_at DATETIME
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_tokens_user_id ON admin_tokens(user_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_tokens_token_id ON admin_tokens(token_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_tokens_expires_at ON admin_tokens(expires_at)");
+        $this->pdo->exec("CREATE INDEX idx_admin_tokens_user_id ON admin_tokens(user_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_tokens_token_id ON admin_tokens(token_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_tokens_expires_at ON admin_tokens(expires_at)"];
     }
     
     /**
@@ -191,16 +185,16 @@ class SimpleAdminDatabaseMigrator
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             permission_name VARCHAR(100) UNIQUE NOT NULL,
             description TEXT,
-            category VARCHAR(50),
+            category VARCHAR(50],
             is_active BOOLEAN DEFAULT TRUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_permissions_name ON admin_permissions(permission_name)");
-        $this->pdo->exec("CREATE INDEX idx_admin_permissions_category ON admin_permissions(category)");
+        $this->pdo->exec("CREATE INDEX idx_admin_permissions_name ON admin_permissions(permission_name)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_permissions_category ON admin_permissions(category)"];
     }
     
     /**
@@ -219,16 +213,15 @@ class SimpleAdminDatabaseMigrator
                 FOREIGN KEY (granted_by) REFERENCES admin_users(id) ON DELETE SET NULL
             )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_user_permissions_user_id ON admin_user_permissions(user_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_user_permissions_permission_id ON admin_user_permissions(permission_id)");
+        $this->pdo->exec("CREATE INDEX idx_admin_user_permissions_user_id ON admin_user_permissions(user_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_user_permissions_permission_id ON admin_user_permissions(permission_id)"];
     }
     
     /**
-     * 迁移005：创建API密钥表
-     */
+     * 迁移005：创建API密钥�?     */
     private function createAdminApiKeysTable(): void {
         $sql = "
         CREATE TABLE admin_api_keys (
@@ -236,7 +229,7 @@ class SimpleAdminDatabaseMigrator
                 user_id INTEGER NOT NULL,
                 api_key VARCHAR(64) UNIQUE NOT NULL,
                 api_secret VARCHAR(128) NOT NULL,
-                name VARCHAR(100),
+                name VARCHAR(100],
             description TEXT,
             permissions TEXT,
             is_active BOOLEAN DEFAULT TRUE,
@@ -246,16 +239,15 @@ class SimpleAdminDatabaseMigrator
                 FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE CASCADE
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_api_keys_user_id ON admin_api_keys(user_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_api_keys_api_key ON admin_api_keys(api_key)");
+        $this->pdo->exec("CREATE INDEX idx_admin_api_keys_user_id ON admin_api_keys(user_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_api_keys_api_key ON admin_api_keys(api_key)"];
     }
     
     /**
-     * 迁移006：创建第三方服务表
-     */
+     * 迁移006：创建第三方服务�?     */
     private function createAdminThirdPartyServicesTable(): void {
         $sql = "
         CREATE TABLE admin_third_party_services (
@@ -272,11 +264,11 @@ class SimpleAdminDatabaseMigrator
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_third_party_services_name ON admin_third_party_services(service_name)");
-        $this->pdo->exec("CREATE INDEX idx_admin_third_party_services_type ON admin_third_party_services(service_type)");
+        $this->pdo->exec("CREATE INDEX idx_admin_third_party_services_name ON admin_third_party_services(service_name)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_third_party_services_type ON admin_third_party_services(service_type)"];
     }
     
     /**
@@ -288,21 +280,21 @@ class SimpleAdminDatabaseMigrator
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
                 action VARCHAR(100) NOT NULL,
-                entity_type VARCHAR(50),
+                entity_type VARCHAR(50],
                 entity_id INTEGER,
                 details TEXT,
-            ip_address VARCHAR(45),
+            ip_address VARCHAR(45],
             user_agent TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE SET NULL
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_user_id ON admin_system_logs(user_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_action ON admin_system_logs(action)");
-        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_created_at ON admin_system_logs(created_at)");
+        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_user_id ON admin_system_logs(user_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_action ON admin_system_logs(action)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_system_logs_created_at ON admin_system_logs(created_at)"];
     }
     
     /**
@@ -318,11 +310,11 @@ class SimpleAdminDatabaseMigrator
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_monitoring_metrics_name ON admin_monitoring_metrics(metric_name)");
-        $this->pdo->exec("CREATE INDEX idx_admin_monitoring_metrics_timestamp ON admin_monitoring_metrics(timestamp)");
+        $this->pdo->exec("CREATE INDEX idx_admin_monitoring_metrics_name ON admin_monitoring_metrics(metric_name)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_monitoring_metrics_timestamp ON admin_monitoring_metrics(timestamp)"];
     }
     
     /**
@@ -342,11 +334,11 @@ class SimpleAdminDatabaseMigrator
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_rules_name ON admin_risk_control_rules(rule_name)");
-        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_rules_type ON admin_risk_control_rules(rule_type)");
+        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_rules_name ON admin_risk_control_rules(rule_name)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_rules_type ON admin_risk_control_rules(rule_type)"];
     }
     
     /**
@@ -368,12 +360,12 @@ class SimpleAdminDatabaseMigrator
                 FOREIGN KEY (handled_by) REFERENCES admin_users(id) ON DELETE SET NULL
             )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_rule_id ON admin_risk_control_events(rule_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_type ON admin_risk_control_events(event_type)");
-        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_created_at ON admin_risk_control_events(created_at)");
+        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_rule_id ON admin_risk_control_events(rule_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_type ON admin_risk_control_events(event_type)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_risk_control_events_created_at ON admin_risk_control_events(created_at)"];
     }
     
     /**
@@ -392,10 +384,10 @@ class SimpleAdminDatabaseMigrator
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_email_templates_name ON admin_email_templates(template_name)");
+        $this->pdo->exec("CREATE INDEX idx_admin_email_templates_name ON admin_email_templates(template_name)"];
     }
     
     /**
@@ -420,12 +412,12 @@ class SimpleAdminDatabaseMigrator
                 FOREIGN KEY (template_id) REFERENCES admin_email_templates(id) ON DELETE SET NULL
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_template_id ON admin_email_queue(template_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_status ON admin_email_queue(status)");
-        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_created_at ON admin_email_queue(created_at)");
+        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_template_id ON admin_email_queue(template_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_status ON admin_email_queue(status)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_email_queue_created_at ON admin_email_queue(created_at)"];
     }
     
     /**
@@ -439,83 +431,79 @@ class SimpleAdminDatabaseMigrator
             user_id INTEGER,
                 message TEXT NOT NULL,
                 message_type VARCHAR(20) NOT NULL,
-                risk_level VARCHAR(20),
+                risk_level VARCHAR(20],
                 is_flagged BOOLEAN DEFAULT FALSE,
                 flagged_reason TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES admin_users(id) ON DELETE SET NULL
             )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_chat_id ON admin_chat_monitoring(chat_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_user_id ON admin_chat_monitoring(user_id)");
-        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_created_at ON admin_chat_monitoring(created_at)");
+        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_chat_id ON admin_chat_monitoring(chat_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_user_id ON admin_chat_monitoring(user_id)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_chat_monitoring_created_at ON admin_chat_monitoring(created_at)"];
     }
     
     /**
-     * 迁移014：创建敏感词表
-     */
+     * 迁移014：创建敏感词�?     */
     private function createAdminSensitiveWordsTable(): void {
         $sql = "
         CREATE TABLE admin_sensitive_words (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
                 word VARCHAR(100) UNIQUE NOT NULL,
-            category VARCHAR(50),
+            category VARCHAR(50],
                 risk_level VARCHAR(20) DEFAULT 'medium',
             is_active BOOLEAN DEFAULT TRUE,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )";
         
-        $this->pdo->exec($sql);
+        $this->pdo->exec($sql];
         
         // 创建索引
-        $this->pdo->exec("CREATE INDEX idx_admin_sensitive_words_word ON admin_sensitive_words(word)");
-        $this->pdo->exec("CREATE INDEX idx_admin_sensitive_words_category ON admin_sensitive_words(category)");
+        $this->pdo->exec("CREATE INDEX idx_admin_sensitive_words_word ON admin_sensitive_words(word)"];
+        $this->pdo->exec("CREATE INDEX idx_admin_sensitive_words_category ON admin_sensitive_words(category)"];
     }
     
     /**
-     * 迁移015：插入默认数据
-     */
+     * 迁移015：插入默认数�?     */
     private function insertDefaultData(): void {
-        // 插入默认管理员用户
-        $defaultPassword = password_hash('admin123', PASSWORD_DEFAULT);
-        $salt = bin2hex(random_bytes(16));
+        // 插入默认管理员用�?        $defaultPassword = password_hash('admin123', PASSWORD_DEFAULT];
+        $salt = bin2hex(random_bytes(16)];
         
         $sql = "INSERT INTO admin_users (username, email, password_hash, salt, role, is_admin) 
                 VALUES ('admin', 'admin@example.com', ?, ?, 'super_admin', 1)";
         
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([$defaultPassword, $salt]);
+        $stmt = $this->pdo->prepare($sql];
+        $stmt->execute([$defaultPassword, $salt]];
         
         // 插入默认权限
         $permissions = [
-            ['user_management', '用户管理权限', 'system'],
-            ['role_management', '角色管理权限', 'system'],
-            ['permission_management', '权限管理权限', 'system'],
-            ['system_settings', '系统设置权限', 'system'],
-            ['api_management', 'API管理权限', 'system'],
-            ['log_view', '日志查看权限', 'system'],
-            ['monitoring', '系统监控权限', 'system'],
+            ['user_management', '用户管理权限', 'system'], 
+            ['role_management', '角色管理权限', 'system'], 
+            ['permission_management', '权限管理权限', 'system'], 
+            ['system_settings', '系统设置权限', 'system'], 
+            ['api_management', 'API管理权限', 'system'], 
+            ['log_view', '日志查看权限', 'system'], 
+            ['monitoring', '系统监控权限', 'system'], 
             ['risk_control', '风控管理权限', 'system']
         ];
         
-        $stmt = $this->pdo->prepare("INSERT INTO admin_permissions (permission_name, description, category) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO admin_permissions (permission_name, description, category) VALUES (?, ?, ?)"];
         
         foreach ($permissions as $permission) {
-            $stmt->execute($permission);
+            $stmt->execute($permission];
         }
         
-        // 为超级管理员分配所有权限
-        $adminId = $this->pdo->lastInsertId();
-        $permissionIds = $this->pdo->query("SELECT id FROM admin_permissions")->fetchAll(PDO::FETCH_COLUMN);
+        // 为超级管理员分配所有权�?        $adminId = $this->pdo->lastInsertId(];
+        $permissionIds = $this->pdo->query("SELECT id FROM admin_permissions")->fetchAll(PDO::FETCH_COLUMN];
         
-        $stmt = $this->pdo->prepare("INSERT INTO admin_user_permissions (user_id, permission_id, granted_by) VALUES (?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO admin_user_permissions (user_id, permission_id, granted_by) VALUES (?, ?, ?)"];
         
         foreach ($permissionIds as $permissionId) {
-                $stmt->execute([$adminId, $permissionId, $adminId]);
+                $stmt->execute([$adminId, $permissionId, $adminId]];
         }
         
         // 插入默认邮件模板
@@ -523,21 +511,21 @@ class SimpleAdminDatabaseMigrator
             [
                 'welcome_email',
                 '欢迎使用 AlingAi Pro 管理系统',
-                '亲爱的 {username}，\n\n欢迎使用 AlingAi Pro 管理系统。您的账号已成功创建。\n\n请使用以下凭据登录：\n用户名：{username}\n密码：{password}\n\n请及时修改您的密码。\n\n祝您使用愉快！',
+                '亲爱�?{username}，\n\n欢迎使用 AlingAi Pro 管理系统。您的账号已成功创建。\n\n请使用以下凭据登录：\n用户名：{username}\n密码：{password}\n\n请及时修改您的密码。\n\n祝您使用愉快�?,
                 '["username", "password"]'
-            ],
+            ], 
             [
                 'password_reset',
                 '重置密码 - AlingAi Pro 管理系统',
-                '亲爱的 {username}，\n\n您请求重置密码。请使用以下临时密码登录：\n\n{temp_password}\n\n请在登录后立即修改密码。\n\n如果这不是您发起的请求，请忽略此邮件。',
+                '亲爱�?{username}，\n\n您请求重置密码。请使用以下临时密码登录：\n\n{temp_password}\n\n请在登录后立即修改密码。\n\n如果这不是您发起的请求，请忽略此邮件�?,
                 '["username", "temp_password"]'
             ]
         ];
         
-        $stmt = $this->pdo->prepare("INSERT INTO admin_email_templates (template_name, subject, body, variables) VALUES (?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO admin_email_templates (template_name, subject, body, variables) VALUES (?, ?, ?, ?)"];
         
         foreach ($templates as $template) {
-            $stmt->execute($template);
+            $stmt->execute($template];
         }
         
         // 插入默认风控规则
@@ -548,26 +536,25 @@ class SimpleAdminDatabaseMigrator
                 '{"max_attempts": 5, "time_window": 300}',
                 '{"action": "lock_account", "duration": 1800}',
                 1
-            ],
+            ], 
             [
                 'sensitive_words',
                 'content',
-                '{"words": ["敏感词1", "敏感词2"]}',
+                '{"words": ["敏感�?", "敏感�?"]}',
                 '{"action": "flag", "notify": true}',
                 2
             ]
         ];
         
-        $stmt = $this->pdo->prepare("INSERT INTO admin_risk_control_rules (rule_name, rule_type, rule_condition, rule_action, priority) VALUES (?, ?, ?, ?, ?)");
+        $stmt = $this->pdo->prepare("INSERT INTO admin_risk_control_rules (rule_name, rule_type, rule_condition, rule_action, priority) VALUES (?, ?, ?, ?, ?)"];
         
         foreach ($rules as $rule) {
-            $stmt->execute($rule);
+            $stmt->execute($rule];
         }
     }
     
     /**
-     * 验证数据库结构
-     */
+     * 验证数据库结�?     */
     public function validateDatabase(): array
     {
         $results = [];
@@ -590,7 +577,7 @@ class SimpleAdminDatabaseMigrator
         
         foreach ($tables as $table) {
             try {
-                $this->pdo->query("SELECT 1 FROM {$table} LIMIT 1");
+                $this->pdo->query("SELECT 1 FROM {$table} LIMIT 1"];
                 $results[$table] = ['status' => 'success', 'message' => 'Table exists and is accessible'];
             } catch (Exception $e) {
                 $results[$table] = ['status' => 'error', 'message' => $e->getMessage()];
@@ -601,15 +588,14 @@ class SimpleAdminDatabaseMigrator
     }
     
     /**
-     * 获取数据库统计信息
-     */
+     * 获取数据库统计信�?     */
     public function getDatabaseStats(): array
     {
         $stats = [];
         
         foreach ($this->pdo->query("SELECT name FROM sqlite_master WHERE type='table'") as $table) {
             $tableName = $table['name'];
-            $count = $this->pdo->query("SELECT COUNT(*) FROM {$tableName}")->fetchColumn();
+            $count = $this->pdo->query("SELECT COUNT(*) FROM {$tableName}")->fetchColumn(];
             $stats[$tableName] = $count;
         }
         
@@ -618,8 +604,8 @@ class SimpleAdminDatabaseMigrator
 }
 
 // 创建并运行迁移器
-$migrator = new SimpleAdminDatabaseMigrator();
-$results = $migrator->runMigrations();
+$migrator = new SimpleAdminDatabaseMigrator(];
+$results = $migrator->runMigrations(];
 
 // 输出迁移结果
     echo "\n📊 Migration Results:\n";
@@ -629,18 +615,16 @@ $results = $migrator->runMigrations();
     echo "{$migration}: {$status} - {$message}\n";
 }
 
-// 验证数据库
-echo "\n🔍 Validating Database Structure:\n";
-$validation = $migrator->validateDatabase();
+// 验证数据�?echo "\n🔍 Validating Database Structure:\n";
+$validation = $migrator->validateDatabase(];
 foreach ($validation as $table => $result) {
     $status = $result['status'];
     $message = $result['message'];
     echo "{$table}: {$status} - {$message}\n";
 }
 
-// 获取数据库统计信息
-    echo "\n📈 Database Statistics:\n";
-$stats = $migrator->getDatabaseStats();
+// 获取数据库统计信�?    echo "\n📈 Database Statistics:\n";
+$stats = $migrator->getDatabaseStats(];
     foreach ($stats as $table => $count) {
     echo "{$table}: {$count} records\n";
 }

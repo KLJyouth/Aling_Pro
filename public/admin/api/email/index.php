@@ -1,19 +1,19 @@
-﻿<?php
+<?php
 /**
- * AlingAi Pro 5.0 - 邮件系统管理API
- * 邮件模板管理、发送追踪和邮件服务配置
+ * AlingAi Pro 5.0 - �ʼ�ϵͳ����API
+ * �ʼ�ģ�����������׷�ٺ��ʼ���������
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
-header("Content-Type: application/json; charset=utf-8");
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Content-Type: application/json; charset=utf-8"];
+header("Access-Control-Allow-Origin: *"];
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"];
+header("Access-Control-Allow-Headers: Content-Type, Authorization"];
 
 if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-    http_response_code(200);
-    exit();
+    http_response_code(200];
+    exit(];
 }
 
 require_once __DIR__ . "/../../../../vendor/autoload.php";
@@ -21,68 +21,68 @@ require_once __DIR__ . "/../../../../src/Auth/AdminAuthServiceDemo.php";
 
 use AlingAi\Auth\AdminAuthServiceDemo;
 
-// 响应函数
+// ��Ӧ����
 function sendResponse($success, $data = null, $message = "", $code = 200)
 {
-    http_response_code($code);
+    http_response_code($code];
     echo json_encode([
         "success" => $success,
         "data" => $data,
         "message" => $message,
         "timestamp" => date("Y-m-d H:i:s")
-    ], JSON_UNESCAPED_UNICODE);
-    exit();
+    ],  JSON_UNESCAPED_UNICODE];
+    exit(];
 }
 
-// 错误处理
+// ������
 function handleError($message, $code = 500) {
-    error_log("API Error: $message");
-    sendResponse(false, null, $message, $code);
+    error_log("API Error: $message"];
+    sendResponse(false, null, $message, $code];
 }
 
-// 数据目录
+// ����Ŀ¼
 $dataDir = __DIR__ . "/../../../../data/email";
 if (!is_dir($dataDir)) {
-    mkdir($dataDir, 0755, true);
+    mkdir($dataDir, 0755, true];
 }
 
-// 数据文件路径
+// �����ļ�·��
 $templatesFile = $dataDir . "/templates.json";
 $logsFile = $dataDir . "/logs.json";
 $configFile = $dataDir . "/config.json";
 $queueFile = $dataDir . "/queue.json";
 
-// 初始化数据文件
+// ��ʼ�������ļ�
 function initDataFile($file, $defaultData = []) {
     if (!file_exists($file)) {
-        file_put_contents($file, json_encode($defaultData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+        file_put_contents($file, json_encode($defaultData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)];
     }
 }
 
-// 辅助函数
+// ��������
 function loadJsonFile($file) {
-    return file_exists($file) ? json_decode(file_get_contents($file), true) : [];
+    return file_exists($file) ? json_decode(file_get_contents($file], true) : [];
 }
 
 function saveJsonFile($file, $data) {
-    return file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
+    return file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT)];
 }
 
 function generateId() {
-    return uniqid() . "_" . bin2hex(random_bytes(4));
+    return uniqid() . "_" . bin2hex(random_bytes(4)];
 }
 
 function validateEmailTemplate($data) {
     $required = ["name", "subject", "content", "type"];
     foreach ($required as $field) {
         if (!isset($data[$field]) || empty($data[$field])) {
-            return "缺少必填字段: $field";
+            return "ȱ�ٱ����ֶ�: $field";
         }
     }
     
     $validTypes = ["welcome", "verification", "password_reset", "notification", "marketing", "system"];
-    if (!in_array($data["type"], $validTypes)) {
-        return "无效的邮件类型";
+    if (!in_[$data["type"],  $validTypes)) {
+        return "��Ч���ʼ�����";
     }
     
     return null;
@@ -91,33 +91,33 @@ function validateEmailTemplate($data) {
 function generateEmailTemplate($type) {
     $templates = [
         "welcome" => [
-            "subject" => "欢迎加入AlingAi Pro！",
-            "content" => "<h1>欢迎！</h1><p>感谢您注册AlingAi Pro，开启AI助手新体验。</p><p><a href=\"{{login_url}}\">立即登录</a></p>",
+            "subject" => "��ӭ����AlingAi Pro��",
+            "content" => "<h1>��ӭ��</h1><p>��л��ע��AlingAi Pro������AI���������顣</p><p><a href=\"{{login_url}}\">������¼</a></p>",
             "variables" => ["username", "login_url", "support_email"]
-        ],
+        ], 
         "verification" => [
-            "subject" => "邮箱验证 - AlingAi Pro",
-            "content" => "<h1>邮箱验证</h1><p>请点击以下链接验证您的邮箱：</p><p><a href=\"{{verification_url}}\">验证邮箱</a></p><p>验证码：{{code}}</p>",
+            "subject" => "������֤ - AlingAi Pro",
+            "content" => "<h1>������֤</h1><p>��������������֤�������䣺</p><p><a href=\"{{verification_url}}\">��֤����</a></p><p>��֤�룺{{code}}</p>",
             "variables" => ["username", "verification_url", "code", "expire_time"]
-        ],
+        ], 
         "password_reset" => [
-            "subject" => "密码重置 - AlingAi Pro",
-            "content" => "<h1>密码重置</h1><p>请点击以下链接重置您的密码：</p><p><a href=\"{{reset_url}}\">重置密码</a></p><p>如非本人操作，请忽略此邮件。</p>",
+            "subject" => "�������� - AlingAi Pro",
+            "content" => "<h1>��������</h1><p>�����������������������룺</p><p><a href=\"{{reset_url}}\">��������</a></p><p>��Ǳ��˲���������Դ��ʼ���</p>",
             "variables" => ["username", "reset_url", "expire_time"]
-        ],
+        ], 
         "notification" => [
-            "subject" => "系统通知 - AlingAi Pro",
-            "content" => "<h1>{{title}}</h1><p>{{message}}</p><p>时间：{{timestamp}}</p>",
+            "subject" => "ϵͳ֪ͨ - AlingAi Pro",
+            "content" => "<h1>{{title}}</h1><p>{{message}}</p><p>ʱ�䣺{{timestamp}}</p>",
             "variables" => ["username", "title", "message", "timestamp"]
-        ],
+        ], 
         "marketing" => [
             "subject" => "{{campaign_title}} - AlingAi Pro",
-            "content" => "<h1>{{campaign_title}}</h1><p>{{campaign_content}}</p><p><a href=\"{{action_url}}\">{{action_text}}</a></p><p>若不想再收到此类邮件，<a href=\"{{unsubscribe_url}}\">点击此处退订</a></p>",
+            "content" => "<h1>{{campaign_title}}</h1><p>{{campaign_content}}</p><p><a href=\"{{action_url}}\">{{action_text}}</a></p><p>���������յ������ʼ���<a href=\"{{unsubscribe_url}}\">����˴��˶�</a></p>",
             "variables" => ["username", "campaign_title", "campaign_content", "action_url", "action_text", "unsubscribe_url"]
-        ],
+        ], 
         "system" => [
-            "subject" => "系统消息 - AlingAi Pro",
-            "content" => "<h1>系统消息</h1><p>{{message}}</p>",
+            "subject" => "ϵͳ��Ϣ - AlingAi Pro",
+            "content" => "<h1>ϵͳ��Ϣ</h1><p>{{message}}</p>",
             "variables" => ["username", "message"]
         ]
     ];
@@ -125,9 +125,9 @@ function generateEmailTemplate($type) {
     return isset($templates[$type]) ? $templates[$type] : null;
 }
 
-// 初始化数据文件
-initDataFile($templatesFile, []);
-initDataFile($logsFile, []);
+// ��ʼ�������ļ�
+initDataFile($templatesFile, []];
+initDataFile($logsFile, []];
 initDataFile($configFile, [
     "smtp" => [
         "host" => "",
@@ -137,12 +137,12 @@ initDataFile($configFile, [
         "encryption" => "tls",
         "from_email" => "",
         "from_name" => "AlingAi Pro"
-    ],
+    ], 
     "limits" => [
         "daily_limit" => 1000,
         "hourly_limit" => 100,
-        "rate_limit" => 10 // 每分钟
-    ],
+        "rate_limit" => 10 // ÿ����
+    ], 
     "features" => [
         "tracking_enabled" => true,
         "bounce_handling" => true,
@@ -150,226 +150,227 @@ initDataFile($configFile, [
         "open_tracking" => true,
         "click_tracking" => true
     ]
-]);
-initDataFile($queueFile, []);
+]];
+initDataFile($queueFile, []];
 
-// 授权验证
+// ��Ȩ��֤
 function authenticateRequest() {
-    $auth = new AdminAuthServiceDemo();
+    $auth = new AdminAuthServiceDemo(];
     
-    // 从请求中获取授权信息
+    // �������л�ȡ��Ȩ��Ϣ
     $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? "";
     
     if (empty($authHeader)) {
-        handleError("未提供认证信息", 401);
+        handleError("δ�ṩ��֤��Ϣ", 401];
     }
     
-    // 处理Bearer Token
-    $token = str_replace("Bearer ", "", $authHeader);
+    // ����Bearer Token
+    $token = str_replace("Bearer ", "", $authHeader];
     if (!$auth->validateToken($token)) {
-        handleError("无效的令牌", 401);
+        handleError("��Ч������", 401];
     }
     
-    $user = $auth->getUserFromToken($token);
+    $user = $auth->getUserFromToken($token];
     
-    // 检查是否是管理员
+    // ����Ƿ��ǹ���Ա
     if ($user["role"] !== "admin") {
-        handleError("无权限访问此API", 403);
+        handleError("��Ȩ�޷��ʴ�API", 403];
     }
     
     return $user;
 }
 
-// 处理请求
+// ��������
 function handleRequest() {
     global $templatesFile, $logsFile, $configFile, $queueFile;
     
-    // 验证管理员身份
-    $admin = authenticateRequest();
+    // ��֤����Ա����
+    $admin = authenticateRequest(];
     
     $method = $_SERVER["REQUEST_METHOD"];
-    $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
-    $pathParts = explode("/", trim($path, "/"));
+    $path = parse_url($_SERVER["REQUEST_URI"],  PHP_URL_PATH];
+    $pathParts = explode("/", trim($path, "/")];
     $action = $pathParts[count($pathParts) - 1] ?? "";
     
-    // 获取请求数据
-    $requestData = json_decode(file_get_contents("php://input"), true) ?? [];
+    // ��ȡ��������
+    $requestData = json_decode(file_get_contents("php://input"], true) ?? [];
     
-    // 根据路径和方法分发请求
+    // ����·���ͷ����ַ�����
     switch ($action) {
         case "templates":
-            handleTemplates($method, $requestData);
+            handleTemplates($method, $requestData];
             break;
             
         case "logs":
-            handleLogs($method, $requestData);
+            handleLogs($method, $requestData];
             break;
             
         case "config":
-            handleConfig($method, $requestData);
+            handleConfig($method, $requestData];
             break;
             
         case "queue":
-            handleQueue($method, $requestData);
+            handleQueue($method, $requestData];
             break;
             
         case "send-test":
-            handleSendTest($method, $requestData);
+            handleSendTest($method, $requestData];
             break;
             
         default:
-            handleApiInfo($method);
+            handleApiInfo($method];
     }
 }
 
-// 处理邮件模板
+// �����ʼ�ģ��
 function handleTemplates($method, $data) {
     global $templatesFile;
     
-    $templates = loadJsonFile($templatesFile);
+    $templates = loadJsonFile($templatesFile];
     
     switch ($method) {
         case "GET":
-            // 获取单个模板或所有模板
+            // ��ȡ����ģ�������ģ��
             $templateId = $_GET["id"] ?? null;
             
             if ($templateId) {
                 if (!isset($templates[$templateId])) {
-                    handleError("模板不存在", 404);
+                    handleError("ģ�岻����", 404];
                 }
-                sendResponse(true, $templates[$templateId], "成功获取模板");
+                sendResponse(true, $templates[$templateId],  "�ɹ���ȡģ��"];
             } else {
-                sendResponse(true, $templates, "成功获取所有模板");
+                sendResponse(true, $templates, "�ɹ���ȡ����ģ��"];
             }
             break;
             
         case "POST":
-            // 创建新模板
-            $validationError = validateEmailTemplate($data);
+            // ������ģ��
+            $validationError = validateEmailTemplate($data];
             if ($validationError) {
-                handleError($validationError, 400);
+                handleError($validationError, 400];
             }
             
-            $templateId = generateId();
+            $templateId = generateId(];
             $data["id"] = $templateId;
-            $data["created_at"] = date("Y-m-d H:i:s");
+            $data["created_at"] = date("Y-m-d H:i:s"];
             $data["updated_at"] = $data["created_at"];
             
             $templates[$templateId] = $data;
-            saveJsonFile($templatesFile, $templates);
+            saveJsonFile($templatesFile, $templates];
             
-            sendResponse(true, $data, "成功创建模板", 201);
+            sendResponse(true, $data, "�ɹ�����ģ��", 201];
             break;
             
         case "PUT":
-            // 更新模板
+            // ����ģ��
             $templateId = $_GET["id"] ?? null;
             
             if (!$templateId || !isset($templates[$templateId])) {
-                handleError("模板不存在", 404);
+                handleError("ģ�岻����", 404];
             }
             
-            $validationError = validateEmailTemplate($data);
+            $validationError = validateEmailTemplate($data];
             if ($validationError) {
-                handleError($validationError, 400);
+                handleError($validationError, 400];
             }
             
             $data["id"] = $templateId;
             $data["created_at"] = $templates[$templateId]["created_at"];
-            $data["updated_at"] = date("Y-m-d H:i:s");
+            $data["updated_at"] = date("Y-m-d H:i:s"];
             
             $templates[$templateId] = $data;
-            saveJsonFile($templatesFile, $templates);
+            saveJsonFile($templatesFile, $templates];
             
-            sendResponse(true, $data, "成功更新模板");
+            sendResponse(true, $data, "�ɹ�����ģ��"];
             break;
             
         case "DELETE":
-            // 删除模板
+            // ɾ��ģ��
             $templateId = $_GET["id"] ?? null;
             
             if (!$templateId || !isset($templates[$templateId])) {
-                handleError("模板不存在", 404);
+                handleError("ģ�岻����", 404];
             }
             
-            unset($templates[$templateId]);
-            saveJsonFile($templatesFile, $templates);
+            unset($templates[$templateId]];
+            saveJsonFile($templatesFile, $templates];
             
-            sendResponse(true, null, "成功删除模板");
+            sendResponse(true, null, "�ɹ�ɾ��ģ��"];
             break;
             
         default:
-            handleError("不支持的方法", 405);
+            handleError("��֧�ֵķ���", 405];
     }
 }
 
-// API信息
+// API��Ϣ
 function handleApiInfo($method) {
     if ($method !== "GET") {
-        handleError("不支持的方法", 405);
+        handleError("��֧�ֵķ���", 405];
     }
     
     sendResponse(true, [
         "name" => "AlingAi Pro Email API",
         "version" => "5.0.0",
-        "description" => "邮件系统管理API - 管理模板、日志、配置和发送队列",
+        "description" => "�ʼ�ϵͳ����API - ����ģ�塢��־�����úͷ��Ͷ���",
         "endpoints" => [
-            "/templates" => "邮件模板管理",
-            "/logs" => "邮件发送日志",
-            "/config" => "邮件系统配置",
-            "/queue" => "邮件发送队列",
-            "/send-test" => "发送测试邮件"
+            "/templates" => "�ʼ�ģ�����",
+            "/logs" => "�ʼ�������־",
+            "/config" => "�ʼ�ϵͳ����",
+            "/queue" => "�ʼ����Ͷ���",
+            "/send-test" => "���Ͳ����ʼ�"
         ]
-    ], "API信息");
+    ],  "API��Ϣ"];
 }
 
-// 处理日志、配置和队列等功能 - 精简版本
+// ������־�����úͶ��еȹ��� - ����汾
 function handleLogs($method, $data) {
     global $logsFile;
-    $logs = loadJsonFile($logsFile);
-    sendResponse(true, $logs, "成功获取邮件日志");
+    $logs = loadJsonFile($logsFile];
+    sendResponse(true, $logs, "�ɹ���ȡ�ʼ���־"];
 }
 
 function handleConfig($method, $data) {
     global $configFile;
-    $config = loadJsonFile($configFile);
+    $config = loadJsonFile($configFile];
     
     if ($method === "GET") {
-        // 获取配置
-        sendResponse(true, $config, "成功获取邮件系统配置");
+        // ��ȡ����
+        sendResponse(true, $config, "�ɹ���ȡ�ʼ�ϵͳ����"];
     } else if ($method === "POST" || $method === "PUT") {
-        // 更新配置
-        saveJsonFile($configFile, $data);
-        sendResponse(true, $data, "成功更新邮件系统配置");
+        // ��������
+        saveJsonFile($configFile, $data];
+        sendResponse(true, $data, "�ɹ������ʼ�ϵͳ����"];
     } else {
-        handleError("不支持的方法", 405);
+        handleError("��֧�ֵķ���", 405];
     }
 }
 
 function handleQueue($method, $data) {
     global $queueFile;
-    $queue = loadJsonFile($queueFile);
-    sendResponse(true, $queue, "成功获取邮件队列");
+    $queue = loadJsonFile($queueFile];
+    sendResponse(true, $queue, "�ɹ���ȡ�ʼ�����"];
 }
 
 function handleSendTest($method, $data) {
     if ($method !== "POST") {
-        handleError("不支持的方法", 405);
+        handleError("��֧�ֵķ���", 405];
     }
     
-    // 模拟测试邮件发送
+    // ģ������ʼ�����
     sendResponse(true, [
         "status" => "sent",
         "to" => $data["to"] ?? "test@example.com",
-        "subject" => $data["subject"] ?? "测试邮件",
+        "subject" => $data["subject"] ?? "�����ʼ�",
         "template_id" => $data["template_id"] ?? null,
         "sent_at" => date("Y-m-d H:i:s")
-    ], "测试邮件已发送");
+    ],  "�����ʼ��ѷ���"];
 }
 
-// 执行请求处理
+// ִ��������
 try {
-    handleRequest();
+    handleRequest(];
 } catch (Exception $e) {
-    handleError("处理请求时发生错误: " . $e->getMessage(), 500);
+    handleError("��������ʱ��������: " . $e->getMessage(), 500];
 }
+

@@ -11,17 +11,17 @@ class DatabaseConnectionPool
     public static function getConnection() 
     {
         if (!empty(self::$pool)) {
-            return array_pop(self::$pool);
+            return array_pop(self::$pool];
         }
         
         if (self::$activeConnections < self::$maxConnections) {
             self::$activeConnections++;
-            return self::createConnection();
+            return self::createConnection(];
         }
         
         // 等待可用连接
-        sleep(1);
-        return self::getConnection();
+        sleep(1];
+        return self::getConnection(];
     }
     
     public static function releaseConnection($connection) 
@@ -47,10 +47,10 @@ class DatabaseConnectionPool
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_PERSISTENT => true
-            ]);
+            ]];
             return $pdo;
         } catch (PDOException $e) {
-            throw new Exception("数据库连接失败: " . $e->getMessage());
+            throw new Exception("数据库连接失�? " . $e->getMessage()];
         }
     }
 }

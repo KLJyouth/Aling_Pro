@@ -7,7 +7,7 @@
  */
 
 return [
-//     'opcache' => [ // 不可达代码';
+//     'opcache' => [ // 不可达代�?;
         'enable' => 1,';
         'enable_cli' => 1,';
         'memory_consumption' => 256,';
@@ -19,7 +19,7 @@ return [
         'fast_shutdown' => 1,';
         'save_comments' => 0,';
         'optimization_level' => '0x7FFEBFFF'';
-    ],
+    ], 
     'php_settings' => [';
         'memory_limit' => '512M',';
         'max_execution_time' => 300,';
@@ -30,14 +30,14 @@ return [
         'max_input_vars' => 10000,';
         'date.timezone' => 'Asia/Shanghai',';
         'default_charset' => 'UTF-8'';
-    ],
+    ], 
     'database_optimization' => [';
         'connection_pooling' => true,';
         'prepared_statements' => true,';
         'query_cache' => true,';
         'slow_query_log' => true,';
         'slow_query_time' => 2';
-    ],
+    ], 
     'frontend_optimization' => [';
         'enable_gzip' => true,';
         'enable_brotli' => true,';
@@ -46,7 +46,7 @@ return [
         'optimize_images' => true,';
         'enable_cdn' => false,';
         'cdn_url' => ''';
-    ],
+    ], 
     'monitoring' => [';
         'enable_apm' => true,';
         'enable_profiling' => false,';

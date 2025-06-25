@@ -5,16 +5,16 @@ namespace App\AI;
 use App\AI\MachineLearning;
 
 /**
- * DeepLearning 类
+ * DeepLearning �?
  * 
- * 深度学习组件，提供深度神经网络相关功能
+ * 深度学习组件，提供深度神经网络相关功�?
  *
  * @package App\AI
  */
 class DeepLearning
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -77,7 +77,7 @@ class DeepLearning
     }
 
     /**
-     * 可视化神经网络
+     * 可视化神经网�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

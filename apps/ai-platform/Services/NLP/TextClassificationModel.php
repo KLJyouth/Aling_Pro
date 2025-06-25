@@ -8,8 +8,7 @@ namespace AlingAi\AIServices\NLP;
 class TextClassificationModel extends BaseNLPModel
 {
     /**
-     * 对文本进行分类
-     */
+     * 对文本进行分�?     */
     public function classify(string $text, array $options = []): array
     {
         // 模拟文本分类结果
@@ -22,14 +21,14 @@ class TextClassificationModel extends BaseNLPModel
         ];
         
         // 按置信度排序
-        arsort($categories);
+        arsort($categories];
         
         return [
             'success' => true,
             'message' => '文本分类完成',
             'data' => [
-                'top_category' => array_key_first($categories),
-                'confidence' => $categories[array_key_first($categories)],
+                'top_category' => array_key_first($categories],
+                'confidence' => $categories[array_key_first($categories)], 
                 'all_categories' => $categories,
                 'processing_time' => rand(50, 200) . 'ms'
             ]
@@ -41,6 +40,6 @@ class TextClassificationModel extends BaseNLPModel
      */
     public function process(string $text, array $options = []): array
     {
-        return $this->classify($text, $options);
+        return $this->classify($text, $options];
     }
 }

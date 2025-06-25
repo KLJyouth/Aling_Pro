@@ -1,10 +1,10 @@
 <?php
 /**
- * 系统管理器 - 整合所有测试、检查、调试功能
- * 增强版 - 包含智能监控、AI服务、安全监控等功能
+ * 系统管理�?- 整合所有测试、检查、调试功�?
+ * 增强�?- 包含智能监控、AI服务、安全监控等功能
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Admin;
 
@@ -20,11 +20,11 @@ class SystemManager
     protected $startTime;
     
     function __construct() {
-        $this->startTime = microtime(true);
-        $this->logger = new Logger('SystemManager');
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/logs/admin.log'));
+        $this->startTime = microtime(true];
+        $this->logger = new Logger('SystemManager'];
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/logs/admin.log')];
         
-        $this->initializeDatabase();
+        $this->initializeDatabase(];
     }
     
     /**
@@ -34,28 +34,28 @@ class SystemManager
     {
         try {
             $dbPath = __DIR__ . '/../../storage/database/admin.sqlite';
-            $dbDir = dirname($dbPath);
+            $dbDir = dirname($dbPath];
             
             if (!is_dir($dbDir)) {
-                mkdir($dbDir, 0755, true);
+                mkdir($dbDir, 0755, true];
             }
             
-            $this->db = new PDO("sqlite:{$dbPath}");
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db = new PDO("sqlite:{$dbPath}"];
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
             
         } catch (Exception $e) {
-            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]);
+            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]];
             $this->db = null;
         }
     }
     
     /**
-     * 获取系统状态
+     * 获取系统状�?
      */
     function getSystemStatus(): array
     {
         $status = [
-            'timestamp' => date('Y-m-d H:i:s'),
+            'timestamp' => date('Y-m-d H:i:s'],
             'uptime' => $this->getUptime(),
             'database' => $this->checkDatabase(),
             'files' => $this->checkFiles(),
@@ -75,21 +75,21 @@ class SystemManager
     }
     
     /**
-     * 系统健康检查
+     * 系统健康检�?
      */
     function systemHealthCheck(): array
     {
-        $status = $this->getSystemStatus();
+        $status = $this->getSystemStatus(];
         
         $health = [
             'overall_health' => 'good',
-            'critical_issues' => [],
-            'warnings' => [],
+            'critical_issues' => [], 
+            'warnings' => [], 
             'recommendations' => []
         ];
         
         if ($status['database']['status'] !== 'ok') {
-            $health['critical_issues'][] = '数据库连接失败';
+            $health['critical_issues'][] = '数据库连接失�?;
             $health['overall_health'] = 'critical';
         }
         
@@ -119,7 +119,7 @@ class SystemManager
     }
 
     /**
-     * 高级系统健康检查
+     * 高级系统健康检�?
      */
     function getAdvancedSystemHealth(): array
     {
@@ -131,13 +131,13 @@ class SystemManager
                 'ai_service' => $this->checkAIServiceHealth(),
                 'security_system' => $this->checkSecuritySystemHealth(),
                 'file_system' => $this->checkFileSystemHealth()
-            ],
+            ], 
             'recommendations' => $this->getHealthRecommendations()
         ];
     }
 
     /**
-     * AI服务状态监控
+     * AI服务状态监�?
      */
     function getAIServicesStatus(): array
     {
@@ -208,37 +208,37 @@ class SystemManager
     }
     
     /**
-     * 检查数据库健康状态
+     * 检查数据库健康状�?
      */
     private function checkDatabaseHealth(): array
     {
         if (!$this->db) {
             return [
                 'status' => 'error',
-                'message' => '数据库连接失败'
+                'message' => '数据库连接失�?
             ];
         }
         
         try {
-            $this->db->query('SELECT 1');
+            $this->db->query('SELECT 1'];
             return [
                 'status' => 'healthy',
-                'message' => '数据库连接正常'
+                'message' => '数据库连接正�?
             ];
         } catch (Exception $e) {
             return [
                 'status' => 'error',
-                'message' => '数据库查询失败: ' . $e->getMessage()
+                'message' => '数据库查询失�? ' . $e->getMessage()
             ];
         }
     }
     
     /**
-     * 检查缓存健康状态
+     * 检查缓存健康状�?
      */
     private function checkCacheHealth(): array
     {
-        // 模拟缓存检查
+        // 模拟缓存检�?
         return [
             'status' => 'healthy',
             'message' => '缓存系统正常运行'
@@ -246,23 +246,23 @@ class SystemManager
     }
     
     /**
-     * 检查WebSocket健康状态
+     * 检查WebSocket健康状�?
      */
     private function checkWebSocketHealth(): array
     {
-        // 模拟WebSocket检查
+        // 模拟WebSocket检�?
         return [
             'status' => 'warning',
-            'message' => 'WebSocket服务未启动'
+            'message' => 'WebSocket服务未启�?
         ];
     }
     
     /**
-     * 检查AI服务健康状态
+     * 检查AI服务健康状�?
      */
     private function checkAIServiceHealth(): array
     {
-        // 模拟AI服务检查
+        // 模拟AI服务检�?
         return [
             'status' => 'healthy',
             'message' => 'AI服务运行正常'
@@ -270,11 +270,11 @@ class SystemManager
     }
     
     /**
-     * 检查安全系统健康状态
+     * 检查安全系统健康状�?
      */
     private function checkSecuritySystemHealth(): array
     {
-        // 模拟安全系统检查
+        // 模拟安全系统检�?
         return [
             'status' => 'healthy',
             'message' => '安全系统运行正常'
@@ -282,16 +282,16 @@ class SystemManager
     }
     
     /**
-     * 检查文件系统健康状态
+     * 检查文件系统健康状�?
      */
     private function checkFileSystemHealth(): array
     {
-        // 检查存储目录
+        // 检查存储目�?
         $storageDir = __DIR__ . '/../../storage';
         if (!is_dir($storageDir) || !is_writable($storageDir)) {
             return [
                 'status' => 'error',
-                'message' => '存储目录不存在或不可写'
+                'message' => '存储目录不存在或不可�?
             ];
         }
         
@@ -307,18 +307,18 @@ class SystemManager
     private function getHealthRecommendations(): array
     {
         return [
-            '定期备份数据库',
-            '监控WebSocket服务状态',
-            '优化数据库查询'
+            '定期备份数据�?,
+            '监控WebSocket服务状�?,
+            '优化数据库查�?
         ];
     }
     
     /**
-     * 检查DeepSeek API状态
+     * 检查DeepSeek API状�?
      */
     private function checkDeepSeekAPI(): array
     {
-        // 模拟API检查
+        // 模拟API检�?
         return [
             'status' => 'active',
             'response_time' => '150ms',
@@ -354,7 +354,7 @@ class SystemManager
     }
     
     /**
-     * 检查语音处理服务
+     * 检查语音处理服�?
      */
     private function checkSpeechService(): array
     {
@@ -367,7 +367,7 @@ class SystemManager
     }
     
     /**
-     * 检查知识图谱
+     * 检查知识图�?
      */
     private function checkKnowledgeGraph(): array
     {
@@ -380,7 +380,7 @@ class SystemManager
     }
     
     /**
-     * 检查推荐引擎
+     * 检查推荐引�?
      */
     private function checkRecommendationEngine(): array
     {
@@ -416,7 +416,7 @@ class SystemManager
                 'type' => 'SQL Injection Attempt',
                 'severity' => 'medium',
                 'source_ip' => '192.168.1.100',
-                'timestamp' => date('Y-m-d H:i:s', time() - 300),
+                'timestamp' => date('Y-m-d H:i:s', time() - 300],
                 'status' => 'blocked'
             ]
         ];
@@ -432,7 +432,7 @@ class SystemManager
     }
     
     /**
-     * 获取零信任状态
+     * 获取零信任状�?
      */
     private function getZeroTrustStatus(): array
     {
@@ -445,7 +445,7 @@ class SystemManager
     }
     
     /**
-     * 获取合规状态
+     * 获取合规状�?
      */
     private function getComplianceStatus(): array
     {
@@ -458,7 +458,7 @@ class SystemManager
     }
     
     /**
-     * 获取事件响应状态
+     * 获取事件响应状�?
      */
     private function getIncidentResponseStatus(): array
     {
@@ -471,7 +471,7 @@ class SystemManager
     }
     
     /**
-     * 获取数据分类状态
+     * 获取数据分类状�?
      */
     private function getDataClassificationStatus(): array
     {
@@ -485,7 +485,7 @@ class SystemManager
     }
     
     /**
-     * 获取吞吐量指标
+     * 获取吞吐量指�?
      */
     private function getThroughputMetrics(): array
     {
@@ -497,7 +497,7 @@ class SystemManager
     }
     
     /**
-     * 获取资源利用率
+     * 获取资源利用�?
      */
     private function getResourceUtilization(): array
     {
@@ -563,13 +563,13 @@ class SystemManager
     }
     
     /**
-     * 获取预测性威胁分析
+     * 获取预测性威胁分�?
      */
     private function getPredictiveThreatAnalysis(): array
     {
         return [
             'probability_of_attack_next_24h' => '15%',
-            'most_likely_vectors' => ['Web Application', 'API Endpoints'],
+            'most_likely_vectors' => ['Web Application', 'API Endpoints'], 
             'recommended_actions' => ['Increase monitoring', 'Update WAF rules']
         ];
     }
@@ -580,8 +580,8 @@ class SystemManager
     private function getMitigationStrategies(): array
     {
         return [
-            'immediate' => ['Block suspicious IPs', 'Enable rate limiting'],
-            'short_term' => ['Update security policies', 'Enhance monitoring'],
+            'immediate' => ['Block suspicious IPs', 'Enable rate limiting'], 
+            'short_term' => ['Update security policies', 'Enhance monitoring'], 
             'long_term' => ['Implement zero-trust architecture', 'Security training']
         ];
     }
@@ -630,7 +630,7 @@ class SystemManager
     }
     
     /**
-     * 获取错误率指标
+     * 获取错误率指�?
      */
     private function getErrorRateMetrics(): array
     {
@@ -647,7 +647,7 @@ class SystemManager
     }
     
     /**
-     * 获取满意度评分
+     * 获取满意度评�?
      */
     private function getSatisfactionScores(): array
     {
@@ -668,18 +668,18 @@ class SystemManager
         if (!$this->db) {
             return [
                 'status' => 'error',
-                'message' => '数据库连接失败'
+                'message' => '数据库连接失�?
             ];
         }
         
         return [
             'status' => 'ok',
-            'message' => '数据库连接正常'
+            'message' => '数据库连接正�?
         ];
     }
     
     /**
-     * 检查文件
+     * 检查文�?
      */
     function checkFiles(): array
     {
@@ -694,7 +694,7 @@ class SystemManager
         
         foreach ($requiredDirs as $dir) {
             if (!is_dir($dir)) {
-                $errors[] = "目录不存在: {$dir}";
+                $errors[] = "目录不存�? {$dir}";
             }
         }
         
@@ -704,7 +704,7 @@ class SystemManager
     }
     
     /**
-     * 检查权限
+     * 检查权�?
      */
     function checkPermissions(): array
     {
@@ -719,7 +719,7 @@ class SystemManager
         
         foreach ($dirsToCheck as $dir) {
             if (is_dir($dir) && !is_writable($dir)) {
-                $errors[] = "目录不可写: {$dir}";
+                $errors[] = "目录不可�? {$dir}";
             }
         }
         
@@ -735,11 +735,12 @@ class SystemManager
     {
         $uptime = microtime(true) - $this->startTime;
         return sprintf('%02d:%02d:%02d', 
-            ($uptime/3600), 
+            ($uptime/3600], 
             ($uptime/60)%60, 
-            $uptime%60);
+            $uptime%60];
     }
 }
 
 // 兼容性包装器
-class_alias(SystemManager::class, 'SystemManager');
+class_alias(SystemManager::class, 'SystemManager'];
+

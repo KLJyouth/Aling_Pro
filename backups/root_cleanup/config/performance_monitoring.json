@@ -1,0 +1,10 @@
+{
+    "enabled": true,
+    "metrics_retention_days": 30,
+    "sampling_rate": 0.1,
+    "memory_threshold": "128M",
+    "cpu_threshold": 80,
+    "response_time_threshold": 2000,
+    "storage_path": "E:\\Code\\AlingAi\\AlingAi_pro\/storage\/performance",
+    "log_path": "E:\\Code\\AlingAi\\AlingAi_pro\/logs\/performance"
+}

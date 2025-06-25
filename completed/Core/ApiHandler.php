@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Core;
 
@@ -18,7 +18,7 @@ use AlingAi\Services\PerformanceMonitorService;
 use Exception;
 
 /**
- * API 路由处理器
+ * API 路由处理�?
  * 
  * 统一处理所有API请求，连接路由管理器与实际控制器
  * 
@@ -27,7 +27,7 @@ use Exception;
  * @since 2024-12-19
  */
 /**
- * ApiHandler 类
+ * ApiHandler �?
  *
  * @package AlingAi\Core
  */
@@ -55,9 +55,9 @@ class ApiHandler
 
     public function __construct()
     {
-        $this->routeManager = new ApiRouteManager();
-        $this->security = new SecurityService();
-        $this->monitor = new PerformanceMonitorService();
+        $this->routeManager = new ApiRouteManager(];
+        $this->security = new SecurityService(];
+        $this->monitor = new PerformanceMonitorService(];
     }
 
     /**
@@ -78,39 +78,39 @@ class ApiHandler
         try {
             // 预检OPTIONS请求处理
             if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-                $this->handleCorsOptions();
+                $this->handleCorsOptions(];
                 return;
             }
 
             // 获取请求信息
             $method = $_SERVER['REQUEST_METHOD'];
-            $path = $this->getRequestPath();
+            $path = $this->getRequestPath(];
             
-            // 记录请求开始
-            $requestId = $this->monitor->startRequest($method, $path);
+            // 记录请求开�?
+            $requestId = $this->monitor->startRequest($method, $path];
             
             // 查找路由
-            $route = $this->routeManager->match($method, $path);
+            $route = $this->routeManager->match($method, $path];
             
             if (!$route) {
-                $this->sendNotFound();
+                $this->sendNotFound(];
                 return;
             }
 
-            // 执行中间件
-            $this->executeMiddleware($route['middleware'] ?? []);
+            // 执行中间�?
+            $this->executeMiddleware($route['middleware'] ?? []];
             
-            // 执行控制器方法
-            $response = $this->executeController($route);
+            // 执行控制器方�?
+            $response = $this->executeController($route];
             
             // 记录请求完成
-            $this->monitor->endRequest($requestId, 200);
+            $this->monitor->endRequest($requestId, 200];
             
-            // 发送响应
-            $this->sendJsonResponse($response);
+            // 发送响�?
+            $this->sendJsonResponse($response];
             
         } catch (Exception $e) {
-            $this->handleException($e);
+            $this->handleException($e];
         }
     }
 
@@ -133,17 +133,17 @@ class ApiHandler
         
         // 移除查询参数
         if (($pos = strpos($path, '?')) !== false) {
-            $path = substr($path, 0, $pos);
+            $path = substr($path, 0, $pos];
         }
         
-        // 标准化路径
-        $path = '/' . trim($path, '/');
+        // 标准化路�?
+        $path = '/' . trim($path, '/'];
         
         return $path;
     }
 
     /**
-     * 执行中间件
+     * 执行中间�?
      */
     /**
 
@@ -162,26 +162,26 @@ class ApiHandler
         foreach ($middleware as $middlewareName) {
             switch ($middlewareName) {
                 case 'auth':
-                    $this->requireAuthentication();
+                    $this->requireAuthentication(];
                     break;
                 case 'admin':
-                    $this->requireAdminRole();
+                    $this->requireAdminRole(];
                     break;
                 case 'csrf':
-                    $this->validateCsrfToken();
+                    $this->validateCsrfToken(];
                     break;
                 case 'rate_limit':
-                    $this->checkRateLimit();
+                    $this->checkRateLimit(];
                     break;
                 default:
                     // 自定义中间件处理
-                    $this->executeCustomMiddleware($middlewareName);
+                    $this->executeCustomMiddleware($middlewareName];
             }
         }
     }
 
     /**
-     * 执行控制器方法
+     * 执行控制器方�?
      */
     /**
 
@@ -201,19 +201,19 @@ class ApiHandler
         $method = $route['method'];
         $params = $route['params'] ?? [];
         
-        // 获取控制器实例
-        $controller = $this->getControllerInstance($controllerClass);
+        // 获取控制器实�?
+        $controller = $this->getControllerInstance($controllerClass];
         
         if (!method_exists($controller, $method)) {
-            throw new Exception("Method {$method} not found in {$controllerClass}");
+            throw new Exception("Method {$method} not found in {$controllerClass}"];
         }
         
-        // 执行控制器方法
-        return call_user_func_array([$controller, $method], $params);
+        // 执行控制器方�?
+        return call_user_func_[[$controller, $method],  $params];
     }
 
     /**
-     * 获取控制器实例
+     * 获取控制器实�?
      */
     /**
 
@@ -230,20 +230,20 @@ class ApiHandler
     private function getControllerInstance(string $controllerClass): object
     {
         if (!isset($this->controllerInstances[$controllerClass])) {
-            $fullClassName = $this->resolveControllerClass($controllerClass);
+            $fullClassName = $this->resolveControllerClass($controllerClass];
             
             if (!class_exists($fullClassName)) {
-                throw new Exception("Controller class {$fullClassName} not found");
+                throw new Exception("Controller class {$fullClassName} not found"];
             }
             
-            $this->controllerInstances[$controllerClass] = new $fullClassName();
+            $this->controllerInstances[$controllerClass] = new $fullClassName(];
         }
         
         return $this->controllerInstances[$controllerClass];
     }
 
     /**
-     * 解析控制器类名
+     * 解析控制器类�?
      */
     /**
 
@@ -264,7 +264,7 @@ class ApiHandler
             return $controllerClass;
         }
         
-        // 根据控制器名称映射到实际类
+        // 根据控制器名称映射到实际�?
         $controllerMap = [
             'AuthController' => AuthApiController::class,
             'ChatController' => ChatApiController::class,
@@ -294,11 +294,11 @@ class ApiHandler
 
     private function handleCorsOptions(): void
     {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
-        header('Access-Control-Max-Age: 86400');
-        http_response_code(200);
+        header('Access-Control-Allow-Origin: *'];
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'];
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token'];
+        header('Access-Control-Max-Age: 86400'];
+        http_response_code(200];
         exit;
     }
 
@@ -317,15 +317,15 @@ class ApiHandler
 
     private function requireAuthentication(): void
     {
-        $token = $this->getBearerToken();
+        $token = $this->getBearerToken(];
         
         if (!$token) {
-            $this->sendError('Authentication required', 401);
+            $this->sendError('Authentication required', 401];
         }
         
-        $user = $this->security->validateJwtToken($token);
+        $user = $this->security->validateJwtToken($token];
         if (!$user) {
-            $this->sendError('Invalid or expired token', 401);
+            $this->sendError('Invalid or expired token', 401];
         }
         
         // 将用户信息存储到全局变量中，供控制器使用
@@ -333,7 +333,7 @@ class ApiHandler
     }
 
     /**
-     * 要求管理员角色
+     * 要求管理员角�?
      */
     /**
 
@@ -350,7 +350,7 @@ class ApiHandler
         $user = $GLOBALS['current_user'] ?? null;
         
         if (!$user || ($user['role'] ?? '') !== 'admin') {
-            $this->sendError('Admin privileges required', 403);
+            $this->sendError('Admin privileges required', 403];
         }
     }
 
@@ -374,7 +374,7 @@ class ApiHandler
                 $_GET['_token'] ?? null;
         
         if (!$token || !$this->security->validateCsrfToken($token)) {
-            $this->sendError('Invalid CSRF token', 403);
+            $this->sendError('Invalid CSRF token', 403];
         }
     }
 
@@ -396,7 +396,7 @@ class ApiHandler
         $clientId = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
         
         if (!$this->security->checkRateLimit($clientId)) {
-            $this->sendError('Rate limit exceeded', 429);
+            $this->sendError('Rate limit exceeded', 429];
         }
     }
 
@@ -420,9 +420,9 @@ class ApiHandler
         $middlewareClass = "AlingAi\\Middleware\\{$middlewareName}";
         
         if (class_exists($middlewareClass)) {
-            $middleware = new $middlewareClass();
+            $middleware = new $middlewareClass(];
             if (method_exists($middleware, 'handle')) {
-                $middleware->handle();
+                $middleware->handle(];
             }
         }
     }
@@ -442,12 +442,12 @@ class ApiHandler
 
     private function getBearerToken(): ?string
     {
-        $headers = getallheaders();
+        $headers = getallheaders(];
         
         if (isset($headers['Authorization'])) {
             $authHeader = $headers['Authorization'];
             if (strpos($authHeader, 'Bearer ') === 0) {
-                return substr($authHeader, 7);
+                return substr($authHeader, 7];
             }
         }
         
@@ -455,7 +455,7 @@ class ApiHandler
     }
 
     /**
-     * 发送404错误
+     * 发�?04错误
      */
     /**
 
@@ -469,7 +469,7 @@ class ApiHandler
 
     private function sendNotFound(): void
     {
-        $this->sendError('Endpoint not found', 404);
+        $this->sendError('Endpoint not found', 404];
     }
 
     /**
@@ -495,17 +495,17 @@ class ApiHandler
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTraceAsString()
-        ]);
+        ]];
         
         // 根据异常类型发送不同的错误响应
         if ($e instanceof \InvalidArgumentException) {
-            $this->sendError($e->getMessage(), 400);
+            $this->sendError($e->getMessage(), 400];
         } elseif ($e instanceof \UnauthorizedAccessException) {
-            $this->sendError($e->getMessage(), 401);
+            $this->sendError($e->getMessage(), 401];
         } elseif ($e instanceof \ForbiddenAccessException) {
-            $this->sendError($e->getMessage(), 403);
+            $this->sendError($e->getMessage(), 403];
         } else {
-            $this->sendError('Internal server error', 500);
+            $this->sendError('Internal server error', 500];
         }
     }
 
@@ -528,23 +528,23 @@ class ApiHandler
 
     private function sendJsonResponse(array $data, int $statusCode = 200): void
     {
-        header('Content-Type: application/json');
-        header('X-Content-Type-Options: nosniff');
-        header('X-Frame-Options: DENY');
-        header('X-XSS-Protection: 1; mode=block');
+        header('Content-Type: application/json'];
+        header('X-Content-Type-Options: nosniff'];
+        header('X-Frame-Options: DENY'];
+        header('X-XSS-Protection: 1; mode=block'];
         
-        // CORS头
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token');
+        // CORS�?
+        header('Access-Control-Allow-Origin: *'];
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS'];
+        header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, X-CSRF-Token'];
         
-        http_response_code($statusCode);
-        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        http_response_code($statusCode];
+        echo json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT];
         exit;
     }
 
     /**
-     * 发送错误响应
+     * 发送错误响�?
      */
     /**
 
@@ -566,7 +566,7 @@ class ApiHandler
             'success' => false,
             'error' => $message,
             'timestamp' => date('c')
-        ], $statusCode);
+        ],  $statusCode];
     }
 
     /**
@@ -574,50 +574,51 @@ class ApiHandler
      */
     public static function registerRoutes(): void
     {
-        $routeManager = new ApiRouteManager();
+        $routeManager = new ApiRouteManager(];
         
         // 认证相关路由
-        $routeManager->post('/api/auth/login', 'AuthController', 'login');
-        $routeManager->post('/api/auth/register', 'AuthController', 'register');
-        $routeManager->post('/api/auth/refresh', 'AuthController', 'refresh', ['auth']);
-        $routeManager->post('/api/auth/logout', 'AuthController', 'logout', ['auth']);
-        $routeManager->get('/api/auth/user', 'AuthController', 'getUser', ['auth']);
-        $routeManager->post('/api/auth/forgot-password', 'AuthController', 'forgotPassword');
-        $routeManager->post('/api/auth/reset-password', 'AuthController', 'resetPassword');
+        $routeManager->post('/api/auth/login', 'AuthController', 'login'];
+        $routeManager->post('/api/auth/register', 'AuthController', 'register'];
+        $routeManager->post('/api/auth/refresh', 'AuthController', 'refresh', ['auth']];
+        $routeManager->post('/api/auth/logout', 'AuthController', 'logout', ['auth']];
+        $routeManager->get('/api/auth/user', 'AuthController', 'getUser', ['auth']];
+        $routeManager->post('/api/auth/forgot-password', 'AuthController', 'forgotPassword'];
+        $routeManager->post('/api/auth/reset-password', 'AuthController', 'resetPassword'];
         
         // 聊天相关路由
-        $routeManager->post('/api/chat/send', 'ChatController', 'sendMessage', ['auth']);
-        $routeManager->get('/api/chat/conversations', 'ChatController', 'getConversations', ['auth']);
-        $routeManager->get('/api/chat/conversations/{id}', 'ChatController', 'getConversation', ['auth']);
-        $routeManager->delete('/api/chat/conversations/{id}', 'ChatController', 'deleteConversation', ['auth']);
-        $routeManager->post('/api/chat/regenerate', 'ChatController', 'regenerateResponse', ['auth']);
+        $routeManager->post('/api/chat/send', 'ChatController', 'sendMessage', ['auth']];
+        $routeManager->get('/api/chat/conversations', 'ChatController', 'getConversations', ['auth']];
+        $routeManager->get('/api/chat/conversations/{id}', 'ChatController', 'getConversation', ['auth']];
+        $routeManager->delete('/api/chat/conversations/{id}', 'ChatController', 'deleteConversation', ['auth']];
+        $routeManager->post('/api/chat/regenerate', 'ChatController', 'regenerateResponse', ['auth']];
         
         // 用户相关路由
-        $routeManager->get('/api/user/profile', 'UserController', 'getProfile', ['auth']);
-        $routeManager->put('/api/user/profile', 'UserController', 'updateProfile', ['auth']);
-        $routeManager->post('/api/user/avatar', 'UserController', 'uploadAvatar', ['auth']);
-        $routeManager->get('/api/user/settings', 'UserController', 'getSettings', ['auth']);
-        $routeManager->put('/api/user/settings', 'UserController', 'updateSettings', ['auth']);
+        $routeManager->get('/api/user/profile', 'UserController', 'getProfile', ['auth']];
+        $routeManager->put('/api/user/profile', 'UserController', 'updateProfile', ['auth']];
+        $routeManager->post('/api/user/avatar', 'UserController', 'uploadAvatar', ['auth']];
+        $routeManager->get('/api/user/settings', 'UserController', 'getSettings', ['auth']];
+        $routeManager->put('/api/user/settings', 'UserController', 'updateSettings', ['auth']];
         
-        // 管理员路由
-        $routeManager->get('/api/admin/users', 'AdminController', 'getUsers', ['auth', 'admin']);
-        $routeManager->post('/api/admin/users', 'AdminController', 'createUser', ['auth', 'admin']);
-        $routeManager->get('/api/admin/users/{id}', 'AdminController', 'getUser', ['auth', 'admin']);
-        $routeManager->put('/api/admin/users/{id}', 'AdminController', 'updateUser', ['auth', 'admin']);
-        $routeManager->delete('/api/admin/users/{id}', 'AdminController', 'deleteUser', ['auth', 'admin']);
-        $routeManager->get('/api/admin/statistics', 'AdminController', 'getStatistics', ['auth', 'admin']);
+        // 管理员路�?
+        $routeManager->get('/api/admin/users', 'AdminController', 'getUsers', ['auth', 'admin']];
+        $routeManager->post('/api/admin/users', 'AdminController', 'createUser', ['auth', 'admin']];
+        $routeManager->get('/api/admin/users/{id}', 'AdminController', 'getUser', ['auth', 'admin']];
+        $routeManager->put('/api/admin/users/{id}', 'AdminController', 'updateUser', ['auth', 'admin']];
+        $routeManager->delete('/api/admin/users/{id}', 'AdminController', 'deleteUser', ['auth', 'admin']];
+        $routeManager->get('/api/admin/statistics', 'AdminController', 'getStatistics', ['auth', 'admin']];
         
         // 系统路由
-        $routeManager->get('/api/system/status', 'SystemController', 'getStatus');
-        $routeManager->get('/api/system/health', 'SystemController', 'getHealth');
-        $routeManager->get('/api/system/version', 'SystemController', 'getVersion');
+        $routeManager->get('/api/system/status', 'SystemController', 'getStatus'];
+        $routeManager->get('/api/system/health', 'SystemController', 'getHealth'];
+        $routeManager->get('/api/system/version', 'SystemController', 'getVersion'];
         
         // 文件上传路由
-        $routeManager->post('/api/files/upload', 'FileController', 'upload', ['auth']);
-        $routeManager->delete('/api/files/{id}', 'FileController', 'delete', ['auth']);
+        $routeManager->post('/api/files/upload', 'FileController', 'upload', ['auth']];
+        $routeManager->delete('/api/files/{id}', 'FileController', 'delete', ['auth']];
         
         // 监控路由
-        $routeManager->get('/api/monitor/metrics', 'MonitorController', 'getMetrics', ['auth', 'admin']);
-        $routeManager->get('/api/monitor/logs', 'MonitorController', 'getLogs', ['auth', 'admin']);
+        $routeManager->get('/api/monitor/metrics', 'MonitorController', 'getMetrics', ['auth', 'admin']];
+        $routeManager->get('/api/monitor/logs', 'MonitorController', 'getLogs', ['auth', 'admin']];
     }
 }
+

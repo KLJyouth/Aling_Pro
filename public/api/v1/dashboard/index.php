@@ -1,26 +1,26 @@
-ï»¿<?php
+<?php
 /**
  * AlingAi Pro - Dashboard API
  * 
  * Provides dashboard data for the user dashboard interface
  */
 
-header('Content-Type: application/json');
+header('Content-Type: application/json'];
 
 // Initialize session if needed
-session_start();
+session_start(];
 
 // Check if user is authenticated (simplified)
-$isAuthenticated = isset($_SERVER['HTTP_AUTHORIZATION']) || isset($_GET['token']);
+$isAuthenticated = isset($_SERVER['HTTP_AUTHORIZATION']) || isset($_GET['token']];
 
 // If not authenticated, return error
 if (!$isAuthenticated) {
-    http_response_code(401);
+    http_response_code(401];
     echo json_encode([
         'success' => false,
         'message' => 'Unauthorized',
         'code' => 'AUTH_REQUIRED'
-    ]);
+    ]];
     exit;
 }
 
@@ -33,17 +33,17 @@ $userData = [
     'avatar' => '/assets/images/avatars/user1.png',
     'plan' => 'professional',
     'registered_date' => '2024-06-01 15:30:45',
-    'last_login' => date('Y-m-d H:i:s', time() - 3600 * 24),
+    'last_login' => date('Y-m-d H:i:s', time() - 3600 * 24],
     'api_usage' => [
         'used' => 842,
         'limit' => 10000,
         'percent' => 8.42
-    ],
+    ], 
     'security_score' => 85,
     'subscription' => [
         'status' => 'active',
-        'next_billing' => date('Y-m-d', strtotime('+15 days')),
-        'plan_details' => 'Professional Plan - æœˆåº¦è®¢é˜…'
+        'next_billing' => date('Y-m-d', strtotime('+15 days')],
+        'plan_details' => 'Professional Plan - ÔÂ¶È¶©ÔÄ'
     ]
 ];
 
@@ -55,83 +55,83 @@ $dashboardData = [
         'total_conversations' => 56,
         'saved_prompts' => 12,
         'ai_agents' => 3
-    ],
+    ], 
     'recent_activities' => [
         [
             'id' => 'act_1001',
             'type' => 'login',
-            'description' => 'æˆåŠŸç™»å½•ç³»ç»Ÿ',
-            'time' => date('Y-m-d H:i:s', time() - 3600 * 1),
+            'description' => '³É¹¦µÇÂ¼ÏµÍ³',
+            'time' => date('Y-m-d H:i:s', time() - 3600 * 1],
             'ip' => '192.168.1.104',
-            'location' => 'åŒ—äº¬, ä¸­å›½'
-        ],
+            'location' => '±±¾©, ÖÐ¹ú'
+        ], 
         [
             'id' => 'act_1002',
             'type' => 'api_call',
-            'description' => 'AIæ¨¡åž‹è°ƒç”¨ - GPT-4',
-            'time' => date('Y-m-d H:i:s', time() - 3600 * 2),
+            'description' => 'AIÄ£ÐÍµ÷ÓÃ - GPT-4',
+            'time' => date('Y-m-d H:i:s', time() - 3600 * 2],
             'tokens' => 1240
-        ],
+        ], 
         [
             'id' => 'act_1003',
             'type' => 'document',
-            'description' => 'æ–‡æ¡£ä¸Šä¼ : é¡¹ç›®åˆ†æž.pdf',
-            'time' => date('Y-m-d H:i:s', time() - 3600 * 5),
+            'description' => 'ÎÄµµÉÏ´«: ÏîÄ¿·ÖÎö.pdf',
+            'time' => date('Y-m-d H:i:s', time() - 3600 * 5],
             'file_size' => '2.4 MB'
-        ],
+        ], 
         [
             'id' => 'act_1004',
             'type' => 'settings',
-            'description' => 'æ›´æ–°è´¦æˆ·è®¾ç½®',
+            'description' => '¸üÐÂÕË»§ÉèÖÃ',
             'time' => date('Y-m-d H:i:s', time() - 3600 * 25)
-        ],
+        ], 
         [
             'id' => 'act_1005',
             'type' => 'security',
-            'description' => 'å¯†ç é‡ç½®',
-            'time' => date('Y-m-d H:i:s', time() - 3600 * 72),
+            'description' => 'ÃÜÂëÖØÖÃ',
+            'time' => date('Y-m-d H:i:s', time() - 3600 * 72],
             'ip' => '192.168.1.104',
-            'location' => 'åŒ—äº¬, ä¸­å›½'
+            'location' => '±±¾©, ÖÐ¹ú'
         ]
-    ],
+    ], 
     'usage_trends' => [
-        'labels' => ["ä¸€æœˆ", "äºŒæœˆ", "ä¸‰æœˆ", "å››æœˆ", "äº”æœˆ", "å…­æœˆ"],
+        'labels' => ["Ò»ÔÂ", "¶þÔÂ", "ÈýÔÂ", "ËÄÔÂ", "ÎåÔÂ", "ÁùÔÂ"], 
         'data' => [
-            'text_queries' => [310, 420, 380, 590, 740, 842],
-            'image_generation' => [120, 150, 210, 240, 280, 310],
+            'text_queries' => [310, 420, 380, 590, 740, 842], 
+            'image_generation' => [120, 150, 210, 240, 280, 310], 
             'document_analysis' => [50, 90, 120, 150, 190, 220]
         ]
-    ],
+    ], 
     'notifications' => [
         [
             'id' => 'notif_001',
             'type' => 'system',
-            'title' => 'ç³»ç»Ÿæ›´æ–°é€šçŸ¥',
-            'message' => 'AlingAi Pro å°†äºŽ6æœˆ30æ—¥è¿›è¡Œç³»ç»Ÿå‡çº§ï¼Œé¢„è®¡åœæœº1å°æ—¶',
+            'title' => 'ÏµÍ³¸üÐÂÍ¨Öª',
+            'message' => 'AlingAi Pro ½«ÓÚ6ÔÂ30ÈÕ½øÐÐÏµÍ³Éý¼¶£¬Ô¤¼ÆÍ£»ú1Ð¡Ê±',
             'read' => false,
             'time' => date('Y-m-d H:i:s', time() - 3600 * 12)
-        ],
+        ], 
         [
             'id' => 'notif_002',
             'type' => 'security',
-            'title' => 'å®‰å…¨è­¦æŠ¥',
-            'message' => 'æ£€æµ‹åˆ°æ–°è®¾å¤‡ç™»å½•ï¼Œä½ç½®: ä¸Šæµ·',
+            'title' => '°²È«¾¯±¨',
+            'message' => '¼ì²âµ½ÐÂÉè±¸µÇÂ¼£¬Î»ÖÃ: ÉÏº£',
             'read' => true,
             'time' => date('Y-m-d H:i:s', time() - 3600 * 48)
-        ],
+        ], 
         [
             'id' => 'notif_003',
             'type' => 'account',
-            'title' => 'è´¦æˆ·æé†’',
-            'message' => 'æ‚¨çš„è®¢é˜…å°†åœ¨15å¤©åŽåˆ°æœŸï¼Œè¯·åŠæ—¶ç»­è´¹',
+            'title' => 'ÕË»§ÌáÐÑ',
+            'message' => 'ÄúµÄ¶©ÔÄ½«ÔÚ15Ììºóµ½ÆÚ£¬Çë¼°Ê±Ðø·Ñ',
             'read' => false,
             'time' => date('Y-m-d H:i:s', time() - 3600 * 24)
-        ],
+        ], 
         [
             'id' => 'notif_004',
             'type' => 'feature',
-            'title' => 'æ–°åŠŸèƒ½ä¸Šçº¿',
-            'message' => 'é‡å­åŠ å¯†åŠŸèƒ½å·²ä¸Šçº¿ï¼Œç«‹å³ä½“éªŒæ›´å¼ºå¤§çš„å®‰å…¨ä¿éšœ',
+            'title' => 'ÐÂ¹¦ÄÜÉÏÏß',
+            'message' => 'Á¿×Ó¼ÓÃÜ¹¦ÄÜÒÑÉÏÏß£¬Á¢¼´ÌåÑé¸üÇ¿´óµÄ°²È«±£ÕÏ',
             'read' => false,
             'time' => date('Y-m-d H:i:s', time() - 3600 * 72)
         ]
@@ -143,4 +143,4 @@ echo json_encode([
     'success' => true,
     'data' => $dashboardData,
     'timestamp' => date('c')
-]);
+]];

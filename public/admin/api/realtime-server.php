@@ -1,24 +1,22 @@
 <?php
 /**
  * AlingAi Pro 5.0 - 实时数据推送服务器 (无Socket依赖版本)
- * 使用HTTP长轮询技术实现实时数据推送
- * 
+ * 使用HTTP长轮询技术实现实时数据推�? * 
  * @package AlingAi\Pro\Admin
  * @version 1.0.0
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 /**
- * 数据存储类
- */
+ * 数据存储�? */
 class DataStore
 {
     private $data = [];
     private $lastUpdate;
     
     public function __construct() {
-        $this->lastUpdate = time();
+        $this->lastUpdate = time(];
     }
     
     /**
@@ -26,8 +24,8 @@ class DataStore
      */
     public function updateData(array $data): void
     {
-        $this->data = array_merge($this->data, $data);
-        $this->lastUpdate = time();
+        $this->data = array_merge($this->data, $data];
+        $this->lastUpdate = time(];
     }
     
     /**
@@ -39,8 +37,7 @@ class DataStore
     }
     
     /**
-     * 获取最后更新时间
-     */
+     * 获取最后更新时�?     */
     public function getLastUpdate(): int
     {
         return $this->lastUpdate;
@@ -54,26 +51,24 @@ class RealtimeDataServer
     private $clients;
     
     public function __construct() {
-        $this->dataStore = new DataStore();
-        $this->lastUpdate = time();
+        $this->dataStore = new DataStore(];
+        $this->lastUpdate = time(];
         $this->clients = [];
         
-        // 设置CORS头
-        $this->setCorsHeaders();
+        // 设置CORS�?        $this->setCorsHeaders(];
     }
     
     /**
-     * 设置CORS头
-     */
+     * 设置CORS�?     */
     private function setCorsHeaders(): void
     {
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-        header("Access-Control-Allow-Headers: Content-Type, Authorization");
-        header("Access-Control-Max-Age: 86400");
+        header("Access-Control-Allow-Origin: *"];
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS"];
+        header("Access-Control-Allow-Headers: Content-Type, Authorization"];
+        header("Access-Control-Max-Age: 86400"];
         
         if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
-            http_response_code(200);
+            http_response_code(200];
             exit;
         }
     }
@@ -87,68 +82,61 @@ class RealtimeDataServer
         
         switch ($action) {
             case "poll":
-                $this->handleLongPolling();
+                $this->handleLongPolling(];
                 break;
                 
             case "status":
-                $this->handleStatus();
+                $this->handleStatus(];
                 break;
                 
             case "push":
-                $this->handleDataPush();
+                $this->handleDataPush(];
                 break;
                 
             default:
-                $this->sendError("Invalid action");
+                $this->sendError("Invalid action"];
                 break;
         }
     }
     
     /**
-     * 处理长轮询请求
-     */
+     * 处理长轮询请�?     */
     private function handleLongPolling(): void
     {
-        $timeout = (int)($_GET["timeout"] ?? 30);
-        $lastClientUpdate = (int)($_GET["timestamp"] ?? 0);
+        $timeout = (int)($_GET["timeout"] ?? 30];
+        $lastClientUpdate = (int)($_GET["timestamp"] ?? 0];
         
         // 设置超时
-        set_time_limit($timeout + 5);
+        set_time_limit($timeout + 5];
         
-        $startTime = time();
-        $maxWaitTime = min($timeout, 30); // 最大等待30秒
-        
+        $startTime = time(];
+        $maxWaitTime = min($timeout, 30]; // 最大等�?0�?        
         while ((time() - $startTime) < $maxWaitTime) {
-            // 检查是否有新数据
-            $currentData = $this->getCurrentData();
-            $currentTimestamp = time();
+            // 检查是否有新数�?            $currentData = $this->getCurrentData(];
+            $currentTimestamp = time(];
             
             if ($currentTimestamp > $lastClientUpdate) {
-                // 有新数据，立即返回
-                $this->sendSuccess([
+                // 有新数据，立即返�?                $this->sendSuccess([
                     "data" => $currentData,
                     "timestamp" => $currentTimestamp,
                     "hasUpdate" => true
-                ]);
+                ]];
                 return;
             }
             
-            // 没有新数据，等待1秒后重新检查
-            sleep(1);
+            // 没有新数据，等待1秒后重新检�?            sleep(1];
         }
         
-        // 超时，返回当前数据
-        $this->sendSuccess([
+        // 超时，返回当前数�?        $this->sendSuccess([
             "data" => $this->getCurrentData(),
             "timestamp" => time(),
             "hasUpdate" => false,
             "timeout" => true
-        ]);
+        ]];
     }
     
     /**
-     * 处理服务器状态请求
-     */
+     * 处理服务器状态请�?     */
     private function handleStatus(): void
     {
         $this->sendSuccess([
@@ -157,34 +145,33 @@ class RealtimeDataServer
             "timestamp" => time(),
             "uptime" => time() - $this->lastUpdate,
             "type" => "long-polling"
-        ]);
+        ]];
     }
     
     /**
-     * 处理数据推送
-     */
+     * 处理数据推�?     */
     private function handleDataPush(): void
     {
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-            $this->sendError("Only POST method allowed for push");
+            $this->sendError("Only POST method allowed for push"];
             return;
         }
         
-        $input = json_decode(file_get_contents("php://input"), true);
+        $input = json_decode(file_get_contents("php://input"], true];
         
         if (!$input) {
-            $this->sendError("Invalid JSON data");
+            $this->sendError("Invalid JSON data"];
             return;
         }
         
         // 更新数据存储
-        $this->dataStore->updateData($input);
-        $this->lastUpdate = time();
+        $this->dataStore->updateData($input];
+        $this->lastUpdate = time(];
         
         $this->sendSuccess([
             "message" => "Data pushed successfully",
             "timestamp" => $this->lastUpdate
-        ]);
+        ]];
     }
     
       /**
@@ -193,19 +180,18 @@ class RealtimeDataServer
     private function getCurrentData(): array
     {
         try {
-            // 连接数据库获取实时数据
-            $pdo = $this->connectDatabase();
+            // 连接数据库获取实时数�?            $pdo = $this->connectDatabase(];
             
             if (!$pdo) {
                 // 数据库连接失败，返回模拟数据
-                return $this->getMockData();
+                return $this->getMockData(];
             }
             
             // 获取系统统计
-            $systemStats = $this->getSystemStats($pdo);
+            $systemStats = $this->getSystemStats($pdo];
             
             // 获取用户统计
-            $userStats = $this->getUserStats($pdo);
+            $userStats = $this->getUserStats($pdo];
             
             return [
                 "system" => $systemStats,
@@ -213,14 +199,13 @@ class RealtimeDataServer
                 "timestamp" => time()
             ];
         } catch (\Exception $e) {
-            error_log("Error getting current data: " . $e->getMessage());
-            return $this->getMockData();
+            error_log("Error getting current data: " . $e->getMessage()];
+            return $this->getMockData(];
         }
     }
     
       /**
-     * 连接数据库
-     */
+     * 连接数据�?     */
     private function connectDatabase(): ?\PDO
     {
         try {
@@ -228,9 +213,9 @@ class RealtimeDataServer
             return new \PDO($dsn, null, null, [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC
-            ]);
+            ]];
         } catch (\PDOException $e) {
-            error_log("Database connection error: " . $e->getMessage());
+            error_log("Database connection error: " . $e->getMessage()];
             return null;
         }
     }
@@ -248,12 +233,12 @@ class RealtimeDataServer
         ];
         
         try {
-            $stmt = $pdo->query("SELECT * FROM system_stats ORDER BY id DESC LIMIT 1");
+            $stmt = $pdo->query("SELECT * FROM system_stats ORDER BY id DESC LIMIT 1"];
             if ($row = $stmt->fetch()) {
                 $stats = $row;
             }
         } catch (\PDOException $e) {
-            error_log("Error getting system stats: " . $e->getMessage());
+            error_log("Error getting system stats: " . $e->getMessage()];
         }
         
         return $stats;
@@ -271,12 +256,12 @@ class RealtimeDataServer
         ];
         
         try {
-            $stmt = $pdo->query("SELECT * FROM user_stats ORDER BY id DESC LIMIT 1");
+            $stmt = $pdo->query("SELECT * FROM user_stats ORDER BY id DESC LIMIT 1"];
             if ($row = $stmt->fetch()) {
                 $stats = $row;
             }
         } catch (\PDOException $e) {
-            error_log("Error getting user stats: " . $e->getMessage());
+            error_log("Error getting user stats: " . $e->getMessage()];
         }
         
         return $stats;
@@ -289,48 +274,47 @@ class RealtimeDataServer
     {
             return [
             "system" => [
-                "cpu_usage" => rand(10, 90),
-                "memory_usage" => rand(20, 80),
-                "disk_usage" => rand(30, 70),
+                "cpu_usage" => rand(10, 90],
+                "memory_usage" => rand(20, 80],
+                "disk_usage" => rand(30, 70],
                 "network_traffic" => rand(1000, 5000)
-            ],
+            ], 
             "users" => [
-                "total_users" => rand(100, 1000),
-                "active_users" => rand(50, 200),
+                "total_users" => rand(100, 1000],
+                "active_users" => rand(50, 200],
                 "new_users_today" => rand(5, 50)
-            ],
+            ], 
             "timestamp" => time()
         ];
     }
     
     /**
-     * 发送成功响应
-     */
+     * 发送成功响�?     */
     private function sendSuccess($data): void
     {
-        header("Content-Type: application/json");
+        header("Content-Type: application/json"];
         echo json_encode([
             "status" => "success",
             "data" => $data
-        ]);
+        ]];
         exit;
     }
     
     /**
-     * 发送错误响应
-     */
+     * 发送错误响�?     */
     private function sendError($message): void
     {
-        header("Content-Type: application/json");
-        http_response_code(400);
+        header("Content-Type: application/json"];
+        http_response_code(400];
         echo json_encode([
             "status" => "error",
             "message" => $message
-        ]);
+        ]];
         exit;
     }
 }
 
 // 创建并运行服务器
-$server = new RealtimeDataServer();
-    $server->handle();
+$server = new RealtimeDataServer(];
+    $server->handle(];
+

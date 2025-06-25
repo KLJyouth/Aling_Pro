@@ -16,9 +16,9 @@ class NaturalLanguageProcessor
             "max_tokens" => 4096,
             "temperature" => 0.7,
             "timeout" => 30
-        ], $config);
+        ],  $config];
         
-        $this->initializeModels();
+        $this->initializeModels(];
     }
     
     /**
@@ -27,11 +27,11 @@ class NaturalLanguageProcessor
     private function initializeModels(): void
     {
         $this->models = [
-            "text_classification" => new TextClassificationModel($this->config),
-            "sentiment_analysis" => new SentimentAnalysisModel($this->config),
-            "entity_recognition" => new EntityRecognitionModel($this->config),
-            "language_detection" => new LanguageDetectionModel($this->config),
-            "text_summarization" => new TextSummarizationModel($this->config),
+            "text_classification" => new TextClassificationModel($this->config],
+            "sentiment_analysis" => new SentimentAnalysisModel($this->config],
+            "entity_recognition" => new EntityRecognitionModel($this->config],
+            "language_detection" => new LanguageDetectionModel($this->config],
+            "text_summarization" => new TextSummarizationModel($this->config],
             "translation" => new TranslationModel($this->config)
         ];
     }
@@ -41,7 +41,7 @@ class NaturalLanguageProcessor
      */
     public function classifyText(string $text, array $options = []): array
     {
-        return $this->models["text_classification"]->process($text, $options);
+        return $this->models["text_classification"]->process($text, $options];
     }
     
     /**
@@ -49,7 +49,7 @@ class NaturalLanguageProcessor
      */
     public function analyzeSentiment(string $text, array $options = []): array
     {
-        return $this->models["sentiment_analysis"]->process($text, $options);
+        return $this->models["sentiment_analysis"]->process($text, $options];
     }
     
     /**
@@ -57,15 +57,14 @@ class NaturalLanguageProcessor
      */
     public function recognizeEntities(string $text, array $options = []): array
     {
-        return $this->models["entity_recognition"]->process($text, $options);
+        return $this->models["entity_recognition"]->process($text, $options];
     }
     
     /**
-     * 语言检测
-     */
+     * 语言检�?     */
     public function detectLanguage(string $text, array $options = []): array
     {
-        return $this->models["language_detection"]->process($text, $options);
+        return $this->models["language_detection"]->process($text, $options];
     }
     
     /**
@@ -73,7 +72,7 @@ class NaturalLanguageProcessor
      */
     public function summarizeText(string $text, array $options = []): array
     {
-        return $this->models["text_summarization"]->process($text, $options);
+        return $this->models["text_summarization"]->process($text, $options];
     }
     
     /**
@@ -81,7 +80,7 @@ class NaturalLanguageProcessor
      */
     public function translateText(string $text, array $options = []): array
     {
-        return $this->models["translation"]->process($text, $options);
+        return $this->models["translation"]->process($text, $options];
     }
     
     /**
@@ -89,40 +88,39 @@ class NaturalLanguageProcessor
      */
     public function analyzeText(string $text, array $options = []): array
     {
-        $language = $this->detectLanguage($text);
-        $sentiment = $this->analyzeSentiment($text);
-        $entities = $this->recognizeEntities($text);
-        $categories = $this->classifyText($text);
-        $summary = $this->summarizeText($text, ["max_length" => 200]);
+        $language = $this->detectLanguage($text];
+        $sentiment = $this->analyzeSentiment($text];
+        $entities = $this->recognizeEntities($text];
+        $categories = $this->classifyText($text];
+        $summary = $this->summarizeText($text, ["max_length" => 200]];
         
         return [
             "success" => true,
             "message" => "文本综合分析完成",
             "data" => [
                 "text" => $text,
-                "language" => $language["data"],
-                "sentiment" => $sentiment["data"],
-                "entities" => $entities["data"],
-                "categories" => $categories["data"],
-                "summary" => $summary["data"],
+                "language" => $language["data"], 
+                "sentiment" => $sentiment["data"], 
+                "entities" => $entities["data"], 
+                "categories" => $categories["data"], 
+                "summary" => $summary["data"], 
                 "processing_time" => rand(200, 800) . "ms"
             ]
         ];
     }
     
     /**
-     * 获取服务状态
-     */
+     * 获取服务状�?     */
     public function getStatus(): array
     {
         return [
             "status" => "active",
-            "models_loaded" => count($this->models),
-            "available_models" => array_keys($this->models),
-            "default_model" => $this->config["default_model"],
-            "max_tokens" => $this->config["max_tokens"],
+            "models_loaded" => count($this->models],
+            "available_models" => array_keys($this->models],
+            "default_model" => $this->config["default_model"], 
+            "max_tokens" => $this->config["max_tokens"], 
             "uptime" => rand(100, 10000) . "s",
-            "requests_processed" => rand(10, 1000),
+            "requests_processed" => rand(10, 1000],
             "average_processing_time" => rand(50, 500) . "ms"
         ];
     }

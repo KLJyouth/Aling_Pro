@@ -5,16 +5,16 @@ namespace App\AI;
 use App\Core\AIManager;
 
 /**
- * ComputerVision 类
+ * ComputerVision �?
  * 
- * 计算机视觉组件，提供图像处理和分析功能
+ * 计算机视觉组件，提供图像处理和分析功�?
  *
  * @package App\AI
  */
 class ComputerVision
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -33,7 +33,7 @@ class ComputerVision
     }
 
     /**
-     * 检测对象
+     * 检测对�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

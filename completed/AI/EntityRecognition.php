@@ -5,16 +5,16 @@ namespace App\AI;
 use App\AI\NaturalLanguage;
 
 /**
- * EntityRecognition 类
+ * EntityRecognition �?
  * 
- * 实体识别组件，从文本中提取命名实体
+ * 实体识别组件，从文本中提取命名实�?
  *
  * @package App\AI
  */
 class EntityRecognition
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -55,7 +55,7 @@ class EntityRecognition
     }
 
     /**
-     * 自定义实体识别
+     * 自定义实体识�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

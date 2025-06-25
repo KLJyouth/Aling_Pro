@@ -1,17 +1,17 @@
-ï»¿<?php
+<?php
 /**
- * æ–‡ä»¶åï¼šTextSummarizer.php
- * åŠŸèƒ½æè¿°ï¼šæ–‡æœ¬æ‘˜è¦å™¨ - å®ç°æ–‡æœ¬æ‘˜è¦åŠŸèƒ½
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼şÃû£ºTextSummarizer.php
+ * ¹¦ÄÜÃèÊö£ºÎÄ±¾ÕªÒªÆ÷ - ÊµÏÖÎÄ±¾ÕªÒª¹¦ÄÜ
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóĞŞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\NLP;
 
@@ -19,55 +19,55 @@ use Exception;
 use InvalidArgumentException;
 
 /**
- * æ–‡æœ¬æ‘˜è¦å™¨
+ * ÎÄ±¾ÕªÒªÆ÷
  *
- * å®ç°æ–‡æœ¬æ‘˜è¦åŠŸèƒ½ï¼Œæ”¯æŒå¤šç§æ‘˜è¦ç®—æ³•å’Œè¯­è¨€
+ * ÊµÏÖÎÄ±¾ÕªÒª¹¦ÄÜ£¬Ö§³Ö¶àÖÖÕªÒªËã·¨ºÍÓïÑÔ
  */
 class TextSummarizer
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊı
      */
     private array $config;
 
     /**
-     * åœç”¨è¯åˆ—è¡¨
+     * Í£ÓÃ´ÊÁĞ±í
      */
     private array $stopwords = [];
 
     /**
-     * æ‘˜è¦ç»“æœç¼“å­˜
+     * ÕªÒª½á¹û»º´æ
      */
     private array $cache = [];
     
     /**
-     * åˆ†è¯å™¨
+     * ·Ö´ÊÆ÷
      */
     private ?TokenizerInterface $tokenizer = null;
     
     /**
-     * æ„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êı
      *
-     * @param array $config é…ç½®å‚æ•°
-     * @param TokenizerInterface|null $tokenizer åˆ†è¯å™¨
+     * @param array $config ÅäÖÃ²ÎÊı
+     * @param TokenizerInterface|null $tokenizer ·Ö´ÊÆ÷
      */
-    public function __construct(array $config = [], ?TokenizerInterface $tokenizer = null)
+    public function __construct(array $config = [],  ?TokenizerInterface $tokenizer = null)
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->config = array_merge($this->getDefaultConfig(), $config];
         $this->tokenizer = $tokenizer;
-        $this->loadStopwords();
+        $this->loadStopwords(];
     }
     
     /**
-     * è·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      *
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
         return [
             'default_language' => 'zh-CN',
-            'supported_languages' => ['zh-CN', 'en-US'],
+            'supported_languages' => ['zh-CN', 'en-US'], 
             'default_algorithm' => 'extractive',
             'max_summary_length' => 200,
             'compression_ratio' => 0.3,
@@ -84,11 +84,11 @@ class TextSummarizer
     }
     
     /**
-     * åŠ è½½åœç”¨è¯
+     * ¼ÓÔØÍ£ÓÃ´Ê
      */
     private function loadStopwords(): void
     {
-        // è‹±æ–‡åœç”¨è¯
+        // Ó¢ÎÄÍ£ÓÃ´Ê
         $this->stopwords['en-US'] = [
             'a', 'an', 'the', 'and', 'or', 'but', 'if', 'then', 'else', 'when',
             'at', 'from', 'by', 'on', 'off', 'for', 'in', 'out', 'over', 'to', 'into', 'with',
@@ -98,61 +98,61 @@ class TextSummarizer
             'this', 'that', 'these', 'those', 'my', 'your', 'his', 'her', 'its', 'our', 'their'
         ];
         
-        // ä¸­æ–‡åœç”¨è¯
+        // ÖĞÎÄÍ£ÓÃ´Ê
         $this->stopwords['zh-CN'] = [
-            'çš„', 'äº†', 'å’Œ', 'æ˜¯', 'å°±', 'éƒ½', 'è€Œ', 'åŠ', 'ä¸', 'è¿™', 'é‚£', 'æœ‰', 'åœ¨', 'ä¸­',
-            'ä¸º', 'å¯¹', 'ä¹Ÿ', 'ä»¥', 'ä¹‹', 'äº', 'ä¸Š', 'ä¸‹', 'ä½†', 'å¦‚', 'å› ', 'ç”±', 'æ‰€', 'å·²',
-            'è¢«', 'å…¶', 'ä»', 'æˆ–', 'æŸ', 'å„', 'æ¯', 'å½“', 'æˆ‘', 'ä½ ', 'ä»–', 'å¥¹', 'å®ƒ', 'ä»¬'
+            'µÄ', 'ÁË', 'ºÍ', 'ÊÇ', '¾Í', '¶¼', '¶ø', '¼°', 'Óë', 'Õâ', 'ÄÇ', 'ÓĞ', 'ÔÚ', 'ÖĞ',
+            'Îª', '¶Ô', 'Ò²', 'ÒÔ', 'Ö®', 'ÓÚ', 'ÉÏ', 'ÏÂ', 'µ«', 'Èç', 'Òò', 'ÓÉ', 'Ëù', 'ÒÑ',
+            '±»', 'Æä', '´Ó', '»ò', 'Ä³', '¸÷', 'Ã¿', 'µ±', 'ÎÒ', 'Äã', 'Ëû', 'Ëı', 'Ëü', 'ÃÇ'
         ];
     }
     
     /**
-     * ç”Ÿæˆæ–‡æœ¬æ‘˜è¦
+     * Éú³ÉÎÄ±¾ÕªÒª
      *
-     * @param string $text åŸæ–‡æœ¬
-     * @param string|null $title æ–‡æœ¬æ ‡é¢˜
-     * @param array $options é€‰é¡¹
-     * @return array æ‘˜è¦ç»“æœ
+     * @param string $text Ô­ÎÄ±¾
+     * @param string|null $title ÎÄ±¾±êÌâ
+     * @param array $options Ñ¡Ïî
+     * @return array ÕªÒª½á¹û
      */
     public function summarize(string $text, ?string $title = null, array $options = []): array
     {
-        // åˆå¹¶é€‰é¡¹
+        // ºÏ²¢Ñ¡Ïî
         $options = array_merge([
-            'language' => $this->config['default_language'],
-            'algorithm' => $this->config['default_algorithm'],
-            'max_length' => $this->config['max_summary_length'],
-            'compression_ratio' => $this->config['compression_ratio'],
+            'language' => $this->config['default_language'], 
+            'algorithm' => $this->config['default_algorithm'], 
+            'max_length' => $this->config['max_summary_length'], 
+            'compression_ratio' => $this->config['compression_ratio'], 
             'keywords' => []
-        ], $options);
+        ],  $options];
         
-        // æ£€æŸ¥ç¼“å­˜
-        $cacheKey = md5($text . json_encode($options));
+        // ¼ì²é»º´æ
+        $cacheKey = md5($text . json_encode($options)];
         if ($this->config['use_cache'] && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
         
-        // æ£€æµ‹è¯­è¨€
+        // ¼ì²âÓïÑÔ
         if ($options['language'] === 'auto') {
-            $options['language'] = $this->detectLanguage($text);
+            $options['language'] = $this->detectLanguage($text];
         }
         
-        // æ ¹æ®ç®—æ³•ç”Ÿæˆæ‘˜è¦
+        // ¸ù¾İËã·¨Éú³ÉÕªÒª
         $summary = [];
         switch ($options['algorithm']) {
             case 'extractive':
-                $summary = $this->extractiveSummarize($text, $title, $options);
+                $summary = $this->extractiveSummarize($text, $title, $options];
                 break;
             case 'abstractive':
-                $summary = $this->abstractiveSummarize($text, $title, $options);
+                $summary = $this->abstractiveSummarize($text, $title, $options];
                 break;
             case 'keyword':
-                $summary = $this->keywordSummarize($text, $options);
+                $summary = $this->keywordSummarize($text, $options];
                 break;
             default:
-                throw new InvalidArgumentException("ä¸æ”¯æŒçš„æ‘˜è¦ç®—æ³•: {$options['algorithm']}");
+                throw new InvalidArgumentException("²»Ö§³ÖµÄÕªÒªËã·¨: {$options['algorithm']}"];
         }
         
-        // ç¼“å­˜ç»“æœ
+        // »º´æ½á¹û
         if ($this->config['use_cache']) {
             $this->cache[$cacheKey] = $summary;
         }
@@ -161,71 +161,71 @@ class TextSummarizer
     }
     
     /**
-     * æå–å¼æ‘˜è¦ç®—æ³•
+     * ÌáÈ¡Ê½ÕªÒªËã·¨
      *
-     * @param string $text åŸæ–‡æœ¬
-     * @param string|null $title æ–‡æœ¬æ ‡é¢˜
-     * @param array $options é€‰é¡¹
-     * @return array æ‘˜è¦ç»“æœ
+     * @param string $text Ô­ÎÄ±¾
+     * @param string|null $title ÎÄ±¾±êÌâ
+     * @param array $options Ñ¡Ïî
+     * @return array ÕªÒª½á¹û
      */
     private function extractiveSummarize(string $text, ?string $title, array $options): array
     {
-        // åˆ†å¥
-        $sentences = $this->splitSentences($text, $options['language']);
+        // ·Ö¾ä
+        $sentences = $this->splitSentences($text, $options['language']];
         if (count($sentences) <= 1) {
             return [
                 'summary' => $text,
                 'sentences' => $sentences,
                 'algorithm' => 'extractive',
                 'compression_ratio' => 1.0,
-                'original_length' => mb_strlen($text),
+                'original_length' => mb_strlen($text],
                 'summary_length' => mb_strlen($text)
             ];
         }
         
-        // è®¡ç®—å¥å­æƒé‡
+        // ¼ÆËã¾ä×ÓÈ¨ÖØ
         $sentenceScores = [];
         $sentenceTokens = [];
         $allTokens = [];
         
         foreach ($sentences as $index => $sentence) {
-            // åˆ†è¯
-            $tokens = $this->tokenize($sentence, $options['language']);
+            // ·Ö´Ê
+            $tokens = $this->tokenize($sentence, $options['language']];
             $sentenceTokens[$index] = $tokens;
-            $allTokens = array_merge($allTokens, $tokens);
+            $allTokens = array_merge($allTokens, $tokens];
             
-            // åˆå§‹åˆ†æ•°
+            // ³õÊ¼·ÖÊı
             $sentenceScores[$index] = 0;
             
-            // ä½ç½®æƒé‡
+            // Î»ÖÃÈ¨ÖØ
             if ($this->config['use_position_weight']) {
                 if ($index === 0 || $index === count($sentences) - 1) {
                     $sentenceScores[$index] += 0.5;
                 }
             }
             
-            // æ ‡é¢˜ç›¸ä¼¼åº¦æƒé‡
+            // ±êÌâÏàËÆ¶ÈÈ¨ÖØ
             if ($this->config['use_title_weight'] && $title) {
-                $titleTokens = $this->tokenize($title, $options['language']);
-                $similarity = $this->calculateSimilarity($titleTokens, $tokens);
+                $titleTokens = $this->tokenize($title, $options['language']];
+                $similarity = $this->calculateSimilarity($titleTokens, $tokens];
                 $sentenceScores[$index] += $similarity * 0.5;
             }
         }
         
-        // è®¡ç®—TF-IDF
+        // ¼ÆËãTF-IDF
         if ($this->config['use_tf_idf']) {
-            $tfIdfScores = $this->calculateTfIdf($sentenceTokens, $allTokens);
+            $tfIdfScores = $this->calculateTfIdf($sentenceTokens, $allTokens];
             foreach ($tfIdfScores as $index => $score) {
                 $sentenceScores[$index] += $score;
             }
         }
         
-        // å…³é”®è¯æƒé‡
+        // ¹Ø¼ü´ÊÈ¨ÖØ
         if ($this->config['use_keyword_weight'] && !empty($options['keywords'])) {
             foreach ($sentenceTokens as $index => $tokens) {
                 $keywordCount = 0;
                 foreach ($tokens as $token) {
-                    if (in_array($token, $options['keywords'])) {
+                    if (in_[$token, $options['keywords'])) {
                         $keywordCount++;
                     }
                 }
@@ -233,11 +233,11 @@ class TextSummarizer
             }
         }
         
-        // å¥å­ç›¸ä¼¼åº¦
+        // ¾ä×ÓÏàËÆ¶È
         $sentenceSimilarities = [];
-        for ($i = 0; $i < count($sentences); $i++) {
-            for ($j = $i + 1; $j < count($sentences); $j++) {
-                $similarity = $this->calculateSimilarity($sentenceTokens[$i], $sentenceTokens[$j]);
+        for ($i = 0; $i < count($sentences]; $i++) {
+            for ($j = $i + 1; $j < count($sentences]; $j++) {
+                $similarity = $this->calculateSimilarity($sentenceTokens[$i],  $sentenceTokens[$j]];
                 if ($similarity > $this->config['sentence_similarity_threshold']) {
                     $sentenceSimilarities[$i][$j] = $similarity;
                     $sentenceSimilarities[$j][$i] = $similarity;
@@ -245,19 +245,19 @@ class TextSummarizer
             }
         }
         
-        // æ ¹æ®ç›¸ä¼¼åº¦è°ƒæ•´åˆ†æ•°
+        // ¸ù¾İÏàËÆ¶Èµ÷Õû·ÖÊı
         foreach ($sentenceSimilarities as $i => $similarities) {
-            $totalSimilarity = array_sum($similarities);
+            $totalSimilarity = array_sum($similarities];
             $sentenceScores[$i] += $totalSimilarity * 0.1;
         }
         
-        // é€‰æ‹©æœ€é«˜åˆ†çš„å¥å­
-        arsort($sentenceScores);
-        $targetSentenceCount = max(1, ceil(count($sentences) * $options['compression_ratio']));
-        $targetSentenceCount = min($targetSentenceCount, $options['max_length'] / 20); // ç²—ç•¥ä¼°è®¡æ¯å¥å¹³å‡20ä¸ªå­—ç¬¦
+        // Ñ¡Ôñ×î¸ß·ÖµÄ¾ä×Ó
+        arsort($sentenceScores];
+        $targetSentenceCount = max(1, ceil(count($sentences) * $options['compression_ratio'])];
+        $targetSentenceCount = min($targetSentenceCount, $options['max_length'] / 20]; // ´ÖÂÔ¹À¼ÆÃ¿¾äÆ½¾ù20¸ö×Ö·û
         
-        $selectedIndices = array_slice(array_keys($sentenceScores), 0, $targetSentenceCount);
-        sort($selectedIndices); // æŒ‰åŸæ–‡é¡ºåºæ’åº
+        $selectedIndices = array_slice(array_keys($sentenceScores], 0, $targetSentenceCount];
+        sort($selectedIndices]; // °´Ô­ÎÄË³ĞòÅÅĞò
         
         $summaryText = '';
         $selectedSentences = [];
@@ -266,7 +266,7 @@ class TextSummarizer
             $summaryText .= $sentences[$index] . ' ';
         }
         
-        $summaryText = trim($summaryText);
+        $summaryText = trim($summaryText];
         if (mb_strlen($summaryText) > $options['max_length']) {
             $summaryText = mb_substr($summaryText, 0, $options['max_length']) . '...';
         }
@@ -275,40 +275,40 @@ class TextSummarizer
             'summary' => $summaryText,
             'sentences' => $selectedSentences,
             'algorithm' => 'extractive',
-            'compression_ratio' => count($selectedSentences) / count($sentences),
-            'original_length' => mb_strlen($text),
+            'compression_ratio' => count($selectedSentences) / count($sentences],
+            'original_length' => mb_strlen($text],
             'summary_length' => mb_strlen($summaryText)
         ];
     }
     
     /**
-     * ç”Ÿæˆå¼æ‘˜è¦ç®—æ³•
+     * Éú³ÉÊ½ÕªÒªËã·¨
      *
-     * @param string $text åŸæ–‡æœ¬
-     * @param string|null $title æ–‡æœ¬æ ‡é¢˜
-     * @param array $options é€‰é¡¹
-     * @return array æ‘˜è¦ç»“æœ
+     * @param string $text Ô­ÎÄ±¾
+     * @param string|null $title ÎÄ±¾±êÌâ
+     * @param array $options Ñ¡Ïî
+     * @return array ÕªÒª½á¹û
      */
     private function abstractiveSummarize(string $text, ?string $title, array $options): array
     {
-        // ç”Ÿæˆå¼æ‘˜è¦éœ€è¦æ›´å¤æ‚çš„NLPæ¨¡å‹ï¼Œè¿™é‡Œç®€åŒ–å®ç°
-        // å®é™…åº”ç”¨ä¸­å¯èƒ½éœ€è¦è°ƒç”¨å¤–éƒ¨APIæˆ–ä½¿ç”¨æ·±åº¦å­¦ä¹ æ¨¡å‹
+        // Éú³ÉÊ½ÕªÒªĞèÒª¸ü¸´ÔÓµÄNLPÄ£ĞÍ£¬ÕâÀï¼ò»¯ÊµÏÖ
+        // Êµ¼ÊÓ¦ÓÃÖĞ¿ÉÄÜĞèÒªµ÷ÓÃÍâ²¿API»òÊ¹ÓÃÉî¶ÈÑ§Ï°Ä£ĞÍ
         
-        // å…ˆä½¿ç”¨æå–å¼æ‘˜è¦è·å–å…³é”®å¥å­
-        $extractiveResult = $this->extractiveSummarize($text, $title, $options);
+        // ÏÈÊ¹ÓÃÌáÈ¡Ê½ÕªÒª»ñÈ¡¹Ø¼ü¾ä×Ó
+        $extractiveResult = $this->extractiveSummarize($text, $title, $options];
         $keySentences = $extractiveResult['sentences'];
         
-        // ç®€å•çš„å¥å­é‡ç»„å’Œå‹ç¼©
+        // ¼òµ¥µÄ¾ä×ÓÖØ×éºÍÑ¹Ëõ
         $abstractiveSummary = '';
         $compressedSentences = [];
         
         foreach ($keySentences as $sentence) {
-            $compressed = $this->compressSentence($sentence, $options['language']);
+            $compressed = $this->compressSentence($sentence, $options['language']];
             $compressedSentences[] = $compressed;
             $abstractiveSummary .= $compressed . ' ';
         }
         
-        $abstractiveSummary = trim($abstractiveSummary);
+        $abstractiveSummary = trim($abstractiveSummary];
         if (mb_strlen($abstractiveSummary) > $options['max_length']) {
             $abstractiveSummary = mb_substr($abstractiveSummary, 0, $options['max_length']) . '...';
         }
@@ -317,37 +317,37 @@ class TextSummarizer
             'summary' => $abstractiveSummary,
             'sentences' => $compressedSentences,
             'algorithm' => 'abstractive',
-            'compression_ratio' => count($compressedSentences) / $this->countSentences($text),
-            'original_length' => mb_strlen($text),
+            'compression_ratio' => count($compressedSentences) / $this->countSentences($text],
+            'original_length' => mb_strlen($text],
             'summary_length' => mb_strlen($abstractiveSummary)
         ];
     }
     
     /**
-     * å…³é”®è¯æ‘˜è¦ç®—æ³•
+     * ¹Ø¼ü´ÊÕªÒªËã·¨
      *
-     * @param string $text åŸæ–‡æœ¬
-     * @param array $options é€‰é¡¹
-     * @return array æ‘˜è¦ç»“æœ
+     * @param string $text Ô­ÎÄ±¾
+     * @param array $options Ñ¡Ïî
+     * @return array ÕªÒª½á¹û
      */
     private function keywordSummarize(string $text, array $options): array
     {
-        // åˆ†è¯
-        $tokens = $this->tokenize($text, $options['language']);
+        // ·Ö´Ê
+        $tokens = $this->tokenize($text, $options['language']];
         
-        // è¿‡æ»¤åœç”¨è¯
-        $filteredTokens = $this->filterStopwords($tokens, $options['language']);
+        // ¹ıÂËÍ£ÓÃ´Ê
+        $filteredTokens = $this->filterStopwords($tokens, $options['language']];
         
-        // è®¡ç®—è¯é¢‘
-        $wordFrequency = array_count_values($filteredTokens);
-        arsort($wordFrequency);
+        // ¼ÆËã´ÊÆµ
+        $wordFrequency = array_count_values($filteredTokens];
+        arsort($wordFrequency];
         
-        // é€‰æ‹©å‰Nä¸ªå…³é”®è¯
-        $keywordCount = min(10, ceil(count($wordFrequency) * 0.1));
-        $keywords = array_slice(array_keys($wordFrequency), 0, $keywordCount);
+        // Ñ¡ÔñÇ°N¸ö¹Ø¼ü´Ê
+        $keywordCount = min(10, ceil(count($wordFrequency) * 0.1)];
+        $keywords = array_slice(array_keys($wordFrequency], 0, $keywordCount];
         
-        // æ‰¾åŒ…å«å…³é”®è¯çš„å¥å­
-        $sentences = $this->splitSentences($text, $options['language']);
+        // ÕÒ°üº¬¹Ø¼ü´ÊµÄ¾ä×Ó
+        $sentences = $this->splitSentences($text, $options['language']];
         $sentenceScores = [];
         
         foreach ($sentences as $index => $sentence) {
@@ -360,13 +360,13 @@ class TextSummarizer
             $sentenceScores[$index] = $score;
         }
         
-        // é€‰æ‹©æœ€é«˜åˆ†çš„å¥å­
-        arsort($sentenceScores);
-        $targetSentenceCount = max(1, ceil(count($sentences) * $options['compression_ratio']));
-        $targetSentenceCount = min($targetSentenceCount, $options['max_length'] / 20);
+        // Ñ¡Ôñ×î¸ß·ÖµÄ¾ä×Ó
+        arsort($sentenceScores];
+        $targetSentenceCount = max(1, ceil(count($sentences) * $options['compression_ratio'])];
+        $targetSentenceCount = min($targetSentenceCount, $options['max_length'] / 20];
         
-        $selectedIndices = array_slice(array_keys($sentenceScores), 0, $targetSentenceCount);
-        sort($selectedIndices);
+        $selectedIndices = array_slice(array_keys($sentenceScores], 0, $targetSentenceCount];
+        sort($selectedIndices];
         
         $summaryText = '';
         $selectedSentences = [];
@@ -375,7 +375,7 @@ class TextSummarizer
             $summaryText .= $sentences[$index] . ' ';
         }
         
-        $summaryText = trim($summaryText);
+        $summaryText = trim($summaryText];
         if (mb_strlen($summaryText) > $options['max_length']) {
             $summaryText = mb_substr($summaryText, 0, $options['max_length']) . '...';
         }
@@ -385,27 +385,27 @@ class TextSummarizer
             'sentences' => $selectedSentences,
             'keywords' => $keywords,
             'algorithm' => 'keyword',
-            'compression_ratio' => count($selectedSentences) / count($sentences),
-            'original_length' => mb_strlen($text),
+            'compression_ratio' => count($selectedSentences) / count($sentences],
+            'original_length' => mb_strlen($text],
             'summary_length' => mb_strlen($summaryText)
         ];
     }
     
     /**
-     * åˆ†å¥
+     * ·Ö¾ä
      *
-     * @param string $text æ–‡æœ¬
-     * @param string $language è¯­è¨€
-     * @return array å¥å­æ•°ç»„
+     * @param string $text ÎÄ±¾
+     * @param string $language ÓïÑÔ
+     * @return array ¾ä×ÓÊı×é
      */
     private function splitSentences(string $text, string $language): array
     {
-        $text = str_replace(["\r\n", "\r"], "\n", $text);
+        $text = str_replace(["\r\n", "\r"],  "\n", $text];
         
         if ($language === 'zh-CN') {
-            // ä¸­æ–‡åˆ†å¥
-            $pattern = '/([ã€‚ï¼ï¼Ÿâ€¦]+)(?=[\s\S])/u';
-            $sentences = preg_split($pattern, $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+            // ÖĞÎÄ·Ö¾ä
+            $pattern = '/([¡££¡£¿¡­]+)(?=[\s\S])/u';
+            $sentences = preg_split($pattern, $text, -1, PREG_SPLIT_DELIM_CAPTURE];
             
             $result = [];
             for ($i = 0; $i < count($sentences) - 1; $i += 2) {
@@ -416,70 +416,70 @@ class TextSummarizer
                 }
             }
             
-            // å¤„ç†æœ€åä¸€ä¸ªå¯èƒ½æ²¡æœ‰æ ‡ç‚¹çš„å¥å­
+            // ´¦Àí×îºóÒ»¸ö¿ÉÄÜÃ»ÓĞ±êµãµÄ¾ä×Ó
             if (count($sentences) % 2 === 1) {
-                $lastSentence = end($sentences);
+                $lastSentence = end($sentences];
                 if (trim($lastSentence) !== '') {
                     $result[] = $lastSentence;
                 }
             }
         } else {
-            // è‹±æ–‡åˆ†å¥
+            // Ó¢ÎÄ·Ö¾ä
             $pattern = '/(?<=[.!?])\s+/';
-            $result = preg_split($pattern, $text);
+            $result = preg_split($pattern, $text];
         }
         
-        // è¿‡æ»¤ç©ºå¥å­å’Œè¿‡çŸ­å¥å­
+        // ¹ıÂË¿Õ¾ä×ÓºÍ¹ı¶Ì¾ä×Ó
         $result = array_filter($result, function($sentence) {
             return trim($sentence) !== '' && mb_strlen(trim($sentence)) >= $this->config['min_sentence_length'];
-        });
+        }];
         
-        // æˆªæ–­è¿‡é•¿å¥å­
+        // ½Ø¶Ï¹ı³¤¾ä×Ó
         foreach ($result as &$sentence) {
             if (mb_strlen($sentence) > $this->config['max_sentence_length']) {
                 $sentence = mb_substr($sentence, 0, $this->config['max_sentence_length']) . '...';
             }
         }
         
-        return array_values($result);
+        return array_values($result];
     }
     
     /**
-     * åˆ†è¯
+     * ·Ö´Ê
      *
-     * @param string $text æ–‡æœ¬
-     * @param string $language è¯­è¨€
-     * @return array è¯å…ƒæ•°ç»„
+     * @param string $text ÎÄ±¾
+     * @param string $language ÓïÑÔ
+     * @return array ´ÊÔªÊı×é
      */
     private function tokenize(string $text, string $language): array
     {
         if ($this->tokenizer) {
-            $tokens = $this->tokenizer->tokenize($text);
-            return array_column($tokens, 'text');
+            $tokens = $this->tokenizer->tokenize($text];
+            return array_column($tokens, 'text'];
         }
         
-        // ç®€å•åˆ†è¯
+        // ¼òµ¥·Ö´Ê
         if ($language === 'zh-CN') {
-            // ä¸­æ–‡æŒ‰å­—ç¬¦åˆ†è¯
-            $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY);
+            // ÖĞÎÄ°´×Ö·û·Ö´Ê
+            $chars = preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY];
             return array_filter($chars, function($char) {
-                return preg_match('/[\p{Han}\p{L}\p{N}]/u', $char);
-            });
+                return preg_match('/[\p{Han}\p{L}\p{N}]/u', $char];
+            }];
         } else {
-            // è‹±æ–‡æŒ‰ç©ºæ ¼åˆ†è¯
-            $words = preg_split('/\s+/', $text);
+            // Ó¢ÎÄ°´¿Õ¸ñ·Ö´Ê
+            $words = preg_split('/\s+/', $text];
             return array_filter($words, function($word) {
-                return preg_match('/[\p{L}\p{N}]/u', $word);
-            });
+                return preg_match('/[\p{L}\p{N}]/u', $word];
+            }];
         }
     }
     
     /**
-     * è¿‡æ»¤åœç”¨è¯
+     * ¹ıÂËÍ£ÓÃ´Ê
      *
-     * @param array $tokens è¯å…ƒæ•°ç»„
-     * @param string $language è¯­è¨€
-     * @return array è¿‡æ»¤åçš„è¯å…ƒæ•°ç»„
+     * @param array $tokens ´ÊÔªÊı×é
+     * @param string $language ÓïÑÔ
+     * @return array ¹ıÂËºóµÄ´ÊÔªÊı×é
      */
     private function filterStopwords(array $tokens, string $language): array
     {
@@ -488,42 +488,42 @@ class TextSummarizer
         }
         
         return array_filter($tokens, function($token) use ($language) {
-            return !in_array(mb_strtolower($token), $this->stopwords[$language]);
-        });
+            return !in_[mb_strtolower($token], $this->stopwords[$language]];
+        }];
     }
     
     /**
-     * è®¡ç®—TF-IDF
+     * ¼ÆËãTF-IDF
      *
-     * @param array $sentenceTokens å¥å­è¯å…ƒæ•°ç»„
-     * @param array $allTokens æ‰€æœ‰è¯å…ƒ
-     * @return array å¥å­TF-IDFåˆ†æ•°
+     * @param array $sentenceTokens ¾ä×Ó´ÊÔªÊı×é
+     * @param array $allTokens ËùÓĞ´ÊÔª
+     * @return array ¾ä×ÓTF-IDF·ÖÊı
      */
     private function calculateTfIdf(array $sentenceTokens, array $allTokens): array
     {
-        $documentCount = count($sentenceTokens);
-        $wordFrequency = array_count_values($allTokens);
+        $documentCount = count($sentenceTokens];
+        $wordFrequency = array_count_values($allTokens];
         $wordInDocuments = [];
         
-        // è®¡ç®—æ¯ä¸ªè¯å‡ºç°åœ¨å‡ ä¸ªå¥å­ä¸­
+        // ¼ÆËãÃ¿¸ö´Ê³öÏÖÔÚ¼¸¸ö¾ä×ÓÖĞ
         foreach ($wordFrequency as $word => $freq) {
             $wordInDocuments[$word] = 0;
             foreach ($sentenceTokens as $tokens) {
-                if (in_array($word, $tokens)) {
+                if (in_[$word, $tokens)) {
                     $wordInDocuments[$word]++;
                 }
             }
         }
         
-        // è®¡ç®—æ¯ä¸ªå¥å­çš„TF-IDFåˆ†æ•°
+        // ¼ÆËãÃ¿¸ö¾ä×ÓµÄTF-IDF·ÖÊı
         $scores = [];
         foreach ($sentenceTokens as $index => $tokens) {
             $score = 0;
-            $sentenceWordFreq = array_count_values($tokens);
+            $sentenceWordFreq = array_count_values($tokens];
             
             foreach ($sentenceWordFreq as $word => $freq) {
-                $tf = $freq / count($tokens);
-                $idf = log($documentCount / ($wordInDocuments[$word] + 1));
+                $tf = $freq / count($tokens];
+                $idf = log($documentCount / ($wordInDocuments[$word] + 1)];
                 $score += $tf * $idf;
             }
             
@@ -534,11 +534,11 @@ class TextSummarizer
     }
     
     /**
-     * è®¡ç®—ç›¸ä¼¼åº¦
+     * ¼ÆËãÏàËÆ¶È
      *
-     * @param array $tokens1 è¯å…ƒæ•°ç»„1
-     * @param array $tokens2 è¯å…ƒæ•°ç»„2
-     * @return float ç›¸ä¼¼åº¦
+     * @param array $tokens1 ´ÊÔªÊı×é1
+     * @param array $tokens2 ´ÊÔªÊı×é2
+     * @return float ÏàËÆ¶È
      */
     private function calculateSimilarity(array $tokens1, array $tokens2): float
     {
@@ -546,72 +546,72 @@ class TextSummarizer
             return 0;
         }
         
-        $intersection = array_intersect($tokens1, $tokens2);
-        return count($intersection) / sqrt(count($tokens1) * count($tokens2));
+        $intersection = array_intersect($tokens1, $tokens2];
+        return count($intersection) / sqrt(count($tokens1) * count($tokens2)];
     }
     
     /**
-     * å‹ç¼©å¥å­
+     * Ñ¹Ëõ¾ä×Ó
      *
-     * @param string $sentence åŸå¥å­
-     * @param string $language è¯­è¨€
-     * @return string å‹ç¼©åçš„å¥å­
+     * @param string $sentence Ô­¾ä×Ó
+     * @param string $language ÓïÑÔ
+     * @return string Ñ¹ËõºóµÄ¾ä×Ó
      */
     private function compressSentence(string $sentence, string $language): string
     {
-        $tokens = $this->tokenize($sentence, $language);
-        $filteredTokens = $this->filterStopwords($tokens, $language);
+        $tokens = $this->tokenize($sentence, $language];
+        $filteredTokens = $this->filterStopwords($tokens, $language];
         
         if (count($filteredTokens) < count($tokens) * 0.5) {
-            // å¦‚æœè¿‡æ»¤åè¯å…ƒå¤ªå°‘ï¼Œä¿ç•™åŸå¥
+            // Èç¹û¹ıÂËºó´ÊÔªÌ«ÉÙ£¬±£ÁôÔ­¾ä
             return $sentence;
         }
         
         if ($language === 'zh-CN') {
-            // ä¸­æ–‡å¥å­å‹ç¼©
-            return implode('', $filteredTokens);
+            // ÖĞÎÄ¾ä×ÓÑ¹Ëõ
+            return implode('', $filteredTokens];
         } else {
-            // è‹±æ–‡å¥å­å‹ç¼©
-            return implode(' ', $filteredTokens);
+            // Ó¢ÎÄ¾ä×ÓÑ¹Ëõ
+            return implode(' ', $filteredTokens];
         }
     }
     
     /**
-     * è®¡ç®—å¥å­æ•°é‡
+     * ¼ÆËã¾ä×ÓÊıÁ¿
      *
-     * @param string $text æ–‡æœ¬
-     * @return int å¥å­æ•°é‡
+     * @param string $text ÎÄ±¾
+     * @return int ¾ä×ÓÊıÁ¿
      */
     private function countSentences(string $text): int
     {
-        $text = str_replace(["\r\n", "\r"], "\n", $text);
-        return preg_match_all('/[.!?ã€‚ï¼ï¼Ÿâ€¦]+/u', $text) + 1;
+        $text = str_replace(["\r\n", "\r"],  "\n", $text];
+        return preg_match_all('/[.!?¡££¡£¿¡­]+/u', $text) + 1;
     }
     
     /**
-     * æ£€æµ‹è¯­è¨€
+     * ¼ì²âÓïÑÔ
      *
-     * @param string $text æ–‡æœ¬
-     * @return string è¯­è¨€ä»£ç 
+     * @param string $text ÎÄ±¾
+     * @return string ÓïÑÔ´úÂë
      */
     private function detectLanguage(string $text): string
     {
-        // ç®€å•è¯­è¨€æ£€æµ‹ï¼šè®¡ç®—ä¸­æ–‡å­—ç¬¦æ¯”ä¾‹
-        $totalChars = mb_strlen($text);
+        // ¼òµ¥ÓïÑÔ¼ì²â£º¼ÆËãÖĞÎÄ×Ö·û±ÈÀı
+        $totalChars = mb_strlen($text];
         if ($totalChars === 0) {
             return $this->config['default_language'];
         }
         
-        $chineseChars = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text);
+        $chineseChars = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text];
         $chineseRatio = $chineseChars / $totalChars;
         
         return $chineseRatio > 0.1 ? 'zh-CN' : 'en-US';
     }
     
     /**
-     * è·å–é…ç½®
+     * »ñÈ¡ÅäÖÃ
      *
-     * @return array é…ç½®
+     * @return array ÅäÖÃ
      */
     public function getConfig(): array
     {
@@ -619,19 +619,19 @@ class TextSummarizer
     }
     
     /**
-     * è®¾ç½®é…ç½®
+     * ÉèÖÃÅäÖÃ
      *
-     * @param array $config é…ç½®
+     * @param array $config ÅäÖÃ
      */
     public function setConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config);
+        $this->config = array_merge($this->config, $config];
     }
     
     /**
-     * è®¾ç½®åˆ†è¯å™¨
+     * ÉèÖÃ·Ö´ÊÆ÷
      *
-     * @param TokenizerInterface $tokenizer åˆ†è¯å™¨
+     * @param TokenizerInterface $tokenizer ·Ö´ÊÆ÷
      */
     public function setTokenizer(TokenizerInterface $tokenizer): void
     {
@@ -639,10 +639,11 @@ class TextSummarizer
     }
     
     /**
-     * æ¸…é™¤ç¼“å­˜
+     * Çå³ı»º´æ
      */
     public function clearCache(): void
     {
         $this->cache = [];
     }
 }
+

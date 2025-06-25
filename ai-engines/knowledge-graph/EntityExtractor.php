@@ -1,17 +1,17 @@
-ï»¿<?php
+<?php
 /**
- * æ–‡ä»¶åï¼šEntityExtractor.php
- * åŠŸèƒ½æè¿°ï¼šå®ä½“æå–å™¨ - ä»æ–‡æœ¬ä¸­æå–å®ä½“
- * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
- * æœ€åä¿®æ”¹ï¼š2025-01-XX
- * ç‰ˆæœ¬ï¼š1.0.0
+ * ÎÄ¼şÃû£ºEntityExtractor.php
+ * ¹¦ÄÜÃèÊö£ºÊµÌåÌáÈ¡Æ÷ - ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå
+ * ´´½¨Ê±¼ä£º2025-01-XX
+ * ×îºóĞŞ¸Ä£º2025-01-XX
+ * °æ±¾£º1.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
@@ -22,49 +22,49 @@ use AlingAi\AI\Engines\NLP\TokenizerInterface;
 use AlingAi\AI\Engines\NLP\UniversalTokenizer;
 
 /**
- * å®ä½“æå–å™¨
+ * ÊµÌåÌáÈ¡Æ÷
  * 
- * ä»æ–‡æœ¬ä¸­æå–å®ä½“ï¼Œæ”¯æŒå¤šç§å®ä½“ç±»å‹å’Œè¯­è¨€
+ * ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå£¬Ö§³Ö¶àÖÖÊµÌåÀàĞÍºÍÓïÑÔ
  */
 class EntityExtractor
 {
     /**
-     * é…ç½®å‚æ•°
+     * ÅäÖÃ²ÎÊı
      */
     private array $config;
     
     /**
-     * å‘½åå®ä½“è¯†åˆ«æ¨¡å‹
+     * ÃüÃûÊµÌåÊ¶±ğÄ£ĞÍ
      */
     private ?NERModel $nerModel = null;
     
     /**
-     * åˆ†è¯å™¨
+     * ·Ö´ÊÆ÷
      */
     private ?TokenizerInterface $tokenizer = null;
     
     /**
-     * å®ä½“ç±»å‹æ˜ å°„
+     * ÊµÌåÀàĞÍÓ³Éä
      */
     private array $entityTypeMap = [];
 
 
     /**
-     * æ„é€ å‡½æ•°
+     * ¹¹Ôìº¯Êı
      * 
-     * @param array $config é…ç½®å‚æ•°
+     * @param array $config ÅäÖÃ²ÎÊı
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config);
-        $this->initializeComponents();
-        $this->initializeEntityTypeMap();
+        $this->config = array_merge($this->getDefaultConfig(), $config];
+        $this->initializeComponents(];
+        $this->initializeEntityTypeMap(];
     }
     
     /**
-     * è·å–é»˜è®¤é…ç½®
+     * »ñÈ¡Ä¬ÈÏÅäÖÃ
      * 
-     * @return array é»˜è®¤é…ç½®
+     * @return array Ä¬ÈÏÅäÖÃ
      */
     private function getDefaultConfig(): array
     {
@@ -74,23 +74,23 @@ class EntityExtractor
             'entity_types' => [
                 'PERSON', 'ORGANIZATION', 'LOCATION', 'DATE', 'TIME',
                 'MONEY', 'PERCENT', 'PRODUCT', 'EVENT', 'WORK_OF_ART'
-            ],
+            ], 
             'enable_entity_linking' => true,
             'enable_coreference_resolution' => true
         ];
     }
     
     /**
-     * åˆå§‹åŒ–ç»„ä»¶
+     * ³õÊ¼»¯×é¼ş
      */
     private function initializeComponents(): void
     {
-        $this->nerModel = new NERModel();
-        $this->tokenizer = new UniversalTokenizer();
+        $this->nerModel = new NERModel(];
+        $this->tokenizer = new UniversalTokenizer(];
     }
     
     /**
-     * åˆå§‹åŒ–å®ä½“ç±»å‹æ˜ å°„
+     * ³õÊ¼»¯ÊµÌåÀàĞÍÓ³Éä
      */
     private function initializeEntityTypeMap(): void
     {
@@ -110,40 +110,40 @@ class EntityExtractor
 
     
     /**
-     * ä»æ–‡æœ¬ä¸­æå–å®ä½“
+     * ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå
      * 
-     * @param string $text è¾“å…¥æ–‡æœ¬
-     * @param array $options æå–é€‰é¡¹
-     * @return array æå–çš„å®ä½“
+     * @param string $text ÊäÈëÎÄ±¾
+     * @param array $options ÌáÈ¡Ñ¡Ïî
+     * @return array ÌáÈ¡µÄÊµÌå
      * @throws InvalidArgumentException
      */
     public function extract(string $text, array $options = []): array
     {
-        // éªŒè¯æ–‡æœ¬
+        // ÑéÖ¤ÎÄ±¾
         if (empty($text)) {
-            throw new InvalidArgumentException('æ–‡æœ¬ä¸èƒ½ä¸ºç©º');
+            throw new InvalidArgumentException('ÎÄ±¾²»ÄÜÎª¿Õ'];
         }
         
-        // å¤„ç†é€‰é¡¹
-        $options = array_merge($this->config, $options);
+        // ´¦ÀíÑ¡Ïî
+        $options = array_merge($this->config, $options];
         
-        // åˆ†è¯
-        $tokens = $this->tokenizer->tokenize($text);
+        // ·Ö´Ê
+        $tokens = $this->tokenizer->tokenize($text];
         
-        // å‘½åå®ä½“è¯†åˆ«
-        $entities = $this->nerModel->recognize($tokens);
+        // ÃüÃûÊµÌåÊ¶±ğ
+        $entities = $this->nerModel->recognize($tokens];
         
-        // è¿‡æ»¤å’Œè½¬æ¢å®ä½“
-        $filteredEntities = $this->filterAndTransformEntities($entities, $options);
+        // ¹ıÂËºÍ×ª»»ÊµÌå
+        $filteredEntities = $this->filterAndTransformEntities($entities, $options];
         
-        // å®ä½“é“¾æ¥
+        // ÊµÌåÁ´½Ó
         if ($options['enable_entity_linking']) {
-            $filteredEntities = $this->linkEntities($filteredEntities, $options);
+            $filteredEntities = $this->linkEntities($filteredEntities, $options];
         }
         
-        // å…±æŒ‡æ¶ˆè§£
+        // ¹²Ö¸Ïû½â
         if ($options['enable_coreference_resolution']) {
-            $filteredEntities = $this->resolveCoreferenceEntities($filteredEntities, $text, $options);
+            $filteredEntities = $this->resolveCoreferenceEntities($filteredEntities, $text, $options];
         }
         
         return $filteredEntities;
@@ -151,11 +151,11 @@ class EntityExtractor
 
     
     /**
-     * è¿‡æ»¤å’Œè½¬æ¢å®ä½“
+     * ¹ıÂËºÍ×ª»»ÊµÌå
      * 
-     * @param array $entities å®ä½“åˆ—è¡¨
-     * @param array $options é€‰é¡¹
-     * @return array è¿‡æ»¤å’Œè½¬æ¢åçš„å®ä½“
+     * @param array $entities ÊµÌåÁĞ±í
+     * @param array $options Ñ¡Ïî
+     * @return array ¹ıÂËºÍ×ª»»ºóµÄÊµÌå
      */
     private function filterAndTransformEntities(array $entities, array $options): array
     {
@@ -165,36 +165,36 @@ class EntityExtractor
         $allowedEntityTypes = $options['entity_types'];
         
         foreach ($entities as $entity) {
-            // è¿‡æ»¤ä½ç½®ä¿¡åº¦å®ä½“
+            // ¹ıÂËµÍÖÃĞÅ¶ÈÊµÌå
             if ($entity['confidence'] < $confidenceThreshold) {
                 continue;
             }
             
-            // è¿‡æ»¤è¿‡é•¿çš„å®ä½“
-            if (mb_strlen($entity['text'], 'UTF-8') > $maxEntityLength) {
+            // ¹ıÂË¹ı³¤µÄÊµÌå
+            if (mb_strlen($entity['text'],  'UTF-8') > $maxEntityLength) {
                 continue;
             }
             
-            // è¿‡æ»¤ä¸åœ¨å…è®¸ç±»å‹åˆ—è¡¨ä¸­çš„å®ä½“
-            if (!in_array($entity['type'], $allowedEntityTypes)) {
+            // ¹ıÂË²»ÔÚÔÊĞíÀàĞÍÁĞ±íÖĞµÄÊµÌå
+            if (!in_[$entity['type'],  $allowedEntityTypes)) {
                 continue;
             }
             
-            // è½¬æ¢å®ä½“ç±»å‹
-            $entityType = $this->mapEntityType($entity['type']);
+            // ×ª»»ÊµÌåÀàĞÍ
+            $entityType = $this->mapEntityType($entity['type']];
             
-            // æ„å»ºå®ä½“å¯¹è±¡
+            // ¹¹½¨ÊµÌå¶ÔÏó
             $result[] = [
-                'id' => $this->generateEntityId($entity),
-                'text' => $entity['text'],
+                'id' => $this->generateEntityId($entity],
+                'text' => $entity['text'], 
                 'type' => $entityType,
-                'confidence' => $entity['confidence'],
-                'start_pos' => $entity['start_pos'],
-                'end_pos' => $entity['end_pos'],
+                'confidence' => $entity['confidence'], 
+                'start_pos' => $entity['start_pos'], 
+                'end_pos' => $entity['end_pos'], 
                 'metadata' => [
                     'source' => 'text_extraction',
                     'extraction_time' => time()
-                ],
+                ], 
                 'attributes' => $this->extractEntityAttributes($entity)
             ];
         }
@@ -204,11 +204,11 @@ class EntityExtractor
 
     
     /**
-     * è¿‡æ»¤å’Œè½¬æ¢å®ä½“
+     * ¹ıÂËºÍ×ª»»ÊµÌå
      * 
-     * @param array $entities å®ä½“åˆ—è¡¨
-     * @param array $options é€‰é¡¹
-     * @return array è¿‡æ»¤å’Œè½¬æ¢åçš„å®ä½“
+     * @param array $entities ÊµÌåÁĞ±í
+     * @param array $options Ñ¡Ïî
+     * @return array ¹ıÂËºÍ×ª»»ºóµÄÊµÌå
      */
     private function filterAndTransformEntities(array $entities, array $options): array
     {
@@ -218,36 +218,36 @@ class EntityExtractor
         $allowedEntityTypes = $options['entity_types'];
         
         foreach ($entities as $entity) {
-            // è¿‡æ»¤ä½ç½®ä¿¡åº¦å®ä½“
+            // ¹ıÂËµÍÖÃĞÅ¶ÈÊµÌå
             if ($entity['confidence'] < $confidenceThreshold) {
                 continue;
             }
             
-            // è¿‡æ»¤è¿‡é•¿çš„å®ä½“
-            if (mb_strlen($entity['text'], 'UTF-8') > $maxEntityLength) {
+            // ¹ıÂË¹ı³¤µÄÊµÌå
+            if (mb_strlen($entity['text'],  'UTF-8') > $maxEntityLength) {
                 continue;
             }
             
-            // è¿‡æ»¤ä¸åœ¨å…è®¸ç±»å‹åˆ—è¡¨ä¸­çš„å®ä½“
-            if (!in_array($entity['type'], $allowedEntityTypes)) {
+            // ¹ıÂË²»ÔÚÔÊĞíÀàĞÍÁĞ±íÖĞµÄÊµÌå
+            if (!in_[$entity['type'],  $allowedEntityTypes)) {
                 continue;
             }
             
-            // è½¬æ¢å®ä½“ç±»å‹
-            $entityType = $this->mapEntityType($entity['type']);
+            // ×ª»»ÊµÌåÀàĞÍ
+            $entityType = $this->mapEntityType($entity['type']];
             
-            // æ„å»ºå®ä½“å¯¹è±¡
+            // ¹¹½¨ÊµÌå¶ÔÏó
             $result[] = [
-                'id' => $this->generateEntityId($entity),
-                'text' => $entity['text'],
+                'id' => $this->generateEntityId($entity],
+                'text' => $entity['text'], 
                 'type' => $entityType,
-                'confidence' => $entity['confidence'],
-                'start_pos' => $entity['start_pos'],
-                'end_pos' => $entity['end_pos'],
+                'confidence' => $entity['confidence'], 
+                'start_pos' => $entity['start_pos'], 
+                'end_pos' => $entity['end_pos'], 
                 'metadata' => [
                     'source' => 'text_extraction',
                     'extraction_time' => time()
-                ],
+                ], 
                 'attributes' => $this->extractEntityAttributes($entity)
             ];
         }
@@ -256,10 +256,10 @@ class EntityExtractor
     }
 
     /**
-     * æ˜ å°„å®ä½“ç±»å‹
+     * Ó³ÉäÊµÌåÀàĞÍ
      * 
-     * @param string $nerType NERå®ä½“ç±»å‹
-     * @return string æ˜ å°„åçš„å®ä½“ç±»å‹
+     * @param string $nerType NERÊµÌåÀàĞÍ
+     * @return string Ó³ÉäºóµÄÊµÌåÀàĞÍ
      */
     private function mapEntityType(string $nerType): string
     {
@@ -267,45 +267,45 @@ class EntityExtractor
     }
     
     /**
-     * ç”Ÿæˆå®ä½“ID
+     * Éú³ÉÊµÌåID
      * 
-     * @param array $entity å®ä½“
-     * @return string å®ä½“ID
+     * @param array $entity ÊµÌå
+     * @return string ÊµÌåID
      */
     private function generateEntityId(array $entity): string
     {
-        return md5($entity['text'] . $entity['type'] . $entity['start_pos'] . $entity['end_pos']);
+        return md5($entity['text'] . $entity['type'] . $entity['start_pos'] . $entity['end_pos']];
     }
     
     /**
-     * æå–å®ä½“å±æ€§
+     * ÌáÈ¡ÊµÌåÊôĞÔ
      * 
-     * @param array $entity å®ä½“
-     * @return array å®ä½“å±æ€§
+     * @param array $entity ÊµÌå
+     * @return array ÊµÌåÊôĞÔ
      */
     private function extractEntityAttributes(array $entity): array
     {
         $attributes = [];
         
-        // æ ¹æ®å®ä½“ç±»å‹æå–ç‰¹å®šå±æ€§
+        // ¸ù¾İÊµÌåÀàĞÍÌáÈ¡ÌØ¶¨ÊôĞÔ
         switch ($entity['type']) {
             case 'PERSON':
-                // å¯ä»¥æå–äººåçš„å§“ã€åç­‰ä¿¡æ¯
+                // ¿ÉÒÔÌáÈ¡ÈËÃûµÄĞÕ¡¢ÃûµÈĞÅÏ¢
                 break;
             case 'ORGANIZATION':
-                // å¯ä»¥æå–ç»„ç»‡æœºæ„çš„ç±»å‹ã€è¡Œä¸šç­‰ä¿¡æ¯
+                // ¿ÉÒÔÌáÈ¡×éÖ¯»ú¹¹µÄÀàĞÍ¡¢ĞĞÒµµÈĞÅÏ¢
                 break;
             case 'LOCATION':
-                // å¯ä»¥æå–åœ°ç‚¹çš„ç»çº¬åº¦ã€æ‰€å±å›½å®¶ç­‰ä¿¡æ¯
+                // ¿ÉÒÔÌáÈ¡µØµãµÄ¾­Î³¶È¡¢ËùÊô¹ú¼ÒµÈĞÅÏ¢
                 break;
             case 'DATE':
-                // å¯ä»¥æå–æ—¥æœŸçš„å¹´ã€æœˆã€æ—¥ç­‰ä¿¡æ¯
+                // ¿ÉÒÔÌáÈ¡ÈÕÆÚµÄÄê¡¢ÔÂ¡¢ÈÕµÈĞÅÏ¢
                 if (isset($entity['normalized_value'])) {
                     $attributes['normalized_date'] = $entity['normalized_value'];
                 }
                 break;
             case 'TIME':
-                // å¯ä»¥æå–æ—¶é—´çš„å°æ—¶ã€åˆ†é’Ÿç­‰ä¿¡æ¯
+                // ¿ÉÒÔÌáÈ¡Ê±¼äµÄĞ¡Ê±¡¢·ÖÖÓµÈĞÅÏ¢
                 if (isset($entity['normalized_value'])) {
                     $attributes['normalized_time'] = $entity['normalized_value'];
                 }
@@ -316,33 +316,34 @@ class EntityExtractor
     }
 
     /**
-     * åˆ¤æ–­ä¸¤ä¸ªå®ä½“æ˜¯å¦å­˜åœ¨å…±æŒ‡å…³ç³»
+     * ÅĞ¶ÏÁ½¸öÊµÌåÊÇ·ñ´æÔÚ¹²Ö¸¹ØÏµ
      * 
-     * @param array $entity1 ç¬¬ä¸€ä¸ªå®ä½“
-     * @param array $entity2 ç¬¬äºŒä¸ªå®ä½“
-     * @param string $text åŸå§‹æ–‡æœ¬
-     * @return bool æ˜¯å¦å­˜åœ¨å…±æŒ‡å…³ç³»
+     * @param array $entity1 µÚÒ»¸öÊµÌå
+     * @param array $entity2 µÚ¶ş¸öÊµÌå
+     * @param string $text Ô­Ê¼ÎÄ±¾
+     * @return bool ÊÇ·ñ´æÔÚ¹²Ö¸¹ØÏµ
      */
     private function areCorefEntities(array $entity1, array $entity2, string $text): bool
     {
-        // å®ç°å…±æŒ‡å…³ç³»åˆ¤æ–­é€»è¾‘
-        // è¿™é‡Œå¯ä»¥ä½¿ç”¨æ›´å¤æ‚çš„ç®—æ³•ï¼Œå¦‚åŸºäºè§„åˆ™æˆ–æœºå™¨å­¦ä¹ çš„æ–¹æ³•
-        // ç®€å•å®ç°ï¼šæ£€æŸ¥æ–‡æœ¬ç›¸ä¼¼åº¦å’Œä½ç½®å…³ç³»
+        // ÊµÏÖ¹²Ö¸¹ØÏµÅĞ¶ÏÂß¼­
+        // ÕâÀï¿ÉÒÔÊ¹ÓÃ¸ü¸´ÔÓµÄËã·¨£¬Èç»ùÓÚ¹æÔò»ò»úÆ÷Ñ§Ï°µÄ·½·¨
+        // ¼òµ¥ÊµÏÖ£º¼ì²éÎÄ±¾ÏàËÆ¶ÈºÍÎ»ÖÃ¹ØÏµ
         
-        // å¦‚æœä¸¤ä¸ªå®ä½“æ–‡æœ¬å®Œå…¨ç›¸åŒï¼Œå¯èƒ½æ˜¯å…±æŒ‡
+        // Èç¹ûÁ½¸öÊµÌåÎÄ±¾ÍêÈ«ÏàÍ¬£¬¿ÉÄÜÊÇ¹²Ö¸
         if ($entity1['text'] === $entity2['text']) {
             return true;
         }
         
-        // å¦‚æœä¸€ä¸ªå®ä½“æ˜¯å¦ä¸€ä¸ªçš„å­ä¸²ï¼Œå¯èƒ½æ˜¯å…±æŒ‡
-        if (stripos($entity1['text'], $entity2['text']) !== false || 
-            stripos($entity2['text'], $entity1['text']) !== false) {
+        // Èç¹ûÒ»¸öÊµÌåÊÇÁíÒ»¸öµÄ×Ó´®£¬¿ÉÄÜÊÇ¹²Ö¸
+        if (stripos($entity1['text'],  $entity2['text']) !== false || 
+            stripos($entity2['text'],  $entity1['text']) !== false) {
             return true;
         }
         
-        // æ›´å¤æ‚çš„å…±æŒ‡æ£€æµ‹é€»è¾‘å¯ä»¥åœ¨è¿™é‡Œå®ç°
-        // ä¾‹å¦‚ï¼Œæ£€æŸ¥ä»£è¯å’Œåè¯ä¹‹é—´çš„å…³ç³»ï¼Œæˆ–è€…ä½¿ç”¨å¤–éƒ¨æœåŠ¡
+        // ¸ü¸´ÔÓµÄ¹²Ö¸¼ì²âÂß¼­¿ÉÒÔÔÚÕâÀïÊµÏÖ
+        // ÀıÈç£¬¼ì²é´ú´ÊºÍÃû´ÊÖ®¼äµÄ¹ØÏµ£¬»òÕßÊ¹ÓÃÍâ²¿·şÎñ
         
         return false;
     }
 }
+

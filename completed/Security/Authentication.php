@@ -6,7 +6,7 @@ use App\Core\Session;
 use App\Models\User;
 
 /**
- * Authentication 类
+ * Authentication �?
  * 
  * 认证管理，处理用户登录和身份验证
  *
@@ -15,11 +15,11 @@ use App\Models\User;
 class Authentication
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
-        // 初始化安全组件
+        // 初始化安全组�?
     }
 
     /**

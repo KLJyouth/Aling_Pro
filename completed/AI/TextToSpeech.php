@@ -5,16 +5,16 @@ namespace App\AI;
 use App\Core\AIManager;
 
 /**
- * TextToSpeech 类
+ * TextToSpeech �?
  * 
- * 文本转语音组件，提供文本转语音功能
+ * 文本转语音组件，提供文本转语音功�?
  *
  * @package App\AI
  */
 class TextToSpeech
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -44,7 +44,7 @@ class TextToSpeech
     }
 
     /**
-     * 调整语速
+     * 调整语�?
      *
      * @param mixed ...$args 方法参数
      * @return mixed

@@ -1,10 +1,10 @@
 <?php
 /**
- * 系统管理器 - 整合所有测试、检查、调试功能
- * 增强版 - 包含智能监控、AI服务、安全监控等功能
+ * 系统管理�?- 整合所有测试、检查、调试功�?
+ * 增强�?- 包含智能监控、AI服务、安全监控等功能
  */
 
-declare(strict_types=1);
+declare(strict_types=1];
 
 namespace AlingAi\Admin;
 
@@ -20,11 +20,11 @@ class SystemManager
     protected $startTime;
     
     function __construct() {
-        $this->startTime = microtime(true);
-        $this->logger = new Logger('SystemManager');
-        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/logs/admin.log'));
+        $this->startTime = microtime(true];
+        $this->logger = new Logger('SystemManager'];
+        $this->logger->pushHandler(new StreamHandler(__DIR__ . '/../../storage/logs/admin.log')];
         
-        $this->initializeDatabase();
+        $this->initializeDatabase(];
     }
     
     /**
@@ -34,37 +34,37 @@ class SystemManager
     {
         try {
             $dbPath = __DIR__ . '/../../storage/database/admin.sqlite';
-            $dbDir = dirname($dbPath);
+            $dbDir = dirname($dbPath];
             
             if (!is_dir($dbDir)) {
-                mkdir($dbDir, 0755, true);
+                mkdir($dbDir, 0755, true];
             }
             
-            $this->db = new PDO("sqlite:{$dbPath}");
-            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->db = new PDO("sqlite:{$dbPath}"];
+            $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
             
         } catch (Exception $e) {
-            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]);
+            $this->logger->error('数据库初始化失败', ['error' => $e->getMessage()]];
             $this->db = null;
         }
     }
     
     /**
-     * 获取系统状态
+     * 获取系统状�?
      */
     function getSystemStatus(): array
     {
         $status = [
             'system_status' => 'healthy',
             'database_status' => 'disconnected',
-            'memory_usage' => $this->formatBytes(memory_get_usage(true)),
+            'memory_usage' => $this->formatBytes(memory_get_usage(true)],
             'uptime' => $this->getUptime(),
             'php_version' => PHP_VERSION,
             'overall_status' => 'healthy',
             'timestamp' => date('Y-m-d H:i:s')
         ];
         
-        // 检查数据库状态
+        // 检查数据库状�?
         if ($this->db) {
             $status['database_status'] = 'connected';
         } else {
@@ -72,9 +72,9 @@ class SystemManager
             $status['overall_status'] = 'warning';
         }
         
-        // 检查内存使用
-        $memoryUsage = memory_get_usage(true);
-        $memoryLimit = $this->parseSize(ini_get('memory_limit'));
+        // 检查内存使�?
+        $memoryUsage = memory_get_usage(true];
+        $memoryLimit = $this->parseSize(ini_get('memory_limit')];
         if ($memoryUsage > $memoryLimit * 0.8) {
             $status['system_status'] = 'warning';
             if ($status['overall_status'] === 'healthy') {
@@ -86,7 +86,7 @@ class SystemManager
     }
     
     /**
-     * 智能系统监控 - 基于文档需求增强
+     * 智能系统监控 - 基于文档需求增�?
      */
     function getIntelligentMonitoring(): array
     {
@@ -100,39 +100,39 @@ class SystemManager
                 'business_monitoring' => $this->getBusinessMetrics()
             ];
             
-            $this->logger->info('智能监控数据收集完成', ['modules' => count($monitoring)]);
+            $this->logger->info('智能监控数据收集完成', ['modules' => count($monitoring)]];
             return $monitoring;
             
         } catch (Exception $e) {
-            $this->logger->error('智能监控失败', ['error' => $e->getMessage()]);
-            return ['error' => '智能监控系统暂时不可用'];
+            $this->logger->error('智能监控失败', ['error' => $e->getMessage()]];
+            return ['error' => '智能监控系统暂时不可�?];
         }
     }
     
     /**
-     * 高级系统健康检查
+     * 高级系统健康检�?
      */
     private function getAdvancedSystemHealth(): array
     {
         $health = [
             'overall_score' => 85,
             'components' => [
-                'database' => ['status' => 'healthy', 'message' => '连接正常'],
-                'cache' => ['status' => 'healthy', 'message' => '缓存可用'],
-                'websocket' => ['status' => 'warning', 'message' => 'WebSocket端口未监听'],
-                'ai_service' => ['status' => 'healthy', 'message' => 'AI服务配置正常'],
-                'security_system' => ['status' => 'healthy', 'message' => '安全系统运行正常'],
+                'database' => ['status' => 'healthy', 'message' => '连接正常'], 
+                'cache' => ['status' => 'healthy', 'message' => '缓存可用'], 
+                'websocket' => ['status' => 'warning', 'message' => 'WebSocket端口未监�?], 
+                'ai_service' => ['status' => 'healthy', 'message' => 'AI服务配置正常'], 
+                'security_system' => ['status' => 'healthy', 'message' => '安全系统运行正常'], 
                 'file_system' => ['status' => 'healthy', 'message' => '文件系统正常']
-            ],
-            'alerts' => [],
-            'recommendations' => ['系统运行状态良好，建议监控WebSocket服务状态']
+            ], 
+            'alerts' => [], 
+            'recommendations' => ['系统运行状态良好，建议监控WebSocket服务状�?]
         ];
         
         return $health;
     }
     
     /**
-     * AI服务状态监控
+     * AI服务状态监�?
      */
     private function getAIServicesStatus(): array
     {
@@ -142,37 +142,37 @@ class SystemManager
                 'response_time' => '150ms',
                 'availability' => '99.9%',
                 'last_check' => date('Y-m-d H:i:s')
-            ],
+            ], 
             'natural_language_processing' => [
                 'status' => 'active',
                 'model_loaded' => true,
                 'processing_queue' => 0,
                 'last_check' => date('Y-m-d H:i:s')
-            ],
+            ], 
             'computer_vision' => [
                 'status' => 'active',
                 'model_loaded' => true,
                 'gpu_utilization' => '45%',
                 'last_check' => date('Y-m-d H:i:s')
-            ],
+            ], 
             'speech_processing' => [
                 'status' => 'active',
                 'tts_available' => true,
                 'stt_available' => true,
                 'last_check' => date('Y-m-d H:i:s')
-            ],
+            ], 
             'knowledge_graph' => [
                 'status' => 'active',
                 'nodes_count' => 15420,
                 'relationships_count' => 52341,
                 'last_update' => date('Y-m-d H:i:s')
-            ],
+            ], 
             'recommendation_engine' => [
                 'status' => 'active',
                 'model_accuracy' => '94.2%',
                 'predictions_today' => 1847,
                 'last_training' => '2025-01-13 02:00:00'
-            ],
+            ], 
             'total_services' => 6,
             'active_services' => 6,
             'performance_metrics' => [
@@ -185,7 +185,7 @@ class SystemManager
     }
     
     /**
-     * 安全监控和威胁检测
+     * 安全监控和威胁检�?
      */
     private function getSecurityMonitoring(): array
     {
@@ -196,29 +196,29 @@ class SystemManager
                     'type' => 'SQL Injection Attempt',
                     'severity' => 'medium',
                     'source_ip' => '192.168.1.100',
-                    'timestamp' => date('Y-m-d H:i:s', time() - 300),
+                    'timestamp' => date('Y-m-d H:i:s', time() - 300],
                     'status' => 'blocked'
                 ]
-            ],
+            ], 
             'security_score' => 94,
             'zero_trust_status' => [
                 'verify_explicitly' => 'enabled',
                 'least_privilege' => 'enabled',
                 'assume_breach' => 'enabled',
                 'continuous_monitoring' => 'active'
-            ],
+            ], 
             'compliance_status' => [
                 'gdpr' => 'compliant',
                 'iso27001' => 'compliant',
                 'soc2' => 'compliant',
                 'last_audit' => '2025-01-01'
-            ],
+            ], 
             'incident_response' => [
                 'response_team' => 'active',
                 'escalation_ready' => true,
                 'playbooks_updated' => '2025-01-01',
                 'avg_response_time' => '4.2 minutes'
-            ],
+            ], 
             'data_classification' => [
                 'public_data' => 1250,
                 'internal_data' => 8420,
@@ -244,18 +244,18 @@ class SystemManager
                     '/api/auth' => '45ms',
                     '/api/users' => '180ms'
                 ]
-            ],
+            ], 
             'throughput' => [
                 'requests_per_second' => 42.5,
                 'peak_rps' => 156.2,
                 'total_requests_today' => 3682145
-            ],
+            ], 
             'resource_utilization' => [
                 'cpu' => '35%',
                 'memory' => '62%',
                 'disk' => '48%',
                 'network_bandwidth' => '18.5 Mbps'
-            ],
+            ], 
             'database_performance' => [
                 'query_time_avg' => '45ms',
                 'active_connections' => 24,
@@ -279,7 +279,7 @@ class SystemManager
                     'severity' => 'high',
                     'affected_systems' => 'Windows',
                     'mitigation_status' => 'patched'
-                ],
+                ], 
                 [
                     'type' => 'Zero-Day',
                     'name' => 'CVE-2025-1234',
@@ -287,11 +287,11 @@ class SystemManager
                     'affected_systems' => 'Apache',
                     'mitigation_status' => 'monitoring'
                 ]
-            ],
+            ], 
             'security_advisories' => 5,
             'monitored_indicators' => 1542,
             'threat_feeds' => [
-                'last_update' => date('Y-m-d H:i:s', time() - 3600),
+                'last_update' => date('Y-m-d H:i:s', time() - 3600],
                 'active_feeds' => 8
             ]
         ];
@@ -308,19 +308,19 @@ class SystemManager
                 'monthly_active_users' => 156432,
                 'average_session_time' => '18.5 minutes',
                 'bounce_rate' => '23.4%'
-            ],
+            ], 
             'conversion_metrics' => [
                 'trial_conversion_rate' => '34.2%',
                 'checkout_completion_rate' => '78.5%',
                 'average_order_value' => '$89.50',
                 'customer_acquisition_cost' => '$24.35'
-            ],
+            ], 
             'customer_satisfaction' => [
                 'nps_score' => 72,
                 'csat_score' => '4.7/5',
                 'support_ticket_resolution_time' => '2.3 hours',
                 'customer_retention_rate' => '92.1%'
-            ],
+            ], 
             'revenue_metrics' => [
                 'monthly_recurring_revenue' => '$1,245,000',
                 'annual_recurring_revenue' => '$14,940,000',
@@ -331,7 +331,7 @@ class SystemManager
     }
     
     /**
-     * 数据库检查
+     * 数据库检�?
      */
     function checkDatabase(): array
     {
@@ -348,30 +348,30 @@ class SystemManager
             $systemTables = ['users', 'settings', 'logs', 'api_keys', 'sessions'];
             $existingTables = [];
             
-            $stmt = $this->db->query("SELECT name FROM sqlite_master WHERE type='table'");
+            $stmt = $this->db->query("SELECT name FROM sqlite_master WHERE type='table'"];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $existingTables[] = $row['name'];
             }
             
-            $missingTables = array_diff($systemTables, $existingTables);
+            $missingTables = array_diff($systemTables, $existingTables];
             
             // 创建缺失的表
             if (count($missingTables) > 0) {
-                $this->createMissingTables($missingTables);
+                $this->createMissingTables($missingTables];
             }
             
             // 检查数据库结构
-            $structureIssues = $this->checkDatabaseStructure();
+            $structureIssues = $this->checkDatabaseStructure(];
             
-            // 检查数据完整性
-            $integrityIssues = $this->checkDataIntegrity();
+            // 检查数据完整�?
+            $integrityIssues = $this->checkDataIntegrity(];
             
-            // 数据库优化建议
-            $optimizationTips = $this->getDatabaseOptimizationTips();
+            // 数据库优化建�?
+            $optimizationTips = $this->getDatabaseOptimizationTips(];
             
             return [
                 'status' => 'success',
-                'message' => '数据库检查完成',
+                'message' => '数据库检查完�?,
                 'details' => [
                     'existing_tables' => $existingTables,
                     'missing_tables' => $missingTables,
@@ -386,10 +386,10 @@ class SystemManager
                 ]
             ];
         } catch (Exception $e) {
-            $this->logger->error('数据库检查失败', ['error' => $e->getMessage()]);
+            $this->logger->error('数据库检查失�?, ['error' => $e->getMessage()]];
             return [
                 'status' => 'error',
-                'message' => '数据库检查失败: ' . $e->getMessage(),
+                'message' => '数据库检查失�? ' . $e->getMessage(),
                 'details' => null
             ];
         }
@@ -449,8 +449,8 @@ class SystemManager
         
         foreach ($tables as $table) {
             if (isset($schemas[$table])) {
-                $this->db->exec($schemas[$table]);
-                $this->logger->info('创建表', ['table' => $table]);
+                $this->db->exec($schemas[$table]];
+                $this->logger->info('创建�?, ['table' => $table]];
             }
         }
     }
@@ -461,30 +461,30 @@ class SystemManager
     private function checkDatabaseStructure(): array
     {
         // 这里应该实现检查数据库结构的逻辑
-        // 简化实现，返回空数组表示没有问题
+        // 简化实现，返回空数组表示没有问�?
         return [];
     }
     
     /**
-     * 检查数据完整性
+     * 检查数据完整�?
      */
     private function checkDataIntegrity(): array
     {
         // 这里应该实现检查数据完整性的逻辑
-        // 简化实现，返回空数组表示没有问题
+        // 简化实现，返回空数组表示没有问�?
         return [];
     }
     
     /**
-     * 获取数据库优化建议
+     * 获取数据库优化建�?
      */
     private function getDatabaseOptimizationTips(): array
     {
         return [
-            '定期执行VACUUM命令释放未使用空间',
+            '定期执行VACUUM命令释放未使用空�?,
             '为频繁查询的字段创建索引',
             '使用事务处理批量操作',
-            '定期备份数据库文件'
+            '定期备份数据库文�?
         ];
     }
     
@@ -493,11 +493,11 @@ class SystemManager
      */
     function runTests(string $testType = 'all'): array
     {
-        $this->logger->info('开始运行测试', ['type' => $testType]);
+        $this->logger->info('开始运行测�?, ['type' => $testType]];
         
         $results = [
             'test_type' => $testType,
-            'start_time' => date('Y-m-d H:i:s'),
+            'start_time' => date('Y-m-d H:i:s'],
             'end_time' => null,
             'duration' => null,
             'tests_run' => 0,
@@ -509,14 +509,14 @@ class SystemManager
         // 实现各类测试
         // 此处省略具体测试实现
         
-        $results['end_time'] = date('Y-m-d H:i:s');
+        $results['end_time'] = date('Y-m-d H:i:s'];
         $results['duration'] = microtime(true) - $this->startTime;
         
         $this->logger->info('测试完成', [
             'type' => $testType,
-            'passed' => $results['tests_passed'],
+            'passed' => $results['tests_passed'], 
             'failed' => $results['tests_failed']
-        ]);
+        ]];
         
         return $results;
     }
@@ -532,11 +532,11 @@ class SystemManager
                 'sapi' => PHP_SAPI,
                 'os' => PHP_OS,
                 'extensions' => get_loaded_extensions(),
-                'memory_limit' => ini_get('memory_limit'),
-                'max_execution_time' => ini_get('max_execution_time'),
-                'upload_max_filesize' => ini_get('upload_max_filesize'),
+                'memory_limit' => ini_get('memory_limit'],
+                'max_execution_time' => ini_get('max_execution_time'],
+                'upload_max_filesize' => ini_get('upload_max_filesize'],
                 'post_max_size' => ini_get('post_max_size')
-            ],
+            ], 
             'server_info' => [
                 'software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
                 'name' => $_SERVER['SERVER_NAME'] ?? 'Unknown',
@@ -546,14 +546,14 @@ class SystemManager
                 'remote_addr' => $_SERVER['REMOTE_ADDR'] ?? 'Unknown',
                 'remote_port' => $_SERVER['REMOTE_PORT'] ?? 'Unknown',
                 'request_time' => $_SERVER['REQUEST_TIME'] ?? time()
-            ],
+            ], 
             'system_info' => [
                 'uptime' => $this->getUptime(),
-                'memory_usage' => $this->formatBytes(memory_get_usage(true)),
-                'peak_memory_usage' => $this->formatBytes(memory_get_peak_usage(true)),
-                'disk_free_space' => $this->formatBytes(disk_free_space('/')),
+                'memory_usage' => $this->formatBytes(memory_get_usage(true)],
+                'peak_memory_usage' => $this->formatBytes(memory_get_peak_usage(true)],
+                'disk_free_space' => $this->formatBytes(disk_free_space('/')],
                 'disk_total_space' => $this->formatBytes(disk_total_space('/'))
-            ],
+            ], 
             'database_info' => $this->db ? [
                 'type' => 'SQLite',
                 'version' => $this->db->query('SELECT sqlite_version()')->fetchColumn(),
@@ -591,16 +591,16 @@ class SystemManager
         }
         
         if (!file_exists($logFile)) {
-            return ['error' => '日志文件不存在: ' . $logFile];
+            return ['error' => '日志文件不存�? ' . $logFile];
         }
         
-        $logs = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        $logs = array_slice($logs, -100); // 只返回最后100行
+        $logs = file($logFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES];
+        $logs = array_slice($logs, -100]; // 只返回最�?00�?
         
         return [
             'log_type' => $logType,
             'log_file' => $logFile,
-            'log_size' => $this->formatBytes(filesize($logFile)),
+            'log_size' => $this->formatBytes(filesize($logFile)],
             'entries' => $logs
         ];
     }
@@ -624,11 +624,11 @@ class SystemManager
      */
     private function parseSize(string $size): int
     {
-        $unit = preg_replace('/[^bkmgtpezy]/i', '', $size);
-        $size = preg_replace('/[^0-9\.]/', '', $size);
+        $unit = preg_replace('/[^bkmgtpezy]/i', '', $size];
+        $size = preg_replace('/[^0-9\.]/', '', $size];
         
         if ($unit) {
-            return (int)($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+            return (int)($size * pow(1024, stripos('bkmgtpezy', $unit[0]))];
         }
         
         return (int)$size;
@@ -641,9 +641,9 @@ class SystemManager
     {
         $uptime = microtime(true) - $this->startTime;
         return sprintf('%02d:%02d:%02d', 
-            ($uptime/3600), 
+            ($uptime/3600], 
             ($uptime/60)%60, 
-            $uptime%60);
+            $uptime%60];
     }
     
     /**
@@ -655,8 +655,8 @@ class SystemManager
             return;
         }
         
-        $files = scandir($dir);
-        $now = time();
+        $files = scandir($dir];
+        $now = time(];
         
         foreach ($files as $file) {
             if ($file === '.' || $file === '..') {
@@ -666,12 +666,13 @@ class SystemManager
             $path = $dir . '/' . $file;
             
             if (is_file($path) && ($now - filemtime($path) > $maxAge)) {
-                unlink($path);
-                $this->logger->info('清理文件', ['file' => $path]);
+                unlink($path];
+                $this->logger->info('清理文件', ['file' => $path]];
             }
         }
     }
 }
 
 // 兼容性包装器
-class_alias(SystemManager::class, 'SystemManager');
+class_alias(SystemManager::class, 'SystemManager'];
+

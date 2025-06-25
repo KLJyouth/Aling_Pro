@@ -4,16 +4,16 @@ namespace App\Core;
 
 
 /**
- * Validator 类
+ * Validator �?
  * 
- * 验证器类，负责验证数据
+ * 验证器类，负责验证数�?
  *
  * @package App\Core
  */
 class Validator
 {
     /**
-     * 构造函数
+     * 构造函�?
      */
     public function __construct()
     {
@@ -21,7 +21,7 @@ class Validator
     }
 
     /**
-     * 创建验证器实例
+     * 创建验证器实�?
      *
      * @return mixed
      */
@@ -41,7 +41,7 @@ class Validator
     }
 
     /**
-     * 检查验证是否失败
+     * 检查验证是否失�?
      *
      * @return mixed
      */
@@ -61,7 +61,7 @@ class Validator
     }
 
     /**
-     * 添加自定义验证规则
+     * 添加自定义验证规�?
      *
      * @return mixed
      */
