@@ -1,138 +1,84 @@
 <?php
 /**
- * AlingAi Pro °²×°Ïòµ¼ - ÏµÍ³¼ì²é½Å±¾
- * ¼ì²éÏµÍ³»·¾³ÊÇ·ñÂú×ã°²×°ÒªÇó
+ * AlingAi Pro ç³»ç»Ÿè¦æ±‚æ£€æŸ¥è„šæœ¬
  */
 
-header('Content-Type: application/json'];
+header('Content-Type: application/json');
 
-// ¶¨Òå¼ì²é½á¹ûÊı×é
-$result = [
-    'success' => true,
-    'required' => [], 
-    'recommended' => []
-];
-
-// ¼ì²éPHP°æ±¾
-$phpVersion = phpversion(];
+// æ£€æŸ¥PHPç‰ˆæœ¬
 $requiredPhpVersion = '7.4.0';
-$result['required'][] = [
-    'name' => 'PHP°æ±¾',
-    'passed' => version_compare($phpVersion, $requiredPhpVersion, '>='], 
-    'message' => 'µ±Ç°°æ±¾: ' . $phpVersion . ' (ĞèÒª ' . $requiredPhpVersion . ' »ò¸ü¸ß]'
-];
+$phpVersionStatus = version_compare(PHP_VERSION, $requiredPhpVersion, '>=');
 
-// ¼ì²éPDOÀ©Õ¹
-$pdoInstalled = extension_loaded('pdo'];
-$result['required'][] = [
-    'name' => 'PDOÀ©Õ¹',
-    'passed' => $pdoInstalled,
-    'message' => $pdoInstalled ? 'ÒÑ°²×°' : 'Î´°²×°'
-];
+// æ£€æŸ¥å¿…è¦çš„PHPæ‰©å±•
+$pdo = extension_loaded('pdo');
+$pdoSqlite = extension_loaded('pdo_sqlite');
+$json = extension_loaded('json');
+$mbstring = extension_loaded('mbstring');
+$curl = extension_loaded('curl');
 
-// ¼ì²éPDO MySQLÀ©Õ¹
-$pdoMysqlInstalled = extension_loaded('pdo_mysql'];
-$result['required'][] = [
-    'name' => 'PDO MySQLÀ©Õ¹',
-    'passed' => $pdoMysqlInstalled,
-    'message' => $pdoMysqlInstalled ? 'ÒÑ°²×°' : 'Î´°²×°'
-];
+// æ£€æŸ¥ç›®å½•æƒé™
+$rootDir = dirname(dirname(__DIR__));
+$storageDir = $rootDir . '/storage';
+$configDir = $rootDir . '/config';
 
-// ¼ì²éJSONÀ©Õ¹
-$jsonInstalled = extension_loaded('json'];
-$result['required'][] = [
-    'name' => 'JSONÀ©Õ¹',
-    'passed' => $jsonInstalled,
-    'message' => $jsonInstalled ? 'ÒÑ°²×°' : 'Î´°²×°'
-];
-
-// ¼ì²écURLÀ©Õ¹
-$curlInstalled = extension_loaded('curl'];
-$result['required'][] = [
-    'name' => 'cURLÀ©Õ¹',
-    'passed' => $curlInstalled,
-    'message' => $curlInstalled ? 'ÒÑ°²×°' : 'Î´°²×°'
-];
-
-// ¼ì²éÄ¿Â¼È¨ÏŞ
-$baseDir = dirname(dirname(__DIR__]];
-$dirsToCheck = [
-    $baseDir . '/config' => 'ÅäÖÃÄ¿Â¼',
-    $baseDir . '/storage' => '´æ´¢Ä¿Â¼',
-    $baseDir . '/public/uploads' => 'ÉÏ´«Ä¿Â¼'
-];
-
-foreach ($dirsToCheck as $dir => $name] {
-    $exists = file_exists($dir];
-    $writable = $exists && is_writable($dir];
-    
-    if (!$exists] {
-        // ³¢ÊÔ´´½¨Ä¿Â¼
-        $created = @mkdir($dir, 0755, true];
-        $writable = $created && is_writable($dir];
-    }
-    
-    $result['required'][] = [
-        'name' => $name . ' È¨ÏŞ',
-        'passed' => $writable,
-        'message' => $writable ? '¿ÉĞ´' : ($exists ? '´æÔÚµ«²»¿ÉĞ´' : '²»´æÔÚÇÒÎŞ·¨´´½¨']
-    ];
+// å¦‚æœç›®å½•ä¸å­˜åœ¨ï¼Œå°è¯•åˆ›å»º
+if (!is_dir($storageDir)) {
+    @mkdir($storageDir, 0755, true);
 }
 
-// ¼ì²éOPcacheÀ©Õ¹
-$opcacheInstalled = extension_loaded('opcache'];
-$result['recommended'][] = [
-    'name' => 'OPcacheÀ©Õ¹',
-    'passed' => $opcacheInstalled,
-    'message' => $opcacheInstalled ? 'ÒÑ°²×°' : 'Î´°²×° (½¨Òé°²×°ÒÔÌá¸ßĞÔÄÜ]'
-];
-
-// ¼ì²éMbstringÀ©Õ¹
-$mbstringInstalled = extension_loaded('mbstring'];
-$result['recommended'][] = [
-    'name' => 'MbstringÀ©Õ¹',
-    'passed' => $mbstringInstalled,
-    'message' => $mbstringInstalled ? 'ÒÑ°²×°' : 'Î´°²×° (½¨Òé°²×°ÒÔÖ§³Ö¶à×Ö½Ú×Ö·û]'
-];
-
-// ¼ì²éGDÀ©Õ¹
-$gdInstalled = extension_loaded('gd'];
-$result['recommended'][] = [
-    'name' => 'GDÀ©Õ¹',
-    'passed' => $gdInstalled,
-    'message' => $gdInstalled ? 'ÒÑ°²×°' : 'Î´°²×° (½¨Òé°²×°ÒÔÖ§³ÖÍ¼Ïñ´¦Àí]'
-];
-
-// ¼ì²éÄÚ´æÏŞÖÆ
-$memoryLimit = ini_get('memory_limit'];
-$memoryLimitBytes = return_bytes($memoryLimit];
-$recommendedMemory = 128 * 1024 * 1024;// 128MB
-$result['recommended'][] = [
-    'name' => 'ÄÚ´æÏŞÖÆ',
-    'passed' => $memoryLimitBytes >= $recommendedMemory,
-    'message' => 'µ±Ç°ÉèÖÃ: ' . $memoryLimit . ' (½¨ÒéÖÁÉÙ 128M]'
-];
-
-// ¼ì²éÊÇ·ñËùÓĞ±ØĞèÌõ¼ş¶¼Í¨¹ı
-foreach ($result['required'] as $check] {
-    if (!$check['passed']] {
-        $result['success'] = false;
-        break;
-    }
+if (!is_dir($configDir)) {
+    @mkdir($configDir, 0755, true);
 }
 
-// ½«½á¹ûÒÔJSON¸ñÊ½·µ»Ø
-echo json_encode($result, JSON_PRETTY_PRINT];
+$storageWritable = is_dir($storageDir) && is_writable($storageDir);
+$configWritable = is_dir($configDir) && is_writable($configDir);
+
+// æ£€æŸ¥å¯é€‰çš„PHPæ‰©å±•
+$opcache = extension_loaded('opcache');
+$gd = extension_loaded('gd');
+$fileinfo = extension_loaded('fileinfo');
+
+// æ£€æŸ¥PHPå†…å­˜é™åˆ¶
+$memoryLimit = ini_get('memory_limit');
+$memoryLimitBytes = return_bytes($memoryLimit);
+$recommendedMemory = 128 * 1024 * 1024; // 128MB
+$memoryOk = $memoryLimitBytes >= $recommendedMemory || $memoryLimitBytes <= 0; // -1 è¡¨ç¤ºæ— é™åˆ¶
+
+// è¿”å›ç»“æœ
+echo json_encode([
+    'php_version' => [
+        'status' => $phpVersionStatus,
+        'version' => PHP_VERSION,
+        'required' => $requiredPhpVersion
+    ],
+    'pdo' => $pdo,
+    'pdo_sqlite' => $pdoSqlite,
+    'json' => $json,
+    'mbstring' => $mbstring,
+    'curl' => $curl,
+    'storage_writable' => $storageWritable,
+    'config_writable' => $configWritable,
+    'opcache' => $opcache,
+    'gd' => $gd,
+    'fileinfo' => $fileinfo,
+    'memory_limit' => [
+        'value' => $memoryLimit,
+        'bytes' => $memoryLimitBytes,
+        'recommended' => $recommendedMemory,
+        'status' => $memoryOk
+    ],
+    'all_requirements_met' => $phpVersionStatus && $pdo && $pdoSqlite && $json && $storageWritable && $configWritable
+]);
 
 /**
- * ½«ÄÚ´æÏŞÖÆ×Ö·û´®×ª»»Îª×Ö½ÚÊı
+ * å°†å†…å­˜é™åˆ¶å­—ç¬¦ä¸²è½¬æ¢ä¸ºå­—èŠ‚æ•°
  */
-function return_bytes($val] {
-    $val = trim($val];
-    $last = strtolower($val[strlen($val]-1]];
-    $val = (int] $val;
+function return_bytes($val) {
+    $val = trim($val);
+    $last = strtolower($val[strlen($val)-1]);
+    $val = (int) $val;
     
-    switch($last] {
+    switch($last) {
         case 'g':
             $val *= 1024;
         case 'm':

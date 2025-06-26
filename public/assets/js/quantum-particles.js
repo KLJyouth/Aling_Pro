@@ -1,6 +1,372 @@
-try {
- class QuantumParticleSystem { constructor() { this.scene = null; this.camera = null; this.renderer = null; this.particles = []; this.quantumFields = []; this.dragonElements = []; this.cloudParticles = []; this.init(); } init() { this.setupScene(); this.createQuantumParticles(); this.createDragonSpirals(); this.createCloudFlow(); this.createHologramEffects(); this.setupEventListeners(); this.animate(); } setupScene() { // 创建3D场景 this.scene = new THREE.Scene(); // 设置相机 this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); this.camera.position.z = 50; // 设置渲染器 this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); this.renderer.setSize(window.innerWidth, window.innerHeight); this.renderer.setClearColor(0x000000, 0); // 将渲染器添加到背景容器 const container = document.getElementById('backgroundContainer'); if (container) { container.appendChild(this.renderer.domElement); } } createQuantumParticles() { // 量子粒子几何体 const particleCount = 2000; const geometry = new THREE.BufferGeometry(); const positions = new Float32Array(particleCount * 3); const colors = new Float32Array(particleCount * 3); const velocities = new Float32Array(particleCount * 3); // 量子色彩系统 const quantumColors = [ [0.42, 0.08, 1.0], // 量子紫 [0.0, 0.8, 1.0], // 科技蓝 [0.8, 0.0, 1.0], // 龙灵紫 [0.0, 1.0, 0.6], // 量子绿 [1.0, 0.4, 0.0] // 港妙橙 ]; for (let i = 0; i < particleCount; i++) { const i3 = i * 3; // 位置 - 创建量子场分布 positions[i3] = (Math.random() - 0.5) * 200; positions[i3 + 1] = (Math.random() - 0.5) * 200; positions[i3 + 2] = (Math.random() - 0.5) * 100; // 颜色 - 随机选择量子色彩 const colorIndex = Math.floor(Math.random() * quantumColors.length); colors[i3] = quantumColors[colorIndex][0]; colors[i3 + 1] = quantumColors[colorIndex][1]; colors[i3 + 2] = quantumColors[colorIndex][2]; // 速度 - 量子漂移 velocities[i3] = (Math.random() - 0.5) * 0.02; velocities[i3 + 1] = (Math.random() - 0.5) * 0.02; velocities[i3 + 2] = (Math.random() - 0.5) * 0.01; } geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3)); geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3)); // 量子粒子材质 const material = new THREE.PointsMaterial({ size: 2, vertexColors: true, transparent: true, opacity: 0.8, blending: THREE.AdditiveBlending }); this.quantumParticles = new THREE.Points(geometry, material); this.scene.add(this.quantumParticles); } createDragonSpirals() { // 创建龙形螺旋粒子系统 const spiralCount = 3; for (let s = 0; s < spiralCount; s++) { const spiral = new THREE.Group(); const particleCount = 500; const geometry = new THREE.BufferGeometry(); const positions = new Float32Array(particleCount * 3); const colors = new Float32Array(particleCount * 3); for (let i = 0; i < particleCount; i++) { const i3 = i * 3; const t = (i / particleCount) * Math.PI * 8; const radius = 20 + Math.sin(t * 0.5) * 10; // 龙形螺旋路径 positions[i3] = Math.cos(t) * radius + s * 30 - 30; positions[i3 + 1] = Math.sin(t) * radius; positions[i3 + 2] = t * 2 - 25; // 龙主题色彩 const dragonColor = s === 0 ? [1, 0.8, 0] : s === 1 ? [0.8, 0, 1] : [0, 0.8, 1]; colors[i3] = dragonColor[0]; colors[i3 + 1] = dragonColor[1]; colors[i3 + 2] = dragonColor[2]; } geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3)); const material = new THREE.PointsMaterial({ size: 1.5, vertexColors: true, transparent: true, opacity: 0.6, blending: THREE.AdditiveBlending }); const dragonSpiral = new THREE.Points(geometry, material); spiral.add(dragonSpiral); this.dragonElements.push(spiral); this.scene.add(spiral); } } createCloudFlow() { // 创建云流动粒子系统 const cloudCount = 1000; const geometry = new THREE.BufferGeometry(); const positions = new Float32Array(cloudCount * 3); const colors = new Float32Array(cloudCount * 3); for (let i = 0; i < cloudCount; i++) { const i3 = i * 3; // 云流动布局 positions[i3] = (Math.random() - 0.5) * 300; positions[i3 + 1] = Math.random() * 150 - 75; positions[i3 + 2] = Math.random() * 200 - 100; // 云色彩系统 const intensity = Math.random() * 0.5 + 0.3; colors[i3] = intensity; colors[i3 + 1] = intensity * 1.2; colors[i3 + 2] = 1.0; } geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3)); geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3)); const material = new THREE.PointsMaterial({ size: 3, vertexColors: true, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending }); this.cloudFlow = new THREE.Points(geometry, material); this.scene.add(this.cloudFlow); } createHologramEffects() { // 创建全息投影网格 const hologramGeometry = new THREE.PlaneGeometry(100, 100, 50, 50); const hologramMaterial = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.1 }); this.hologramGrid = new THREE.Mesh(hologramGeometry, hologramMaterial); this.hologramGrid.rotation.x = -Math.PI / 2; this.hologramGrid.position.y = -50; this.scene.add(this.hologramGrid); } animate() { requestAnimationFrame(() => this.animate()); const time = Date.now() * 0.001; // 量子粒子动画 if (this.quantumParticles) { const positions = this.quantumParticles.geometry.attributes.position.array; const velocities = this.quantumParticles.geometry.attributes.velocity.array; for (let i = 0; i < positions.length; i += 3) { // 量子纠缠运动 positions[i] += velocities[i] + Math.sin(time + i) * 0.01; positions[i + 1] += velocities[i + 1] + Math.cos(time + i) * 0.01; positions[i + 2] += velocities[i + 2]; // 边界重置 if (Math.abs(positions[i]) > 100) velocities[i] *= -1; if (Math.abs(positions[i + 1]) > 100) velocities[i + 1] *= -1; if (Math.abs(positions[i + 2]) > 50) velocities[i + 2] *= -1; } this.quantumParticles.geometry.attributes.position.needsUpdate = true; this.quantumParticles.rotation.y += 0.001; } // 龙螺旋动画 this.dragonElements.forEach((spiral, index) => { spiral.rotation.y += 0.005 * (index + 1); spiral.rotation.z += 0.002 * (index + 1); }); // 云流动动画 if (this.cloudFlow) { const positions = this.cloudFlow.geometry.attributes.position.array; for (let i = 0; i < positions.length; i += 3) { positions[i] += Math.sin(time + i * 0.01) * 0.1; positions[i + 1] += Math.cos(time + i * 0.01) * 0.05; } this.cloudFlow.geometry.attributes.position.needsUpdate = true; } // 全息网格动画 if (this.hologramGrid) { this.hologramGrid.rotation.z += 0.001; this.hologramGrid.material.opacity = 0.1 + Math.sin(time * 2) * 0.05; } this.renderer.render(this.scene, this.camera); } setupEventListeners() { // 窗口大小调整 window.addEventListener('resize', () => { this.camera.aspect = window.innerWidth / window.innerHeight; this.camera.updateProjectionMatrix(); this.renderer.setSize(window.innerWidth, window.innerHeight); }); // 鼠标交互 document.addEventListener('mousemove', (event) => { const mouseX = (event.clientX / window.innerWidth) * 2 - 1; const mouseY = -(event.clientY / window.innerHeight) * 2 + 1; // 相机跟随鼠标 this.camera.position.x += (mouseX * 10 - this.camera.position.x) * 0.05; this.camera.position.y += (mouseY * 10 - this.camera.position.y) * 0.05; }); } } // 量子UI增强系统 class QuantumUIEnhancer { constructor() { this.initQuantumEffects(); this.initDragonElements(); this.initParticleOrbits(); this.init3DCards(); } initQuantumEffects() { // 为量子纠缠元素添加动态效果 const quantumElements = document.querySelectorAll('.quantum-entanglement'); quantumElements.forEach((element, index) => { setInterval(() => { const intensity = Math.sin(Date.now() * 0.001 + index) * 0.5 + 0.5; element.style.filter = `hue-rotate(${intensity * 360}deg) brightness(${1 + intensity * 0.3})`; }, 50); }); } initDragonElements() { // 龙主题元素交互效果 const dragonElements = document.querySelectorAll('.dragon-scale, .dragon-spiral, .dragon-border'); dragonElements.forEach(element => { element.addEventListener('mouseenter', () => { element.style.transform = 'scale(1.05) rotateY(10deg)'; element.style.filter = 'drop-shadow(0 0 20px rgba(255, 215, 0, 0.6))'; }); element.addEventListener('mouseleave', () => { element.style.transform = 'scale(1) rotateY(0deg)'; element.style.filter = 'none'; }); }); } initParticleOrbits() { // 粒子轨道动画 const orbitElements = document.querySelectorAll('.particle-orbit'); orbitElements.forEach(element => { const particles = []; for (let i = 0; i < 5; i++) { const particle = document.createElement('div'); particle.className = 'absolute w-2 h-2 bg-tech-blue rounded-full opacity-50'; particle.style.cssText = ` position: absolute; width: 8px; height: 8px; background: radial-gradient(circle, #00bfff, #6c13ff); border-radius: 50%; opacity: 0.7; pointer-events: none; z-index: -1; `; element.appendChild(particle); particles.push(particle); } let angle = 0; setInterval(() => { particles.forEach((particle, index) => { const radius = 50 + index * 10; const x = Math.cos(angle + index * Math.PI * 0.4) * radius; const y = Math.sin(angle + index * Math.PI * 0.4) * radius; particle.style.transform = `translate(${x}px, ${y}px)`; }); angle += 0.02; }, 16); }); } init3DCards() { // 3D卡片效果增强 const card3DElements = document.querySelectorAll('.card-3d'); card3DElements.forEach(element => { element.addEventListener('mousemove', (e) => { const rect = element.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top; const centerX = rect.width / 2; const centerY = rect.height / 2; const rotateX = (y - centerY) / centerY * 10; const rotateY = (centerX - x) / centerX * 10; element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`; }); element.addEventListener('mouseleave', () => { element.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)'; }); }); } } // 初始化系统 document.addEventListener('DOMContentLoaded', () => { // 等待Three.js加载完成 if (typeof THREE !== 'undefined') { new QuantumParticleSystem(); new QuantumUIEnhancer(); } else { // 如果Three.js未加载，延迟初始化 setTimeout(() => { if (typeof THREE !== 'undefined') { new QuantumParticleSystem(); new QuantumUIEnhancer(); } }, 1000); } }); // 导出类供其他模块使用 if (typeof module !== 'undefined' && module.exports) { module.exports = { QuantumParticleSystem, QuantumUIEnhancer }; } 
-} catch (error) {
-    console.error(error);
-    // 处理错误
+/**
+ * AlingAi Pro - 量子粒子动画
+ * 为登录和首页提供量子安全视觉效果
+ * 
+ * @version 1.0.0
+ * @author AlingAi Team
+ */
+
+// 量子粒子动画初始化函数
+function initQuantumParticles(elementId) {
+    const container = document.getElementById(elementId);
+    if (!container) return;
+    
+    // 配置参数
+    const config = {
+        particleCount: 50,
+        particleSize: [2, 5],
+        particleColor: ['#3498db', '#9b59b6', '#2ecc71', '#f1c40f', '#e74c3c'],
+        speed: [0.5, 2],
+        connectionDistance: 150,
+        connectionOpacity: 0.6,
+        interactive: true
+    };
+    
+    let particles = [];
+    let width = container.offsetWidth;
+    let height = container.offsetHeight;
+    let canvas, ctx, animationFrame;
+    
+    // 创建画布
+    function createCanvas() {
+        canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
+        container.appendChild(canvas);
+    }
+    
+    // 粒子类
+    class Particle {
+        constructor() {
+            this.x = Math.random() * width;
+            this.y = Math.random() * height;
+            this.size = Math.random() * (config.particleSize[1] - config.particleSize[0]) + config.particleSize[0];
+            this.color = config.particleColor[Math.floor(Math.random() * config.particleColor.length)];
+            this.speedX = (Math.random() - 0.5) * (config.speed[1] - config.speed[0]) + config.speed[0];
+            this.speedY = (Math.random() - 0.5) * (config.speed[1] - config.speed[0]) + config.speed[0];
+            this.opacity = Math.random() * 0.5 + 0.5;
+        }
+        
+        update() {
+            // 更新位置
+            this.x += this.speedX;
+            this.y += this.speedY;
+            
+            // 边界检查
+            if (this.x < 0 || this.x > width) this.speedX *= -1;
+            if (this.y < 0 || this.y > height) this.speedY *= -1;
+            
+            // 保持在边界内
+            this.x = Math.max(0, Math.min(width, this.x));
+            this.y = Math.max(0, Math.min(height, this.y));
+        }
+        
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+    
+    // 初始化粒子
+    function initParticles() {
+        particles = [];
+        for (let i = 0; i < config.particleCount; i++) {
+            particles.push(new Particle());
+        }
+    }
+    
+    // 绘制粒子连线
+    function drawConnections() {
+        for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+                const dx = particles[i].x - particles[j].x;
+                const dy = particles[i].y - particles[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < config.connectionDistance) {
+                    const opacity = (1 - distance / config.connectionDistance) * config.connectionOpacity;
+                    ctx.beginPath();
+                    ctx.moveTo(particles[i].x, particles[i].y);
+                    ctx.lineTo(particles[j].x, particles[j].y);
+                    ctx.strokeStyle = 'rgba(255, 255, 255, ' + opacity + ')';
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    // 动画循环
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        drawConnections();
+        
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        
+        animationFrame = requestAnimationFrame(animate);
+    }
+    
+    // 处理交互
+    function handleInteraction() {
+        if (!config.interactive) return;
+        
+        let mouseX, mouseY;
+        let isActive = false;
+        
+        canvas.addEventListener('mousemove', e => {
+            isActive = true;
+            const rect = canvas.getBoundingClientRect();
+            mouseX = e.clientX - rect.left;
+            mouseY = e.clientY - rect.top;
+            
+            // 粒子跟随鼠标
+            particles.forEach(particle => {
+                const dx = mouseX - particle.x;
+                const dy = mouseY - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < 100) {
+                    const force = 0.2 * (1 - distance / 100);
+                    particle.speedX += dx * force / 20;
+                    particle.speedY += dy * force / 20;
+                }
+            });
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            isActive = false;
+        });
+    }
+    
+    // 处理窗口大小变化
+    function handleResize() {
+        window.addEventListener('resize', () => {
+            width = container.offsetWidth;
+            height = container.offsetHeight;
+            if (canvas) {
+                canvas.width = width;
+                canvas.height = height;
+            }
+        });
+    }
+    
+    // 初始化
+    function init() {
+        createCanvas();
+        initParticles();
+        handleInteraction();
+        handleResize();
+        animate();
+    }
+    
+    // 清理函数
+    function cleanup() {
+        if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+        }
+        if (canvas && canvas.parentNode) {
+            canvas.parentNode.removeChild(canvas);
+        }
+    }
+    
+    init();
+    
+    // 返回清理函数，便于后续需要时清理资源
+    return cleanup;
+}
+
+// 量子动画初始化函数（用于首页特效）
+function initQuantumAnimation(elementId) {
+    const container = document.getElementById(elementId);
+    if (!container) return;
+    
+    // 配置
+    const config = {
+        sphereCount: 3,
+        particleCount: 80,
+        color: ['#3498db', '#9b59b6', '#2ecc71'],
+        rotationSpeed: 0.01
+    };
+    
+    let width = container.offsetWidth;
+    let height = container.offsetHeight;
+    let canvas, ctx, animationFrame;
+    let spheres = [];
+    let particles = [];
+    let angle = 0;
+    
+    // 创建画布
+    function createCanvas() {
+        canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        ctx = canvas.getContext('2d');
+        container.appendChild(canvas);
+    }
+    
+    // 量子球体类
+    class QuantumSphere {
+        constructor(index) {
+            this.index = index;
+            this.color = config.color[index % config.color.length];
+            this.radius = 30 + index * 10;
+            this.x = width / 2;
+            this.y = height / 2;
+            this.orbitRadius = 50 + index * 40;
+            this.orbitSpeed = 0.02 - index * 0.005;
+            this.angle = index * (Math.PI * 2 / config.sphereCount);
+        }
+        
+        update() {
+            this.angle += this.orbitSpeed;
+            this.x = width / 2 + Math.cos(this.angle) * this.orbitRadius;
+            this.y = height / 2 + Math.sin(this.angle) * this.orbitRadius;
+        }
+        
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            const gradient = ctx.createRadialGradient(
+                this.x, this.y, 0,
+                this.x, this.y, this.radius
+            );
+            gradient.addColorStop(0, this.color);
+            gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = gradient;
+            ctx.globalAlpha = 0.7;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+    
+    // 量子粒子类
+    class QuantumParticle {
+        constructor() {
+            this.reset();
+        }
+        
+        reset() {
+            this.sphere = Math.floor(Math.random() * config.sphereCount);
+            this.size = Math.random() * 3 + 1;
+            this.color = config.color[this.sphere % config.color.length];
+            this.speed = Math.random() * 2 + 0.5;
+            this.angle = Math.random() * Math.PI * 2;
+            this.distance = Math.random() * 100 + 50;
+            this.opacity = Math.random() * 0.5 + 0.3;
+            this.life = 0;
+            this.maxLife = Math.random() * 100 + 50;
+        }
+        
+        update() {
+            // 更新位置
+            this.distance += this.speed;
+            this.life++;
+            
+            if (this.life >= this.maxLife || this.distance > 300) {
+                this.reset();
+            }
+            
+            // 设置透明度
+            this.opacity = (1 - this.life / this.maxLife) * 0.8;
+        }
+        
+        draw() {
+            if (this.sphere >= spheres.length) return;
+            
+            const sphere = spheres[this.sphere];
+            const x = sphere.x + Math.cos(this.angle) * this.distance;
+            const y = sphere.y + Math.sin(this.angle) * this.distance;
+            
+            ctx.beginPath();
+            ctx.arc(x, y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.opacity;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+        }
+    }
+    
+    // 初始化
+    function init() {
+        createCanvas();
+        
+        // 创建量子球体
+        for (let i = 0; i < config.sphereCount; i++) {
+            spheres.push(new QuantumSphere(i));
+        }
+        
+        // 创建粒子
+        for (let i = 0; i < config.particleCount; i++) {
+            particles.push(new QuantumParticle());
+        }
+        
+        // 处理窗口大小变化
+        window.addEventListener('resize', () => {
+            width = container.offsetWidth;
+            height = container.offsetHeight;
+            if (canvas) {
+                canvas.width = width;
+                canvas.height = height;
+            }
+        });
+        
+        // 开始动画
+        animate();
+    }
+    
+    // 动画循环
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        
+        // 更新和绘制球体
+        spheres.forEach(sphere => {
+            sphere.update();
+            sphere.draw();
+        });
+        
+        // 更新和绘制粒子
+        particles.forEach(particle => {
+            particle.update();
+            particle.draw();
+        });
+        
+        // 绘制中心光点
+        ctx.beginPath();
+        ctx.arc(width / 2, height / 2, 15, 0, Math.PI * 2);
+        const gradient = ctx.createRadialGradient(
+            width / 2, height / 2, 0,
+            width / 2, height / 2, 15
+        );
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.8)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = gradient;
+        ctx.fill();
+        
+        angle += config.rotationSpeed;
+        animationFrame = requestAnimationFrame(animate);
+    }
+    
+    // 清理函数
+    function cleanup() {
+        if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+        }
+        if (canvas && canvas.parentNode) {
+            canvas.parentNode.removeChild(canvas);
+        }
+    }
+    
+    init();
+    
+    // 返回清理函数
+    return cleanup;
 }

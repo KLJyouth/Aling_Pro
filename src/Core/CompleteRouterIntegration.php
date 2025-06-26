@@ -235,7 +235,7 @@ class CompleteRouterIntegration
         $apiVersions = $this->apiVersions;
         
         // 重定向到最新版本
-        $group->get('/info', function (ServerRequestInterface $request, ResponseInterface $response) use ($apiVersions) {
+        $group->get('', function (ServerRequestInterface $request, ResponseInterface $response) use ($apiVersions) {
             $info = [
                 'message' => 'AlingAi Pro API',
                 'current_version' => 'v2',

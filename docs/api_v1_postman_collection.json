@@ -1,0 +1,841 @@
+{
+  "info": {
+    "_postman_id": "7bb9a15c-0f1d-4d8c-8e7e-9e86e5b80c8d",
+    "name": "AlingAi Pro API v1",
+    "description": "AlingAi Pro API v1 集合，包含所有API端点的请求示例",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "认证",
+      "description": "认证相关的API端点",
+      "item": [
+        {
+          "name": "登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"your_password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "用户登录并获取访问令牌"
+          },
+          "response": []
+        },
+        {
+          "name": "注册",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"password_confirmation\": \"password123\",\n  \"first_name\": \"New\",\n  \"last_name\": \"User\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register"]
+            },
+            "description": "注册新用户"
+          },
+          "response": []
+        },
+        {
+          "name": "退出登录",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "用户退出登录，撤销当前令牌"
+          },
+          "response": []
+        },
+        {
+          "name": "刷新令牌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "refresh"]
+            },
+            "description": "刷新访问令牌"
+          },
+          "response": []
+        },
+        {
+          "name": "忘记密码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/forgot-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "forgot-password"]
+            },
+            "description": "发送密码重置链接到邮箱"
+          },
+          "response": []
+        },
+        {
+          "name": "重置密码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"reset_token\",\n  \"email\": \"user@example.com\",\n  \"password\": \"new_password\",\n  \"password_confirmation\": \"new_password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/reset-password",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "reset-password"]
+            },
+            "description": "使用重置令牌重置密码"
+          },
+          "response": []
+        },
+        {
+          "name": "验证邮箱",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"verification_token\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/verify-email",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "verify-email"]
+            },
+            "description": "验证用户邮箱"
+          },
+          "response": []
+        },
+        {
+          "name": "重新发送验证邮件",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/resend-verification",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "resend-verification"]
+            },
+            "description": "重新发送邮箱验证链接"
+          },
+          "response": []
+        },
+        {
+          "name": "获取当前用户",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/user",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "user"]
+            },
+            "description": "获取当前登录用户信息"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "用户",
+      "description": "用户相关的API端点",
+      "item": [
+        {
+          "name": "获取用户列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users?page=1&per_page=15&role=user&status=active&sort=-created_at",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                },
+                {
+                  "key": "role",
+                  "value": "user"
+                },
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "sort",
+                  "value": "-created_at"
+                }
+              ]
+            },
+            "description": "获取用户列表，支持分页、筛选和排序"
+          },
+          "response": []
+        },
+        {
+          "name": "获取单个用户",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users/1?include=conversations,documents",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "1"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "conversations,documents"
+                }
+              ]
+            },
+            "description": "获取单个用户的详细信息，可以包含关联数据"
+          },
+          "response": []
+        },
+        {
+          "name": "创建用户",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"newuser\",\n  \"email\": \"newuser@example.com\",\n  \"password\": \"password123\",\n  \"first_name\": \"New\",\n  \"last_name\": \"User\",\n  \"role\": \"user\",\n  \"status\": \"active\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users"]
+            },
+            "description": "创建新用户（仅管理员可用）"
+          },
+          "response": []
+        },
+        {
+          "name": "更新用户",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Updated\",\n  \"last_name\": \"Name\",\n  \"phone\": \"1234567890\",\n  \"bio\": \"User bio\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "1"]
+            },
+            "description": "更新用户信息"
+          },
+          "response": []
+        },
+        {
+          "name": "删除用户",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "1"]
+            },
+            "description": "删除用户（仅管理员可用）"
+          },
+          "response": []
+        },
+        {
+          "name": "获取当前用户信息",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users/me?include=conversations",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "me"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "conversations"
+                }
+              ]
+            },
+            "description": "获取当前登录用户的详细信息"
+          },
+          "response": []
+        },
+        {
+          "name": "验证电子邮件",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"verification_token\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/verify-email",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "verify-email"]
+            },
+            "description": "验证用户邮箱"
+          },
+          "response": []
+        },
+        {
+          "name": "更新密码",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"current_password\": \"old_password\",\n  \"new_password\": \"new_password\",\n  \"confirm_password\": \"new_password\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/update-password",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "update-password"]
+            },
+            "description": "更新用户密码"
+          },
+          "response": []
+        },
+        {
+          "name": "生成 API 令牌",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My App\",\n  \"expires_in\": 30\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/tokens",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "tokens"]
+            },
+            "description": "生成长期有效的 API 令牌"
+          },
+          "response": []
+        },
+        {
+          "name": "撤销 API 令牌",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"api_token_to_revoke\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/users/tokens",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "tokens"]
+            },
+            "description": "撤销 API 令牌"
+          },
+          "response": []
+        },
+        {
+          "name": "获取 API 令牌列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/users/tokens",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "users", "tokens"]
+            },
+            "description": "获取当前用户的 API 令牌列表"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "文档",
+      "description": "文档相关的API端点",
+      "item": [
+        {
+          "name": "获取文档列表",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents?page=1&per_page=15&type=markdown&status=published&sort=-created_at&include=user",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "per_page",
+                  "value": "15"
+                },
+                {
+                  "key": "type",
+                  "value": "markdown"
+                },
+                {
+                  "key": "status",
+                  "value": "published"
+                },
+                {
+                  "key": "sort",
+                  "value": "-created_at"
+                },
+                {
+                  "key": "include",
+                  "value": "user"
+                }
+              ]
+            },
+            "description": "获取文档列表，支持分页、筛选和排序"
+          },
+          "response": []
+        },
+        {
+          "name": "获取单个文档",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1?include=user",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1"],
+              "query": [
+                {
+                  "key": "include",
+                  "value": "user"
+                }
+              ]
+            },
+            "description": "获取单个文档的详细信息"
+          },
+          "response": []
+        },
+        {
+          "name": "创建文档",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"新文档\",\n  \"content\": \"文档内容...\",\n  \"type\": \"markdown\",\n  \"status\": \"draft\",\n  \"metadata\": {\n    \"author\": \"原作者\",\n    \"source\": \"来源网站\",\n    \"tags\": [\"标签1\", \"标签2\"]\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/documents",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents"]
+            },
+            "description": "创建新文档"
+          },
+          "response": []
+        },
+        {
+          "name": "更新文档",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"更新的标题\",\n  \"content\": \"更新的内容...\",\n  \"status\": \"published\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1"]
+            },
+            "description": "更新文档"
+          },
+          "response": []
+        },
+        {
+          "name": "删除文档",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1"]
+            },
+            "description": "删除文档"
+          },
+          "response": []
+        },
+        {
+          "name": "批量导入文档",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"documents\": [\n    {\n      \"title\": \"文档1\",\n      \"content\": \"内容1\",\n      \"type\": \"markdown\",\n      \"status\": \"draft\"\n    },\n    {\n      \"title\": \"文档2\",\n      \"content\": \"内容2\",\n      \"type\": \"html\",\n      \"status\": \"published\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/documents/bulk-import",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "bulk-import"]
+            },
+            "description": "批量导入多个文档"
+          },
+          "response": []
+        },
+        {
+          "name": "导出文档 (JSON)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1/export?format=json",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1", "export"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json"
+                }
+              ]
+            },
+            "description": "导出文档为JSON格式"
+          },
+          "response": []
+        },
+        {
+          "name": "导出文档 (TXT)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1/export?format=txt",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1", "export"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "txt"
+                }
+              ]
+            },
+            "description": "导出文档为纯文本格式"
+          },
+          "response": []
+        },
+        {
+          "name": "导出文档 (HTML)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/v1/documents/1/export?format=html",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "documents", "1", "export"],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "html"
+                }
+              ]
+            },
+            "description": "导出文档为HTML格式"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://api.alingai.pro/api",
+      "type": "string",
+      "description": "API基础URL"
+    },
+    {
+      "key": "token",
+      "value": "your_access_token",
+      "type": "string",
+      "description": "用于认证的访问令牌"
+    }
+  ]
+} 

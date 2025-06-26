@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Code Check Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            border-left: 4px solid #4CAF50;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .nav {
+            background-color: #2c3e50;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+        }
+        .nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .nav ul li {
+            margin-right: 20px;
+        }
+        .nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .nav ul li a:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .stats-table th, .stats-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .stats-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <ul>
+            <li><a href="#summary">Summary</a></li>
+            <li><a href="#php-syntax">PHP Syntax</a></li>
+            <li><a href="#php-security">PHP Security</a></li>
+            <li><a href="#html-validation">HTML Validation</a></li>
+        </ul>
+    </div>
+    
+    <div class="container">
+        <h1>Master Code Check Report</h1>
+        <p>Generated on: 2025-06-25 19:44:41</p>
+        
+        <div id="summary" class="section summary">
+            <h2>Summary</h2>
+            <p>This report combines the results of PHP syntax checking, PHP security scanning, and HTML validation.</p>
+            
+            <h3>Individual Reports</h3>
+            <ul>
+                <li><a href="#php-syntax">PHP Syntax Check</a></li>
+                <li><a href="#php-security">PHP Security Check</a></li>
+                <li><a href="#html-validation">HTML Validation</a></li>
+            </ul>
+            
+            <h3>Recommendations</h3>
+            <ol>
+                <li>Fix all PHP syntax errors first</li>
+                <li>Address critical security vulnerabilities</li>
+                <li>Fix HTML validation issues</li>
+                <li>Run the checks again to ensure all issues are resolved</li>
+            </ol>
+        </div>
+        
+        <div id="php-syntax" class="section">
+            <h2>PHP Syntax Check</h2>
+            <p>Check for PHP syntax errors and fix common issues.</p>
+            <a href="syntax_fix_report_latest.html" class="btn">View Full Report</a>
+        </div>
+        
+        <div id="php-security" class="section">
+            <h2>PHP Security Check</h2>
+            <p>Scan for security vulnerabilities in PHP code.</p>
+            <a href="security_check_report_latest.html" class="btn">View Full Report</a>
+        </div>
+        
+        <div id="html-validation" class="section">
+            <h2>HTML Validation</h2>
+            <p>Check HTML files for syntax errors, accessibility issues, and best practices.</p>
+            <a href="html_check_report_latest.html" class="btn">View Full Report</a>
+        </div>
+    </div>
+</body>
+</html>

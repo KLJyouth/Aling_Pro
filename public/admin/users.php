@@ -1,63 +1,63 @@
 <?php
 /**
- * AlingAi Pro ÓÃ»§¹ÜÀíÒ³Ãæ
- * Ìá¹©°²È«µÄÓÃ»§¹ÜÀí¹¦ÄÜ
+ * AlingAi Pro ç”¨æˆ·ç®¡ç†é¡µé¢
+ * æä¾›å®‰å…¨çš„ç”¨æˆ·ç®¡ç†åŠŸèƒ½
  * 
  * @version 1.0.0
  * @author AlingAi Team
  */
 
-// ÉèÖÃÒ³Ãæ°²È«Í·
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;'];
-header('X-Content-Type-Options: nosniff'];
-header('X-Frame-Options: DENY'];
-header('X-XSS-Protection: 1; mode=block'];
+// è®¾ç½®é¡µé¢å®‰å…¨å¤´
+header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
 
-// ÒıÈëÓÃ»§°²È«Àà
+// å¼•å…¥ç”¨æˆ·å®‰å…¨ç±»
 require_once __DIR__ . '/../includes/UserSecurity.php';
 
 use AlingAi\Security\UserSecurity;
 
-// ÑéÖ¤¹ÜÀíÔ±»á»°
-$userData = UserSecurity::validateSession(true, '../login.php'];
+// éªŒè¯ç®¡ç†å‘˜ä¼šè¯
+$userData = UserSecurity::validateSession(true, '../login.php');
 
-// µ½ÕâÀïËµÃ÷ÓÃ»§ÒÑµÇÂ¼ÇÒÊÇ¹ÜÀíÔ±
+// éªŒè¯å·²ç™»å½•ç”¨æˆ·æ˜¯ç®¡ç†å‘˜
 $userId = $userData['id'];
 $username = $userData['username'];
 $userRole = $userData['role'];
 
-// ³õÊ¼»¯±äÁ¿
+// åˆå§‹åŒ–å˜é‡
 $userError = '';
 $userSuccess = '';
 $users = [];
-$csrfToken = UserSecurity::generateCsrfToken('user_form'];
+$csrfToken = UserSecurity::generateCsrfToken('user_form');
 
-// Ã¿Ò³ÏÔÊ¾µÄÓÃ»§Êı
+// æ¯é¡µæ˜¾ç¤ºçš„ç”¨æˆ·æ•°
 $perPage = 10;
 $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($currentPage < 1) $currentPage = 1;
 
-// ËÑË÷²ÎÊı
+// æœç´¢æ¡ä»¶
 $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
 $filterRole = isset($_GET['role']) ? trim($_GET['role']) : '';
 $filterStatus = isset($_GET['status']) ? trim($_GET['status']) : '';
 
-// ´¦ÀíÓÃ»§²Ù×÷
+// å¤„ç†ç”¨æˆ·æ“ä½œ
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CSRF±£»¤
+    // CSRFæ£€æŸ¥
     if (!isset($_POST['csrf_token']) || !UserSecurity::validateCsrfToken($_POST['csrf_token'],  'user_form')) {
-        $userError = '°²È«ÑéÖ¤Ê§°Ü£¬ÇëÖØĞÂ³¢ÊÔ';
+        $userError = 'å®‰å…¨éªŒè¯å¤±è´¥ï¼Œè¯·é‡æ–°æ“ä½œ';
     } else {
         try {
-            // ¼ÓÔØÅäÖÃÎÄ¼ş
+            // åŠ è½½é…ç½®æ–‡ä»¶
             $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
             if (file_exists($configFile)) {
                 $config = require $configFile;
                 
-                // Á¬½ÓÊı¾İ¿â
+                // è¿æ¥æ•°æ®åº“
                 if ($config['database']['type'] === 'sqlite') {
                     $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
-                    $pdo = new PDO("sqlite:{$dbPath}"];
+                    $pdo = new PDO("sqlite:{$dbPath}");
                 } else {
                     $host = $config['database']['host'];
                     $port = $config['database']['port'] ?? 3306;
@@ -65,155 +65,155 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $dbuser = $config['database']['username'];
                     $dbpass = $config['database']['password'];
                     
-                    $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
+                    $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
                 }
                 
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 
-                // ´¦Àí´´½¨ÓÃ»§
+                // å¤„ç†åˆ›å»ºç”¨æˆ·
                 if (isset($_POST['create_user'])) {
-                    $newUsername = trim($_POST['username'] ?? ''];
-                    $newEmail = trim($_POST['email'] ?? ''];
+                    $newUsername = trim($_POST['username'] ?? '');
+                    $newEmail = trim($_POST['email'] ?? '');
                     $newPassword = $_POST['password'] ?? '';
                     $newRole = $_POST['role'] ?? 'user';
                     
-                    // ÑéÖ¤ÊäÈë
+                    // éªŒè¯è¾“å…¥
                     if (empty($newUsername) || empty($newEmail) || empty($newPassword)) {
-                        $userError = 'ËùÓĞ×Ö¶Î¶¼ÊÇ±ØÌîµÄ';
+                        $userError = 'æ‰€æœ‰å­—æ®µéƒ½æ˜¯å¿…å¡«é¡¹';
                     } elseif (!filter_var($newEmail, FILTER_VALIDATE_EMAIL)) {
-                        $userError = 'ÇëÊäÈëÓĞĞ§µÄµç×ÓÓÊÏäµØÖ·';
+                        $userError = 'è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€';
                     } else {
-                        // ¼ì²éÓÃ»§Ãû»òÓÊÏäÊÇ·ñÒÑ´æÔÚ
-                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?"];
-                        $stmt->execute([$newUsername, $newEmail]];
+                        // æ£€æŸ¥ç”¨æˆ·åå’Œé‚®ç®±æ˜¯å¦å·²å­˜åœ¨
+                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?");
+                        $stmt->execute([$newUsername, $newEmail]);
                         
                         if ($stmt->fetchColumn() > 0) {
-                            $userError = 'ÓÃ»§Ãû»òµç×ÓÓÊÏäÒÑ±»Ê¹ÓÃ';
+                            $userError = 'ç”¨æˆ·åæˆ–é‚®ç®±å·²è¢«ä½¿ç”¨';
                         } else {
-                            // ´´½¨ÓÃ»§
-                            $hashedPassword = UserSecurity::hashPassword($newPassword];
+                            // åˆ›å»ºç”¨æˆ·
+                            $hashedPassword = UserSecurity::hashPassword($newPassword);
                             
                             $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role, status, created_at) 
-                                               VALUES (?, ?, ?, ?, 'active', NOW())"];
-                            $stmt->execute([$newUsername, $newEmail, $hashedPassword, $newRole]];
+                                               VALUES (?, ?, ?, ?, 'active', NOW())");
+                            $stmt->execute([$newUsername, $newEmail, $hashedPassword, $newRole]);
                             
-                            $newUserId = $pdo->lastInsertId(];
+                            $newUserId = $pdo->lastInsertId();
                             
-                            // ´´½¨Ä¬ÈÏÓÃ»§Åä¶î
+                            // åˆ›å»ºé»˜è®¤ç”¨æˆ·é…é¢
                             $stmt = $pdo->prepare("INSERT INTO user_usage_quota (user_id, quota_type, limit_value, reset_period, next_reset) 
-                                               VALUES (?, 'tokens', 100000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))"];
-                            $stmt->execute([$newUserId]];
+                                               VALUES (?, 'tokens', 100000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))");
+                            $stmt->execute([$newUserId]);
                             
                             $stmt = $pdo->prepare("INSERT INTO user_usage_quota (user_id, quota_type, limit_value, reset_period, next_reset) 
-                                               VALUES (?, 'requests', 1000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))"];
-                            $stmt->execute([$newUserId]];
+                                               VALUES (?, 'requests', 1000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))");
+                            $stmt->execute([$newUserId]);
                             
-                            // ¼ÇÂ¼´´½¨ÓÃ»§ÊÂ¼ş
-                            UserSecurity::logSecurityEvent($userId, 'user_create', "¹ÜÀíÔ±´´½¨ÁËĞÂÓÃ»§: {$newUsername}", 'info', 'success'];
+                            // è®°å½•åˆ›å»ºç”¨æˆ·äº‹ä»¶
+                            UserSecurity::logSecurityEvent($userId, 'user_create', "ç®¡ç†å‘˜åˆ›å»ºäº†æ–°ç”¨æˆ·: {$newUsername}", 'info', 'success');
                             
-                            $userSuccess = 'ÓÃ»§´´½¨³É¹¦';
+                            $userSuccess = 'ç”¨æˆ·åˆ›å»ºæˆåŠŸ';
                         }
                     }
                 }
                 
-                // ´¦Àí¸üĞÂÓÃ»§×´Ì¬
+                // å¤„ç†ç”¨æˆ·çŠ¶æ€
                 if (isset($_POST['update_status'])) {
-                    $targetUserId = (int)($_POST['user_id'] ?? 0];
+                    $targetUserId = (int)($_POST['user_id'] ?? 0);
                     $newStatus = $_POST['status'] ?? '';
                     
                     if ($targetUserId <= 0) {
-                        $userError = 'ÎŞĞ§µÄÓÃ»§ID';
-                    } elseif (!in_[$newStatus, ['active', 'inactive', 'suspended'])) {
-                        $userError = 'ÎŞĞ§µÄÓÃ»§×´Ì¬';
+                        $userError = 'æ— æ•ˆçš„ç”¨æˆ·ID';
+                    } elseif (!in_array($newStatus, ['active', 'inactive', 'suspended'])) {
+                        $userError = 'æ— æ•ˆçš„ç”¨æˆ·çŠ¶æ€';
                     } elseif ($targetUserId === $userId) {
-                        $userError = '²»ÄÜĞŞ¸Ä×Ô¼ºµÄ×´Ì¬';
+                        $userError = 'ä¸èƒ½ä¿®æ”¹è‡ªå·±çš„çŠ¶æ€';
                     } else {
-                        // ¸üĞÂÓÃ»§×´Ì¬
-                        $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?"];
-                        $stmt->execute([$newStatus, $targetUserId]];
+                        // æ›´æ–°ç”¨æˆ·çŠ¶æ€
+                        $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
+                        $stmt->execute([$newStatus, $targetUserId]);
                         
-                        // ¼ÇÂ¼¸üĞÂÓÃ»§×´Ì¬ÊÂ¼ş
+                        // è®°å½•ç”¨æˆ·çŠ¶æ€äº‹ä»¶
                         UserSecurity::logSecurityEvent($userId, 'user_status_update', 
-                            "¹ÜÀíÔ±½«ÓÃ»§ID {$targetUserId} µÄ×´Ì¬¸ü¸ÄÎª {$newStatus}", 'info', 'success'];
+                            "ç®¡ç†å‘˜æ›´æ–°äº†ç”¨æˆ·ID {$targetUserId} çš„çŠ¶æ€ä¸º {$newStatus}", 'info', 'success');
                         
-                        $userSuccess = 'ÓÃ»§×´Ì¬ÒÑ¸üĞÂ';
+                        $userSuccess = 'ç”¨æˆ·çŠ¶æ€æ›´æ–°æˆåŠŸ';
                     }
                 }
                 
-                // ´¦Àí¸üĞÂÓÃ»§½ÇÉ«
+                // å¤„ç†ç”¨æˆ·è§’è‰²
                 if (isset($_POST['update_role'])) {
-                    $targetUserId = (int)($_POST['user_id'] ?? 0];
+                    $targetUserId = (int)($_POST['user_id'] ?? 0);
                     $newRole = $_POST['role'] ?? '';
                     
                     if ($targetUserId <= 0) {
-                        $userError = 'ÎŞĞ§µÄÓÃ»§ID';
-                    } elseif (!in_[$newRole, ['user', 'admin', 'moderator'])) {
-                        $userError = 'ÎŞĞ§µÄÓÃ»§½ÇÉ«';
+                        $userError = 'æ— æ•ˆçš„ç”¨æˆ·ID';
+                    } elseif (!in_array($newRole, ['user', 'admin', 'moderator'])) {
+                        $userError = 'æ— æ•ˆçš„ç”¨æˆ·è§’è‰²';
                     } elseif ($targetUserId === $userId) {
-                        $userError = '²»ÄÜĞŞ¸Ä×Ô¼ºµÄ½ÇÉ«';
+                        $userError = 'ä¸èƒ½ä¿®æ”¹è‡ªå·±çš„è§’è‰²';
                     } else {
-                        // ¸üĞÂÓÃ»§½ÇÉ«
-                        $stmt = $pdo->prepare("UPDATE users SET role = ? WHERE id = ?"];
-                        $stmt->execute([$newRole, $targetUserId]];
+                        // æ›´æ–°ç”¨æˆ·è§’è‰²
+                        $stmt = $pdo->prepare("UPDATE users SET role = ? WHERE id = ?");
+                        $stmt->execute([$newRole, $targetUserId]);
                         
-                        // ¼ÇÂ¼¸üĞÂÓÃ»§½ÇÉ«ÊÂ¼ş
+                        // è®°å½•ç”¨æˆ·è§’è‰²äº‹ä»¶
                         UserSecurity::logSecurityEvent($userId, 'user_role_update', 
-                            "¹ÜÀíÔ±½«ÓÃ»§ID {$targetUserId} µÄ½ÇÉ«¸ü¸ÄÎª {$newRole}", 'info', 'success'];
+                            "ç®¡ç†å‘˜æ›´æ–°äº†ç”¨æˆ·ID {$targetUserId} çš„è§’è‰²ä¸º {$newRole}", 'info', 'success');
                         
-                        $userSuccess = 'ÓÃ»§½ÇÉ«ÒÑ¸üĞÂ';
+                        $userSuccess = 'ç”¨æˆ·è§’è‰²æ›´æ–°æˆåŠŸ';
                     }
                 }
                 
-                // ´¦ÀíÖØÖÃÃÜÂë
+                // å¤„ç†é‡ç½®å¯†ç 
                 if (isset($_POST['reset_password'])) {
-                    $targetUserId = (int)($_POST['user_id'] ?? 0];
+                    $targetUserId = (int)($_POST['user_id'] ?? 0);
                     $newPassword = $_POST['password'] ?? '';
                     
                     if ($targetUserId <= 0) {
-                        $userError = 'ÎŞĞ§µÄÓÃ»§ID';
+                        $userError = 'æ— æ•ˆçš„ç”¨æˆ·ID';
                     } elseif (empty($newPassword)) {
-                        $userError = 'ÃÜÂë²»ÄÜÎª¿Õ';
+                        $userError = 'å¯†ç ä¸èƒ½ä¸ºç©º';
                     } else {
-                        // ¼ì²éÃÜÂëÇ¿¶È
-                        $passwordStrength = UserSecurity::checkPasswordStrength($newPassword];
+                        // æ£€æŸ¥å¯†ç å¼ºåº¦
+                        $passwordStrength = UserSecurity::checkPasswordStrength($newPassword);
                         if ($passwordStrength['strength'] === 'weak') {
-                            $userError = 'ÃÜÂëÇ¿¶È²»×ã: ' . implode(', ', $passwordStrength['feedback']];
+                            $userError = 'å¯†ç å¼ºåº¦ä¸è¶³: ' . implode(', ', $passwordStrength['feedback']);
                         } else {
-                            // ¸üĞÂÃÜÂë
-                            $hashedPassword = UserSecurity::hashPassword($newPassword];
+                            // æ›´æ–°å¯†ç 
+                            $hashedPassword = UserSecurity::hashPassword($newPassword);
                             
-                            $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?"];
-                            $stmt->execute([$hashedPassword, $targetUserId]];
+                            $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+                            $stmt->execute([$hashedPassword, $targetUserId]);
                             
-                            // ¼ÇÂ¼ÃÜÂëÖØÖÃÊÂ¼ş
+                            // è®°å½•é‡ç½®å¯†ç äº‹ä»¶
                             UserSecurity::logSecurityEvent($userId, 'user_password_reset', 
-                                "¹ÜÀíÔ±ÖØÖÃÁËÓÃ»§ID {$targetUserId} µÄÃÜÂë", 'warning', 'success'];
+                                "ç®¡ç†å‘˜é‡ç½®äº†ç”¨æˆ·ID {$targetUserId} çš„å¯†ç ", 'warning', 'success');
                             
-                            $userSuccess = 'ÓÃ»§ÃÜÂëÒÑÖØÖÃ';
+                            $userSuccess = 'ç”¨æˆ·å¯†ç é‡ç½®æˆåŠŸ';
                         }
                     }
                 }
             } else {
-                $userError = 'ÏµÍ³ÅäÖÃ´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±';
+                $userError = 'ç³»ç»Ÿé”™è¯¯ï¼Œè¯·è”ç³»ç®¡ç†å‘˜';
             }
         } catch (Exception $e) {
-            $userError = '²Ù×÷¹ı³ÌÖĞ·¢Éú´íÎó: ' . $e->getMessage(];
-            error_log('User management error: ' . $e->getMessage()];
+            $userError = 'å¤„ç†ç”¨æˆ·æ“ä½œæ—¶å‘ç”Ÿé”™è¯¯: ' . $e->getMessage();
+            error_log('User management error: ' . $e->getMessage());
         }
     }
 }
 
-// »ñÈ¡ÓÃ»§ÁĞ±í
+// è·å–ç”¨æˆ·åˆ—è¡¨
 try {
-    // ¼ÓÔØÅäÖÃÎÄ¼ş
+    // åŠ è½½é…ç½®æ–‡ä»¶
     $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
     if (file_exists($configFile)) {
         $config = require $configFile;
         
-        // Á¬½ÓÊı¾İ¿â
+        // è¿æ¥æ•°æ®åº“
         if ($config['database']['type'] === 'sqlite') {
             $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
-            $pdo = new PDO("sqlite:{$dbPath}"];
+            $pdo = new PDO("sqlite:{$dbPath}");
         } else {
             $host = $config['database']['host'];
             $port = $config['database']['port'] ?? 3306;
@@ -221,59 +221,59 @@ try {
             $dbuser = $config['database']['username'];
             $dbpass = $config['database']['password'];
             
-            $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
+            $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
         }
         
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-        // ¹¹½¨²éÑ¯
+        // æ„å»ºæŸ¥è¯¢
         $query = "SELECT * FROM users WHERE 1=1";
         $params = [];
         
-        // Ìí¼ÓËÑË÷Ìõ¼ş
+        // æ·»åŠ æœç´¢æ¡ä»¶
         if (!empty($searchTerm)) {
             $query .= " AND (username LIKE ? OR email LIKE ?)";
             $params[] = "%{$searchTerm}%";
             $params[] = "%{$searchTerm}%";
         }
         
-        // Ìí¼Ó½ÇÉ«¹ıÂË
+        // æ·»åŠ è§’è‰²æ¡ä»¶
         if (!empty($filterRole)) {
             $query .= " AND role = ?";
             $params[] = $filterRole;
         }
         
-        // Ìí¼Ó×´Ì¬¹ıÂË
+        // æ·»åŠ çŠ¶æ€æ¡ä»¶
         if (!empty($filterStatus)) {
             $query .= " AND status = ?";
             $params[] = $filterStatus;
         }
         
-        // »ñÈ¡×Ü¼ÇÂ¼Êı
-        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM ({$query}) as count_query"];
-        $countStmt->execute($params];
-        $totalUsers = $countStmt->fetchColumn(];
+        // è·å–æ€»è®°å½•æ•°
+        $countStmt = $pdo->prepare("SELECT COUNT(*) FROM ({$query}) as count_query");
+        $countStmt->execute($params);
+        $totalUsers = $countStmt->fetchColumn();
         
-        // ¼ÆËã×ÜÒ³Êı
-        $totalPages = ceil($totalUsers / $perPage];
+        // è®¡ç®—æ€»é¡µæ•°
+        $totalPages = ceil($totalUsers / $perPage);
         if ($currentPage > $totalPages && $totalPages > 0) {
             $currentPage = $totalPages;
         }
         
-        // Ìí¼Ó·ÖÒ³
+        // æ·»åŠ åˆ†é¡µ
         $offset = ($currentPage - 1) * $perPage;
         $query .= " ORDER BY id DESC LIMIT {$perPage} OFFSET {$offset}";
         
-        // Ö´ĞĞ²éÑ¯
-        $stmt = $pdo->prepare($query];
-        $stmt->execute($params];
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC];
+        // æ‰§è¡ŒæŸ¥è¯¢
+        $stmt = $pdo->prepare($query);
+        $stmt->execute($params);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } else {
-        $userError = 'ÏµÍ³ÅäÖÃ´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±';
+        $userError = 'ç³»ç»Ÿé”™è¯¯ï¼Œè¯·è”ç³»ç®¡ç†å‘˜';
     }
 } catch (Exception $e) {
-    $userError = '»ñÈ¡ÓÃ»§ÁĞ±íÊ±·¢Éú´íÎó: ' . $e->getMessage(];
-    error_log('User list error: ' . $e->getMessage()];
+    $userError = 'è·å–ç”¨æˆ·åˆ—è¡¨æ—¶å‘ç”Ÿé”™è¯¯: ' . $e->getMessage();
+    error_log('User list error: ' . $e->getMessage());
     $users = [];
     $totalUsers = 0;
     $totalPages = 0;
@@ -284,9 +284,9 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ÓÃ»§¹ÜÀí - AlingAi Pro</title>
+    <title>ç”¨æˆ·ç®¡ç† - AlingAi Pro</title>
     
-    <!-- ºËĞÄ×ÊÔ´ -->
+    <!-- å¼•å…¥èµ„æº -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -302,11 +302,11 @@ try {
         }
         
         .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1];
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
         .nav-link.active {
-            background-color: rgba(59, 130, 246, 0.8];
+            background-color: rgba(59, 130, 246, 0.8);
         }
         
         .password-field {
@@ -317,7 +317,7 @@ try {
             position: absolute;
             right: 1rem;
             top: 50%;
-            transform: translateY(-50%];
+            transform: translateY(-50%);
             cursor: pointer;
         }
         
@@ -364,7 +364,7 @@ try {
     </style>
 </head>
 <body class="min-h-screen bg-gray-100">
-    <!-- µ¼º½À¸ -->
+    <!-- å¯¼èˆªæ  -->
     <nav class="bg-gray-900 text-white">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-3">
@@ -372,34 +372,34 @@ try {
                     <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
                         <i class="fas fa-brain text-white"></i>
                     </div>
-                    <span class="ml-2 font-semibold text-xl">AlingAi Pro ¹ÜÀíºóÌ¨</span>
+                    <span class="ml-2 font-semibold text-xl">AlingAi Pro åå°ç®¡ç†</span>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="index.php" class="nav-link px-3 py-2 rounded-lg">ÒÇ±íÅÌ</a>
-                    <a href="users.php" class="nav-link active px-3 py-2 rounded-lg">ÓÃ»§¹ÜÀí</a>
-                    <a href="config_manager.php" class="nav-link px-3 py-2 rounded-lg">ÏµÍ³ÅäÖÃ</a>
-                    <a href="security.php" class="nav-link px-3 py-2 rounded-lg">°²È«ÖĞĞÄ</a>
-                    <a href="logs.php" class="nav-link px-3 py-2 rounded-lg">ÏµÍ³ÈÕÖ¾</a>
+                    <a href="index.php" class="nav-link px-3 py-2 rounded-lg">é¦–é¡µ</a>
+                    <a href="users.php" class="nav-link active px-3 py-2 rounded-lg">ç”¨æˆ·ç®¡ç†</a>
+                    <a href="config_manager.php" class="nav-link px-3 py-2 rounded-lg">ç³»ç»Ÿé…ç½®</a>
+                    <a href="security.php" class="nav-link px-3 py-2 rounded-lg">å®‰å…¨è®¾ç½®</a>
+                    <a href="logs.php" class="nav-link px-3 py-2 rounded-lg">ç³»ç»Ÿæ—¥å¿—</a>
                 </div>
                 
                 <div class="flex items-center space-x-3">
                     <div class="relative">
                         <button id="userMenuBtn" class="flex items-center space-x-1">
                             <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                                <?php echo strtoupper(substr($username, 0, 1)]; ?>
+                                <?php echo strtoupper(substr($username, 0, 1)); ?>
                             </div>
-                            <span class="hidden md:inline-block"><?php echo htmlspecialchars($username]; ?></span>
+                            <span class="hidden md:inline-block"><?php echo htmlspecialchars($username); ?></span>
                             <i class="fas fa-chevron-down text-xs"></i>
                         </button>
                         
                         <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
                             <a href="profile.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-user mr-2"></i>¸öÈË×ÊÁÏ
+                                <i class="fas fa-user mr-2"></i>ä¸ªäººèµ„æ–™
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
                             <a href="logout.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-sign-out-alt mr-2"></i>ÍË³öµÇÂ¼
+                                <i class="fas fa-sign-out-alt mr-2"></i>é€€å‡ºç™»å½•
                             </a>
                         </div>
                     </div>
@@ -408,13 +408,13 @@ try {
         </div>
     </nav>
     
-    <!-- Ö÷ÄÚÈİÇøÓò -->
+    <!-- ä¸»å†…å®¹åŒºåŸŸ -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Ò³Ãæ±êÌâ -->
+        <!-- é¡µé¢æ ‡é¢˜ -->
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">ÓÃ»§¹ÜÀí</h1>
+            <h1 class="text-2xl font-bold text-gray-800">ç”¨æˆ·ç®¡ç†</h1>
             <button id="createUserBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md">
-                <i class="fas fa-user-plus mr-2"></i>´´½¨ÓÃ»§
+                <i class="fas fa-user-plus mr-2"></i>åˆ›å»ºç”¨æˆ·
             </button>
         </div>
         
@@ -422,7 +422,7 @@ try {
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
             <div class="flex items-center">
                 <i class="fas fa-exclamation-triangle mr-3"></i>
-                <p><?php echo htmlspecialchars($userError]; ?></p>
+                <p><?php echo htmlspecialchars($userError); ?></p>
             </div>
         </div>
         <?php endif; ?>
@@ -431,58 +431,58 @@ try {
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
             <div class="flex items-center">
                 <i class="fas fa-check-circle mr-3"></i>
-                <p><?php echo htmlspecialchars($userSuccess]; ?></p>
+                <p><?php echo htmlspecialchars($userSuccess); ?></p>
             </div>
         </div>
         <?php endif; ?>
         
-        <!-- ËÑË÷ºÍ¹ıÂË -->
+        <!-- æœç´¢è¡¨å• -->
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-            <form method="get" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <form method="get" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">ËÑË÷</label>
-                    <input type="text" id="search" name="search" value="<?php echo htmlspecialchars($searchTerm]; ?>" 
-                        placeholder="ÓÃ»§Ãû»òÓÊÏä"
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">ç”¨æˆ·å</label>
+                    <input type="text" id="search" name="search" value="<?php echo htmlspecialchars($searchTerm); ?>" 
+                        placeholder="ç”¨æˆ·åæˆ–é‚®ç®±"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 
                 <div>
-                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">½ÇÉ«</label>
+                    <label for="role" class="block text-sm font-medium text-gray-700 mb-1">è§’è‰²</label>
                     <select id="role" name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">È«²¿½ÇÉ«</option>
-                        <option value="admin" <?php echo $filterRole === 'admin' ? 'selected' : ''; ?>>¹ÜÀíÔ±</option>
-                        <option value="moderator" <?php echo $filterRole === 'moderator' ? 'selected' : ''; ?>>°æÖ÷</option>
-                        <option value="user" <?php echo $filterRole === 'user' ? 'selected' : ''; ?>>ÆÕÍ¨ÓÃ»§</option>
+                        <option value="">å…¨è§’è‰²</option>
+                        <option value="admin" <?php echo $filterRole === 'admin' ? 'selected' : ''; ?>>ç®¡ç†å‘˜</option>
+                        <option value="moderator" <?php echo $filterRole === 'moderator' ? 'selected' : ''; ?>>ç‰ˆä¸»</option>
+                        <option value="user" <?php echo $filterRole === 'user' ? 'selected' : ''; ?>>æ™®é€šç”¨æˆ·</option>
                     </select>
                 </div>
                 
                 <div>
-                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">×´Ì¬</label>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-1">çŠ¶æ€</label>
                     <select id="status" name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="">È«²¿×´Ì¬</option>
-                        <option value="active" <?php echo $filterStatus === 'active' ? 'selected' : ''; ?>>»îÔ¾</option>
-                        <option value="inactive" <?php echo $filterStatus === 'inactive' ? 'selected' : ''; ?>>·Ç»îÔ¾</option>
-                        <option value="suspended" <?php echo $filterStatus === 'suspended' ? 'selected' : ''; ?>>ÒÑÔİÍ£</option>
+                        <option value="">å…¨çŠ¶æ€</option>
+                        <option value="active" <?php echo $filterStatus === 'active' ? 'selected' : ''; ?>>æ´»è·ƒ</option>
+                        <option value="inactive" <?php echo $filterStatus === 'inactive' ? 'selected' : ''; ?>>ä¸æ´»è·ƒ</option>
+                        <option value="suspended" <?php echo $filterStatus === 'suspended' ? 'selected' : ''; ?>>å·²æš‚åœ</option>
                     </select>
                 </div>
                 
                 <div class="flex items-end">
                     <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md">
-                        <i class="fas fa-search mr-2"></i>ËÑË÷
+                        <i class="fas fa-search mr-2"></i>æœç´¢
                     </button>
-                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="ml-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md">
-                        <i class="fas fa-times mr-2"></i>ÖØÖÃ
+                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="ml-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-md">
+                        <i class="fas fa-times mr-2"></i>é‡ç½®
                     </a>
                 </div>
             </form>
         </div>
         
-        <!-- ÓÃ»§ÁĞ±í -->
+        <!-- ç”¨æˆ·åˆ—è¡¨ -->
         <div class="bg-white rounded-lg shadow-md overflow-hidden">
             <?php if (empty($users)): ?>
                 <div class="p-6 text-center text-gray-500">
                     <i class="fas fa-users text-4xl mb-4"></i>
-                    <p>Ã»ÓĞÕÒµ½ÓÃ»§¼ÇÂ¼</p>
+                    <p>æ²¡æœ‰æ‰¾åˆ°ç”¨æˆ·è®°å½•</p>
                 </div>
             <?php else: ?>
                 <div class="overflow-x-auto">
@@ -490,34 +490,34 @@ try {
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ÓÃ»§Ãû</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ÓÊÏä</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">½ÇÉ«</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">×´Ì¬</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">×¢²áÊ±¼ä</th>
-                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">²Ù×÷</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ç”¨æˆ·å</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">é‚®ç®±</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">è§’è‰²</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">çŠ¶æ€</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">æ³¨å†Œæ—¶é—´</th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">æ“ä½œ</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             <?php foreach ($users as $user): ?>
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <?php echo htmlspecialchars($user['id']]; ?>
+                                        <?php echo htmlspecialchars($user['id']); ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white">
-                                                <?php echo strtoupper(substr($user['username'],  0, 1)]; ?>
+                                                <?php echo strtoupper(substr($user['username'],  0, 1)); ?>
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">
-                                                    <?php echo htmlspecialchars($user['username']]; ?>
+                                                    <?php echo htmlspecialchars($user['username']); ?>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <?php echo htmlspecialchars($user['email']]; ?>
+                                        <?php echo htmlspecialchars($user['email']); ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <?php 
@@ -529,7 +529,7 @@ try {
                                         }
                                         ?>
                                         <span class="role-badge <?php echo $roleClass; ?>">
-                                            <?php echo htmlspecialchars(ucfirst($user['role'])]; ?>
+                                            <?php echo htmlspecialchars(ucfirst($user['role'])); ?>
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -545,11 +545,11 @@ try {
                                             <div class="user-status <?php echo $statusClass; ?>"></div>
                                             <span class="text-sm text-gray-500">
                                                 <?php 
-                                                $statusText = '»îÔ¾';
+                                                $statusText = 'æ´»è·ƒ';
                                                 if ($user['status'] === 'inactive') {
-                                                    $statusText = '·Ç»îÔ¾';
+                                                    $statusText = 'ä¸æ´»è·ƒ';
                                                 } elseif ($user['status'] === 'suspended') {
-                                                    $statusText = 'ÒÑÔİÍ£';
+                                                    $statusText = 'å·²æš‚åœ';
                                                 }
                                                 echo $statusText;
                                                 ?>
@@ -557,25 +557,25 @@ try {
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <?php echo htmlspecialchars(date('Y-m-d', strtotime($user['created_at']))]; ?>
+                                        <?php echo htmlspecialchars(date('Y-m-d', strtotime($user['created_at']))); ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <?php if ($user['id'] != $userId): ?>
                                             <button type="button" class="text-blue-600 hover:text-blue-900 mr-3 edit-user-btn" 
-                                                data-id="<?php echo htmlspecialchars($user['id']]; ?>"
-                                                data-username="<?php echo htmlspecialchars($user['username']]; ?>"
-                                                data-email="<?php echo htmlspecialchars($user['email']]; ?>"
-                                                data-role="<?php echo htmlspecialchars($user['role']]; ?>"
-                                                data-status="<?php echo htmlspecialchars($user['status']]; ?>">
+                                                data-id="<?php echo htmlspecialchars($user['id']); ?>"
+                                                data-username="<?php echo htmlspecialchars($user['username']); ?>"
+                                                data-email="<?php echo htmlspecialchars($user['email']); ?>"
+                                                data-role="<?php echo htmlspecialchars($user['role']); ?>"
+                                                data-status="<?php echo htmlspecialchars($user['status']); ?>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button type="button" class="text-red-600 hover:text-red-900 reset-password-btn"
-                                                data-id="<?php echo htmlspecialchars($user['id']]; ?>"
-                                                data-username="<?php echo htmlspecialchars($user['username']]; ?>">
+                                                data-id="<?php echo htmlspecialchars($user['id']); ?>"
+                                                data-username="<?php echo htmlspecialchars($user['username']); ?>">
                                                 <i class="fas fa-key"></i>
                                             </button>
                                         <?php else: ?>
-                                            <span class="text-gray-400">µ±Ç°ÓÃ»§</span>
+                                            <span class="text-gray-400">å½“å‰ç”¨æˆ·</span>
                                         <?php endif; ?>
                                     </td>
                                 </tr>
@@ -584,28 +584,28 @@ try {
                     </table>
                 </div>
                 
-                <!-- ·ÖÒ³ -->
+                <!-- åˆ†é¡µ -->
                 <?php if ($totalPages > 1): ?>
                     <div class="px-6 py-4 bg-gray-50">
                         <div class="flex justify-between items-center">
                             <div class="text-sm text-gray-700">
-                                ÏÔÊ¾ <?php echo ($currentPage - 1) * $perPage + 1; ?> µ½ 
-                                <?php echo min($currentPage * $perPage, $totalUsers]; ?> 
-                                Ìõ£¬¹² <?php echo $totalUsers; ?> Ìõ¼ÇÂ¼
+                                æ˜¾ç¤º <?php echo ($currentPage - 1) * $perPage + 1; ?> åˆ° 
+                                <?php echo min($currentPage * $perPage, $totalUsers); ?> 
+                                å…± <?php echo $totalUsers; ?> æ¡è®°å½•
                             </div>
                             <div class="flex space-x-1">
                                 <?php if ($currentPage > 1): ?>
                                     <a href="?page=<?php echo $currentPage - 1; ?><?php echo !empty($searchTerm) ? '&search=' . urlencode($searchTerm) : ''; ?><?php echo !empty($filterRole) ? '&role=' . urlencode($filterRole) : ''; ?><?php echo !empty($filterStatus) ? '&status=' . urlencode($filterStatus) : ''; ?>" 
                                         class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">
-                                        ÉÏÒ»Ò³
+                                        ä¸Šä¸€é¡µ
                                     </a>
                                 <?php endif; ?>
                                 
                                 <?php 
-                                $startPage = max(1, $currentPage - 2];
-                                $endPage = min($totalPages, $startPage + 4];
+                                $startPage = max(1, $currentPage - 2);
+                                $endPage = min($totalPages, $startPage + 4);
                                 if ($endPage - $startPage < 4) {
-                                    $startPage = max(1, $endPage - 4];
+                                    $startPage = max(1, $endPage - 4);
                                 }
                                 
                                 for ($i = $startPage; $i <= $endPage; $i++): 
@@ -619,7 +619,7 @@ try {
                                 <?php if ($currentPage < $totalPages): ?>
                                     <a href="?page=<?php echo $currentPage + 1; ?><?php echo !empty($searchTerm) ? '&search=' . urlencode($searchTerm) : ''; ?><?php echo !empty($filterRole) ? '&role=' . urlencode($filterRole) : ''; ?><?php echo !empty($filterStatus) ? '&status=' . urlencode($filterStatus) : ''; ?>" 
                                         class="px-3 py-1 border border-gray-300 rounded-md bg-white text-gray-700">
-                                        ÏÂÒ»Ò³
+                                        ä¸‹ä¸€é¡µ
                                     </a>
                                 <?php endif; ?>
                             </div>
@@ -630,33 +630,33 @@ try {
         </div>
     </main>
     
-    <!-- ´´½¨ÓÃ»§Ä£Ì¬¿ò -->
+    <!-- åˆ›å»ºç”¨æˆ·æ¨¡æ€æ¡† -->
     <div id="createUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-800">´´½¨ĞÂÓÃ»§</h3>
+                <h3 class="text-lg font-semibold text-gray-800">åˆ›å»ºæ–°ç”¨æˆ·</h3>
                 <button type="button" class="text-gray-400 hover:text-gray-600 close-modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="px-6 py-4">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="px-6 py-4">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
                 
                 <div class="mb-4">
-                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">ÓÃ»§Ãû</label>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-1">ç”¨æˆ·å</label>
                     <input type="text" id="username" name="username" required 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">µç×ÓÓÊÏä</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">é‚®ç®±</label>
                     <input type="email" id="email" name="email" required 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 
                 <div class="mb-4 password-field">
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">ÃÜÂë</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">å¯†ç </label>
                     <input type="password" id="password" name="password" required 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <span class="password-toggle" onclick="togglePassword('password')">
@@ -665,27 +665,27 @@ try {
                 </div>
                 
                 <div class="mb-4">
-                    <label for="create_role" class="block text-sm font-medium text-gray-700 mb-1">½ÇÉ«</label>
+                    <label for="create_role" class="block text-sm font-medium text-gray-700 mb-1">è§’è‰²</label>
                     <select id="create_role" name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="user">ÆÕÍ¨ÓÃ»§</option>
-                        <option value="moderator">°æÖ÷</option>
-                        <option value="admin">¹ÜÀíÔ±</option>
+                        <option value="user">æ™®é€šç”¨æˆ·</option>
+                        <option value="moderator">ç‰ˆä¸»</option>
+                        <option value="admin">ç®¡ç†å‘˜</option>
                     </select>
                 </div>
                 
                 <div class="mt-6 flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 close-modal">È¡Ïû</button>
-                    <button type="submit" name="create_user" class="px-4 py-2 bg-blue-600 text-white rounded-md">´´½¨ÓÃ»§</button>
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 close-modal">å–æ¶ˆ</button>
+                    <button type="submit" name="create_user" class="px-4 py-2 bg-blue-600 text-white rounded-md">åˆ›å»ºç”¨æˆ·</button>
                 </div>
             </form>
         </div>
     </div>
     
-    <!-- ±à¼­ÓÃ»§Ä£Ì¬¿ò -->
+    <!-- ç¼–è¾‘ç”¨æˆ·æ¨¡æ€æ¡† -->
     <div id="editUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-800">±à¼­ÓÃ»§</h3>
+                <h3 class="text-lg font-semibold text-gray-800">ç¼–è¾‘ç”¨æˆ·</h3>
                 <button type="button" class="text-gray-400 hover:text-gray-600 close-modal">
                     <i class="fas fa-times"></i>
                 </button>
@@ -693,75 +693,75 @@ try {
             
             <div class="px-6 py-4">
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ÓÃ»§Ãû</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ç”¨æˆ·å</label>
                     <div id="edit_username" class="text-gray-800 font-medium"></div>
                 </div>
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">µç×ÓÓÊÏä</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">é‚®ç®±</label>
                     <div id="edit_email" class="text-gray-800"></div>
                 </div>
                 
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="mb-4 border-t border-gray-200 pt-4 mt-4">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="mb-4 border-t border-gray-200 pt-4 mt-4">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
                     <input type="hidden" id="edit_user_id" name="user_id">
                     
                     <div class="mb-4">
-                        <label for="edit_role" class="block text-sm font-medium text-gray-700 mb-1">½ÇÉ«</label>
+                        <label for="edit_role" class="block text-sm font-medium text-gray-700 mb-1">è§’è‰²</label>
                         <select id="edit_role" name="role" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="user">ÆÕÍ¨ÓÃ»§</option>
-                            <option value="moderator">°æÖ÷</option>
-                            <option value="admin">¹ÜÀíÔ±</option>
+                            <option value="user">æ™®é€šç”¨æˆ·</option>
+                            <option value="moderator">ç‰ˆä¸»</option>
+                            <option value="admin">ç®¡ç†å‘˜</option>
                         </select>
                     </div>
                     
                     <div class="mt-4 flex justify-end">
-                        <button type="submit" name="update_role" class="px-4 py-2 bg-blue-600 text-white rounded-md">¸üĞÂ½ÇÉ«</button>
+                        <button type="submit" name="update_role" class="px-4 py-2 bg-blue-600 text-white rounded-md">æ›´æ–°è§’è‰²</button>
                     </div>
                 </form>
                 
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="mb-4 border-t border-gray-200 pt-4">
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="mb-4 border-t border-gray-200 pt-4">
                     <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
                     <input type="hidden" name="user_id" class="edit_user_id_input">
                     
                     <div class="mb-4">
-                        <label for="edit_status" class="block text-sm font-medium text-gray-700 mb-1">×´Ì¬</label>
+                        <label for="edit_status" class="block text-sm font-medium text-gray-700 mb-1">çŠ¶æ€</label>
                         <select id="edit_status" name="status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="active">»îÔ¾</option>
-                            <option value="inactive">·Ç»îÔ¾</option>
-                            <option value="suspended">ÒÑÔİÍ£</option>
+                            <option value="active">æ´»è·ƒ</option>
+                            <option value="inactive">ä¸æ´»è·ƒ</option>
+                            <option value="suspended">å·²æš‚åœ</option>
                         </select>
                     </div>
                     
                     <div class="mt-4 flex justify-end">
-                        <button type="submit" name="update_status" class="px-4 py-2 bg-blue-600 text-white rounded-md">¸üĞÂ×´Ì¬</button>
+                        <button type="submit" name="update_status" class="px-4 py-2 bg-blue-600 text-white rounded-md">æ›´æ–°çŠ¶æ€</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     
-    <!-- ÖØÖÃÃÜÂëÄ£Ì¬¿ò -->
+    <!-- é‡ç½®å¯†ç æ¨¡æ€æ¡† -->
     <div id="resetPasswordModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                <h3 class="text-lg font-semibold text-gray-800">ÖØÖÃÃÜÂë</h3>
+                <h3 class="text-lg font-semibold text-gray-800">é‡ç½®å¯†ç </h3>
                 <button type="button" class="text-gray-400 hover:text-gray-600 close-modal">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="px-6 py-4">
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="px-6 py-4">
                 <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
                 <input type="hidden" id="reset_user_id" name="user_id">
                 
                 <div class="mb-4">
-                    <label class="block text-sm font-medium text-gray-700 mb-1">ÓÃ»§</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">ç”¨æˆ·å</label>
                     <div id="reset_username" class="text-gray-800 font-medium"></div>
                 </div>
                 
                 <div class="mb-4 password-field">
-                    <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">ĞÂÃÜÂë</label>
+                    <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">æ–°å¯†ç </label>
                     <input type="password" id="new_password" name="password" required 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     <span class="password-toggle" onclick="togglePassword('new_password')">
@@ -770,8 +770,8 @@ try {
                 </div>
                 
                 <div class="mt-6 flex justify-end">
-                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 close-modal">È¡Ïû</button>
-                    <button type="submit" name="reset_password" class="px-4 py-2 bg-red-600 text-white rounded-md">ÖØÖÃÃÜÂë</button>
+                    <button type="button" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-2 close-modal">å–æ¶ˆ</button>
+                    <button type="submit" name="reset_password" class="px-4 py-2 bg-red-600 text-white rounded-md">é‡ç½®å¯†ç </button>
                 </div>
             </form>
         </div>
@@ -779,108 +779,108 @@ try {
     
     <!-- JavaScript -->
     <script>
-        // ÓÃ»§²Ëµ¥ÇĞ»»
+        // ç”¨æˆ·èœå•æŒ‰é’®ç‚¹å‡»äº‹ä»¶
         document.getElementById('userMenuBtn').addEventListener('click', function() {
-            document.getElementById('userMenu').classList.toggle('hidden'];
-        }];
+            document.getElementById('userMenu').classList.toggle('hidden');
+        });
         
-        // µã»÷Íâ²¿¹Ø±Õ²Ëµ¥
+        // å¤–éƒ¨ç‚¹å‡»å…³é—­ç”¨æˆ·èœå•
         document.addEventListener('click', function(e) {
-            const userMenu = document.getElementById('userMenu'];
-            const userMenuBtn = document.getElementById('userMenuBtn'];
+            const userMenu = document.getElementById('userMenu');
+            const userMenuBtn = document.getElementById('userMenuBtn');
             
             if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
-                userMenu.classList.add('hidden'];
+                userMenu.classList.add('hidden');
             }
-        }];
+        });
         
-        // ÇĞ»»ÃÜÂë¿É¼ûĞÔ
+        // ç”¨æˆ·å¯†ç åˆ‡æ¢äº‹ä»¶
         function togglePassword(inputId) {
-            const passwordInput = document.getElementById(inputId];
-            const toggleIcon = document.querySelector(`#${inputId}`).nextElementSibling.querySelector('i'];
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.querySelector(`#${inputId}`).nextElementSibling.querySelector('i');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye'];
-                toggleIcon.classList.add('fa-eye-slash'];
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash'];
-                toggleIcon.classList.add('fa-eye'];
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
             }
         }
         
-        // Ä£Ì¬¿òÏà¹Ø
-        const createUserBtn = document.getElementById('createUserBtn'];
-        const createUserModal = document.getElementById('createUserModal'];
-        const editUserModal = document.getElementById('editUserModal'];
-        const resetPasswordModal = document.getElementById('resetPasswordModal'];
-        const closeModalButtons = document.querySelectorAll('.close-modal'];
+        // åˆ›å»ºç”¨æˆ·æŒ‰é’®ç‚¹å‡»äº‹ä»¶
+        const createUserBtn = document.getElementById('createUserBtn');
+        const createUserModal = document.getElementById('createUserModal');
+        const editUserModal = document.getElementById('editUserModal');
+        const resetPasswordModal = document.getElementById('resetPasswordModal');
+        const closeModalButtons = document.querySelectorAll('.close-modal');
         
-        // ´ò¿ª´´½¨ÓÃ»§Ä£Ì¬¿ò
+        // æ‰“å¼€åˆ›å»ºç”¨æˆ·æ¨¡æ€æ¡†
         createUserBtn.addEventListener('click', function() {
-            createUserModal.classList.remove('hidden'];
-        }];
+            createUserModal.classList.remove('hidden');
+        });
         
-        // ±à¼­ÓÃ»§°´Å¥µã»÷ÊÂ¼ş
+        // ç¼–è¾‘ç”¨æˆ·æŒ‰é’®ç‚¹å‡»äº‹ä»¶
         document.querySelectorAll('.edit-user-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const userId = this.getAttribute('data-id'];
-                const username = this.getAttribute('data-username'];
-                const email = this.getAttribute('data-email'];
-                const role = this.getAttribute('data-role'];
-                const status = this.getAttribute('data-status'];
+                const userId = this.getAttribute('data-id');
+                const username = this.getAttribute('data-username');
+                const email = this.getAttribute('data-email');
+                const role = this.getAttribute('data-role');
+                const status = this.getAttribute('data-status');
                 
                 document.getElementById('edit_user_id').value = userId;
                 document.querySelectorAll('.edit_user_id_input').forEach(input => {
                     input.value = userId;
-                }];
+                });
                 
                 document.getElementById('edit_username').textContent = username;
                 document.getElementById('edit_email').textContent = email;
                 document.getElementById('edit_role').value = role;
                 document.getElementById('edit_status').value = status;
                 
-                editUserModal.classList.remove('hidden'];
-            }];
-        }];
+                editUserModal.classList.remove('hidden');
+            });
+        });
         
-        // ÖØÖÃÃÜÂë°´Å¥µã»÷ÊÂ¼ş
+        // é‡ç½®å¯†ç æŒ‰é’®ç‚¹å‡»äº‹ä»¶
         document.querySelectorAll('.reset-password-btn').forEach(button => {
             button.addEventListener('click', function() {
-                const userId = this.getAttribute('data-id'];
-                const username = this.getAttribute('data-username'];
+                const userId = this.getAttribute('data-id');
+                const username = this.getAttribute('data-username');
                 
                 document.getElementById('reset_user_id').value = userId;
                 document.getElementById('reset_username').textContent = username;
                 
-                resetPasswordModal.classList.remove('hidden'];
-            }];
-        }];
+                resetPasswordModal.classList.remove('hidden');
+            });
+        });
         
-        // ¹Ø±ÕÄ£Ì¬¿ò
+        // å…³é—­æ¨¡æ€æ¡†
         closeModalButtons.forEach(button => {
             button.addEventListener('click', function() {
-                createUserModal.classList.add('hidden'];
-                editUserModal.classList.add('hidden'];
-                resetPasswordModal.classList.add('hidden'];
-            }];
-        }];
+                createUserModal.classList.add('hidden');
+                editUserModal.classList.add('hidden');
+                resetPasswordModal.classList.add('hidden');
+            });
+        });
         
-        // µã»÷Ä£Ì¬¿òÍâ²¿¹Ø±Õ
+        // å¤–éƒ¨ç‚¹å‡»å…³é—­æ¨¡æ€æ¡†
         window.addEventListener('click', function(e) {
             if (e.target === createUserModal) {
-                createUserModal.classList.add('hidden'];
+                createUserModal.classList.add('hidden');
             }
             
             if (e.target === editUserModal) {
-                editUserModal.classList.add('hidden'];
+                editUserModal.classList.add('hidden');
             }
             
             if (e.target === resetPasswordModal) {
-                resetPasswordModal.classList.add('hidden'];
+                resetPasswordModal.classList.add('hidden');
             }
-        }];
+        });
     </script>
 </body>
 </html>

@@ -1,0 +1,36 @@
+[
+    {
+        "id": 1,
+        "email": "test@example.com",
+        "password": "$2y$10$Y.bI5/CzXc4UCM8Bs9tK4.CEYVm0Mu2BMqtUFgPQ9kRNNSD0AC3he",
+        "username": "testuser",
+        "name": "Test User",
+        "role": "user",
+        "status": "active",
+        "permissions": [],
+        "avatar": null,
+        "phone": null,
+        "last_login_at": null,
+        "login_count": 0,
+        "created_at": "2025-06-26 17:35:00",
+        "updated_at": "2025-06-26 17:35:00",
+        "deleted_at": null
+    },
+    {
+        "id": 2,
+        "email": "admin@example.com",
+        "password": "$2y$10$zxvWh8GGF08U9PcLDd7RmeKGZeZ1ebxMb0TbB5SNK6sRwQgZXCVKa",
+        "username": "admin",
+        "name": "Administrator",
+        "role": "admin",
+        "status": "active",
+        "permissions": ["*"],
+        "avatar": null,
+        "phone": null,
+        "last_login_at": null,
+        "login_count": 0,
+        "created_at": "2025-06-26 17:35:00",
+        "updated_at": "2025-06-26 17:35:00",
+        "deleted_at": null
+    }
+] 

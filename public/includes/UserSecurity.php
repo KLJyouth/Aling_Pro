@@ -1,6 +1,6 @@
 <?php
 /**
- * AlingAi Pro 用户安全�?
+ * AlingAi Pro 用户安全�?
  * 提供用户数据保护、加密、访问控制等安全功能
  * 
  * @version 1.0.0
@@ -15,7 +15,7 @@ class UserSecurity {
      */
     const CIPHER_ALGO = 'aes-256-gcm';
     const HASH_ALGO = 'sha256';
-    const KEY_LENGTH = 32; // 256位密�?
+    const KEY_LENGTH = 32; // 256位密�?
     const TAG_LENGTH = 16; // GCM认证标签长度
     const PBKDF2_ITERATIONS = 10000;
 
@@ -23,17 +23,17 @@ class UserSecurity {
      * 加密用户敏感数据
      * 
      * @param string $data 要加密的数据
-     * @param string $masterKey 主密�?
-     * @return array 包含密文和相关元数据的数�?
+     * @param string $masterKey 主密�?
+     * @return array 包含密文和相关元数据的数�?
      */
     public static function encryptData($data, $masterKey) {
         if (empty($data) || empty($masterKey)) {
-            throw new \InvalidArgumentException('数据和主密钥不能为空'];
+            throw new \InvalidArgumentException('数据和主密钥不能为空');
         }
 
         // 生成随机盐和IV
-        $salt = random_bytes(16];
-        $iv = random_bytes(12]; // GCM模式推荐IV长度�?2字节
+        $salt = random_bytes(16);
+        $iv = random_bytes(12); // GCM模式推荐IV长度为12字节
 
         // 使用PBKDF2从主密钥派生加密密钥
         $key = hash_pbkdf2(
@@ -43,7 +43,7 @@ class UserSecurity {
             self::PBKDF2_ITERATIONS,
             self::KEY_LENGTH,
             true
-        ];
+        );
 
         // 使用GCM模式加密
         $tag = '';
@@ -54,22 +54,22 @@ class UserSecurity {
             OPENSSL_RAW_DATA,
             $iv,
             $tag,
-            '', // 附加数据，用于认�?
+            '', // 附加数据，用于认�?
             self::TAG_LENGTH
-        ];
+        );
 
         if ($encrypted === false) {
-            throw new \RuntimeException('加密失败: ' . openssl_error_string()];
+            throw new \RuntimeException('加密失败: ' . openssl_error_string());
         }
 
         // 将所有二进制数据转换为Base64
         return [
-            'ciphertext' => base64_encode($encrypted],
-            'iv' => base64_encode($iv],
-            'salt' => base64_encode($salt],
-            'tag' => base64_encode($tag],
+            'ciphertext' => base64_encode($encrypted),
+            'iv' => base64_encode($iv),
+            'salt' => base64_encode($salt),
+            'tag' => base64_encode($tag),
             'algo' => self::CIPHER_ALGO,
-            'version' => 1, // 加密版本，便于未来升级加密算�?
+            'version' => 1, // 加密版本，便于未来升级加密算�?
         ];
     }
 
@@ -77,37 +77,37 @@ class UserSecurity {
      * 解密用户敏感数据
      * 
      * @param array $encryptedData 加密数据数组
-     * @param string $masterKey 主密�?
+     * @param string $masterKey 主密�?
      * @return string 解密后的数据
      */
     public static function decryptData($encryptedData, $masterKey) {
         if (empty($encryptedData) || empty($masterKey)) {
-            throw new \InvalidArgumentException('加密数据和主密钥不能为空'];
+            throw new \InvalidArgumentException('加密数据和主密钥不能为空');
         }
 
         // 检查必要的加密元素
         $requiredKeys = ['ciphertext', 'iv', 'salt', 'tag', 'algo', 'version'];
         foreach ($requiredKeys as $key) {
             if (!isset($encryptedData[$key])) {
-                throw new \InvalidArgumentException("缺少加密元素: {$key}"];
+                throw new \InvalidArgumentException("缺少加密元素: {$key}");
             }
         }
 
-        // 检查加密算法版�?
+        // 检查加密算法版?
         if ($encryptedData['version'] != 1) {
-            throw new \RuntimeException("不支持的加密版本: {$encryptedData['version']}"];
+            throw new \RuntimeException("不支持的加密版本: {$encryptedData['version']}");
         }
 
-        // 检查加密算�?
+        // 检查加密算?
         if ($encryptedData['algo'] != self::CIPHER_ALGO) {
-            throw new \RuntimeException("不支持的加密算法: {$encryptedData['algo']}"];
+            throw new \RuntimeException("不支持的加密算法: {$encryptedData['algo']}");
         }
 
         // 解码所有Base64数据
-        $ciphertext = base64_decode($encryptedData['ciphertext']];
-        $iv = base64_decode($encryptedData['iv']];
-        $salt = base64_decode($encryptedData['salt']];
-        $tag = base64_decode($encryptedData['tag']];
+        $ciphertext = base64_decode($encryptedData['ciphertext']);
+        $iv = base64_decode($encryptedData['iv']);
+        $salt = base64_decode($encryptedData['salt']);
+        $tag = base64_decode($encryptedData['tag']);
 
         // 使用PBKDF2从主密钥派生加密密钥
         $key = hash_pbkdf2(
@@ -117,7 +117,7 @@ class UserSecurity {
             self::PBKDF2_ITERATIONS,
             self::KEY_LENGTH,
             true
-        ];
+        );
 
         // 使用GCM模式解密
         $decrypted = openssl_decrypt(
@@ -127,10 +127,10 @@ class UserSecurity {
             OPENSSL_RAW_DATA,
             $iv,
             $tag
-        ];
+        );
 
         if ($decrypted === false) {
-            throw new \RuntimeException('解密失败: ' . openssl_error_string()];
+            throw new \RuntimeException('解密失败: ' . openssl_error_string());
         }
 
         return $decrypted;
@@ -144,17 +144,17 @@ class UserSecurity {
      */
     public static function hashPassword($password) {
         if (empty($password)) {
-            throw new \InvalidArgumentException('密码不能为空'];
+            throw new \InvalidArgumentException('密码不能为空');
         }
         
-        // 使用Argon2id算法进行密码哈希（PHP 7.3+�?
+        // 使用Argon2id算法进行密码哈希（PHP 7.3+?
         $options = [
             'memory_cost' => 65536, // 64MB
-            'time_cost' => 4,       // 4次迭�?
+            'time_cost' => 4,       // 4次迭?
             'threads' => 3          // 3线程
         ];
         
-        return password_hash($password, PASSWORD_ARGON2ID, $options];
+        return password_hash($password, PASSWORD_ARGON2ID, $options);
     }
 
     /**
@@ -169,11 +169,11 @@ class UserSecurity {
             return false;
         }
         
-        return password_verify($password, $hash];
+        return password_verify($password, $hash);
     }
 
     /**
-     * 检查密码强�?
+     * 检查密码强?
      * 
      * @param string $password 密码
      * @return array 包含强度评分和建议的数组
@@ -182,42 +182,42 @@ class UserSecurity {
         $score = 0;
         $feedback = [];
 
-        // 长度检�?
-        $length = strlen($password];
+        // 长度检查
+        $length = strlen($password);
         if ($length < 8) {
-            $feedback[] = '密码长度应至少为8个字�?;
+            $feedback[] = '密码长度应至少为8个字符';
         } elseif ($length >= 12) {
             $score += 2;
         } else {
             $score += 1;
         }
 
-        // 复杂性检�?
+        // 复杂性检查
         if (preg_match('/[A-Z]/', $password)) {
             $score++;
         } else {
-            $feedback[] = '应包含至少一个大写字�?;
+            $feedback[] = '应包含至少一个大写字母';
         }
 
         if (preg_match('/[a-z]/', $password)) {
             $score++;
         } else {
-            $feedback[] = '应包含至少一个小写字�?;
+            $feedback[] = '应包含至少一个小写字母';
         }
 
         if (preg_match('/[0-9]/', $password)) {
             $score++;
         } else {
-            $feedback[] = '应包含至少一个数�?;
+            $feedback[] = '应包含至少一个数字';
         }
 
         if (preg_match('/[^A-Za-z0-9]/', $password)) {
             $score++;
         } else {
-            $feedback[] = '应包含至少一个特殊字�?;
+            $feedback[] = '应包含至少一个特殊字符';
         }
 
-        // 常见密码模式检�?
+        // 常见密码模式检查
         $commonPatterns = [
             '/^123456/',
             '/^password/i',
@@ -259,7 +259,7 @@ class UserSecurity {
      */
     public static function generateCsrfToken($formId = null) {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start(];
+            session_start();
         }
         
         $tokenId = $formId ? "csrf_token_{$formId}" : 'csrf_token';
@@ -267,8 +267,8 @@ class UserSecurity {
         // 如果令牌不存在或过期，生成新令牌
         if (!isset($_SESSION[$tokenId]) || 
             (isset($_SESSION["{$tokenId}_time"]) && time() - $_SESSION["{$tokenId}_time"] > 3600)) {
-            $_SESSION[$tokenId] = bin2hex(random_bytes(32)];
-            $_SESSION["{$tokenId}_time"] = time(];
+            $_SESSION[$tokenId] = bin2hex(random_bytes(32));
+            $_SESSION["{$tokenId}_time"] = time();
         }
         
         return $_SESSION[$tokenId];
@@ -277,13 +277,13 @@ class UserSecurity {
     /**
      * 验证CSRF令牌
      * 
-     * @param string $token 提交的令�?
+     * @param string $token 提交的令牌
      * @param string $formId 表单ID
      * @return bool 验证结果
      */
     public static function validateCsrfToken($token, $formId = null) {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start(];
+            session_start();
         }
         
         $tokenId = $formId ? "csrf_token_{$formId}" : 'csrf_token';
@@ -302,14 +302,14 @@ class UserSecurity {
      * @return string 随机令牌
      */
     public static function generateRandomToken($length = 32) {
-        return bin2hex(random_bytes($length / 2)];
+        return bin2hex(random_bytes($length / 2));
     }
 
     /**
      * 安全地执行重定向
      * 
      * @param string $url 目标URL
-     * @param array $allowedDomains 允许的域名列�?
+     * @param array $allowedDomains 允许的域名列牌
      * @return void
      */
     public static function safeRedirect($url, $allowedDomains = []) {
@@ -319,28 +319,28 @@ class UserSecurity {
         }
 
         // 解析URL
-        $parsedUrl = parse_url($url];
+        $parsedUrl = parse_url($url);
         
         // 检查是否是相对URL
         if (empty($parsedUrl['host'])) {
-            header("Location: {$url}"];
+            header("Location: {$url}");
             exit;
         }
         
-        // 检查域名是否在允许列表�?
+        // 检查域名是否在允许列表中
         $isAllowedDomain = false;
         foreach ($allowedDomains as $domain) {
-            if (strcasecmp(substr($parsedUrl['host'],  -strlen($domain)], $domain) === 0) {
+            if (strcasecmp(substr($parsedUrl['host'],  -strlen($domain)), $domain) === 0) {
                 $isAllowedDomain = true;
                 break;
             }
         }
         
         if (!$isAllowedDomain) {
-            $url = '/'; // 如域名不在允许列表中，重定向到首�?
+            $url = '/'; // 如域名不在允许列表中，重定向到首页
         }
         
-        header("Location: {$url}"];
+        header("Location: {$url}");
         exit;
     }
 
@@ -352,7 +352,7 @@ class UserSecurity {
      */
     public static function assessIpRisk($ipAddress) {
         $risk = [
-            'score' => 0, // 0-100，分数越高风险越�?
+            'score' => 0, // 0-100，分数越高风险越高
             'factors' => [], 
             'level' => 'low',
         ];
@@ -364,7 +364,7 @@ class UserSecurity {
         }
         
         // 检查是否是代理IP（示例实现）
-        // 真实实现可能需要使用专业的代理检测服�?
+        // 真实实现可能需要使用专业的代理检测服务
         $headers = [
             'HTTP_VIA',
             'HTTP_X_FORWARDED_FOR',
@@ -400,45 +400,45 @@ class UserSecurity {
     }
 
     /**
-     * 验证用户会话状�?
+     * 验证用户会话状态
      * 
-     * @param bool $requireAdmin 是否要求管理员权�?
+     * @param bool $requireAdmin 是否要求管理员权限
      * @param string $redirectUrl 未登录时重定向URL
      * @return array|bool 用户数据或false
      */
     public static function validateSession($requireAdmin = false, $redirectUrl = '/login.php') {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start(];
+            session_start();
         }
         
         if (!isset($_SESSION['user_id']) || !isset($_SESSION['last_activity'])) {
-            // 未登录，重定�?
+            // 未登录，重定向
             if ($redirectUrl !== null) {
-                header("Location: {$redirectUrl}"];
+                header("Location: {$redirectUrl}");
                 exit;
             }
             return false;
         }
         
-        // 检查会话活动超时（30分钟�?
+        // 检查会话活动超时（30分钟）
         if (time() - $_SESSION['last_activity'] > 1800) {
-            // 会话过期，清理会�?
-            self::destroySession(];
+            // 会话过期，清理会话
+            self::destroySession();
             
             if ($redirectUrl !== null) {
-                header("Location: {$redirectUrl}?expired=1"];
+                header("Location: {$redirectUrl}?expired=1");
                 exit;
             }
             return false;
         }
         
-        // 更新最后活动时�?
-        $_SESSION['last_activity'] = time(];
+        // 更新最后活动时间
+        $_SESSION['last_activity'] = time();
         
-        // 如果要求管理员权限，检查用户是否是管理�?
+        // 如果要求管理员权限，检查用户是否是管理员
         if ($requireAdmin && (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin')) {
             if ($redirectUrl !== null) {
-                header("Location: /access-denied.php"];
+                header("Location: /access-denied.php");
                 exit;
             }
             return false;
@@ -457,21 +457,21 @@ class UserSecurity {
     }
 
     /**
-     * 安全销毁用户会�?
+     * 安全销毁用户会话
      * 
      * @return void
      */
     public static function destroySession() {
         if (session_status() === PHP_SESSION_NONE) {
-            session_start(];
+            session_start();
         }
         
-        // 清除所有会话变�?
+        // 清除所有会话变量
         $_SESSION = [];
         
         // 删除会话Cookie
         if (ini_get('session.use_cookies')) {
-            $params = session_get_cookie_params(];
+            $params = session_get_cookie_params();
             setcookie(
                 session_name(),
                 '',
@@ -480,11 +480,11 @@ class UserSecurity {
                 $params['domain'], 
                 $params['secure'], 
                 $params['httponly']
-            ];
+            );
         }
         
-        // 销毁会�?
-        session_destroy(];
+        // 销毁会话
+        session_destroy();
     }
 
     /**
@@ -493,8 +493,8 @@ class UserSecurity {
      * @param int $userId 用户ID
      * @param string $action 操作
      * @param string $description 描述
-     * @param string $severity 严重程度（info/warning/critical�?
-     * @param string $status 状态（success/failed�?
+     * @param string $severity 严重程度（info/warning/critical）
+     * @param string $status 状态（success/failed）
      * @return bool 是否记录成功
      */
     public static function logSecurityEvent($userId, $action, $description, $severity = 'info', $status = 'success') {
@@ -502,15 +502,15 @@ class UserSecurity {
             // 加载配置文件
             $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
             if (!file_exists($configFile)) {
-                throw new \Exception('配置文件不存�?];
+                throw new \Exception('配置文件不存在');
             }
             
             $config = require $configFile;
             
-            // 连接数据�?
+            // 连接数据库
             if ($config['database']['type'] === 'sqlite') {
                 $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
-                $pdo = new \PDO("sqlite:{$dbPath}"];
+                $pdo = new \PDO("sqlite:{$dbPath}");
             } else {
                 $host = $config['database']['host'];
                 $port = $config['database']['port'] ?? 3306;
@@ -518,15 +518,16 @@ class UserSecurity {
                 $dbuser = $config['database']['username'];
                 $dbpass = $config['database']['password'];
                 
-                $pdo = new \PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
+                $pdo = new \PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
             }
             
-            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION];
+            $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             
             // 插入日志记录
             $stmt = $pdo->prepare("INSERT INTO security_audit_log 
                 (user_id, action, description, ip_address, user_agent, severity, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)"];
+                VALUES (?, ?, ?, ?, ?, ?, ?)"
+            );
                 
             $stmt->execute([
                 $userId,
@@ -536,12 +537,12 @@ class UserSecurity {
                 $_SERVER['HTTP_USER_AGENT'] ?? '',
                 $severity,
                 $status
-            ]];
+            ]);
             
             return true;
         } catch (\Exception $e) {
-            // 记录错误到系统日�?
-            error_log("Security audit log error: " . $e->getMessage()];
+            // 记录错误到系统日志
+            error_log("Security audit log error: " . $e->getMessage());
             return false;
         }
     }

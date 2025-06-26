@@ -8,14 +8,14 @@
     
     <!-- 核心资源 -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="/assets/css/https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
     <!-- WebAuthn API支持 -->
-    <script src="/assets/js/https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@github/webauthn-json@2.1.1/dist/esm/webauthn-json.browser-ponyfill.js" type="module"></script>
     
     <!-- 安全相关库 -->
-    <script src="/assets/js/https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     
     <!-- Tailwind配置 -->
     <script>
@@ -186,6 +186,9 @@
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
+    <!-- 量子球Canvas元素 -->
+    <canvas id="quantum-sphere" class="fixed inset-0 pointer-events-none z-0"></canvas>
+    
     <!-- 量子粒子背景 -->
     <div id="quantum-particles" class="fixed inset-0 pointer-events-none z-0"></div>
     
@@ -925,9 +928,9 @@
     </script>
 
     <!-- 集成认证模块 -->
-    <script src="/assets/js/assets/js/api-config.js"></script>
-    <script src="/assets/js/assets/js/zero-trust-auth.js"></script>
-    <script src="/assets/js/assets/js/multi-auth-system.js"></script>
+    <script src="/assets/js/api-config.js"></script>
+    <script src="/assets/js/zero-trust-auth.js"></script>
+    <script src="/assets/js/multi-auth-system.js"></script>
     
     <script>
 
@@ -942,6 +945,169 @@
                 // 处理OAuth错误
                 new ZeroTrustLogin().showMessage(event.data.error, 'error');
             }
+        });
+        
+        // 量子安全球动画
+        document.addEventListener('DOMContentLoaded', () => {
+            // 获取画布和上下文
+            const canvas = document.getElementById('quantum-sphere');
+            const ctx = canvas.getContext('2d');
+            
+            // 设置画布尺寸
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            
+            // 初始化调整画布尺寸
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+            
+            // 量子球参数
+            const sphereConfig = {
+                radius: 120,
+                centerX: window.innerWidth / 2,
+                centerY: window.innerHeight / 2,
+                particleCount: 250,
+                particleSize: 2,
+                rotationSpeed: 0.002,
+                colorPrimary: '#6B46C1',
+                colorSecondary: '#3B82F6',
+                colorHighlight: '#10B981'
+            };
+            
+            // 粒子数组
+            let particles = [];
+            
+            // 初始化粒子
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < sphereConfig.particleCount; i++) {
+                    // 随机球面坐标
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.random() * Math.PI;
+                    
+                    // 转换为笛卡尔坐标
+                    const x = sphereConfig.radius * Math.sin(phi) * Math.cos(theta);
+                    const y = sphereConfig.radius * Math.sin(phi) * Math.sin(theta);
+                    const z = sphereConfig.radius * Math.cos(phi);
+                    
+                    // 添加粒子
+                    particles.push({
+                        x, y, z,
+                        size: Math.random() * sphereConfig.particleSize + 1,
+                        color: Math.random() > 0.95 ? sphereConfig.colorHighlight : 
+                               Math.random() > 0.5 ? sphereConfig.colorPrimary : sphereConfig.colorSecondary,
+                        speed: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            
+            // 更新粒子位置
+            function updateParticles(time) {
+                // 旋转角度
+                const rotationX = time * sphereConfig.rotationSpeed;
+                const rotationY = time * sphereConfig.rotationSpeed * 0.6;
+                
+                // 更新每个粒子
+                particles.forEach(p => {
+                    // 应用旋转
+                    const x = p.x * Math.cos(rotationX) - p.z * Math.sin(rotationX);
+                    const z = p.x * Math.sin(rotationX) + p.z * Math.cos(rotationX);
+                    
+                    const y = p.y * Math.cos(rotationY) - z * Math.sin(rotationY);
+                    const newZ = p.y * Math.sin(rotationY) + z * Math.cos(rotationY);
+                    
+                    // 更新坐标
+                    p.renderX = x;
+                    p.renderY = y;
+                    p.renderZ = newZ;
+                    
+                    // 粒子呼吸效果
+                    p.size = p.size + Math.sin(time * 0.01 * p.speed) * 0.2;
+                });
+                
+                // 按Z轴排序，远的先绘制
+                particles.sort((a, b) => a.renderZ - b.renderZ);
+            }
+            
+            // 绘制粒子
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(p => {
+                    // 计算透明度（基于Z轴位置）
+                    const alpha = 0.2 + (p.renderZ + sphereConfig.radius) / (sphereConfig.radius * 2) * 0.8;
+                    
+                    // 绘制粒子
+                    ctx.beginPath();
+                    ctx.arc(
+                        sphereConfig.centerX + p.renderX, 
+                        sphereConfig.centerY + p.renderY, 
+                        p.size, 
+                        0, 
+                        Math.PI * 2
+                    );
+                    ctx.fillStyle = p.color.replace(')', `, ${alpha})`).replace('rgb', 'rgba');
+                    ctx.fill();
+                    
+                    // 连接临近粒子（量子纠缠效果）
+                    particles.forEach(p2 => {
+                        const dx = p.renderX - p2.renderX;
+                        const dy = p.renderY - p2.renderY;
+                        const dz = p.renderZ - p2.renderZ;
+                        const distance = Math.sqrt(dx*dx + dy*dy + dz*dz);
+                        
+                        if (distance < 40 && p.renderZ > 0 && p2.renderZ > 0) {
+                            ctx.beginPath();
+                            ctx.moveTo(sphereConfig.centerX + p.renderX, sphereConfig.centerY + p.renderY);
+                            ctx.lineTo(sphereConfig.centerX + p2.renderX, sphereConfig.centerY + p2.renderY);
+                            
+                            const lineAlpha = (1 - distance / 40) * 0.15;
+                            ctx.strokeStyle = `rgba(107, 70, 193, ${lineAlpha})`;
+                            ctx.lineWidth = 1;
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                // 绘制球体光晕
+                const gradient = ctx.createRadialGradient(
+                    sphereConfig.centerX, sphereConfig.centerY, 0,
+                    sphereConfig.centerX, sphereConfig.centerY, sphereConfig.radius * 1.5
+                );
+                gradient.addColorStop(0, 'rgba(107, 70, 193, 0.2)');
+                gradient.addColorStop(1, 'rgba(107, 70, 193, 0)');
+                
+                ctx.beginPath();
+                ctx.arc(
+                    sphereConfig.centerX, 
+                    sphereConfig.centerY, 
+                    sphereConfig.radius * 1.5, 
+                    0, 
+                    Math.PI * 2
+                );
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+            
+            // 动画循环
+            function animate(time) {
+                updateParticles(time);
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+            
+            // 初始化并启动动画
+            initParticles();
+            animate(0);
+            
+            // 随机移动量子球
+            setInterval(() => {
+                // 随机移动中心点
+                sphereConfig.centerX = window.innerWidth / 2 + Math.sin(Date.now() * 0.0005) * 100;
+                sphereConfig.centerY = window.innerHeight / 2 + Math.cos(Date.now() * 0.0004) * 50;
+            }, 50);
         });
     </script>
 </body>

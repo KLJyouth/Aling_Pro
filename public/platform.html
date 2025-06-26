@@ -193,5 +193,93 @@
             <p class="text-gray-400 text-sm">© 2024 珑凌科技. 保留所有权利.</p>
         </div>
     </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 样例数据
+        const sampleData = {
+            todayChats: 126,
+            apiCalls: 3475,
+            tokenUsage: '54.3K',
+            successRate: '99.8%',
+            apiKeys: [
+                { name: '生产环境', key: 'sk-prod-8f72b39c4de1a5e7...', permission: '完全访问', usage: '68%', status: 'active', created: '2024-06-01' },
+                { name: '测试环境', key: 'sk-test-2a54c87b3f61d9e2...', permission: '只读', usage: '23%', status: 'active', created: '2024-06-10' }
+            ],
+            recentActivities: [
+                { type: 'api_call', message: 'API调用成功 - /v1/completions', time: '2分钟前' },
+                { type: 'user_login', message: '用户登录 - admin@example.com', time: '15分钟前' },
+                { type: 'system_update', message: '系统更新完成 - v2.3.5', time: '1小时前' }
+            ]
+        };
+        
+        // 加载样例数据到统计卡片
+        document.getElementById('todayChats').textContent = sampleData.todayChats;
+        document.getElementById('apiCalls').textContent = sampleData.apiCalls;
+        document.getElementById('tokenUsage').textContent = sampleData.tokenUsage;
+        document.getElementById('successRate').textContent = sampleData.successRate;
+        
+        // API密钥表格填充
+        const apiKeysTable = document.getElementById('apiKeysTable');
+        if (apiKeysTable) {
+            sampleData.apiKeys.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td><div class="api-key-field api-key-masked">${item.key}</div></td>
+                    <td>${item.permission}</td>
+                    <td>
+                        <div class="progress-cyber">
+                            <div class="progress-fill" style="width: ${item.usage}"></div>
+                        </div>
+                        <span class="text-xs">${item.usage}</span>
+                    </td>
+                    <td>
+                        <span class="status-indicator ${item.status === 'active' ? 'status-online' : 'status-error'}"></span>
+                        <span>${item.status === 'active' ? '活跃' : '禁用'}</span>
+                    </td>
+                    <td>${item.created}</td>
+                    <td>
+                        <button class="cyber-btn p-1 text-xs" onclick="copyApiKey(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="cyber-btn p-1 text-xs" onclick="editApiKey(this)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="cyber-btn p-1 text-xs" onclick="deleteApiKey(this)">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                apiKeysTable.appendChild(row);
+            });
+        }
+        
+        // 最近活动加载
+        const recentActivitiesContainer = document.getElementById('recentActivities');
+        if (recentActivitiesContainer) {
+            sampleData.recentActivities.forEach(activity => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center space-x-3 p-3 rounded-lg bg-white/5';
+                
+                let iconClass = 'fas fa-exchange-alt';
+                if (activity.type === 'api_call') {
+                    iconClass = 'fas fa-code';
+                } else if (activity.type === 'user_login') {
+                    iconClass = 'fas fa-user';
+                } else if (activity.type === 'system_update') {
+                    iconClass = 'fas fa-cog';
+                }
+                
+                div.innerHTML = `
+                    <i class="${iconClass} text-quantum-accent"></i>
+                    <span>${activity.message}</span>
+                    <span class="text-xs text-gray-400">${activity.time}</span>
+                `;
+                recentActivitiesContainer.appendChild(div);
+            });
+        }
+    });
+    </script>
 </body>
 </html>

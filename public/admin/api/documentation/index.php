@@ -1,229 +1,312 @@
 <?php
 /**
- * AlingAi Pro 6.0 - APIÎÄµµÉú³ÉÏµÍ³
- * ×Ô¶¯É¨Ãè²¢Éú³ÉAPIÎÄµµ£¬Ö§³ÖOpenAPI/Swagger¸ñÊ½
+ * AlingAi Pro 6.0 - APIæ–‡æ¡£ç®¡ç†ç³»ç»Ÿ
+ * è‡ªåŠ¨æ‰«æå¹¶ç”ŸæˆAPIæ–‡æ¡£ï¼Œæ”¯æŒOpenAPI/Swaggeræ ¼å¼
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
-header("Content-Type: application/json;charset=utf-8"];
-header("Access-Control-Allow-Origin: *"];
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS"];
-header("Access-Control-Allow-Headers: Content-Type, Authorization"];
+header("Content-Type: text/html; charset=utf-8");
+session_start();
 
-if ($_SERVER["REQUEST_METHOD"] === "OPTIONS"] {
-    http_response_code(200];
-    exit(];
+// æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å·²ç™»å½•
+if (!isset($_SESSION['user_id']) && !isset($_SESSION['admin_user'])) {
+    // ç”¨æˆ·æœªç™»å½•ï¼Œé‡å®šå‘åˆ°ç™»å½•é¡µé¢
+    header('Location: /admin/login.php');
+    exit;
 }
 
-require_once __DIR__ . "/../../../../vendor/autoload.php";
-require_once __DIR__ . "/../../../../src/Auth/AdminAuthServiceDemo.php";
+// è·å–ç”¨æˆ·è§’è‰²ä¿¡æ¯
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$username = $_SESSION['username'] ?? $_SESSION['admin_user'] ?? 'Admin';
 
-use AlingAi\Auth\AdminAuthServiceDemo;
-
-// ÏìÓ¦Êı¾İ
-function sendResponse($success, $data = null, $message = ", $code = 200]
-{
-    http_response_code($code];
-    echo json_encode([
-        "success" => $success,
-        "data" => $data,
-        "message" => $message,
-        "timestamp" => date("Y-m-d H:i:s"]
-    ],  JSON_UNESCAPED_UNICODE];
-    exit(];
-}
-
-// ´íÎó´¦Àí
-function handleError($message, $code = 500] {
-    error_log("API Error: $message"];
-    sendResponse(false, null, $message, $code];
-}
-
-// APIÎÄµµÉú³ÉÆ÷
-function generateApiDocumentation() {
-    return [
-        "openapi" => "3.0.0",
-        "info" => [
-            "title" => "AlingAi Pro API",
-            "description" => "AlingAi Pro APIÎÄµµÏµÍ³ - ÓÃ»§¹ÜÀí¡¢ÏµÍ³¼à¿ØµÈ¹¦ÄÜ",
-            "version" => "6.0.0",
-            "contact" => [
-                "name" => "AlingAi Team",
-                "email" => "api@gxggm.com",
-                "url" => "https://alingai.com"
-            ], 
-            "license" => [
-                "name" => "MIT",
-                "url" => "https://opensource.org/licenses/MIT"
-            ]
-        ], 
-        "servers" => [
-            [
-                "url" => "http://localhost",
-                "description" => "±¾µØ¿ª·¢»·¾³"
-            ], 
-            [
-                "url" => "https://api.alingai.com",
-                "description" => "Éú²ú»·¾³"
-            ]
-        ], 
-        "security" => [
-            ["bearerAuth" => []], 
-            ["apiKey" => []]
-        ], 
-        "paths" => generateApiPaths(),
-        "components" => generateApiComponents()
-    ];
-}
-
-function generateApiPaths() {
-    return [
-        // ÈÏÖ¤Ïà¹ØAPI
-        "/api/auth/login" => [
-            "post" => [
-                "tags" => ["ÈÏÖ¤"], 
-                "summary" => "ÓÃ»§µÇÂ¼",
-                "description" => "Ê¹ÓÃÓÃ»§Ãû/ÃÜÂë½øĞĞÓÃ»§µÇÂ¼",
-                "requestBody" => [
-                    "required" => true,
-                    "content" => [
-                        "application/json" => [
-                            "schema" => [
-                                "type" => "object",
-                                "required" => ["username", "password"], 
-                                "properties" => [
-                                    "username" => ["type" => "string", "description" => "ÓÃ»§Ãû»òÓÊÏä"], 
-                                    "password" => ["type" => "string", "description" => "ÃÜÂë"], 
-                                    "remember" => ["type" => "boolean", "description" => "¼Ç×¡µÇÂ¼×´Ì¬"]
-                                ]
-                            ]
-                        ]
-                    ]
-                ], 
-                "responses" => [
-                    "200" => [
-                        "description" => "µÇÂ¼³É¹¦",
-                        "content" => [
-                            "application/json" => [
-                                "schema" => ["\$ref" => "#/components/schemas/AuthResponse"]
-                            ]
-                        ]
-                    ], 
-                    "401" => ["description" => "ÈÏÖ¤Ê§°Ü"]
-                ]
-            ]
-        ]
-    ];
-}
-
-function generateApiComponents() {
-    return [
-        "schemas" => [
-            "AuthResponse" => [
-                "type" => "object",
-                "properties" => [
-                    "success" => ["type" => "boolean"], 
-                    "data" => [
-                        "type" => "object",
-                        "properties" => [
-                            "token" => ["type" => "string"], 
-                            "user" => ["\$ref" => "#/components/schemas/User"]
-                        ]
-                    ], 
-                    "message" => ["type" => "string"]
-                ]
-            ], 
-            "User" => [
-                "type" => "object",
-                "properties" => [
-                    "id" => ["type" => "integer"], 
-                    "username" => ["type" => "string"], 
-                    "email" => ["type" => "string"], 
-                    "avatar" => ["type" => "string"], 
-                    "role" => ["type" => "string"]
-                ]
-            ]
-        ], 
-        "securitySchemes" => [
-            "bearerAuth" => [
-                "type" => "http",
-                "scheme" => "bearer",
-                "bearerFormat" => "JWT"
-            ], 
-            "apiKey" => [
-                "type" => "apiKey",
-                "in" => "header",
-                "name" => "X-API-Key"
-            ]
-        ]
-    ];
-}
-
-// ÊÚÈ¨ÑéÖ¤
-function authenticateRequest() {
-    $auth = new AdminAuthServiceDemo(];
-    
-    // ³¢ÊÔ»ñÈ¡ÊÚÈ¨ĞÅÏ¢
-    $authHeader = $_SERVER["HTTP_AUTHORIZATION"] ?? ";
-    $apiKey = $_SERVER["HTTP_X_API_KEY"] ?? ";
-    
-    if (empty($authHeader] && empty($apiKey]] {
-        handleError("Î´Ìá¹©ÈÏÖ¤ĞÅÏ¢", 401];
-    }
-    
-    // ¼ì²éBearer Token
-    if (!empty($authHeader]] {
-        $token = str_replace("Bearer ", ", $authHeader];
-        if (!$auth->validateToken($token]] {
-            handleError("ÎŞĞ§ÁîÅÆ", 401];
+// åŠ è½½APIæ–‡æ¡£æ•°æ®
+$apiDocs = [
+    [
+        'id' => 'user-api',
+        'title' => 'ç”¨æˆ·API',
+        'version' => 'v1.0',
+        'description' => 'ç”¨æˆ·ç®¡ç†ç›¸å…³APIï¼ŒåŒ…æ‹¬è·å–ç”¨æˆ·åˆ—è¡¨ã€ç”¨æˆ·è¯¦æƒ…ã€åˆ›å»ºç”¨æˆ·ç­‰åŠŸèƒ½ã€‚',
+        'endpoints' => 8,
+        'updated' => '2023-12-10'
+    ],
+    [
+        'id' => 'auth-api',
+        'title' => 'è®¤è¯API',
+        'version' => 'v1.0',
+        'description' => 'è®¤è¯ç›¸å…³APIï¼ŒåŒ…æ‹¬ç™»å½•ã€æ³¨å†Œã€æ‰¾å›å¯†ç ã€ä»¤ç‰Œåˆ·æ–°ç­‰åŠŸèƒ½ã€‚',
+        'endpoints' => 6,
+        'updated' => '2023-12-15'
+    ],
+    [
+        'id' => 'document-api',
+        'title' => 'æ–‡æ¡£API',
+        'version' => 'v1.0',
+        'description' => 'æ–‡æ¡£ç®¡ç†ç›¸å…³APIï¼ŒåŒ…æ‹¬åˆ›å»ºã€æŸ¥è¯¢ã€æ›´æ–°å’Œåˆ é™¤æ–‡æ¡£ç­‰åŠŸèƒ½ã€‚',
+        'endpoints' => 10,
+        'updated' => '2023-12-18'
+    ],
+    [
+        'id' => 'security-api',
+        'title' => 'å®‰å…¨API',
+        'version' => 'v1.0',
+        'description' => 'å®‰å…¨ç›¸å…³APIï¼ŒåŒ…æ‹¬é‡å­åŠ å¯†ã€å¨èƒæ£€æµ‹ã€é£é™©è¯„ä¼°ç­‰åŠŸèƒ½ã€‚',
+        'endpoints' => 12,
+        'updated' => '2023-12-20'
+    ],
+    [
+        'id' => 'system-api',
+        'title' => 'ç³»ç»ŸAPI',
+        'version' => 'v1.0',
+        'description' => 'ç³»ç»Ÿç®¡ç†ç›¸å…³APIï¼ŒåŒ…æ‹¬é…ç½®ã€ç›‘æ§ã€åŸºçº¿ç®¡ç†ç­‰åŠŸèƒ½ã€‚',
+        'endpoints' => 15,
+        'updated' => '2023-12-25'
+    ]
+];
+?>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AlingAi Pro - APIæ–‡æ¡£ä¸­å¿ƒ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
         }
-        return $auth->getUserFromToken($token];
-    }
-    
-    // ¼ì²éAPI Key
-    if (!empty($apiKey]] {
-        if (!$auth->validateApiKey($apiKey]] {
-            handleError("ÎŞĞ§µÄAPIÃÜÔ¿", 401];
+        .api-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            margin: 20px;
+            overflow: hidden;
+            min-height: 90vh;
         }
-        return $auth->getUserFromApiKey($apiKey];
-    }
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            min-height: 90vh;
+            color: white;
+        }
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 15px 20px;
+            border-radius: 0;
+            transition: all 0.3s ease;
+        }
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+        .logo-area {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .logo-area h3 {
+            margin: 0;
+            color: white;
+            font-size: 24px;
+        }
+        .content-area {
+            padding: 30px;
+        }
+        .header-area {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+        .api-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+            border-left: 5px solid #3498db;
+        }
+        .api-card:hover {
+            transform: translateY(-5px);
+        }
+        .nav-group-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.5);
+            padding: 15px 20px 5px;
+            margin-top: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .badge-api {
+            background-color: #3498db;
+            color: white;
+            font-weight: normal;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        .badge-endpoints {
+            background-color: #2ecc71;
+            color: white;
+            font-weight: normal;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <div class="api-container">
+            <div class="row g-0">
+                <!-- ä¾§è¾¹æ  -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <div class="logo-area">
+                        <h3>AlingAi Pro</h3>
+                        <p class="mb-0">APIæ–‡æ¡£ä¸­å¿ƒ</p>
+                    </div>
+                    <ul class="nav flex-column">
+                        <!-- è¿”å›ç®¡ç†æ§åˆ¶å° -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">
+                                <i class="bi bi-arrow-left me-2"></i> è¿”å›ç®¡ç†æ§åˆ¶å°
+                            </a>
+                        </li>
+                        
+                        <!-- APIåˆ†ç±» -->
+                        <div class="nav-group-title">APIåˆ†ç±»</div>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/admin/api/documentation">
+                                <i class="bi bi-house me-2"></i> APIæ–‡æ¡£é¦–é¡µ
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/user-api">
+                                <i class="bi bi-people me-2"></i> ç”¨æˆ·API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/auth-api">
+                                <i class="bi bi-shield-lock me-2"></i> è®¤è¯API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/document-api">
+                                <i class="bi bi-file-earmark-text me-2"></i> æ–‡æ¡£API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/security-api">
+                                <i class="bi bi-shield me-2"></i> å®‰å…¨API
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/system-api">
+                                <i class="bi bi-gear me-2"></i> ç³»ç»ŸAPI
+                            </a>
+                        </li>
+                        
+                        <!-- å·¥å…· -->
+                        <div class="nav-group-title">å¼€å‘å·¥å…·</div>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/swagger">
+                                <i class="bi bi-code-slash me-2"></i> Swagger UI
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/api/documentation/postman">
+                                <i class="bi bi-cloud-download me-2"></i> Postman Collection
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- å†…å®¹åŒºåŸŸ -->
+                <div class="col-md-9 col-lg-10">
+                    <div class="header-area d-flex justify-content-between align-items-center">
+                        <h4>APIæ–‡æ¡£ä¸­å¿ƒ</h4>
+                        <div>
+                            <span class="me-3">ç”¨æˆ·ï¼š<?php echo htmlspecialchars($username); ?></span>
+                            <a href="/admin/logout.php" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-box-arrow-right"></i> é€€å‡º
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="content-area">
+                        <div class="row">
+                            <div class="col-12">
+                                <h2 class="mb-4"><i class="bi bi-code-slash"></i> AlingAi Pro APIæ–‡æ¡£</h2>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> 
+                                    <strong>å¼€å‘è€…æç¤ºï¼š</strong> 
+                                    æ‰€æœ‰APIéƒ½éœ€è¦è®¤è¯ï¼Œè¯·åœ¨è¯·æ±‚å¤´ä¸­åŒ…å«æœ‰æ•ˆçš„API Keyæˆ–Bearer Tokenã€‚
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- APIåˆ—è¡¨ -->
+                        <div class="row mt-4">
+                            <?php foreach ($apiDocs as $api): ?>
+                            <div class="col-md-6 mb-4">
+                                <div class="api-card h-100">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h5><?php echo htmlspecialchars($api['title']); ?></h5>
+                                        <span class="badge badge-api"><?php echo htmlspecialchars($api['version']); ?></span>
+                                    </div>
+                                    <p><?php echo htmlspecialchars($api['description']); ?></p>
+                                    <div class="d-flex justify-content-between align-items-center mt-4">
+                                        <span class="badge badge-endpoints"><?php echo htmlspecialchars($api['endpoints']); ?> ä¸ªæ¥å£</span>
+                                        <a href="/admin/api/documentation/<?php echo htmlspecialchars($api['id']); ?>" class="btn btn-sm btn-primary">
+                                            æŸ¥çœ‹æ–‡æ¡£ <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        
+                        <!-- å¼€å‘å·¥å…· -->
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4 class="mb-3"><i class="bi bi-tools"></i> å¼€å‘å·¥å…·</h4>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="api-card">
+                                    <h5><i class="bi bi-code-slash"></i> Swagger UI</h5>
+                                    <p>ä½¿ç”¨äº¤äº’å¼Swagger UIæµè§ˆå¹¶æµ‹è¯•APIç«¯ç‚¹ã€‚æ”¯æŒåœ¨çº¿è¯·æ±‚å‘é€å’Œå“åº”æŸ¥çœ‹ã€‚</p>
+                                    <div class="text-end mt-3">
+                                        <a href="/admin/api/documentation/swagger" class="btn btn-sm btn-outline-primary">
+                                            æ‰“å¼€Swagger UI <i class="bi bi-arrow-right"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="api-card">
+                                    <h5><i class="bi bi-cloud-download"></i> Postman Collection</h5>
+                                    <p>ä¸‹è½½Postman Collectionä»¥ä¾¿åœ¨æ‚¨è‡ªå·±çš„ç¯å¢ƒä¸­æµ‹è¯•APIã€‚åŒ…å«æ‰€æœ‰ç«¯ç‚¹å’Œç¤ºä¾‹è¯·æ±‚ã€‚</p>
+                                    <div class="text-end mt-3">
+                                        <a href="/admin/api/documentation/postman" class="btn btn-sm btn-outline-primary">
+                                            ä¸‹è½½Collection <i class="bi bi-download"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    handleError("ÈÏÖ¤Ê§°Ü", 401];
-}
-
-// Éú²ú»·¾³
-function handleRequest() {
-    $method = $_SERVER["REQUEST_METHOD"];
-    $path = parse_url($_SERVER["REQUEST_URI"],  PHP_URL_PATH];
-    $pathParts = explode("/", trim($path, "/"]];
-    $action = $pathParts[count($pathParts] - 1] ?? ";
-    
-    // ´¦ÀíOPTIONSÇëÇóµÄCORSÔ¤¼ìÏìÓ¦ºÍÇ°ÖÃ´¦Àí
-    if ($method === "OPTIONS"] {
-        return;
-    }
-    
-    // ¸ù¾İÂ·¾¶ºÍ·½·¨·Ö·¢ÇëÇó
-    switch ($action] {
-        case "schema":
-            // »ñÈ¡APIÎÄµµ½á¹¹
-            sendResponse(true, generateApiDocumentation(), "³É¹¦»ñÈ¡APIÎÄµµ"];
-                        break;
-            
-                    default:
-            // Ä¬ÈÏ·µ»ØÍêÕûµÄAPIÎÄµµ
-            $docs = generateApiDocumentation(];
-            sendResponse(true, $docs, "³É¹¦»ñÈ¡APIÎÄµµ"];
-    }
-}
-
-// Ö´Éú²ú»·¾³
-try {
-    handleRequest(];
-} catch (Exception $e] {
-    handleError("´¦ÀíÇëÇóÊ±·¢Éú´íÎó: " . $e->getMessage(), 500];
-}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
 
 

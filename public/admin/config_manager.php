@@ -1,82 +1,129 @@
 <?php
 /**
- * AlingAi Pro ÏµÍ³ÅäÖÃ¹ÜÀíÒ³Ãæ
- * Ìá¹©°²È«µÄÏµÍ³ÅäÖÃ¹ÜÀí¹¦ÄÜ
+ * AlingAi Pro ç³»ç»Ÿé…ç½®ç®¡ç†é¡µé¢
+ * æä¾›å®Œæ•´çš„ç³»ç»Ÿé…ç½®ç®¡ç†åŠŸèƒ½
  * 
  * @version 1.0.0
  * @author AlingAi Team
  */
 
-// ÉèÖÃÒ³Ãæ°²È«Í·
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;'];
-header('X-Content-Type-Options: nosniff'];
-header('X-Frame-Options: DENY'];
-header('X-XSS-Protection: 1; mode=block'];
+// è®¾ç½®é¡µé¢å®‰å…¨å¤´
+header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;');
+header('X-Content-Type-Options: nosniff');
+header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
 
-// ÒıÈëÓÃ»§°²È«Àà
-require_once __DIR__ . '/../includes/UserSecurity.php';
+// å¯åŠ¨ä¼šè¯
+session_start();
 
-use AlingAi\Security\UserSecurity;
+// æ£€æŸ¥ç”¨æˆ·æ˜¯å¦å·²ç™»å½•
+if (!isset($_SESSION['user_id']) && !isset($_SESSION['admin_user'])) {
+    // ç”¨æˆ·æœªç™»å½•ï¼Œé‡å®šå‘åˆ°ç™»å½•é¡µé¢
+    header('Location: /admin/login.php');
+    exit;
+}
 
-// ÑéÖ¤¹ÜÀíÔ±»á»°
-$userData = UserSecurity::validateSession(true, '../login.php'];
+// è·å–ç”¨æˆ·è§’è‰²ä¿¡æ¯
+$isAdmin = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$username = $_SESSION['username'] ?? $_SESSION['admin_user'] ?? 'Admin';
 
-// µ½ÕâÀïËµÃ÷ÓÃ»§ÒÑµÇÂ¼ÇÒÊÇ¹ÜÀíÔ±
-$userId = $userData['id'];
-$username = $userData['username'];
-$userRole = $userData['role'];
+if (!$isAdmin) {
+    // éç®¡ç†å‘˜ç”¨æˆ·ï¼Œç¦æ­¢è®¿é—®
+    header('Location: /admin/index.html');
+    exit;
+}
 
-// ³õÊ¼»¯±äÁ¿
+// åˆå§‹åŒ–é…ç½®
 $configFile = dirname(dirname(__DIR__)) . '/config/config.php';
 $configBackupDir = dirname(dirname(__DIR__)) . '/config/backups/';
 $configError = '';
 $configSuccess = '';
 $configData = [];
-$csrfToken = UserSecurity::generateCsrfToken('config_form'];
+$csrfToken = md5(uniqid(mt_rand(), true));
+$_SESSION['csrf_token'] = $csrfToken;
 
-// È·±£±¸·İÄ¿Â¼´æÔÚ
+// ç¡®ä¿å¤‡ä»½ç›®å½•å­˜åœ¨
 if (!is_dir($configBackupDir)) {
-    mkdir($configBackupDir, 0755, true];
+    mkdir($configBackupDir, 0755, true);
 }
 
-// ¼ÓÔØÅäÖÃ
+// åŠ è½½é…ç½®
 if (file_exists($configFile)) {
-    $configData = require $configFile;
+    $configData = include $configFile;
 } else {
-    $configError = 'ÅäÖÃÎÄ¼ş²»´æÔÚ';
+    // é»˜è®¤é…ç½®
+    $configData = [
+        'database' => [
+            'type' => 'mysql',
+            'host' => 'localhost',
+            'port' => 3306,
+            'database' => 'alingai_pro',
+            'username' => 'root',
+            'password' => ''
+        ],
+        'system' => [
+            'name' => 'AlingAi Pro',
+            'version' => '6.0.0',
+            'debug' => false,
+            'maintenance' => false,
+            'timezone' => 'Asia/Shanghai',
+            'language' => 'zh-CN'
+        ],
+        'security' => [
+            'session_lifetime' => 1800,
+            'password_min_length' => 8,
+            'login_attempts' => 5,
+            'lockout_time' => 30
+        ],
+        'api' => [
+            'rate_limit' => 100,
+            'token_expiry' => 30
+        ],
+        'mail' => [
+            'driver' => 'smtp',
+            'host' => '',
+            'port' => 587,
+            'username' => '',
+            'password' => '',
+            'encryption' => 'tls',
+            'from_address' => '',
+            'from_name' => 'AlingAi Pro'
+        ]
+    ];
+    $configError = 'é…ç½®æ–‡ä»¶ä¸å­˜åœ¨ï¼Œå·²åŠ è½½é»˜è®¤é…ç½®';
 }
 
-// ´¦ÀíÅäÖÃ±£´æ
+// å¤„ç†ä¿å­˜
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
-    // CSRF±£»¤
-    if (!isset($_POST['csrf_token']) || !UserSecurity::validateCsrfToken($_POST['csrf_token'],  'config_form')) {
-        $configError = '°²È«ÑéÖ¤Ê§°Ü£¬ÇëÖØĞÂ³¢ÊÔ';
+    // CSRFæ ¡éªŒ
+    if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
+        $configError = 'å®‰å…¨éªŒè¯å¤±è´¥ï¼Œè¯·é‡æ–°æ“ä½œ';
     } else {
         try {
-            // ±¸·İµ±Ç°ÅäÖÃ
+            // å¤‡ä»½å½“å‰é…ç½®
             $backupFile = $configBackupDir . 'config_' . date('YmdHis') . '.php.bak';
             if (file_exists($configFile)) {
-                copy($configFile, $backupFile];
+                copy($configFile, $backupFile);
             }
             
-            // ¸üĞÂÊı¾İ¿âÅäÖÃ
+            // æ›´æ–°æ•°æ®åº“é…ç½®
             $configData['database']['type'] = $_POST['db_type'] ?? 'mysql';
             $configData['database']['host'] = $_POST['db_host'] ?? 'localhost';
-            $configData['database']['port'] = (int)($_POST['db_port'] ?? 3306];
+            $configData['database']['port'] = (int)($_POST['db_port'] ?? 3306);
             $configData['database']['database'] = $_POST['db_name'] ?? '';
             $configData['database']['username'] = $_POST['db_user'] ?? '';
             
-            // Ö»ÓĞÔÚÌá¹©ÁËĞÂÃÜÂëÊ±²Å¸üĞÂÃÜÂë
+            // åªæœ‰å½“æä¾›äº†æ–°å¯†ç æ—¶æ‰æ›´æ–°å¯†ç 
             if (!empty($_POST['db_pass'])) {
                 $configData['database']['password'] = $_POST['db_pass'];
             }
             
-            // Èç¹ûÊÇSQLite£¬¸üĞÂÂ·¾¶
+            // è®¾ç½®SQLiteæ•°æ®åº“è·¯å¾„
             if ($configData['database']['type'] === 'sqlite') {
                 $configData['database']['path'] = $_POST['db_path'] ?? 'database/alingai.db';
             }
             
-            // ¸üĞÂÏµÍ³ÅäÖÃ
+            // æ›´æ–°ç³»ç»Ÿé…ç½®
             $configData['system']['name'] = $_POST['system_name'] ?? 'AlingAi Pro';
             $configData['system']['version'] = $_POST['system_version'] ?? '6.0.0';
             $configData['system']['debug'] = isset($_POST['system_debug']) && $_POST['system_debug'] === 'on';
@@ -84,23 +131,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
             $configData['system']['timezone'] = $_POST['system_timezone'] ?? 'Asia/Shanghai';
             $configData['system']['language'] = $_POST['system_language'] ?? 'zh-CN';
             
-            // ¸üĞÂ°²È«ÅäÖÃ
-            $configData['security']['session_lifetime'] = (int)($_POST['security_session'] ?? 1800];
-            $configData['security']['password_min_length'] = (int)($_POST['security_password_length'] ?? 8];
-            $configData['security']['login_attempts'] = (int)($_POST['security_login_attempts'] ?? 5];
-            $configData['security']['lockout_time'] = (int)($_POST['security_lockout_time'] ?? 30];
+            // æ›´æ–°å®‰å…¨é…ç½®
+            $configData['security']['session_lifetime'] = (int)($_POST['security_session'] ?? 1800);
+            $configData['security']['password_min_length'] = (int)($_POST['security_password_length'] ?? 8);
+            $configData['security']['login_attempts'] = (int)($_POST['security_login_attempts'] ?? 5);
+            $configData['security']['lockout_time'] = (int)($_POST['security_lockout_time'] ?? 30);
             
-            // ¸üĞÂAPIÅäÖÃ
-            $configData['api']['rate_limit'] = (int)($_POST['api_rate_limit'] ?? 100];
-            $configData['api']['token_expiry'] = (int)($_POST['api_token_expiry'] ?? 30];
+            // æ›´æ–°APIé…ç½®
+            $configData['api']['rate_limit'] = (int)($_POST['api_rate_limit'] ?? 100);
+            $configData['api']['token_expiry'] = (int)($_POST['api_token_expiry'] ?? 30);
             
-            // ¸üĞÂÓÊ¼şÅäÖÃ
+            // æ›´æ–°é‚®ä»¶é…ç½®
             $configData['mail']['driver'] = $_POST['mail_driver'] ?? 'smtp';
             $configData['mail']['host'] = $_POST['mail_host'] ?? '';
-            $configData['mail']['port'] = (int)($_POST['mail_port'] ?? 587];
+            $configData['mail']['port'] = (int)($_POST['mail_port'] ?? 587);
             $configData['mail']['username'] = $_POST['mail_user'] ?? '';
             
-            // Ö»ÓĞÔÚÌá¹©ÁËĞÂÃÜÂëÊ±²Å¸üĞÂÃÜÂë
+            // åªæœ‰å½“æä¾›äº†æ–°å¯†ç æ—¶æ‰æ›´æ–°å¯†ç 
             if (!empty($_POST['mail_pass'])) {
                 $configData['mail']['password'] = $_POST['mail_pass'];
             }
@@ -109,36 +156,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_config'])) {
             $configData['mail']['from_address'] = $_POST['mail_from_address'] ?? '';
             $configData['mail']['from_name'] = $_POST['mail_from_name'] ?? 'AlingAi Pro';
             
-            // Éú³ÉÅäÖÃÎÄ¼şÄÚÈİ
+            // ç”Ÿæˆé…ç½®æ–‡ä»¶å†…å®¹
             $configContent = "<?php\n\n";
             $configContent .= "/**\n";
-            $configContent .= " * AlingAi Pro ÏµÍ³ÅäÖÃÎÄ¼ş\n";
-            $configContent .= " * ÓÉ¹ÜÀíÔ± {$username} ÓÚ " . date('Y-m-d H:i:s') . " ¸üĞÂ\n";
+            $configContent .= " * AlingAi Pro ç³»ç»Ÿé…ç½®æ–‡ä»¶\n";
+            $configContent .= " * ç”±ç®¡ç†å‘˜ {$username} äº " . date('Y-m-d H:i:s') . " æ›´æ–°\n";
             $configContent .= " */\n\n";
             $configContent .= "return " . var_export($configData, true) . ";\n";
             
-            // Ğ´ÈëÅäÖÃÎÄ¼ş
+            // å†™å…¥é…ç½®æ–‡ä»¶
             if (file_put_contents($configFile, $configContent)) {
-                $configSuccess = 'ÅäÖÃÒÑ³É¹¦±£´æ';
+                $configSuccess = 'é…ç½®å·²æˆåŠŸä¿å­˜';
                 
-                // ¼ÇÂ¼ÅäÖÃ¸üĞÂÊÂ¼ş
-                UserSecurity::logSecurityEvent($userId, 'config_update', 'ÏµÍ³ÅäÖÃÒÑ¸üĞÂ', 'info', 'success'];
+                // è®°å½•é…ç½®æ›´æ–°äº‹ä»¶
+                $eventLogFile = dirname(dirname(__DIR__)) . '/logs/config_events.log';
+                $eventLog = date('Y-m-d H:i:s') . " | ç”¨æˆ·: {$username} | æ“ä½œ: æ›´æ–°ç³»ç»Ÿé…ç½®\n";
+                file_put_contents($eventLogFile, $eventLog, FILE_APPEND);
             } else {
-                $configError = 'ÅäÖÃÎÄ¼şÎŞ·¨Ğ´Èë£¬Çë¼ì²éÎÄ¼şÈ¨ÏŞ';
+                $configError = 'é…ç½®æ–‡ä»¶æ— æ³•å†™å…¥ï¼Œæ£€æŸ¥æ–‡ä»¶æƒé™';
             }
         } catch (Exception $e) {
-            $configError = '±£´æÅäÖÃÊ±·¢Éú´íÎó: ' . $e->getMessage(];
-            error_log('Config save error: ' . $e->getMessage()];
+            $configError = 'ä¿å­˜é…ç½®æ—¶å‘ç”Ÿé”™è¯¯: ' . $e->getMessage();
+            error_log('Config save error: ' . $e->getMessage());
         }
     }
 }
 
-// ²âÊÔÊı¾İ¿âÁ¬½Ó
+// æµ‹è¯•æ•°æ®åº“è¿æ¥
 function testDatabaseConnection($config) {
     try {
         if ($config['database']['type'] === 'sqlite') {
             $dbPath = dirname(dirname(__DIR__)) . '/' . $config['database']['path'];
-            new PDO("sqlite:{$dbPath}"];
+            new PDO("sqlite:{$dbPath}");
         } else {
             $host = $config['database']['host'];
             $port = $config['database']['port'] ?? 3306;
@@ -146,7 +195,7 @@ function testDatabaseConnection($config) {
             $dbuser = $config['database']['username'];
             $dbpass = $config['database']['password'];
             
-            new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
+            new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass);
         }
         return true;
     } catch (Exception $e) {
@@ -154,17 +203,17 @@ function testDatabaseConnection($config) {
     }
 }
 
-// ¼ì²éÊı¾İ¿âÁ¬½Ó×´Ì¬
-$dbConnectionStatus = testDatabaseConnection($configData];
+// æ£€æŸ¥æ•°æ®åº“è¿æ¥çŠ¶æ€
+$dbConnectionStatus = testDatabaseConnection($configData);
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ÏµÍ³ÅäÖÃ¹ÜÀí - AlingAi Pro</title>
+    <title>ç³»ç»Ÿé…ç½®ç®¡ç† - AlingAi Pro</title>
     
-    <!-- ºËĞÄ×ÊÔ´ -->
+    <!-- åŠ è½½èµ„æº -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -180,11 +229,11 @@ $dbConnectionStatus = testDatabaseConnection($configData];
         }
         
         .nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1];
+            background-color: rgba(255, 255, 255, 0.1);
         }
         
         .nav-link.active {
-            background-color: rgba(59, 130, 246, 0.8];
+            background-color: rgba(59, 130, 246, 0.8);
         }
         
         .form-section {
@@ -192,7 +241,7 @@ $dbConnectionStatus = testDatabaseConnection($configData];
         }
         
         .form-section:hover {
-            background-color: rgba(255, 255, 255, 0.8];
+            background-color: rgba(255, 255, 255, 0.8);
         }
         
         .password-field {
@@ -203,13 +252,13 @@ $dbConnectionStatus = testDatabaseConnection($configData];
             position: absolute;
             right: 1rem;
             top: 50%;
-            transform: translateY(-50%];
+            transform: translateY(-50%);
             cursor: pointer;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gray-100">
-    <!-- µ¼º½À¸ -->
+    <!-- å¯¼èˆªæ  -->
     <nav class="bg-gray-900 text-white">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-3">
@@ -217,34 +266,34 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     <div class="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-500 rounded-lg flex items-center justify-center">
                         <i class="fas fa-brain text-white"></i>
                     </div>
-                    <span class="ml-2 font-semibold text-xl">AlingAi Pro ¹ÜÀíºóÌ¨</span>
+                    <span class="ml-2 font-semibold text-xl">AlingAi Pro åå°ç®¡ç†</span>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="index.php" class="nav-link px-3 py-2 rounded-lg">ÒÇ±íÅÌ</a>
-                    <a href="users.php" class="nav-link px-3 py-2 rounded-lg">ÓÃ»§¹ÜÀí</a>
-                    <a href="config_manager.php" class="nav-link active px-3 py-2 rounded-lg">ÏµÍ³ÅäÖÃ</a>
-                    <a href="security.php" class="nav-link px-3 py-2 rounded-lg">°²È«ÖĞĞÄ</a>
-                    <a href="logs.php" class="nav-link px-3 py-2 rounded-lg">ÏµÍ³ÈÕÖ¾</a>
+                    <a href="index.php" class="nav-link px-3 py-2 rounded-lg">é¦–é¡µ</a>
+                    <a href="users.php" class="nav-link px-3 py-2 rounded-lg">ç”¨æˆ·ç®¡ç†</a>
+                    <a href="config_manager.php" class="nav-link active px-3 py-2 rounded-lg">ç³»ç»Ÿé…ç½®</a>
+                    <a href="security.php" class="nav-link px-3 py-2 rounded-lg">å®‰å…¨è®¾ç½®</a>
+                    <a href="logs.php" class="nav-link px-3 py-2 rounded-lg">ç³»ç»Ÿæ—¥å¿—</a>
                 </div>
                 
                 <div class="flex items-center space-x-3">
                     <div class="relative">
                         <button id="userMenuBtn" class="flex items-center space-x-1">
                             <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                                <?php echo strtoupper(substr($username, 0, 1)]; ?>
+                                <?php echo strtoupper(substr($username, 0, 1)); ?>
                             </div>
-                            <span class="hidden md:inline-block"><?php echo htmlspecialchars($username]; ?></span>
+                            <span class="hidden md:inline-block"><?php echo htmlspecialchars($username); ?></span>
                             <i class="fas fa-chevron-down text-xs"></i>
                         </button>
                         
                         <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden">
                             <a href="profile.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-user mr-2"></i>¸öÈË×ÊÁÏ
+                                <i class="fas fa-user mr-2"></i>ä¸ªäººèµ„æ–™
                             </a>
                             <div class="border-t border-gray-100 my-1"></div>
                             <a href="logout.php" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                <i class="fas fa-sign-out-alt mr-2"></i>ÍË³öµÇÂ¼
+                                <i class="fas fa-sign-out-alt mr-2"></i>é€€å‡ºç™»å½•
                             </a>
                         </div>
                     </div>
@@ -253,20 +302,20 @@ $dbConnectionStatus = testDatabaseConnection($configData];
         </div>
     </nav>
     
-    <!-- Ö÷ÄÚÈİÇøÓò -->
+    <!-- ä¸»å†…å®¹åŒºåŸŸ -->
     <main class="container mx-auto px-4 py-8">
-        <!-- Ò³Ãæ±êÌâ -->
+        <!-- é¡µé¢æ ‡é¢˜ -->
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-800">ÏµÍ³ÅäÖÃ¹ÜÀí</h1>
+            <h1 class="text-2xl font-bold text-gray-800">ç³»ç»Ÿé…ç½®ç®¡ç†</h1>
             <div class="flex items-center">
-                <span class="mr-2 text-sm text-gray-600">Êı¾İ¿âÁ¬½Ó×´Ì¬:</span>
+                <span class="mr-2 text-sm text-gray-600">æ•°æ®åº“çŠ¶æ€:</span>
                 <?php if ($dbConnectionStatus): ?>
                     <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                        <i class="fas fa-check-circle mr-1"></i>Õı³£
+                        <i class="fas fa-check-circle mr-1"></i>è¿æ¥æˆåŠŸ
                     </span>
                 <?php else: ?>
                     <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">
-                        <i class="fas fa-exclamation-circle mr-1"></i>Á¬½ÓÊ§°Ü
+                        <i class="fas fa-exclamation-circle mr-1"></i>è¿æ¥å¤±è´¥
                     </span>
                 <?php endif; ?>
             </div>
@@ -276,7 +325,7 @@ $dbConnectionStatus = testDatabaseConnection($configData];
         <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6" role="alert">
             <div class="flex items-center">
                 <i class="fas fa-exclamation-triangle mr-3"></i>
-                <p><?php echo htmlspecialchars($configError]; ?></p>
+                <p><?php echo htmlspecialchars($configError); ?></p>
             </div>
         </div>
         <?php endif; ?>
@@ -285,53 +334,53 @@ $dbConnectionStatus = testDatabaseConnection($configData];
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6" role="alert">
             <div class="flex items-center">
                 <i class="fas fa-check-circle mr-3"></i>
-                <p><?php echo htmlspecialchars($configSuccess]; ?></p>
+                <p><?php echo htmlspecialchars($configSuccess); ?></p>
             </div>
         </div>
         <?php endif; ?>
         
-        <!-- ÅäÖÃ±íµ¥ -->
-        <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="bg-white rounded-lg shadow-md p-6">
+        <!-- è¡¨å•éƒ¨åˆ† -->
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" class="bg-white rounded-lg shadow-md p-6">
             <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
             
-            <!-- ±íµ¥µ¼º½ -->
+            <!-- é€‰é¡¹å¡éƒ¨åˆ† -->
             <div class="mb-6 border-b border-gray-200">
                 <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
                     <li class="mr-2">
                         <a href="#database" class="inline-block p-4 border-b-2 border-blue-600 text-blue-600 active" id="database-tab">
-                            <i class="fas fa-database mr-2"></i>Êı¾İ¿âÅäÖÃ
+                            <i class="fas fa-database mr-2"></i>æ•°æ®åº“é…ç½®
                         </a>
                     </li>
                     <li class="mr-2">
                         <a href="#system" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="system-tab">
-                            <i class="fas fa-cogs mr-2"></i>ÏµÍ³ÅäÖÃ
+                            <i class="fas fa-cogs mr-2"></i>ç³»ç»Ÿé…ç½®
                         </a>
                     </li>
                     <li class="mr-2">
                         <a href="#security" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="security-tab">
-                            <i class="fas fa-shield-alt mr-2"></i>°²È«ÅäÖÃ
+                            <i class="fas fa-shield-alt mr-2"></i>å®‰å…¨é…ç½®
                         </a>
                     </li>
                     <li class="mr-2">
                         <a href="#api" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="api-tab">
-                            <i class="fas fa-plug mr-2"></i>APIÅäÖÃ
+                            <i class="fas fa-plug mr-2"></i>APIé…ç½®
                         </a>
                     </li>
                     <li>
                         <a href="#mail" class="inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" id="mail-tab">
-                            <i class="fas fa-envelope mr-2"></i>ÓÊ¼şÅäÖÃ
+                            <i class="fas fa-envelope mr-2"></i>é‚®ä»¶é…ç½®
                         </a>
                     </li>
                 </ul>
             </div>
             
-            <!-- Êı¾İ¿âÅäÖÃ -->
+            <!-- æ•°æ®åº“é…ç½® -->
             <div id="database-section" class="form-section mb-8">
-                <h2 class="text-xl font-semibold mb-4">Êı¾İ¿âÅäÖÃ</h2>
+                <h2 class="text-xl font-semibold mb-4">æ•°æ®åº“é…ç½®</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="db_type" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÀàĞÍ</label>
+                        <label for="db_type" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“ç±»å‹</label>
                         <select id="db_type" name="db_type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="mysql" <?php echo ($configData['database']['type'] ?? '') === 'mysql' ? 'selected' : ''; ?>>MySQL</option>
                             <option value="sqlite" <?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'selected' : ''; ?>>SQLite</option>
@@ -339,44 +388,44 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     </div>
                     
                     <div id="sqlite_path_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? '' : 'hidden'; ?>">
-                        <label for="db_path" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÎÄ¼şÂ·¾¶</label>
+                        <label for="db_path" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“æ–‡ä»¶è·¯å¾„</label>
                         <input type="text" id="db_path" name="db_path" 
-                            value="<?php echo htmlspecialchars($configData['database']['path'] ?? 'database/alingai.db']; ?>"
+                            value="<?php echo htmlspecialchars($configData['database']['path'] ?? 'database/alingai.db'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mysql_host_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'hidden' : ''; ?>">
-                        <label for="db_host" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÖ÷»ú</label>
+                        <label for="db_host" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“ä¸»æœº</label>
                         <input type="text" id="db_host" name="db_host" 
-                            value="<?php echo htmlspecialchars($configData['database']['host'] ?? 'localhost']; ?>"
+                            value="<?php echo htmlspecialchars($configData['database']['host'] ?? 'localhost'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mysql_port_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'hidden' : ''; ?>">
-                        <label for="db_port" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿â¶Ë¿Ú</label>
+                        <label for="db_port" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“ç«¯å£</label>
                         <input type="number" id="db_port" name="db_port" 
-                            value="<?php echo htmlspecialchars($configData['database']['port'] ?? '3306']; ?>"
+                            value="<?php echo htmlspecialchars($configData['database']['port'] ?? '3306'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mysql_name_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'hidden' : ''; ?>">
-                        <label for="db_name" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÃû³Æ</label>
+                        <label for="db_name" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“åç§°</label>
                         <input type="text" id="db_name" name="db_name" 
-                            value="<?php echo htmlspecialchars($configData['database']['database'] ?? '']; ?>"
+                            value="<?php echo htmlspecialchars($configData['database']['database'] ?? ''); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mysql_user_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'hidden' : ''; ?>">
-                        <label for="db_user" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÓÃ»§Ãû</label>
+                        <label for="db_user" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“ç”¨æˆ·å</label>
                         <input type="text" id="db_user" name="db_user" 
-                            value="<?php echo htmlspecialchars($configData['database']['username'] ?? '']; ?>"
+                            value="<?php echo htmlspecialchars($configData['database']['username'] ?? ''); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mysql_pass_container" class="<?php echo ($configData['database']['type'] ?? '') === 'sqlite' ? 'hidden' : ''; ?> password-field">
-                        <label for="db_pass" class="block text-sm font-medium text-gray-700 mb-1">Êı¾İ¿âÃÜÂë</label>
+                        <label for="db_pass" class="block text-sm font-medium text-gray-700 mb-1">æ•°æ®åº“å¯†ç </label>
                         <input type="password" id="db_pass" name="db_pass" 
-                            placeholder="<?php echo empty($configData['database']['password'] ?? '') ? '' : '±£³Ö²»±äÇëÁô¿Õ'; ?>"
+                            placeholder="<?php echo empty($configData['database']['password'] ?? '') ? '' : 'è¯·è¾“å…¥æ–°å¯†ç '; ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <span class="password-toggle" onclick="togglePassword('db_pass')">
                             <i class="fas fa-eye"></i>
@@ -385,38 +434,38 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                 </div>
             </div>
             
-            <!-- ÏµÍ³ÅäÖÃ -->
+            <!-- ç³»ç»Ÿé…ç½® -->
             <div id="system-section" class="form-section mb-8 hidden">
-                <h2 class="text-xl font-semibold mb-4">ÏµÍ³ÅäÖÃ</h2>
+                <h2 class="text-xl font-semibold mb-4">ç³»ç»Ÿé…ç½®</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="system_name" class="block text-sm font-medium text-gray-700 mb-1">ÏµÍ³Ãû³Æ</label>
+                        <label for="system_name" class="block text-sm font-medium text-gray-700 mb-1">ç³»ç»Ÿåç§°</label>
                         <input type="text" id="system_name" name="system_name" 
-                            value="<?php echo htmlspecialchars($configData['system']['name'] ?? 'AlingAi Pro']; ?>"
+                            value="<?php echo htmlspecialchars($configData['system']['name'] ?? 'AlingAi Pro'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="system_version" class="block text-sm font-medium text-gray-700 mb-1">ÏµÍ³°æ±¾</label>
+                        <label for="system_version" class="block text-sm font-medium text-gray-700 mb-1">ç³»ç»Ÿç‰ˆæœ¬</label>
                         <input type="text" id="system_version" name="system_version" 
-                            value="<?php echo htmlspecialchars($configData['system']['version'] ?? '6.0.0']; ?>"
+                            value="<?php echo htmlspecialchars($configData['system']['version'] ?? '6.0.0'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="system_timezone" class="block text-sm font-medium text-gray-700 mb-1">Ê±ÇøÉèÖÃ</label>
+                        <label for="system_timezone" class="block text-sm font-medium text-gray-700 mb-1">æ—¶åŒº</label>
                         <select id="system_timezone" name="system_timezone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <?php
                             $timezones = [
-                                'Asia/Shanghai' => 'ÖĞ¹ú±ê×¼Ê±¼ä (UTC+8)',
-                                'Asia/Hong_Kong' => 'Ïã¸ÛÊ±¼ä (UTC+8)',
-                                'Asia/Tokyo' => '¶«¾©Ê±¼ä (UTC+9)',
-                                'America/New_York' => 'Å¦Ô¼Ê±¼ä (UTC-5/-4)',
-                                'America/Los_Angeles' => 'ÂåÉ¼í¶Ê±¼ä (UTC-8/-7)',
-                                'Europe/London' => 'Â×¶ØÊ±¼ä (UTC+0/+1)',
-                                'Europe/Paris' => '°ÍÀèÊ±¼ä (UTC+1/+2)',
-                                'UTC' => 'Ğ­µ÷ÊÀ½çÊ± (UTC)'
+                                'Asia/Shanghai' => 'åŒ—äº¬æ—¶é—´ (UTC+8)',
+                                'Asia/Hong_Kong' => 'é¦™æ¸¯æ—¶é—´ (UTC+8)',
+                                'Asia/Tokyo' => 'ä¸œäº¬æ—¶é—´ (UTC+9)',
+                                'America/New_York' => 'çº½çº¦æ—¶é—´ (UTC-5/-4)',
+                                'America/Los_Angeles' => 'æ´›æ‰çŸ¶æ—¶é—´ (UTC-8/-7)',
+                                'Europe/London' => 'ä¼¦æ•¦æ—¶é—´ (UTC+0/+1)',
+                                'Europe/Paris' => 'å·´é»æ—¶é—´ (UTC+1/+2)',
+                                'UTC' => 'ä¸–ç•Œæ ‡å‡†æ—¶é—´ (UTC)'
                             ];
                             
                             $currentTimezone = $configData['system']['timezone'] ?? 'Asia/Shanghai';
@@ -430,11 +479,11 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     </div>
                     
                     <div>
-                        <label for="system_language" class="block text-sm font-medium text-gray-700 mb-1">Ä¬ÈÏÓïÑÔ</label>
+                        <label for="system_language" class="block text-sm font-medium text-gray-700 mb-1">é»˜è®¤è¯­è¨€</label>
                         <select id="system_language" name="system_language" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="zh-CN" <?php echo ($configData['system']['language'] ?? '') === 'zh-CN' ? 'selected' : ''; ?>>¼òÌåÖĞÎÄ</option>
+                            <option value="zh-CN" <?php echo ($configData['system']['language'] ?? '') === 'zh-CN' ? 'selected' : ''; ?>>ä¸­æ–‡</option>
                             <option value="en-US" <?php echo ($configData['system']['language'] ?? '') === 'en-US' ? 'selected' : ''; ?>>English (US)</option>
-                            <option value="ja-JP" <?php echo ($configData['system']['language'] ?? '') === 'ja-JP' ? 'selected' : ''; ?>>ÈÕ±¾ÕZ</option>
+                            <option value="ja-JP" <?php echo ($configData['system']['language'] ?? '') === 'ja-JP' ? 'selected' : ''; ?>>æ—¥æœ¬è¯­</option>
                         </select>
                     </div>
                     
@@ -443,7 +492,7 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                             <?php echo isset($configData['system']['debug']) && $configData['system']['debug'] ? 'checked' : ''; ?>
                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                         <label for="system_debug" class="ml-2 block text-sm text-gray-700">
-                            ÆôÓÃµ÷ÊÔÄ£Ê½
+                            å¯ç”¨è°ƒè¯•æ¨¡å¼
                         </label>
                     </div>
                     
@@ -452,75 +501,75 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                             <?php echo isset($configData['system']['maintenance']) && $configData['system']['maintenance'] ? 'checked' : ''; ?>
                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                         <label for="system_maintenance" class="ml-2 block text-sm text-gray-700">
-                            ÆôÓÃÎ¬»¤Ä£Ê½
+                            å¯ç”¨ç»´æŠ¤æ¨¡å¼
                         </label>
                     </div>
                 </div>
             </div>
             
-            <!-- °²È«ÅäÖÃ -->
+            <!-- å®‰å…¨é…ç½® -->
             <div id="security-section" class="form-section mb-8 hidden">
-                <h2 class="text-xl font-semibold mb-4">°²È«ÅäÖÃ</h2>
+                <h2 class="text-xl font-semibold mb-4">å®‰å…¨é…ç½®</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="security_session" class="block text-sm font-medium text-gray-700 mb-1">»á»°³¬Ê±Ê±¼ä</label>
+                        <label for="security_session" class="block text-sm font-medium text-gray-700 mb-1">ä¼šè¯è¶…æ—¶æ—¶é—´</label>
                         <input type="number" id="security_session" name="security_session" 
-                            value="<?php echo htmlspecialchars($configData['security']['session_lifetime'] ?? '1800']; ?>"
+                            value="<?php echo htmlspecialchars($configData['security']['session_lifetime'] ?? '1800'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="security_password_length" class="block text-sm font-medium text-gray-700 mb-1">ÃÜÂë×îĞ¡³¤¶È</label>
+                        <label for="security_password_length" class="block text-sm font-medium text-gray-700 mb-1">å¯†ç æœ€å°é•¿åº¦</label>
                         <input type="number" id="security_password_length" name="security_password_length" 
-                            value="<?php echo htmlspecialchars($configData['security']['password_min_length'] ?? '8']; ?>"
+                            value="<?php echo htmlspecialchars($configData['security']['password_min_length'] ?? '8'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="security_login_attempts" class="block text-sm font-medium text-gray-700 mb-1">µÇÂ¼³¢ÊÔ´ÎÊı</label>
+                        <label for="security_login_attempts" class="block text-sm font-medium text-gray-700 mb-1">ç™»å½•å°è¯•æ¬¡æ•°</label>
                         <input type="number" id="security_login_attempts" name="security_login_attempts" 
-                            value="<?php echo htmlspecialchars($configData['security']['login_attempts'] ?? '5']; ?>"
+                            value="<?php echo htmlspecialchars($configData['security']['login_attempts'] ?? '5'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="security_lockout_time" class="block text-sm font-medium text-gray-700 mb-1">Ëø¶¨Ê±¼ä</label>
+                        <label for="security_lockout_time" class="block text-sm font-medium text-gray-700 mb-1">é”å®šæ—¶é—´</label>
                         <input type="number" id="security_lockout_time" name="security_lockout_time" 
-                            value="<?php echo htmlspecialchars($configData['security']['lockout_time'] ?? '30']; ?>"
+                            value="<?php echo htmlspecialchars($configData['security']['lockout_time'] ?? '30'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
             </div>
             
-            <!-- APIÅäÖÃ -->
+            <!-- APIé…ç½® -->
             <div id="api-section" class="form-section mb-8 hidden">
-                <h2 class="text-xl font-semibold mb-4">APIÅäÖÃ</h2>
+                <h2 class="text-xl font-semibold mb-4">APIé…ç½®</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="api_rate_limit" class="block text-sm font-medium text-gray-700 mb-1">ÇëÇóËÙÂÊÏŞÖÆ</label>
+                        <label for="api_rate_limit" class="block text-sm font-medium text-gray-700 mb-1">è¯·æ±‚é™åˆ¶</label>
                         <input type="number" id="api_rate_limit" name="api_rate_limit" 
-                            value="<?php echo htmlspecialchars($configData['api']['rate_limit'] ?? '100']; ?>"
+                            value="<?php echo htmlspecialchars($configData['api']['rate_limit'] ?? '100'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="api_token_expiry" class="block text-sm font-medium text-gray-700 mb-1">ÁîÅÆÓĞĞ§ÆÚ</label>
+                        <label for="api_token_expiry" class="block text-sm font-medium text-gray-700 mb-1">ä»¤ç‰Œæœ‰æ•ˆæœŸ</label>
                         <input type="number" id="api_token_expiry" name="api_token_expiry" 
-                            value="<?php echo htmlspecialchars($configData['api']['token_expiry'] ?? '30']; ?>"
+                            value="<?php echo htmlspecialchars($configData['api']['token_expiry'] ?? '30'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
             </div>
             
-            <!-- ÓÊ¼şÅäÖÃ -->
+            <!-- é‚®ä»¶é…ç½® -->
             <div id="mail-section" class="form-section mb-8 hidden">
-                <h2 class="text-xl font-semibold mb-4">ÓÊ¼şÅäÖÃ</h2>
+                <h2 class="text-xl font-semibold mb-4">é‚®ä»¶é…ç½®</h2>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="mail_driver" class="block text-sm font-medium text-gray-700 mb-1">ÓÊ¼şÇı¶¯</label>
+                        <label for="mail_driver" class="block text-sm font-medium text-gray-700 mb-1">é‚®ä»¶é©±åŠ¨</label>
                         <select id="mail_driver" name="mail_driver" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="smtp" <?php echo ($configData['mail']['driver'] ?? '') === 'smtp' ? 'selected' : ''; ?>>SMTP</option>
                             <option value="sendmail" <?php echo ($configData['mail']['driver'] ?? '') === 'sendmail' ? 'selected' : ''; ?>>Sendmail</option>
@@ -529,30 +578,30 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     </div>
                     
                     <div>
-                        <label for="mail_host" class="block text-sm font-medium text-gray-700 mb-1">ÓÊ¼şÖ÷»ú</label>
+                        <label for="mail_host" class="block text-sm font-medium text-gray-700 mb-1">é‚®ä»¶ä¸»æœº</label>
                         <input type="text" id="mail_host" name="mail_host" 
-                            value="<?php echo htmlspecialchars($configData['mail']['host'] ?? '']; ?>"
+                            value="<?php echo htmlspecialchars($configData['mail']['host'] ?? ''); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="mail_port" class="block text-sm font-medium text-gray-700 mb-1">ÓÊ¼ş¶Ë¿Ú</label>
+                        <label for="mail_port" class="block text-sm font-medium text-gray-700 mb-1">é‚®ä»¶ç«¯å£</label>
                         <input type="number" id="mail_port" name="mail_port" 
-                            value="<?php echo htmlspecialchars($configData['mail']['port'] ?? '587']; ?>"
+                            value="<?php echo htmlspecialchars($configData['mail']['port'] ?? '587'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="mail_user" class="block text-sm font-medium text-gray-700 mb-1">ÓÊ¼şÓÃ»§Ãû</label>
+                        <label for="mail_user" class="block text-sm font-medium text-gray-700 mb-1">é‚®ä»¶ç”¨æˆ·å</label>
                         <input type="text" id="mail_user" name="mail_user" 
-                            value="<?php echo htmlspecialchars($configData['mail']['username'] ?? '']; ?>"
+                            value="<?php echo htmlspecialchars($configData['mail']['username'] ?? ''); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div id="mail_pass_container" class="password-field">
-                        <label for="mail_pass" class="block text-sm font-medium text-gray-700 mb-1">ÓÊ¼şÃÜÂë</label>
+                        <label for="mail_pass" class="block text-sm font-medium text-gray-700 mb-1">é‚®ä»¶å¯†ç </label>
                         <input type="password" id="mail_pass" name="mail_pass" 
-                            placeholder="<?php echo empty($configData['mail']['password'] ?? '') ? '' : '±£³Ö²»±äÇëÁô¿Õ'; ?>"
+                            placeholder="<?php echo empty($configData['mail']['password'] ?? '') ? '' : 'è¯·è¾“å…¥æ–°å¯†ç '; ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <span class="password-toggle" onclick="togglePassword('mail_pass')">
                             <i class="fas fa-eye"></i>
@@ -560,7 +609,7 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     </div>
                     
                     <div>
-                        <label for="mail_encryption" class="block text-sm font-medium text-gray-700 mb-1">¼ÓÃÜ·½Ê½</label>
+                        <label for="mail_encryption" class="block text-sm font-medium text-gray-700 mb-1">åŠ å¯†æ–¹å¼</label>
                         <select id="mail_encryption" name="mail_encryption" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                             <option value="tls" <?php echo ($configData['mail']['encryption'] ?? '') === 'tls' ? 'selected' : ''; ?>>TLS</option>
                             <option value="ssl" <?php echo ($configData['mail']['encryption'] ?? '') === 'ssl' ? 'selected' : ''; ?>>SSL</option>
@@ -568,68 +617,68 @@ $dbConnectionStatus = testDatabaseConnection($configData];
                     </div>
                     
                     <div>
-                        <label for="mail_from_address" class="block text-sm font-medium text-gray-700 mb-1">·¢¼şÈËµØÖ·</label>
+                        <label for="mail_from_address" class="block text-sm font-medium text-gray-700 mb-1">å‘ä»¶äººåœ°å€</label>
                         <input type="text" id="mail_from_address" name="mail_from_address" 
-                            value="<?php echo htmlspecialchars($configData['mail']['from_address'] ?? '']; ?>"
+                            value="<?php echo htmlspecialchars($configData['mail']['from_address'] ?? ''); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                     
                     <div>
-                        <label for="mail_from_name" class="block text-sm font-medium text-gray-700 mb-1">·¢¼şÈËÃû³Æ</label>
+                        <label for="mail_from_name" class="block text-sm font-medium text-gray-700 mb-1">å‘ä»¶äººåç§°</label>
                         <input type="text" id="mail_from_name" name="mail_from_name" 
-                            value="<?php echo htmlspecialchars($configData['mail']['from_name'] ?? 'AlingAi Pro']; ?>"
+                            value="<?php echo htmlspecialchars($configData['mail']['from_name'] ?? 'AlingAi Pro'); ?>"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
                     </div>
                 </div>
             </div>
             
             <div class="mt-6">
-                <button type="submit" name="save_config" class="px-4 py-2 bg-blue-600 text-white rounded-md">±£´æÅäÖÃ</button>
+                <button type="submit" name="save_config" class="px-4 py-2 bg-blue-600 text-white rounded-md">ä¿å­˜é…ç½®</button>
             </div>
         </form>
     </main>
     
     <!-- JavaScript -->
     <script>
-        // ÓÃ»§²Ëµ¥ÇĞ»»
+        // ç”¨æˆ·èœå•æŒ‰é’®ç‚¹å‡»äº‹ä»¶
         document.getElementById('userMenuBtn').addEventListener('click', function() {
-            document.getElementById('userMenu').classList.toggle('hidden'];
-        }];
+            document.getElementById('userMenu').classList.toggle('hidden');
+        });
         
-        // µã»÷Íâ²¿¹Ø±Õ²Ëµ¥
+        // ç‚¹å‡»å¤–éƒ¨åŒºåŸŸéšè—ç”¨æˆ·èœå•
         document.addEventListener('click', function(e) {
-            const userMenu = document.getElementById('userMenu'];
-            const userMenuBtn = document.getElementById('userMenuBtn'];
+            const userMenu = document.getElementById('userMenu');
+            const userMenuBtn = document.getElementById('userMenuBtn');
             
             if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
-                userMenu.classList.add('hidden'];
+                userMenu.classList.add('hidden');
             }
-        }];
+        });
         
-        // ÇĞ»»ÃÜÂë¿É¼ûĞÔ
+        // ç”¨æˆ·åˆ‡æ¢å¯†ç æ˜¾ç¤º
         function togglePassword(inputId) {
-            const passwordInput = document.getElementById(inputId];
-            const toggleIcon = document.querySelector(`#${inputId}`).nextElementSibling.querySelector('i'];
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = document.querySelector(`#${inputId}`).nextElementSibling.querySelector('i');
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye'];
-                toggleIcon.classList.add('fa-eye-slash'];
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash'];
-                toggleIcon.classList.add('fa-eye'];
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
             }
         }
         
-        // ÇĞ»»Êı¾İ¿âÀàĞÍ
+        // ç”¨æˆ·åˆ‡æ¢æ•°æ®åº“é…ç½®
         document.getElementById('db_type').addEventListener('change', function() {
             const isSqlite = this.value === 'sqlite';
             
-            // ÇĞ»»SQLiteÌØ¶¨×Ö¶Î
-            document.getElementById('sqlite_path_container').classList.toggle('hidden', !isSqlite];
+            // ç”¨æˆ·åˆ‡æ¢SQLiteç›¸å…³é€‰é¡¹
+            document.getElementById('sqlite_path_container').classList.toggle('hidden', !isSqlite);
             
-            // ÇĞ»»MySQLÌØ¶¨×Ö¶Î
+            // ç”¨æˆ·åˆ‡æ¢MySQLç›¸å…³é€‰é¡¹
             const mysqlFields = [
                 'mysql_host_container',
                 'mysql_port_container',
@@ -639,41 +688,41 @@ $dbConnectionStatus = testDatabaseConnection($configData];
             ];
             
             mysqlFields.forEach(field => {
-                document.getElementById(field).classList.toggle('hidden', isSqlite];
-            }];
-        }];
+                document.getElementById(field).classList.toggle('hidden', isSqlite);
+            });
+        });
         
-        // ÇĞ»»ÅäÖÃÑ¡Ïî¿¨
+        // ç”¨æˆ·åˆ‡æ¢é€‰é¡¹å¡
         const tabs = ['database', 'system', 'security', 'api', 'mail'];
-        const tabEls = tabs.map(tab => document.getElementById(`${tab}-tab`)];
-        const sectionEls = tabs.map(tab => document.getElementById(`${tab}-section`)];
+        const tabEls = tabs.map(tab => document.getElementById(`${tab}-tab`));
+        const sectionEls = tabs.map(tab => document.getElementById(`${tab}-section`));
         
         tabEls.forEach((tabEl, index) => {
             tabEl.addEventListener('click', function(e) {
-                e.preventDefault(];
+                e.preventDefault();
                 
-                // ¸üĞÂÑ¡Ïî¿¨ÑùÊ½
+                // ç”¨æˆ·åˆ‡æ¢é€‰é¡¹å¡æ ·å¼
                 tabEls.forEach(el => {
-                    el.classList.remove('border-blue-600', 'text-blue-600'];
-                    el.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300'];
-                }];
+                    el.classList.remove('border-blue-600', 'text-blue-600');
+                    el.classList.add('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                });
                 
-                tabEl.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300'];
-                tabEl.classList.add('border-blue-600', 'text-blue-600'];
+                tabEl.classList.remove('border-transparent', 'hover:text-gray-600', 'hover:border-gray-300');
+                tabEl.classList.add('border-blue-600', 'text-blue-600');
                 
-                // ¸üĞÂÄÚÈİÇøÓò
-                sectionEls.forEach(section => section.classList.add('hidden')];
-                sectionEls[index].classList.remove('hidden'];
-            }];
-        }];
+                // ç”¨æˆ·åˆ‡æ¢å†…å®¹åŒºåŸŸ
+                sectionEls.forEach(section => section.classList.add('hidden'));
+                sectionEls[index].classList.remove('hidden');
+            });
+        });
         
-        // ×Ô¶¯²âÊÔÊı¾İ¿âÁ¬½Ó
+        // è‡ªåŠ¨ä¿å­˜æ•°æ®åº“é…ç½®
         document.querySelectorAll('#db_type, #db_host, #db_port, #db_name, #db_user, #db_pass, #db_path').forEach(el => {
             el.addEventListener('change', function() {
-                // ÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬ÕâÀï¿ÉÒÔÌí¼ÓAJAXÇëÇóÀ´²âÊÔÊı¾İ¿âÁ¬½Ó
-                console.log('Êı¾İ¿âÅäÖÃÒÑ¸ü¸Ä£¬¿ÉÒÔÔÚ´Ë´¦Ìí¼ÓÁ¬½Ó²âÊÔ'];
-            }];
-        }];
+                // å®é™…åº”ç”¨ä¸­éœ€è¦é€šè¿‡AJAXè¯·æ±‚åç«¯ä¿å­˜é…ç½®
+                console.log('æ•°æ®åº“é…ç½®å·²æ›´æ”¹ï¼Œä½†æ­¤æ“ä½œä¸ä¼šä¿å­˜åˆ°åç«¯');
+            });
+        });
     </script>
 </body>
 </html>
