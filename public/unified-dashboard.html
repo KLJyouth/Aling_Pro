@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 用户仪表板，管理您的AI服务和API">
+    <meta name="keywords" content="AI, 仪表板, 控制台, API管理">
+    <title>AlingAi Pro - 用户仪表板</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ChartJS 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索命令、文档或API...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="#" class="sidebar-item active" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="#" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="#" class="sidebar-item" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                        <span class="ml-auto bg-quantum-accent/20 text-quantum-accent text-xs py-0.5 px-2 rounded">新</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="#" class="sidebar-item" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="#" class="sidebar-item" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="#" class="sidebar-item" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- 概览部分 -->
+            <div id="overview-section" class="dashboard-section">
+                <!-- 欢迎信息 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">欢迎回来，John</h1>
+                        <p class="text-gray-400">今天是 <span id="current-date">2024年6月18日</span> · 上次登录: 昨天 14:32</p>
+                    </div>
+                    <div>
+                        <button class="quantum-button">
+                            <i class="fas fa-plus mr-2"></i> 新建项目
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 统计卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- 今日对话 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">今日对话</h3>
+                                <p class="stat-value" id="todayChats">126</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <i class="fas fa-comments text-blue-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>12%</span>
+                            <span class="text-gray-400 ml-2">相比昨天</span>
+                        </div>
+                    </div>
+                    
+                    <!-- API调用 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">API调用</h3>
+                                <p class="stat-value" id="apiCalls">3,475</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-code text-purple-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>8%</span>
+                            <span class="text-gray-400 ml-2">相比昨天</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Token用量 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">Token用量</h3>
+                                <p class="stat-value" id="tokenUsage">54.3K</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-cyan-500/10 flex items-center justify-center">
+                                <i class="fas fa-microchip text-cyan-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>5%</span>
+                            <span class="text-gray-400 ml-2">相比昨天</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 成功率 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">成功率</h3>
+                                <p class="stat-value" id="successRate">99.8%</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-equals mr-1"></i>稳定</span>
+                            <span class="text-gray-400 ml-2">相比昨天</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 图表和表格区域 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 使用趋势图 -->
+                    <div class="lg:col-span-2 glass-effect p-6 rounded-xl">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-medium">使用趋势</h3>
+                            <div class="flex space-x-2">
+                                <button class="py-1 px-3 text-xs bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                    日
+                                </button>
+                                <button class="py-1 px-3 text-xs bg-quantum-accent/20 text-quantum-accent rounded-lg">
+                                    周
+                                </button>
+                                <button class="py-1 px-3 text-xs bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                    月
+                                </button>
+                            </div>
+                        </div>
+                        <div class="h-64">
+                            <canvas id="usageTrendChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- 最近活动 -->
+                    <div class="glass-effect p-6 rounded-xl">
+                        <h3 class="text-lg font-medium mb-6">最近活动</h3>
+                        <div class="space-y-4" id="recentActivities">
+                            <!-- 活动项会通过JS动态加载 -->
+                        </div>
+                        <div class="mt-4 text-center">
+                            <a href="#" class="text-sm text-quantum-accent hover:underline">
+                                查看全部活动
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API密钥部分 -->
+                <div class="mt-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-medium">API密钥</h3>
+                        <button class="py-2 px-4 text-sm bg-white/5 hover:bg-white/10 rounded-lg transition-colors flex items-center">
+                            <i class="fas fa-plus mr-2"></i> 创建新密钥
+                        </button>
+                    </div>
+                    
+                    <div class="glass-effect rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-black/20">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            名称
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            密钥
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            权限
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            使用量
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            创建日期
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="apiKeysTable" class="divide-y divide-gray-800">
+                                    <!-- API密钥列表会通过JS动态加载 -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 核心JS -->
+    <script src="/assets/js/unified-core.js"></script>
+    
+    <!-- 仪表板特定脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化量子粒子背景
+            initQuantumParticles('quantum-particles', {
+                particleCount: 30,
+                particleColor: ['#4F46E5', '#8B5CF6', '#06B6D4'],
+                connectionDistance: 120,
+                connectionOpacity: 0.3
+            });
+            
+            // 设置当前日期
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
+            
+            // 初始化仪表板数据
+            const dashboardData = initDashboardData();
+            loadDashboardData(dashboardData);
+            
+            // 设置图表
+            setupCharts();
+            
+            // 数字动画效果
+            animateNumbers();
+            
+            // 设置侧边栏
+            setupSidebar();
+            
+            // 设置用户菜单
+            setupUserMenu();
+            
+            // 复制API密钥功能
+            setupApiKeyActions();
+        });
+        
+        // 初始化仪表板数据
+        function initDashboardData() {
+            // 模拟从API获取的数据
+            return {
+                stats: {
+                    todayChats: 126,
+                    apiCalls: 3475,
+                    tokenUsage: '54.3K',
+                    successRate: '99.8%'
+                },
+                trends: {
+                    dates: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    chatData: [45, 59, 80, 81, 56, 55, 70],
+                    apiData: [1200, 1900, 2100, 1800, 1500, 1200, 1700],
+                    tokenData: [12000, 19000, 21000, 18000, 15000, 12000, 17000]
+                },
+                activities: [
+                    { type: 'chat', message: '新的对话会话已创建', time: '10分钟前', icon: 'comments', color: 'blue' },
+                    { type: 'api', message: 'API密钥 "Production-1" 被使用', time: '25分钟前', icon: 'key', color: 'purple' },
+                    { type: 'system', message: '系统更新已完成', time: '1小时前', icon: 'sync', color: 'green' },
+                    { type: 'security', message: '检测到新的登录', time: '3小时前', icon: 'shield-alt', color: 'red' }
+                ],
+                apiKeys: [
+                    { 
+                        name: 'Production', 
+                        key: 'sk_prod_2fGh7i8jKl9mN0oP1qR2s3T4u', 
+                        permissions: '完全访问', 
+                        usage: '87%', 
+                        status: 'active',
+                        created: '2024-05-15'
+                    },
+                    { 
+                        name: 'Development', 
+                        key: 'sk_dev_5vW6xY7zZ8aB9cD0eF1gH2i', 
+                        permissions: '只读', 
+                        usage: '23%', 
+                        status: 'active',
+                        created: '2024-05-20'
+                    },
+                    { 
+                        name: 'Testing', 
+                        key: 'sk_test_3jK4lM5nO6pQ7rS8tU9vW0x', 
+                        permissions: '完全访问', 
+                        usage: '45%', 
+                        status: 'active',
+                        created: '2024-06-01'
+                    }
+                ]
+            };
+        }
+        
+        // 加载仪表板数据
+        function loadDashboardData(data) {
+            // 加载最近活动
+            const activitiesContainer = document.getElementById('recentActivities');
+            if (activitiesContainer) {
+                activitiesContainer.innerHTML = '';
+                
+                data.activities.forEach(activity => {
+                    const activityEl = document.createElement('div');
+                    activityEl.className = 'flex items-start space-x-3';
+                    
+                    activityEl.innerHTML = `
+                        <div class="w-8 h-8 rounded-full bg-${activity.color}-500/10 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-${activity.icon} text-${activity.color}-500"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm">${activity.message}</p>
+                            <p class="text-xs text-gray-400">${activity.time}</p>
+                        </div>
+                    `;
+                    
+                    activitiesContainer.appendChild(activityEl);
+                });
+            }
+            
+            // 加载API密钥表格
+            const apiKeysTable = document.getElementById('apiKeysTable');
+            if (apiKeysTable) {
+                apiKeysTable.innerHTML = '';
+                
+                data.apiKeys.forEach(key => {
+                    const row = document.createElement('tr');
+                    
+                    // 状态标签样式
+                    let statusClass = 'bg-green-500/20 text-green-500';
+                    if (key.status === 'inactive') {
+                        statusClass = 'bg-gray-500/20 text-gray-400';
+                    } else if (key.status === 'revoked') {
+                        statusClass = 'bg-red-500/20 text-red-400';
+                    }
+                    
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            ${key.name}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <div class="flex items-center">
+                                <span class="api-key-field font-mono">${key.key.substring(0, 10)}...${key.key.substring(key.key.length - 4)}</span>
+                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            ${key.permissions}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div class="bg-quantum-accent h-2 rounded-full" style="width: ${key.usage}"></div>
+                            </div>
+                            <span class="text-xs text-gray-400 mt-1 block">${key.usage}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                            <span class="px-2 py-1 rounded-full text-xs ${statusClass}">
+                                ${key.status === 'active' ? '活跃' : key.status === 'inactive' ? '不活跃' : '已撤销'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                            ${key.created}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                            <div class="flex space-x-2">
+                                <button onclick="editApiKey(this)" class="text-gray-400 hover:text-quantum-accent" title="编辑">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    
+                    apiKeysTable.appendChild(row);
+                });
+            }
+        }
+        
+        // 设置图表
+        function setupCharts() {
+            const usageTrendChart = document.getElementById('usageTrendChart');
+            
+            if (usageTrendChart) {
+                const ctx = usageTrendChart.getContext('2d');
+                
+                // 图表渐变背景
+                const gradientFill = ctx.createLinearGradient(0, 0, 0, 300);
+                gradientFill.addColorStop(0, 'rgba(6, 182, 212, 0.3)');
+                gradientFill.addColorStop(1, 'rgba(6, 182, 212, 0.0)');
+                
+                // 图表数据
+                const data = {
+                    labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                    datasets: [
+                        {
+                            label: 'API调用',
+                            data: [1200, 1900, 2100, 1800, 1500, 1200, 1700],
+                            borderColor: '#4F46E5',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#4F46E5',
+                            tension: 0.4,
+                            fill: false
+                        },
+                        {
+                            label: 'Token用量',
+                            data: [12000, 19000, 21000, 18000, 15000, 12000, 17000],
+                            borderColor: '#06B6D4',
+                            borderWidth: 2,
+                            pointBackgroundColor: '#06B6D4',
+                            tension: 0.4,
+                            fill: {
+                                target: 'origin',
+                                above: gradientFill
+                            }
+                        }
+                    ]
+                };
+                
+                // 图表配置
+                const config = {
+                    type: 'line',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: 'rgba(255, 255, 255, 0.7)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    color: 'rgba(255, 255, 255, 0.7)',
+                                    boxWidth: 12,
+                                    padding: 20
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                                titleColor: 'rgba(255, 255, 255, 0.9)',
+                                bodyColor: 'rgba(255, 255, 255, 0.9)',
+                                borderColor: 'rgba(79, 70, 229, 0.3)',
+                                borderWidth: 1,
+                                padding: 10,
+                                boxPadding: 5,
+                                usePointStyle: true,
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += context.parsed.y.toLocaleString();
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                };
+                
+                // 创建图表
+                new Chart(ctx, config);
+            }
+        }
+        
+        // 数字动画效果
+        function animateNumbers() {
+            const statValues = document.querySelectorAll('.stat-value');
+            
+            statValues.forEach(stat => {
+                const value = stat.textContent;
+                let startValue = 0;
+                let endValue = parseInt(value.replace(/[^0-9]/g, ''));
+                let suffix = value.replace(/[0-9]/g, '').trim();
+                let duration = 1500;
+                let startTime;
+                
+                const animate = (timestamp) => {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / duration, 1);
+                    const currentValue = Math.floor(progress * (endValue - startValue) + startValue);
+                    
+                    stat.textContent = currentValue + suffix;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            });
+        }
+        
+        // 设置侧边栏切换
+        function setupSidebar() {
+            const toggleButton = document.getElementById('toggleSidebar');
+            const sidebar = document.getElementById('sidebar');
+            
+            if (toggleButton && sidebar) {
+                toggleButton.addEventListener('click', () => {
+                    sidebar.classList.toggle('-translate-x-full');
+                });
+            }
+            
+            // 侧边栏项点击事件
+            const sidebarItems = document.querySelectorAll('.sidebar-item');
+            
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // 移除所有active类
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    
+                    // 添加active类到当前项
+                    item.classList.add('active');
+                    
+                    // 这里可以添加切换不同部分的逻辑
+                    const sectionId = item.getAttribute('data-section');
+                    if (sectionId) {
+                        // 如果有对应的部分，可以在这里切换显示
+                        console.log(`切换到部分: ${sectionId}`);
+                    }
+                });
+            });
+        }
+        
+        // 设置用户菜单
+        function setupUserMenu() {
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userMenu = document.getElementById('userMenu');
+            
+            if (userMenuBtn && userMenu) {
+                userMenuBtn.addEventListener('click', () => {
+                    userMenu.classList.toggle('hidden');
+                });
+                
+                // 点击其他地方关闭菜单
+                document.addEventListener('click', (e) => {
+                    if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
+        }
+        
+        // API密钥操作
+        function setupApiKeyActions() {
+            document.addEventListener('click', function(e) {
+                // 复制API密钥
+                if (e.target.closest('[onclick="copyApiKey(this)"]')) {
+                    e.preventDefault();
+                    const button = e.target.closest('[onclick="copyApiKey(this)"]');
+                    const row = button.closest('tr');
+                    const keyField = row.querySelector('.api-key-field');
+                    
+                    if (keyField) {
+                        // 模拟复制到剪贴板
+                        navigator.clipboard.writeText(keyField.textContent)
+                            .then(() => {
+                                showNotification('API密钥已复制到剪贴板', 'success');
+                            })
+                            .catch(err => {
+                                showNotification('复制失败', 'error');
+                            });
+                    }
+                }
+                
+                // 编辑API密钥
+                if (e.target.closest('[onclick="editApiKey(this)"]')) {
+                    e.preventDefault();
+                    const button = e.target.closest('[onclick="editApiKey(this)"]');
+                    const row = button.closest('tr');
+                    const keyName = row.cells[0].textContent;
+                    
+                    showNotification(`正在编辑密钥: ${keyName}`, 'info');
+                    // 这里可以添加打开编辑模态框的逻辑
+                }
+                
+                // 删除API密钥
+                if (e.target.closest('[onclick="deleteApiKey(this)"]')) {
+                    e.preventDefault();
+                    const button = e.target.closest('[onclick="deleteApiKey(this)"]');
+                    const row = button.closest('tr');
+                    const keyName = row.cells[0].textContent;
+                    
+                    if (confirm(`确定要删除密钥 "${keyName}" 吗?`)) {
+                        // 模拟删除操作
+                        row.classList.add('opacity-50');
+                        setTimeout(() => {
+                            row.remove();
+                            showNotification(`密钥 "${keyName}" 已删除`, 'success');
+                        }, 500);
+                    }
+                }
+            });
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            // 检查是否已存在通知元素
+            let notificationEl = document.getElementById('dashboard-notification');
+            
+            if (!notificationEl) {
+                notificationEl = document.createElement('div');
+                notificationEl.id = 'dashboard-notification';
+                notificationEl.className = 'fixed top-20 right-6 px-6 py-3 rounded-lg text-white text-sm z-50 transform transition-all duration-300 translate-x-full';
+                document.body.appendChild(notificationEl);
+            }
+            
+            // 设置通知类型
+            if (type === 'info') {
+                notificationEl.className = 'fixed top-20 right-6 px-6 py-3 rounded-lg text-white text-sm z-50 bg-quantum-blue/80 backdrop-blur-sm transform transition-all duration-300';
+            } else if (type === 'success') {
+                notificationEl.className = 'fixed top-20 right-6 px-6 py-3 rounded-lg text-white text-sm z-50 bg-quantum-green/80 backdrop-blur-sm transform transition-all duration-300';
+            } else if (type === 'error') {
+                notificationEl.className = 'fixed top-20 right-6 px-6 py-3 rounded-lg text-white text-sm z-50 bg-red-500/80 backdrop-blur-sm transform transition-all duration-300';
+            }
+            
+            notificationEl.textContent = message;
+            notificationEl.style.transform = 'translateX(0)';
+            
+            // 自动隐藏
+            setTimeout(() => {
+                notificationEl.style.transform = 'translateX(120%)';
+            }, 3000);
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,428 @@
+/**
+ * AlingAi Pro - 统一样式库
+ * 整合自所有页面的样式元素
+ * 
+ * @version 1.0.0
+ * @author AlingAi Team
+ */
+
+:root {
+    /* 核心色彩系统 */
+    --primary-color: #4F46E5;
+    --secondary-color: #10B981;
+    --dark-color: #1F2937;
+    --light-color: #F9FAFB;
+    --accent-color: #8B5CF6;
+    
+    /* 量子主题色 */
+    --quantum-primary: #6366f1;
+    --quantum-secondary: #8B5CF6;
+    --quantum-accent: #06b6d4;
+    --quantum-purple: #6B46C1;
+    --quantum-blue: #3B82F6;
+    --quantum-cyan: #06B6D4;
+    --quantum-green: #10b981;
+    --neon-pink: #FF2B75;
+    --tech-blue: #00D4FF;
+    --cyber-green: #00FF41;
+    --electric-purple: #6C13FF;
+    --matrix-green: #00FF00;
+    --neural-blue: #3B82F6;
+    --quantum-dark: #0F172A;
+    
+    /* 背景和容器 */
+    --primary-gradient: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+    --secondary-gradient: linear-gradient(135deg, #FF2B75 0%, #FF6B35 100%);
+    --success-gradient: linear-gradient(135deg, #00FF41 0%, #00D4FF 100%);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --neon-glow: 0 0 20px rgba(108, 19, 255, 0.5);
+    --cyber-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--primary-gradient);
+    color: rgba(255, 255, 255, 0.9);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 玻璃态效果 */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--cyber-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-effect:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(108, 19, 255, 0.3);
+    box-shadow: var(--neon-glow), var(--cyber-shadow);
+}
+
+/* 量子按钮 */
+.quantum-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.quantum-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.quantum-button:active {
+    transform: translateY(0);
+}
+
+.quantum-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.quantum-button:hover::before {
+    left: 100%;
+}
+
+/* 导航栏 */
+.navbar-quantum {
+    background-color: rgba(31, 41, 55, 0.8);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(108, 19, 255, 0.2);
+}
+
+/* 量子卡片 */
+.quantum-card {
+    background: rgba(31, 41, 55, 0.6);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100%;
+}
+
+.quantum-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    background: rgba(31, 41, 55, 0.8);
+}
+
+/* 量子标题 */
+.quantum-title {
+    background: linear-gradient(135deg, var(--quantum-primary) 0%, var(--quantum-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+}
+
+/* 状态指示器 */
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+.status-online {
+    background: var(--quantum-green);
+    box-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-warning {
+    background: #FFB800;
+    box-shadow: 0 0 10px rgba(255, 184, 0, 0.5);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.status-error {
+    background: var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 43, 117, 0.5);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* 进度条 */
+.progress-cyber {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-cyber::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(108, 19, 255, 0.2) 0%, 
+        rgba(108, 19, 255, 0.8) 50%, 
+        rgba(108, 19, 255, 0.2) 100%);
+    animation: data-flow 2s ease-in-out infinite;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00D4FF 0%, #6C13FF 100%);
+    border-radius: 0.5rem;
+}
+
+/* 聊天容器 */
+.chat-container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+/* 消息气泡 */
+.message-bubble {
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.user-message {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.ai-message {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 侧边栏 */
+.sidebar {
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(24px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.sidebar-item {
+    background: transparent;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    margin: 0.25rem 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.sidebar-item:hover {
+    background: rgba(108, 19, 255, 0.1);
+    border-color: rgba(108, 19, 255, 0.3);
+    transform: translateX(4px);
+}
+
+.sidebar-item.active {
+    background: linear-gradient(135deg, rgba(108, 19, 255, 0.2) 0%, rgba(255, 43, 117, 0.1) 100%);
+    border-color: rgba(108, 19, 255, 0.5);
+    box-shadow: var(--neon-glow);
+}
+
+/* 统计卡片 */
+.stat-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--neon-glow), var(--cyber-shadow);
+}
+
+.stat-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #00D4FF 0%, #6C13FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 动画效果 */
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 10px currentColor; }
+    50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+    100% { box-shadow: 0 0 10px currentColor; }
+}
+
+@keyframes data-flow {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes typing {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes quantum-pulse {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    50% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.8); opacity: 0.7; }
+}
+
+/* 量子球动画 */
+.quantum-sphere-container {
+    position: absolute;
+    top: 50%;
+    right: 10%;
+    transform: translateY(-50%);
+    width: 400px;
+    height: 400px;
+    z-index: -1;
+}
+
+.quantum-sphere {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.quantum-sphere .sphere {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #4F46E5, #8B5CF6);
+    box-shadow: 0 0 60px rgba(79, 70, 229, 0.6);
+    animation: pulse 4s infinite alternate;
+}
+
+.quantum-sphere .ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 2px solid rgba(79, 70, 229, 0.3);
+    transform: translate(-50%, -50%);
+    animation: rotate 15s linear infinite;
+}
+
+.quantum-sphere .ring:nth-child(1) {
+    width: 240px;
+    height: 240px;
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+.quantum-sphere .ring:nth-child(2) {
+    width: 320px;
+    height: 320px;
+    border-color: rgba(139, 92, 246, 0.3);
+    animation-duration: 20s;
+    animation-direction: reverse;
+}
+
+.quantum-sphere .ring:nth-child(3) {
+    width: 380px;
+    height: 380px;
+    border-color: rgba(16, 185, 129, 0.3);
+    animation-duration: 25s;
+}
+
+/* 生物识别扫描器 */
+.biometric-scanner {
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1), transparent);
+    border: 2px solid rgba(16, 185, 129, 0.3);
+    animation: biometricPulse 2s ease-in-out infinite;
+}
+
+@keyframes biometricPulse {
+    0%, 100% { 
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+        transform: scale(1.05);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .quantum-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .quantum-card {
+        padding: 1.5rem;
+    }
+    
+    .sidebar {
+        transform: translateX(-100%);
+    }
+    
+    .sidebar.active {
+        transform: translateX(0);
+    }
+    
+    .stat-value {
+        font-size: 2rem;
+    }
+}
+
+@media (prefers-contrast: high) {
+    .quantum-button {
+        border: 2px solid white;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .quantum-button,
+    .quantum-button::before,
+    .quantum-card,
+    .status-indicator,
+    .progress-cyber::before,
+    .message-bubble,
+    .sidebar-item {
+        transition: none;
+        animation: none;
+    }
+} 

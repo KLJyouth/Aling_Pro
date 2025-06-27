@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 智能对话系统，支持多模态交互、实时语音、图像识别、文档分析的企业级AI助手">
+    <meta name="keywords" content="AI, 聊天, 智能对话, 语音识别, 图像分析">
+    <title>AlingAi Pro - 智能对话</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- 代码高亮 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github-dark.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/languages/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/languages/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/lib/languages/php.min.js"></script>
+    
+    <!-- Markdown解析 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked@9.1.6/marked.min.js"></script>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A',
+                        'cyber-green': '#10B981',
+                        'neon-pink': '#FF00E4',
+                        'neural-blue': '#0088FF',
+                        'matrix-green': '#00FF00'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 2s ease-in-out infinite alternate',
+                        'typing': 'typing 1.5s steps(3, end) infinite',
+                        'gradient': 'gradient 15s ease infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* 全局样式 */
+        body {
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #334155 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        /* 玻璃态效果 */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 量子粒子 */
+        .quantum-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: radial-gradient(circle, rgba(107, 70, 193, 0.8), transparent);
+            border-radius: 50%;
+            animation: quantumFloat 8s ease-in-out infinite;
+        }
+        
+        /* 聊天消息样式 */
+        .message-bubble {
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 1rem;
+            max-width: 85%;
+            margin-bottom: 1.5rem;
+        }
+        
+        .message-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+        }
+        
+        .user-message {
+            background: linear-gradient(135deg, #4F46E5, #8B5CF6);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .ai-message {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-right: auto;
+        }
+        
+        /* 工具栏按钮 */
+        .toolbar-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toolbar-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .toolbar-btn.active {
+            background: linear-gradient(135deg, #4F46E5, #8B5CF6);
+            color: white;
+            border-color: transparent;
+        }
+        
+        /* 快捷操作 */
+        .quick-action {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quick-action:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* AI状态指示器 */
+        .ai-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10B981;
+        }
+        
+        .status-dot.active {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* 文件上传区域 */
+        .file-drop-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .file-drop-zone.dragover {
+            border-color: #4F46E5;
+            background: rgba(79, 70, 229, 0.1);
+        }
+        
+        /* 打字指示器 */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            animation: typing 1.4s ease-in-out infinite;
+        }
+        
+        .typing-dot:nth-child(1) { animation-delay: 0ms; }
+        .typing-dot:nth-child(2) { animation-delay: 200ms; }
+        .typing-dot:nth-child(3) { animation-delay: 400ms; }
+        
+        /* 代码块样式 */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        
+        .code-header {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        /* 动画效果 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px rgba(79, 70, 229, 0.4); }
+            to { box-shadow: 0 0 40px rgba(79, 70, 229, 0.8); }
+        }
+        
+        @keyframes typing {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes quantumFloat {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.3;
+            }
+            25% { 
+                transform: translateY(-30px) translateX(15px) rotate(90deg);
+                opacity: 0.8;
+            }
+            50% { 
+                transform: translateY(-15px) translateX(-20px) rotate(180deg);
+                opacity: 0.5;
+            }
+            75% { 
+                transform: translateY(-25px) translateX(25px) rotate(270deg);
+                opacity: 0.9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            AlingAi Pro
+                        </h1>
+                        <p class="text-xs text-gray-400">智能对话</p>
+                    </div>
+                </div>
+                
+                <!-- 中间区域：AI状态 -->
+                <div class="hidden md:flex items-center">
+                    <div class="ai-status">
+                        <div class="status-dot active"></div>
+                        <span class="text-sm text-white">AI在线</span>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏和用户菜单 -->
+                <div class="flex items-center space-x-3">
+                    <!-- 工具栏按钮 -->
+                    <button type="button" class="toolbar-btn w-10 h-10" id="toggleSidebar" title="历史记录">
+                        <i class="fas fa-history"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn w-10 h-10" id="toggleSettings" title="设置">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn w-10 h-10" id="toggleFullscreen" title="全屏">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative" id="userMenuContainer">
+                        <button class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors" id="userMenuButton">
+                            <span class="hidden md:inline">张三</span>
+                            <img src="https://i.pravatar.cc/150?img=12" alt="用户头像" class="w-8 h-8 rounded-full">
+                        </button>
+                        
+                        <!-- 下拉菜单 -->
+                        <div class="absolute right-0 mt-2 w-48 glassmorphism rounded-xl p-1 hidden" id="userMenu">
+                            <a href="/unified-dashboard.html" class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-colors">
+                                <i class="fas fa-tachometer-alt"></i>
+                                <span>控制台</span>
+                            </a>
+                            <a href="/unified-profile.html" class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-colors">
+                                <i class="fas fa-user"></i>
+                                <span>个人资料</span>
+                            </a>
+                            <div class="border-t border-white/10 my-1"></div>
+                            <a href="#" onclick="logout()" class="flex items-center space-x-2 px-4 py-2 text-white hover:bg-white/10 rounded-lg transition-colors">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>退出登录</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主容器 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 - 聊天历史 -->
+        <div id="chatSidebar" class="w-72 bg-black/30 backdrop-blur-xl border-r border-white/5 h-full overflow-y-auto fixed left-0 top-16 bottom-0 transform -translate-x-full md:translate-x-0 transition-transform z-40">
+            <div class="p-4">
+                <h2 class="text-lg font-semibold text-white mb-4">聊天历史</h2>
+                
+                <!-- 新建聊天按钮 -->
+                <button class="w-full bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 text-white py-2 px-4 rounded-lg mb-4 flex items-center justify-center space-x-2" onclick="newChat()">
+                    <i class="fas fa-plus"></i>
+                    <span>新建对话</span>
+                </button>
+                
+                <!-- 聊天历史列表 -->
+                <div id="chatHistory" class="space-y-2">
+                    <!-- 历史项目将通过JS动态添加 -->
+                    <div class="glassmorphism rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors border-l-4 border-quantum-accent">
+                        <div class="text-sm font-medium text-white">项目架构分析</div>
+                        <div class="text-xs text-gray-400 mt-1">今天 14:30</div>
+                    </div>
+                    
+                    <div class="glassmorphism rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors">
+                        <div class="text-sm font-medium text-white">Python爬虫开发</div>
+                        <div class="text-xs text-gray-400 mt-1">昨天 09:15</div>
+                    </div>
+                    
+                    <div class="glassmorphism rounded-lg p-3 cursor-pointer hover:bg-white/10 transition-colors">
+                        <div class="text-sm font-medium text-white">机器学习基础概念</div>
+                        <div class="text-xs text-gray-400 mt-1">2023-10-15</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 主聊天区域 -->
+        <div class="flex-1 md:ml-72 flex flex-col h-full">
+            <!-- 聊天消息容器 -->
+            <div class="flex-1 overflow-y-auto p-4" id="chatMessages">
+                <!-- 欢迎部分 -->
+                <div class="welcome-section text-center py-10" id="welcomeSection">
+                    <div class="mb-8">
+                        <i class="fas fa-robot text-5xl text-quantum-accent mb-4 animate-float"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">欢迎使用 AlingAi Pro</h2>
+                        <p class="text-gray-400">您的智能AI助手，支持多模态交互和企业级应用</p>
+                    </div>
+                    
+                    <!-- 快捷操作 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                        <div class="quick-action" onclick="insertQuickMessage('帮我分析一下这个项目的架构')">
+                            <i class="fas fa-project-diagram text-2xl text-quantum-accent mb-3"></i>
+                            <div class="text-sm text-white">项目分析</div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="insertQuickMessage('生成一个Python爬虫代码')">
+                            <i class="fas fa-code text-2xl text-cyber-green mb-3"></i>
+                            <div class="text-sm text-white">代码生成</div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="insertQuickMessage('帮我写一份技术文档')">
+                            <i class="fas fa-file-alt text-2xl text-quantum-accent mb-3"></i>
+                            <div class="text-sm text-white">文档编写</div>
+                        </div>
+                        
+                        <div class="quick-action" onclick="insertQuickMessage('解释一下机器学习的基本概念')">
+                            <i class="fas fa-brain text-2xl text-neon-pink mb-3"></i>
+                            <div class="text-sm text-white">知识问答</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 聊天消息将通过JS动态添加 -->
+            </div>
+            
+            <!-- 输入区域 -->
+            <div class="p-4 border-t border-white/10 glassmorphism">
+                <!-- 文件上传区域 -->
+                <div class="file-drop-zone p-4 mb-4 text-center hidden" id="fileDropZone">
+                    <i class="fas fa-cloud-upload-alt text-2xl text-gray-400 mb-2"></i>
+                    <p class="text-gray-400">拖拽文件到这里上传，或点击选择文件</p>
+                    <input type="file" id="fileInput" class="hidden" multiple accept=".txt,.md,.pdf,.doc,.docx,.jpg,.png,.gif">
+                </div>
+                
+                <!-- 输入框和工具栏 -->
+                <div class="flex items-end space-x-3">
+                    <!-- 左侧工具按钮 -->
+                    <div class="flex flex-col space-y-2">
+                        <button type="button" class="toolbar-btn w-10 h-10" id="attachFile" title="附件">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                        <button type="button" class="toolbar-btn w-10 h-10" id="voiceInput" title="语音输入">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 主输入区域 -->
+                    <div class="flex-1 relative">
+                        <textarea 
+                            id="messageInput" 
+                            class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:border-quantum-accent focus:outline-none focus:ring-1 focus:ring-quantum-accent resize-none"
+                            rows="1" 
+                            placeholder="输入您的消息... (Shift+Enter换行，Enter发送)"
+                            style="min-height: 50px; max-height: 150px;"
+                        ></textarea>
+                        
+                        <!-- 输入增强工具 -->
+                        <div class="absolute bottom-2 right-2">
+                            <div class="flex space-x-1">
+                                <button type="button" class="text-gray-400 hover:text-white p-1" id="formatText" title="格式化">
+                                    <i class="fas fa-font"></i>
+                                </button>
+                                <button type="button" class="text-gray-400 hover:text-white p-1" id="insertEmoji" title="表情">
+                                    <i class="fas fa-smile"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 输入提示 -->
+                        <div class="text-xs text-gray-400 mt-1" id="inputHint">
+                            AI正在学习中...
+                        </div>
+                    </div>
+                    
+                    <!-- 发送按钮 -->
+                    <button type="button" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 text-white w-12 h-12 rounded-full flex items-center justify-center" id="sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <!-- 快捷命令提示 -->
+                <div class="mt-3 flex flex-wrap gap-2" id="quickCommands">
+                    <span class="bg-black/30 text-gray-300 text-xs px-2 py-1 rounded-full">/help - 帮助</span>
+                    <span class="bg-black/30 text-gray-300 text-xs px-2 py-1 rounded-full">/clear - 清空对话</span>
+                    <span class="bg-black/30 text-gray-300 text-xs px-2 py-1 rounded-full">/export - 导出对话</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 设置面板 -->
+    <div class="fixed inset-y-0 right-0 w-80 glassmorphism transform translate-x-full transition-transform duration-300 z-50" id="settingsPanel">
+        <div class="p-6 h-full overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-white">聊天设置</h2>
+                <button type="button" class="text-gray-400 hover:text-white" id="closeSettings">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <!-- AI模型选择 -->
+            <div class="mb-6">
+                <label class="block text-white text-sm font-medium mb-2">AI模型</label>
+                <select class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-quantum-accent focus:outline-none" id="aiModel">
+                    <option value="gpt-4">GPT-4 (推荐)</option>
+                    <option value="gpt-3.5">GPT-3.5 Turbo</option>
+                    <option value="claude">Claude 3</option>
+                    <option value="deepseek">DeepSeek</option>
+                </select>
+            </div>
+            
+            <!-- 创造性设置 -->
+            <div class="mb-6">
+                <label class="block text-white text-sm font-medium mb-2">创造性 (Temperature)</label>
+                <input type="range" class="w-full" id="temperature" min="0" max="1" step="0.1" value="0.7">
+                <div class="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>保守</span>
+                    <span id="temperatureValue">0.7</span>
+                    <span>创新</span>
+                </div>
+            </div>
+            
+            <!-- 最大回复长度 -->
+            <div class="mb-6">
+                <label class="block text-white text-sm font-medium mb-2">最大回复长度</label>
+                <select class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 text-white focus:border-quantum-accent focus:outline-none" id="maxTokens">
+                    <option value="512">短回复 (512)</option>
+                    <option value="1024" selected>中等回复 (1024)</option>
+                    <option value="2048">长回复 (2048)</option>
+                    <option value="4096">超长回复 (4096)</option>
+                </select>
+            </div>
+            
+            <!-- 功能开关 -->
+            <div class="mb-6">
+                <h3 class="text-white text-sm font-medium mb-3">功能设置</h3>
+                
+                <div class="space-y-3">
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-white">语音输入</span>
+                        <div class="relative">
+                            <input type="checkbox" id="enableVoice" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-primary"></div>
+                        </div>
+                    </label>
+                    
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-white">文件上传</span>
+                        <div class="relative">
+                            <input type="checkbox" id="enableFileUpload" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-primary"></div>
+                        </div>
+                    </label>
+                    
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-white">代码高亮</span>
+                        <div class="relative">
+                            <input type="checkbox" id="enableCodeHighlight" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-primary"></div>
+                        </div>
+                    </label>
+                    
+                    <label class="flex items-center justify-between cursor-pointer">
+                        <span class="text-white">自动保存</span>
+                        <div class="relative">
+                            <input type="checkbox" id="enableAutoSave" class="sr-only peer" checked>
+                            <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-primary"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 快捷键说明 -->
+            <div class="mb-6">
+                <h3 class="text-white text-sm font-medium mb-3">快捷键</h3>
+                
+                <div class="bg-black/20 rounded-lg p-3">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="text-gray-400">发送消息</div>
+                        <div class="text-right"><kbd class="bg-black/40 text-white px-2 py-1 rounded text-xs">Enter</kbd></div>
+                        
+                        <div class="text-gray-400">换行</div>
+                        <div class="text-right"><kbd class="bg-black/40 text-white px-2 py-1 rounded text-xs">Shift+Enter</kbd></div>
+                        
+                        <div class="text-gray-400">清空输入</div>
+                        <div class="text-right"><kbd class="bg-black/40 text-white px-2 py-1 rounded text-xs">Ctrl+L</kbd></div>
+                        
+                        <div class="text-gray-400">语音输入</div>
+                        <div class="text-right"><kbd class="bg-black/40 text-white px-2 py-1 rounded text-xs">Ctrl+M</kbd></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 重置按钮 -->
+            <button class="w-full border border-white/20 text-white py-2 rounded-lg hover:bg-white/10 transition-colors" onclick="resetSettings()">
+                <i class="fas fa-undo mr-2"></i>重置设置
+            </button>
+        </div>
+    </div>
+    
+    <!-- 核心JS -->
+    <script src="/assets/js/unified-core.js"></script>
+    
+    <!-- 聊天功能脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 量子粒子背景
+            createQuantumParticles();
+            
+            // DOM元素引用
+            const chatSidebar = document.getElementById('chatSidebar');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const toggleSettings = document.getElementById('toggleSettings');
+            const closeSettings = document.getElementById('closeSettings');
+            const toggleFullscreen = document.getElementById('toggleFullscreen');
+            const userMenuButton = document.getElementById('userMenuButton');
+            const userMenu = document.getElementById('userMenu');
+            const messageInput = document.getElementById('messageInput');
+            const sendMessage = document.getElementById('sendMessage');
+            const chatMessages = document.getElementById('chatMessages');
+            const welcomeSection = document.getElementById('welcomeSection');
+            const attachFile = document.getElementById('attachFile');
+            const fileDropZone = document.getElementById('fileDropZone');
+            const fileInput = document.getElementById('fileInput');
+            const voiceInput = document.getElementById('voiceInput');
+            const temperature = document.getElementById('temperature');
+            const temperatureValue = document.getElementById('temperatureValue');
+            
+            // 初始化设置
+            initializeSettings();
+            
+            // 事件监听器
+            toggleSidebar.addEventListener('click', function() {
+                chatSidebar.classList.toggle('-translate-x-full');
+                toggleSidebar.classList.toggle('active');
+            });
+            
+            toggleSettings.addEventListener('click', function() {
+                settingsPanel.classList.toggle('translate-x-full');
+                toggleSettings.classList.toggle('active');
+            });
+            
+            closeSettings.addEventListener('click', function() {
+                settingsPanel.classList.add('translate-x-full');
+                toggleSettings.classList.remove('active');
+            });
+            
+            toggleFullscreen.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                    toggleFullscreen.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                        toggleFullscreen.innerHTML = '<i class="fas fa-expand"></i>';
+                    }
+                }
+            });
+            
+            userMenuButton.addEventListener('click', function() {
+                userMenu.classList.toggle('hidden');
+            });
+            
+            // 点击其他地方关闭用户菜单
+            document.addEventListener('click', function(event) {
+                if (!userMenuContainer.contains(event.target)) {
+                    userMenu.classList.add('hidden');
+                }
+            });
+            
+            // 发送消息
+            sendMessage.addEventListener('click', function() {
+                sendUserMessage();
+            });
+            
+            // 回车发送消息，Shift+Enter换行
+            messageInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendUserMessage();
+                }
+            });
+            
+            // 自动调整输入框高度
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+                if (this.scrollHeight > 150) {
+                    this.style.height = '150px';
+                }
+            });
+            
+            // 附件按钮
+            attachFile.addEventListener('click', function() {
+                fileDropZone.classList.toggle('hidden');
+                if (!fileDropZone.classList.contains('hidden')) {
+                    fileInput.click();
+                }
+            });
+            
+            // 文件上传
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    handleFiles(this.files);
+                }
+            });
+            
+            // 拖放文件
+            fileDropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('dragover');
+            });
+            
+            fileDropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+            });
+            
+            fileDropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    handleFiles(e.dataTransfer.files);
+                }
+            });
+            
+            // 语音输入
+            voiceInput.addEventListener('click', function() {
+                if ('webkitSpeechRecognition' in window) {
+                    startSpeechRecognition();
+                } else {
+                    alert('您的浏览器不支持语音识别功能');
+                }
+            });
+            
+            // 温度滑块
+            temperature.addEventListener('input', function() {
+                temperatureValue.textContent = this.value;
+            });
+            
+            // 功能函数
+            function createQuantumParticles() {
+                const particlesContainer = document.getElementById('quantum-particles');
+                const particleCount = 50;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'quantum-particle';
+                    
+                    // 随机位置
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    
+                    // 随机大小
+                    const size = Math.random() * 5 + 2;
+                    
+                    // 随机颜色
+                    const colors = ['#4F46E5', '#8B5CF6', '#06B6D4', '#10B981'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // 随机动画延迟
+                    const delay = Math.random() * 5;
+                    
+                    // 设置样式
+                    particle.style.cssText = `
+                        left: ${posX}%;
+                        top: ${posY}%;
+                        width: ${size}px;
+                        height: ${size}px;
+                        background: radial-gradient(circle, ${color}80, transparent);
+                        animation-delay: ${delay}s;
+                    `;
+                    
+                    particlesContainer.appendChild(particle);
+                }
+            }
+            
+            function sendUserMessage() {
+                const message = messageInput.value.trim();
+                if (message === '') return;
+                
+                // 隐藏欢迎部分
+                welcomeSection.classList.add('hidden');
+                
+                // 添加用户消息
+                addMessage(message, 'user');
+                
+                // 清空输入框
+                messageInput.value = '';
+                messageInput.style.height = 'auto';
+                
+                // 显示AI正在输入
+                showTypingIndicator();
+                
+                // 模拟AI回复（实际应用中应该调用API）
+                setTimeout(() => {
+                    // 移除输入指示器
+                    removeTypingIndicator();
+                    
+                    // 添加AI回复
+                    const aiResponse = generateAIResponse(message);
+                    addMessage(aiResponse, 'ai');
+                    
+                    // 滚动到底部
+                    scrollToBottom();
+                }, 1500);
+            }
+            
+            function addMessage(content, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message-bubble p-4 ${type === 'user' ? 'user-message' : 'ai-message'}`;
+                
+                // 处理markdown和代码高亮
+                if (type === 'ai') {
+                    // 使用marked解析markdown
+                    const parsedContent = parseMarkdown(content);
+                    messageDiv.innerHTML = parsedContent;
+                    
+                    // 应用代码高亮
+                    messageDiv.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                } else {
+                    // 用户消息不解析markdown
+                    messageDiv.textContent = content;
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                scrollToBottom();
+            }
+            
+            function parseMarkdown(content) {
+                // 配置marked选项
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                        return hljs.highlight(code, { language }).value;
+                    },
+                    langPrefix: 'hljs language-',
+                    gfm: true,
+                    breaks: true
+                });
+                
+                // 解析markdown
+                return marked.parse(content);
+            }
+            
+            function showTypingIndicator() {
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'message-bubble ai-message p-4';
+                typingDiv.id = 'typingIndicator';
+                
+                const typingIndicator = document.createElement('div');
+                typingIndicator.className = 'typing-indicator';
+                
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    typingIndicator.appendChild(dot);
+                }
+                
+                typingDiv.appendChild(typingIndicator);
+                chatMessages.appendChild(typingDiv);
+                scrollToBottom();
+            }
+            
+            function removeTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            function scrollToBottom() {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function handleFiles(files) {
+                // 在实际应用中，这里应该上传文件到服务器
+                // 这里只是简单显示文件信息
+                const fileList = Array.from(files);
+                const fileNames = fileList.map(file => file.name).join(', ');
+                
+                // 添加系统消息
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message-bubble p-4 mx-auto bg-black/30 text-gray-300 text-center max-w-md';
+                messageDiv.innerHTML = `
+                    <i class="fas fa-paperclip mr-2"></i>
+                    已上传文件: ${fileNames}
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                fileDropZone.classList.add('hidden');
+                
+                // 清空文件输入
+                fileInput.value = '';
+                
+                // 隐藏欢迎部分
+                welcomeSection.classList.add('hidden');
+                
+                // 滚动到底部
+                scrollToBottom();
+            }
+            
+            function startSpeechRecognition() {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'zh-CN';
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                // 语音识别开始
+                recognition.onstart = function() {
+                    voiceInput.classList.add('active');
+                    voiceInput.innerHTML = '<i class="fas fa-microphone-alt"></i>';
+                };
+                
+                // 语音识别结果
+                recognition.onresult = function(event) {
+                    const transcript = event.results[0][0].transcript;
+                    messageInput.value = transcript;
+                };
+                
+                // 语音识别结束
+                recognition.onend = function() {
+                    voiceInput.classList.remove('active');
+                    voiceInput.innerHTML = '<i class="fas fa-microphone"></i>';
+                };
+                
+                // 语音识别错误
+                recognition.onerror = function(event) {
+                    console.error('语音识别错误:', event.error);
+                    voiceInput.classList.remove('active');
+                    voiceInput.innerHTML = '<i class="fas fa-microphone"></i>';
+                };
+                
+                // 开始识别
+                recognition.start();
+            }
+            
+            function initializeSettings() {
+                // 从本地存储加载设置
+                const settings = JSON.parse(localStorage.getItem('chatSettings')) || {
+                    aiModel: 'gpt-4',
+                    temperature: 0.7,
+                    maxTokens: 1024,
+                    enableVoice: true,
+                    enableFileUpload: true,
+                    enableCodeHighlight: true,
+                    enableAutoSave: true
+                };
+                
+                // 应用设置
+                document.getElementById('aiModel').value = settings.aiModel;
+                document.getElementById('temperature').value = settings.temperature;
+                document.getElementById('temperatureValue').textContent = settings.temperature;
+                document.getElementById('maxTokens').value = settings.maxTokens;
+                document.getElementById('enableVoice').checked = settings.enableVoice;
+                document.getElementById('enableFileUpload').checked = settings.enableFileUpload;
+                document.getElementById('enableCodeHighlight').checked = settings.enableCodeHighlight;
+                document.getElementById('enableAutoSave').checked = settings.enableAutoSave;
+                
+                // 保存设置的事件
+                const settingsInputs = document.querySelectorAll('#settingsPanel select, #settingsPanel input');
+                settingsInputs.forEach(input => {
+                    input.addEventListener('change', saveSettings);
+                });
+            }
+            
+            function saveSettings() {
+                const settings = {
+                    aiModel: document.getElementById('aiModel').value,
+                    temperature: document.getElementById('temperature').value,
+                    maxTokens: document.getElementById('maxTokens').value,
+                    enableVoice: document.getElementById('enableVoice').checked,
+                    enableFileUpload: document.getElementById('enableFileUpload').checked,
+                    enableCodeHighlight: document.getElementById('enableCodeHighlight').checked,
+                    enableAutoSave: document.getElementById('enableAutoSave').checked
+                };
+                
+                localStorage.setItem('chatSettings', JSON.stringify(settings));
+            }
+            
+            function resetSettings() {
+                const defaultSettings = {
+                    aiModel: 'gpt-4',
+                    temperature: 0.7,
+                    maxTokens: 1024,
+                    enableVoice: true,
+                    enableFileUpload: true,
+                    enableCodeHighlight: true,
+                    enableAutoSave: true
+                };
+                
+                // 应用默认设置
+                document.getElementById('aiModel').value = defaultSettings.aiModel;
+                document.getElementById('temperature').value = defaultSettings.temperature;
+                document.getElementById('temperatureValue').textContent = defaultSettings.temperature;
+                document.getElementById('maxTokens').value = defaultSettings.maxTokens;
+                document.getElementById('enableVoice').checked = defaultSettings.enableVoice;
+                document.getElementById('enableFileUpload').checked = defaultSettings.enableFileUpload;
+                document.getElementById('enableCodeHighlight').checked = defaultSettings.enableCodeHighlight;
+                document.getElementById('enableAutoSave').checked = defaultSettings.enableAutoSave;
+                
+                // 保存默认设置
+                localStorage.setItem('chatSettings', JSON.stringify(defaultSettings));
+            }
+            
+            function newChat() {
+                // 清空聊天消息
+                chatMessages.innerHTML = '';
+                
+                // 显示欢迎部分
+                welcomeSection.classList.remove('hidden');
+                
+                // 在移动设备上关闭侧边栏
+                if (window.innerWidth < 768) {
+                    chatSidebar.classList.add('-translate-x-full');
+                    toggleSidebar.classList.remove('active');
+                }
+            }
+            
+            function insertQuickMessage(message) {
+                messageInput.value = message;
+                messageInput.focus();
+            }
+            
+            function logout() {
+                // 实际应用中应该调用登出API
+                window.location.href = '/unified-login.html';
+            }
+            
+            // 模拟AI回复（实际应用中应该调用API）
+            function generateAIResponse(message) {
+                // 这只是演示用的简单回复逻辑
+                if (message.toLowerCase().includes('项目架构')) {
+                    return `# 项目架构分析
+
+项目架构通常包含以下几个核心部分：
+
+1. **前端层**
+   - 用户界面组件
+   - 状态管理
+   - 路由系统
+
+2. **后端层**
+   - API接口
+   - 业务逻辑
+   - 数据访问层
+
+3. **数据存储层**
+   - 数据库设计
+   - 缓存策略
+
+\`\`\`javascript
+// 前端架构示例
+const appArchitecture = {
+  components: ['UI组件', '页面组件', '布局组件'],
+  stateManagement: 'Redux/Vuex/Context',
+  routing: 'React Router/Vue Router'
+};
+\`\`\`
+
+您需要根据项目规模和复杂度选择适合的架构模式。`;
+                } else if (message.toLowerCase().includes('python') && message.toLowerCase().includes('爬虫')) {
+                    return `# Python爬虫代码示例
+
+以下是一个使用requests和BeautifulSoup的简单爬虫：
+
+\`\`\`python
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+def scrape_website(url):
+    # 发送HTTP请求
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+    }
+    response = requests.get(url, headers=headers)
+    
+    # 检查请求是否成功
+    if response.status_code == 200:
+        # 解析HTML内容
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # 查找所有文章标题
+        articles = soup.find_all('article')
+        results = []
+        
+        for article in articles:
+            title = article.find('h2').text.strip()
+            link = article.find('a')['href']
+            summary = article.find('p').text.strip()
+            
+            results.append({
+                'title': title,
+                'link': link,
+                'summary': summary
+            })
+        
+        return results
+    else:
+        print(f"请求失败: {response.status_code}")
+        return []
+
+# 使用示例
+if __name__ == "__main__":
+    data = scrape_website('https://example.com/blog')
+    
+    # 保存到CSV
+    with open('results.csv', 'w', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=['title', 'link', 'summary'])
+        writer.writeheader()
+        writer.writerows(data)
+    
+    print(f"已爬取 {len(data)} 条数据并保存到 results.csv")
+\`\`\`
+
+注意事项：
+1. 请确保遵守目标网站的robots.txt规则
+2. 添加适当的延迟避免过于频繁的请求
+3. 处理可能的异常情况`;
+                } else if (message.toLowerCase().includes('技术文档')) {
+                    return `# 技术文档模板
+
+## 1. 项目概述
+简要描述项目的目的、背景和主要功能。
+
+## 2. 系统架构
+描述系统的整体架构，包括各个组件及其交互方式。
+
+### 2.1 前端架构
+- 框架选择：React/Vue/Angular
+- 状态管理
+- 路由设计
+
+### 2.2 后端架构
+- API设计
+- 数据库设计
+- 缓存策略
+
+## 3. 安装与部署
+详细的安装步骤和部署指南。
+
+\`\`\`bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm run dev
+
+# 构建生产版本
+npm run build
+\`\`\`
+
+## 4. API文档
+主要API端点的详细说明。
+
+| 端点 | 方法 | 描述 | 参数 | 返回值 |
+|------|------|------|------|--------|
+| /api/users | GET | 获取用户列表 | page, limit | 用户数组 |
+| /api/users/:id | GET | 获取单个用户 | id | 用户对象 |
+
+## 5. 常见问题
+列出可能遇到的问题及解决方案。
+
+## 6. 更新日志
+记录版本更新的主要变化。`;
+                } else if (message.toLowerCase().includes('机器学习')) {
+                    return `# 机器学习基本概念
+
+机器学习是人工智能的一个分支，它专注于开发能够从数据中学习并做出预测的算法。
+
+## 核心概念
+
+### 1. 监督学习
+算法从标记数据中学习，并预测新数据的标签。
+
+**常见算法**:
+- 线性回归
+- 逻辑回归
+- 决策树
+- 随机森林
+- 支持向量机 (SVM)
+- 神经网络
+
+### 2. 无监督学习
+算法从未标记数据中发现模式。
+
+**常见算法**:
+- K-means聚类
+- 层次聚类
+- 主成分分析 (PCA)
+- 异常检测
+
+### 3. 强化学习
+算法通过与环境交互并接收反馈来学习最佳行为。
+
+**关键概念**:
+- 代理 (Agent)
+- 环境 (Environment)
+- 状态 (State)
+- 动作 (Action)
+- 奖励 (Reward)
+
+## 评估指标
+
+- **分类问题**: 准确率、精确率、召回率、F1分数、ROC曲线
+- **回归问题**: 均方误差 (MSE)、平均绝对误差 (MAE)
+
+## 常见挑战
+
+1. **过拟合**: 模型在训练数据上表现良好，但在新数据上表现不佳
+2. **欠拟合**: 模型无法捕捉数据中的模式
+3. **特征工程**: 选择和创建最相关的特征
+4. **数据不平衡**: 某些类别的样本远多于其他类别`;
+                } else {
+                    return `感谢您的消息！我是AlingAi Pro智能助手，很高兴为您提供帮助。
+
+您可以向我询问各种问题，例如：
+- 编程和技术问题
+- 文档和内容创建
+- 数据分析和解释
+- 学习和教育资源
+
+如果您有任何具体需求，请告诉我，我会尽力提供最准确和有用的信息。`;
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

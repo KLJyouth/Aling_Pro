@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 专业级AI解决方案平台">
+    <meta name="keywords" content="AI, 人工智能, 大语言模型, API, 量子计算, 安全">
+    <title>AlingAi Pro - 平台概述</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A',
+                        'cyber-green': '#00FF9D',
+                        'neon-pink': '#FF00E4'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg flex items-center justify-center">
+                        <i class="fas fa-atom text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                            AlingAi Pro
+                        </h1>
+                        <p class="text-xs text-gray-400">专业级AI解决方案平台</p>
+                    </div>
+                </div>
+                
+                <!-- 导航链接 - 中等尺寸屏幕以上 -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/unified-index.html" class="text-gray-300 hover:text-quantum-accent transition-colors">首页</a>
+                    <a href="/unified-platform.html" class="text-quantum-accent border-b border-quantum-accent pb-1 transition-colors">平台</a>
+                    <a href="/unified-api.html" class="text-gray-300 hover:text-quantum-accent transition-colors">API</a>
+                    <a href="/unified-assistant.html" class="text-gray-300 hover:text-quantum-accent transition-colors">AI助手</a>
+                    <a href="/unified-security.html" class="text-gray-300 hover:text-quantum-accent transition-colors">安全</a>
+                    <a href="/partners.html" class="text-gray-300 hover:text-quantum-accent transition-colors">合作伙伴</a>
+                </div>
+                
+                <!-- 登录/注册按钮 -->
+                <div class="flex items-center space-x-2">
+                    <a href="/unified-login.html" class="px-4 py-2 text-quantum-accent hover:text-white transition-colors">登录</a>
+                    <a href="/unified-dashboard.html" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white text-sm hover:shadow-lg transition-all duration-300">
+                        进入平台
+                    </a>
+                </div>
+                
+                <!-- 移动端导航按钮 -->
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-quantum-dark border-b border-quantum-primary/20 hidden">
+            <div class="container mx-auto px-6 py-4">
+                <a href="/unified-index.html" class="block py-2 text-gray-300 hover:text-quantum-accent transition-colors">首页</a>
+                <a href="/unified-platform.html" class="block py-2 text-quantum-accent transition-colors">平台</a>
+                <a href="/unified-api.html" class="block py-2 text-gray-300 hover:text-quantum-accent transition-colors">API</a>
+                <a href="/unified-assistant.html" class="block py-2 text-gray-300 hover:text-quantum-accent transition-colors">AI助手</a>
+                <a href="/unified-security.html" class="block py-2 text-gray-300 hover:text-quantum-accent transition-colors">安全</a>
+                <a href="/partners.html" class="block py-2 text-gray-300 hover:text-quantum-accent transition-colors">合作伙伴</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="pt-20">
+        <!-- 平台介绍英雄区域 -->
+        <section class="py-20 bg-gradient-to-b from-quantum-purple/20 to-transparent">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-quantum-primary to-quantum-accent bg-clip-text text-transparent">
+                        AlingAi Platform
+                    </h1>
+                    <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                        AI驱动的智能安全管理平台，集成量子安全技术、零信任架构和智能威胁检测，为企业提供全方位的安全防护解决方案
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 核心功能模块 -->
+        <section class="py-20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-quantum-accent">核心功能模块</h2>
+                    <p class="text-xl text-gray-300">一站式安全管理，智能化威胁防护</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- AI智能对话系统 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-primary/20 hover:border-quantum-primary/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-comments text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">AI智能对话系统</h3>
+                        <p class="text-gray-400 mb-6">24/7 AI助手，提供技术支持和安全咨询</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>自然语言处理</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>智能问题解答</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>多语言支持</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>上下文理解</li>
+                        </ul>
+                    </div>
+
+                    <!-- 实时监控面板 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-accent/20 hover:border-quantum-accent/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-accent to-cyber-green rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-chart-line text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">实时监控面板</h3>
+                        <p class="text-gray-400 mb-6">全方位的安全状态监控和可视化分析</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>实时威胁监测</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>性能指标分析</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>交互式仪表板</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>自定义报表</li>
+                        </ul>
+                    </div>
+
+                    <!-- 自动化响应 -->
+                    <div class="p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-quantum-secondary/20 hover:border-quantum-secondary/40 transition-all duration-300">
+                        <div class="w-16 h-16 bg-gradient-to-r from-quantum-secondary to-neon-pink rounded-xl flex items-center justify-center mb-6">
+                            <i class="fas fa-cogs text-white text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-4">自动化响应</h3>
+                        <p class="text-gray-400 mb-6">智能威胁识别与自动化安全策略执行</p>
+                        <ul class="text-sm text-gray-300 space-y-2">
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>智能威胁检测</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>自动隔离处理</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>策略自动调整</li>
+                            <li><i class="fas fa-check text-quantum-accent mr-2"></i>事件自动记录</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 平台架构 -->
+        <section class="py-20 bg-gradient-to-b from-transparent to-quantum-purple/20">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4 text-quantum-secondary">平台架构</h2>
+                    <p class="text-xl text-gray-300">模块化设计，灵活扩展</p>
+                </div>
+                
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-quantum-accent">分层架构设计</h3>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                                <h4 class="font-semibold mb-2 text-quantum-primary">应用层</h4>
+                                <p class="text-gray-400 text-sm">用户界面、API网关、业务逻辑处理</p>
+                            </div>
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                                <h4 class="font-semibold mb-2 text-quantum-accent">服务层</h4>
+                                <p class="text-gray-400 text-sm">AI引擎、安全策略、监控服务</p>
+                            </div>
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                                <h4 class="font-semibold mb-2 text-quantum-secondary">数据层</h4>
+                                <p class="text-gray-400 text-sm">量子加密存储、实时数据流、历史数据</p>
+                            </div>
+                            <div class="p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                                <h4 class="font-semibold mb-2 text-cyber-green">基础层</h4>
+                                <p class="text-gray-400 text-sm">量子安全协议、零信任网络、云基础设施</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-bold text-quantum-secondary">技术特性</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-primary/20">
+                                <div class="text-2xl font-bold text-quantum-primary mb-1">99.9%</div>
+                                <div class="text-sm text-gray-400">系统可用性</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-accent/20">
+                                <div class="text-2xl font-bold text-quantum-accent mb-1">< 100ms</div>
+                                <div class="text-sm text-gray-400">响应时间</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-quantum-secondary/20">
+                                <div class="text-2xl font-bold text-quantum-secondary mb-1">1M+</div>
+                                <div class="text-sm text-gray-400">日处理事件</div>
+                            </div>
+                            <div class="text-center p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-cyber-green/20">
+                                <div class="text-2xl font-bold text-cyber-green mb-1">256位</div>
+                                <div class="text-sm text-gray-400">量子加密</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 立即体验 -->
+        <section class="py-20">
+            <div class="container mx-auto px-6 text-center">
+                <div class="bg-gradient-to-r from-quantum-primary/10 to-quantum-accent/10 backdrop-blur-xl rounded-2xl border border-quantum-primary/20 p-12">
+                    <h2 class="text-3xl font-bold mb-6 text-white">立即体验 AlingAI Platform</h2>
+                    <p class="text-xl text-gray-300 mb-8">开启您的量子安全之旅</p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/register.html" class="px-8 py-4 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white font-semibold hover:shadow-lg transition-all duration-300">
+                            <i class="fas fa-user-plus mr-2"></i>免费注册
+                        </a>
+                        <a href="/unified-dashboard.html" class="px-8 py-4 border border-quantum-accent text-quantum-accent rounded-lg font-semibold hover:bg-quantum-accent hover:text-white transition-all duration-300">
+                            <i class="fas fa-tachometer-alt mr-2"></i>产品演示
+                        </a>
+                        <a href="/contact.html" class="px-8 py-4 border border-quantum-secondary text-quantum-secondary rounded-lg font-semibold hover:bg-quantum-secondary hover:text-white transition-all duration-300">
+                            <i class="fas fa-phone mr-2"></i>联系销售
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-black/30 backdrop-blur-lg border-t border-white/10 py-12 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- Logo和简介 -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">A</span>
+                        </div>
+                        <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">
+                        专业级AI解决方案平台，提供先进的人工智能API、工具集和安全防护
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 产品链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">产品</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/unified-platform.html" class="hover:text-quantum-accent transition-colors">平台概述</a></li>
+                        <li><a href="/unified-assistant.html" class="hover:text-quantum-accent transition-colors">AI助手</a></li>
+                        <li><a href="/unified-api.html" class="hover:text-quantum-accent transition-colors">API文档</a></li>
+                        <li><a href="/quantum-security.html" class="hover:text-quantum-accent transition-colors">量子安全</a></li>
+                        <li><a href="/sdk-download.html" class="hover:text-quantum-accent transition-colors">SDK下载</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 公司链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">公司</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/about.html" class="hover:text-quantum-accent transition-colors">关于我们</a></li>
+                        <li><a href="/partners.html" class="hover:text-quantum-accent transition-colors">合作伙伴</a></li>
+                        <li><a href="/ecosystem.html" class="hover:text-quantum-accent transition-colors">生态系统</a></li>
+                        <li><a href="/contact.html" class="hover:text-quantum-accent transition-colors">联系我们</a></li>
+                        <li><a href="/careers.html" class="hover:text-quantum-accent transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 资源链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">资源</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/help-center.html" class="hover:text-quantum-accent transition-colors">帮助中心</a></li>
+                        <li><a href="/docs-center.html" class="hover:text-quantum-accent transition-colors">开发文档</a></li>
+                        <li><a href="/api-community.html" class="hover:text-quantum-accent transition-colors">API社区</a></li>
+                        <li><a href="/security-dashboard.html" class="hover:text-quantum-accent transition-colors">安全监控</a></li>
+                        <li><a href="/status.html" class="hover:text-quantum-accent transition-colors">系统状态</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    &copy; 2024 AlingAi Pro. 保留所有权利
+                </p>
+                <div class="flex space-x-6 text-sm text-gray-500">
+                    <a href="/terms.html" class="hover:text-quantum-accent transition-colors">服务条款</a>
+                    <a href="/privacy.html" class="hover:text-quantum-accent transition-colors">隐私政策</a>
+                    <a href="/sitemap.html" class="hover:text-quantum-accent transition-colors">网站地图</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 核心JS -->
+    <script src="/assets/js/unified-core.js"></script>
+    
+    <!-- 移动菜单脚本 -->
+    <script>
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+        
+        // 设置当前日期
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取当前日期并格式化为中文日期
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            
+            // 更新页脚版权年份
+            const copyrightElements = document.querySelectorAll('footer .text-gray-500');
+            if (copyrightElements.length > 0) {
+                copyrightElements[0].textContent = `© ${year} AlingAi Pro. 保留所有权利`;
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - API管理，控制和监控您的API使用">
+    <meta name="keywords" content="AI, API, 管理, 密钥, 开发者">
+    <title>AlingAi Pro - API管理</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ChartJS 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索命令、文档或API...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="/unified-dashboard.html" class="sidebar-item" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="/unified-assistant.html" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="#" class="sidebar-item active" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                        <span class="ml-auto bg-quantum-accent/20 text-quantum-accent text-xs py-0.5 px-2 rounded">新</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="#" class="sidebar-item" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="#" class="sidebar-item" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="#" class="sidebar-item" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- API管理部分 -->
+            <div id="api-section" class="dashboard-section">
+                <!-- 页面标题 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">API管理</h1>
+                        <p class="text-gray-400">管理您的API密钥、权限和使用情况</p>
+                    </div>
+                    <div>
+                        <button id="createApiKeyBtn" class="quantum-button">
+                            <i class="fas fa-plus mr-2"></i> 创建新密钥
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- API概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- 活跃密钥 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">活跃密钥</h3>
+                                <p class="stat-value" id="activeKeys">4</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <i class="fas fa-key text-blue-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-gray-400">总计5个密钥</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 本月API调用 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">本月API调用</h3>
+                                <p class="stat-value" id="monthlyApiCalls">24,581</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-code text-purple-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>12%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 成功率 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">成功率</h3>
+                                <p class="stat-value" id="successRate">99.7%</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-equals mr-1"></i>稳定</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 平均响应时间 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">平均响应时间</h3>
+                                <p class="stat-value" id="avgResponseTime">245ms</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-amber-500/10 flex items-center justify-center">
+                                <i class="fas fa-clock text-amber-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-down mr-1"></i>5%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API密钥管理 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">API密钥</h2>
+                        <div class="flex space-x-2">
+                            <div class="relative">
+                                <input type="text" class="pl-9 pr-3 py-2 bg-black/30 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索密钥...">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search text-gray-500"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <select class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                    <option value="all">所有状态</option>
+                                    <option value="active">活跃</option>
+                                    <option value="inactive">不活跃</option>
+                                    <option value="revoked">已撤销</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API密钥表格 -->
+                    <div class="glass-effect rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-black/20">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            名称
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            密钥
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            权限
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            使用量
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            创建日期
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="apiKeysTable" class="divide-y divide-gray-800">
+                                    <!-- Production Key -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            Production
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="flex items-center">
+                                                <span class="api-key-field font-mono">sk_prod_2fGh...s3T4u</span>
+                                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            完全访问
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-quantum-accent h-2 rounded-full" style="width: 87%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 mt-1 block">87%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                活跃
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2024-05-15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <div class="flex space-x-2">
+                                                <button onclick="editApiKey(this)" class="text-gray-400 hover:text-quantum-accent" title="编辑">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Development Key -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            Development
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="flex items-center">
+                                                <span class="api-key-field font-mono">sk_dev_5vW6...F1gH2i</span>
+                                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            只读
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-quantum-accent h-2 rounded-full" style="width: 23%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 mt-1 block">23%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                活跃
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2024-05-20
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <div class="flex space-x-2">
+                                                <button onclick="editApiKey(this)" class="text-gray-400 hover:text-quantum-accent" title="编辑">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Testing Key -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            Testing
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="flex items-center">
+                                                <span class="api-key-field font-mono">sk_test_3jK4...tU9vW0x</span>
+                                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            完全访问
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-quantum-accent h-2 rounded-full" style="width: 45%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 mt-1 block">45%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                活跃
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2024-06-01
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <div class="flex space-x-2">
+                                                <button onclick="editApiKey(this)" class="text-gray-400 hover:text-quantum-accent" title="编辑">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Inactive Key -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            Legacy
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="flex items-center">
+                                                <span class="api-key-field font-mono">sk_leg_9zY8...xW7vU6t</span>
+                                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            完全访问
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-gray-500 h-2 rounded-full" style="width: 0%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 mt-1 block">0%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-gray-500/20 text-gray-400">
+                                                不活跃
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2023-12-10
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <div class="flex space-x-2">
+                                                <button onclick="editApiKey(this)" class="text-gray-400 hover:text-quantum-accent" title="编辑">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Revoked Key -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            Compromised
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="flex items-center">
+                                                <span class="api-key-field font-mono">sk_comp_7hG6...pQ5rS4t</span>
+                                                <button onclick="copyApiKey(this)" class="ml-2 text-gray-400 hover:text-quantum-accent" title="复制API密钥">
+                                                    <i class="fas fa-copy"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            完全访问
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                                <div class="bg-gray-500 h-2 rounded-full" style="width: 0%"></div>
+                                            </div>
+                                            <span class="text-xs text-gray-400 mt-1 block">0%</span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">
+                                                已撤销
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2024-01-05
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <div class="flex space-x-2">
+                                                <button onclick="deleteApiKey(this)" class="text-gray-400 hover:text-red-500" title="删除">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API使用统计 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">API使用统计</h2>
+                        <div class="flex space-x-2">
+                            <select id="apiStatsPeriod" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="7d">最近7天</option>
+                                <option value="30d" selected>最近30天</option>
+                                <option value="90d">最近90天</option>
+                                <option value="1y">最近1年</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- API调用统计图表 -->
+                        <div class="glass-effect rounded-xl p-4">
+                            <h3 class="text-sm font-medium text-gray-400 mb-4">API调用量</h3>
+                            <div class="h-64">
+                                <canvas id="apiCallsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- 响应时间统计图表 -->
+                        <div class="glass-effect rounded-xl p-4">
+                            <h3 class="text-sm font-medium text-gray-400 mb-4">平均响应时间</h3>
+                            <div class="h-64">
+                                <canvas id="responseTimeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API调用历史 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">API调用历史</h2>
+                        <div class="flex space-x-2">
+                            <div class="relative">
+                                <input type="text" class="pl-9 pr-3 py-2 bg-black/30 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索请求...">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-search text-gray-500"></i>
+                                </div>
+                            </div>
+                            <select class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-2 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="all">所有状态</option>
+                                <option value="success">成功</option>
+                                <option value="error">错误</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- API调用历史表格 -->
+                    <div class="glass-effect rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-black/20">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            请求ID
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            API端点
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            密钥
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            响应时间
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            时间
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            操作
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800">
+                                    <!-- 成功请求 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            req_7f8g9h0j1k
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            /api/v1/generate
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_2fGh...
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                成功
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            235ms
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            2分钟前
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <button class="text-gray-400 hover:text-quantum-accent" onclick="viewRequestDetails('req_7f8g9h0j1k')">
+                                                详情
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 成功请求 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            req_2l3m4n5o6p
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            /api/v1/analyze
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_2fGh...
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                成功
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            412ms
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            15分钟前
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <button class="text-gray-400 hover:text-quantum-accent" onclick="viewRequestDetails('req_2l3m4n5o6p')">
+                                                详情
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 错误请求 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            req_7q8r9s0t1u
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            /api/v1/generate
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_dev_5vW6...
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">
+                                                错误
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            56ms
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            1小时前
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <button class="text-gray-400 hover:text-quantum-accent" onclick="viewRequestDetails('req_7q8r9s0t1u')">
+                                                详情
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 成功请求 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            req_2v3w4x5y6z
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            /api/v1/embeddings
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_test_3jK4...
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                成功
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            189ms
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            3小时前
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <button class="text-gray-400 hover:text-quantum-accent" onclick="viewRequestDetails('req_2v3w4x5y6z')">
+                                                详情
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 成功请求 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            req_7a8b9c0d1e
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            /api/v1/analyze
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_2fGh...
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                成功
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            278ms
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            昨天
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                                            <button class="text-gray-400 hover:text-quantum-accent" onclick="viewRequestDetails('req_7a8b9c0d1e')">
+                                                详情
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页控件 -->
+                        <div class="px-6 py-3 flex items-center justify-between border-t border-gray-700">
+                            <div class="flex-1 flex justify-between sm:hidden">
+                                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md text-gray-400 bg-black/30 hover:bg-black/50">
+                                    上一页
+                                </a>
+                                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md text-gray-400 bg-black/30 hover:bg-black/50">
+                                    下一页
+                                </a>
+                            </div>
+                            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">
+                                        显示 <span class="font-medium">1</span> 到 <span class="font-medium">5</span> 条，共 <span class="font-medium">42</span> 条结果
+                                    </p>
+                                </div>
+                                <div>
+                                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            <span class="sr-only">上一页</span>
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-quantum-primary/20 text-sm font-medium text-quantum-accent">
+                                            1
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            2
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            3
+                                        </a>
+                                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400">
+                                            ...
+                                        </span>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            8
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            9
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-black/50">
+                                            <span class="sr-only">下一页</span>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- API文档快速访问 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">API文档</h2>
+                        <a href="/docs-center.html" class="text-quantum-accent hover:underline text-sm flex items-center">
+                            查看完整文档 <i class="fas fa-external-link-alt ml-1"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- API端点卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- 文本生成 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">文本生成</h3>
+                                    <p class="text-sm text-gray-400 mt-1">生成自然语言文本</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-green-500/10 text-green-400 border border-green-500/20">GET</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/generate</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">文本</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 文本分析 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">文本分析</h3>
+                                    <p class="text-sm text-gray-400 mt-1">分析文本内容和情感</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">POST</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/analyze</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-amber-500/20 text-amber-400">分析</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 文本嵌入 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">文本嵌入</h3>
+                                    <p class="text-sm text-gray-400 mt-1">生成文本的向量表示</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">POST</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/embeddings</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-cyan-500/20 text-cyan-400">向量</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 图像生成 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">图像生成</h3>
+                                    <p class="text-sm text-gray-400 mt-1">根据文本提示生成图像</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">POST</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/images/generate</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-pink-500/20 text-pink-400">图像</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 语音转文本 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">语音转文本</h3>
+                                    <p class="text-sm text-gray-400 mt-1">将语音内容转换为文本</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">POST</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/audio/transcribe</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">音频</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 文本转语音 -->
+                        <div class="glass-effect rounded-xl p-5 border border-gray-800 hover:border-quantum-accent/50 transition-all cursor-pointer">
+                            <div class="flex items-start justify-between mb-4">
+                                <div>
+                                    <h3 class="font-medium">文本转语音</h3>
+                                    <p class="text-sm text-gray-400 mt-1">将文本转换为自然语音</p>
+                                </div>
+                                <span class="px-2 py-1 rounded text-xs bg-blue-500/10 text-blue-400 border border-blue-500/20">POST</span>
+                            </div>
+                            <div class="font-mono text-sm bg-black/30 p-2 rounded-md mb-4 overflow-x-auto">
+                                <code class="text-quantum-accent">/api/v1/audio/speech</code>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex space-x-2">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-purple-500/20 text-purple-400">AI</span>
+                                    <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">音频</span>
+                                </div>
+                                <button class="text-xs text-quantum-accent hover:underline">查看文档</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 创建API密钥模态框 -->
+    <div id="createApiKeyModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="glass-effect rounded-xl p-6 max-w-md w-full z-10 border border-quantum-primary/30">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-medium">创建新API密钥</h3>
+                <button id="closeCreateApiKeyModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="createApiKeyForm">
+                <div class="mb-4">
+                    <label for="keyName" class="block text-sm font-medium text-gray-300 mb-1">密钥名称</label>
+                    <input type="text" id="keyName" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="例如：Production, Development">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="keyPermission" class="block text-sm font-medium text-gray-300 mb-1">权限级别</label>
+                    <select id="keyPermission" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                        <option value="full">完全访问</option>
+                        <option value="readonly">只读</option>
+                        <option value="limited">有限访问</option>
+                    </select>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="keyExpiration" class="block text-sm font-medium text-gray-300 mb-1">过期时间</label>
+                    <select id="keyExpiration" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                        <option value="never">永不过期</option>
+                        <option value="30d">30天后</option>
+                        <option value="90d">90天后</option>
+                        <option value="1y">1年后</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" class="w-4 h-4 bg-black/30 border border-gray-700 rounded text-quantum-accent focus:ring-quantum-accent focus:ring-opacity-25">
+                        <span class="ml-2 text-sm text-gray-300">我了解此密钥将具有对我账户的访问权限</span>
+                    </label>
+                </div>
+                
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancelCreateApiKey" class="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800">
+                        取消
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white hover:from-quantum-primary/90 hover:to-quantum-secondary/90">
+                        创建密钥
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 请求详情模态框 -->
+    <div id="requestDetailsModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="glass-effect rounded-xl p-6 max-w-4xl w-full z-10 border border-quantum-primary/30 max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-medium">请求详情</h3>
+                <button id="closeRequestDetailsModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="requestDetailsContent">
+                <!-- 请求基本信息 -->
+                <div class="mb-6">
+                    <div class="flex flex-wrap md:flex-nowrap gap-4">
+                        <div class="w-full md:w-1/3">
+                            <div class="glass-effect rounded-lg p-4">
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">请求ID</h4>
+                                <p class="font-mono" id="requestId">req_7f8g9h0j1k</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <div class="glass-effect rounded-lg p-4">
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">API端点</h4>
+                                <p class="font-mono" id="requestEndpoint">/api/v1/generate</p>
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <div class="glass-effect rounded-lg p-4">
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">状态</h4>
+                                <p id="requestStatus">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                        成功
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 请求详情标签页 -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-700">
+                        <nav class="flex -mb-px" aria-label="Tabs">
+                            <button class="request-tab-btn active py-3 px-4 border-b-2 border-quantum-accent text-quantum-accent" data-tab="request">
+                                请求内容
+                            </button>
+                            <button class="request-tab-btn py-3 px-4 border-b-2 border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300" data-tab="response">
+                                响应内容
+                            </button>
+                            <button class="request-tab-btn py-3 px-4 border-b-2 border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300" data-tab="metadata">
+                                元数据
+                            </button>
+                        </nav>
+                    </div>
+                    
+                    <!-- 请求内容 -->
+                    <div id="requestTab" class="request-tab-content py-4">
+                        <div class="bg-black/30 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                            <pre id="requestContent">{
+  "prompt": "为我的电子商务网站写一段产品描述，这是一款高端智能手表。",
+  "max_tokens": 150,
+  "temperature": 0.7,
+  "top_p": 1,
+  "frequency_penalty": 0,
+  "presence_penalty": 0
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <!-- 响应内容 -->
+                    <div id="responseTab" class="request-tab-content py-4 hidden">
+                        <div class="bg-black/30 rounded-lg p-4 font-mono text-sm overflow-x-auto">
+                            <pre id="responseContent">{
+  "id": "gen-2023-06-15-12-34-56",
+  "object": "text_completion",
+  "created": 1686831296,
+  "model": "aling-pro-1",
+  "choices": [
+    {
+      "text": "探索未来科技与优雅设计的完美融合。我们的高端智能手表不仅仅是一款时间计量设备，更是您生活方式的智能伴侣。采用航空级钛合金材质，搭配蓝宝石玻璃表面，兼具轻盈与坚固。内置先进健康监测系统，全天候追踪您的心率、血氧和睡眠质量。IP68级防水设计让您在任何环境下都能自信佩戴。超长续航能力，单次充电可持续使用7天。与您的智能设备无缝连接，让您的生活更加智能、高效。",
+      "index": 0,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 25,
+    "completion_tokens": 150,
+    "total_tokens": 175
+  }
+}</pre>
+                        </div>
+                    </div>
+                    
+                    <!-- 元数据 -->
+                    <div id="metadataTab" class="request-tab-content py-4 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">请求时间</h4>
+                                <p class="text-sm">2024-06-15 12:34:56</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">响应时间</h4>
+                                <p class="text-sm">235ms</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">API密钥</h4>
+                                <p class="text-sm font-mono">sk_prod_2fGh...s3T4u</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">使用的模型</h4>
+                                <p class="text-sm">aling-pro-1</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">请求源IP</h4>
+                                <p class="text-sm">203.0.113.42</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">用户代理</h4>
+                                <p class="text-sm">Mozilla/5.0 (Windows NT 10.0; Win64; x64)</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">令牌使用</h4>
+                                <p class="text-sm">175个令牌 (提示: 25, 完成: 150)</p>
+                            </div>
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-400 mb-2">请求ID</h4>
+                                <p class="text-sm font-mono">req_7f8g9h0j1k</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM元素
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const createApiKeyBtn = document.getElementById('createApiKeyBtn');
+        const createApiKeyModal = document.getElementById('createApiKeyModal');
+        const closeCreateApiKeyModal = document.getElementById('closeCreateApiKeyModal');
+        const cancelCreateApiKey = document.getElementById('cancelCreateApiKey');
+        const createApiKeyForm = document.getElementById('createApiKeyForm');
+        const requestDetailsModal = document.getElementById('requestDetailsModal');
+        const closeRequestDetailsModal = document.getElementById('closeRequestDetailsModal');
+        const requestTabBtns = document.querySelectorAll('.request-tab-btn');
+        const requestTabContents = document.querySelectorAll('.request-tab-content');
+        
+        // 用户菜单切换
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // 点击外部关闭用户菜单
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // 侧边栏切换（移动端）
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 创建API密钥模态框
+        createApiKeyBtn.addEventListener('click', () => {
+            createApiKeyModal.classList.remove('hidden');
+        });
+        
+        closeCreateApiKeyModal.addEventListener('click', () => {
+            createApiKeyModal.classList.add('hidden');
+        });
+        
+        cancelCreateApiKey.addEventListener('click', () => {
+            createApiKeyModal.classList.add('hidden');
+        });
+        
+        createApiKeyForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 这里添加创建API密钥的逻辑
+            createApiKeyModal.classList.add('hidden');
+            // 显示成功消息或刷新表格
+        });
+        
+        // 请求详情模态框
+        function viewRequestDetails(requestId) {
+            // 这里可以添加根据requestId获取详情的逻辑
+            requestDetailsModal.classList.remove('hidden');
+            document.getElementById('requestId').textContent = requestId;
+        }
+        
+        closeRequestDetailsModal.addEventListener('click', () => {
+            requestDetailsModal.classList.add('hidden');
+        });
+        
+        // 请求详情标签页切换
+        requestTabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabName = btn.getAttribute('data-tab');
+                
+                // 切换按钮样式
+                requestTabBtns.forEach(b => {
+                    b.classList.remove('active', 'border-quantum-accent', 'text-quantum-accent');
+                    b.classList.add('border-transparent', 'text-gray-400', 'hover:text-gray-300', 'hover:border-gray-300');
+                });
+                btn.classList.add('active', 'border-quantum-accent', 'text-quantum-accent');
+                btn.classList.remove('border-transparent', 'text-gray-400', 'hover:text-gray-300', 'hover:border-gray-300');
+                
+                // 切换内容
+                requestTabContents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            });
+        });
+        
+        // 复制API密钥
+        function copyApiKey(button) {
+            const keyElement = button.parentElement.querySelector('.api-key-field');
+            const keyText = keyElement.textContent;
+            
+            // 创建临时输入框
+            const tempInput = document.createElement('input');
+            tempInput.value = keyText;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            
+            // 显示复制成功提示
+            const originalIcon = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check"></i>';
+            button.classList.add('text-green-500');
+            
+            setTimeout(() => {
+                button.innerHTML = originalIcon;
+                button.classList.remove('text-green-500');
+            }, 2000);
+        }
+        
+        // 编辑API密钥
+        function editApiKey(button) {
+            const row = button.closest('tr');
+            const keyName = row.querySelector('td:first-child').textContent.trim();
+            
+            // 这里可以添加编辑API密钥的逻辑
+            console.log('编辑API密钥:', keyName);
+        }
+        
+        // 删除API密钥
+        function deleteApiKey(button) {
+            const row = button.closest('tr');
+            const keyName = row.querySelector('td:first-child').textContent.trim();
+            
+            if (confirm(`确定要删除密钥 "${keyName}" 吗？此操作不可撤销。`)) {
+                // 这里可以添加删除API密钥的逻辑
+                console.log('删除API密钥:', keyName);
+            }
+        }
+        
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', () => {
+            // API调用图表
+            const apiCallsCtx = document.getElementById('apiCallsChart').getContext('2d');
+            const apiCallsChart = new Chart(apiCallsCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6/1', '6/2', '6/3', '6/4', '6/5', '6/6', '6/7', '6/8', '6/9', '6/10', '6/11', '6/12', '6/13', '6/14', '6/15'],
+                    datasets: [{
+                        label: 'API调用量',
+                        data: [820, 932, 901, 934, 1290, 1330, 1320, 1450, 1200, 1100, 1380, 1500, 1800, 1700, 1600],
+                        borderColor: '#4F46E5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 响应时间图表
+            const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+            const responseTimeChart = new Chart(responseTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6/1', '6/2', '6/3', '6/4', '6/5', '6/6', '6/7', '6/8', '6/9', '6/10', '6/11', '6/12', '6/13', '6/14', '6/15'],
+                    datasets: [{
+                        label: '平均响应时间 (ms)',
+                        data: [280, 250, 290, 270, 260, 240, 230, 245, 235, 220, 225, 240, 250, 245, 235],
+                        borderColor: '#06B6D4',
+                        backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#cbd5e1',
+                            borderColor: 'rgba(6, 182, 212, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: '#94a3b8'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 数字动画效果
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(el => {
+                const finalValue = el.textContent;
+                let startValue = 0;
+                
+                // 检查是否包含逗号（数字格式化）
+                if (finalValue.includes(',')) {
+                    const numericValue = parseInt(finalValue.replace(/,/g, ''));
+                    const duration = 1500;
+                    const step = Math.ceil(numericValue / (duration / 20));
+                    
+                    const updateValue = () => {
+                        startValue += step;
+                        if (startValue > numericValue) startValue = numericValue;
+                        el.textContent = startValue.toLocaleString();
+                        if (startValue < numericValue) {
+                            requestAnimationFrame(updateValue);
+                        }
+                    };
+                    
+                    requestAnimationFrame(updateValue);
+                } 
+                // 检查是否包含百分号
+                else if (finalValue.includes('%')) {
+                    const numericValue = parseFloat(finalValue);
+                    const duration = 1500;
+                    const step = numericValue / (duration / 20);
+                    
+                    const updateValue = () => {
+                        startValue += step;
+                        if (startValue > numericValue) startValue = numericValue;
+                        el.textContent = startValue.toFixed(1) + '%';
+                        if (startValue < numericValue) {
+                            requestAnimationFrame(updateValue);
+                        }
+                    };
+                    
+                    requestAnimationFrame(updateValue);
+                }
+                // 检查是否包含ms（毫秒）
+                else if (finalValue.includes('ms')) {
+                    const numericValue = parseInt(finalValue);
+                    const duration = 1500;
+                    const step = Math.ceil(numericValue / (duration / 20));
+                    
+                    const updateValue = () => {
+                        startValue += step;
+                        if (startValue > numericValue) startValue = numericValue;
+                        el.textContent = startValue + 'ms';
+                        if (startValue < numericValue) {
+                            requestAnimationFrame(updateValue);
+                        }
+                    };
+                    
+                    requestAnimationFrame(updateValue);
+                }
+            });
+            
+            // 点击外部关闭模态框
+            window.addEventListener('click', (e) => {
+                if (e.target === createApiKeyModal) {
+                    createApiKeyModal.classList.add('hidden');
+                }
+                if (e.target === requestDetailsModal) {
+                    requestDetailsModal.classList.add('hidden');
+                }
+            });
+            
+            // 初始化量子粒子背景
+            initQuantumParticles();
+        });
+        
+        // 量子粒子背景
+        function initQuantumParticles() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const particlesContainer = document.getElementById('quantum-particles');
+            
+            particlesContainer.appendChild(canvas);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 50;
+            const colors = ['#4F46E5', '#8B5CF6', '#06B6D4', '#3B82F6'];
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    velocity: {
+                        x: (Math.random() - 0.5) * 0.5,
+                        y: (Math.random() - 0.5) * 0.5
+                    },
+                    opacity: Math.random() * 0.5 + 0.2
+                });
+            }
+            
+            // 绘制粒子
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    const gradient = ctx.createRadialGradient(
+                        particle.x, particle.y, 0,
+                        particle.x, particle.y, particle.radius
+                    );
+                    gradient.addColorStop(0, `${particle.color}`);
+                    gradient.addColorStop(1, 'transparent');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.globalAlpha = particle.opacity;
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                // 绘制连接线
+                ctx.globalAlpha = 0.1;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#4F46E5';
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 更新粒子位置
+            function updateParticles() {
+                particles.forEach(particle => {
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+                    
+                    // 边界检查
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.velocity.x = -particle.velocity.x;
+                    }
+                    
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.velocity.y = -particle.velocity.y;
+                    }
+                    
+                    // 随机改变方向
+                    if (Math.random() < 0.01) {
+                        particle.velocity.x = (Math.random() - 0.5) * 0.5;
+                        particle.velocity.y = (Math.random() - 0.5) * 0.5;
+                    }
+                });
+            }
+            
+            // 动画循环
+            function animate() {
+                updateParticles();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+            
+            // 窗口大小改变时调整画布大小
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            animate();
+        }
+    </script>
+</body>
+</html> 

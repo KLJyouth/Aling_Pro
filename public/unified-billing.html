@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 账单与订阅管理中心">
+    <meta name="keywords" content="AI, 账单, 订阅, 付款, 发票">
+    <title>AlingAi Pro - 账单与订阅</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索账单、发票或订阅...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="/unified-dashboard.html" class="sidebar-item" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="/unified-assistant.html" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="/unified-api.html" class="sidebar-item" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="/unified-security.html" class="sidebar-item" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="/unified-usage.html" class="sidebar-item" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="/unified-integrations.html" class="sidebar-item" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item active" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- 账单与订阅部分 -->
+            <div id="billing-section" class="dashboard-section">
+                <!-- 页面标题 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">账单与订阅</h1>
+                        <p class="text-gray-400">管理您的订阅计划、查看账单历史和付款方式</p>
+                    </div>
+                    <div>
+                        <button id="upgradeBtn" class="quantum-button">
+                            <i class="fas fa-arrow-circle-up mr-2"></i> 升级计划
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 订阅概览卡片 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex flex-col lg:flex-row justify-between">
+                        <div class="mb-6 lg:mb-0">
+                            <h2 class="text-lg font-semibold mb-2">当前订阅</h2>
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-4">
+                                    <i class="fas fa-crown text-white text-xl"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center">
+                                        <h3 class="text-xl font-bold">专业版</h3>
+                                        <span class="ml-3 px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">活跃</span>
+                                    </div>
+                                    <p class="text-gray-400 text-sm">下次续费日期: 2024-06-15</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col items-start lg:items-end">
+                            <div class="text-right mb-2">
+                                <span class="text-gray-400 text-sm">月度订阅</span>
+                                <div class="text-2xl font-bold">¥299.00 <span class="text-gray-400 text-sm">/ 月</span></div>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button class="text-sm text-gray-300 border border-gray-600 rounded-lg px-3 py-1.5 hover:bg-gray-800 transition-colors">
+                                    取消订阅
+                                </button>
+                                <button class="text-sm text-white bg-quantum-primary rounded-lg px-3 py-1.5 hover:bg-quantum-primary/90 transition-colors">
+                                    管理订阅
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 pt-6 border-t border-gray-700">
+                        <h3 class="text-sm font-medium text-gray-300 mb-3">订阅包含</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="flex items-start">
+                                <div class="mt-1 text-green-400 mr-3">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">无限AI对话</h4>
+                                    <p class="text-xs text-gray-400">不限次数使用AI助手功能</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="mt-1 text-green-400 mr-3">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">高级API访问</h4>
+                                    <p class="text-xs text-gray-400">每月100,000次API调用</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="mt-1 text-green-400 mr-3">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">优先响应</h4>
+                                    <p class="text-xs text-gray-400">更快的系统响应速度</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <div class="mt-1 text-green-400 mr-3">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium">高级集成</h4>
+                                    <p class="text-xs text-gray-400">支持所有第三方集成</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用情况进度条 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <h2 class="text-lg font-semibold mb-4">本月使用情况</h2>
+                    
+                    <div class="space-y-6">
+                        <!-- API调用进度条 -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="text-sm">
+                                    <span class="font-medium">API调用</span>
+                                    <span class="text-gray-400 ml-2">67,521 / 100,000</span>
+                                </div>
+                                <span class="text-sm text-gray-400">67.5%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full" style="width: 67.5%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 存储空间进度条 -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="text-sm">
+                                    <span class="font-medium">存储空间</span>
+                                    <span class="text-gray-400 ml-2">2.8GB / 10GB</span>
+                                </div>
+                                <span class="text-sm text-gray-400">28%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full" style="width: 28%"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 高级模型使用进度条 -->
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <div class="text-sm">
+                                    <span class="font-medium">高级模型使用</span>
+                                    <span class="text-gray-400 ml-2">14.2小时 / 20小时</span>
+                                </div>
+                                <span class="text-sm text-gray-400">71%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full" style="width: 71%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-right">
+                        <a href="/unified-usage.html" class="text-quantum-accent text-sm hover:underline">查看详细使用统计 <i class="fas fa-arrow-right ml-1"></i></a>
+                    </div>
+                </div>
+                
+                <!-- 付款方式 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">付款方式</h2>
+                        <button id="addPaymentBtn" class="text-sm text-quantum-accent hover:underline flex items-center">
+                            <i class="fas fa-plus mr-1"></i> 添加付款方式
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 信用卡 -->
+                        <div class="border border-gray-700 rounded-lg p-4 bg-black/30 relative">
+                            <div class="absolute top-4 right-4">
+                                <span class="text-xs text-white bg-quantum-primary/80 px-2 py-0.5 rounded">默认</span>
+                            </div>
+                            <div class="flex items-center mb-3">
+                                <div class="w-10 h-10 rounded bg-white/10 flex items-center justify-center mr-3">
+                                    <i class="fab fa-cc-visa text-blue-400 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">Visa 尾号 4321</h3>
+                                    <p class="text-xs text-gray-400">到期日: 09/2025</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end space-x-2 text-sm">
+                                <button class="text-gray-400 hover:text-white">编辑</button>
+                                <span class="text-gray-600">|</span>
+                                <button class="text-gray-400 hover:text-white">删除</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 支付宝 -->
+                        <div class="border border-gray-700 rounded-lg p-4 bg-black/30">
+                            <div class="flex items-center mb-3">
+                                <div class="w-10 h-10 rounded bg-white/10 flex items-center justify-center mr-3">
+                                    <i class="fab fa-alipay text-blue-500 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium">支付宝</h3>
+                                    <p class="text-xs text-gray-400">账号: j***@example.com</p>
+                                </div>
+                            </div>
+                            <div class="flex justify-end space-x-2 text-sm">
+                                <button class="text-gray-400 hover:text-white">编辑</button>
+                                <span class="text-gray-600">|</span>
+                                <button class="text-gray-400 hover:text-white">删除</button>
+                                <span class="text-gray-600">|</span>
+                                <button class="text-quantum-accent hover:underline">设为默认</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 账单历史 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold">账单历史</h2>
+                        <div class="flex items-center space-x-3">
+                            <div class="relative">
+                                <select class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent appearance-none pr-8">
+                                    <option value="all">所有账单</option>
+                                    <option value="paid">已付款</option>
+                                    <option value="pending">待付款</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                                </div>
+                            </div>
+                            <button class="text-sm text-quantum-accent hover:underline">
+                                <i class="fas fa-download mr-1"></i> 导出
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 账单表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">账单编号</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">日期</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">金额</th>
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">状态</th>
+                                    <th class="py-3 px-4 text-right text-xs font-medium text-gray-400 uppercase tracking-wider">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">INV-2024-0512</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">2024-05-15</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">¥299.00</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">已付款</span>
+                                    </td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-right">
+                                        <button class="text-quantum-accent hover:underline">查看</button>
+                                        <span class="text-gray-600 mx-1">|</span>
+                                        <button class="text-quantum-accent hover:underline">下载</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">INV-2024-0412</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">2024-04-15</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">¥299.00</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">已付款</span>
+                                    </td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-right">
+                                        <button class="text-quantum-accent hover:underline">查看</button>
+                                        <span class="text-gray-600 mx-1">|</span>
+                                        <button class="text-quantum-accent hover:underline">下载</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">INV-2024-0312</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">2024-03-15</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">¥299.00</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">已付款</span>
+                                    </td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-right">
+                                        <button class="text-quantum-accent hover:underline">查看</button>
+                                        <span class="text-gray-600 mx-1">|</span>
+                                        <button class="text-quantum-accent hover:underline">下载</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">INV-2024-0212</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">2024-02-15</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">¥299.00</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">已付款</span>
+                                    </td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-right">
+                                        <button class="text-quantum-accent hover:underline">查看</button>
+                                        <span class="text-gray-600 mx-1">|</span>
+                                        <button class="text-quantum-accent hover:underline">下载</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">INV-2024-0112</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">2024-01-15</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">¥299.00</td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm">
+                                        <span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full">已付款</span>
+                                    </td>
+                                    <td class="py-3 px-4 whitespace-nowrap text-sm text-right">
+                                        <button class="text-quantum-accent hover:underline">查看</button>
+                                        <span class="text-gray-600 mx-1">|</span>
+                                        <button class="text-quantum-accent hover:underline">下载</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 分页 -->
+                    <div class="flex justify-between items-center mt-4 text-sm">
+                        <div class="text-gray-400">
+                            显示 1-5 条，共 12 条
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-700 bg-black/30 text-gray-400 hover:bg-gray-800">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-quantum-accent bg-quantum-accent/20 text-white">1</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-700 bg-black/30 text-gray-300 hover:bg-gray-800">2</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-700 bg-black/30 text-gray-300 hover:bg-gray-800">3</button>
+                            <button class="w-8 h-8 flex items-center justify-center rounded border border-gray-700 bg-black/30 text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 订阅计划比较 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <h2 class="text-lg font-semibold mb-4">订阅计划比较</h2>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="border-b border-gray-700">
+                                    <th class="py-3 px-4 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">功能</th>
+                                    <th class="py-3 px-4 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">基础版</th>
+                                    <th class="py-3 px-4 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">专业版<span class="ml-2 text-quantum-accent">(当前)</span></th>
+                                    <th class="py-3 px-4 text-center text-xs font-medium text-gray-400 uppercase tracking-wider">企业版</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800">
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">价格</td>
+                                    <td class="py-3 px-4 text-center text-sm">¥99/月</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">¥299/月</td>
+                                    <td class="py-3 px-4 text-center text-sm">¥999/月</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">AI对话</td>
+                                    <td class="py-3 px-4 text-center text-sm">每月100次</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">无限</td>
+                                    <td class="py-3 px-4 text-center text-sm">无限</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">API调用</td>
+                                    <td class="py-3 px-4 text-center text-sm">10,000次/月</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">100,000次/月</td>
+                                    <td class="py-3 px-4 text-center text-sm">1,000,000次/月</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">存储空间</td>
+                                    <td class="py-3 px-4 text-center text-sm">1GB</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">10GB</td>
+                                    <td class="py-3 px-4 text-center text-sm">100GB</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">高级模型</td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-times text-red-400"></i></td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10"><i class="fas fa-check text-green-400"></i> 20小时/月</td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-check text-green-400"></i> 无限</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">第三方集成</td>
+                                    <td class="py-3 px-4 text-center text-sm">3个</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">无限</td>
+                                    <td class="py-3 px-4 text-center text-sm">无限</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">团队成员</td>
+                                    <td class="py-3 px-4 text-center text-sm">1人</td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">5人</td>
+                                    <td class="py-3 px-4 text-center text-sm">无限</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">优先支持</td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-times text-red-400"></i></td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10"><i class="fas fa-check text-green-400"></i></td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-check text-green-400"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm">专属客户经理</td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-times text-red-400"></i></td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10"><i class="fas fa-times text-red-400"></i></td>
+                                    <td class="py-3 px-4 text-center text-sm"><i class="fas fa-check text-green-400"></i></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3 px-4 text-sm"></td>
+                                    <td class="py-3 px-4 text-center text-sm">
+                                        <button class="text-sm text-white bg-gray-600 rounded-lg px-4 py-1.5 hover:bg-gray-500 transition-colors">
+                                            降级
+                                        </button>
+                                    </td>
+                                    <td class="py-3 px-4 text-center text-sm font-medium bg-quantum-primary/10">
+                                        <button class="text-sm text-white bg-quantum-primary rounded-lg px-4 py-1.5 opacity-50 cursor-not-allowed">
+                                            当前计划
+                                        </button>
+                                    </td>
+                                    <td class="py-3 px-4 text-center text-sm">
+                                        <button class="text-sm text-white bg-quantum-primary rounded-lg px-4 py-1.5 hover:bg-quantum-primary/90 transition-colors">
+                                            升级
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 添加付款方式模态框 -->
+    <div id="addPaymentModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+            <div class="glass-effect rounded-xl p-6 border border-quantum-primary/20">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">添加付款方式</h2>
+                    <button id="closePaymentModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- 付款方式选项卡 -->
+                <div class="mb-6">
+                    <div class="flex border-b border-gray-700">
+                        <button class="payment-tab active py-2 px-4 border-b-2 border-quantum-accent -mb-px" data-tab="card">信用卡</button>
+                        <button class="payment-tab py-2 px-4 border-b-2 border-transparent -mb-px" data-tab="alipay">支付宝</button>
+                        <button class="payment-tab py-2 px-4 border-b-2 border-transparent -mb-px" data-tab="wechat">微信支付</button>
+                    </div>
+                </div>
+                
+                <!-- 信用卡表单 -->
+                <div id="cardTab" class="payment-content">
+                    <form id="cardForm">
+                        <div class="mb-4">
+                            <label for="cardNumber" class="block text-sm font-medium text-gray-300 mb-1">卡号</label>
+                            <input type="text" id="cardNumber" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="1234 5678 9012 3456">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="expiryDate" class="block text-sm font-medium text-gray-300 mb-1">到期日</label>
+                                <input type="text" id="expiryDate" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="MM/YY">
+                            </div>
+                            <div>
+                                <label for="cvv" class="block text-sm font-medium text-gray-300 mb-1">CVV</label>
+                                <input type="text" id="cvv" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="123">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="cardName" class="block text-sm font-medium text-gray-300 mb-1">持卡人姓名</label>
+                            <input type="text" id="cardName" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="John Doe">
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="defaultCard" class="w-4 h-4 text-quantum-accent bg-black/30 border border-gray-700 rounded focus:ring-quantum-accent">
+                            <label for="defaultCard" class="ml-2 text-sm text-gray-300">设为默认支付方式</label>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" id="cancelPayment" class="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors">
+                                取消
+                            </button>
+                            <button type="submit" class="quantum-button">
+                                保存
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- 支付宝表单 -->
+                <div id="alipayTab" class="payment-content hidden">
+                    <form id="alipayForm">
+                        <div class="mb-4">
+                            <label for="alipayAccount" class="block text-sm font-medium text-gray-300 mb-1">支付宝账号</label>
+                            <input type="email" id="alipayAccount" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="example@alipay.com">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="alipayName" class="block text-sm font-medium text-gray-300 mb-1">账户姓名</label>
+                            <input type="text" id="alipayName" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="张三">
+                        </div>
+                        
+                        <div class="flex items-center mb-4">
+                            <input type="checkbox" id="defaultAlipay" class="w-4 h-4 text-quantum-accent bg-black/30 border border-gray-700 rounded focus:ring-quantum-accent">
+                            <label for="defaultAlipay" class="ml-2 text-sm text-gray-300">设为默认支付方式</label>
+                        </div>
+                        
+                        <div class="flex justify-end space-x-3">
+                            <button type="button" class="cancel-payment px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors">
+                                取消
+                            </button>
+                            <button type="submit" class="quantum-button">
+                                保存
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- 微信支付表单 -->
+                <div id="wechatTab" class="payment-content hidden">
+                    <div class="text-center py-4">
+                        <div class="w-48 h-48 mx-auto bg-white p-3 rounded-lg mb-4">
+                            <img src="https://placeholder.pics/svg/200/DEDEDE/555555/QR%20Code" alt="微信支付二维码" class="w-full h-full">
+                        </div>
+                        <p class="text-gray-300 mb-2">请使用微信扫描上方二维码进行绑定</p>
+                        <p class="text-gray-400 text-sm">绑定成功后将自动设置为可用的支付方式</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 升级计划模态框 -->
+    <div id="upgradeModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
+            <div class="glass-effect rounded-xl p-6 border border-quantum-primary/20">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">升级到企业版</h2>
+                    <button id="closeUpgradeModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600 to-pink-500 flex items-center justify-center mr-4">
+                            <i class="fas fa-building text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold">企业版</h3>
+                            <p class="text-gray-400">适合大型团队和企业用户的高级订阅计划</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div class="flex items-start">
+                            <div class="mt-1 text-green-400 mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">无限API调用</h4>
+                                <p class="text-xs text-gray-400">每月高达1,000,000次API调用</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 text-green-400 mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">100GB存储空间</h4>
+                                <p class="text-xs text-gray-400">存储更多数据和文件</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 text-green-400 mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">无限团队成员</h4>
+                                <p class="text-xs text-gray-400">添加任意数量的团队成员</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="mt-1 text-green-400 mr-3">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium">专属客户经理</h4>
+                                <p class="text-xs text-gray-400">获得一对一的专业支持</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between items-center p-4 border border-gray-700 rounded-lg bg-black/30 mb-6">
+                        <div>
+                            <p class="text-sm text-gray-400">月度订阅</p>
+                            <p class="text-2xl font-bold">¥999.00 <span class="text-gray-400 text-sm">/ 月</span></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-400">年度订阅 (节省20%)</p>
+                            <p class="text-2xl font-bold">¥9,590.00 <span class="text-gray-400 text-sm">/ 年</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button id="cancelUpgrade" class="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors">
+                            取消
+                        </button>
+                        <button id="confirmUpgrade" class="quantum-button">
+                            确认升级
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM元素
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const addPaymentBtn = document.getElementById('addPaymentBtn');
+        const addPaymentModal = document.getElementById('addPaymentModal');
+        const closePaymentModal = document.getElementById('closePaymentModal');
+        const cancelPayment = document.getElementById('cancelPayment');
+        const paymentTabs = document.querySelectorAll('.payment-tab');
+        const paymentContents = document.querySelectorAll('.payment-content');
+        const upgradeBtn = document.getElementById('upgradeBtn');
+        const upgradeModal = document.getElementById('upgradeModal');
+        const closeUpgradeModal = document.getElementById('closeUpgradeModal');
+        const cancelUpgrade = document.getElementById('cancelUpgrade');
+        
+        // 侧边栏切换
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 用户菜单切换
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // 点击页面其他地方关闭用户菜单
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // 打开添加付款方式模态框
+        addPaymentBtn.addEventListener('click', () => {
+            addPaymentModal.classList.remove('hidden');
+        });
+        
+        // 关闭添加付款方式模态框
+        closePaymentModal.addEventListener('click', () => {
+            addPaymentModal.classList.add('hidden');
+        });
+        
+        cancelPayment.addEventListener('click', () => {
+            addPaymentModal.classList.add('hidden');
+        });
+        
+        // 付款方式选项卡切换
+        paymentTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有选项卡的活跃状态
+                paymentTabs.forEach(t => t.classList.remove('active', 'border-quantum-accent'));
+                
+                // 隐藏所有内容
+                paymentContents.forEach(content => content.classList.add('hidden'));
+                
+                // 激活当前选项卡
+                tab.classList.add('active', 'border-quantum-accent');
+                
+                // 显示对应内容
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}Tab`).classList.remove('hidden');
+            });
+        });
+        
+        // 打开升级计划模态框
+        upgradeBtn.addEventListener('click', () => {
+            upgradeModal.classList.remove('hidden');
+        });
+        
+        // 关闭升级计划模态框
+        closeUpgradeModal.addEventListener('click', () => {
+            upgradeModal.classList.add('hidden');
+        });
+        
+        cancelUpgrade.addEventListener('click', () => {
+            upgradeModal.classList.add('hidden');
+        });
+        
+        // 表单提交处理
+        document.getElementById('cardForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('信用卡信息已保存！');
+            addPaymentModal.classList.add('hidden');
+        });
+        
+        document.getElementById('alipayForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('支付宝账户已绑定！');
+            addPaymentModal.classList.add('hidden');
+        });
+        
+        document.getElementById('confirmUpgrade').addEventListener('click', () => {
+            alert('您的订阅已升级到企业版！');
+            upgradeModal.classList.add('hidden');
+        });
+        
+        // 量子粒子背景（简化版）
+        function initQuantumParticles() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const particlesContainer = document.getElementById('quantum-particles');
+            
+            particlesContainer.appendChild(canvas);
+            
+            let width = particlesContainer.offsetWidth;
+            let height = particlesContainer.offsetHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const particles = [];
+            const particleCount = 50;
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2 + 1,
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 1 - 0.5,
+                    color: `rgba(${Math.floor(Math.random() * 100 + 50)}, ${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.random() * 0.5 + 0.2})`
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    if (particle.x < 0 || particle.x > width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > height) particle.speedY *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                // 连接临近粒子
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(79, 70, 229, ${0.1 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            // 处理窗口大小变化
+            window.addEventListener('resize', () => {
+                width = particlesContainer.offsetWidth;
+                height = particlesContainer.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            });
+            
+            animate();
+        }
+        
+        // 初始化量子粒子背景
+        initQuantumParticles();
+    </script>
+    
+    <!-- 添加CSS样式 -->
+    <style>
+        /* 基础样式 */
+        .sidebar-item {
+            @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors;
+            @apply text-gray-300 hover:bg-quantum-primary/20 hover:text-white;
+        }
+        
+        .sidebar-item.active {
+            @apply bg-quantum-primary/20 text-white;
+        }
+        
+        .quantum-button {
+            @apply px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary text-white rounded-lg;
+            @apply hover:opacity-90 transition-opacity flex items-center justify-center;
+        }
+        
+        .glass-effect {
+            @apply bg-black/40 backdrop-blur-lg border border-white/5;
+        }
+        
+        .status-indicator {
+            @apply inline-block w-2 h-2 rounded-full;
+        }
+        
+        .status-online {
+            @apply bg-green-500;
+        }
+        
+        /* 付款方式选项卡样式 */
+        .payment-tab {
+            @apply text-gray-400 hover:text-white transition-colors;
+        }
+        
+        .payment-tab.active {
+            @apply text-white;
+        }
+    </style>
+</body>
+</html> 

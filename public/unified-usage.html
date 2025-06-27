@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 使用统计，监控您的AI资源使用情况">
+    <meta name="keywords" content="AI, 统计, 使用量, 分析, 监控">
+    <title>AlingAi Pro - 使用统计</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ChartJS 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索使用统计、报告或设置...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="/unified-dashboard.html" class="sidebar-item" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="/unified-assistant.html" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="/unified-api.html" class="sidebar-item" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="/unified-security.html" class="sidebar-item" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="#" class="sidebar-item active" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="#" class="sidebar-item" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- 使用统计部分 -->
+            <div id="usage-section" class="dashboard-section">
+                <!-- 页面标题 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">使用统计</h1>
+                        <p class="text-gray-400">监控和分析您的AI资源使用情况</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <!-- 日期选择器 -->
+                        <select id="dateRangeSelector" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                            <option value="7d">最近7天</option>
+                            <option value="30d" selected>最近30天</option>
+                            <option value="90d">最近90天</option>
+                            <option value="ytd">今年至今</option>
+                            <option value="custom">自定义范围</option>
+                        </select>
+                        
+                        <!-- 导出按钮 -->
+                        <button id="exportBtn" class="quantum-button-outline">
+                            <i class="fas fa-download mr-2"></i> 导出报告
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 使用概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- 总API调用 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">总API调用</h3>
+                                <p class="stat-value" id="totalApiCalls">24,853</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <i class="fas fa-server text-blue-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>12.4%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 总计算时间 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">总计算时间</h3>
+                                <p class="stat-value" id="totalComputeTime">156.2<span class="text-base">小时</span></p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-clock text-purple-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>8.7%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 总令牌数 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">总令牌数</h3>
+                                <p class="stat-value" id="totalTokens">5.8<span class="text-base">百万</span></p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                                <i class="fas fa-key text-green-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>15.2%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 活跃用户 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">活跃用户</h3>
+                                <p class="stat-value" id="activeUsers">342</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                                <i class="fas fa-users text-yellow-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-yellow-400"><i class="fas fa-arrow-up mr-1"></i>3.5%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用趋势图表 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-lg font-medium">使用趋势</h2>
+                        <div class="flex space-x-2">
+                            <button class="trend-btn active" data-trend="api-calls">API调用</button>
+                            <button class="trend-btn" data-trend="compute-time">计算时间</button>
+                            <button class="trend-btn" data-trend="tokens">令牌数</button>
+                            <button class="trend-btn" data-trend="users">用户数</button>
+                        </div>
+                    </div>
+                    
+                    <div class="h-80">
+                        <canvas id="usageTrendChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 模型使用分析 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-medium mb-4">模型使用分析</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- 模型使用分布 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-base font-medium">模型使用分布</h3>
+                                <select id="modelDistributionMetric" class="bg-black/30 border border-gray-700 rounded-lg text-xs text-white py-1 px-2 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                    <option value="calls">按调用次数</option>
+                                    <option value="tokens">按令牌数</option>
+                                    <option value="cost">按成本</option>
+                                </select>
+                            </div>
+                            
+                            <div class="h-64">
+                                <canvas id="modelDistributionChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-4 grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                                    <span class="text-sm">AlingAi-Pro (42%)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
+                                    <span class="text-sm">AlingAi-Standard (28%)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                                    <span class="text-sm">AlingAi-Fast (18%)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                                    <span class="text-sm">AlingAi-Vision (12%)</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 模型性能比较 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-base font-medium">模型性能比较</h3>
+                                <select id="modelPerformanceMetric" class="bg-black/30 border border-gray-700 rounded-lg text-xs text-white py-1 px-2 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                    <option value="latency">平均延迟</option>
+                                    <option value="throughput">吞吐量</option>
+                                    <option value="error-rate">错误率</option>
+                                </select>
+                            </div>
+                            
+                            <div class="h-64">
+                                <canvas id="modelPerformanceChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span>最佳性能模型:</span>
+                                    <span class="font-medium text-quantum-accent">AlingAi-Fast</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm mt-1">
+                                    <span>最高准确率模型:</span>
+                                    <span class="font-medium text-quantum-accent">AlingAi-Pro</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm mt-1">
+                                    <span>最佳性价比模型:</span>
+                                    <span class="font-medium text-quantum-accent">AlingAi-Standard</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 资源分布 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-medium mb-4">资源分布</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- 按应用分布 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <h3 class="text-base font-medium mb-4">按应用分布</h3>
+                            
+                            <div class="h-56">
+                                <canvas id="appDistributionChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                                        <span class="text-sm">Web应用</span>
+                                    </div>
+                                    <span class="text-sm font-medium">45%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
+                                        <span class="text-sm">移动应用</span>
+                                    </div>
+                                    <span class="text-sm font-medium">30%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                                        <span class="text-sm">桌面应用</span>
+                                    </div>
+                                    <span class="text-sm font-medium">15%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                                        <span class="text-sm">其他</span>
+                                    </div>
+                                    <span class="text-sm font-medium">10%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 按地区分布 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <h3 class="text-base font-medium mb-4">按地区分布</h3>
+                            
+                            <div class="h-56">
+                                <canvas id="regionDistributionChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                                        <span class="text-sm">亚太地区</span>
+                                    </div>
+                                    <span class="text-sm font-medium">52%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
+                                        <span class="text-sm">北美</span>
+                                    </div>
+                                    <span class="text-sm font-medium">28%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                                        <span class="text-sm">欧洲</span>
+                                    </div>
+                                    <span class="text-sm font-medium">15%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                                        <span class="text-sm">其他</span>
+                                    </div>
+                                    <span class="text-sm font-medium">5%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 按功能分布 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <h3 class="text-base font-medium mb-4">按功能分布</h3>
+                            
+                            <div class="h-56">
+                                <canvas id="featureDistributionChart"></canvas>
+                            </div>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-blue-500 mr-2"></span>
+                                        <span class="text-sm">文本生成</span>
+                                    </div>
+                                    <span class="text-sm font-medium">38%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-purple-500 mr-2"></span>
+                                        <span class="text-sm">对话</span>
+                                    </div>
+                                    <span class="text-sm font-medium">25%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-green-500 mr-2"></span>
+                                        <span class="text-sm">图像分析</span>
+                                    </div>
+                                    <span class="text-sm font-medium">18%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></span>
+                                        <span class="text-sm">代码辅助</span>
+                                    </div>
+                                    <span class="text-sm font-medium">12%</span>
+                                </div>
+                                
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <span class="w-3 h-3 rounded-full bg-red-500 mr-2"></span>
+                                        <span class="text-sm">其他</span>
+                                    </div>
+                                    <span class="text-sm font-medium">7%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 使用详情 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">使用详情</h2>
+                        <div class="flex space-x-2">
+                            <select id="usageDetailFilter" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="all">所有模型</option>
+                                <option value="pro">AlingAi-Pro</option>
+                                <option value="standard">AlingAi-Standard</option>
+                                <option value="fast">AlingAi-Fast</option>
+                                <option value="vision">AlingAi-Vision</option>
+                            </select>
+                            <input type="text" placeholder="搜索..." class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                        </div>
+                    </div>
+                    
+                    <!-- 使用详情表格 -->
+                    <div class="glass-effect rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-black/20">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            日期
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            模型
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            API密钥
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            调用次数
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            令牌数
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            计算时间
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            成本
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800">
+                                    <!-- 详情行 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                                                AlingAi-Pro
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_*****6789
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            1,245
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            352,689
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            8.5小时
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            ¥125.60
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-14
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
+                                                AlingAi-Standard
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_*****6789
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            876
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            215,432
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            5.2小时
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            ¥64.80
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-14
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+                                                AlingAi-Fast
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_dev_*****3456
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            532
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            98,765
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2.1小时
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            ¥29.40
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-13
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full bg-yellow-500 mr-2"></span>
+                                                AlingAi-Vision
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_*****6789
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            324
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            156,789
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            4.8小时
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            ¥96.20
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-13
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                                                AlingAi-Pro
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            sk_prod_*****6789
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            1,102
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            321,456
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            7.9小时
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            ¥118.30
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- 分页 -->
+                        <div class="bg-black/20 px-6 py-3 flex items-center justify-between">
+                            <div class="flex-1 flex justify-between sm:hidden">
+                                <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md text-gray-300 bg-black/30 hover:bg-gray-800">
+                                    上一页
+                                </a>
+                                <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-700 text-sm font-medium rounded-md text-gray-300 bg-black/30 hover:bg-gray-800">
+                                    下一页
+                                </a>
+                            </div>
+                            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                                <div>
+                                    <p class="text-sm text-gray-400">
+                                        显示 <span class="font-medium">1</span> 到 <span class="font-medium">5</span> 条，共 <span class="font-medium">24</span> 条结果
+                                    </p>
+                                </div>
+                                <div>
+                                    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-gray-800">
+                                            <span class="sr-only">上一页</span>
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                        <a href="#" aria-current="page" class="relative inline-flex items-center px-4 py-2 border border-quantum-primary bg-quantum-primary/20 text-sm font-medium text-quantum-accent">
+                                            1
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-300 hover:bg-gray-800">
+                                            2
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-300 hover:bg-gray-800">
+                                            3
+                                        </a>
+                                        <span class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-400">
+                                            ...
+                                        </span>
+                                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-700 bg-black/30 text-sm font-medium text-gray-300 hover:bg-gray-800">
+                                            5
+                                        </a>
+                                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-700 bg-black/30 text-sm font-medium text-gray-400 hover:bg-gray-800">
+                                            <span class="sr-only">下一页</span>
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM元素
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const dateRangeSelector = document.getElementById('dateRangeSelector');
+        const exportBtn = document.getElementById('exportBtn');
+        const trendBtns = document.querySelectorAll('.trend-btn');
+        const modelDistributionMetric = document.getElementById('modelDistributionMetric');
+        const modelPerformanceMetric = document.getElementById('modelPerformanceMetric');
+        const usageDetailFilter = document.getElementById('usageDetailFilter');
+        
+        // 用户菜单切换
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // 点击外部关闭用户菜单
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // 侧边栏切换（移动端）
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 趋势按钮切换
+        trendBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                trendBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                updateTrendChart(btn.dataset.trend);
+            });
+        });
+        
+        // 日期范围选择器
+        dateRangeSelector.addEventListener('change', () => {
+            const selectedRange = dateRangeSelector.value;
+            if (selectedRange === 'custom') {
+                // 显示自定义日期选择器
+                console.log('显示自定义日期选择器');
+            } else {
+                updateAllCharts(selectedRange);
+            }
+        });
+        
+        // 导出报告
+        exportBtn.addEventListener('click', () => {
+            console.log('导出报告');
+            alert('报告已导出到您的下载文件夹');
+        });
+        
+        // 模型分布指标切换
+        modelDistributionMetric.addEventListener('change', () => {
+            updateModelDistributionChart(modelDistributionMetric.value);
+        });
+        
+        // 模型性能指标切换
+        modelPerformanceMetric.addEventListener('change', () => {
+            updateModelPerformanceChart(modelPerformanceMetric.value);
+        });
+        
+        // 使用详情过滤
+        usageDetailFilter.addEventListener('change', () => {
+            filterUsageDetails(usageDetailFilter.value);
+        });
+        
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            animateNumbers();
+            
+            // 初始化量子粒子背景
+            initQuantumParticles();
+        });
+        
+        // 数字动画效果
+        function animateNumbers() {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(el => {
+                const finalValue = el.textContent.replace(/[^\d.]/g, '');
+                if (!finalValue) return;
+                
+                const numericValue = parseFloat(finalValue);
+                let startValue = 0;
+                const duration = 1500;
+                const step = numericValue / (duration / 20);
+                const suffix = el.innerHTML.replace(/[\d,.]*/g, '');
+                
+                const updateValue = () => {
+                    startValue += step;
+                    if (startValue > numericValue) startValue = numericValue;
+                    
+                    if (el.id === 'totalApiCalls') {
+                        el.textContent = Math.round(startValue).toLocaleString();
+                    } else if (el.id === 'totalComputeTime') {
+                        el.innerHTML = startValue.toFixed(1) + suffix;
+                    } else if (el.id === 'totalTokens') {
+                        el.innerHTML = startValue.toFixed(1) + suffix;
+                    } else if (el.id === 'activeUsers') {
+                        el.textContent = Math.round(startValue).toLocaleString();
+                    }
+                    
+                    if (startValue < numericValue) {
+                        requestAnimationFrame(updateValue);
+                    }
+                };
+                
+                requestAnimationFrame(updateValue);
+            });
+        }
+        
+        // 初始化所有图表
+        function initCharts() {
+            // 使用趋势图表
+            const usageTrendCtx = document.getElementById('usageTrendChart').getContext('2d');
+            const usageTrendChart = new Chart(usageTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['6/1', '6/2', '6/3', '6/4', '6/5', '6/6', '6/7', '6/8', '6/9', '6/10', '6/11', '6/12', '6/13', '6/14', '6/15'],
+                    datasets: [{
+                        label: 'API调用',
+                        data: [1200, 1350, 1400, 1300, 1450, 1600, 1550, 1700, 1800, 1750, 1900, 2050, 2100, 2200, 2300],
+                        borderColor: '#4F46E5',
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 模型分布图表
+            const modelDistributionCtx = document.getElementById('modelDistributionChart').getContext('2d');
+            const modelDistributionChart = new Chart(modelDistributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['AlingAi-Pro', 'AlingAi-Standard', 'AlingAi-Fast', 'AlingAi-Vision'],
+                    datasets: [{
+                        data: [42, 28, 18, 12],
+                        backgroundColor: [
+                            '#4F46E5',
+                            '#8B5CF6',
+                            '#10B981',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+            
+            // 模型性能图表
+            const modelPerformanceCtx = document.getElementById('modelPerformanceChart').getContext('2d');
+            const modelPerformanceChart = new Chart(modelPerformanceCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['AlingAi-Pro', 'AlingAi-Standard', 'AlingAi-Fast', 'AlingAi-Vision'],
+                    datasets: [{
+                        label: '平均延迟 (ms)',
+                        data: [350, 280, 120, 420],
+                        backgroundColor: [
+                            'rgba(79, 70, 229, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(245, 158, 11, 0.7)'
+                        ],
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.05)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 应用分布图表
+            const appDistributionCtx = document.getElementById('appDistributionChart').getContext('2d');
+            const appDistributionChart = new Chart(appDistributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Web应用', '移动应用', '桌面应用', '其他'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: [
+                            '#4F46E5',
+                            '#8B5CF6',
+                            '#10B981',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+            
+            // 地区分布图表
+            const regionDistributionCtx = document.getElementById('regionDistributionChart').getContext('2d');
+            const regionDistributionChart = new Chart(regionDistributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['亚太地区', '北美', '欧洲', '其他'],
+                    datasets: [{
+                        data: [52, 28, 15, 5],
+                        backgroundColor: [
+                            '#4F46E5',
+                            '#8B5CF6',
+                            '#10B981',
+                            '#F59E0B'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+            
+            // 功能分布图表
+            const featureDistributionCtx = document.getElementById('featureDistributionChart').getContext('2d');
+            const featureDistributionChart = new Chart(featureDistributionCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['文本生成', '对话', '图像分析', '代码辅助', '其他'],
+                    datasets: [{
+                        data: [38, 25, 18, 12, 7],
+                        backgroundColor: [
+                            '#4F46E5',
+                            '#8B5CF6',
+                            '#10B981',
+                            '#F59E0B',
+                            '#EF4444'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: 'rgba(79, 70, 229, 0.3)',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+            
+            // 存储图表实例以便后续更新
+            window.charts = {
+                usageTrend: usageTrendChart,
+                modelDistribution: modelDistributionChart,
+                modelPerformance: modelPerformanceChart,
+                appDistribution: appDistributionChart,
+                regionDistribution: regionDistributionChart,
+                featureDistribution: featureDistributionChart
+            };
+        }
+        
+        // 更新趋势图表
+        function updateTrendChart(trendType) {
+            const chart = window.charts.usageTrend;
+            let label, data, color;
+            
+            switch(trendType) {
+                case 'api-calls':
+                    label = 'API调用';
+                    data = [1200, 1350, 1400, 1300, 1450, 1600, 1550, 1700, 1800, 1750, 1900, 2050, 2100, 2200, 2300];
+                    color = '#4F46E5';
+                    break;
+                case 'compute-time':
+                    label = '计算时间 (小时)';
+                    data = [5.2, 6.1, 5.8, 5.5, 6.3, 7.1, 6.8, 7.5, 8.2, 7.9, 8.5, 9.2, 9.8, 10.4, 11.2];
+                    color = '#8B5CF6';
+                    break;
+                case 'tokens':
+                    label = '令牌数 (千)';
+                    data = [280, 310, 290, 300, 330, 350, 340, 370, 400, 390, 420, 450, 470, 490, 520];
+                    color = '#10B981';
+                    break;
+                case 'users':
+                    label = '活跃用户';
+                    data = [220, 230, 225, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 335, 342];
+                    color = '#F59E0B';
+                    break;
+            }
+            
+            chart.data.datasets[0].label = label;
+            chart.data.datasets[0].data = data;
+            chart.data.datasets[0].borderColor = color;
+            chart.data.datasets[0].backgroundColor = `${color}1A`; // 10% opacity
+            chart.update();
+        }
+        
+        // 更新模型分布图表
+        function updateModelDistributionChart(metric) {
+            const chart = window.charts.modelDistribution;
+            let data;
+            
+            switch(metric) {
+                case 'calls':
+                    data = [42, 28, 18, 12];
+                    break;
+                case 'tokens':
+                    data = [48, 22, 14, 16];
+                    break;
+                case 'cost':
+                    data = [55, 20, 10, 15];
+                    break;
+            }
+            
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+        
+        // 更新模型性能图表
+        function updateModelPerformanceChart(metric) {
+            const chart = window.charts.modelPerformance;
+            let label, data;
+            
+            switch(metric) {
+                case 'latency':
+                    label = '平均延迟 (ms)';
+                    data = [350, 280, 120, 420];
+                    break;
+                case 'throughput':
+                    label = '吞吐量 (请求/秒)';
+                    data = [28, 35, 85, 22];
+                    break;
+                case 'error-rate':
+                    label = '错误率 (%)';
+                    data = [0.8, 1.2, 1.5, 2.1];
+                    break;
+            }
+            
+            chart.data.datasets[0].label = label;
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }
+        
+        // 过滤使用详情
+        function filterUsageDetails(model) {
+            console.log(`过滤模型: ${model}`);
+            // 这里可以添加实际的过滤逻辑
+        }
+        
+        // 更新所有图表
+        function updateAllCharts(dateRange) {
+            console.log(`更新日期范围: ${dateRange}`);
+            // 这里可以添加实际的更新逻辑
+        }
+        
+        // 量子粒子背景
+        function initQuantumParticles() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const particlesContainer = document.getElementById('quantum-particles');
+            
+            particlesContainer.appendChild(canvas);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 50;
+            const colors = ['#4F46E5', '#8B5CF6', '#06B6D4', '#3B82F6'];
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    velocity: {
+                        x: (Math.random() - 0.5) * 0.5,
+                        y: (Math.random() - 0.5) * 0.5
+                    },
+                    opacity: Math.random() * 0.5 + 0.2
+                });
+            }
+            
+            // 绘制粒子
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    const gradient = ctx.createRadialGradient(
+                        particle.x, particle.y, 0,
+                        particle.x, particle.y, particle.radius
+                    );
+                    gradient.addColorStop(0, `${particle.color}`);
+                    gradient.addColorStop(1, 'transparent');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.globalAlpha = particle.opacity;
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                // 绘制连接线
+                ctx.globalAlpha = 0.1;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#4F46E5';
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 更新粒子位置
+            function updateParticles() {
+                particles.forEach(particle => {
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+                    
+                    // 边界检查
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.velocity.x = -particle.velocity.x;
+                    }
+                    
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.velocity.y = -particle.velocity.y;
+                    }
+                    
+                    // 随机改变方向
+                    if (Math.random() < 0.01) {
+                        particle.velocity.x = (Math.random() - 0.5) * 0.5;
+                        particle.velocity.y = (Math.random() - 0.5) * 0.5;
+                    }
+                });
+            }
+            
+            // 动画循环
+            function animate() {
+                updateParticles();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+            
+            // 窗口大小改变时调整画布大小
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            animate();
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 集成中心，连接您的应用和服务">
+    <meta name="keywords" content="AI, 集成, 连接, 应用, 服务">
+    <title>AlingAi Pro - 集成中心</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索集成、应用或服务...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="/unified-dashboard.html" class="sidebar-item" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="/unified-assistant.html" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="/unified-api.html" class="sidebar-item" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="/unified-security.html" class="sidebar-item" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="/unified-usage.html" class="sidebar-item" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="#" class="sidebar-item active" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                        <span class="ml-auto bg-quantum-accent/20 text-quantum-accent text-xs py-0.5 px-2 rounded">新</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- 集成中心部分 -->
+            <div id="integrations-section" class="dashboard-section">
+                <!-- 页面标题 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">集成中心</h1>
+                        <p class="text-gray-400">连接您的应用和服务，扩展AlingAi的能力</p>
+                    </div>
+                    <div>
+                        <button id="createIntegrationBtn" class="quantum-button">
+                            <i class="fas fa-plus mr-2"></i> 创建集成
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 集成概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- 活跃集成 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">活跃集成</h3>
+                                <p class="stat-value" id="activeIntegrations">8</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <i class="fas fa-plug text-blue-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>2</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- API调用 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">本月集成API调用</h3>
+                                <p class="stat-value" id="integrationApiCalls">12,456</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-server text-purple-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>18.5%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 数据流量 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">数据流量</h3>
+                                <p class="stat-value" id="dataTraffic">3.8<span class="text-base">GB</span></p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                                <i class="fas fa-exchange-alt text-green-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-up mr-1"></i>12.3%</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 可用集成 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">可用集成</h3>
+                                <p class="stat-value" id="availableIntegrations">24</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex items-center justify-center">
+                                <i class="fas fa-puzzle-piece text-yellow-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-quantum-accent"><i class="fas fa-plus mr-1"></i>3</span>
+                            <span class="text-gray-400 ml-2">新增集成</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 集成搜索和过滤 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        <!-- 搜索框 -->
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-search text-gray-400"></i>
+                            </div>
+                            <input type="text" id="integrationSearch" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索集成...">
+                        </div>
+                        
+                        <!-- 过滤器 -->
+                        <div class="flex flex-wrap gap-2">
+                            <select id="categoryFilter" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="all">所有分类</option>
+                                <option value="communication">通讯</option>
+                                <option value="productivity">生产力</option>
+                                <option value="data">数据处理</option>
+                                <option value="crm">CRM</option>
+                                <option value="social">社交媒体</option>
+                            </select>
+                            
+                            <select id="statusFilter" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="all">所有状态</option>
+                                <option value="active">已激活</option>
+                                <option value="inactive">未激活</option>
+                            </select>
+                            
+                            <button id="sortBtn" class="flex items-center space-x-1 bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none hover:bg-gray-800">
+                                <i class="fas fa-sort-amount-down"></i>
+                                <span>排序</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 集成卡片列表 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Slack集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg" alt="Slack" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Slack</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">通讯</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">将AlingAi集成到您的Slack工作区，实现自动回复和智能助手功能</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-10-15</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 258</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Microsoft Teams集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoftteams/microsoftteams-plain.svg" alt="Microsoft Teams" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Microsoft Teams</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">通讯</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">在Teams中使用AlingAi，提供会议摘要、文档分析和即时翻译</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-11-02</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 176</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Google Workspace集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg" alt="Google Workspace" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Google Workspace</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">生产力</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">将AlingAi与Google文档、表格和演示文稿集成，增强协作效率</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-09-28</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 312</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Salesforce集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/salesforce/salesforce-original.svg" alt="Salesforce" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Salesforce</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">CRM</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">将AlingAi与Salesforce集成，实现智能客户数据分析和自动化销售流程</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-12-05</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 189</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                    
+                    <!-- GitHub集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">GitHub</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">开发</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">将AlingAi与GitHub集成，提供代码审查、问题分析和自动化文档生成</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-10-22</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 247</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Zapier集成 -->
+                    <div class="integration-card active">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                <img src="https://www.vectorlogo.zone/logos/zapier/zapier-icon.svg" alt="Zapier" class="w-10 h-10">
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold">Zapier</h3>
+                                <div class="flex items-center">
+                                    <span class="status-badge active">已激活</span>
+                                    <span class="text-xs text-gray-400 ml-2">自动化</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-gray-300 text-sm mb-4">通过Zapier将AlingAi与3000+应用连接，创建强大的自动化工作流</p>
+                        <div class="flex items-center text-xs text-gray-400 mb-4">
+                            <div class="flex items-center mr-4">
+                                <i class="fas fa-calendar-alt mr-1"></i>
+                                <span>添加于 2023-11-18</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-exchange-alt mr-1"></i>
+                                <span>每日调用: 326</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between">
+                            <button class="text-sm text-quantum-accent hover:underline">查看详情</button>
+                            <button class="text-sm text-red-400 hover:underline">停用</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 推荐集成 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">推荐集成</h2>
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Notion推荐集成 -->
+                            <div class="flex items-start p-4 border border-gray-700 rounded-lg bg-black/30 hover:border-quantum-accent transition-all">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png" alt="Notion" class="w-10 h-10">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="text-lg font-semibold">Notion</h3>
+                                        <span class="bg-quantum-accent/20 text-quantum-accent text-xs py-0.5 px-2 rounded">热门</span>
+                                    </div>
+                                    <p class="text-gray-300 text-sm my-2">将AlingAi与Notion集成，实现智能笔记、内容生成和知识管理</p>
+                                    <button class="quantum-button-sm">
+                                        <i class="fas fa-plus mr-2"></i> 添加集成
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Jira推荐集成 -->
+                            <div class="flex items-start p-4 border border-gray-700 rounded-lg bg-black/30 hover:border-quantum-accent transition-all">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mr-4">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jira/jira-original.svg" alt="Jira" class="w-10 h-10">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-start">
+                                        <h3 class="text-lg font-semibold">Jira</h3>
+                                        <span class="bg-quantum-accent/20 text-quantum-accent text-xs py-0.5 px-2 rounded">热门</span>
+                                    </div>
+                                    <p class="text-gray-300 text-sm my-2">将AlingAi与Jira集成，优化项目管理、自动生成任务描述和分析报告</p>
+                                    <button class="quantum-button-sm">
+                                        <i class="fas fa-plus mr-2"></i> 添加集成
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 可用集成 -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-bold mb-4">可用集成</h2>
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                            <!-- Discord -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/discordjs/discordjs-original.svg" alt="Discord" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Discord</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Trello -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/trello/trello-plain.svg" alt="Trello" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Trello</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Asana -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.icon-icons.com/icons2/2429/PNG/512/asana_logo_icon_147042.png" alt="Asana" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Asana</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Zoom -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.worldvectorlogo.com/logos/zoom-5.svg" alt="Zoom" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Zoom</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Zendesk -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.worldvectorlogo.com/logos/zendesk-1.svg" alt="Zendesk" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Zendesk</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- HubSpot -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.worldvectorlogo.com/logos/hubspot-1.svg" alt="HubSpot" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">HubSpot</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Shopify -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/shopify/shopify-original.svg" alt="Shopify" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Shopify</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- WordPress -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/wordpress/wordpress-plain.svg" alt="WordPress" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">WordPress</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Figma -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg" alt="Figma" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Figma</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Stripe -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/stripe/stripe-original.svg" alt="Stripe" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Stripe</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- Airtable -->
+                            <div class="available-integration-card">
+                                <div class="w-12 h-12 rounded-lg bg-white p-1 flex items-center justify-center mx-auto mb-3">
+                                    <img src="https://www.vectorlogo.zone/logos/airtable/airtable-icon.svg" alt="Airtable" class="w-10 h-10">
+                                </div>
+                                <h3 class="text-center font-medium text-sm">Airtable</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-quantum-accent border border-quantum-accent/30 rounded hover:bg-quantum-accent/10 transition-colors">
+                                    添加
+                                </button>
+                            </div>
+                            
+                            <!-- 更多按钮 -->
+                            <div class="available-integration-card flex flex-col items-center justify-center">
+                                <div class="w-12 h-12 rounded-lg border-2 border-dashed border-gray-600 flex items-center justify-center mx-auto mb-3">
+                                    <i class="fas fa-ellipsis-h text-gray-400 text-xl"></i>
+                                </div>
+                                <h3 class="text-center font-medium text-sm">更多集成</h3>
+                                <button class="w-full mt-3 py-1 text-xs text-gray-400 border border-gray-600 rounded hover:bg-gray-800/30 transition-colors">
+                                    浏览全部
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 创建集成模态框 -->
+    <div id="createIntegrationModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
+            <div class="glass-effect rounded-xl p-6 border border-quantum-primary/20">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold">创建新集成</h2>
+                    <button id="closeIntegrationModal" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <!-- 集成类型选择 -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-300 mb-2">集成类型</label>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        <label class="integration-type-option">
+                            <input type="radio" name="integrationType" value="api" class="sr-only" checked>
+                            <div class="p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-quantum-accent transition-all">
+                                <div class="flex items-center">
+                                    <i class="fas fa-code text-quantum-accent mr-3"></i>
+                                    <span>API集成</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="integration-type-option">
+                            <input type="radio" name="integrationType" value="webhook" class="sr-only">
+                            <div class="p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-quantum-accent transition-all">
+                                <div class="flex items-center">
+                                    <i class="fas fa-link text-purple-500 mr-3"></i>
+                                    <span>Webhook</span>
+                                </div>
+                            </div>
+                        </label>
+                        
+                        <label class="integration-type-option">
+                            <input type="radio" name="integrationType" value="oauth" class="sr-only">
+                            <div class="p-3 border border-gray-700 rounded-lg cursor-pointer hover:border-quantum-accent transition-all">
+                                <div class="flex items-center">
+                                    <i class="fas fa-key text-green-500 mr-3"></i>
+                                    <span>OAuth 2.0</span>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                
+                <!-- 集成表单 -->
+                <form id="integrationForm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="integrationName" class="block text-sm font-medium text-gray-300 mb-1">集成名称</label>
+                            <input type="text" id="integrationName" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="输入集成名称">
+                        </div>
+                        
+                        <div>
+                            <label for="integrationCategory" class="block text-sm font-medium text-gray-300 mb-1">分类</label>
+                            <select id="integrationCategory" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="">选择分类</option>
+                                <option value="communication">通讯</option>
+                                <option value="productivity">生产力</option>
+                                <option value="data">数据处理</option>
+                                <option value="crm">CRM</option>
+                                <option value="social">社交媒体</option>
+                                <option value="development">开发</option>
+                                <option value="automation">自动化</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="integrationDescription" class="block text-sm font-medium text-gray-300 mb-1">描述</label>
+                        <textarea id="integrationDescription" rows="3" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="描述此集成的用途和功能"></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="apiEndpoint" class="block text-sm font-medium text-gray-300 mb-1">API端点</label>
+                            <input type="text" id="apiEndpoint" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="https://api.example.com/v1">
+                        </div>
+                        
+                        <div>
+                            <label for="apiKey" class="block text-sm font-medium text-gray-300 mb-1">API密钥</label>
+                            <input type="text" id="apiKey" class="w-full bg-black/30 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="输入API密钥">
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center mb-6">
+                        <input type="checkbox" id="enableWebhooks" class="w-4 h-4 text-quantum-accent bg-black/30 border border-gray-700 rounded focus:ring-quantum-accent">
+                        <label for="enableWebhooks" class="ml-2 text-sm text-gray-300">启用Webhook回调</label>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" id="cancelIntegration" class="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-800 transition-colors">
+                            取消
+                        </button>
+                        <button type="submit" class="quantum-button">
+                            <i class="fas fa-plus mr-2"></i> 创建集成
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM元素
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const createIntegrationBtn = document.getElementById('createIntegrationBtn');
+        const createIntegrationModal = document.getElementById('createIntegrationModal');
+        const closeIntegrationModal = document.getElementById('closeIntegrationModal');
+        const cancelIntegration = document.getElementById('cancelIntegration');
+        const integrationTypeOptions = document.querySelectorAll('.integration-type-option input');
+        const integrationForm = document.getElementById('integrationForm');
+        
+        // 侧边栏切换
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 用户菜单切换
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // 点击页面其他地方关闭用户菜单
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // 打开创建集成模态框
+        createIntegrationBtn.addEventListener('click', () => {
+            createIntegrationModal.classList.remove('hidden');
+        });
+        
+        // 关闭创建集成模态框
+        closeIntegrationModal.addEventListener('click', () => {
+            createIntegrationModal.classList.add('hidden');
+        });
+        
+        cancelIntegration.addEventListener('click', () => {
+            createIntegrationModal.classList.add('hidden');
+        });
+        
+        // 集成类型选择
+        integrationTypeOptions.forEach(option => {
+            option.addEventListener('change', () => {
+                document.querySelectorAll('.integration-type-option input').forEach(input => {
+                    const parent = input.closest('.integration-type-option').querySelector('div');
+                    if (input.checked) {
+                        parent.classList.add('border-quantum-accent', 'bg-quantum-accent/10');
+                    } else {
+                        parent.classList.remove('border-quantum-accent', 'bg-quantum-accent/10');
+                    }
+                });
+            });
+        });
+        
+        // 表单提交
+        integrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // 这里可以添加表单验证和提交逻辑
+            alert('集成创建成功！');
+            createIntegrationModal.classList.add('hidden');
+        });
+        
+        // 数字动画效果
+        function animateNumbers() {
+            const statValues = document.querySelectorAll('.stat-value');
+            
+            statValues.forEach(stat => {
+                const finalValue = stat.textContent;
+                const isDecimal = finalValue.includes('.');
+                let value = isDecimal ? 0 : 0;
+                const increment = isDecimal ? 0.1 : 1;
+                const targetValue = parseFloat(finalValue);
+                const duration = 1500; // 动画持续时间（毫秒）
+                const steps = 30; // 动画步数
+                const step = Math.max(1, Math.floor(targetValue / steps));
+                
+                let currentStep = 0;
+                
+                const interval = setInterval(() => {
+                    currentStep++;
+                    value += step;
+                    
+                    if (value >= targetValue || currentStep >= steps) {
+                        clearInterval(interval);
+                        value = targetValue;
+                    }
+                    
+                    if (isDecimal) {
+                        stat.textContent = value.toFixed(1) + (finalValue.includes('GB') ? 'GB' : '');
+                    } else {
+                        // 处理带逗号的数字
+                        if (finalValue.includes(',')) {
+                            stat.textContent = Math.floor(value).toLocaleString();
+                        } else {
+                            stat.textContent = Math.floor(value);
+                        }
+                    }
+                }, duration / steps);
+            });
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', () => {
+            animateNumbers();
+            
+            // 初始化选中的集成类型
+            document.querySelector('.integration-type-option input:checked')
+                .closest('.integration-type-option')
+                .querySelector('div')
+                .classList.add('border-quantum-accent', 'bg-quantum-accent/10');
+        });
+        
+        // 量子粒子背景（简化版）
+        function initQuantumParticles() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const particlesContainer = document.getElementById('quantum-particles');
+            
+            particlesContainer.appendChild(canvas);
+            
+            let width = particlesContainer.offsetWidth;
+            let height = particlesContainer.offsetHeight;
+            
+            canvas.width = width;
+            canvas.height = height;
+            
+            const particles = [];
+            const particleCount = 50;
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 2 + 1,
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 1 - 0.5,
+                    color: `rgba(${Math.floor(Math.random() * 100 + 50)}, ${Math.floor(Math.random() * 100 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.random() * 0.5 + 0.2})`
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    if (particle.x < 0 || particle.x > width) particle.speedX *= -1;
+                    if (particle.y < 0 || particle.y > height) particle.speedY *= -1;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                // 连接临近粒子
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(79, 70, 229, ${0.1 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            // 处理窗口大小变化
+            window.addEventListener('resize', () => {
+                width = particlesContainer.offsetWidth;
+                height = particlesContainer.offsetHeight;
+                canvas.width = width;
+                canvas.height = height;
+            });
+            
+            animate();
+        }
+        
+        // 初始化量子粒子背景
+        initQuantumParticles();
+    </script>
+    
+    <!-- 添加CSS样式 -->
+    <style>
+        /* 基础样式 */
+        .sidebar-item {
+            @apply flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors;
+            @apply text-gray-300 hover:bg-quantum-primary/20 hover:text-white;
+        }
+        
+        .sidebar-item.active {
+            @apply bg-quantum-primary/20 text-white;
+        }
+        
+        .quantum-button {
+            @apply px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary text-white rounded-lg;
+            @apply hover:opacity-90 transition-opacity flex items-center justify-center;
+        }
+        
+        .quantum-button-sm {
+            @apply px-3 py-1.5 bg-gradient-to-r from-quantum-primary to-quantum-secondary text-white rounded-lg;
+            @apply hover:opacity-90 transition-opacity flex items-center justify-center text-sm;
+        }
+        
+        .glass-effect {
+            @apply bg-black/40 backdrop-blur-lg border border-white/5;
+        }
+        
+        .stat-card {
+            @apply glass-effect rounded-xl p-4;
+        }
+        
+        .stat-value {
+            @apply text-3xl font-semibold mt-1;
+        }
+        
+        .status-indicator {
+            @apply inline-block w-2 h-2 rounded-full;
+        }
+        
+        .status-online {
+            @apply bg-green-500;
+        }
+        
+        .status-badge {
+            @apply text-xs py-0.5 px-2 rounded;
+        }
+        
+        .status-badge.active {
+            @apply bg-green-500/20 text-green-400;
+        }
+        
+        .integration-card {
+            @apply glass-effect rounded-xl p-4 transition-all hover:border-quantum-accent/50;
+        }
+        
+        .integration-card.active {
+            @apply border-l-4 border-l-green-500;
+        }
+        
+        .available-integration-card {
+            @apply p-3 border border-gray-700 rounded-lg bg-black/30 hover:border-quantum-accent/50 transition-all;
+        }
+    </style>
+</body>
+</html> 

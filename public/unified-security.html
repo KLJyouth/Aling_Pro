@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 安全中心，保护您的账户和数据安全">
+    <meta name="keywords" content="AI, 安全, 隐私, 保护, 认证">
+    <title>AlingAi Pro - 安全中心</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ChartJS 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none opacity-30"></div>
+    
+    <!-- 顶部导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/40 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <!-- 侧边栏切换按钮 - 移动端 -->
+                <button id="toggleSidebar" class="lg:hidden text-white p-2">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <!-- Logo - 仅在移动端显示 -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                </div>
+                
+                <!-- 搜索栏 -->
+                <div class="hidden md:flex items-center flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input type="text" class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-black/30 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent" placeholder="搜索命令、文档或安全设置...">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 text-xs">
+                            <span>Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 右侧工具栏 -->
+                <div class="flex items-center space-x-4">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden text-white">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    
+                    <!-- 通知 -->
+                    <div class="relative">
+                        <button class="text-white relative">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    
+                    <!-- 用户菜单 -->
+                    <div class="relative">
+                        <button id="userMenuBtn" class="flex items-center space-x-2 text-white">
+                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center">
+                                <span class="font-medium text-sm">JD</span>
+                            </div>
+                            <span class="hidden md:inline-block text-sm font-medium">John Doe</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        
+                        <!-- 用户下拉菜单 -->
+                        <div id="userMenu" class="absolute right-0 mt-2 w-48 bg-quantum-dark border border-gray-700 rounded-lg shadow-lg py-1 hidden z-50">
+                            <a href="/profile.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-user mr-2"></i> 个人资料
+                            </a>
+                            <a href="/settings.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-cog mr-2"></i> 设置
+                            </a>
+                            <a href="/api-keys.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-key mr-2"></i> API密钥
+                            </a>
+                            <a href="/billing.html" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800">
+                                <i class="fas fa-credit-card mr-2"></i> 账单与订阅
+                            </a>
+                            <div class="border-t border-gray-700 my-1"></div>
+                            <a href="/logout.php" class="block px-4 py-2 text-sm text-red-400 hover:bg-gray-800">
+                                <i class="fas fa-sign-out-alt mr-2"></i> 退出登录
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容区 -->
+    <div class="flex h-screen pt-16">
+        <!-- 侧边栏 -->
+        <aside id="sidebar" class="sidebar fixed inset-y-0 left-0 z-30 w-64 transform transition-transform duration-300 lg:translate-x-0 lg:relative lg:z-0 pt-16 bg-black/40 backdrop-blur-xl border-r border-quantum-primary/20">
+            <!-- Logo -->
+            <div class="hidden lg:flex items-center space-x-2 px-6 py-5 border-b border-gray-800">
+                <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">A</span>
+                </div>
+                <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+            </div>
+            
+            <!-- 导航菜单 -->
+            <nav class="mt-5 px-4">
+                <div class="space-y-1">
+                    <!-- 仪表板 -->
+                    <a href="/unified-dashboard.html" class="sidebar-item" data-section="overview">
+                        <i class="fas fa-tachometer-alt mr-3 w-5 text-center"></i>
+                        <span>仪表板概览</span>
+                    </a>
+                    
+                    <!-- AI助手 -->
+                    <a href="/unified-assistant.html" class="sidebar-item" data-section="assistant">
+                        <i class="fas fa-robot mr-3 w-5 text-center"></i>
+                        <span>AI助手</span>
+                    </a>
+                    
+                    <!-- API管理 -->
+                    <a href="/unified-api.html" class="sidebar-item" data-section="api">
+                        <i class="fas fa-code mr-3 w-5 text-center"></i>
+                        <span>API管理</span>
+                    </a>
+                    
+                    <!-- 安全中心 -->
+                    <a href="#" class="sidebar-item active" data-section="security">
+                        <i class="fas fa-shield-alt mr-3 w-5 text-center"></i>
+                        <span>安全中心</span>
+                        <span class="ml-auto bg-red-500/20 text-red-400 text-xs py-0.5 px-2 rounded">重要</span>
+                    </a>
+                    
+                    <!-- 使用统计 -->
+                    <a href="#" class="sidebar-item" data-section="usage">
+                        <i class="fas fa-chart-line mr-3 w-5 text-center"></i>
+                        <span>使用统计</span>
+                    </a>
+                    
+                    <!-- 集成 -->
+                    <a href="#" class="sidebar-item" data-section="integrations">
+                        <i class="fas fa-plug mr-3 w-5 text-center"></i>
+                        <span>集成</span>
+                    </a>
+                    
+                    <!-- 账单 -->
+                    <a href="#" class="sidebar-item" data-section="billing">
+                        <i class="fas fa-credit-card mr-3 w-5 text-center"></i>
+                        <span>账单与订阅</span>
+                    </a>
+                </div>
+                
+                <div class="mt-10 pt-5 border-t border-gray-800">
+                    <h3 class="px-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        开发者资源
+                    </h3>
+                    
+                    <div class="mt-3 space-y-1">
+                        <!-- 文档 -->
+                        <a href="/docs-center.html" class="sidebar-item">
+                            <i class="fas fa-book mr-3 w-5 text-center"></i>
+                            <span>开发文档</span>
+                        </a>
+                        
+                        <!-- 示例 -->
+                        <a href="/code-examples.html" class="sidebar-item">
+                            <i class="fas fa-code-branch mr-3 w-5 text-center"></i>
+                            <span>代码示例</span>
+                        </a>
+                        
+                        <!-- 社区 -->
+                        <a href="/api-community.html" class="sidebar-item">
+                            <i class="fas fa-users mr-3 w-5 text-center"></i>
+                            <span>开发者社区</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- 底部状态 -->
+            <div class="absolute bottom-0 left-0 right-0 p-4">
+                <div class="flex items-center justify-between text-xs text-gray-400">
+                    <div class="flex items-center">
+                        <span class="status-indicator status-online mr-2"></span>
+                        <span>系统正常</span>
+                    </div>
+                    <a href="/system_status.html" class="text-quantum-accent hover:underline">查看状态</a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主内容 -->
+        <main class="flex-1 overflow-y-auto p-6">
+            <!-- 安全中心部分 -->
+            <div id="security-section" class="dashboard-section">
+                <!-- 页面标题 -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold">安全中心</h1>
+                        <p class="text-gray-400">保护您的账户和数据安全</p>
+                    </div>
+                    <div>
+                        <button id="securityScanBtn" class="quantum-button">
+                            <i class="fas fa-shield-alt mr-2"></i> 运行安全扫描
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 安全概览卡片 -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- 安全评分 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">安全评分</h3>
+                                <p class="stat-value" id="securityScore">85<span class="text-base">/100</span></p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-green-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-yellow-400"><i class="fas fa-arrow-up mr-1"></i>5</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 安全警报 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">活跃警报</h3>
+                                <p class="stat-value" id="activeAlerts">2</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center">
+                                <i class="fas fa-exclamation-triangle text-red-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-green-400"><i class="fas fa-arrow-down mr-1"></i>3</span>
+                            <span class="text-gray-400 ml-2">相比上月</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 上次登录 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">上次登录</h3>
+                                <p class="stat-value text-base" id="lastLogin">今天 09:45</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center">
+                                <i class="fas fa-sign-in-alt text-blue-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-gray-400">从 192.168.1.105</span>
+                        </div>
+                    </div>
+                    
+                    <!-- 数据保护 -->
+                    <div class="stat-card">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-400">数据保护</h3>
+                                <p class="stat-value text-base" id="dataProtection">已启用</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-purple-500/10 flex items-center justify-center">
+                                <i class="fas fa-lock text-purple-500"></i>
+                            </div>
+                        </div>
+                        <div class="flex items-center text-sm">
+                            <span class="text-gray-400">端到端加密</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 安全状态概览 -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">安全状态</h2>
+                        <span class="px-3 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-400 border border-yellow-500/30">
+                            <i class="fas fa-exclamation-circle mr-1"></i> 需要注意
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- 安全建议 -->
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-red-500/10 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-exclamation-circle text-red-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">启用双因素认证</h3>
+                                <p class="text-gray-400 text-sm mt-1">为您的账户添加额外的安全层，防止未授权访问。</p>
+                                <button class="mt-2 px-3 py-1 bg-red-500/20 text-red-400 hover:bg-red-500/30 rounded-lg text-sm">
+                                    立即设置
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-yellow-500/10 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-key text-yellow-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">更新您的密码</h3>
+                                <p class="text-gray-400 text-sm mt-1">您已经超过90天没有更新密码了。我们建议定期更新密码以提高安全性。</p>
+                                <button class="mt-2 px-3 py-1 bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 rounded-lg text-sm">
+                                    更改密码
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">您的API密钥安全</h3>
+                                <p class="text-gray-400 text-sm mt-1">所有API密钥都已正确配置并受到保护。</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="w-10 h-10 rounded-full bg-green-500/10 flex-shrink-0 flex items-center justify-center mr-4">
+                                <i class="fas fa-check-circle text-green-500"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-medium">数据加密已启用</h3>
+                                <p class="text-gray-400 text-sm mt-1">您的所有数据都使用端到端加密进行保护。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 安全设置 -->
+                <div class="mb-8">
+                    <h2 class="text-lg font-medium mb-4">安全设置</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <!-- 账户安全 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <h3 class="text-base font-medium mb-4">账户安全</h3>
+                            
+                            <div class="space-y-4">
+                                <!-- 双因素认证 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">双因素认证</h4>
+                                        <p class="text-gray-400 text-sm">使用应用程序或短信进行双重验证</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" id="toggle2fa">
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-accent"></div>
+                                    </label>
+                                </div>
+                                
+                                <!-- 登录通知 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">登录通知</h4>
+                                        <p class="text-gray-400 text-sm">当检测到新设备登录时通知您</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" id="toggleLoginNotifications" checked>
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-accent"></div>
+                                    </label>
+                                </div>
+                                
+                                <!-- 会话超时 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">会话超时</h4>
+                                        <p class="text-gray-400 text-sm">自动注销非活动会话</p>
+                                    </div>
+                                    <select class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                        <option value="30m">30分钟</option>
+                                        <option value="1h" selected>1小时</option>
+                                        <option value="4h">4小时</option>
+                                        <option value="8h">8小时</option>
+                                        <option value="24h">24小时</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- 密码更新 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">密码</h4>
+                                        <p class="text-gray-400 text-sm">上次更新于2024年3月15日</p>
+                                    </div>
+                                    <button class="px-3 py-1.5 border border-gray-600 rounded-lg text-sm hover:bg-gray-800">
+                                        更改密码
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 数据安全 -->
+                        <div class="glass-effect rounded-xl p-6">
+                            <h3 class="text-base font-medium mb-4">数据安全</h3>
+                            
+                            <div class="space-y-4">
+                                <!-- 数据加密 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">数据加密</h4>
+                                        <p class="text-gray-400 text-sm">对所有存储的数据进行加密</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" id="toggleDataEncryption" checked>
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-accent"></div>
+                                    </label>
+                                </div>
+                                
+                                <!-- 隐私模式 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">隐私模式</h4>
+                                        <p class="text-gray-400 text-sm">不保存您的会话历史记录</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="sr-only peer" id="togglePrivacyMode">
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-quantum-accent"></div>
+                                    </label>
+                                </div>
+                                
+                                <!-- 数据保留 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">数据保留</h4>
+                                        <p class="text-gray-400 text-sm">保留您的数据的时间</p>
+                                    </div>
+                                    <select class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                        <option value="30d">30天</option>
+                                        <option value="90d">90天</option>
+                                        <option value="180d" selected>180天</option>
+                                        <option value="365d">365天</option>
+                                        <option value="forever">永久</option>
+                                    </select>
+                                </div>
+                                
+                                <!-- 数据导出 -->
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-medium">数据导出</h4>
+                                        <p class="text-gray-400 text-sm">下载您的所有数据</p>
+                                    </div>
+                                    <button class="px-3 py-1.5 border border-gray-600 rounded-lg text-sm hover:bg-gray-800">
+                                        导出数据
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 登录历史 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">登录历史</h2>
+                        <button class="text-quantum-accent hover:underline text-sm flex items-center">
+                            查看完整历史 <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- 登录历史表格 -->
+                    <div class="glass-effect rounded-xl overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-700">
+                                <thead class="bg-black/20">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            时间
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            IP地址
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            位置
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            设备
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                            状态
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800">
+                                    <!-- 当前会话 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            今天 09:45
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            192.168.1.105
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            北京, 中国
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            Windows 10 · Chrome 121
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-500">
+                                                当前会话
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- 其他登录 -->
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            昨天 18:32
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            192.168.1.105
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            北京, 中国
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            Windows 10 · Chrome 121
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                                                成功
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            昨天 12:15
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            192.168.1.105
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            北京, 中国
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            iOS 17 · Safari
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                                                成功
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-12 08:47
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            220.181.108.123
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            上海, 中国
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            未知设备
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-red-500/20 text-red-400">
+                                                失败
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            2024-06-10 14:22
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-mono">
+                                            192.168.1.105
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            北京, 中国
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            Windows 10 · Chrome 121
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                            <span class="px-2 py-1 rounded-full text-xs bg-blue-500/20 text-blue-400">
+                                                成功
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 安全审计日志 -->
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-medium">安全审计日志</h2>
+                        <div class="flex space-x-2">
+                            <select id="auditLogFilter" class="bg-black/30 border border-gray-700 rounded-lg text-sm text-white py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-quantum-accent focus:border-transparent">
+                                <option value="all">所有事件</option>
+                                <option value="login">登录事件</option>
+                                <option value="settings">设置变更</option>
+                                <option value="api">API操作</option>
+                                <option value="data">数据访问</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- 审计日志列表 -->
+                    <div class="glass-effect rounded-xl p-4">
+                        <ul class="space-y-3">
+                            <li class="flex items-start p-3 rounded-lg bg-black/20 hover:bg-black/30">
+                                <div class="w-8 h-8 rounded-full bg-blue-500/10 flex-shrink-0 flex items-center justify-center mr-3">
+                                    <i class="fas fa-sign-in-alt text-blue-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium">成功登录</h4>
+                                        <span class="text-xs text-gray-400">今天 09:45</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">从 192.168.1.105 (北京, 中国) 使用 Chrome 浏览器登录</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start p-3 rounded-lg bg-black/20 hover:bg-black/30">
+                                <div class="w-8 h-8 rounded-full bg-purple-500/10 flex-shrink-0 flex items-center justify-center mr-3">
+                                    <i class="fas fa-key text-purple-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium">API密钥创建</h4>
+                                        <span class="text-xs text-gray-400">昨天 14:22</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">创建了一个新的API密钥 "Development"</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start p-3 rounded-lg bg-black/20 hover:bg-black/30">
+                                <div class="w-8 h-8 rounded-full bg-yellow-500/10 flex-shrink-0 flex items-center justify-center mr-3">
+                                    <i class="fas fa-cog text-yellow-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium">设置变更</h4>
+                                        <span class="text-xs text-gray-400">昨天 14:18</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">启用了登录通知功能</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start p-3 rounded-lg bg-black/20 hover:bg-black/30">
+                                <div class="w-8 h-8 rounded-full bg-red-500/10 flex-shrink-0 flex items-center justify-center mr-3">
+                                    <i class="fas fa-exclamation-triangle text-red-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium">登录失败</h4>
+                                        <span class="text-xs text-gray-400">2024-06-12 08:47</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">从 220.181.108.123 (上海, 中国) 尝试登录失败，密码错误</p>
+                                </div>
+                            </li>
+                            
+                            <li class="flex items-start p-3 rounded-lg bg-black/20 hover:bg-black/30">
+                                <div class="w-8 h-8 rounded-full bg-green-500/10 flex-shrink-0 flex items-center justify-center mr-3">
+                                    <i class="fas fa-file-export text-green-500"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h4 class="font-medium">数据导出</h4>
+                                        <span class="text-xs text-gray-400">2024-06-10 16:32</span>
+                                    </div>
+                                    <p class="text-sm text-gray-400 mt-1">导出了账户数据</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- 安全扫描模态框 -->
+    <div id="securityScanModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm"></div>
+        <div class="glass-effect rounded-xl p-6 max-w-md w-full z-10 border border-quantum-primary/30">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-lg font-medium">安全扫描</h3>
+                <button id="closeSecurityScanModal" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="scanningState" class="mb-6">
+                <div class="flex flex-col items-center justify-center py-6">
+                    <div class="w-16 h-16 rounded-full border-4 border-t-quantum-accent border-r-quantum-accent border-b-transparent border-l-transparent animate-spin mb-4"></div>
+                    <h4 class="font-medium text-lg">正在扫描您的账户安全</h4>
+                    <p class="text-gray-400 text-center mt-2">请稍候，我们正在检查您的账户是否存在安全隐患...</p>
+                </div>
+                
+                <div class="space-y-3 mt-4">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                        </div>
+                        <span class="text-sm">检查密码强度</span>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                        </div>
+                        <span class="text-sm">验证登录历史</span>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <div class="w-4 h-4 border-2 border-t-quantum-accent border-r-quantum-accent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
+                        </div>
+                        <span class="text-sm">检查API密钥安全</span>
+                    </div>
+                    
+                    <div class="flex items-center text-gray-400">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="fas fa-circle text-xs"></i>
+                        </div>
+                        <span class="text-sm">检查数据加密设置</span>
+                    </div>
+                    
+                    <div class="flex items-center text-gray-400">
+                        <div class="w-6 h-6 flex items-center justify-center mr-2">
+                            <i class="fas fa-circle text-xs"></i>
+                        </div>
+                        <span class="text-sm">扫描可疑活动</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="scanResultsState" class="mb-6 hidden">
+                <div class="flex flex-col items-center justify-center py-4">
+                    <div class="w-16 h-16 rounded-full bg-yellow-500/10 flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-yellow-500 text-3xl"></i>
+                    </div>
+                    <h4 class="font-medium text-lg">安全扫描完成</h4>
+                    <p class="text-gray-400 text-center mt-2">我们发现了一些可以改进的地方</p>
+                </div>
+                
+                <div class="space-y-4 mt-6">
+                    <div class="p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+                        <h5 class="font-medium flex items-center">
+                            <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                            未启用双因素认证
+                        </h5>
+                        <p class="text-sm text-gray-400 mt-1">建议启用双因素认证以提高账户安全性</p>
+                    </div>
+                    
+                    <div class="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                        <h5 class="font-medium flex items-center">
+                            <i class="fas fa-exclamation-triangle text-yellow-500 mr-2"></i>
+                            密码已超过90天未更新
+                        </h5>
+                        <p class="text-sm text-gray-400 mt-1">建议定期更新密码</p>
+                    </div>
+                    
+                    <div class="p-3 rounded-lg bg-green-500/10 border border-green-500/20">
+                        <h5 class="font-medium flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                            API密钥配置安全
+                        </h5>
+                        <p class="text-sm text-gray-400 mt-1">您的API密钥配置符合安全最佳实践</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end">
+                <button id="scanActionBtn" class="px-4 py-2 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-lg text-white hover:from-quantum-primary/90 hover:to-quantum-secondary/90">
+                    取消
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript -->
+    <script>
+        // DOM元素
+        const userMenuBtn = document.getElementById('userMenuBtn');
+        const userMenu = document.getElementById('userMenu');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const securityScanBtn = document.getElementById('securityScanBtn');
+        const securityScanModal = document.getElementById('securityScanModal');
+        const closeSecurityScanModal = document.getElementById('closeSecurityScanModal');
+        const scanningState = document.getElementById('scanningState');
+        const scanResultsState = document.getElementById('scanResultsState');
+        const scanActionBtn = document.getElementById('scanActionBtn');
+        const toggle2fa = document.getElementById('toggle2fa');
+        const auditLogFilter = document.getElementById('auditLogFilter');
+        
+        // 用户菜单切换
+        userMenuBtn.addEventListener('click', () => {
+            userMenu.classList.toggle('hidden');
+        });
+        
+        // 点击外部关闭用户菜单
+        document.addEventListener('click', (e) => {
+            if (!userMenuBtn.contains(e.target) && !userMenu.contains(e.target)) {
+                userMenu.classList.add('hidden');
+            }
+        });
+        
+        // 侧边栏切换（移动端）
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+        
+        // 安全扫描模态框
+        securityScanBtn.addEventListener('click', () => {
+            securityScanModal.classList.remove('hidden');
+            scanningState.classList.remove('hidden');
+            scanResultsState.classList.add('hidden');
+            scanActionBtn.textContent = '取消';
+            
+            // 模拟扫描完成
+            setTimeout(() => {
+                scanningState.classList.add('hidden');
+                scanResultsState.classList.remove('hidden');
+                scanActionBtn.textContent = '查看详细报告';
+            }, 3000);
+        });
+        
+        closeSecurityScanModal.addEventListener('click', () => {
+            securityScanModal.classList.add('hidden');
+        });
+        
+        scanActionBtn.addEventListener('click', () => {
+            if (scanActionBtn.textContent === '取消') {
+                securityScanModal.classList.add('hidden');
+            } else {
+                // 查看详细报告的逻辑
+                console.log('查看详细安全报告');
+                securityScanModal.classList.add('hidden');
+            }
+        });
+        
+        // 双因素认证切换
+        toggle2fa.addEventListener('change', () => {
+            if (toggle2fa.checked) {
+                // 这里可以添加启用双因素认证的逻辑
+                console.log('启用双因素认证');
+                // 显示设置向导等
+            } else {
+                // 这里可以添加禁用双因素认证的逻辑
+                console.log('禁用双因素认证');
+                // 显示确认对话框等
+            }
+        });
+        
+        // 审计日志过滤
+        auditLogFilter.addEventListener('change', () => {
+            const filterValue = auditLogFilter.value;
+            console.log('过滤审计日志:', filterValue);
+            // 这里可以添加过滤审计日志的逻辑
+        });
+        
+        // 数字动画效果
+        document.addEventListener('DOMContentLoaded', () => {
+            const statValues = document.querySelectorAll('.stat-value');
+            statValues.forEach(el => {
+                const finalValue = el.textContent.replace(/[^\d.]/g, '');
+                if (!finalValue) return;
+                
+                const numericValue = parseFloat(finalValue);
+                let startValue = 0;
+                const duration = 1500;
+                const step = numericValue / (duration / 20);
+                
+                const updateValue = () => {
+                    startValue += step;
+                    if (startValue > numericValue) startValue = numericValue;
+                    
+                    if (el.id === 'securityScore') {
+                        el.innerHTML = Math.round(startValue) + '<span class="text-base">/100</span>';
+                    } else if (el.id === 'activeAlerts') {
+                        el.textContent = Math.round(startValue);
+                    }
+                    
+                    if (startValue < numericValue) {
+                        requestAnimationFrame(updateValue);
+                    }
+                };
+                
+                requestAnimationFrame(updateValue);
+            });
+            
+            // 点击外部关闭模态框
+            window.addEventListener('click', (e) => {
+                if (e.target === securityScanModal) {
+                    securityScanModal.classList.add('hidden');
+                }
+            });
+            
+            // 初始化量子粒子背景
+            initQuantumParticles();
+        });
+        
+        // 量子粒子背景
+        function initQuantumParticles() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const particlesContainer = document.getElementById('quantum-particles');
+            
+            particlesContainer.appendChild(canvas);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 50;
+            const colors = ['#4F46E5', '#8B5CF6', '#06B6D4', '#3B82F6'];
+            
+            // 创建粒子
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2 + 0.5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    velocity: {
+                        x: (Math.random() - 0.5) * 0.5,
+                        y: (Math.random() - 0.5) * 0.5
+                    },
+                    opacity: Math.random() * 0.5 + 0.2
+                });
+            }
+            
+            // 绘制粒子
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    ctx.beginPath();
+                    const gradient = ctx.createRadialGradient(
+                        particle.x, particle.y, 0,
+                        particle.x, particle.y, particle.radius
+                    );
+                    gradient.addColorStop(0, `${particle.color}`);
+                    gradient.addColorStop(1, 'transparent');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.globalAlpha = particle.opacity;
+                    ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                // 绘制连接线
+                ctx.globalAlpha = 0.1;
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = '#4F46E5';
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            
+            // 更新粒子位置
+            function updateParticles() {
+                particles.forEach(particle => {
+                    particle.x += particle.velocity.x;
+                    particle.y += particle.velocity.y;
+                    
+                    // 边界检查
+                    if (particle.x < 0 || particle.x > canvas.width) {
+                        particle.velocity.x = -particle.velocity.x;
+                    }
+                    
+                    if (particle.y < 0 || particle.y > canvas.height) {
+                        particle.velocity.y = -particle.velocity.y;
+                    }
+                    
+                    // 随机改变方向
+                    if (Math.random() < 0.01) {
+                        particle.velocity.x = (Math.random() - 0.5) * 0.5;
+                        particle.velocity.y = (Math.random() - 0.5) * 0.5;
+                    }
+                });
+            }
+            
+            // 动画循环
+            function animate() {
+                updateParticles();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+            
+            // 窗口大小改变时调整画布大小
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+            
+            animate();
+        }
+    </script>
+</body>
+</html> 
