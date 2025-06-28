@@ -38,6 +38,70 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --neon-glow: 0 0 20px rgba(108, 19, 255, 0.5);
     --cyber-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    
+    /* 自定义鼠标样式变量 */
+    --cursor-default: auto;
+    --cursor-pointer: pointer;
+    --cursor-text: text;
+    --cursor-wait: wait;
+    --cursor-resize: move;
+    --cursor-hover: pointer;
+}
+
+/* 自定义鼠标样式 - 使用CSS变量，由JS动态设置 */
+html {
+    cursor: var(--cursor-default);
+}
+
+a, button, .clickable, [role="button"], .quantum-button, .sidebar-item, .nav-link {
+    cursor: var(--cursor-pointer);
+}
+
+input, textarea, select, [contenteditable="true"] {
+    cursor: var(--cursor-text);
+}
+
+.resizable {
+    cursor: var(--cursor-resize);
+}
+
+.loading, .processing {
+    cursor: var(--cursor-wait);
+}
+
+.quantum-card:hover, .glass-effect:hover {
+    cursor: var(--cursor-hover);
+}
+
+/* 量子交互鼠标效果 */
+.quantum-cursor-fx {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--quantum-accent);
+    opacity: 0.6;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    box-shadow: 0 0 10px var(--quantum-accent);
+}
+
+.quantum-cursor-fx.active {
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+    background-color: var(--quantum-primary);
+}
+
+.quantum-cursor-fx.click {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+    background-color: var(--neon-pink);
+    box-shadow: 0 0 20px var(--neon-pink);
+    transition: transform 0.1s ease-out, background-color 0.1s ease;
 }
 
 body {

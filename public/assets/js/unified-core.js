@@ -6,6 +6,93 @@
  * @author AlingAi Team
  */
 
+// 量子鼠标跟随效果
+function initQuantumCursor() {
+    // 检查是否为移动设备，如果是则不初始化鼠标效果
+    if (window.matchMedia('(max-width: 768px)').matches || 
+        'ontouchstart' in window || 
+        navigator.maxTouchPoints > 0) {
+        return;
+    }
+    
+    // 创建鼠标跟随元素
+    const cursor = document.createElement('div');
+    cursor.className = 'quantum-cursor-fx';
+    document.body.appendChild(cursor);
+    
+    // 鼠标移动事件
+    document.addEventListener('mousemove', e => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+    });
+    
+    // 鼠标点击事件
+    document.addEventListener('mousedown', () => {
+        cursor.classList.add('click');
+        setTimeout(() => cursor.classList.remove('click'), 300);
+    });
+    
+    // 鼠标悬停在可交互元素上时的效果
+    const interactiveElements = document.querySelectorAll('a, button, .clickable, [role="button"], .quantum-button, .sidebar-item, .nav-link, .glass-effect');
+    
+    interactiveElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('active');
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('active');
+        });
+    });
+    
+    // 处理鼠标离开页面的情况
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+    });
+    
+    document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '0.6';
+    });
+    
+    // 处理文本输入区域
+    const inputElements = document.querySelectorAll('input, textarea, [contenteditable="true"]');
+    
+    inputElements.forEach(el => {
+        el.addEventListener('focus', () => {
+            cursor.style.opacity = '0.2';
+        });
+        
+        el.addEventListener('blur', () => {
+            cursor.style.opacity = '0.6';
+        });
+    });
+    
+    // 性能优化：使用requestAnimationFrame
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    
+    document.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+    });
+    
+    function animateCursor() {
+        const easing = 0.2;
+        
+        cursorX += (mouseX - cursorX) * easing;
+        cursorY += (mouseY - cursorY) * easing;
+        
+        cursor.style.left = `${cursorX}px`;
+        cursor.style.top = `${cursorY}px`;
+        
+        requestAnimationFrame(animateCursor);
+    }
+    
+    animateCursor();
+}
+
 // 量子粒子初始化函数
 function initQuantumParticles(elementId, options = {}) {
     const container = document.getElementById(elementId);

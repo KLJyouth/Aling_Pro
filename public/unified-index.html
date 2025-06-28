@@ -63,9 +63,10 @@
                 <!-- 导航链接 - 中等尺寸屏幕以上 -->
                 <div class="hidden md:flex items-center space-x-6">
                     <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
-                    <a href="/api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
-                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
-                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/unified-api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
+                    <a href="/unified-status.html" class="text-white hover:text-quantum-accent transition-colors">系统状态</a>
+                    <a href="/unified-quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/unified-partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
                     <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
                 </div>
                 
@@ -89,9 +90,10 @@
             <div class="container mx-auto px-6 py-4">
                 <div class="flex flex-col space-y-4">
                     <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
-                    <a href="/api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
-                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
-                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/unified-api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
+                    <a href="/unified-status.html" class="text-white hover:text-quantum-accent transition-colors">系统状态</a>
+                    <a href="/unified-quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/unified-partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
                     <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
                 </div>
             </div>
@@ -566,13 +568,36 @@
         </div>
     </footer>
     
-    <!-- 核心JS -->
+    <!-- 核心脚本 -->
     <script src="/assets/js/unified-core.js"></script>
+    <script src="/assets/js/quantum-particles.js"></script>
+    <script src="/assets/js/cursor-effects.js"></script>
     
     <!-- 移动菜单脚本 -->
     <script>
         document.getElementById('mobile-menu-button').addEventListener('click', function() {
             document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    </script>
+    
+    <!-- 页面脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化量子粒子背景
+            initQuantumParticles('quantum-particles');
+            
+            // 初始化量子鼠标效果
+            initQuantumCursor();
+            
+            // 初始化移动菜单
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
         });
     </script>
 </body>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>合作伙伴 - AlingAi</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#6366f1',
+                        'quantum-secondary': '#8b5cf6',
+                        'quantum-accent': '#4fd1c5',
+                        'quantum-dark': '#111827',
+                        'quantum-light': '#f9fafb'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 25% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 75% 30%, rgba(79, 209, 197, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: white;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .quantum-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .gradient-border {
+            position: relative;
+            border-radius: 0.75rem;
+            padding: 1px;
+            background: linear-gradient(90deg, #6366f1, #4fd1c5, #8b5cf6);
+        }
+        
+        .gradient-border::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: 0.75rem;
+            background: linear-gradient(90deg, #6366f1, #4fd1c5, #8b5cf6);
+            filter: blur(10px);
+            opacity: 0.7;
+        }
+        
+        .quantum-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* FAQ展开/收起动画 */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.3s ease-out, transform 0.3s ease-out;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 1000px;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* 表单验证样式 */
+        .form-input {
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .form-input.error {
+            border-color: #ef4444;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .error-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* 表单提交反馈 */
+        .form-feedback {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            z-index: 100;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .form-feedback.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .form-feedback.success {
+            background: rgba(16, 185, 129, 0.9);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .form-feedback.error {
+            background: rgba(239, 68, 68, 0.9);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <nav class="glass-effect py-4 px-6">
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="flex items-center">
+                    <div class="h-9 w-9 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-xl">A</span>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                </a>
+                
+                <!-- 导航链接 - 桌面 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">首页</a>
+                    <a href="/unified-api-documentation.html" class="text-gray-300 hover:text-white transition-colors">API文档</a>
+                    <a href="/unified-status.html" class="text-gray-300 hover:text-white transition-colors">系统状态</a>
+                    <a href="/unified-quantum-security.html" class="text-gray-300 hover:text-white transition-colors">量子安全</a>
+                    <a href="/unified-partners.html" class="text-white font-medium">合作伙伴</a>
+                </div>
+                
+                <!-- 登录按钮 - 桌面 -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/login" class="text-gray-300 hover:text-white transition-colors">登录</a>
+                    <a href="/register" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white px-4 py-2 rounded-lg">注册</a>
+                </div>
+                
+                <!-- 移动菜单按钮 -->
+                <button class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- 移动导航菜单 (默认隐藏) -->
+    <div class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-md hidden" id="mobile-menu">
+        <div class="glass-effect h-full w-64 p-6">
+            <div class="flex justify-between items-center mb-8">
+                <a href="/" class="flex items-center">
+                    <div class="h-8 w-8 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-2">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                </a>
+                <button id="close-mobile-menu" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col space-y-4">
+                <a href="/" class="text-gray-300 hover:text-white py-2 transition-colors">首页</a>
+                <a href="/unified-api-documentation.html" class="text-gray-300 hover:text-white py-2 transition-colors">API文档</a>
+                <a href="/unified-status.html" class="text-gray-300 hover:text-white py-2 transition-colors">系统状态</a>
+                <a href="/unified-quantum-security.html" class="text-gray-300 hover:text-white py-2 transition-colors">量子安全</a>
+                <a href="/unified-partners.html" class="text-white font-medium py-2">合作伙伴</a>
+                
+                <div class="pt-4 border-t border-gray-800">
+                    <a href="/login" class="block text-center text-gray-300 hover:text-white py-2 transition-colors">登录</a>
+                    <a href="/register" class="block text-center bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white mt-2 py-2 rounded-lg">注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <main class="container mx-auto pt-24 pb-16 px-4 md:px-6">
+        <!-- 英雄区块 -->
+        <section class="mb-20">
+            <div class="glass-effect rounded-xl p-8 md:p-12 relative overflow-hidden">
+                <!-- 背景装饰 -->
+                <div class="absolute top-0 right-0 w-full h-full overflow-hidden opacity-10 pointer-events-none">
+                    <div class="absolute top-1/4 left-0 w-1/2 h-1/2 bg-quantum-primary rounded-full blur-3xl"></div>
+                    <div class="absolute -bottom-1/4 right-0 w-1/2 h-1/2 bg-quantum-secondary rounded-full blur-3xl"></div>
+                </div>
+                
+                <div class="relative z-10 flex flex-col lg:flex-row items-center">
+                    <div class="lg:w-2/3 mb-10 lg:mb-0 lg:pr-12">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                            <span class="block">携手共创</span>
+                            <span class="bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AI创新未来</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                            AlingAi与行业领先企业和研究机构建立战略合作伙伴关系，探索AI创新应用，共同推动人工智能技术的边界，为各行各业带来变革性解决方案。
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#partner-types" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white px-6 py-3 rounded-lg font-medium">
+                                浏览合作机会
+                            </a>
+                            <a href="#contact-form" class="border border-white/20 hover:bg-white/10 transition-colors text-white px-6 py-3 rounded-lg font-medium">
+                                成为合作伙伴
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/3">
+                        <div class="relative w-full h-64 md:h-80">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <!-- 连接图形 -->
+                                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+                                    <!-- 背景圆形 -->
+                                    <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(99, 102, 241, 0.1)" stroke-width="2" />
+                                    <circle cx="100" cy="100" r="70" fill="none" stroke="rgba(79, 209, 197, 0.1)" stroke-width="2" />
+                                    <circle cx="100" cy="100" r="50" fill="none" stroke="rgba(139, 92, 246, 0.1)" stroke-width="2" />
+                                    
+                                    <!-- 节点 -->
+                                    <circle cx="100" cy="100" r="12" fill="rgba(79, 209, 197, 0.8)" />
+                                    <circle cx="160" cy="100" r="8" fill="rgba(99, 102, 241, 0.8)" />
+                                    <circle cx="70" cy="160" r="8" fill="rgba(139, 92, 246, 0.8)" />
+                                    <circle cx="70" cy="40" r="8" fill="rgba(99, 102, 241, 0.8)" />
+                                    <circle cx="40" cy="120" r="8" fill="rgba(139, 92, 246, 0.8)" />
+                                    <circle cx="150" cy="50" r="8" fill="rgba(79, 209, 197, 0.8)" />
+                                    <circle cx="150" cy="150" r="8" fill="rgba(99, 102, 241, 0.8)" />
+                                    
+                                    <!-- 连接线 -->
+                                    <line x1="100" y1="100" x2="160" y2="100" stroke="rgba(99, 102, 241, 0.5)" stroke-width="2" />
+                                    <line x1="100" y1="100" x2="70" y2="160" stroke="rgba(139, 92, 246, 0.5)" stroke-width="2" />
+                                    <line x1="100" y1="100" x2="70" y2="40" stroke="rgba(99, 102, 241, 0.5)" stroke-width="2" />
+                                    <line x1="100" y1="100" x2="40" y2="120" stroke="rgba(139, 92, 246, 0.5)" stroke-width="2" />
+                                    <line x1="100" y1="100" x2="150" y2="50" stroke="rgba(79, 209, 197, 0.5)" stroke-width="2" />
+                                    <line x1="100" y1="100" x2="150" y2="150" stroke="rgba(99, 102, 241, 0.5)" stroke-width="2" />
+                                    
+                                    <line x1="70" y1="40" x2="150" y2="50" stroke="rgba(79, 209, 197, 0.3)" stroke-width="1" stroke-dasharray="4" />
+                                    <line x1="160" y1="100" x2="150" y2="150" stroke="rgba(99, 102, 241, 0.3)" stroke-width="1" stroke-dasharray="4" />
+                                    <line x1="70" y1="160" x2="150" y2="150" stroke="rgba(139, 92, 246, 0.3)" stroke-width="1" stroke-dasharray="4" />
+                                    <line x1="40" y1="120" x2="70" y2="160" stroke="rgba(139, 92, 246, 0.3)" stroke-width="1" stroke-dasharray="4" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 伙伴标志 -->
+                <div class="relative z-10 mt-8 pt-8 border-t border-white/10">
+                    <p class="text-center text-sm text-gray-400 mb-6">我们的全球合作伙伴</p>
+                    <div class="flex flex-wrap justify-center items-center gap-8 opacity-60">
+                        <div class="h-8 w-24 bg-white/90 rounded-md"></div>
+                        <div class="h-8 w-24 bg-white/90 rounded-md"></div>
+                        <div class="h-8 w-24 bg-white/90 rounded-md"></div>
+                        <div class="h-8 w-24 bg-white/90 rounded-md"></div>
+                        <div class="h-8 w-24 bg-white/90 rounded-md"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 合作类型 -->
+        <section class="mb-20" id="partner-types">
+            <h2 class="text-3xl font-bold mb-12 text-center">合作伙伴类型</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 技术合作伙伴 -->
+                <div class="glass-effect rounded-xl p-8 relative group hover:border-quantum-primary/30 transition-colors">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mb-6">
+                        <i class="fas fa-microchip text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">技术合作伙伴</h3>
+                    <p class="text-gray-300 mb-6">
+                        与我们共同开发尖端AI技术和解决方案，包括API集成、模型优化和定制AI服务。我们提供技术资源、API优先访问权和联合研发机会。
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>优先访问Beta版API和模型</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>技术支持和专家咨询</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>联合研发项目机会</span>
+                        </li>
+                    </ul>
+                    <a href="#contact-form" class="inline-block border border-quantum-primary/50 hover:bg-quantum-primary/10 transition-colors text-quantum-accent px-5 py-2 rounded-lg text-sm font-medium">
+                        了解详情
+                    </a>
+                </div>
+                
+                <!-- 解决方案合作伙伴 -->
+                <div class="glass-effect rounded-xl p-8 relative group hover:border-quantum-accent/30 transition-colors">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-quantum-accent to-quantum-primary flex items-center justify-center mb-6">
+                        <i class="fas fa-puzzle-piece text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">解决方案合作伙伴</h3>
+                    <p class="text-gray-300 mb-6">
+                        将AlingAi技术集成到您的产品和服务中，为客户创建创新解决方案。我们提供集成支持、联合营销机会和商业发展协助。
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>集成支持和自定义解决方案</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>联合营销和案例研究</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>营收共享计划</span>
+                        </li>
+                    </ul>
+                    <a href="#contact-form" class="inline-block border border-quantum-accent/50 hover:bg-quantum-accent/10 transition-colors text-quantum-accent px-5 py-2 rounded-lg text-sm font-medium">
+                        了解详情
+                    </a>
+                </div>
+                
+                <!-- 研究合作伙伴 -->
+                <div class="glass-effect rounded-xl p-8 relative group hover:border-quantum-secondary/30 transition-colors">
+                    <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-quantum-secondary to-quantum-primary flex items-center justify-center mb-6">
+                        <i class="fas fa-flask text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4">研究合作伙伴</h3>
+                    <p class="text-gray-300 mb-6">
+                        与学术机构和研究组织合作开展前沿AI研究。我们提供研究资助、数据访问、联合发表机会和开源合作。
+                    </p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>研究资助和计算资源</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>数据集和模型访问</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check text-quantum-accent mr-3"></i>
+                            <span>联合发表研究成果</span>
+                        </li>
+                    </ul>
+                    <a href="#contact-form" class="inline-block border border-quantum-secondary/50 hover:bg-quantum-secondary/10 transition-colors text-quantum-accent px-5 py-2 rounded-lg text-sm font-medium">
+                        了解详情
+                    </a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 合作流程 -->
+        <section class="mb-20">
+            <div class="glass-effect rounded-xl p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-12 text-center">合作流程</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <!-- 步骤1 -->
+                    <div class="relative">
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mb-6">
+                                <span class="text-white font-bold text-xl">1</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-center">提交申请</h3>
+                            <p class="text-gray-300 text-center">
+                                填写合作伙伴申请表，告诉我们您的组织和合作想法
+                            </p>
+                        </div>
+                        
+                        <!-- 连接线 - 仅在大屏幕显示 -->
+                        <div class="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-quantum-primary to-transparent -translate-x-8"></div>
+                    </div>
+                    
+                    <!-- 步骤2 -->
+                    <div class="relative">
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mb-6">
+                                <span class="text-white font-bold text-xl">2</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-center">初步咨询</h3>
+                            <p class="text-gray-300 text-center">
+                                与我们的合作团队进行沟通，探讨潜在的合作机会
+                            </p>
+                        </div>
+                        
+                        <!-- 连接线 - 仅在大屏幕显示 -->
+                        <div class="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-quantum-secondary to-transparent -translate-x-8"></div>
+                    </div>
+                    
+                    <!-- 步骤3 -->
+                    <div class="relative">
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-quantum-secondary to-quantum-accent flex items-center justify-center mb-6">
+                                <span class="text-white font-bold text-xl">3</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-center">制定方案</h3>
+                            <p class="text-gray-300 text-center">
+                                共同制定合作计划，确定目标、资源和时间线
+                            </p>
+                        </div>
+                        
+                        <!-- 连接线 - 仅在大屏幕显示 -->
+                        <div class="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-quantum-accent to-transparent -translate-x-8"></div>
+                    </div>
+                    
+                    <!-- 步骤4 -->
+                    <div class="relative">
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-quantum-accent to-quantum-primary flex items-center justify-center mb-6">
+                                <span class="text-white font-bold text-xl">4</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3 text-center">启动合作</h3>
+                            <p class="text-gray-300 text-center">
+                                签署协议，开始合作项目，获得专属支持和资源
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 成功案例 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-12 text-center">成功合作案例</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 案例1 -->
+                <div class="glass-effect rounded-xl overflow-hidden group">
+                    <div class="relative h-48 bg-gradient-to-br from-quantum-primary/20 to-quantum-secondary/20 overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-16 w-40 bg-white/90 rounded-lg flex items-center justify-center">
+                                <span class="font-bold text-gray-800 text-xl">科技公司</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">智能客服解决方案</h3>
+                        <p class="text-gray-300 mb-4">
+                            与领先科技公司合作开发的AI客服助手，集成AlingAi的对话模型，提升了客户满意度和服务效率，降低了60%的人工服务成本。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">客户服务</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">对话AI</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">解决方案集成</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例2 -->
+                <div class="glass-effect rounded-xl overflow-hidden group">
+                    <div class="relative h-48 bg-gradient-to-br from-quantum-secondary/20 to-quantum-accent/20 overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-16 w-40 bg-white/90 rounded-lg flex items-center justify-center">
+                                <span class="font-bold text-gray-800 text-xl">医疗机构</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">医学影像分析</h3>
+                        <p class="text-gray-300 mb-4">
+                            与医疗研究机构合作研发的医学影像分析系统，利用AlingAi的图像识别技术，辅助医生提高诊断准确率，减少30%的误诊率。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">医疗AI</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">图像分析</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">研究合作</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 案例3 -->
+                <div class="glass-effect rounded-xl overflow-hidden group">
+                    <div class="relative h-48 bg-gradient-to-br from-quantum-accent/20 to-quantum-primary/20 overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="h-16 w-40 bg-white/90 rounded-lg flex items-center justify-center">
+                                <span class="font-bold text-gray-800 text-xl">教育平台</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-3">个性化学习助手</h3>
+                        <p class="text-gray-300 mb-4">
+                            与在线教育平台合作开发的AI学习助手，根据学习者能力和进度提供量身定制的教学内容，提升了学习效果和用户留存率。
+                        </p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">教育科技</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">个性化学习</span>
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-xs">内容生成</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-10">
+                <a href="#" class="inline-block border border-white/20 hover:bg-white/10 transition-colors text-white px-6 py-3 rounded-lg font-medium">
+                    查看更多案例
+                </a>
+            </div>
+        </section>
+        
+        <!-- 常见问题 -->
+        <section class="mb-20">
+            <div class="glass-effect rounded-xl p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-8">常见问题</h2>
+                
+                <div class="space-y-6">
+                    <!-- 问题1 -->
+                    <div class="border border-white/10 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                            <h3 class="text-lg font-medium">如何成为AlingAi的合作伙伴？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent transition-transform"></i>
+                        </button>
+                        <div class="p-5 pt-0 border-t border-white/10" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                            <p class="text-gray-300">
+                                要成为AlingAi的合作伙伴，您需要填写本页底部的合作伙伴申请表，详细说明您的组织和合作意向。我们的合作团队会在3个工作日内与您联系，进一步讨论合作可能性和后续步骤。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 问题2 -->
+                    <div class="border border-white/10 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                            <h3 class="text-lg font-medium">合作伙伴计划有哪些具体权益？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent transition-transform"></i>
+                        </button>
+                        <div class="p-5 pt-0 border-t border-white/10" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                            <p class="text-gray-300">
+                                不同类型的合作伙伴享有不同的权益。技术合作伙伴可获得API优先访问权、专家技术支持和联合研发机会；解决方案合作伙伴可获得集成支持、联合营销和营收共享计划；研究合作伙伴则可获得研究资助、数据访问和联合发表机会。具体权益会根据合作项目的规模和目标进行定制。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 问题3 -->
+                    <div class="border border-white/10 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                            <h3 class="text-lg font-medium">合作是否需要支付费用？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent transition-transform"></i>
+                        </button>
+                        <div class="p-5 pt-0 border-t border-white/10" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                            <p class="text-gray-300">
+                                合作费用因项目而异。我们提供多种合作模式，包括收入分成、资源交换或联合投资等。研究合作通常提供资助而非收费。在初步咨询阶段，我们会与您讨论最适合双方的财务安排，确保合作对双方都有价值。
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- 问题4 -->
+                    <div class="border border-white/10 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-5 flex justify-between items-center focus:outline-none">
+                            <h3 class="text-lg font-medium">如何保护我们在合作中的知识产权？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent transition-transform"></i>
+                        </button>
+                        <div class="p-5 pt-0 border-t border-white/10" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out;">
+                            <p class="text-gray-300">
+                                我们非常重视知识产权保护。在启动任何合作之前，我们会签署保密协议来保护双方的机密信息。在正式合作协议中，我们会明确界定知识产权的归属、使用权限和商业化条款，确保所有参与方的权益得到尊重和保护。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 联系表单 -->
+        <section class="mb-20" id="contact-form">
+            <div class="glass-effect rounded-xl p-8 md:p-12">
+                <h2 class="text-3xl font-bold mb-8 text-center">成为合作伙伴</h2>
+                <p class="text-center text-gray-300 mb-10 max-w-2xl mx-auto">
+                    填写以下表单，我们的合作团队将会在3个工作日内与您联系，探讨合作机会
+                </p>
+                
+                <form class="max-w-3xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="company-name" class="block text-sm font-medium mb-2">公司/组织名称*</label>
+                            <input type="text" id="company-name" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-quantum-accent">
+                        </div>
+                        <div>
+                            <label for="website" class="block text-sm font-medium mb-2">网站</label>
+                            <input type="url" id="website" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-quantum-accent">
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="contact-name" class="block text-sm font-medium mb-2">联系人姓名*</label>
+                            <input type="text" id="contact-name" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-quantum-accent">
+                        </div>
+                        <div>
+                            <label for="contact-email" class="block text-sm font-medium mb-2">联系人邮箱*</label>
+                            <input type="email" id="contact-email" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-quantum-accent">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">合作伙伴类型*</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <label class="flex items-center bg-black/30 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer">
+                                <input type="radio" name="partner-type" class="mr-3">
+                                <span>技术合作伙伴</span>
+                            </label>
+                            <label class="flex items-center bg-black/30 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer">
+                                <input type="radio" name="partner-type" class="mr-3">
+                                <span>解决方案合作伙伴</span>
+                            </label>
+                            <label class="flex items-center bg-black/30 border border-gray-700 rounded-lg px-4 py-3 cursor-pointer">
+                                <input type="radio" name="partner-type" class="mr-3">
+                                <span>研究合作伙伴</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label for="cooperation-idea" class="block text-sm font-medium mb-2">合作意向描述*</label>
+                        <textarea id="cooperation-idea" rows="5" class="w-full bg-black/30 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-quantum-accent" placeholder="请描述您希望如何与AlingAi合作，包括目标、想法和预期成果..."></textarea>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <label class="flex items-center">
+                            <input type="checkbox" class="mr-3">
+                            <span class="text-sm">我同意AlingAi的<a href="#" class="text-quantum-accent hover:underline">隐私政策</a>和<a href="#" class="text-quantum-accent hover:underline">服务条款</a></span>
+                        </label>
+                    </div>
+                    
+                    <div class="flex justify-center">
+                        <button type="submit" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white px-8 py-4 rounded-lg font-medium">
+                            提交申请
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-10">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <a href="/" class="flex items-center mb-6">
+                        <div class="h-9 w-9 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-xl">A</span>
+                        </div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        构建更安全、更智能的AI应用，保护您的数据不受量子威胁
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">产品</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">API和SDK</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">AI模型</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">量子安全</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">企业解决方案</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">价格</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">资源</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">文档</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API参考</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">示例和指南</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">状态页面</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">博客</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">公司</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">安全与合规</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">合作伙伴</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">联系我们</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">招贤纳士</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2024 AlingAi Inc. 保留所有权利</p>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">服务条款</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">隐私政策</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">安全政策</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">Cookie设置</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 移动菜单脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动菜单
+            const mobileMenuBtn = document.querySelector('.md\\:hidden');
+            const closeMenuBtn = document.getElementById('close-mobile-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            closeMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+            });
+            
+            // FAQ手风琴效果
+            const faqButtons = document.querySelectorAll('.border.border-white\\/10 button');
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const faqItem = this.closest('.faq-item');
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // 关闭其他所有FAQ
+                    faqItems.forEach(item => {
+                        if (item !== faqItem && item.classList.contains('active')) {
+                            item.classList.remove('active');
+                        }
+                    });
+                    
+                    // 切换当前FAQ的显示/隐藏
+                    faqItem.classList.toggle('active');
+                });
+            });
+            
+            // 初始状态：打开第一个FAQ
+            if (faqItems.length > 0) {
+                faqItems[0].classList.add('active');
+            }
+            
+            // 平滑滚动效果
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        // 添加平滑滚动效果
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100, // 偏移量，避免被导航栏遮挡
+                            behavior: 'smooth'
+                        });
+                        
+                        // 如果是FAQ链接，自动打开相应的FAQ
+                        if (targetId.includes('faq')) {
+                            const faqSection = document.querySelector(targetId);
+                            if (faqSection) {
+                                const faqButton = faqSection.querySelector('button');
+                                if (faqButton) {
+                                    setTimeout(() => {
+                                        faqButton.click();
+                                    }, 500); // 等待滚动完成后打开FAQ
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+            
+            // 表单验证
+            const partnerForm = document.querySelector('form');
+            if (partnerForm) {
+                // 为所有输入字段添加验证
+                const formInputs = partnerForm.querySelectorAll('input, textarea');
+                formInputs.forEach(input => {
+                    input.classList.add('form-input');
+                    
+                    // 创建错误消息容器
+                    const errorMsg = document.createElement('div');
+                    errorMsg.className = 'error-message';
+                    input.parentNode.appendChild(errorMsg);
+                    
+                    // 添加实时验证
+                    input.addEventListener('blur', function() {
+                        validateInput(input);
+                    });
+                    
+                    // 当用户开始输入时，移除错误状态
+                    input.addEventListener('input', function() {
+                        input.classList.remove('error');
+                        const errorMsg = input.parentNode.querySelector('.error-message');
+                        if (errorMsg) {
+                            errorMsg.classList.remove('visible');
+                        }
+                    });
+                });
+                
+                partnerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 验证所有字段
+                    let isValid = true;
+                    formInputs.forEach(input => {
+                        if (!validateInput(input)) {
+                            isValid = false;
+                        }
+                    });
+                    
+                    if (!isValid) {
+                        // 滚动到第一个错误字段
+                        const firstError = partnerForm.querySelector('.error');
+                        if (firstError) {
+                            firstError.focus();
+                            firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return;
+                    }
+                    
+                    // 收集表单数据
+                    const formData = new FormData(partnerForm);
+                    const formDataObj = {};
+                    formData.forEach((value, key) => {
+                        formDataObj[key] = value;
+                    });
+                    
+                    // 模拟表单提交
+                    showFormFeedback('success', '感谢您的申请！我们的团队将在3个工作日内与您联系。');
+                    partnerForm.reset();
+                    
+                    // 实际场景中，这里应该发送AJAX请求
+                    /*
+                    fetch('/api/partner-application', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formDataObj)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            showFormFeedback('success', '感谢您的申请！我们的团队将在3个工作日内与您联系。');
+                            partnerForm.reset();
+                        } else {
+                            showFormFeedback('error', data.message || '提交失败，请稍后重试。');
+                        }
+                    })
+                    .catch(error => {
+                        showFormFeedback('error', '提交失败，请稍后重试。');
+                        console.error('Error:', error);
+                    });
+                    */
+                });
+                
+                // 验证单个输入字段
+                function validateInput(input) {
+                    const errorMsg = input.parentNode.querySelector('.error-message');
+                    let isValid = true;
+                    let message = '';
+                    
+                    // 检查必填字段
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        isValid = false;
+                        message = '此字段为必填项';
+                    }
+                    // 验证邮箱
+                    else if (input.type === 'email' && input.value.trim() && !validateEmail(input.value)) {
+                        isValid = false;
+                        message = '请输入有效的邮箱地址';
+                    }
+                    // 验证复选框
+                    else if (input.type === 'checkbox' && input.hasAttribute('required') && !input.checked) {
+                        isValid = false;
+                        message = '请同意此项';
+                    }
+                    
+                    // 更新UI
+                    if (!isValid) {
+                        input.classList.add('error');
+                        if (errorMsg) {
+                            errorMsg.textContent = message;
+                            errorMsg.classList.add('visible');
+                        }
+                    } else {
+                        input.classList.remove('error');
+                        if (errorMsg) {
+                            errorMsg.classList.remove('visible');
+                        }
+                    }
+                    
+                    return isValid;
+                }
+                
+                // 邮箱验证函数
+                function validateEmail(email) {
+                    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    return re.test(email);
+                }
+                
+                // 显示表单反馈
+                function showFormFeedback(type, message) {
+                    // 移除之前的反馈
+                    const existingFeedback = document.querySelector('.form-feedback');
+                    if (existingFeedback) {
+                        existingFeedback.remove();
+                    }
+                    
+                    // 创建反馈元素
+                    const feedback = document.createElement('div');
+                    feedback.className = `form-feedback ${type}`;
+                    
+                    const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+                    feedback.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-${icon} mr-3"></i>
+                            <span>${message}</span>
+                            <button class="ml-4 text-white/70 hover:text-white" onclick="this.parentElement.parentElement.remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                    
+                    // 添加到页面
+                    document.body.appendChild(feedback);
+                    
+                    // 显示反馈
+                    setTimeout(() => {
+                        feedback.classList.add('visible');
+                    }, 10);
+                    
+                    // 5秒后自动消失
+                    setTimeout(() => {
+                        feedback.classList.remove('visible');
+                        setTimeout(() => {
+                            feedback.remove();
+                        }, 300);
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

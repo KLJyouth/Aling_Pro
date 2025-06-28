@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>量子安全技术 - AlingAi</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#6366f1',
+                        'quantum-secondary': '#8b5cf6',
+                        'quantum-accent': '#4fd1c5',
+                        'quantum-dark': '#111827',
+                        'quantum-light': '#f9fafb'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at 25% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 75% 30%, rgba(79, 209, 197, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+            color: white;
+        }
+        
+        .glass-effect {
+            background: rgba(15, 15, 15, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .quantum-glow {
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        .gradient-border {
+            position: relative;
+            border-radius: 0.75rem;
+            padding: 1px;
+            background: linear-gradient(90deg, #6366f1, #4fd1c5, #8b5cf6);
+        }
+        
+        .gradient-border::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: 0.75rem;
+            background: linear-gradient(90deg, #6366f1, #4fd1c5, #8b5cf6);
+            filter: blur(10px);
+            opacity: 0.7;
+        }
+        
+        .quantum-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+        
+        /* 安全特性卡片悬停效果 */
+        .security-feature-card {
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .security-feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .security-feature-card:hover .card-icon {
+            transform: rotateY(180deg);
+            color: #4fd1c5;
+        }
+        
+        .card-icon {
+            transition: all 0.6s ease;
+            transform-style: preserve-3d;
+        }
+        
+        /* 安全层级图交互 */
+        .security-layer {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .security-layer:hover {
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+        
+        .security-layer.active {
+            filter: brightness(1.3);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        
+        .layer-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .layer-details.active {
+            max-height: 500px;
+        }
+        
+        /* 量子粒子动画 */
+        .quantum-particle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0;
+            background: radial-gradient(circle at center, rgba(99, 102, 241, 0.8), rgba(79, 209, 197, 0.4));
+            animation: particle-float 8s ease-in-out infinite, particle-fade 8s ease-in-out infinite;
+        }
+        
+        @keyframes particle-float {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(20px, -20px); }
+            50% { transform: translate(40px, 0); }
+            75% { transform: translate(20px, 20px); }
+            100% { transform: translate(0, 0); }
+        }
+        
+        @keyframes particle-fade {
+            0%, 100% { opacity: 0; }
+            25%, 75% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* 淡入动画 */
+        .fade-in-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in-element.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* FAQ手风琴效果 */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+        
+        .faq-toggle {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50">
+        <nav class="glass-effect py-4 px-6">
+            <div class="container mx-auto flex justify-between items-center">
+                <!-- Logo -->
+                <a href="/" class="flex items-center">
+                    <div class="h-9 w-9 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-3">
+                        <span class="text-white font-bold text-xl">A</span>
+                    </div>
+                    <span class="text-xl font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                </a>
+                
+                <!-- 导航链接 - 桌面 -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-300 hover:text-white transition-colors">首页</a>
+                    <a href="/unified-api-documentation.html" class="text-gray-300 hover:text-white transition-colors">API文档</a>
+                    <a href="/unified-status.html" class="text-gray-300 hover:text-white transition-colors">系统状态</a>
+                    <a href="/unified-quantum-security.html" class="text-white font-medium">量子安全</a>
+                    <a href="/unified-partners.html" class="text-gray-300 hover:text-white transition-colors">合作伙伴</a>
+                </div>
+                
+                <!-- 登录按钮 - 桌面 -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="/login" class="text-gray-300 hover:text-white transition-colors">登录</a>
+                    <a href="/register" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white px-4 py-2 rounded-lg">注册</a>
+                </div>
+                
+                <!-- 移动菜单按钮 -->
+                <button class="md:hidden text-white focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- 移动导航菜单 (默认隐藏) -->
+    <div class="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-md hidden" id="mobile-menu">
+        <div class="glass-effect h-full w-64 p-6">
+            <div class="flex justify-between items-center mb-8">
+                <a href="/" class="flex items-center">
+                    <div class="h-8 w-8 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-2">
+                        <span class="text-white font-bold text-lg">A</span>
+                    </div>
+                    <span class="text-lg font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                </a>
+                <button id="close-mobile-menu" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex flex-col space-y-4">
+                <a href="/" class="text-gray-300 hover:text-white py-2 transition-colors">首页</a>
+                <a href="/unified-api-documentation.html" class="text-gray-300 hover:text-white py-2 transition-colors">API文档</a>
+                <a href="/unified-status.html" class="text-gray-300 hover:text-white py-2 transition-colors">系统状态</a>
+                <a href="/unified-quantum-security.html" class="text-white font-medium py-2">量子安全</a>
+                <a href="/unified-partners.html" class="text-gray-300 hover:text-white py-2 transition-colors">合作伙伴</a>
+                
+                <div class="pt-4 border-t border-gray-800">
+                    <a href="/login" class="block text-center text-gray-300 hover:text-white py-2 transition-colors">登录</a>
+                    <a href="/register" class="block text-center bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white mt-2 py-2 rounded-lg">注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主内容 -->
+    <main class="container mx-auto pt-24 pb-16 px-4 md:px-6">
+        <!-- 英雄区块 -->
+        <section class="mb-20">
+            <div class="glass-effect rounded-xl p-8 md:p-12 relative overflow-hidden">
+                <!-- 背景装饰 -->
+                <div class="absolute top-0 right-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+                    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-quantum-primary/20 to-transparent"></div>
+                    <div class="absolute -bottom-1/4 -right-1/4 w-1/2 h-1/2 bg-quantum-accent/20 rounded-full blur-3xl"></div>
+                </div>
+                
+                <div class="relative z-10 flex flex-col lg:flex-row items-center">
+                    <div class="lg:w-3/5 mb-8 lg:mb-0 lg:pr-12">
+                        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                            <span class="bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">量子级安全</span>
+                            <span class="block">保障您的数据与AI交互</span>
+                        </h1>
+                        <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                            AlingAi的量子安全架构为您的数据和AI模型提供最高等级的保护，抵御包括量子计算在内的先进威胁，确保您的AI应用安全可靠。
+                        </p>
+                        <div class="flex flex-wrap gap-4">
+                            <a href="#quantum-tech" class="bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white px-6 py-3 rounded-lg font-medium">
+                                探索技术细节
+                            </a>
+                            <a href="#security-model" class="border border-white/20 hover:bg-white/10 transition-colors text-white px-6 py-3 rounded-lg font-medium">
+                                安全性白皮书
+                            </a>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/5 flex justify-center">
+                        <div class="relative w-64 h-64 md:w-80 md:h-80">
+                            <!-- 主要图形 -->
+                            <div class="absolute inset-0 bg-gradient-to-r from-quantum-primary to-quantum-secondary rounded-full opacity-20 animate-pulse"></div>
+                            <div class="absolute inset-4 bg-gradient-to-tr from-quantum-primary/40 to-quantum-accent/40 backdrop-blur-md rounded-full"></div>
+                            <!-- 围绕的量子粒子效果 -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="relative w-full h-full">
+                                    <div class="absolute w-6 h-6 bg-quantum-accent rounded-full top-0 left-1/2 transform -translate-x-1/2 floating opacity-80" style="animation-delay: 0.2s;"></div>
+                                    <div class="absolute w-4 h-4 bg-quantum-primary rounded-full top-1/4 right-0 floating opacity-70" style="animation-delay: 0.5s;"></div>
+                                    <div class="absolute w-5 h-5 bg-quantum-secondary rounded-full bottom-0 left-1/4 floating opacity-60" style="animation-delay: 0.8s;"></div>
+                                    <div class="absolute w-3 h-3 bg-quantum-accent rounded-full bottom-1/3 left-0 floating opacity-90" style="animation-delay: 1s;"></div>
+                                    <div class="absolute w-8 h-8 bg-white/10 backdrop-blur-sm rounded-full top-1/3 right-1/6 floating opacity-40" style="animation-delay: 1.2s;"></div>
+                                </div>
+                            </div>
+                            <!-- 中心图标 -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-shield-alt text-white text-5xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 安全特性概览 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 animate-on-scroll">安全特性概览</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 特性1：后量子加密 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(79, 209, 197, 0.3)">
+                    <div class="feature-icon text-4xl text-quantum-accent mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">后量子加密</h3>
+                    <p class="text-gray-300">
+                        采用抵抗量子计算攻击的加密算法，确保即使在量子计算机面前，您的数据依然安全。我们实现了格基密码学和哈希签名等先进技术。
+                    </p>
+                </div>
+                
+                <!-- 特性2：量子密钥分发 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(147, 51, 234, 0.3)">
+                    <div class="feature-icon text-4xl text-purple-500 mb-4">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">量子密钥分发</h3>
+                    <p class="text-gray-300">
+                        通过量子力学原理建立不可破解的通信通道，任何窃听尝试都会留下可检测的痕迹，为关键数据传输提供绝对安全保障。
+                    </p>
+                </div>
+                
+                <!-- 特性3：多因素认证 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(59, 130, 246, 0.3)">
+                    <div class="feature-icon text-4xl text-blue-500 mb-4">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">多因素认证</h3>
+                    <p class="text-gray-300">
+                        结合生物识别、硬件令牌和知识因素的高级认证系统，有效防止未授权访问，同时保持用户体验的流畅性。
+                    </p>
+                </div>
+                
+                <!-- 特性4：零知识证明 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(236, 72, 153, 0.3)">
+                    <div class="feature-icon text-4xl text-pink-500 mb-4">
+                        <i class="fas fa-user-secret"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">零知识证明</h3>
+                    <p class="text-gray-300">
+                        允许用户证明他们知道某个秘密，而无需透露秘密本身，实现隐私保护与身份验证的完美平衡。
+                    </p>
+                </div>
+                
+                <!-- 特性5：同态加密 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(245, 158, 11, 0.3)">
+                    <div class="feature-icon text-4xl text-amber-500 mb-4">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">同态加密</h3>
+                    <p class="text-gray-300">
+                        在数据保持加密状态的同时进行计算处理，确保敏感数据在云端分析过程中始终受到保护。
+                    </p>
+                </div>
+                
+                <!-- 特性6：量子随机数生成 -->
+                <div class="security-feature-card glass-effect rounded-xl p-6 relative overflow-hidden" data-glow-color="rgba(16, 185, 129, 0.3)">
+                    <div class="feature-icon text-4xl text-green-500 mb-4">
+                        <i class="fas fa-random"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">量子随机数生成</h3>
+                    <p class="text-gray-300">
+                        利用量子不确定性原理生成真正的随机数，为密钥生成和加密操作提供无法预测的随机性基础。
+                    </p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 量子安全技术解析 -->
+        <section id="quantum-tech" class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 animate-on-scroll">量子安全技术解析</h2>
+            
+            <div class="glass-effect rounded-xl p-8 relative overflow-hidden">
+                <!-- 量子安全插图 -->
+                <div class="quantum-illustration absolute inset-0 opacity-20"></div>
+                
+                <div class="relative z-10">
+                    <div class="mb-10 animate-on-scroll">
+                        <h3 class="text-2xl font-semibold mb-4 text-quantum-accent">后量子密码学</h3>
+                        <p class="text-gray-300 mb-4">
+                            随着量子计算的进步，传统加密算法面临着前所未有的挑战。我们的后量子密码学解决方案采用了最先进的格基密码学和基于哈希的签名方案，这些技术经过精心设计，能够抵抗量子计算机的攻击。
+                        </p>
+                        <p class="text-gray-300">
+                            我们实现的CRYSTALS-Kyber和CRYSTALS-Dilithium算法已通过NIST的后量子密码标准化流程，为您的数据提供面向未来的保护。
+                        </p>
+                    </div>
+                    
+                    <div class="mb-10 animate-on-scroll">
+                        <h3 class="text-2xl font-semibold mb-4 text-purple-500">量子密钥分发 (QKD)</h3>
+                        <p class="text-gray-300 mb-4">
+                            量子密钥分发利用量子力学的基本原理，创建了一种理论上不可破解的通信方式。通过量子比特的传输，任何窃听尝试都会改变量子状态，从而被立即检测到。
+                        </p>
+                        <p class="text-gray-300">
+                            我们的QKD网络已在多个关键基础设施部署，为金融交易和政府通信提供最高级别的安全保障。
+                        </p>
+                    </div>
+                    
+                    <div class="animate-on-scroll">
+                        <h3 class="text-2xl font-semibold mb-4 text-blue-500">量子随机数生成</h3>
+                        <p class="text-gray-300 mb-4">
+                            真正的随机性对于强大的加密系统至关重要。我们的量子随机数生成器 (QRNG) 利用量子不确定性原理，产生真正不可预测的随机数，而不是传统伪随机数生成器的确定性输出。
+                        </p>
+                        <p class="text-gray-300">
+                            这些量子随机数用于密钥生成、加密操作和安全协议中，显著提高了整个系统的安全性。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 安全模型部分 -->
+        <section class="mb-20" id="security-model">
+            <div class="glass-effect rounded-xl p-8 md:p-12 relative overflow-hidden">
+                <!-- 背景装饰 -->
+                <div class="absolute top-0 right-0 w-full h-full overflow-hidden opacity-20 pointer-events-none">
+                    <div class="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-quantum-secondary/20 rounded-full blur-3xl"></div>
+                </div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-bold mb-8">全方位安全模型</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="col-span-1 lg:col-span-2">
+                            <p class="text-gray-300 mb-6 leading-relaxed">
+                                AlingAi的全方位安全模型采取多层式"纵深防御"策略，从数据的生成、处理、传输到存储的每一个环节都应用了量子安全技术。我们的安全模型基于"零信任"架构，即使在系统内部组件之间的通信也进行完整性验证和加密保护。
+                            </p>
+                            
+                            <div class="mb-8">
+                                <h3 class="text-xl font-semibold mb-4">分层安全架构</h3>
+                                
+                                <div class="space-y-4">
+                                    <!-- 安全层级1 -->
+                                    <div class="glass-effect rounded-lg p-4 border-l-4 border-quantum-primary">
+                                        <h4 class="font-medium text-lg mb-1">第1层：应用安全层</h4>
+                                        <p class="text-gray-300 text-sm">
+                                            用户交互界面、API调用和应用逻辑的安全机制，包括多因素认证、安全会话管理和防止请求伪造。
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- 安全层级2 -->
+                                    <div class="glass-effect rounded-lg p-4 border-l-4 border-quantum-secondary">
+                                        <h4 class="font-medium text-lg mb-1">第2层：AI模型安全层</h4>
+                                        <p class="text-gray-300 text-sm">
+                                            AI模型训练、推理和访问的安全控制，确保模型不被篡改且输入/输出得到加密保护。采用同态加密技术在加密数据上进行计算。
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- 安全层级3 -->
+                                    <div class="glass-effect rounded-lg p-4 border-l-4 border-quantum-accent">
+                                        <h4 class="font-medium text-lg mb-1">第3层：数据安全层</h4>
+                                        <p class="text-gray-300 text-sm">
+                                            敏感数据的存储、处理和传输安全，使用后量子加密算法和量子密钥分发技术确保数据永远不会被未授权方访问。
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- 安全层级4 -->
+                                    <div class="glass-effect rounded-lg p-4 border-l-4" style="border-color: #e879f9;">
+                                        <h4 class="font-medium text-lg mb-1">第4层：网络通信安全层</h4>
+                                        <p class="text-gray-300 text-sm">
+                                            所有网络通信使用量子增强的TLS协议，结合量子密钥分发技术实现近乎完美的加密通道，防止中间人攻击和流量分析。
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- 安全层级5 -->
+                                    <div class="glass-effect rounded-lg p-4 border-l-4" style="border-color: #f472b6;">
+                                        <h4 class="font-medium text-lg mb-1">第5层：基础设施安全层</h4>
+                                        <p class="text-gray-300 text-sm">
+                                            服务器、存储系统和网络设备的物理和逻辑安全，包括量子随机数防火墙、入侵检测和预警系统。
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-xl font-semibold mb-4">合规与认证</h3>
+                                <p class="text-gray-300 mb-4">
+                                    AlingAi已获得多项国际安全标准认证，并定期进行独立第三方安全审核和渗透测试。我们严格遵守全球主要隐私法规：
+                                </p>
+                                
+                                <div class="flex flex-wrap gap-4">
+                                    <div class="bg-white/10 rounded-lg px-4 py-2 flex items-center">
+                                        <i class="fas fa-check-circle text-quantum-accent mr-2"></i>
+                                        <span>ISO 27001认证</span>
+                                    </div>
+                                    <div class="bg-white/10 rounded-lg px-4 py-2 flex items-center">
+                                        <i class="fas fa-check-circle text-quantum-accent mr-2"></i>
+                                        <span>SOC 2 Type II</span>
+                                    </div>
+                                    <div class="bg-white/10 rounded-lg px-4 py-2 flex items-center">
+                                        <i class="fas fa-check-circle text-quantum-accent mr-2"></i>
+                                        <span>GDPR合规</span>
+                                    </div>
+                                    <div class="bg-white/10 rounded-lg px-4 py-2 flex items-center">
+                                        <i class="fas fa-check-circle text-quantum-accent mr-2"></i>
+                                        <span>CCPA合规</span>
+                                    </div>
+                                    <div class="bg-white/10 rounded-lg px-4 py-2 flex items-center">
+                                        <i class="fas fa-check-circle text-quantum-accent mr-2"></i>
+                                        <span>HIPAA合规</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-span-1">
+                            <div class="glass-effect rounded-xl p-6 h-full">
+                                <h3 class="text-xl font-semibold mb-4">安全资源下载</h3>
+                                
+                                <div class="space-y-5">
+                                    <a href="#" class="block p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-4 flex-shrink-0">
+                                                <i class="fas fa-file-pdf text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium mb-1">安全白皮书</h4>
+                                                <p class="text-gray-400 text-sm">全面了解我们的安全架构和方法论</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-4 flex-shrink-0">
+                                                <i class="fas fa-file-alt text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium mb-1">合规性报告</h4>
+                                                <p class="text-gray-400 text-sm">我们的合规认证和审计结果概述</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-4 flex-shrink-0">
+                                                <i class="fas fa-file-code text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium mb-1">安全API指南</h4>
+                                                <p class="text-gray-400 text-sm">安全地集成和使用AlingAi API</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    <a href="#" class="block p-4 bg-white/5 hover:bg-white/10 rounded-lg transition-colors">
+                                        <div class="flex items-center">
+                                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-4 flex-shrink-0">
+                                                <i class="fas fa-shield-alt text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium mb-1">量子安全FAQ</h4>
+                                                <p class="text-gray-400 text-sm">关于量子安全技术的常见问题解答</p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                
+                                <div class="mt-6 pt-6 border-t border-white/10">
+                                    <a href="/security-contact" class="block w-full bg-gradient-to-r from-quantum-primary to-quantum-secondary hover:opacity-90 transition-opacity text-white py-3 rounded-lg text-center font-medium">
+                                        联系安全团队
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 最新安全动态 -->
+        <section class="mb-20">
+            <h2 class="text-3xl font-bold mb-8">最新安全动态</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 动态1 -->
+                <article class="glass-effect rounded-xl overflow-hidden hover:shadow-lg hover:shadow-quantum-primary/10 transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-quantum-primary/20 to-quantum-secondary/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-shield-alt text-white text-5xl opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-quantum-accent bg-quantum-accent/10 px-3 py-1 rounded-full">安全公告</span>
+                        <h3 class="text-xl font-semibold mt-3 mb-3">量子安全框架升级至v3.2版本</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            我们最新的安全框架升级包含多项后量子加密算法的改进，进一步增强了对未来量子计算威胁的防御能力。
+                        </p>
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <span>2024年5月15日</span>
+                            <a href="#" class="text-quantum-accent hover:underline">了解更多</a>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- 动态2 -->
+                <article class="glass-effect rounded-xl overflow-hidden hover:shadow-lg hover:shadow-quantum-primary/10 transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-quantum-secondary/20 to-quantum-accent/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-award text-white text-5xl opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-quantum-accent bg-quantum-accent/10 px-3 py-1 rounded-full">荣誉奖项</span>
+                        <h3 class="text-xl font-semibold mt-3 mb-3">获评全球量子安全技术创新奖</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            AlingAi的量子安全架构凭借其创新的同态加密AI处理能力，荣获国际信息安全协会颁发的年度技术创新奖。
+                        </p>
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <span>2024年4月28日</span>
+                            <a href="#" class="text-quantum-accent hover:underline">了解更多</a>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- 动态3 -->
+                <article class="glass-effect rounded-xl overflow-hidden hover:shadow-lg hover:shadow-quantum-primary/10 transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-quantum-accent/20 to-quantum-primary/20 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <i class="fas fa-handshake text-white text-5xl opacity-50"></i>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <span class="text-xs text-quantum-accent bg-quantum-accent/10 px-3 py-1 rounded-full">合作伙伴</span>
+                        <h3 class="text-xl font-semibold mt-3 mb-3">与国家量子信息科学研究院合作</h3>
+                        <p class="text-gray-300 text-sm mb-4">
+                            我们很荣幸宣布与国家量子信息科学研究院建立战略合作伙伴关系，共同推进量子安全技术在AI领域的应用。
+                        </p>
+                        <div class="flex justify-between items-center text-sm text-gray-400">
+                            <span>2024年4月10日</span>
+                            <a href="#" class="text-quantum-accent hover:underline">了解更多</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            
+            <div class="text-center mt-8">
+                <a href="/security-news" class="inline-block border border-white/20 hover:bg-white/10 transition-colors text-white px-6 py-3 rounded-lg font-medium">
+                    查看更多安全动态
+                </a>
+            </div>
+        </section>
+        
+        <!-- 常见问题 -->
+        <section id="faq" class="mb-20">
+            <h2 class="text-3xl font-bold mb-8 animate-on-scroll">常见问题</h2>
+            
+            <div class="glass-effect rounded-xl p-8">
+                <div class="space-y-4">
+                    <!-- 问题1 -->
+                    <div class="animate-on-scroll">
+                        <button class="faq-question w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-lg flex justify-between items-center transition-colors">
+                            <h3 class="text-lg font-medium">什么是量子安全，为什么它很重要？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent"></i>
+                        </button>
+                        <div class="faq-answer p-4 text-gray-300 hidden">
+                            量子安全是指能够抵抗量子计算机攻击的安全技术。随着量子计算的快速发展，现有的加密算法（如RSA和ECC）将变得脆弱，因为量子计算机可以在短时间内破解它们。量子安全技术（如后量子密码学和量子密钥分发）旨在保护数据免受这些新兴威胁。对于需要长期数据保护的组织来说，现在就开始采用量子安全解决方案至关重要，因为"收集现在，解密未来"的攻击已经开始。
+                        </div>
+                    </div>
+                    
+                    <!-- 问题2 -->
+                    <div class="animate-on-scroll">
+                        <button class="faq-question w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-lg flex justify-between items-center transition-colors">
+                            <h3 class="text-lg font-medium">AlingAi的量子安全技术如何保护我的数据？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent"></i>
+                        </button>
+                        <div class="faq-answer p-4 text-gray-300 hidden">
+                            AlingAi采用多层量子安全架构保护您的数据：首先，我们使用后量子加密算法（如CRYSTALS-Kyber）加密所有数据，确保即使面对未来的量子计算机也能保持安全；其次，我们的量子密钥分发网络为关键通信提供理论上不可破解的加密通道；第三，我们使用量子随机数生成器创建真正随机的密钥；最后，我们的同态加密技术允许在数据保持加密状态的同时进行处理，确保您的敏感信息在整个生命周期中都受到保护。
+                        </div>
+                    </div>
+                    
+                    <!-- 问题3 -->
+                    <div class="animate-on-scroll">
+                        <button class="faq-question w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-lg flex justify-between items-center transition-colors">
+                            <h3 class="text-lg font-medium">我需要特殊硬件来使用AlingAi的量子安全功能吗？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent"></i>
+                        </button>
+                        <div class="faq-answer p-4 text-gray-300 hidden">
+                            对于大多数用户，不需要特殊硬件。我们的后量子加密算法和安全协议已在云端实现，可以在标准设备上无缝运行。对于需要最高安全级别的企业客户，我们确实提供专用的量子安全硬件选项，如量子随机数生成器和量子密钥分发设备。这些设备可以集成到您现有的IT基础设施中，提供额外的安全保障。我们的团队会根据您的具体需求提供建议和实施方案。
+                        </div>
+                    </div>
+                    
+                    <!-- 问题4 -->
+                    <div class="animate-on-scroll">
+                        <button class="faq-question w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-lg flex justify-between items-center transition-colors">
+                            <h3 class="text-lg font-medium">量子安全技术会影响系统性能吗？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent"></i>
+                        </button>
+                        <div class="faq-answer p-4 text-gray-300 hidden">
+                            我们的量子安全技术经过优化，对性能影响最小。后量子加密算法确实比传统算法需要更多计算资源，但我们通过高效实现和硬件加速将这种影响降到最低。在大多数应用场景中，用户不会注意到明显的性能差异。对于高性能要求的应用，我们提供定制优化选项，在保持强大安全性的同时确保卓越性能。我们的工程团队会持续监控和优化性能，确保用户体验不受影响。
+                        </div>
+                    </div>
+                    
+                    <!-- 问题5 -->
+                    <div class="animate-on-scroll">
+                        <button class="faq-question w-full text-left p-4 bg-white/5 hover:bg-white/10 rounded-lg flex justify-between items-center transition-colors">
+                            <h3 class="text-lg font-medium">如何开始使用AlingAi的量子安全解决方案？</h3>
+                            <i class="fas fa-chevron-down text-quantum-accent"></i>
+                        </button>
+                        <div class="faq-answer p-4 text-gray-300 hidden">
+                            开始使用AlingAi的量子安全解决方案非常简单。首先，请联系我们的安全专家团队进行初步咨询，他们会评估您的具体需求和安全挑战。然后，我们会提供定制的实施计划，包括必要的集成步骤和培训。对于企业客户，我们提供全程指导的试点项目，让您在全面部署前体验量子安全的优势。我们的目标是使过渡过程尽可能顺畅，同时确保您的系统获得最高级别的保护。请通过我们的网站或客户服务热线联系我们，开始您的量子安全之旅。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-10">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <a href="/" class="flex items-center mb-6">
+                        <div class="h-9 w-9 rounded-full bg-gradient-to-br from-quantum-primary to-quantum-secondary flex items-center justify-center mr-3">
+                            <span class="text-white font-bold text-xl">A</span>
+                        </div>
+                        <span class="text-xl font-bold bg-gradient-to-r from-quantum-accent to-quantum-secondary inline-block text-transparent bg-clip-text">AlingAi</span>
+                    </a>
+                    <p class="text-gray-400 mb-6">
+                        构建更安全、更智能的AI应用，保护您的数据不受量子威胁
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">产品</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">API和SDK</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">AI模型</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">量子安全</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">企业解决方案</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">价格</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">资源</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">文档</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">API参考</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">示例和指南</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">状态页面</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">博客</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-medium mb-4">公司</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">关于我们</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">安全与合规</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">合作伙伴</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">联系我们</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">招贤纳士</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2024 AlingAi Inc. 保留所有权利</p>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">服务条款</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">隐私政策</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">安全政策</a>
+                        <a href="#" class="text-gray-500 hover:text-white transition-colors">Cookie设置</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 移动菜单脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 移动菜单
+            const mobileMenuBtn = document.querySelector('.md\\:hidden');
+            const closeMenuBtn = document.getElementById('close-mobile-menu');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            closeMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.add('hidden');
+            });
+            
+            // 安全特性卡片悬停效果
+            const securityCards = document.querySelectorAll('.security-feature-card');
+            securityCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    // 添加悬停效果
+                    this.classList.add('transform', 'scale-105', 'shadow-xl');
+                    
+                    // 添加发光效果
+                    const glowColor = this.getAttribute('data-glow-color') || 'rgba(79, 209, 197, 0.3)';
+                    this.style.boxShadow = `0 0 20px ${glowColor}`;
+                    
+                    // 找到图标并添加动画
+                    const icon = this.querySelector('.feature-icon');
+                    if (icon) {
+                        icon.classList.add('animate-pulse');
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    // 移除悬停效果
+                    this.classList.remove('transform', 'scale-105', 'shadow-xl');
+                    this.style.boxShadow = '';
+                    
+                    // 移除图标动画
+                    const icon = this.querySelector('.feature-icon');
+                    if (icon) {
+                        icon.classList.remove('animate-pulse');
+                    }
+                });
+            });
+            
+            // 安全层级图交互效果
+            const securityLayers = document.querySelectorAll('.security-layer');
+            securityLayers.forEach(layer => {
+                layer.addEventListener('mouseenter', function() {
+                    // 高亮当前层
+                    this.classList.add('ring-2', 'ring-quantum-accent', 'ring-offset-2', 'ring-offset-gray-900');
+                    
+                    // 显示详细信息
+                    const layerInfo = this.querySelector('.layer-info');
+                    if (layerInfo) {
+                        layerInfo.classList.remove('opacity-0', 'scale-95');
+                        layerInfo.classList.add('opacity-100', 'scale-100');
+                    }
+                });
+                
+                layer.addEventListener('mouseleave', function() {
+                    // 移除高亮
+                    this.classList.remove('ring-2', 'ring-quantum-accent', 'ring-offset-2', 'ring-offset-gray-900');
+                    
+                    // 隐藏详细信息
+                    const layerInfo = this.querySelector('.layer-info');
+                    if (layerInfo) {
+                        layerInfo.classList.add('opacity-0', 'scale-95');
+                        layerInfo.classList.remove('opacity-100', 'scale-100');
+                    }
+                });
+            });
+            
+            // FAQ手风琴效果
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', function() {
+                    const answer = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    
+                    // 关闭其他所有FAQ
+                    faqQuestions.forEach(otherQuestion => {
+                        if (otherQuestion !== question) {
+                            const otherAnswer = otherQuestion.nextElementSibling;
+                            const otherIcon = otherQuestion.querySelector('i');
+                            otherAnswer.classList.add('hidden');
+                            otherIcon.classList.remove('fa-chevron-up');
+                            otherIcon.classList.add('fa-chevron-down');
+                        }
+                    });
+                    
+                    // 切换当前FAQ的显示/隐藏
+                    if (answer.classList.contains('hidden')) {
+                        answer.classList.remove('hidden');
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        answer.classList.add('hidden');
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                        
+                        // 如果是移动视图，点击后关闭菜单
+                        if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                            mobileMenu.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+            
+            // 添加量子安全动画
+            const quantumIllustration = document.querySelector('.quantum-illustration');
+            if (quantumIllustration) {
+                // 创建量子粒子效果
+                createQuantumParticles(quantumIllustration);
+            }
+            
+            // 添加进入视口时的动画效果
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            // 创建Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in-up');
+                        observer.unobserve(entry.target); // 只触发一次
+                    }
+                });
+            }, {
+                threshold: 0.1 // 当元素10%进入视口时触发
+            });
+            
+            // 观察所有需要动画的元素
+            animatedElements.forEach(element => {
+                observer.observe(element);
+            });
+        });
+        
+        // 创建量子粒子效果
+        function createQuantumParticles(container) {
+            // 添加canvas元素
+            const canvas = document.createElement('canvas');
+            canvas.className = 'absolute inset-0 z-0';
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            container.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // 粒子数组
+            const particles = [];
+            
+            // 创建粒子
+            for (let i = 0; i < 50; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 2 - 1,
+                    speedY: Math.random() * 2 - 1,
+                    color: `rgba(79, 209, 197, ${Math.random() * 0.5 + 0.2})`
+                });
+            }
+            
+            // 动画循环
+            function animate() {
+                // 清除画布
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // 更新和绘制粒子
+                particles.forEach(particle => {
+                    // 更新位置
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    // 边界检查
+                    if (particle.x > canvas.width) particle.x = 0;
+                    else if (particle.x < 0) particle.x = canvas.width;
+                    
+                    if (particle.y > canvas.height) particle.y = 0;
+                    else if (particle.y < 0) particle.y = canvas.height;
+                    
+                    // 绘制粒子
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                });
+                
+                // 绘制粒子之间的连线
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(79, 209, 197, ${0.1 * (1 - distance / 100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                
+                requestAnimationFrame(animate);
+            }
+            
+            // 启动动画
+            animate();
+            
+            // 窗口大小变化时调整canvas大小
+            window.addEventListener('resize', () => {
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+            });
+        }
+    </script>
+    
+    <!-- 添加动画CSS -->
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+        }
+        
+        .security-feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .layer-info {
+            transition: all 0.3s ease;
+        }
+    </style>
+    
+    <!-- 量子安全动画脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化量子粒子背景
+            if (typeof initQuantumParticles === 'function') {
+                initQuantumParticles('quantum-particles');
+            }
+            
+            // 初始化量子鼠标效果
+            if (typeof initQuantumCursor === 'function') {
+                initQuantumCursor();
+            }
+            
+            // 为安全特性卡片添加悬停效果
+            const securityCards = document.querySelectorAll('.glass-effect.rounded-xl.p-6');
+            securityCards.forEach(card => {
+                card.classList.add('security-feature-card');
+                
+                // 找到图标并添加类
+                const icon = card.querySelector('i');
+                if (icon) {
+                    icon.classList.add('card-icon');
+                }
+            });
+            
+            // 为安全层级添加点击交互
+            const securityLayers = document.querySelectorAll('[data-layer]');
+            if (securityLayers.length > 0) {
+                securityLayers.forEach(layer => {
+                    layer.classList.add('security-layer');
+                    
+                    layer.addEventListener('click', function() {
+                        const layerId = this.getAttribute('data-layer');
+                        const layerDetails = document.querySelector(`[data-layer-details="${layerId}"]`);
+                        
+                        // 移除其他层级的活动状态
+                        securityLayers.forEach(otherLayer => {
+                            if (otherLayer !== layer) {
+                                otherLayer.classList.remove('active');
+                            }
+                        });
+                        
+                        // 隐藏其他层级的详情
+                        document.querySelectorAll('[data-layer-details]').forEach(details => {
+                            if (details !== layerDetails) {
+                                details.classList.remove('active');
+                            }
+                        });
+                        
+                        // 切换当前层级的活动状态和详情显示
+                        layer.classList.toggle('active');
+                        if (layerDetails) {
+                            layerDetails.classList.toggle('active');
+                        }
+                    });
+                });
+                
+                // 默认激活第一个层级
+                securityLayers[0].click();
+            }
+            
+            // 为FAQ添加手风琴效果
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                const question = item.querySelector('h3, .faq-question');
+                const answer = item.querySelector('p, .faq-answer');
+                const icon = item.querySelector('i');
+                
+                if (question && answer) {
+                    // 确保元素有正确的类名
+                    if (answer) answer.classList.add('faq-answer');
+                    if (icon) icon.classList.add('faq-toggle');
+                    
+                    question.addEventListener('click', function() {
+                        // 关闭其他所有FAQ
+                        faqItems.forEach(otherItem => {
+                            if (otherItem !== item && otherItem.classList.contains('active')) {
+                                otherItem.classList.remove('active');
+                            }
+                        });
+                        
+                        // 切换当前FAQ的状态
+                        item.classList.toggle('active');
+                    });
+                }
+            });
+            
+            // 创建量子粒子动画
+            function createQuantumParticles() {
+                const containers = document.querySelectorAll('.quantum-illustration, .quantum-animation-container');
+                
+                containers.forEach(container => {
+                    // 创建多个粒子
+                    for (let i = 0; i < 8; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'quantum-particle';
+                        
+                        // 随机大小
+                        const size = Math.floor(Math.random() * 10) + 5;
+                        particle.style.width = `${size}px`;
+                        particle.style.height = `${size}px`;
+                        
+                        // 随机位置
+                        const posX = Math.floor(Math.random() * 80) + 10; // 10% - 90%
+                        const posY = Math.floor(Math.random() * 80) + 10; // 10% - 90%
+                        particle.style.left = `${posX}%`;
+                        particle.style.top = `${posY}%`;
+                        
+                        // 随机动画延迟
+                        const delay = Math.random() * 5;
+                        particle.style.animationDelay = `${delay}s`;
+                        
+                        container.appendChild(particle);
+                    }
+                });
+            }
+            
+            // 添加进入视口时的淡入动画
+            function setupScrollAnimations() {
+                // 为需要动画的元素添加类
+                const animateElements = document.querySelectorAll('.security-section, .feature-card, h2, .glass-effect:not(nav)');
+                animateElements.forEach(el => {
+                    if (!el.classList.contains('fade-in-element')) {
+                        el.classList.add('fade-in-element');
+                    }
+                });
+                
+                // 创建交叉观察器
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -100px 0px'
+                });
+                
+                // 观察所有需要动画的元素
+                document.querySelectorAll('.fade-in-element').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+            
+            // 初始化所有动画和交互效果
+            createQuantumParticles();
+            setupScrollAnimations();
+        });
+    </script>
+</body>
+</html> 

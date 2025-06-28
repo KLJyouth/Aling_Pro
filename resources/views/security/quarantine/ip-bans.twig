@@ -1,0 +1,238 @@
+{% extends 'layouts/admin.twig' %}
+
+{% block title %}IP封禁管理 - AlingAi Pro{% endblock %}
+
+{% block content %}
+<div class="dashboard-card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="fas fa-ban"></i> IP封禁管理</h3>
+        <div class="card-actions">
+            <button class="card-btn" title="刷新数据"><i class="fas fa-sync-alt"></i></button>
+            <button class="card-btn" title="导出数据"><i class="fas fa-download"></i></button>
+        </div>
+    </div>
+    <div class="card-content">
+        <div class="action-bar">
+            <button class="btn" data-toggle="modal" data-target="#addIpBanModal">
+                <i class="fas fa-plus"></i> 添加IP封禁
+            </button>
+        </div>
+        
+        <form class="filter-form" method="GET" action="{{ route('security.quarantine.ip-bans') }}">
+            <div class="form-group">
+                <label class="form-label">状态</label>
+                <select class="form-control" name="status">
+                    <option value="">全部</option>
+                    <option value="active" {{ filters.status == 'active' ? 'selected' : '' }}>生效中</option>
+                    <option value="expired" {{ filters.status == 'expired' ? 'selected' : '' }}>已过期</option>
+                    <option value="revoked" {{ filters.status == 'revoked' ? 'selected' : '' }}>已撤销</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">IP地址</label>
+                <input type="text" class="form-control" name="ip_address" value="{{ filters.ip_address }}" placeholder="搜索IP地址">
+            </div>
+            <div class="form-group" style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn">筛选</button>
+            </div>
+        </form>
+        
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>IP地址</th>
+                    <th>封禁原因</th>
+                    <th>状态</th>
+                    <th>封禁时间</th>
+                    <th>截止时间</th>
+                    <th>操作人</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ban in ipBans %}
+                <tr>
+                    <td>{{ ban.id }}</td>
+                    <td>{{ ban.ip_address }}</td>
+                    <td>{{ ban.reason }}</td>
+                    <td>
+                        {% if ban.status == 'active' %}
+                        <span class="badge badge-danger">生效中</span>
+                        {% elseif ban.status == 'expired' %}
+                        <span class="badge badge-secondary">已过期</span>
+                        {% else %}
+                        <span class="badge badge-info">已撤销</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ ban.created_at }}</td>
+                    <td>{{ ban.banned_until ? ban.banned_until : '永久' }}</td>
+                    <td>{{ ban.bannedByUser ? ban.bannedByUser.name : '系统' }}</td>
+                    <td>
+                        {% if ban.status == 'active' %}
+                        <button class="btn btn-outline btn-sm" data-toggle="modal" data-target="#revokeIpBanModal" data-id="{{ ban.id }}" data-ip="{{ ban.ip_address }}">
+                            撤销
+                        </button>
+                        {% endif %}
+                        
+                        {% if ban.quarantine_id %}
+                        <a href="{{ route('security.quarantine.show', ban.quarantine_id) }}" class="btn btn-outline btn-sm">
+                            查看关联异常
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="pagination">
+            {% if ipBans.currentPage() > 1 %}
+            <a href="{{ ipBans.previousPageUrl() }}" class="pagination-item">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% else %}
+            <span class="pagination-item disabled">
+                <i class="fas fa-chevron-left"></i>
+            </span>
+            {% endif %}
+            
+            {% for i in 1..ipBans.lastPage() %}
+            <a href="{{ ipBans.url(i) }}" class="pagination-item {{ ipBans.currentPage() == i ? 'active' : '' }}">
+                {{ i }}
+            </a>
+            {% endfor %}
+            
+            {% if ipBans.hasMorePages() %}
+            <a href="{{ ipBans.nextPageUrl() }}" class="pagination-item">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% else %}
+            <span class="pagination-item disabled">
+                <i class="fas fa-chevron-right"></i>
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 添加IP封禁模态框 -->
+<div class="modal fade" id="addIpBanModal" tabindex="-1" role="dialog" aria-labelledby="addIpBanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addIpBanModalLabel">添加IP封禁</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{{ route('security.quarantine.ban-ip') }}" method="POST">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="ip_address">IP地址</label>
+                        <input type="text" class="form-control" id="ip_address" name="ip_address" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reason">封禁原因</label>
+                        <input type="text" class="form-control" id="reason" name="reason" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="banned_until">封禁截止时间（留空表示永久封禁）</label>
+                        <input type="datetime-local" class="form-control" id="banned_until" name="banned_until">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-danger">封禁</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- 撤销IP封禁模态框 -->
+<div class="modal fade" id="revokeIpBanModal" tabindex="-1" role="dialog" aria-labelledby="revokeIpBanModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="revokeIpBanModalLabel">撤销IP封禁</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="revokeIpBanForm" action="" method="POST">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <p>您确定要撤销对 <strong id="revokeIpAddress"></strong> 的封禁吗？</p>
+                    <div class="form-group">
+                        <label for="revoke_reason">撤销原因</label>
+                        <input type="text" class="form-control" id="revoke_reason" name="revoke_reason" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">确认撤销</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('#revokeIpBanModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var id = button.data('id');
+            var ip = button.data('ip');
+            
+            var modal = $(this);
+            modal.find('#revokeIpAddress').text(ip);
+            modal.find('#revokeIpBanForm').attr('action', '{{ route("security.quarantine.revoke-ip-ban", "") }}/' + id);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block styles %}
+<style>
+    .action-bar {
+        margin-bottom: 20px;
+    }
+    
+    .filter-form {
+        background-color: rgba(123, 104, 238, 0.05);
+        border: 1px solid rgba(123, 104, 238, 0.1);
+        border-radius: 6px;
+        padding: 15px;
+        margin-bottom: 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .modal-content {
+        background-color: #0f0f35;
+        border: 1px solid rgba(123, 104, 238, 0.3);
+        color: #fff;
+    }
+    
+    .modal-header {
+        border-bottom: 1px solid rgba(123, 104, 238, 0.3);
+    }
+    
+    .modal-footer {
+        border-top: 1px solid rgba(123, 104, 238, 0.3);
+    }
+    
+    .close {
+        color: #fff;
+    }
+    
+    .close:hover {
+        color: #ccc;
+    }
+</style>
+{% endblock %} 

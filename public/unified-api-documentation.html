@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - API文档，了解如何集成和使用AlingAi Pro的强大API">
+    <meta name="keywords" content="AI, API文档, 开发者接口, AlingAi Pro API, AI集成">
+    <title>AlingAi Pro - API文档</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Prism.js 代码高亮 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-tomorrow.min.css">
+    
+    <style>
+        /* 平滑滚动效果 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 代码复制按钮样式 */
+        .code-wrapper {
+            position: relative;
+        }
+        
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .copy-button:hover {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .copy-button.copied {
+            background: rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+        
+        /* 侧边栏导航高亮样式 */
+        .sidebar-link {
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link.active {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border-left: 3px solid #6366f1;
+            padding-left: calc(0.5rem - 3px);
+        }
+        
+        /* 语言切换标签样式 */
+        .language-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .language-tab {
+            padding: 4px 10px;
+            border-radius: 4px 4px 0 0;
+            font-size: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+        
+        .language-tab.active {
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366f1;
+        }
+        
+        .language-content {
+            display: none;
+        }
+        
+        .language-content.active {
+            display: block;
+        }
+        
+        /* 搜索框样式 */
+        .search-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            color: white;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .search-input:focus {
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">A</span>
+                        </div>
+                        <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                    </a>
+                </div>
+                
+                <!-- 导航链接 - 中等尺寸屏幕以上 -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
+                    <a href="/unified-api-documentation.html" class="text-quantum-accent transition-colors">API文档</a>
+                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
+                </div>
+                
+                <!-- 用户菜单/登录按钮 -->
+                <div class="flex items-center space-x-2">
+                    <a href="/login.html" class="py-2 px-4 text-sm font-medium text-white hover:text-quantum-accent transition-colors">登录</a>
+                    <a href="/register.html" class="quantum-button">
+                        注册
+                    </a>
+                </div>
+                
+                <!-- 移动端导航按钮 -->
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-quantum-dark border-b border-quantum-primary/20 hidden">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
+                    <a href="/unified-api-documentation.html" class="text-quantum-accent transition-colors">API文档</a>
+                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-6 py-24">
+        <!-- 页面标题 -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <span class="quantum-title">API文档</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                集成AlingAi Pro的强大AI功能到您的应用程序中，从简单调用到复杂流程，我们提供全面的API指南
+            </p>
+        </div>
+        
+        <!-- API文档主体 -->
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- 侧边导航栏 -->
+            <div class="w-64 hidden md:block bg-black/40 backdrop-blur-xl rounded-xl p-6 flex-shrink-0 sticky top-24">
+                <h2 class="text-xl font-bold mb-6 text-quantum-accent">API文档</h2>
+                
+                <!-- API搜索框 -->
+                <div class="search-container mb-6">
+                    <input type="text" id="api-search" class="search-input" placeholder="搜索API端点..." />
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                
+                <nav>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="#introduction" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">介绍</a>
+                        </li>
+                        <li>
+                            <a href="#authentication" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">认证</a>
+                        </li>
+                        <li>
+                            <a href="#errors" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">错误处理</a>
+                        </li>
+                        <li>
+                            <a href="#ai-text" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">文本生成API</a>
+                        </li>
+                        <li>
+                            <a href="#ai-image" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">图像生成API</a>
+                        </li>
+                        <li>
+                            <a href="#ai-chat" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">聊天对话API</a>
+                        </li>
+                        <li>
+                            <a href="#ai-speech" class="sidebar-link block p-2 hover:bg-white/5 rounded-lg transition-colors">语音识别API</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- 主要文档内容 -->
+            <div class="lg:w-3/4">
+                <!-- 介绍部分 -->
+                <section id="introduction" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">API介绍</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            AlingAi Pro API提供了一套全面的人工智能接口，让您能够轻松地将AI能力集成到您的应用程序、服务或产品中。我们的API采用RESTful设计原则，为您提供简单直观的集成体验。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">核心特性</h3>
+                            <ul class="space-y-3">
+                                <li class="flex">
+                                    <div class="mr-3 text-quantum-accent"><i class="fas fa-check-circle mt-1"></i></div>
+                                    <div>
+                                        <span class="font-medium">高性能 REST API</span>
+                                        <p class="text-gray-300 text-sm mt-1">所有API端点都经过优化，提供毫秒级响应时间和99.99%的可用性</p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="mr-3 text-quantum-accent"><i class="fas fa-check-circle mt-1"></i></div>
+                                    <div>
+                                        <span class="font-medium">全球分布式架构</span>
+                                        <p class="text-gray-300 text-sm mt-1">遍布全球的服务器集群确保低延迟访问和数据冗余</p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="mr-3 text-quantum-accent"><i class="fas fa-check-circle mt-1"></i></div>
+                                    <div>
+                                        <span class="font-medium">企业级安全</span>
+                                        <p class="text-gray-300 text-sm mt-1">所有API通信采用TLS 1.3加密，支持API密钥和OAuth 2.0认证</p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="mr-3 text-quantum-accent"><i class="fas fa-check-circle mt-1"></i></div>
+                                    <div>
+                                        <span class="font-medium">灵活的定价模型</span>
+                                        <p class="text-gray-300 text-sm mt-1">按需付费或企业级套餐，根据您的使用量自动扩展</p>
+                                    </div>
+                                </li>
+                                <li class="flex">
+                                    <div class="mr-3 text-quantum-accent"><i class="fas fa-check-circle mt-1"></i></div>
+                                    <div>
+                                        <span class="font-medium">详细文档与SDK</span>
+                                        <p class="text-gray-300 text-sm mt-1">提供多种语言的SDK和详尽的API文档，加速开发过程</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">基本API端点</h3>
+                            <div class="bg-black/50 rounded-lg p-4 font-mono text-sm mb-2 overflow-x-auto">
+                                https://api.alingai.pro/v1/
+                            </div>
+                            <p class="text-gray-300 text-sm">所有API请求都以此基础URL开头，后接特定的资源路径</p>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">开始使用</h3>
+                            <div class="bg-gradient-to-r from-quantum-primary/20 to-quantum-secondary/20 rounded-lg p-6 border border-quantum-primary/20">
+                                <h4 class="text-lg font-medium mb-4">创建API密钥</h4>
+                                <ol class="space-y-2 text-gray-200 list-decimal pl-5">
+                                    <li>登录您的<a href="/dashboard.html" class="text-quantum-accent hover:underline">AlingAi Pro开发者控制台</a></li>
+                                    <li>进入"API密钥"部分</li>
+                                    <li>点击"创建新密钥"按钮</li>
+                                    <li>为您的API密钥命名并设置权限范围</li>
+                                    <li>保存生成的API密钥（注意：密钥只会显示一次）</li>
+                                </ol>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">请求示例</h3>
+                            <div class="bg-black/50 rounded-lg overflow-hidden">
+                                <div class="flex items-center px-4 py-2 border-b border-white/10">
+                                    <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">GET</div>
+                                    <div class="ml-2 font-mono text-sm">/v1/ai/models</div>
+                                </div>
+                                <pre class="language-bash line-numbers p-4"><code>curl -X GET "https://api.alingai.pro/v1/ai/models" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json"</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 认证部分 -->
+                <section id="authentication" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">认证</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            AlingAi Pro API支持两种主要的认证方式：API密钥认证和OAuth 2.0认证。对于大多数开发者而言，API密钥认证足够简单且安全。对于需要更高级访问控制的企业用户，我们推荐使用OAuth 2.0认证。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">API密钥认证</h3>
+                            <p class="mb-4 text-gray-200">
+                                API密钥是访问AlingAi Pro API最简单的方式。每个密钥都与您的账户关联，并具有指定的权限范围和限制。
+                            </p>
+                            
+                            <div class="bg-black/50 rounded-lg p-6 mb-4">
+                                <h4 class="font-medium mb-3 text-quantum-accent">HTTP头部认证方式</h4>
+                                <div class="font-mono text-sm bg-black/50 p-3 rounded-lg mb-4 overflow-x-auto">
+                                    Authorization: Bearer YOUR_API_KEY
+                                </div>
+                                <p class="text-gray-300 text-sm mb-4">
+                                    将您的API密钥添加到请求头中。这是推荐的方法，因为它可以避免密钥暴露在URL中。
+                                </p>
+                                
+                                <div class="mb-2">
+                                    <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">示例请求</span>
+                                </div>
+                                <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/text/generate" \
+     -H "Authorization: Bearer ak-xxxxxxxxxxxxxxxxxxx" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "prompt": "使用人工智能解决气候变化问题",
+       "max_tokens": 500,
+       "temperature": 0.7
+     }'</code></pre>
+                            </div>
+                            
+                            <div class="bg-black/50 rounded-lg p-6">
+                                <h4 class="font-medium mb-3 text-quantum-accent">查询参数认证方式</h4>
+                                <div class="font-mono text-sm bg-black/50 p-3 rounded-lg mb-2 overflow-x-auto">
+                                    https://api.alingai.pro/v1/ai/models?api_key=YOUR_API_KEY
+                                </div>
+                                <p class="text-gray-300 text-sm mb-4">
+                                    <span class="text-yellow-400"><i class="fas fa-exclamation-triangle mr-1"></i>不推荐</span> - 此方法仅在不支持自定义HTTP头部的环境中使用，因为它可能导致API密钥暴露在服务器日志中。
+                                </p>
+                                
+                                <div class="mb-2">
+                                    <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">示例请求</span>
+                                </div>
+                                <pre class="language-bash line-numbers"><code>curl -X GET "https://api.alingai.pro/v1/ai/models?api_key=ak-xxxxxxxxxxxxxxxxxxx" \
+     -H "Content-Type: application/json"</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">OAuth 2.0认证</h3>
+                            <p class="mb-4 text-gray-200">
+                                对于需要代表用户执行操作的应用程序，我们提供完整的OAuth 2.0支持，包括授权码流程和客户端凭据流程。
+                            </p>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium mb-3">授权端点</h4>
+                                <div class="font-mono text-sm bg-black/50 p-3 rounded-lg mb-2 overflow-x-auto">
+                                    https://api.alingai.pro/oauth/authorize
+                                </div>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium mb-3">令牌端点</h4>
+                                <div class="font-mono text-sm bg-black/50 p-3 rounded-lg mb-2 overflow-x-auto">
+                                    https://api.alingai.pro/oauth/token
+                                </div>
+                            </div>
+                            
+                            <div class="flex mb-4">
+                                <div class="mr-3 text-quantum-accent mt-1"><i class="fas fa-info-circle"></i></div>
+                                <p class="text-gray-200 text-sm">
+                                    关于OAuth 2.0实现的详细信息，请查看我们的<a href="/oauth-guide.html" class="text-quantum-accent hover:underline">OAuth集成指南</a>。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 错误处理部分 -->
+                <section id="errors" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">错误处理</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            AlingAi Pro API使用HTTP状态码表示请求的结果。除了标准HTTP状态码外，错误响应还包含一个JSON对象，提供有关错误的更多详细信息。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">HTTP状态码</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="py-3 px-4 text-left bg-black/30">状态码</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">200 OK</td>
+                                            <td class="py-3 px-4">请求成功处理并返回结果</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">400 Bad Request</td>
+                                            <td class="py-3 px-4">请求参数无效或缺失必要参数</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">401 Unauthorized</td>
+                                            <td class="py-3 px-4">认证失败或API密钥无效</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">403 Forbidden</td>
+                                            <td class="py-3 px-4">权限不足以执行请求的操作</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">404 Not Found</td>
+                                            <td class="py-3 px-4">请求的资源不存在</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">429 Too Many Requests</td>
+                                            <td class="py-3 px-4">超出API调用频率限制</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 font-mono bg-black/20">500 Internal Server Error</td>
+                                            <td class="py-3 px-4">服务器内部错误</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">错误响应格式</h3>
+                            <p class="mb-4 text-gray-200">
+                                当发生错误时，响应主体将包含一个JSON对象，提供有关错误的更详细信息：
+                            </p>
+                            
+                            <div class="mb-2">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">错误响应示例</span>
+                            </div>
+                            <pre class="language-json line-numbers"><code>{
+  "error": {
+    "code": "invalid_request",
+    "message": "请求参数无效: 'temperature' 必须在0.0-1.0范围内",
+    "param": "temperature",
+    "type": "validation_error",
+    "request_id": "req_7PzhMeyGj92cBmzV"
+  }
+}</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">常见错误处理示例</h3>
+                            <div class="space-y-6">
+                                <div class="bg-black/20 rounded-lg p-6">
+                                    <h4 class="font-medium mb-3 text-quantum-accent">认证错误</h4>
+                                    <pre class="language-json line-numbers"><code>{
+  "error": {
+    "code": "authentication_failed",
+    "message": "无效的API密钥",
+    "type": "auth_error",
+    "request_id": "req_6NsHc8zL5AyGkRtX"
+  }
+}</code></pre>
+                                </div>
+                                
+                                <div class="bg-black/20 rounded-lg p-6">
+                                    <h4 class="font-medium mb-3 text-quantum-accent">请求速率限制错误</h4>
+                                    <pre class="language-json line-numbers"><code>{
+  "error": {
+    "code": "rate_limit_exceeded",
+    "message": "请求频率超限: 每分钟最多60个请求",
+    "type": "rate_limit_error",
+    "request_id": "req_2MpQdCvR8KwTnFjZ",
+    "retry_after": 25
+  }
+}</code></pre>
+                                    <p class="text-gray-300 text-sm mt-3">
+                                        <code class="bg-black/30 px-2 py-0.5 rounded">retry_after</code> 字段表示应等待多少秒后再尝试请求
+                                    </p>
+                                </div>
+                                
+                                <div class="bg-black/20 rounded-lg p-6">
+                                    <h4 class="font-medium mb-3 text-quantum-accent">服务器错误</h4>
+                                    <pre class="language-json line-numbers"><code>{
+  "error": {
+    "code": "server_error",
+    "message": "内部服务器错误，请稍后重试",
+    "type": "api_error",
+    "request_id": "req_9LsKtBwE1HgPzXyV"
+  }
+}</code></pre>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 flex">
+                                <div class="mr-3 text-quantum-accent mt-1"><i class="fas fa-lightbulb"></i></div>
+                                <div>
+                                    <p class="text-gray-200 text-sm">
+                                        <strong>提示:</strong> 始终保存 <code class="bg-black/30 px-2 py-0.5 rounded">request_id</code> 值，它对于排查问题和向技术支持团队提供信息非常有用。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 文本生成API -->
+                <section id="ai-text" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">文本生成API</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            文本生成API是AlingAi Pro最核心的功能之一，它允许您根据提示生成自然、连贯且高质量的文本内容。您可以控制生成过程的多个方面，包括输出长度、创意程度和特定主题。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">端点</h3>
+                            <div class="flex items-center px-4 py-2 bg-black/50 rounded-t-lg border-b border-white/10">
+                                <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">POST</div>
+                                <div class="ml-2 font-mono text-sm">/v1/ai/text/generate</div>
+                            </div>
+                            <div class="bg-black/30 rounded-b-lg p-4 font-mono text-sm overflow-x-auto">
+                                https://api.alingai.pro/v1/ai/text/generate
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求参数</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="py-3 px-4 text-left bg-black/30">参数名称</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">类型</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">必填</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">prompt</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">是</td>
+                                            <td class="py-3 px-4">用于生成文本的提示</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">max_tokens</td>
+                                            <td class="py-3 px-4">integer</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">生成的最大标记数，默认为100，最大为4000</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">temperature</td>
+                                            <td class="py-3 px-4">float</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">控制生成文本的随机性，0.0-1.0之间，默认为0.7</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">model</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">使用的模型ID，默认为"aling-text-v1"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">top_p</td>
+                                            <td class="py-3 px-4">float</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">核采样参数，0.0-1.0之间，默认为1.0</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 font-mono bg-black/20">stop</td>
+                                            <td class="py-3 px-4">string[]</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">生成遇到这些字符串时停止</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求示例</h3>
+                            <div class="mb-2">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">cURL</span>
+                            </div>
+                            <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/text/generate" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "prompt": "描述一种未来智能家居系统如何改善人们的生活质量",
+       "max_tokens": 500,
+       "temperature": 0.8,
+       "model": "aling-text-v1"
+     }'</code></pre>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">响应示例</h3>
+                            <pre class="language-json line-numbers"><code>{
+  "id": "gen_7oDhEkcLaPyxWsRf",
+  "object": "text_generation",
+  "created": 1716309758,
+  "model": "aling-text-v1",
+  "choices": [
+    {
+      "text": "未来智能家居系统将通过全面互联和人工智能技术，从根本上改变人们的日常生活和生活质量。这些系统不仅仅是单一的智能设备的集合，而是一个完整的生态系统，能够学习、适应和预测家庭成员的需求和行为模式。\n\n首先，在健康管理方面，智能家居系统将通过嵌入式传感器和可穿戴设备实时监控居住者的健康指标。系统可以检测异常模式，提醒用户潜在的健康问题，甚至在紧急情况下自动联系医疗服务。智能厨房设备可以根据个人健康数据和饮食需求推荐和准备营养均衡的餐食，帮助维持健康生活方式。\n\n在能源管理方面，智能家居将优化能源使用，显著降低能源消耗和碳足迹。系统能根据天气预报、电网负载和家庭活动模式自动调整供暖、制冷和照明。例如，当检测到房间无人时，自动关闭不必要的电器和灯光；或在电价较低时段自动运行洗衣机和洗碗机等高能耗设备。\n\n安全性也将大幅提升。先进的人脸识别、声纹识别和行为模式分析可以精确识别家庭成员和访客，自动拒绝未授权访问。系统能够检测异常活动，如意外漏水、燃气泄漏或火灾隐患，并采取预防措施或发出警报。对于老年人或需要特殊照顾的家庭成员，智能监控系统可以确保他们的安全，同时保持独立生活。",
+      "index": 0,
+      "finish_reason": "length"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 22,
+    "completion_tokens": 500,
+    "total_tokens": 522
+  }
+}</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">高级功能与示例</h3>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">引导式生成</h4>
+                                <p class="text-gray-200 mb-3">
+                                    通过提供明确的指令和示例，您可以引导模型生成特定格式或风格的文本。
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "prompt": "将以下概念转换为技术博客文章的开头段落：\n\n概念：量子计算如何改变网络安全格局",
+  "max_tokens": 250,
+  "temperature": 0.7
+}</code></pre>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">多语言支持</h4>
+                                <p class="text-gray-200 mb-3">
+                                    API支持多种语言的文本生成，并且可以在不同语言之间进行翻译。
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "prompt": "把以下中文内容翻译成英文：\n\n人工智能技术正在改变我们工作和生活的方式。",
+  "max_tokens": 100,
+  "temperature": 0.3
+}</code></pre>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-lg mb-3">流式响应</h4>
+                                <p class="text-gray-200 mb-3">
+                                    对于需要实时文本生成的应用程序，API支持流式响应，可以在生成过程中逐步返回结果。
+                                </p>
+                                <p class="text-gray-200 mb-3">
+                                    只需在端点URL中添加<code class="bg-black/30 px-2 py-0.5 rounded">/stream</code>后缀：
+                                </p>
+                                <div class="font-mono text-sm bg-black/50 p-3 rounded-lg mb-4 overflow-x-auto">
+                                    https://api.alingai.pro/v1/ai/text/generate/stream
+                                </div>
+                                <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/text/generate/stream" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "prompt": "分析人工智能在医疗领域的应用前景",
+       "max_tokens": 300
+     }'</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 图像生成API -->
+                <section id="ai-image" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">图像生成API</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            图像生成API允许您通过文本描述生成高质量的图像。这个API可以用于创建各种类型的图像内容，包括产品渲染、场景可视化、概念艺术和创意插图。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">端点</h3>
+                            <div class="flex items-center px-4 py-2 bg-black/50 rounded-t-lg border-b border-white/10">
+                                <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">POST</div>
+                                <div class="ml-2 font-mono text-sm">/v1/ai/image/generate</div>
+                            </div>
+                            <div class="bg-black/30 rounded-b-lg p-4 font-mono text-sm overflow-x-auto">
+                                https://api.alingai.pro/v1/ai/image/generate
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求参数</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="py-3 px-4 text-left bg-black/30">参数名称</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">类型</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">必填</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">prompt</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">是</td>
+                                            <td class="py-3 px-4">要生成图像的文本描述，最大4000个字符</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">n</td>
+                                            <td class="py-3 px-4">integer</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">要生成的图像数量，默认为1，最大为4</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">size</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">图像尺寸，可选值："256x256", "512x512", "1024x1024", "1024x1792", "1792x1024"，默认为"1024x1024"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">style</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">图像风格，可选值："natural", "vivid", "artistic", "quantum"，默认为"natural"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">response_format</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">响应格式，可选值："url", "b64_json"，默认为"url"</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 font-mono bg-black/20">model</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">使用的模型，默认为"aling-image-v1"</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求示例</h3>
+                            <div class="mb-2">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">cURL</span>
+                            </div>
+                            <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/image/generate" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "prompt": "一座未来主义风格的城市夜景，霓虹灯光照亮高耸的量子计算建筑，光束在建筑物之间交错，玻璃幕墙反射着紫色和蓝色的光芒",
+       "n": 1,
+       "size": "1024x1024",
+       "style": "quantum"
+     }'</code></pre>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">响应示例</h3>
+                            <pre class="language-json line-numbers"><code>{
+  "created": 1716310846,
+  "data": [
+    {
+      "url": "https://image.alingai.pro/images/generated/a7b9c5d3e2f1g8h6i4j2k0l9m7n5o3p1q8r6s4t2u0v9w7x5y3z1.png"
+    }
+  ]
+}</code></pre>
+                            <p class="text-gray-300 text-sm mt-3">
+                                当 <code class="bg-black/30 px-2 py-0.5 rounded">response_format</code> 设置为 <code class="bg-black/30 px-2 py-0.5 rounded">b64_json</code> 时，响应会包含Base64编码的图像数据：
+                            </p>
+                            <pre class="language-json line-numbers"><code>{
+  "created": 1716310846,
+  "data": [
+    {
+      "b64_json": "iVBORw0KGgoAAAANSUhEUgAAA..."
+    }
+  ]
+}</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">高级功能与示例</h3>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">图像风格控制</h4>
+                                <p class="text-gray-200 mb-3">
+                                    通过 <code class="bg-black/30 px-2 py-0.5 rounded">style</code> 参数，您可以控制生成图像的视觉风格：
+                                </p>
+                                <ul class="space-y-2 text-gray-300">
+                                    <li>• <code class="bg-black/30 px-2 py-0.5 rounded">natural</code>：真实自然的风格，适合照片级图像</li>
+                                    <li>• <code class="bg-black/30 px-2 py-0.5 rounded">vivid</code>：鲜艳生动的风格，颜色更加饱和</li>
+                                    <li>• <code class="bg-black/30 px-2 py-0.5 rounded">artistic</code>：艺术风格，类似于数字艺术作品</li>
+                                    <li>• <code class="bg-black/30 px-2 py-0.5 rounded">quantum</code>：AlingAi特有的量子风格，具有未来科技感</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">批量生成示例</h4>
+                                <p class="text-gray-200 mb-3">
+                                    您可以通过 <code class="bg-black/30 px-2 py-0.5 rounded">n</code> 参数一次生成多张不同的图像：
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "prompt": "一台先进的量子计算机，散发着蓝光，悬浮在实验室中",
+  "n": 3,
+  "size": "512x512",
+  "style": "natural"
+}</code></pre>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <h4 class="font-medium text-lg mb-3">不同尺寸和方向</h4>
+                                <p class="text-gray-200 mb-3">
+                                    API支持不同尺寸和方向的图像生成，适应不同应用场景的需求：
+                                </p>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="glass-effect rounded-lg p-4">
+                                        <div class="mb-2 text-center">正方形 (1:1)</div>
+                                        <div class="bg-black/30 h-32 rounded-lg flex items-center justify-center">
+                                            <span class="font-mono text-xs">1024x1024</span>
+                                        </div>
+                                    </div>
+                                    <div class="glass-effect rounded-lg p-4">
+                                        <div class="mb-2 text-center">肖像 (9:16)</div>
+                                        <div class="bg-black/30 h-32 rounded-lg flex items-center justify-center">
+                                            <span class="font-mono text-xs">1024x1792</span>
+                                        </div>
+                                    </div>
+                                    <div class="glass-effect rounded-lg p-4">
+                                        <div class="mb-2 text-center">风景 (16:9)</div>
+                                        <div class="bg-black/30 h-32 rounded-lg flex items-center justify-center">
+                                            <span class="font-mono text-xs">1792x1024</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-lg mb-3">提示词优化建议</h4>
+                                <div class="bg-gradient-to-r from-quantum-primary/20 to-quantum-secondary/20 rounded-lg p-6 border border-quantum-primary/20">
+                                    <p class="text-gray-200 mb-4">
+                                        为了获得更好的图像生成结果，我们建议在提示词中包含以下信息：
+                                    </p>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li>• 清晰的主题描述（人物、物体、场景等）</li>
+                                        <li>• 视角和构图信息（特写、全景、俯视等）</li>
+                                        <li>• 照明条件（明亮、昏暗、日落、霓虹灯等）</li>
+                                        <li>• 色彩偏好（色调、配色方案）</li>
+                                        <li>• 艺术风格参考（如写实、卡通、油画等）</li>
+                                        <li>• 情感或氛围描述（宁静、紧张、神秘等）</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 聊天对话API -->
+                <section id="ai-chat" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">聊天对话API</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            聊天对话API是一个功能强大的接口，支持创建持续的对话，允许AI助手通过上下文记忆与用户进行自然、连贯的交流。这个API特别适合构建聊天机器人、虚拟助手和客户服务应用。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">端点</h3>
+                            <div class="flex items-center px-4 py-2 bg-black/50 rounded-t-lg border-b border-white/10">
+                                <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">POST</div>
+                                <div class="ml-2 font-mono text-sm">/v1/ai/chat/completions</div>
+                            </div>
+                            <div class="bg-black/30 rounded-b-lg p-4 font-mono text-sm overflow-x-auto">
+                                https://api.alingai.pro/v1/ai/chat/completions
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求参数</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="py-3 px-4 text-left bg-black/30">参数名称</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">类型</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">必填</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">messages</td>
+                                            <td class="py-3 px-4">array</td>
+                                            <td class="py-3 px-4">是</td>
+                                            <td class="py-3 px-4">消息数组，包含对话历史及新的用户消息</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">model</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">使用的模型ID，默认为"aling-chat-v1"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">temperature</td>
+                                            <td class="py-3 px-4">float</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">控制生成文本的随机性，0.0-1.0之间，默认为0.7</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">max_tokens</td>
+                                            <td class="py-3 px-4">integer</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">生成的最大标记数，默认为1000，最大为8000</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">stream</td>
+                                            <td class="py-3 px-4">boolean</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">是否启用流式响应，默认为false</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 font-mono bg-black/20">tools</td>
+                                            <td class="py-3 px-4">array</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">可供模型调用的工具列表</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="mt-6">
+                                <h4 class="font-medium mb-3">消息格式</h4>
+                                <p class="text-gray-200 mb-3">
+                                    <code class="bg-black/30 px-2 py-0.5 rounded">messages</code> 数组中的每个消息对象必须包含以下字段：
+                                </p>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full border-collapse">
+                                        <thead>
+                                            <tr class="border-b border-white/10">
+                                                <th class="py-3 px-4 text-left bg-black/30">字段</th>
+                                                <th class="py-3 px-4 text-left bg-black/30">类型</th>
+                                                <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-sm">
+                                            <tr class="border-b border-white/5">
+                                                <td class="py-3 px-4 font-mono bg-black/20">role</td>
+                                                <td class="py-3 px-4">string</td>
+                                                <td class="py-3 px-4">消息发送者角色，可选值："system", "user", "assistant", "tool"</td>
+                                            </tr>
+                                            <tr class="border-b border-white/5">
+                                                <td class="py-3 px-4 font-mono bg-black/20">content</td>
+                                                <td class="py-3 px-4">string</td>
+                                                <td class="py-3 px-4">消息内容</td>
+                                            </tr>
+                                            <tr class="border-b border-white/5">
+                                                <td class="py-3 px-4 font-mono bg-black/20">name</td>
+                                                <td class="py-3 px-4">string</td>
+                                                <td class="py-3 px-4">可选，发送者名称，仅在role为"tool"时需要</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="py-3 px-4 font-mono bg-black/20">tool_calls</td>
+                                                <td class="py-3 px-4">array</td>
+                                                <td class="py-3 px-4">可选，工具调用信息，仅在role为"assistant"且调用工具时使用</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求示例</h3>
+                            <div class="mb-2">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">cURL</span>
+                            </div>
+                            <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/chat/completions" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "model": "aling-chat-v1",
+       "messages": [
+         {
+           "role": "system",
+           "content": "你是AlingAi助手，一个专业、友好且富有创意的AI助手。今天是2024年5月22日。"
+         },
+         {
+           "role": "user",
+           "content": "请解释什么是量子计算，并给我一个简单的应用场景例子。"
+         }
+       ],
+       "temperature": 0.7,
+       "max_tokens": 800
+     }'</code></pre>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">响应示例</h3>
+                            <pre class="language-json line-numbers"><code>{
+  "id": "chatcmpl_3f8g9h7j6k5l4m3n2p1q",
+  "object": "chat.completion",
+  "created": 1716312458,
+  "model": "aling-chat-v1",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "量子计算是一种利用量子物理学原理进行信息处理的计算方式。与传统计算机使用比特（0或1）不同，量子计算机使用量子比特（qubit），它们可以同时处于多个状态的叠加态。\n\n这种特性使量子计算机在处理某些特定问题时，能够实现指数级的速度提升。关键的量子特性包括：\n\n1. 量子叠加：量子比特可以同时表示0和1\n2. 量子纠缠：多个量子比特之间可以建立特殊的关联\n3. 量子干涉：量子态可以相互干涉，增强某些计算路径的概率\n\n**实际应用场景例子：药物发现**\n\n传统计算机模拟分子结构和相互作用需要巨大的计算资源。例如，要精确模拟一个中等复杂度的分子，可能需要传统计算机花费数年或更长时间计算。\n\n而量子计算机可以高效模拟量子系统（如分子），加速药物发现过程：\n\n- 研究人员可以使用量子计算机模拟候选药物分子与疾病相关蛋白质的相互作用\n- 快速筛选出最有希望的化合物\n- 减少实验室测试需求，节省大量时间和资源\n- 发现传统方法难以找到的新型药物\n\n实际上，量子计算已经被用于研究COVID-19治疗药物和抗生素等领域，有望在未来彻底改变药物发现的流程和效率。"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 74,
+    "completion_tokens": 438,
+    "total_tokens": 512
+  }
+}</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">高级功能与示例</h3>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">多轮对话示例</h4>
+                                <p class="text-gray-200 mb-3">
+                                    通过保留之前的消息，可以实现连贯的多轮对话体验：
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "model": "aling-chat-v1",
+  "messages": [
+    {
+      "role": "system",
+      "content": "你是AlingAi助手，一个专业、友好且富有创意的AI助手。"
+    },
+    {
+      "role": "user",
+      "content": "请解释什么是量子计算？"
+    },
+    {
+      "role": "assistant",
+      "content": "量子计算是一种利用量子物理学原理进行信息处理的计算方式。与传统计算机使用比特（0或1）不同，量子计算机使用量子比特（qubit），它们可以同时处于多个状态的叠加态，这使得量子计算机能够在处理某些特定问题时实现指数级的速度提升。"
+    },
+    {
+      "role": "user",
+      "content": "这对密码学有什么影响？"
+    }
+  ]
+}</code></pre>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">流式响应</h4>
+                                <p class="text-gray-200 mb-3">
+                                    通过启用 <code class="bg-black/30 px-2 py-0.5 rounded">stream</code> 参数，可以获得实时的响应流，适用于打字机效果的界面实现：
+                                </p>
+                                <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/chat/completions" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "model": "aling-chat-v1",
+       "messages": [{"role": "user", "content": "讲一个简短的科幻故事"}],
+       "stream": true
+     }'</code></pre>
+                                <p class="text-gray-300 text-sm mt-3">
+                                    服务器将以Server-Sent Events (SSE) 格式返回流式响应，每次发送部分内容。
+                                </p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">工具调用功能</h4>
+                                <p class="text-gray-200 mb-3">
+                                    模型可以调用您定义的工具，执行复杂的操作，如检索信息、执行计算或调用其他API：
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "model": "aling-chat-v1",
+  "messages": [
+    {"role": "user", "content": "北京今天的天气怎么样？"}
+  ],
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "get_weather",
+        "description": "获取指定城市的最新天气信息",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "城市名称，如北京、上海等"
+            },
+            "unit": {
+              "type": "string", 
+              "enum": ["celsius", "fahrenheit"],
+              "description": "温度单位"
+            }
+          },
+          "required": ["location"]
+        }
+      }
+    }
+  ]
+}</code></pre>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-lg mb-3">最佳实践</h4>
+                                <div class="bg-gradient-to-r from-quantum-primary/20 to-quantum-secondary/20 rounded-lg p-6 border border-quantum-primary/20">
+                                    <h5 class="font-medium mb-3 text-quantum-accent">优化聊天体验的建议</h5>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li>• 使用明确的系统提示设置AI助手的行为、知识范围和限制</li>
+                                        <li>• 在客户端实现部分消息历史管理，仅发送相关上下文</li>
+                                        <li>• 对于长对话，考虑使用摘要技术或删除较早的、不太相关的消息</li>
+                                        <li>• 使用适当的temperature参数调整回答的创造性（较低值更确定性，较高值更创造性）</li>
+                                        <li>• 在敏感场景中，通过系统提示和适当的模型参数控制输出内容</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 语音识别API -->
+                <section id="ai-speech" class="mb-16">
+                    <div class="glass-effect rounded-xl p-8">
+                        <h2 class="text-2xl font-bold mb-6 text-quantum-accent">语音识别API</h2>
+                        
+                        <p class="mb-6 text-gray-200">
+                            语音识别API将音频转换为文本，支持多种语言和特殊领域词汇。该API适用于语音助手、会议记录、字幕生成等多种应用场景，提供高准确度的实时或批量音频转录。
+                        </p>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">端点</h3>
+                            <div class="flex items-center px-4 py-2 bg-black/50 rounded-t-lg border-b border-white/10">
+                                <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">POST</div>
+                                <div class="ml-2 font-mono text-sm">/v1/ai/speech/transcriptions</div>
+                            </div>
+                            <div class="bg-black/30 rounded-b-lg p-4 font-mono text-sm overflow-x-auto">
+                                https://api.alingai.pro/v1/ai/speech/transcriptions
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求参数</h3>
+                            <p class="text-gray-200 mb-4">
+                                此API使用 <code class="bg-black/30 px-2 py-0.5 rounded">multipart/form-data</code> 格式，允许直接上传音频文件：
+                            </p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="border-b border-white/10">
+                                            <th class="py-3 px-4 text-left bg-black/30">参数名称</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">类型</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">必填</th>
+                                            <th class="py-3 px-4 text-left bg-black/30">描述</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">file</td>
+                                            <td class="py-3 px-4">file</td>
+                                            <td class="py-3 px-4">是</td>
+                                            <td class="py-3 px-4">要转录的音频文件，格式支持mp3, wav, m4a, flac, webm，最大大小为25MB</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">model</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">使用的模型ID，默认为"aling-speech-v1"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">language</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">音频语言的ISO-639-1代码（如"zh"表示中文，"en"表示英文）。如未指定，API将自动检测语言</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">response_format</td>
+                                            <td class="py-3 px-4">string</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">响应格式，可选值："json", "text", "srt", "vtt"，默认为"json"</td>
+                                        </tr>
+                                        <tr class="border-b border-white/5">
+                                            <td class="py-3 px-4 font-mono bg-black/20">temperature</td>
+                                            <td class="py-3 px-4">float</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">采样温度，0.0-1.0之间，较低值使音频转文本更加确定，默认为0.2</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="py-3 px-4 font-mono bg-black/20">timestamp_granularities</td>
+                                            <td class="py-3 px-4">array</td>
+                                            <td class="py-3 px-4">否</td>
+                                            <td class="py-3 px-4">包含时间戳信息的粒度，可选值："word"（词级别）、"segment"（段落级别），默认为空</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">请求示例</h3>
+                            <div class="mb-2">
+                                <span class="text-xs font-medium px-2 py-1 rounded bg-quantum-primary/20 text-quantum-accent">cURL</span>
+                            </div>
+                            <pre class="language-bash line-numbers"><code>curl -X POST "https://api.alingai.pro/v1/ai/speech/transcriptions" \
+     -H "Authorization: Bearer YOUR_API_KEY" \
+     -H "Content-Type: multipart/form-data" \
+     -F file=@"recording.mp3" \
+     -F model="aling-speech-v1" \
+     -F language="zh" \
+     -F timestamp_granularities="[\"segment\"]"</code></pre>
+                        </div>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-xl font-semibold mb-4">响应示例</h3>
+                            <pre class="language-json line-numbers"><code>{
+  "text": "欢迎使用AlingAi的语音识别API。这项技术可以将语音准确地转换为文本，支持多种语言和特定领域的专业词汇。",
+  "task": "transcribe",
+  "language": "zh",
+  "duration": 8.2,
+  "segments": [
+    {
+      "id": 0,
+      "start": 0.0,
+      "end": 2.6,
+      "text": "欢迎使用AlingAi的语音识别API。"
+    },
+    {
+      "id": 1,
+      "start": 2.6,
+      "end": 8.2,
+      "text": "这项技术可以将语音准确地转换为文本，支持多种语言和特定领域的专业词汇。"
+    }
+  ]
+}</code></pre>
+                            <p class="text-gray-300 text-sm mt-3">
+                                当 <code class="bg-black/30 px-2 py-0.5 rounded">response_format</code> 设置为 <code class="bg-black/30 px-2 py-0.5 rounded">text</code> 时，响应将只包含纯文本：
+                            </p>
+                            <pre class="language-text line-numbers"><code>欢迎使用AlingAi的语音识别API。这项技术可以将语音准确地转换为文本，支持多种语言和特定领域的专业词汇。</code></pre>
+                            <p class="text-gray-300 text-sm mt-3">
+                                当 <code class="bg-black/30 px-2 py-0.5 rounded">response_format</code> 设置为 <code class="bg-black/30 px-2 py-0.5 rounded">srt</code> 时，响应将返回SRT字幕格式：
+                            </p>
+                            <pre class="language-text line-numbers"><code>1
+00:00:00,000 --> 00:00:02,600
+欢迎使用AlingAi的语音识别API。
+
+2
+00:00:02,600 --> 00:00:08,200
+这项技术可以将语音准确地转换为文本，支持多种语言和特定领域的专业词汇。</code></pre>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-xl font-semibold mb-4">高级功能与示例</h3>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">实时转录示例</h4>
+                                <p class="text-gray-200 mb-3">
+                                    对于需要实时处理的音频流，可以使用流式API端点：
+                                </p>
+                                <div class="flex items-center px-4 py-2 bg-black/50 rounded-t-lg border-b border-white/10">
+                                    <div class="bg-quantum-accent/20 text-quantum-accent text-xs px-2 py-1 rounded">POST</div>
+                                    <div class="ml-2 font-mono text-sm">/v1/ai/speech/transcribe-stream</div>
+                                </div>
+                                <div class="bg-black/30 rounded-b-lg p-4 font-mono text-sm overflow-x-auto mb-4">
+                                    https://api.alingai.pro/v1/ai/speech/transcribe-stream
+                                </div>
+                                <p class="text-gray-200">
+                                    该API接受音频流并返回Server-Sent Events格式的实时转录结果。
+                                </p>
+                            </div>
+                            
+                            <div class="mb-6">
+                                <h4 class="font-medium text-lg mb-3">词级时间戳示例</h4>
+                                <p class="text-gray-200 mb-3">
+                                    通过设置 <code class="bg-black/30 px-2 py-0.5 rounded">timestamp_granularities</code> 参数为 <code class="bg-black/30 px-2 py-0.5 rounded">["word"]</code>，可以获取每个词的精确时间戳：
+                                </p>
+                                <pre class="language-json line-numbers"><code>{
+  "text": "欢迎使用AlingAi的语音识别API。",
+  "task": "transcribe",
+  "language": "zh",
+  "duration": 2.6,
+  "words": [
+    {"word": "欢迎", "start": 0.0, "end": 0.5},
+    {"word": "使用", "start": 0.5, "end": 0.9},
+    {"word": "AlingAi", "start": 0.9, "end": 1.5},
+    {"word": "的", "start": 1.5, "end": 1.6},
+    {"word": "语音识别", "start": 1.6, "end": 2.2},
+    {"word": "API", "start": 2.2, "end": 2.5},
+    {"word": "。", "start": 2.5, "end": 2.6}
+  ]
+}</code></pre>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <h4 class="font-medium text-lg mb-3">支持的语言</h4>
+                                <p class="text-gray-200 mb-3">
+                                    AlingAi语音识别API支持多种语言，包括但不限于：
+                                </p>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                    <div class="bg-black/20 rounded p-2 text-center">中文 (zh)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">英语 (en)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">日语 (ja)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">韩语 (ko)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">法语 (fr)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">德语 (de)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">西班牙语 (es)</div>
+                                    <div class="bg-black/20 rounded p-2 text-center">俄语 (ru)</div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="font-medium text-lg mb-3">最佳实践</h4>
+                                <div class="bg-gradient-to-r from-quantum-primary/20 to-quantum-secondary/20 rounded-lg p-6 border border-quantum-primary/20">
+                                    <h5 class="font-medium mb-3 text-quantum-accent">提高转录质量的建议</h5>
+                                    <ul class="space-y-2 text-gray-300">
+                                        <li>• 确保音频质量清晰，降低背景噪音</li>
+                                        <li>• 指定正确的语言参数可以提高特定语言的识别精度</li>
+                                        <li>• 对于专业领域术语，可以使用特定领域的模型变体（如医疗、法律等）</li>
+                                        <li>• 长音频（>10分钟）建议分段处理以获得更好的性能</li>
+                                        <li>• 对于多语言音频，使用自动语言检测功能</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- 更多API文档部分将在这里添加 -->
+                
+                <!-- 页脚链接 -->
+                <div class="text-center mt-16 mb-8">
+                    <p class="text-gray-300">
+                        找不到您需要的内容？请查看我们的<a href="/unified-help-center.html" class="text-quantum-accent hover:underline">帮助中心</a>或<a href="/unified-help-center.html#contact-support" class="text-quantum-accent hover:underline">联系我们的技术支持团队</a>。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="bg-black/30 backdrop-blur-lg border-t border-white/10 py-12 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- Logo和简介 -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">A</span>
+                        </div>
+                        <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">
+                        专业级AI解决方案平台，提供先进的人工智能API、工具集和安全防护
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 产品链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">产品</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/platform.html" class="hover:text-quantum-accent transition-colors">平台概述</a></li>
+                        <li><a href="/ai-assistant.html" class="hover:text-quantum-accent transition-colors">AI助手</a></li>
+                        <li><a href="/unified-api-documentation.html" class="hover:text-quantum-accent transition-colors">API文档</a></li>
+                        <li><a href="/quantum-security.html" class="hover:text-quantum-accent transition-colors">量子安全</a></li>
+                        <li><a href="/sdk-download.html" class="hover:text-quantum-accent transition-colors">SDK下载</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 公司链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">公司</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/about.html" class="hover:text-quantum-accent transition-colors">关于我们</a></li>
+                        <li><a href="/partners.html" class="hover:text-quantum-accent transition-colors">合作伙伴</a></li>
+                        <li><a href="/ecosystem.html" class="hover:text-quantum-accent transition-colors">生态系统</a></li>
+                        <li><a href="/contact.html" class="hover:text-quantum-accent transition-colors">联系我们</a></li>
+                        <li><a href="/careers.html" class="hover:text-quantum-accent transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 资源链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">资源</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/unified-help-center.html" class="hover:text-quantum-accent transition-colors">帮助中心</a></li>
+                        <li><a href="/docs-center.html" class="hover:text-quantum-accent transition-colors">开发文档</a></li>
+                        <li><a href="/api-community.html" class="hover:text-quantum-accent transition-colors">API社区</a></li>
+                        <li><a href="/unified-status.html" class="hover:text-quantum-accent transition-colors">系统状态</a></li>
+                        <li><a href="/sitemap.html" class="hover:text-quantum-accent transition-colors">网站地图</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    &copy; 2024 AlingAi Pro. 保留所有权利
+                </p>
+                <div class="flex space-x-6 text-sm text-gray-500">
+                    <a href="/terms.html" class="hover:text-quantum-accent transition-colors">服务条款</a>
+                    <a href="/privacy.html" class="hover:text-quantum-accent transition-colors">隐私政策</a>
+                    <a href="/sitemap.html" class="hover:text-quantum-accent transition-colors">网站地图</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 核心JS -->
+    <script src="/assets/js/unified-core.js"></script>
+    
+    <!-- Prism.js 代码高亮 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    
+    <!-- 量子粒子背景 -->
+    <script src="/assets/js/quantum-particles.js"></script>
+    
+    <!-- 页面脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化量子粒子背景
+            if (typeof initQuantumParticles === 'function') {
+                initQuantumParticles('quantum-particles');
+            }
+            
+            // 初始化量子鼠标效果
+            if (typeof initQuantumCursor === 'function') {
+                initQuantumCursor();
+            }
+            
+            // 移动菜单
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // 代码块复制功能
+            function setupCodeCopyButtons() {
+                const codeBlocks = document.querySelectorAll('pre');
+                
+                codeBlocks.forEach(block => {
+                    // 创建包装容器
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-wrapper relative';
+                    block.parentNode.insertBefore(wrapper, block);
+                    wrapper.appendChild(block);
+                    
+                    // 创建复制按钮
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'copy-button';
+                    copyButton.innerHTML = '<i class="fas fa-copy"></i> 复制';
+                    wrapper.appendChild(copyButton);
+                    
+                    // 添加复制功能
+                    copyButton.addEventListener('click', function() {
+                        const code = block.querySelector('code') ? block.querySelector('code').textContent : block.textContent;
+                        
+                        navigator.clipboard.writeText(code).then(() => {
+                            // 显示复制成功
+                            copyButton.innerHTML = '<i class="fas fa-check"></i> 已复制';
+                            copyButton.classList.add('copied');
+                            
+                            // 2秒后恢复原状
+                            setTimeout(() => {
+                                copyButton.innerHTML = '<i class="fas fa-copy"></i> 复制';
+                                copyButton.classList.remove('copied');
+                            }, 2000);
+                        });
+                    });
+                });
+            }
+            
+            // 侧边栏导航高亮
+            function setupSidebarHighlight() {
+                const sidebarLinks = document.querySelectorAll('.sidebar-link');
+                const sections = document.querySelectorAll('section[id]');
+                
+                // 初始化 Intersection Observer
+                const observerOptions = {
+                    rootMargin: '-100px 0px -80% 0px',
+                    threshold: 0
+                };
+                
+                const observerCallback = (entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const activeId = entry.target.id;
+                            
+                            // 移除所有链接的活动状态
+                            sidebarLinks.forEach(link => {
+                                link.classList.remove('active');
+                            });
+                            
+                            // 添加当前部分链接的活动状态
+                            const activeLink = document.querySelector(`.sidebar-link[href="#${activeId}"]`);
+                            if (activeLink) {
+                                activeLink.classList.add('active');
+                            }
+                        }
+                    });
+                };
+                
+                const observer = new IntersectionObserver(observerCallback, observerOptions);
+                
+                // 观察所有部分
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+                
+                // 点击侧边栏链接时的平滑滚动
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            // 平滑滚动到目标位置
+                            window.scrollTo({
+                                top: targetElement.offsetTop - 80,
+                                behavior: 'smooth'
+                            });
+                            
+                            // 更新URL
+                            history.pushState(null, null, targetId);
+                            
+                            // 手动更新活动状态
+                            sidebarLinks.forEach(l => l.classList.remove('active'));
+                            link.classList.add('active');
+                        }
+                    });
+                });
+            }
+            
+            // API请求示例语言切换
+            function setupLanguageTabs() {
+                const tabs = document.querySelectorAll('.language-tab');
+                const contents = document.querySelectorAll('.language-content');
+                
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const language = tab.getAttribute('data-language');
+                        
+                        // 更新标签状态
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        // 更新内容显示
+                        contents.forEach(content => {
+                            if (content.getAttribute('data-language') === language) {
+                                content.classList.add('active');
+                            } else {
+                                content.classList.remove('active');
+                            }
+                        });
+                    });
+                });
+                
+                // 默认选中第一个标签
+                if (tabs.length > 0) {
+                    tabs[0].click();
+                }
+            }
+            
+            // API端点搜索功能
+            function setupApiSearch() {
+                const searchInput = document.getElementById('api-search');
+                if (!searchInput) return;
+                
+                searchInput.addEventListener('input', () => {
+                    const searchTerm = searchInput.value.toLowerCase();
+                    const sections = document.querySelectorAll('section[id]');
+                    
+                    sections.forEach(section => {
+                        const title = section.querySelector('h2, h3')?.textContent.toLowerCase() || '';
+                        const content = section.textContent.toLowerCase();
+                        
+                        if (searchTerm === '' || title.includes(searchTerm) || content.includes(searchTerm)) {
+                            section.style.display = '';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                });
+            }
+            
+            // 初始化所有功能
+            setupCodeCopyButtons();
+            setupSidebarHighlight();
+            setupLanguageTabs();
+            setupApiSearch();
+        });
+    </script>
+</body>
+</html> 

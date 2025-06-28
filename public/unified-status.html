@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AlingAi Pro - 系统状态监控，实时查看服务可用性和性能指标">
+    <meta name="keywords" content="AI, 系统状态, 服务监控, 性能指标, 运行状况">
+    <title>AlingAi Pro - 系统状态监控</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    
+    <!-- 核心CSS -->
+    <link rel="stylesheet" href="/assets/css/unified-styles.css">
+    
+    <!-- 字体库 -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+    
+    <!-- FontAwesome 图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'quantum-primary': '#4F46E5',
+                        'quantum-secondary': '#8B5CF6',
+                        'quantum-accent': '#06B6D4',
+                        'quantum-dark': '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- ChartJS 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+
+<body class="bg-gradient-to-b from-quantum-dark to-slate-900 text-white min-h-screen">
+    <!-- 量子粒子背景 -->
+    <div id="quantum-particles" class="fixed inset-0 -z-10 pointer-events-none"></div>
+    
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-quantum-primary/20">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-2">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-9 h-9 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">A</span>
+                        </div>
+                        <span class="text-xl font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                    </a>
+                </div>
+                
+                <!-- 导航链接 - 中等尺寸屏幕以上 -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
+                    <a href="/api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
+                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
+                </div>
+                
+                <!-- 用户菜单/登录按钮 -->
+                <div class="flex items-center space-x-2">
+                    <a href="/login.html" class="py-2 px-4 text-sm font-medium text-white hover:text-quantum-accent transition-colors">登录</a>
+                    <a href="/register.html" class="quantum-button">
+                        注册
+                    </a>
+                </div>
+                
+                <!-- 移动端导航按钮 -->
+                <button id="mobile-menu-button" class="md:hidden text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 移动端导航菜单 -->
+        <div id="mobile-menu" class="md:hidden bg-quantum-dark border-b border-quantum-primary/20 hidden">
+            <div class="container mx-auto px-6 py-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="/platform.html" class="text-white hover:text-quantum-accent transition-colors">平台</a>
+                    <a href="/api-documentation.html" class="text-white hover:text-quantum-accent transition-colors">API文档</a>
+                    <a href="/quantum-security.html" class="text-white hover:text-quantum-accent transition-colors">量子安全</a>
+                    <a href="/partners.html" class="text-white hover:text-quantum-accent transition-colors">合作伙伴</a>
+                    <a href="/about.html" class="text-white hover:text-quantum-accent transition-colors">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主要内容 -->
+    <main class="container mx-auto px-6 py-24">
+        <!-- 页面标题 -->
+        <div class="text-center mb-16">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                <span class="quantum-title">系统状态监控</span>
+            </h1>
+            <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                实时监控AlingAi Pro平台各项服务的运行状态和性能指标
+            </p>
+        </div>
+        
+        <!-- 系统状态概览 -->
+        <div class="mb-16">
+            <div class="glass-effect rounded-xl p-8 text-center">
+                <div class="flex items-center justify-center space-x-4 mb-6">
+                    <div class="w-4 h-4 rounded-full bg-green-500 animate-pulse"></div>
+                    <h2 class="text-2xl font-bold">所有系统正常运行</h2>
+                </div>
+                <p class="text-gray-300">
+                    最后更新时间: <span id="last-updated">2024-05-22 15:30:45</span> · 
+                    <button class="text-quantum-accent hover:underline" id="refresh-status">
+                        <i class="fas fa-sync-alt mr-1"></i>刷新
+                    </button>
+                </p>
+            </div>
+        </div>
+        
+        <!-- 刷新按钮 -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-2">
+                <span class="text-sm text-gray-400 last-updated">最后更新: 12:30:45</span>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="auto-refresh-toggle" class="w-4 h-4 text-quantum-accent bg-gray-800 border-gray-600 rounded focus:ring-quantum-accent focus:ring-1" checked>
+                    <label for="auto-refresh-toggle" class="text-sm text-gray-300">自动刷新</label>
+                </div>
+                <button class="bg-quantum-primary/20 hover:bg-quantum-primary/30 text-quantum-primary px-3 py-1.5 rounded-lg text-sm flex items-center transition-colors">
+                    <i class="fas fa-sync-alt mr-2"></i> 刷新状态
+                </button>
+            </div>
+        </div>
+        
+        <!-- 服务状态卡片 -->
+        <section class="mb-12">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-semibold">服务状态</h2>
+                <button class="bg-quantum-primary/20 hover:bg-quantum-primary/30 text-quantum-accent border border-quantum-primary/40 rounded-lg px-4 py-2 text-sm flex items-center transition-colors">
+                    <i class="fas fa-sync-alt mr-2"></i> 刷新状态
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- API服务 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">API服务</div>
+                            <div class="text-sm text-gray-400">核心API服务接口</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.98%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">当前请求数</span>
+                            <span>247 req/min</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">平均响应时间</span>
+                            <span>185ms</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>2分钟前</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 数据库 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">数据库服务</div>
+                            <div class="text-sm text-gray-400">MySQL数据存储</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.96%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">当前连接数</span>
+                            <span>78 连接</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">查询延迟</span>
+                            <span>24ms</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>2分钟前</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI引擎 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">AI引擎</div>
+                            <div class="text-sm text-gray-400">核心AI推理服务</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.92%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">当前推理请求</span>
+                            <span>36 req/min</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">平均处理时间</span>
+                            <span>1.2s</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>3分钟前</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 存储服务 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">存储服务</div>
+                            <div class="text-sm text-gray-400">文件和媒体存储</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">传输速度</span>
+                            <span>52MB/s</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">可用存储</span>
+                            <span>8.2TB (76%)</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>4分钟前</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 认证服务 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">认证服务</div>
+                            <div class="text-sm text-gray-400">用户身份验证</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-yellow-400 mr-2"></span>
+                            部分延迟
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>98.54%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">当前验证请求</span>
+                            <span>124 req/min</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">平均响应时间</span>
+                            <span>436ms <span class="text-yellow-400">↑</span></span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>1分钟前</span>
+                        </div>
+                    </div>
+                    <div class="mt-3 text-sm text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-2">
+                        部分地区用户登录可能遇到轻微延迟，正在解决中。
+                    </div>
+                </div>
+
+                <!-- 网络服务 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">网络服务</div>
+                            <div class="text-sm text-gray-400">网络基础设施</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.99%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">网络流量</span>
+                            <span>2.4 GB/s</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">延迟</span>
+                            <span>18ms</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>2分钟前</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 定时任务 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">定时任务</div>
+                            <div class="text-sm text-gray-400">后台调度系统</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.97%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">活跃任务</span>
+                            <span>14 jobs</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">完成率</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>5分钟前</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 推送通知 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">推送通知</div>
+                            <div class="text-sm text-gray-400">消息通知系统</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>99.95%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">发送速率</span>
+                            <span>96 msg/min</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">送达率</span>
+                            <span>99.8%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>3分钟前</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 负载均衡 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <div class="text-lg font-medium">负载均衡器</div>
+                            <div class="text-sm text-gray-400">流量分配系统</div>
+                        </div>
+                        <div class="px-2 py-1 rounded-full bg-green-500/20 text-green-400 text-sm flex items-center">
+                            <span class="h-2 w-2 rounded-full bg-green-400 mr-2"></span>
+                            正常运行
+                        </div>
+                    </div>
+                    <div class="text-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">正常运行时间</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">活跃连接</span>
+                            <span>1,450</span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-400">健康节点</span>
+                            <span>8/8</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">最近更新</span>
+                            <span>2分钟前</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 历史事件 -->
+        <div class="mb-16">
+            <h2 class="text-2xl font-bold mb-6">历史事件</h2>
+            
+            <div class="glass-effect rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="px-6 py-4 text-left text-sm font-medium text-gray-300">日期</th>
+                                <th class="px-6 py-4 text-left text-sm font-medium text-gray-300">服务</th>
+                                <th class="px-6 py-4 text-left text-sm font-medium text-gray-300">事件</th>
+                                <th class="px-6 py-4 text-left text-sm font-medium text-gray-300">状态</th>
+                                <th class="px-6 py-4 text-left text-sm font-medium text-gray-300">持续时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-white/5 bg-white/5">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-05-22</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">存储服务</td>
+                                <td class="px-6 py-4 text-sm">存储服务优化维护</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-400">进行中</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">进行中</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-05-15</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">AI引擎</td>
+                                <td class="px-6 py-4 text-sm">AI模型升级</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">已解决</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">2小时</td>
+                            </tr>
+                            <tr class="border-b border-white/5 bg-white/5">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-05-08</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">数据库服务</td>
+                                <td class="px-6 py-4 text-sm">数据库性能优化</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">已解决</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">45分钟</td>
+                            </tr>
+                            <tr class="border-b border-white/5">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-05-02</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">WebSocket服务</td>
+                                <td class="px-6 py-4 text-sm">连接稳定性问题</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">已解决</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">30分钟</td>
+                            </tr>
+                            <tr class="border-b border-white/5 bg-white/5">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-04-25</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">API服务</td>
+                                <td class="px-6 py-4 text-sm">计划维护</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    <span class="px-2 py-1 rounded-full text-xs bg-green-500/20 text-green-400">已解决</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">1小时</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 性能指标图表 -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold mb-4">性能指标</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- API请求量 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">API 请求量</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="api-requests-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="apiRequestsChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 响应时间 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">平均响应时间</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="response-time-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="responseTimeChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- CPU使用率 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">CPU 使用率</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="cpu-usage-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="cpuUsageChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 内存使用率 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">内存使用率</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="memory-usage-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="memoryUsageChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 磁盘使用率 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">磁盘使用率</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="disk-usage-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="diskUsageChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                
+                <!-- 网络流量 -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-lg font-medium mb-4">网络流量</h3>
+                    <div class="text-sm text-gray-400 mb-4">
+                        <div class="flex items-center">
+                            <span class="mr-3">时间范围:</span>
+                            <select id="network-traffic-timerange" class="bg-black/30 border border-gray-600 rounded px-2 py-1 text-sm">
+                                <option value="24h">过去24小时</option>
+                                <option value="7d">过去7天</option>
+                                <option value="30d">过去30天</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <canvas id="networkTrafficChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 页面底部 -->
+        <div class="text-center text-sm text-gray-400 mt-16 mb-8">
+            <p>如果您发现任何服务异常或有任何疑问，请<a href="/unified-help-center.html#contact-support" class="text-quantum-accent hover:underline">联系我们的技术支持团队</a>。</p>
+            <p class="mt-2">监控数据每5分钟自动更新。数据可能会有最多5分钟的延迟。</p>
+        </div>
+    </main>
+    
+    <!-- 页脚 -->
+    <footer class="bg-black/30 backdrop-blur-lg border-t border-white/10 py-12 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <!-- Logo和简介 -->
+                <div class="col-span-1 md:col-span-1">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-quantum-primary to-quantum-accent rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">A</span>
+                        </div>
+                        <span class="text-lg font-bold">AlingAi <span class="text-quantum-accent">Pro</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm mb-6">
+                        专业级AI解决方案平台，提供先进的人工智能API、工具集和安全防护
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-quantum-accent transition-colors">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 产品链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">产品</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/platform.html" class="hover:text-quantum-accent transition-colors">平台概述</a></li>
+                        <li><a href="/ai-assistant.html" class="hover:text-quantum-accent transition-colors">AI助手</a></li>
+                        <li><a href="/api-documentation.html" class="hover:text-quantum-accent transition-colors">API文档</a></li>
+                        <li><a href="/quantum-security.html" class="hover:text-quantum-accent transition-colors">量子安全</a></li>
+                        <li><a href="/sdk-download.html" class="hover:text-quantum-accent transition-colors">SDK下载</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 公司链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">公司</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/about.html" class="hover:text-quantum-accent transition-colors">关于我们</a></li>
+                        <li><a href="/partners.html" class="hover:text-quantum-accent transition-colors">合作伙伴</a></li>
+                        <li><a href="/ecosystem.html" class="hover:text-quantum-accent transition-colors">生态系统</a></li>
+                        <li><a href="/contact.html" class="hover:text-quantum-accent transition-colors">联系我们</a></li>
+                        <li><a href="/careers.html" class="hover:text-quantum-accent transition-colors">加入我们</a></li>
+                    </ul>
+                </div>
+                
+                <!-- 资源链接 -->
+                <div class="col-span-1">
+                    <h3 class="text-lg font-medium mb-4">资源</h3>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="/unified-help-center.html" class="hover:text-quantum-accent transition-colors">帮助中心</a></li>
+                        <li><a href="/docs-center.html" class="hover:text-quantum-accent transition-colors">开发文档</a></li>
+                        <li><a href="/api-community.html" class="hover:text-quantum-accent transition-colors">API社区</a></li>
+                        <li><a href="/unified-status.html" class="hover:text-quantum-accent transition-colors">系统状态</a></li>
+                        <li><a href="/sitemap.html" class="hover:text-quantum-accent transition-colors">网站地图</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row items-center justify-between">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0">
+                    &copy; 2024 AlingAi Pro. 保留所有权利
+                </p>
+                <div class="flex space-x-6 text-sm text-gray-500">
+                    <a href="/terms.html" class="hover:text-quantum-accent transition-colors">服务条款</a>
+                    <a href="/privacy.html" class="hover:text-quantum-accent transition-colors">隐私政策</a>
+                    <a href="/sitemap.html" class="hover:text-quantum-accent transition-colors">网站地图</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 核心JS -->
+    <script src="/assets/js/unified-core.js"></script>
+    
+    <!-- 量子粒子背景 -->
+    <script src="/assets/js/quantum-particles.js"></script>
+    
+    <!-- 系统监控脚本 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化所有图表
+            const apiRequestsCtx = document.getElementById('apiRequestsChart').getContext('2d');
+            const apiRequestsChart = new Chart(apiRequestsCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: 'API请求 (每分钟)',
+                        data: generateRandomData(24, 180, 320),
+                        borderColor: 'rgba(79, 209, 197, 1)',
+                        backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: getChartOptions('API请求量 (每分钟)')
+            });
+            
+            // 响应时间图表
+            const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+            const responseTimeChart = new Chart(responseTimeCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: '响应时间 (ms)',
+                        data: generateRandomData(24, 150, 220),
+                        borderColor: 'rgba(147, 51, 234, 1)',
+                        backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: getChartOptions('平均响应时间 (ms)')
+            });
+            
+            // CPU使用率图表
+            const cpuUsageCtx = document.getElementById('cpuUsageChart').getContext('2d');
+            const cpuUsageChart = new Chart(cpuUsageCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: 'CPU使用率 (%)',
+                        data: generateRandomData(24, 30, 65),
+                        borderColor: 'rgba(59, 130, 246, 1)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: getChartOptions('CPU使用率 (%)', 0, 100)
+            });
+            
+            // 内存使用率图表
+            const memoryUsageCtx = document.getElementById('memoryUsageChart').getContext('2d');
+            const memoryUsageChart = new Chart(memoryUsageCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: '内存使用率 (%)',
+                        data: generateRandomData(24, 40, 75),
+                        borderColor: 'rgba(236, 72, 153, 1)',
+                        backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: getChartOptions('内存使用率 (%)', 0, 100)
+            });
+            
+            // 磁盘使用率图表
+            const diskUsageCtx = document.getElementById('diskUsageChart').getContext('2d');
+            const diskUsageChart = new Chart(diskUsageCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: '磁盘使用率 (%)',
+                        data: generateRandomData(24, 50, 80),
+                        borderColor: 'rgba(245, 158, 11, 1)',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4
+                    }]
+                },
+                options: getChartOptions('磁盘使用率 (%)', 0, 100)
+            });
+            
+            // 网络流量图表
+            const networkTrafficCtx = document.getElementById('networkTrafficChart').getContext('2d');
+            const networkTrafficChart = new Chart(networkTrafficCtx, {
+                type: 'line',
+                data: {
+                    labels: generateTimeLabels(24),
+                    datasets: [{
+                        label: '入站流量 (MB/s)',
+                        data: generateRandomData(24, 100, 250),
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        fill: true
+                    }, {
+                        label: '出站流量 (MB/s)',
+                        data: generateRandomData(24, 150, 350),
+                        borderColor: 'rgba(99, 102, 241, 1)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.05)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        fill: true
+                    }]
+                },
+                options: getChartOptions('网络流量 (MB/s)')
+            });
+            
+            // 时间范围选择器绑定事件
+            document.getElementById('api-requests-timerange').addEventListener('change', function() {
+                updateChart(apiRequestsChart, this.value, 180, 320);
+            });
+            
+            document.getElementById('response-time-timerange').addEventListener('change', function() {
+                updateChart(responseTimeChart, this.value, 150, 220);
+            });
+            
+            document.getElementById('cpu-usage-timerange').addEventListener('change', function() {
+                updateChart(cpuUsageChart, this.value, 30, 65);
+            });
+            
+            document.getElementById('memory-usage-timerange').addEventListener('change', function() {
+                updateChart(memoryUsageChart, this.value, 40, 75);
+            });
+            
+            document.getElementById('disk-usage-timerange').addEventListener('change', function() {
+                updateChart(diskUsageChart, this.value, 50, 80);
+            });
+            
+            document.getElementById('network-traffic-timerange').addEventListener('change', function() {
+                const hours = getHoursFromRange(this.value);
+                networkTrafficChart.data.labels = generateTimeLabels(hours);
+                networkTrafficChart.data.datasets[0].data = generateRandomData(hours, 100, 250);
+                networkTrafficChart.data.datasets[1].data = generateRandomData(hours, 150, 350);
+                networkTrafficChart.update();
+            });
+            
+            // 添加实时更新功能
+            const refreshBtn = document.querySelector('button.bg-quantum-primary\\/20');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', function() {
+                    // 显示加载动画
+                    this.innerHTML = '<i class="fas fa-sync-alt fa-spin mr-2"></i> 正在刷新...';
+                    this.disabled = true;
+                    
+                    // 模拟数据加载延迟
+                    setTimeout(() => {
+                        // 更新所有图表
+                        updateAllCharts();
+                        
+                        // 更新服务状态卡片
+                        updateServiceStatus();
+                        
+                        // 更新系统状态概览
+                        updateSystemOverview();
+                        
+                        // 恢复按钮状态
+                        this.innerHTML = '<i class="fas fa-sync-alt mr-2"></i> 刷新状态';
+                        this.disabled = false;
+                        
+                        // 显示成功提示
+                        showStatusMessage('系统状态数据已更新', 'success');
+                    }, 1200);
+                });
+            }
+            
+            // 自动定时刷新 (每60秒)
+            let autoRefreshInterval = setInterval(autoRefresh, 60000);
+            
+            // 自动刷新开关
+            const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+            if (autoRefreshToggle) {
+                autoRefreshToggle.addEventListener('change', function() {
+                    if (this.checked) {
+                        autoRefreshInterval = setInterval(autoRefresh, 60000);
+                        showStatusMessage('自动刷新已开启', 'info');
+                    } else {
+                        clearInterval(autoRefreshInterval);
+                        showStatusMessage('自动刷新已关闭', 'info');
+                    }
+                });
+            }
+            
+            // 自动刷新函数
+            function autoRefresh() {
+                // 更新所有图表但使用较小的变化
+                updateAllCharts(true);
+                
+                // 小概率更新服务状态
+                if (Math.random() < 0.3) {
+                    updateServiceStatus();
+                }
+                
+                // 更新系统概览
+                updateSystemOverview();
+            }
+            
+            // 更新所有图表
+            function updateAllCharts(isMinorUpdate = false) {
+                // 更新API请求图表
+                if (apiRequestsChart) {
+                    const variationFactor = isMinorUpdate ? 0.1 : 0.3; // 小更新时变化更小
+                    apiRequestsChart.data.datasets[0].data = apiRequestsChart.data.datasets[0].data.map(value => {
+                        const variation = value * variationFactor * (Math.random() - 0.5);
+                        return Math.max(150, Math.min(350, value + variation));
+                    });
+                    apiRequestsChart.update();
+                }
+                
+                // 更新响应时间图表
+                if (responseTimeChart) {
+                    const variationFactor = isMinorUpdate ? 0.05 : 0.2;
+                    responseTimeChart.data.datasets[0].data = responseTimeChart.data.datasets[0].data.map(value => {
+                        const variation = value * variationFactor * (Math.random() - 0.5);
+                        return Math.max(100, Math.min(300, value + variation));
+                    });
+                    responseTimeChart.update();
+                }
+                
+                // 更新CPU使用率图表
+                if (cpuUsageChart) {
+                    const variationFactor = isMinorUpdate ? 0.08 : 0.25;
+                    cpuUsageChart.data.datasets[0].data = cpuUsageChart.data.datasets[0].data.map(value => {
+                        const variation = 10 * variationFactor * (Math.random() - 0.3); // 偏向下降
+                        return Math.max(20, Math.min(95, value + variation));
+                    });
+                    cpuUsageChart.update();
+                }
+                
+                // 更新内存使用率图表
+                if (memoryUsageChart) {
+                    const variationFactor = isMinorUpdate ? 0.05 : 0.15;
+                    memoryUsageChart.data.datasets[0].data = memoryUsageChart.data.datasets[0].data.map(value => {
+                        const variation = 8 * variationFactor * (Math.random() - 0.4); // 偏向下降
+                        return Math.max(30, Math.min(90, value + variation));
+                    });
+                    memoryUsageChart.update();
+                }
+                
+                // 更新磁盘使用率图表
+                if (diskUsageChart) {
+                    const variationFactor = isMinorUpdate ? 0.02 : 0.1;
+                    diskUsageChart.data.datasets[0].data = diskUsageChart.data.datasets[0].data.map(value => {
+                        const variation = 5 * variationFactor * (Math.random() - 0.2); // 偏向上升
+                        return Math.max(40, Math.min(95, value + variation));
+                    });
+                    diskUsageChart.update();
+                }
+                
+                // 更新网络流量图表
+                if (networkTrafficChart) {
+                    const variationFactor = isMinorUpdate ? 0.15 : 0.35;
+                    // 入站流量
+                    networkTrafficChart.data.datasets[0].data = networkTrafficChart.data.datasets[0].data.map(value => {
+                        const variation = value * variationFactor * (Math.random() - 0.5);
+                        return Math.max(50, Math.min(400, value + variation));
+                    });
+                    // 出站流量
+                    networkTrafficChart.data.datasets[1].data = networkTrafficChart.data.datasets[1].data.map(value => {
+                        const variation = value * variationFactor * (Math.random() - 0.5);
+                        return Math.max(100, Math.min(500, value + variation));
+                    });
+                    networkTrafficChart.update();
+                }
+            }
+            
+            // 更新服务状态卡片
+            function updateServiceStatus() {
+                const serviceCards = document.querySelectorAll('.service-status-card');
+                serviceCards.forEach(card => {
+                    // 90%概率保持正常状态，10%概率变为警告或错误
+                    const statusRandom = Math.random();
+                    let newStatus, newStatusText, newStatusClass;
+                    
+                    if (statusRandom > 0.9) {
+                        // 8%概率警告
+                        newStatus = 'warning';
+                        newStatusText = '警告';
+                        newStatusClass = 'bg-yellow-500';
+                    } else if (statusRandom > 0.98) {
+                        // 2%概率错误
+                        newStatus = 'error';
+                        newStatusText = '错误';
+                        newStatusClass = 'bg-red-500';
+                    } else {
+                        // 90%概率正常
+                        newStatus = 'normal';
+                        newStatusText = '正常';
+                        newStatusClass = 'bg-green-500';
+                    }
+                    
+                    // 更新状态指示器
+                    const statusIndicator = card.querySelector('.status-indicator');
+                    if (statusIndicator) {
+                        // 移除所有状态类
+                        statusIndicator.classList.remove('bg-green-500', 'bg-yellow-500', 'bg-red-500');
+                        // 添加新状态类
+                        statusIndicator.classList.add(newStatusClass);
+                    }
+                    
+                    // 更新状态文本
+                    const statusText = card.querySelector('.status-text');
+                    if (statusText) {
+                        statusText.textContent = newStatusText;
+                    }
+                    
+                    // 如果是警告或错误状态，添加一些详细信息
+                    const detailsElement = card.querySelector('.service-details');
+                    if (detailsElement) {
+                        if (newStatus === 'warning') {
+                            detailsElement.textContent = '性能略低于预期，正在自动调整资源';
+                        } else if (newStatus === 'error') {
+                            detailsElement.textContent = '检测到异常，自动恢复程序已启动';
+                        } else {
+                            detailsElement.textContent = '所有指标正常';
+                        }
+                    }
+                });
+            }
+            
+            // 更新系统状态概览
+            function updateSystemOverview() {
+                const overviewCards = document.querySelectorAll('.overview-card');
+                
+                // 更新时间戳
+                const timestampElement = document.querySelector('.last-updated');
+                if (timestampElement) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    timestampElement.textContent = `最后更新: ${timeString}`;
+                }
+                
+                // 更新概览卡片数据
+                overviewCards.forEach(card => {
+                    const valueElement = card.querySelector('.overview-value');
+                    if (valueElement) {
+                        const currentValue = parseFloat(valueElement.textContent);
+                        const isPercentage = valueElement.textContent.includes('%');
+                        
+                        // 根据不同类型的数据进行不同的更新
+                        let newValue;
+                        if (isPercentage) {
+                            // 百分比类型数据
+                            const variation = 5 * (Math.random() - 0.5);
+                            newValue = Math.max(0, Math.min(100, currentValue + variation));
+                            valueElement.textContent = newValue.toFixed(1) + '%';
+                        } else if (valueElement.textContent.includes('ms')) {
+                            // 响应时间类型数据
+                            const variation = currentValue * 0.1 * (Math.random() - 0.5);
+                            newValue = Math.max(10, currentValue + variation);
+                            valueElement.textContent = newValue.toFixed(0) + ' ms';
+                        } else {
+                            // 其他数值类型数据
+                            const variation = currentValue * 0.15 * (Math.random() - 0.4);
+                            newValue = Math.max(1, currentValue + variation);
+                            valueElement.textContent = Math.round(newValue).toString();
+                        }
+                    }
+                });
+            }
+            
+            // 显示状态消息
+            function showStatusMessage(message, type = 'success') {
+                // 创建消息元素
+                const messageElement = document.createElement('div');
+                messageElement.className = 'fixed bottom-4 right-4 rounded-lg shadow-lg p-4 flex items-center z-50 animate-fade-in';
+                
+                // 根据类型设置样式
+                switch (type) {
+                    case 'success':
+                        messageElement.classList.add('bg-green-500/90', 'text-white');
+                        messageElement.innerHTML = `<i class="fas fa-check-circle mr-2"></i> ${message}`;
+                        break;
+                    case 'error':
+                        messageElement.classList.add('bg-red-500/90', 'text-white');
+                        messageElement.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i> ${message}`;
+                        break;
+                    case 'info':
+                        messageElement.classList.add('bg-blue-500/90', 'text-white');
+                        messageElement.innerHTML = `<i class="fas fa-info-circle mr-2"></i> ${message}`;
+                        break;
+                    default:
+                        messageElement.classList.add('bg-gray-700/90', 'text-white');
+                        messageElement.innerHTML = `<i class="fas fa-bell mr-2"></i> ${message}`;
+                }
+                
+                // 添加到页面
+                document.body.appendChild(messageElement);
+                
+                // 添加淡入动画
+                messageElement.style.animation = 'fadeIn 0.3s ease-out';
+                
+                // 3秒后淡出并移除
+                setTimeout(() => {
+                    messageElement.style.animation = 'fadeOut 0.3s ease-in';
+                    setTimeout(() => {
+                        messageElement.remove();
+                    }, 300);
+                }, 3000);
+            }
+            
+            // 添加CSS动画
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                @keyframes fadeOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(20px); }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // 获取时间范围小时数
+            function getHoursFromRange(range) {
+                switch (range) {
+                    case '24h':
+                        return 24;
+                    case '7d':
+                        return 24 * 7;
+                    case '30d':
+                        return 24 * 30;
+                    default:
+                        return 24;
+                }
+            }
+            
+            // 自动刷新功能
+            function initAutoRefresh() {
+                const autoRefreshToggle = document.getElementById('auto-refresh-toggle');
+                const refreshButtons = document.querySelectorAll('button:has(.fa-sync-alt)');
+                let autoRefreshInterval;
+                
+                // 刷新状态函数
+                function refreshStatus() {
+                    // 更新最后更新时间
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('zh-CN');
+                    document.getElementById('last-updated').textContent = now.toLocaleDateString('zh-CN') + ' ' + timeString;
+                    document.querySelector('.last-updated').textContent = '最后更新: ' + timeString;
+                    
+                    // 更新服务状态卡片
+                    updateServiceCards();
+                    
+                    // 更新图表数据
+                    updateChartData();
+                    
+                    // 更新系统概览数据
+                    updateSystemOverview();
+                    
+                    // 显示刷新消息
+                    showStatusMessage('系统状态已更新', 'success');
+                }
+                
+                // 更新服务状态卡片
+                function updateServiceCards() {
+                    const cards = document.querySelectorAll('.glass-effect.rounded-xl.p-6');
+                    cards.forEach(card => {
+                        // 随机生成新的请求数和响应时间
+                        const requestsPerMin = Math.floor(Math.random() * 300) + 100;
+                        const responseTime = Math.floor(Math.random() * 100) + 100;
+                        
+                        // 更新卡片中的数据
+                        const statsElements = card.querySelectorAll('.flex.justify-between span:last-child');
+                        if (statsElements.length >= 4) {
+                            statsElements[1].textContent = requestsPerMin + ' req/min';
+                            statsElements[2].textContent = responseTime + 'ms';
+                            statsElements[3].textContent = '刚刚';
+                        }
+                    });
+                }
+                
+                // 更新图表数据
+                function updateChartData() {
+                    // 更新已存在的图表
+                    const charts = Chart.instances;
+                    for (let chart of charts) {
+                        if (chart.data && chart.data.datasets && chart.data.datasets.length > 0) {
+                            for (let dataset of chart.data.datasets) {
+                                // 添加新的数据点
+                                if (dataset.data && dataset.data.length > 0) {
+                                    // 根据不同图表类型生成不同范围的随机数据
+                                    let newValue;
+                                    if (chart.canvas.id.includes('cpu')) {
+                                        newValue = Math.floor(Math.random() * 30) + 20; // CPU 20-50%
+                                    } else if (chart.canvas.id.includes('memory')) {
+                                        newValue = Math.floor(Math.random() * 20) + 40; // 内存 40-60%
+                                    } else if (chart.canvas.id.includes('network')) {
+                                        if (dataset.label.includes('入站')) {
+                                            newValue = Math.floor(Math.random() * 50) + 100; // 入站 100-150
+                                        } else {
+                                            newValue = Math.floor(Math.random() * 30) + 50; // 出站 50-80
+                                        }
+                                    } else if (chart.canvas.id.includes('latency')) {
+                                        newValue = Math.floor(Math.random() * 50) + 150; // 延迟 150-200ms
+                                    } else if (chart.canvas.id.includes('requests')) {
+                                        newValue = Math.floor(Math.random() * 200) + 800; // 请求数 800-1000
+                                    } else {
+                                        // 默认数据
+                                        const lastValue = dataset.data[dataset.data.length - 1];
+                                        const variation = lastValue * 0.1 * (Math.random() - 0.5);
+                                        newValue = Math.max(0, lastValue + variation);
+                                    }
+                                    
+                                    dataset.data.push(newValue);
+                                    
+                                    // 移除最旧的数据点，保持图表长度一致
+                                    if (dataset.data.length > chart.data.labels.length) {
+                                        dataset.data.shift();
+                                    }
+                                }
+                            }
+                            
+                            // 更新图表
+                            chart.update();
+                        }
+                    }
+                }
+                
+                // 更新系统概览数据
+                function updateSystemOverview() {
+                    const overviewItems = document.querySelectorAll('.system-overview-item .text-3xl');
+                    if (overviewItems.length >= 4) {
+                        // 更新API调用次数（增加随机值）
+                        const apiCalls = parseInt(overviewItems[0].textContent.replace(/,/g, ''));
+                        const newApiCalls = apiCalls + Math.floor(Math.random() * 100);
+                        overviewItems[0].textContent = newApiCalls.toLocaleString();
+                        
+                        // 更新活跃用户数（小幅波动）
+                        const activeUsers = parseInt(overviewItems[1].textContent);
+                        const userChange = Math.floor(Math.random() * 11) - 5; // -5到+5的随机变化
+                        const newActiveUsers = Math.max(1, activeUsers + userChange);
+                        overviewItems[1].textContent = newActiveUsers;
+                        
+                        // 更新服务器数量（通常保持不变）
+                        // 不做更改
+                        
+                        // 更新正常运行时间（增加1分钟）
+                        const uptimeText = overviewItems[3].textContent;
+                        const uptimeParts = uptimeText.split(':');
+                        if (uptimeParts.length === 3) {
+                            let hours = parseInt(uptimeParts[0]);
+                            let minutes = parseInt(uptimeParts[1]);
+                            let seconds = parseInt(uptimeParts[2]);
+                            
+                            seconds++;
+                            if (seconds >= 60) {
+                                seconds = 0;
+                                minutes++;
+                                if (minutes >= 60) {
+                                    minutes = 0;
+                                    hours++;
+                                }
+                            }
+                            
+                            overviewItems[3].textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        }
+                    }
+                }
+                
+                // 为所有刷新按钮添加点击事件
+                refreshButtons.forEach(button => {
+                    button.addEventListener('click', refreshStatus);
+                });
+                
+                // 自动刷新切换
+                if (autoRefreshToggle) {
+                    autoRefreshToggle.addEventListener('change', function() {
+                        if (this.checked) {
+                            // 启用自动刷新（每60秒）
+                            autoRefreshInterval = setInterval(refreshStatus, 60000);
+                            showStatusMessage('已启用自动刷新 (每60秒)', 'info');
+                        } else {
+                            // 禁用自动刷新
+                            clearInterval(autoRefreshInterval);
+                            showStatusMessage('已禁用自动刷新', 'info');
+                        }
+                    });
+                    
+                    // 初始化自动刷新（如果切换按钮被选中）
+                    if (autoRefreshToggle.checked) {
+                        autoRefreshInterval = setInterval(refreshStatus, 60000);
+                    }
+                }
+            }
+            
+            // 页面加载完成后初始化
+            initAutoRefresh();
+            
+            // 初始化量子粒子背景
+            if (typeof initQuantumParticles === 'function') {
+                initQuantumParticles('quantum-particles');
+            }
+            
+            // 初始化量子鼠标效果
+            if (typeof initQuantumCursor === 'function') {
+                initQuantumCursor();
+            }
+        });
+        
+        // 生成时间标签
+        function generateTimeLabels(hours) {
+            const labels = [];
+            const now = new Date();
+            for (let i = hours; i >= 0; i--) {
+                const time = new Date(now.getTime() - i * 60 * 60 * 1000);
+                labels.push(time.getHours() + ':00');
+            }
+            return labels;
+        }
+        
+        // 生成随机数据
+        function generateRandomData(count, min, max) {
+            const data = [];
+            for (let i = 0; i <= count; i++) {
+                data.push(Math.floor(Math.random() * (max - min + 1) + min));
+            }
+            return data;
+        }
+        
+        // 获取图表通用配置
+        function getChartOptions(title, min = undefined, max = undefined) {
+            return {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            boxWidth: 12,
+                            padding: 10,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: 'rgba(255, 255, 255, 0.8)',
+                        titleFont: {
+                            family: "'Inter', sans-serif",
+                            size: 14
+                        },
+                        bodyFont: {
+                            family: "'Inter', sans-serif",
+                            size: 13
+                        },
+                        padding: 12,
+                        cornerRadius: 6
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: true,
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 11
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: true,
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.5)',
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 11
+                            }
+                        },
+                        min: min,
+                        max: max
+                    }
+                }
+            };
+        }
+        
+        // 更新图表数据
+        function updateChart(chart, timeRange, min, max) {
+            const hours = getHoursFromRange(timeRange);
+            chart.data.labels = generateTimeLabels(hours);
+            chart.data.datasets[0].data = generateRandomData(hours, min, max);
+            chart.update();
+        }
+    </script>
+</body>
+</html> 
