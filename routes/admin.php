@@ -226,49 +226,146 @@ Route::prefix('database')->name('database.')->group(function () {
     Route::get('/structure', 'DatabaseManagerController@structure')->name('structure');
 });
 
+// API管理路由
+Route::prefix('security/api')->name('security.api.')->group(function () {
+    // API密钥管理
+    Route::get('keys', 'Security\ApiKeyController@index')->name('keys.index');
+    Route::get('keys/create', 'Security\ApiKeyController@create')->name('keys.create');
+    Route::post('keys', 'Security\ApiKeyController@store')->name('keys.store');
+    Route::get('keys/{id}', 'Security\ApiKeyController@show')->name('keys.show');
+    Route::get('keys/{id}/edit', 'Security\ApiKeyController@edit')->name('keys.edit');
+    Route::put('keys/{id}', 'Security\ApiKeyController@update')->name('keys.update');
+    Route::delete('keys/{id}', 'Security\ApiKeyController@destroy')->name('keys.destroy');
+    Route::put('keys/{id}/reset', 'Security\ApiKeyController@reset')->name('keys.reset');
+    
+    // API请求日志
+    Route::get('request-logs', 'Security\ApiRequestLogController@index')->name('request-logs.index');
+    Route::get('request-logs/{id}', 'Security\ApiRequestLogController@show')->name('request-logs.show');
+    Route::get('request-logs/export', 'Security\ApiRequestLogController@export')->name('request-logs.export');
+    Route::get('request-logs/statistics', 'Security\ApiRequestLogController@statistics')->name('request-logs.statistics');
+    
+    // SDK管理
+    Route::get('sdks', 'Security\ApiSdkController@index')->name('sdks.index');
+    Route::get('sdks/create', 'Security\ApiSdkController@create')->name('sdks.create');
+    Route::post('sdks', 'Security\ApiSdkController@store')->name('sdks.store');
+    Route::get('sdks/{id}', 'Security\ApiSdkController@show')->name('sdks.show');
+    Route::get('sdks/{id}/edit', 'Security\ApiSdkController@edit')->name('sdks.edit');
+    Route::put('sdks/{id}', 'Security\ApiSdkController@update')->name('sdks.update');
+    Route::delete('sdks/{id}', 'Security\ApiSdkController@destroy')->name('sdks.destroy');
+    Route::post('sdks/{id}/generate', 'Security\ApiSdkController@generate')->name('sdks.generate');
+    Route::get('sdks/{id}/download/{version_id}', 'Security\ApiSdkController@download')->name('sdks.download');
+    Route::put('sdks/{id}/set-current/{version_id}', 'Security\ApiSdkController@setCurrent')->name('sdks.set-current');
+    Route::delete('sdks/{id}/delete-version/{version_id}', 'Security\ApiSdkController@deleteVersion')->name('sdks.delete-version');
+    Route::get('sdks/{id}/interfaces', 'Security\ApiSdkController@getInterfaces')->name('sdks.interfaces');
+    Route::get('sdks/{id}/documentation', 'Security\ApiSdkController@documentation')->name('sdks.documentation');
+    
+    // API文档
+    Route::get('documentation', 'Security\ApiDocumentationController@index')->name('documentation.index');
+    Route::get('documentation/{id}', 'Security\ApiDocumentationController@show')->name('documentation.show');
+    Route::post('documentation/generate', 'Security\ApiDocumentationController@generate')->name('documentation.generate');
+    Route::get('documentation/test-tool', 'Security\ApiDocumentationController@testTool')->name('documentation.test-tool');
+    Route::post('documentation/execute-test', 'Security\ApiDocumentationController@executeTest')->name('documentation.execute-test');
+    
+    // API接口管理
+    Route::get('interfaces', 'Security\ApiInterfaceController@index')->name('interfaces.index');
+    Route::get('interfaces/create', 'Security\ApiInterfaceController@create')->name('interfaces.create');
+    Route::post('interfaces', 'Security\ApiInterfaceController@store')->name('interfaces.store');
+    Route::get('interfaces/{id}', 'Security\ApiInterfaceController@show')->name('interfaces.show');
+    Route::get('interfaces/{id}/edit', 'Security\ApiInterfaceController@edit')->name('interfaces.edit');
+    Route::put('interfaces/{id}', 'Security\ApiInterfaceController@update')->name('interfaces.update');
+    Route::delete('interfaces/{id}', 'Security\ApiInterfaceController@destroy')->name('interfaces.destroy');
+    Route::get('interfaces/{id}/parameters', 'Security\ApiInterfaceController@getParameters')->name('interfaces.parameters');
+});
 
- / /   A I >f:y7h_�{t
- R o u t e : : p r e f i x ( " a i / s t y l e s " ) - > n a m e ( " a i . s t y l e s . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : g e t ( " / p r e d e f i n e d " ,   " A I \ D i s p l a y S t y l e C o n t r o l l e r @ g e t P r e d e f i n e d S t y l e s " ) - > n a m e ( " p r e d e f i n e d " ) ; 
-         R o u t e : : p u t ( " / p r o v i d e r / { i d } " ,   " A I \ D i s p l a y S t y l e C o n t r o l l e r @ u p d a t e P r o v i d e r S t y l e " ) - > n a m e ( " u p d a t e - p r o v i d e r " ) ; 
-         R o u t e : : p u t ( " / m o d e l / { i d } " ,   " A I \ D i s p l a y S t y l e C o n t r o l l e r @ u p d a t e M o d e l S t y l e " ) - > n a m e ( " u p d a t e - m o d e l " ) ; 
-         R o u t e : : p u t ( " / a g e n t / { i d } " ,   " A I \ D i s p l a y S t y l e C o n t r o l l e r @ u p d a t e A g e n t S t y l e " ) - > n a m e ( " u p d a t e - a g e n t " ) ; 
-         R o u t e : : d e l e t e ( " / { t y p e } / { i d } " ,   " A I \ D i s p l a y S t y l e C o n t r o l l e r @ d e l e t e S t y l e " ) - > n a m e ( " d e l e t e " ) ; 
- } ) ; 
- 
- / /   A I �e�_�{t
- R o u t e : : p r e f i x ( " a i / l o g s " ) - > n a m e ( " a i . l o g s . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : g e t ( " / a p i " ,   " A I \ L o g C o n t r o l l e r @ a p i L o g s " ) - > n a m e ( " a p i " ) ; 
-         R o u t e : : g e t ( " / a p i / { i d } " ,   " A I \ L o g C o n t r o l l e r @ s h o w A p i L o g " ) - > n a m e ( " a p i . s h o w " ) ; 
-         R o u t e : : g e t ( " / a p i / e x p o r t " ,   " A I \ L o g C o n t r o l l e r @ e x p o r t A p i L o g s " ) - > n a m e ( " a p i . e x p o r t " ) ; 
-         R o u t e : : g e t ( " / a u d i t " ,   " A I \ L o g C o n t r o l l e r @ a u d i t L o g s " ) - > n a m e ( " a u d i t " ) ; 
-         R o u t e : : g e t ( " / a u d i t / { i d } " ,   " A I \ L o g C o n t r o l l e r @ s h o w A u d i t L o g " ) - > n a m e ( " a u d i t . s h o w " ) ; 
-         R o u t e : : g e t ( " / a u d i t / e x p o r t " ,   " A I \ L o g C o n t r o l l e r @ e x p o r t A u d i t L o g s " ) - > n a m e ( " a u d i t . e x p o r t " ) ; 
- } ) ; 
- 
- / /   A I ؚ�~��n
- R o u t e : : p r e f i x ( " a i / a d v a n c e d - s e t t i n g s " ) - > n a m e ( " a i . a d v a n c e d - s e t t i n g s . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : g e t ( " / " ,   " A I \ A d v a n c e d S e t t i n g C o n t r o l l e r @ i n d e x " ) - > n a m e ( " i n d e x " ) ; 
-         R o u t e : : p u t ( " / " ,   " A I \ A d v a n c e d S e t t i n g C o n t r o l l e r @ u p d a t e " ) - > n a m e ( " u p d a t e " ) ; 
-         R o u t e : : p o s t ( " / r e s e t " ,   " A I \ A d v a n c e d S e t t i n g C o n t r o l l e r @ r e s e t " ) - > n a m e ( " r e s e t " ) ; 
- } ) ;  
- 
- / /   A I zf��SOKmՋ�]wQ
- R o u t e : : p r e f i x ( " a i / t e s t i n g " ) - > n a m e ( " a i . t e s t i n g . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : g e t ( " / " ,   " A I \ A g e n t T e s t i n g C o n t r o l l e r @ i n d e x " ) - > n a m e ( " i n d e x " ) ; 
-         R o u t e : : p o s t ( " / t e s t " ,   " A I \ A g e n t T e s t i n g C o n t r o l l e r @ t e s t " ) - > n a m e ( " t e s t " ) ; 
-         R o u t e : : g e t ( " / c o m p a r e " ,   " A I \ A g e n t T e s t i n g C o n t r o l l e r @ c o m p a r e " ) - > n a m e ( " c o m p a r e " ) ; 
-         R o u t e : : p o s t ( " / c o m p a r e - a g e n t s " ,   " A I \ A g e n t T e s t i n g C o n t r o l l e r @ c o m p a r e A g e n t s " ) - > n a m e ( " c o m p a r e - a g e n t s " ) ; 
-         R o u t e : : g e t ( " / d e b u g / { i d } " ,   " A I \ A g e n t T e s t i n g C o n t r o l l e r @ d e b u g " ) - > n a m e ( " d e b u g " ) ; 
- } ) ;  
- 
- / /   O A u t h �c�OFU�{t
- R o u t e : : p r e f i x ( " o a u t h " ) - > n a m e ( " o a u t h . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : r e s o u r c e ( " p r o v i d e r s " ,   " O A u t h P r o v i d e r C o n t r o l l e r " ) - > e x c e p t ( [ " d e s t r o y " ] ) ; 
-         R o u t e : : d e l e t e ( " p r o v i d e r s / { i d } " ,   " O A u t h P r o v i d e r C o n t r o l l e r @ d e s t r o y " ) - > n a m e ( " p r o v i d e r s . d e s t r o y " ) ; 
-         R o u t e : : g e t ( " l o g s " ,   " O A u t h P r o v i d e r C o n t r o l l e r @ l o g s " ) - > n a m e ( " l o g s . i n d e x " ) ; 
-         R o u t e : : g e t ( " l o g s / { i d } " ,   " O A u t h P r o v i d e r C o n t r o l l e r @ s h o w L o g " ) - > n a m e ( " l o g s . s h o w " ) ; 
-         R o u t e : : g e t ( " u s e r - a c c o u n t s " ,   " O A u t h P r o v i d e r C o n t r o l l e r @ u s e r A c c o u n t s " ) - > n a m e ( " u s e r - a c c o u n t s . i n d e x " ) ; 
-         R o u t e : : g e t ( " u s e r - a c c o u n t s / { i d } " ,   " O A u t h P r o v i d e r C o n t r o l l e r @ s h o w U s e r A c c o u n t " ) - > n a m e ( " u s e r - a c c o u n t s . s h o w " ) ; 
- } ) ;  
- 
+// 额度套餐、商品和会员相关的后台路由
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // 管理员首页
+    Route::get('/', [AdminController::class, 'index'])->name('index');
+    
+    // API密钥管理
+    Route::prefix('api-keys')->name('api-keys.')->group(function () {
+        Route::get('/', [ApiKeyController::class, 'index'])->name('index');
+        Route::get('/create', [ApiKeyController::class, 'create'])->name('create');
+        Route::post('/', [ApiKeyController::class, 'store'])->name('store');
+        Route::get('/{apiKey}', [ApiKeyController::class, 'show'])->name('show');
+        Route::get('/{apiKey}/edit', [ApiKeyController::class, 'edit'])->name('edit');
+        Route::put('/{apiKey}', [ApiKeyController::class, 'update'])->name('update');
+        Route::delete('/{apiKey}', [ApiKeyController::class, 'destroy'])->name('destroy');
+        Route::post('/{apiKey}/regenerate', [ApiKeyController::class, 'regenerate'])->name('regenerate');
+        Route::post('/{apiKey}/toggle', [ApiKeyController::class, 'toggle'])->name('toggle');
+    });
+
+    // API请求日志
+    Route::prefix('api-logs')->name('api-logs.')->group(function () {
+        Route::get('/', [ApiRequestLogController::class, 'index'])->name('index');
+        Route::get('/{log}', [ApiRequestLogController::class, 'show'])->name('show');
+        Route::delete('/{log}', [ApiRequestLogController::class, 'destroy'])->name('destroy');
+        Route::get('/statistics', [ApiRequestLogController::class, 'statistics'])->name('statistics');
+    });
+
+    // 额度套餐管理
+    Route::prefix('billing/packages')->name('billing.packages.')->group(function () {
+        Route::get('/', [PackageController::class, 'index'])->name('index');
+        Route::get('/create', [PackageController::class, 'create'])->name('create');
+        Route::post('/', [PackageController::class, 'store'])->name('store');
+        Route::get('/{package}', [PackageController::class, 'show'])->name('show');
+        Route::get('/{package}/edit', [PackageController::class, 'edit'])->name('edit');
+        Route::put('/{package}', [PackageController::class, 'update'])->name('update');
+        Route::delete('/{package}', [PackageController::class, 'destroy'])->name('destroy');
+    });
+
+    // 商品管理
+    Route::prefix('billing/products')->name('billing.products.')->group(function () {
+        Route::get('/', [ProductController::class, 'index'])->name('index');
+        Route::get('/create', [ProductController::class, 'create'])->name('create');
+        Route::post('/', [ProductController::class, 'store'])->name('store');
+        Route::get('/{product}', [ProductController::class, 'show'])->name('show');
+        Route::get('/{product}/edit', [ProductController::class, 'edit'])->name('edit');
+        Route::put('/{product}', [ProductController::class, 'update'])->name('update');
+        Route::delete('/{product}', [ProductController::class, 'destroy'])->name('destroy');
+    });
+
+    // 订单管理
+    Route::prefix('billing/orders')->name('billing.orders.')->group(function () {
+        Route::get('/', [OrderController::class, 'index'])->name('index');
+        Route::get('/{order}', [OrderController::class, 'show'])->name('show');
+        Route::post('/{order}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
+        Route::get('/statistics', [OrderController::class, 'statistics'])->name('statistics');
+    });
+
+    // 用户套餐管理
+    Route::prefix('billing/user-packages')->name('billing.user-packages.')->group(function () {
+        Route::get('/', [UserPackageController::class, 'index'])->name('index');
+        Route::get('/create', [UserPackageController::class, 'create'])->name('create');
+        Route::post('/', [UserPackageController::class, 'store'])->name('store');
+        Route::get('/{userPackage}', [UserPackageController::class, 'show'])->name('show');
+        Route::get('/{userPackage}/edit', [UserPackageController::class, 'edit'])->name('edit');
+        Route::put('/{userPackage}', [UserPackageController::class, 'update'])->name('update');
+        Route::delete('/{userPackage}', [UserPackageController::class, 'destroy'])->name('destroy');
+        Route::post('/{userPackage}/adjust-quota', [UserPackageController::class, 'adjustQuota'])->name('adjust-quota');
+    });
+
+    // 会员等级管理
+    Route::prefix('membership/levels')->name('membership.levels.')->group(function () {
+        Route::get('/', [MembershipLevelController::class, 'index'])->name('index');
+        Route::get('/create', [MembershipLevelController::class, 'create'])->name('create');
+        Route::post('/', [MembershipLevelController::class, 'store'])->name('store');
+        Route::get('/{membershipLevel}', [MembershipLevelController::class, 'show'])->name('show');
+        Route::get('/{membershipLevel}/edit', [MembershipLevelController::class, 'edit'])->name('edit');
+        Route::put('/{membershipLevel}', [MembershipLevelController::class, 'update'])->name('update');
+        Route::delete('/{membershipLevel}', [MembershipLevelController::class, 'destroy'])->name('destroy');
+    });
+
+    // 会员订阅管理
+    Route::prefix('membership/subscriptions')->name('membership.subscriptions.')->group(function () {
+        Route::get('/', [MembershipSubscriptionController::class, 'index'])->name('index');
+        Route::get('/create', [MembershipSubscriptionController::class, 'create'])->name('create');
+        Route::post('/', [MembershipSubscriptionController::class, 'store'])->name('store');
+        Route::get('/{subscription}', [MembershipSubscriptionController::class, 'show'])->name('show');
+        Route::get('/{subscription}/edit', [MembershipSubscriptionController::class, 'edit'])->name('edit');
+        Route::put('/{subscription}', [MembershipSubscriptionController::class, 'update'])->name('update');
+        Route::delete('/{subscription}', [MembershipSubscriptionController::class, 'destroy'])->name('destroy');
+        Route::post('/{subscription}/cancel', [MembershipSubscriptionController::class, 'cancel'])->name('cancel');
+    });
+});
+

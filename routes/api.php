@@ -2,7 +2,7 @@
 
 /**
  * AlingAi Pro 6.0 API Routes
- * 零信任量子加密系�?API 路由配置
+ * 零信任量子加密系�?API 路由配置
  */
 
 use AlingAi\Config\Routes;
@@ -31,6 +31,7 @@ use App\Http\Controllers\Security\QuantumSecurityDashboardController;
 use App\Http\Controllers\Security\QuarantineController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\UserApiController;
 
 /**
  * API路由定义
@@ -126,7 +127,7 @@ class ApiRoutes {
     }
     
     /**
-     * 安全和加密路�?
+     * 安全和加密路�?
      */
     private static function getSecurityRoutes() {
         return [
@@ -157,7 +158,7 @@ class ApiRoutes {
             'GET /api/security/vulnerabilities/history' => ['controller' => VulnerabilityScanController::class, 'method' => 'getScanHistory', 'middleware' => ['auth', 'admin']],
             'POST /api/security/vulnerabilities/scan/{scanId}/cancel' => ['controller' => VulnerabilityScanController::class, 'method' => 'cancelScan', 'middleware' => ['auth', 'admin']],
             
-            // 入侵检测相关路�?
+            // 入侵检测相关路�?
             'GET /api/security/intrusion/attempts' => ['controller' => IntrusionDetectionController::class, 'method' => 'getIntrusionAttempts', 'middleware' => ['auth', 'admin']],
             'GET /api/security/intrusion/{attemptId}/detail' => ['controller' => IntrusionDetectionController::class, 'method' => 'getIntrusionDetail', 'middleware' => ['auth', 'admin']],
             'POST /api/security/intrusion/{attemptId}/resolve' => ['controller' => IntrusionDetectionController::class, 'method' => 'resolveIntrusion', 'middleware' => ['auth', 'admin']],
@@ -191,7 +192,7 @@ class ApiRoutes {
             'POST /api/security/threats/{id}/respond' => ['controller' => SecurityThreatController::class, 'method' => 'respondToThreat', 'middleware' => ['auth', 'admin']],
             'GET /api/security/threats/statistics' => ['controller' => SecurityThreatController::class, 'method' => 'getStatistics', 'middleware' => ['auth', 'admin']],
             
-            // 量子安全仪表盘路�?
+            // 量子安全仪表盘路�?
             'GET /api/security/dashboard/overview' => ['controller' => QuantumSecurityDashboardController::class, 'method' => 'getDashboardOverview', 'middleware' => ['auth', 'admin']],
             'GET /api/security/dashboard/threat-trends' => ['controller' => QuantumSecurityDashboardController::class, 'method' => 'getThreatTrends', 'middleware' => ['auth', 'admin']],
             'GET /api/security/dashboard/threat-distribution' => ['controller' => QuantumSecurityDashboardController::class, 'method' => 'getThreatDistribution', 'middleware' => ['auth', 'admin']],
@@ -274,7 +275,7 @@ class ApiRoutes {
             'POST /api/settings/clear-cache' => ['controller' => 'App\Http\Controllers\Api\SettingApiController', 'method' => 'clearCache', 'middleware' => ['auth', 'admin']],
             'POST /api/settings/init-system' => ['controller' => 'App\Http\Controllers\Api\SettingApiController', 'method' => 'initSystemSettings', 'middleware' => ['auth', 'admin']],
             
-            // 公共设置路由（无需登录�?
+            // 公共设置路由（无需登录�?
             'GET /api/public-settings' => ['controller' => 'App\Http\Controllers\Api\SettingApiController', 'method' => 'getPublicSettings'],
         ];
     }
@@ -294,7 +295,7 @@ class ApiRoutes {
     }
     
     /**
-     * 管理员路�?
+     * 管理员路�?
      */
     private static function getAdminRoutes() {
         return [
@@ -354,55 +355,39 @@ class ApiRoutes {
 
 // 返回所有API路由
 return ApiRoutes::getRoutes();
-    /**
-     * ���Ź���·��
-     */
-    private static function getNewsRoutes() {
-        return [
-            // ���Ź���·��
-            'GET /api/news' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'index'],
-            'GET /api/news/{slug}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'show'],
-            'GET /api/news/categories' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getCategories'],
-            'GET /api/news/tags' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getTags'],
-            'GET /api/news/category/{slug}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getByCategory'],
-            'GET /api/news/tag/{slug}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getByTag'],
-            'GET /api/news/{slug}/comments' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getComments'],
-            'POST /api/news/{slug}/comment' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'addComment', 'middleware' => ['auth:api']],
-            'GET /api/news/featured' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'getFeatured'],
-            
-            // ��̨���Ź���·��
-            'POST /api/admin/news' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'store', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'PUT /api/admin/news/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'update', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'DELETE /api/admin/news/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'destroy', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/{id}/toggle-featured' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'toggleFeatured', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/{id}/publish' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'publish', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/{id}/draft' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'draft', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/{id}/archive' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'archive', 'middleware' => ['auth:api', 'role:admin,editor']],
-            
-            // �������·��
-            'GET /api/admin/news/categories' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'adminGetCategories', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/categories' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'storeCategory', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'GET /api/admin/news/categories/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'showCategory', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'PUT /api/admin/news/categories/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'updateCategory', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'DELETE /api/admin/news/categories/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'destroyCategory', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/categories/{id}/toggle-status' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'toggleCategoryStatus', 'middleware' => ['auth:api', 'role:admin,editor']],
-            
-            // ��ǩ����·��
-            'GET /api/admin/news/tags' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'adminGetTags', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/tags' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'storeTag', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'GET /api/admin/news/tags/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'showTag', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'PUT /api/admin/news/tags/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'updateTag', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'DELETE /api/admin/news/tags/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'destroyTag', 'middleware' => ['auth:api', 'role:admin,editor']],
-            'POST /api/admin/news/tags/{id}/toggle-status' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'toggleTagStatus', 'middleware' => ['auth:api', 'role:admin,editor']],
-            
-            // ���۹���·��
-            'GET /api/admin/news/comments' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'adminGetComments', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'GET /api/admin/news/comments/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'showComment', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'POST /api/admin/news/comments/{id}/approve' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'approveComment', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'POST /api/admin/news/comments/{id}/reject' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'rejectComment', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'POST /api/admin/news/comments/{id}/reply' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'replyToComment', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'DELETE /api/admin/news/comments/{id}' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'destroyComment', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-            'POST /api/admin/news/comments/batch-action' => ['controller' => 'App\Http\Controllers\Api\NewsApiController', 'method' => 'batchActionComments', 'middleware' => ['auth:api', 'role:admin,editor,moderator']],
-        ];
-    }
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// API V1 路由
+Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
+    // 用户账户相关
+    Route::prefix('user')->group(function () {
+        Route::get('/account', [UserApiController::class, 'getAccountInfo']);
+        Route::get('/api-usage', [UserApiController::class, 'getApiUsageStats']);
+        Route::get('/ai-usage', [UserApiController::class, 'getAiUsageStats']);
+    });
+    
+    // 套餐相关
+    Route::prefix('packages')->group(function () {
+        Route::get('/', [UserApiController::class, 'getAvailablePackages']);
+    });
+    
+    // 会员相关
+    Route::prefix('membership')->group(function () {
+        Route::get('/levels', [UserApiController::class, 'getAvailableMembershipLevels']);
+    });
+});
 
