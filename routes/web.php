@@ -188,3 +188,76 @@ Route::prefix('admin/news')->name('admin.news.')->middleware(['auth', 'role:admi
          R o u t e : : p o s t ( " / { p r o v i d e r } / u n l i n k " ,   " O A u t h \ O A u t h C o n t r o l l e r @ u n l i n k " ) - > m i d d l e w a r e ( " a u t h " ) - > n a m e ( " o a u t h . u n l i n k " ) ; 
  } ) ;  
  
+// 支付相关路由
+Route::prefix("payment")->name("payment.")->group(function () {
+    // 支付回调
+    Route::any("/alipay/notify", "PaymentController@alipayNotify")->name("alipay.notify");
+    Route::any("/wechat/notify", "PaymentController@wechatNotify")->name("wechat.notify");
+    
+    // 支付状态查询
+    Route::get("/query/{order}", "PaymentController@queryStatus")->name("query")->middleware("auth");
+    
+    // 微信二维码生成
+    Route::get("/wechat/qrcode", "PaymentController@qrcode")->name("wechat.qrcode");
+});
+
+// 用户账单和套餐相关路由
+Route::prefix("user/billing")->name("user.billing.")->middleware(["auth"])->group(function () {
+    // 额度页面
+    Route::get("/quota", "User\BillingController@quota")->name("quota");
+    
+    // 套餐购买
+    Route::get("/packages", "User\BillingController@packages")->name("packages");
+    
+    // 结账
+    Route::post("/checkout/{package}", "PaymentController@checkout")->name("checkout");
+    
+    // 支付页面
+    Route::get("/pay", "User\BillingController@pay")->name("pay");
+    
+    // 支付成功
+    Route::get("/success/{order}", "User\BillingController@success")->name("success");
+    
+    // 订单列表
+    Route::get("/orders", "User\BillingController@orders")->name("orders");
+    
+    // 订单详情
+    Route::get("/order/{order}", "User\BillingController@orderDetail")->name("order");
+    
+    // 额度使用统计
+    Route::get("/stats", "User\BillingController@stats")->name("stats");
+});
+
+// 会员中心相关路由
+Route::prefix("user/membership")->name("user.membership.")->middleware(["auth"])->group(function () {
+    // 会员中心首页
+    Route::get("/", "User\MembershipController@index")->name("index");
+    
+    // 会员等级列表
+    Route::get("/levels", "User\MembershipController@levels")->name("levels");
+    
+    // 会员订阅记录
+    Route::get("/subscriptions", "User\MembershipController@subscriptions")->name("subscriptions");
+});
+
+// 后台套餐管理路由
+Route::prefix("admin/billing")->name("admin.billing.")->middleware(["auth", "role:admin"])->group(function () {
+    // 套餐管理
+    Route::resource("packages", "Admin\Billing\PackageController");
+    
+    // 订单管理
+    Route::resource("orders", "Admin\Billing\OrderController")->except(["create", "store"]);
+    
+    // 额度记录
+    Route::get("/quota-logs", "Admin\Billing\QuotaLogController@index")->name("quota-logs.index");
+    Route::get("/quota-logs/{id}", "Admin\Billing\QuotaLogController@show")->name("quota-logs.show");
+});
+
+// 后台会员管理路由
+Route::prefix("admin/membership")->name("admin.membership.")->middleware(["auth", "role:admin"])->group(function () {
+    // 会员等级管理
+    Route::resource("levels", "Admin\Membership\LevelController");
+    
+    // 会员订阅管理
+    Route::resource("subscriptions", "Admin\Membership\SubscriptionController")->except(["create", "store"]);
+});
