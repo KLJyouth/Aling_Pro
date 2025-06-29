@@ -181,3 +181,10 @@ Route::prefix('admin/news')->name('admin.news.')->middleware(['auth', 'role:admi
     Route::delete('/comments/{id}', 'Admin\News\NewsCommentController@destroy')->name('comments.destroy');
     Route::post('/comments/batch-action', 'Admin\News\NewsCommentController@batchAction')->name('comments.batch-action');
 }); 
+ / /   O A u t h ï1u
+ R o u t e : : p r e f i x ( " a u t h " ) - > n a m e ( " a u t h . " ) - > g r o u p ( f u n c t i o n   ( )   { 
+         R o u t e : : g e t ( " / { p r o v i d e r } / r e d i r e c t " ,   " O A u t h \ O A u t h C o n t r o l l e r @ r e d i r e c t " ) - > n a m e ( " o a u t h . r e d i r e c t " ) ; 
+         R o u t e : : g e t ( " / { p r o v i d e r } / c a l l b a c k " ,   " O A u t h \ O A u t h C o n t r o l l e r @ c a l l b a c k " ) - > n a m e ( " o a u t h . c a l l b a c k " ) ; 
+         R o u t e : : p o s t ( " / { p r o v i d e r } / u n l i n k " ,   " O A u t h \ O A u t h C o n t r o l l e r @ u n l i n k " ) - > m i d d l e w a r e ( " a u t h " ) - > n a m e ( " o a u t h . u n l i n k " ) ; 
+ } ) ;  
+ 
