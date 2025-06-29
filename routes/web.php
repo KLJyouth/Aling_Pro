@@ -261,3 +261,7 @@ Route::prefix("admin/membership")->name("admin.membership.")->middleware(["auth"
     // 会员订阅管理
     Route::resource("subscriptions", "Admin\Membership\SubscriptionController")->except(["create", "store"]);
 });
+
+
+// 安全相关路由
+require __DIR__ . '/security.php';

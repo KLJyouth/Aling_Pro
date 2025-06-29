@@ -59,5 +59,19 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'db.security' => \App\Http\Middleware\DatabaseSecurityMiddleware::class,
+        
+        // 零信任安全中间件
+        'zero_trust' => \App\Http\Middleware\ZeroTrustMiddleware::class,
+        
+        // 多因素认证中间件
+        'require_mfa' => \App\Http\Middleware\RequireMfaMiddleware::class,
+        
+        // 设备验证中间件
+        'verify_device' => \App\Http\Middleware\VerifyDeviceMiddleware::class,
+        
+        // 角色和权限中间件
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }
