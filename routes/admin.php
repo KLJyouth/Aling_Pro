@@ -116,4 +116,21 @@ Route::prefix('notification')->name('notification.')->group(function () {
         Route::post('/import-emails', 'Notification\BulkEmailController@importEmails')->name('import-emails');
         Route::get('/get-template-variables', 'Notification\BulkEmailController@getTemplateVariables')->name('get-template-variables');
     });
+});
+
+// 数据库超级运维与超级管理
+Route::prefix('database')->name('database.')->group(function () {
+    Route::get('/', 'DatabaseManagerController@index')->name('index');
+    Route::get('/tables', 'DatabaseManagerController@tables')->name('tables');
+    Route::get('/table/{table}', 'DatabaseManagerController@tableDetail')->name('table.detail');
+    Route::post('/execute-query', 'DatabaseManagerController@executeQuery')->name('execute-query');
+    Route::post('/optimize', 'DatabaseManagerController@optimize')->name('optimize');
+    Route::get('/backup', 'DatabaseManagerController@backupIndex')->name('backup.index');
+    Route::post('/backup/create', 'DatabaseManagerController@createBackup')->name('backup.create');
+    Route::get('/backup/download/{filename}', 'DatabaseManagerController@downloadBackup')->name('backup.download');
+    Route::delete('/backup/delete/{filename}', 'DatabaseManagerController@deleteBackup')->name('backup.delete');
+    Route::post('/backup/restore/{filename}', 'DatabaseManagerController@restoreBackup')->name('backup.restore');
+    Route::get('/monitor', 'DatabaseManagerController@monitor')->name('monitor');
+    Route::get('/slow-queries', 'DatabaseManagerController@slowQueries')->name('slow-queries');
+    Route::get('/structure', 'DatabaseManagerController@structure')->name('structure');
 }); 
