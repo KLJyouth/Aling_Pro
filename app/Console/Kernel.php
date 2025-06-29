@@ -8,33 +8,51 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     /**
-     * åº”ç”¨ç¨‹åºæä¾›çš„ Artisan å‘½ä»¤
+     * Ó¦ÓÃ³ÌÐòÌá¹©µÄ Artisan ÃüÁî
      *
      * @var array
      */
     protected $commands = [
-        //
+        \App\Console\Commands\DatabaseSecurityMonitor::class,
     ];
 
     /**
-     * å®šä¹‰åº”ç”¨ç¨‹åºçš„å‘½ä»¤è°ƒåº¦
+     * ¶¨ÒåÓ¦ÓÃ³ÌÐòµÄÃüÁîµ÷¶È
      *
      * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // æ¯5åˆ†é’Ÿæ‰§è¡Œä¸€æ¬¡ç³»ç»Ÿæ£€æŸ¥å¹¶ç”Ÿæˆå‘Šè­¦
-        $schedule->command('monitoring:check-system')
+        // Ã¿5·ÖÖÓÖ´ÐÐÒ»´ÎÏµÍ³¼ì²é²¢Éú³É¸æ¾¯
+        $schedule->command("monitoring:check-system")
             ->everyFiveMinutes()
             ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/monitoring.log'));
+            ->appendOutputTo(storage_path("logs/monitoring.log"));
             
-        // æ¯10åˆ†é’Ÿæ‰§è¡Œä¸€æ¬¡å®‰å…¨å¨èƒæ£€æŸ¥
-        $schedule->command('security:check-threats')
+        // Ã¿10·ÖÖÓÖ´ÐÐÒ»´Î°²È«ÍþÐ²¼ì²é
+        $schedule->command("security:check-threats")
             ->everyTenMinutes()
             ->withoutOverlapping()
-            ->appendOutputTo(storage_path('logs/security.log'));
+            ->appendOutputTo(storage_path("logs/security.log"));
+            
+        // Ã¿5·ÖÖÓÖ´ÐÐÒ»´ÎÊý¾Ý¿â°²È«¼à¿ØÈÎÎñ
+        $schedule->command("db:security-monitor")
+            ->everyFiveMinutes()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path("logs/db-security.log"));
+            
+        // Ã¿Ð¡Ê±ÖÕÖ¹Ò»´Î³¤Ê±¼äÔËÐÐµÄ²éÑ¯
+        $schedule->command("db:security-monitor --kill-long-queries")
+            ->hourly()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path("logs/db-security.log"));
+            
+        // Ã¿Ìì¼à¿ØÒ»´ÎÊý¾Ý¿â½á¹¹±ä»¯
+        $schedule->command("db:security-monitor --monitor-changes")
+            ->daily()
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path("logs/db-security.log"));
     }
 
     /**
@@ -44,8 +62,8 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__."/Commands");
 
-        require base_path('routes/console.php');
+        require base_path("routes/console.php");
     }
-} 
+}
