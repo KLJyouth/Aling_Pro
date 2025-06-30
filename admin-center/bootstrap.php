@@ -1,10 +1,10 @@
 <?php
 /**
- * 应用引导文件
- * 负责应用的初始化和全局设置
+ * AlingAi Pro - IT运维中心引导文件
+ * 负责初始化系统设置、常量定义和全局函数
  */
 
-// 设置错误报告
+// 设置错误报告级别
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -22,6 +22,8 @@ define('ROUTES_PATH', BASE_PATH . '/routes');
 define('VIEWS_PATH', BASE_PATH . '/resources/views');
 define('STORAGE_PATH', BASE_PATH . '/storage');
 define('PUBLIC_PATH', BASE_PATH . '/public');
+define('LOGS_PATH', STORAGE_PATH . '/logs');
+define('UPLOADS_PATH', STORAGE_PATH . '/uploads');
 
 // 创建必要的目录
 $directories = [
@@ -40,13 +42,26 @@ foreach ($directories as $dir) {
 
 // 设置自动加载
 spl_autoload_register(function ($class) {
-    // 将命名空间转换为文件路径
-    $file = BASE_PATH . '/' . str_replace('\\', '/', $class) . '.php';
+    // 转换命名空间为目录路径
+    $prefix = 'App\\';
+    $baseDir = APP_PATH . '/';
+    
+    // 检查类是否使用命名空间前缀
+    $len = strlen($prefix);
+    if (strncmp($prefix, $class, $len) !== 0) {
+        return;
+    }
+    
+    // 获取相对类名
+    $relativeClass = substr($class, $len);
+    
+    // 将命名空间分隔符替换为目录分隔符，并添加.php后缀
+    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+    
+    // 如果文件存在，加载它
     if (file_exists($file)) {
         require $file;
-        return true;
     }
-    return false;
 });
 
 // 设置异常处理器
@@ -155,4 +170,131 @@ if (file_exists(BASE_PATH . '/.env')) {
         
         putenv("$name=$value");
     }
-} 
+}
+
+// 加载配置
+require_once CONFIG_PATH . '/app.php';
+
+// 注册路由
+$router = [
+    // 仪表盘
+    '/' => ['DashboardController', 'index'],
+    '/dashboard' => ['DashboardController', 'index'],
+    
+    // 认证
+    '/login' => ['AuthController', 'login'],
+    '/logout' => ['AuthController', 'logout'],
+    
+    // 用户管理
+    '/users' => ['UserController', 'index'],
+    '/users/create' => ['UserController', 'create'],
+    '/users/store' => ['UserController', 'store'],
+    '/users/edit/{id}' => ['UserController', 'edit'],
+    '/users/update/{id}' => ['UserController', 'update'],
+    '/users/delete/{id}' => ['UserController', 'delete'],
+    '/users/show/{id}' => ['UserController', 'show'],
+    
+    // 系统设置
+    '/settings' => ['SettingController', 'index'],
+    '/settings/save' => ['SettingController', 'save'],
+    
+    // 日志管理
+    '/logs' => ['LogController', 'index'],
+    '/logs/view/{file}' => ['LogController', 'view'],
+    '/logs/download/{file}' => ['LogController', 'download'],
+    '/logs/clear' => ['LogController', 'clear'],
+    
+    // 系统监控
+    '/monitoring' => ['MonitoringController', 'index'],
+    '/monitoring/status' => ['MonitoringController', 'status'],
+    
+    // 安全管理
+    '/security' => ['SecurityController', 'index'],
+    '/security/scan' => ['SecurityController', 'scan'],
+    
+    // 运维工具
+    '/tools' => ['ToolController', 'index'],
+    '/tools/{name}' => ['ToolController', 'run'],
+    
+    // 运维报告
+    '/reports' => ['ReportController', 'index'],
+    '/reports/generate' => ['ReportController', 'generate'],
+    '/reports/export/{id}' => ['ReportController', 'export']
+];
+
+// 全局函数
+/**
+ * 获取当前请求的路径
+ * 
+ * @return string 请求路径
+ */
+function getRequestPath() {
+    $path = $_SERVER['REQUEST_URI'] ?? '/';
+    $position = strpos($path, '?');
+    if ($position !== false) {
+        $path = substr($path, 0, $position);
+    }
+    $path = rtrim($path, '/');
+    return $path ?: '/';
+}
+
+/**
+ * 获取请求方法
+ * 
+ * @return string 请求方法（GET, POST 等）
+ */
+function getRequestMethod() {
+    return $_SERVER['REQUEST_METHOD'] ?? 'GET';
+}
+
+/**
+ * 重定向到指定的URL
+ * 
+ * @param string $url 重定向的目标URL
+ * @return void
+ */
+function redirect($url) {
+    header("Location: $url");
+    exit;
+}
+
+/**
+ * 设置闪存消息，用于在下一个请求中显示
+ * 
+ * @param string $message 消息内容
+ * @param string $type 消息类型（success, info, warning, danger）
+ * @return void
+ */
+function setFlashMessage($message, $type = 'info') {
+    $_SESSION['flash_message'] = $message;
+    $_SESSION['flash_message_type'] = $type;
+}
+
+/**
+ * 检查路径是否匹配路由模式
+ * 
+ * @param string $pattern 路由模式
+ * @param string $path 请求路径
+ * @return array|false 匹配成功返回参数数组，否则返回false
+ */
+function matchRoute($pattern, $path) {
+    // 将路由模式转换为正则表达式
+    $patternRegex = preg_replace('/\{([a-zA-Z0-9_]+)\}/', '(?P<$1>[^/]+)', $pattern);
+    $patternRegex = '#^' . $patternRegex . '$#';
+    
+    // 尝试匹配
+    if (preg_match($patternRegex, $path, $matches)) {
+        $params = [];
+        foreach ($matches as $key => $value) {
+            if (is_string($key)) {
+                $params[$key] = $value;
+            }
+        }
+        return $params;
+    }
+    
+    return false;
+}
+
+// 返回路由配置
+return $router; 

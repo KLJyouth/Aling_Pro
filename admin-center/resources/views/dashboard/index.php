@@ -124,64 +124,136 @@
                     </div>
                 </div>
                 
-                <!-- 状态卡片 -->
+                <!-- 系统状态卡片 -->
                 <div class="row">
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-primary">
+                    <!-- CPU使用率 -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="card-title">工具总数</h6>
-                                        <h3 class="card-text"><?= $toolsStats['totalTools'] ?? 0 ?></h3>
+                                        <h6 class="text-muted mb-1">CPU使用率</h6>
+                                        <h4 class="mb-0"><?= $metrics['cpu']['usage'] ?>%</h4>
                                     </div>
-                                    <i class="bi bi-tools fs-1"></i>
+                                    <div>
+                                        <?php if ($metrics['cpu']['status'] === 'good'): ?>
+                                            <i class="bi bi-cpu fs-1 text-success"></i>
+                                        <?php elseif ($metrics['cpu']['status'] === 'warning'): ?>
+                                            <i class="bi bi-cpu fs-1 text-warning"></i>
+                                        <?php else: ?>
+                                            <i class="bi bi-cpu fs-1 text-danger"></i>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
+                                <div class="progress mt-3" style="height: 8px;">
+                                    <?php if ($metrics['cpu']['status'] === 'good'): ?>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?= $metrics['cpu']['usage'] ?>%" aria-valuenow="<?= $metrics['cpu']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php elseif ($metrics['cpu']['status'] === 'warning'): ?>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $metrics['cpu']['usage'] ?>%" aria-valuenow="<?= $metrics['cpu']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php else: ?>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $metrics['cpu']['usage'] ?>%" aria-valuenow="<?= $metrics['cpu']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <small class="text-muted mt-1 d-block">最近更新: <?= date('H:i:s') ?></small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-success">
+                    
+                    <!-- 内存使用率 -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="card-title">系统状态</h6>
-                                        <h3 class="card-text">正常</h3>
+                                        <h6 class="text-muted mb-1">内存使用率</h6>
+                                        <h4 class="mb-0"><?= $metrics['memory']['usage'] ?>%</h4>
                                     </div>
-                                    <i class="bi bi-check-circle fs-1"></i>
+                                    <div>
+                                        <?php if ($metrics['memory']['status'] === 'good'): ?>
+                                            <i class="bi bi-memory fs-1 text-success"></i>
+                                        <?php elseif ($metrics['memory']['status'] === 'warning'): ?>
+                                            <i class="bi bi-memory fs-1 text-warning"></i>
+                                        <?php else: ?>
+                                            <i class="bi bi-memory fs-1 text-danger"></i>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
+                                <div class="progress mt-3" style="height: 8px;">
+                                    <?php if ($metrics['memory']['status'] === 'good'): ?>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?= $metrics['memory']['usage'] ?>%" aria-valuenow="<?= $metrics['memory']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php elseif ($metrics['memory']['status'] === 'warning'): ?>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $metrics['memory']['usage'] ?>%" aria-valuenow="<?= $metrics['memory']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php else: ?>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $metrics['memory']['usage'] ?>%" aria-valuenow="<?= $metrics['memory']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <small class="text-muted mt-1 d-block">使用: <?= $metrics['memory']['used'] ?> / 总计: <?= $metrics['memory']['total'] ?></small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-info">
+                    
+                    <!-- 磁盘使用率 -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="card-title">磁盘使用率</h6>
-                                        <h3 class="card-text">
-                                            <?php 
-                                                $diskUsed = disk_total_space('/') - disk_free_space('/');
-                                                $diskTotal = disk_total_space('/');
-                                                $diskUsagePercent = ($diskUsed / $diskTotal) * 100;
-                                                echo round($diskUsagePercent) . '%';
-                                            ?>
-                                        </h3>
+                                        <h6 class="text-muted mb-1">磁盘使用率</h6>
+                                        <h4 class="mb-0"><?= $metrics['disk']['usage'] ?>%</h4>
                                     </div>
-                                    <i class="bi bi-hdd fs-1"></i>
+                                    <div>
+                                        <?php if ($metrics['disk']['status'] === 'good'): ?>
+                                            <i class="bi bi-hdd fs-1 text-success"></i>
+                                        <?php elseif ($metrics['disk']['status'] === 'warning'): ?>
+                                            <i class="bi bi-hdd fs-1 text-warning"></i>
+                                        <?php else: ?>
+                                            <i class="bi bi-hdd fs-1 text-danger"></i>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
+                                <div class="progress mt-3" style="height: 8px;">
+                                    <?php if ($metrics['disk']['status'] === 'good'): ?>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?= $metrics['disk']['usage'] ?>%" aria-valuenow="<?= $metrics['disk']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php elseif ($metrics['disk']['status'] === 'warning'): ?>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: <?= $metrics['disk']['usage'] ?>%" aria-valuenow="<?= $metrics['disk']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php else: ?>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: <?= $metrics['disk']['usage'] ?>%" aria-valuenow="<?= $metrics['disk']['usage'] ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <small class="text-muted mt-1 d-block">可用: <?= $metrics['disk']['free'] ?> / 总计: <?= $metrics['disk']['total'] ?></small>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3 mb-4">
-                        <div class="card text-white bg-warning">
+                    
+                    <!-- 数据库连接数 -->
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
-                                        <h6 class="card-title">PHP版本</h6>
-                                        <h3 class="card-text"><?= $systemInfo['phpVersion'] ?? '未知' ?></h3>
+                                        <h6 class="text-muted mb-1">数据库连接</h6>
+                                        <h4 class="mb-0"><?= $metrics['database']['connections'] ?></h4>
                                     </div>
-                                    <i class="bi bi-filetype-php fs-1"></i>
+                                    <div>
+                                        <?php if ($metrics['database']['status'] === 'good'): ?>
+                                            <i class="bi bi-database fs-1 text-success"></i>
+                                        <?php elseif ($metrics['database']['status'] === 'warning'): ?>
+                                            <i class="bi bi-database fs-1 text-warning"></i>
+                                        <?php else: ?>
+                                            <i class="bi bi-database fs-1 text-danger"></i>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
+                                <div class="progress mt-3" style="height: 8px;">
+                                    <?php if ($metrics['database']['status'] === 'good'): ?>
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: <?= ($metrics['database']['connections'] / 100) * 100 ?>%" aria-valuenow="<?= ($metrics['database']['connections'] / 100) * 100 ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php elseif ($metrics['database']['status'] === 'warning'): ?>
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: <?= ($metrics['database']['connections'] / 100) * 100 ?>%" aria-valuenow="<?= ($metrics['database']['connections'] / 100) * 100 ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php else: ?>
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: <?= ($metrics['database']['connections'] / 100) * 100 ?>%" aria-valuenow="<?= ($metrics['database']['connections'] / 100) * 100 ?>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <?php endif; ?>
+                                </div>
+                                <small class="text-muted mt-1 d-block">最大连接数: 100</small>
                             </div>
                         </div>
                     </div>
@@ -189,66 +261,81 @@
                 
                 <div class="row">
                     <!-- 系统信息 -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="bi bi-info-circle"></i> 系统信息
+                    <div class="col-xl-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">系统信息</h5>
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="刷新信息">
+                                    <i class="bi bi-arrow-clockwise"></i>
+                                </button>
                             </div>
                             <div class="card-body">
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>操作系统:</span>
-                                    <span class="text-muted"><?= $systemInfo['operatingSystem'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>服务器软件：</strong> <?= $systemInfo['serverSoftware'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>服务器软件:</span>
-                                    <span class="text-muted"><?= $systemInfo['serverSoftware'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>PHP版本：</strong> <?= $systemInfo['phpVersion'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>内存使用:</span>
-                                    <span class="text-muted"><?= $systemInfo['memoryUsage'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>MySQL版本：</strong> <?= $systemInfo['mysqlVersion'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>可用磁盘空间:</span>
-                                    <span class="text-muted"><?= $systemInfo['diskFreeSpace'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>操作系统：</strong> <?= $systemInfo['operatingSystem'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>总磁盘空间:</span>
-                                    <span class="text-muted"><?= $systemInfo['diskTotalSpace'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>内存使用：</strong> <?= $systemInfo['memoryUsage'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>服务器时间:</span>
-                                    <span class="text-muted"><?= $systemInfo['serverTime'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>磁盘空间：</strong> 已用 <?= $metrics['disk']['used'] ?> / 可用 <?= $systemInfo['diskFreeSpace'] ?> / 总计 <?= $systemInfo['diskTotalSpace'] ?>
                                 </div>
-                                <div class="system-info-item d-flex justify-content-between">
-                                    <span>时区:</span>
-                                    <span class="text-muted"><?= $systemInfo['timeZone'] ?? '未知' ?></span>
+                                <div class="system-info-item">
+                                    <strong>服务器时间：</strong> <?= $systemInfo['serverTime'] ?>
+                                </div>
+                                <div class="system-info-item">
+                                    <strong>时区：</strong> <?= $systemInfo['timeZone'] ?>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>系统环境配置</span>
+                                    <a href="/admin/system" class="btn btn-sm btn-primary">查看详情</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- 工具统计 -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <i class="bi bi-bar-chart"></i> 工具统计
+                    <!-- 最近的日志 -->
+                    <div class="col-xl-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">最近日志</h5>
+                                <a href="/admin/logs" class="btn btn-sm btn-outline-primary">查看所有</a>
                             </div>
-                            <div class="card-body">
-                                <canvas id="toolsChart" height="200"></canvas>
-                                
-                                <hr>
-                                
-                                <h6>最近使用的工具</h6>
-                                <ul class="list-group">
-                                    <?php foreach ($toolsStats['recentlyUsed'] ?? [] as $tool): ?>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <?= $tool['name'] ?>
-                                        <span class="badge bg-primary rounded-pill"><?= $tool['lastUsed'] ?></span>
-                                    </li>
-                                    <?php endforeach; ?>
-                                    
-                                    <?php if (empty($toolsStats['recentlyUsed'])): ?>
-                                    <li class="list-group-item">暂无工具使用记录</li>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush">
+                                    <?php if (empty($recentLogs)): ?>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                            <span class="text-muted">暂无日志记录</span>
+                                        </li>
+                                    <?php else: ?>
+                                        <?php foreach ($recentLogs as $log): ?>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                <div>
+                                                    <?php if ($log['type'] === 'error'): ?>
+                                                        <i class="bi bi-exclamation-circle-fill text-danger me-2"></i>
+                                                    <?php elseif ($log['type'] === 'warning'): ?>
+                                                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                                                    <?php else: ?>
+                                                        <i class="bi bi-info-circle-fill text-info me-2"></i>
+                                                    <?php endif; ?>
+                                                    <span><?= $log['name'] ?></span>
+                                                    <small class="text-muted ms-2">(<?= $log['size'] ?>)</small>
+                                                    <br>
+                                                    <small class="text-muted"><?= $log['modified'] ?></small>
+                                                </div>
+                                                <button class="btn btn-sm btn-outline-secondary view-log-btn" data-bs-toggle="modal" data-bs-target="#logModal" data-log-content="<?= htmlspecialchars($log['content']) ?>" data-log-name="<?= htmlspecialchars($log['name']) ?>">查看</button>
+                                            </li>
+                                        <?php endforeach; ?>
                                     <?php endif; ?>
                                 </ul>
                             </div>
@@ -256,29 +343,111 @@
                     </div>
                 </div>
                 
-                <!-- 最近日志 -->
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card">
+                <div class="row">
+                    <!-- 工具统计 -->
+                    <div class="col-lg-4 mb-4">
+                        <div class="card h-100">
                             <div class="card-header">
-                                <i class="bi bi-journal-text"></i> 最近日志
+                                <h5 class="mb-0">运维工具</h5>
                             </div>
                             <div class="card-body">
-                                <?php if (!empty($recentLogs)): ?>
-                                    <?php foreach ($recentLogs as $log): ?>
-                                    <div class="mb-3">
-                                        <h6><?= $log['name'] ?> <small class="text-muted">(<?= $log['modified'] ?>, <?= $log['size'] ?>)</small></h6>
-                                        <div class="log-item">
-                                            <pre class="mb-0"><?= htmlspecialchars($log['content']) ?></pre>
-                                        </div>
-                                    </div>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <p class="text-muted">暂无日志记录</p>
-                                <?php endif; ?>
+                                <div class="mb-4">
+                                    <h6>工具分类</h6>
+                                    <canvas id="toolsChart" width="100%" height="150"></canvas>
+                                </div>
                                 
-                                <div class="text-end mt-3">
-                                    <a href="/logs" class="btn btn-sm btn-primary">查看所有日志</a>
+                                <div class="mb-3">
+                                    <h6>最近使用的工具</h6>
+                                    <ul class="list-group list-group-flush">
+                                        <?php if (empty($toolsStats['recentlyUsed'])): ?>
+                                            <li class="list-group-item px-0">
+                                                <span class="text-muted">暂无工具使用记录</span>
+                                            </li>
+                                        <?php else: ?>
+                                            <?php foreach ($toolsStats['recentlyUsed'] as $tool): ?>
+                                                <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <i class="bi bi-tools me-2"></i>
+                                                        <?= $tool['name'] ?>
+                                                    </div>
+                                                    <small class="text-muted"><?= $tool['lastUsed'] ?></small>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>总共 <?= $toolsStats['totalTools'] ?> 个工具</span>
+                                    <a href="/admin/tools" class="btn btn-sm btn-primary">查看工具</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 最近登录用户 -->
+                    <div class="col-lg-8 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">最近登录</h5>
+                                <a href="/admin/users" class="btn btn-sm btn-outline-primary">管理用户</a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>用户名</th>
+                                                <th>角色</th>
+                                                <th>IP地址</th>
+                                                <th>登录时间</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php if (empty($recentUsers)): ?>
+                                                <tr>
+                                                    <td colspan="5" class="text-center py-3">暂无登录记录</td>
+                                                </tr>
+                                            <?php else: ?>
+                                                <?php foreach ($recentUsers as $user): ?>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="https://ui-avatars.com/api/?name=<?= urlencode($user['name'] ?? $user['username']) ?>&background=random" alt="用户头像" width="32" height="32" class="rounded-circle me-2">
+                                                                <div>
+                                                                    <div><?= $user['name'] ?? $user['username'] ?></div>
+                                                                    <small class="text-muted"><?= $user['email'] ?></small>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($user['role'] === 'admin'): ?>
+                                                                <span class="badge bg-danger">管理员</span>
+                                                            <?php elseif ($user['role'] === 'operator'): ?>
+                                                                <span class="badge bg-primary">运维</span>
+                                                            <?php else: ?>
+                                                                <span class="badge bg-secondary">用户</span>
+                                                            <?php endif; ?>
+                                                        </td>
+                                                        <td><?= $user['ip_address'] ?></td>
+                                                        <td><?= $user['created_at'] ?></td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <a href="/admin/users/edit/<?= $user['id'] ?>" class="btn btn-outline-primary btn-sm">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                </a>
+                                                                <button type="button" class="btn btn-outline-info btn-sm" data-bs-toggle="tooltip" title="查看详情">
+                                                                    <i class="bi bi-eye"></i>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -288,43 +457,99 @@
         </div>
     </div>
     
+    <!-- 日志详情模态框 -->
+    <div class="modal fade" id="logModal" tabindex="-1" aria-labelledby="logModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logModalLabel">日志内容</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+                </div>
+                <div class="modal-body">
+                    <pre class="bg-dark text-light p-3 rounded" style="max-height: 400px; overflow-y: auto;"><code id="logContent"></code></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id="downloadLog">下载日志</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
     <script>
-        // 工具统计图表
-        const toolsChart = document.getElementById('toolsChart');
-        if (toolsChart) {
-            const categories = <?= json_encode($toolsStats['categories'] ?? []) ?>;
-            
-            new Chart(toolsChart, {
-                type: 'pie',
-                data: {
-                    labels: ['修复工具', '检查工具', '验证工具', '其他工具'],
-                    datasets: [{
-                        data: [
-                            categories.fix || 0,
-                            categories.check || 0,
-                            categories.validate || 0,
-                            categories.other || 0
-                        ],
-                        backgroundColor: [
-                            '#0d6efd',
-                            '#198754',
-                            '#ffc107',
-                            '#6c757d'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'bottom'
-                        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // 工具分类图表
+            const toolsChart = new Chart(
+                document.getElementById('toolsChart'),
+                {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['修复工具', '检查工具', '验证工具', '其他工具'],
+                        datasets: [{
+                            data: [
+                                <?= $toolsStats['categories']['fix'] ?? 0 ?>,
+                                <?= $toolsStats['categories']['check'] ?? 0 ?>,
+                                <?= $toolsStats['categories']['validate'] ?? 0 ?>,
+                                <?= $toolsStats['categories']['other'] ?? 0 ?>
+                            ],
+                            backgroundColor: ['#0d6efd', '#ffc107', '#20c997', '#6c757d']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    boxWidth: 12
+                                }
+                            }
+                        },
+                        cutout: '70%'
                     }
                 }
+            );
+            
+            // 日志查看功能
+            const logModal = document.getElementById('logModal');
+            const logContent = document.getElementById('logContent');
+            const logModalLabel = document.getElementById('logModalLabel');
+            const downloadLogBtn = document.getElementById('downloadLog');
+            let currentLogName = '';
+            
+            document.querySelectorAll('.view-log-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const content = this.getAttribute('data-log-content');
+                    currentLogName = this.getAttribute('data-log-name');
+                    
+                    logModalLabel.textContent = `日志内容: ${currentLogName}`;
+                    logContent.textContent = content || '日志内容为空';
+                });
             });
-        }
+            
+            // 下载日志
+            downloadLogBtn.addEventListener('click', function() {
+                const content = logContent.textContent;
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = currentLogName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // 初始化工具提示
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
     </script>
 </body>
 </html> 
