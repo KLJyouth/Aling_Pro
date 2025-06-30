@@ -2,18 +2,15 @@
 
 namespace App\Models;
 
-use App\Models\Membership\MemberPoint;
-use App\Models\Membership\MemberReferral;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Str;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasFactory, Notifiable;
 
     /**
      * 可批量赋值的属性
@@ -24,232 +21,96 @@ class User extends Authenticatable implements MustVerifyEmail
         "name",
         "email",
         "password",
-        "phone_number",
-        "has_mfa",
-        "last_login_at",
-        "last_login_ip",
+        "role",
+        "status",
         "referral_code",
-        "total_referrals",
-        "total_referral_points",
     ];
 
     /**
-     * 应被隐藏的属性
+     * 应该为序列化隐藏的属性
      *
      * @var array<int, string>
      */
     protected $hidden = [
         "password",
         "remember_token",
-        "mfa_recovery_codes",
     ];
 
     /**
-     * 应该被转换成原生类型的属性
+     * 应该被转换的属性
      *
      * @var array<string, string>
      */
     protected $casts = [
         "email_verified_at" => "datetime",
-        "phone_verified_at" => "datetime",
-        "password" => "hashed",
-        "has_mfa" => "boolean",
-        "mfa_recovery_codes" => "array",
-        "last_login_at" => "datetime",
-        "total_referrals" => "integer",
-        "total_referral_points" => "integer",
     ];
-    
+
     /**
-     * 获取用户的OAuth账号
+     * 模型启动时注册事件
      */
-    public function oauthAccounts()
+    protected static function boot()
     {
-        return $this->hasMany(\App\Models\OAuth\UserAccount::class);
-    }
-    
-    /**
-     * 获取用户的设备
-     */
-    public function devices()
-    {
-        return $this->hasMany(UserDevice::class);
-    }
-    
-    /**
-     * 获取用户的MFA方法
-     */
-    public function mfaMethods()
-    {
-        return $this->hasMany(UserMfaMethod::class);
-    }
-    
-    /**
-     * 获取用户的安全日志
-     */
-    public function securityLogs()
-    {
-        return $this->hasMany(SecurityLog::class);
-    }
-    
-    /**
-     * 获取用户的安全警报
-     */
-    public function securityAlerts()
-    {
-        return $this->hasMany(SecurityAlert::class);
-    }
-    
-    /**
-     * 获取当前设备
-     * 
-     * @return \App\Models\UserDevice|null
-     */
-    public function currentDevice()
-    {
-        $deviceId = request()->header("X-Device-ID");
-        $deviceFingerprint = request()->header("X-Device-Fingerprint");
-        
-        if ($deviceId) {
-            return $this->devices()->where("device_id", $deviceId)->first();
-        } elseif ($deviceFingerprint) {
-            return $this->devices()->where("device_fingerprint", $deviceFingerprint)->first();
-        }
-        
-        return null;
-    }
-    
-    /**
-     * 检查用户是否有指定的设备
-     * 
-     * @param string $deviceId 设备ID
-     * @return bool
-     */
-    public function hasDevice(string $deviceId): bool
-    {
-        return $this->devices()->where("device_id", $deviceId)->exists();
-    }
-    
-    /**
-     * 检查用户是否有指定的MFA方法
-     * 
-     * @param string $method MFA方法
-     * @return bool
-     */
-    public function hasMfaMethod(string $method): bool
-    {
-        return $this->mfaMethods()->where("method", $method)->exists();
-    }
-    
-    /**
-     * 获取用户的主要MFA方法
-     * 
-     * @return \App\Models\UserMfaMethod|null
-     */
-    public function primaryMfaMethod()
-    {
-        return $this->mfaMethods()->where("is_primary", true)->first();
-    }
-    
-    /**
-     * 记录登录
-     * 
-     * @param string $ip IP地址
-     * @return void
-     */
-    public function recordLogin(string $ip): void
-    {
-        $this->last_login_at = now();
-        $this->last_login_ip = $ip;
-        $this->save();
-        
-        // 创建安全日志
-        $this->securityLogs()->create([
-            "ip_address" => $ip,
-            "user_agent" => request()->userAgent(),
-            "event_type" => "login",
-            "context" => "auth",
-            "metadata" => [
-                "timestamp" => now()->timestamp,
-            ],
-        ]);
-    }
-    
-    /**
-     * 检查用户是否需要MFA验证
-     * 
-     * @return bool
-     */
-    public function needsMfaVerification(): bool
-    {
-        return $this->has_mfa && !session("mfa_verified", false);
-    }
-    
-    /**
-     * 检查用户是否需要设备验证
-     * 
-     * @return bool
-     */
-    public function needsDeviceVerification(): bool
-    {
-        if (!config("zero_trust.device_binding.enabled", true)) {
-            return false;
-        }
-        
-        $deviceId = request()->header("X-Device-ID");
-        $deviceFingerprint = request()->header("X-Device-Fingerprint");
-        
-        if (!$deviceId && !$deviceFingerprint) {
-            return true;
-        }
-        
-        $device = $this->currentDevice();
-        
-        return !$device || !$device->is_verified;
-    }
-    
-    /**
-     * 获取用户的会员订阅
-     */
-    public function subscriptions()
-    {
-        return $this->hasMany(\App\Models\Membership\MembershipSubscription::class);
-    }
-    
-    /**
-     * 获取用户当前有效的会员订阅
-     * 
-     * @return \App\Models\Membership\MembershipSubscription|null
-     */
-    public function activeSubscription()
-    {
-        return $this->subscriptions()
-            ->where("status", "active")
-            ->where("end_date", ">", now())
-            ->orderBy("end_date", "desc")
-            ->first();
-    }
-    
-    /**
-     * 检查用户是否是会员
-     * 
-     * @return bool
-     */
-    public function isMember(): bool
-    {
-        return $this->activeSubscription() !== null;
-    }
-    
-    /**
-     * 获取用户的配额使用记录
-     */
-    public function quotaUsages()
-    {
-        return $this->hasMany(QuotaUsage::class);
+        parent::boot();
+
+        static::creating(function ($user) {
+            // 生成唯一推荐码
+            if (empty($user->referral_code)) {
+                $user->referral_code = self::generateUniqueReferralCode();
+            }
+        });
     }
 
     /**
-     * 获取用户的会员积分记录
+     * 生成唯一推荐码
+     */
+    protected static function generateUniqueReferralCode()
+    {
+        do {
+            $code = strtoupper(Str::random(8));
+        } while (self::where("referral_code", $code)->exists());
+
+        return $code;
+    }
+
+    /**
+     * 记录用户登录信息
+     *
+     * @param string $ip
+     * @return void
+     */
+    public function recordLogin($ip)
+    {
+        // 如果有UserLogin模型，则记录登录信息
+        if (class_exists("\\App\\Models\\UserLogin")) {
+            \App\Models\UserLogin::create([
+                "user_id" => $this->id,
+                "ip_address" => $ip,
+                "user_agent" => request()->userAgent(),
+            ]);
+        }
+    }
+
+    /**
+     * 获取用户当前订阅
+     */
+    public function currentSubscription()
+    {
+        return $this->hasOne(MembershipSubscription::class)
+            ->where("status", "active")
+            ->where("end_date", ">", now())
+            ->latest();
+    }
+
+    /**
+     * 获取用户所有订阅
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(MembershipSubscription::class);
+    }
+
+    /**
+     * 获取用户积分记录
      */
     public function points()
     {
@@ -265,7 +126,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 获取推荐该用户的推荐记录
+     * 获取用户被推荐的记录
      */
     public function referredBy()
     {
@@ -273,68 +134,151 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * 检查用户是否有指定会员特权
-     * 
-     * @param string $privilegeCode 特权代码
+     * 获取用户API密钥
+     */
+    public function apiKeys()
+    {
+        return $this->hasMany(ApiKey::class);
+    }
+
+    /**
+     * 获取用户订单
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * 获取用户配额使用记录
+     */
+    public function quotaUsages()
+    {
+        return $this->hasMany(QuotaUsage::class);
+    }
+
+    /**
+     * 检查用户是否为管理员
+     *
      * @return bool
      */
-    public function hasPrivilege(string $privilegeCode): bool
+    public function isAdmin()
     {
-        // 依赖注入会导致循环依赖，因此这里手动实例化服务
-        $privilegeService = app(\App\Services\Membership\PrivilegeService::class);
-        return $privilegeService->hasPrivilege($this, $privilegeCode);
+        return $this->role === "admin";
     }
 
     /**
-     * 获取用户的特权值
-     * 
-     * @param string $privilegeCode 特权代码
-     * @param mixed $default 默认值
-     * @return mixed
+     * 获取用户当前会员等级
+     *
+     * @return \App\Models\MembershipLevel|null
      */
-    public function getPrivilegeValue(string $privilegeCode, $default = null)
+    public function getCurrentMembershipLevel()
     {
-        // 依赖注入会导致循环依赖，因此这里手动实例化服务
-        $privilegeService = app(\App\Services\Membership\PrivilegeService::class);
-        return $privilegeService->getPrivilegeValue($this, $privilegeCode, $default);
-    }
-
-    /**
-     * 检查用户的会员等级是否需要升级
-     * 
-     * @return bool
-     */
-    public function checkAndUpgradeLevel(): bool
-    {
-        // 依赖注入会导致循环依赖，因此这里手动实例化服务
-        $upgradeService = app(\App\Services\Membership\LevelUpgradeService::class);
-        return $upgradeService->checkAndUpgradeLevel($this);
-    }
-
-    /**
-     * 获取用户的推荐码
-     * 
-     * @return string
-     */
-    public function getReferralCode(): string
-    {
-        // 如果用户没有推荐码，生成一个
-        if (!$this->referral_code) {
-            $referralService = app(\App\Services\Membership\ReferralService::class);
-            return $referralService->generateReferralCode($this);
+        $subscription = $this->currentSubscription;
+        
+        if ($subscription) {
+            return $subscription->membershipLevel;
         }
-
-        return $this->referral_code;
+        
+        // 返回免费会员等级
+        return MembershipLevel::where("code", "free")->first();
     }
 
     /**
-     * 获取用户当前有效积分
-     * 
+     * 获取用户总积分
+     *
      * @return int
      */
-    public function getCurrentPoints(): int
+    public function getTotalPoints()
     {
-        $pointService = app(\App\Services\Membership\PointService::class);
-        return $pointService->getCurrentPoints($this);
+        return $this->points()
+            ->where(function ($query) {
+                $query->whereNull("expires_at")
+                      ->orWhere("expires_at", ">", now());
+            })
+            ->sum("points");
+    }
+
+    /**
+     * 检查用户是否有特定特权
+     *
+     * @param string $privilegeCode
+     * @return bool
+     */
+    public function hasPrivilege($privilegeCode)
+    {
+        $level = $this->getCurrentMembershipLevel();
+        
+        if (!$level) {
+            return false;
+        }
+        
+        return $level->privileges()
+            ->where("code", $privilegeCode)
+            ->exists();
+    }
+
+    /**
+     * 获取用户特定配额的使用情况
+     *
+     * @param string $quotaType
+     * @return int
+     */
+    public function getQuotaUsage($quotaType)
+    {
+        return $this->quotaUsages()
+            ->where("quota_type", $quotaType)
+            ->whereDate("created_at", today())
+            ->sum("amount");
+    }
+
+    /**
+     * 检查用户是否可以使用特定配额
+     *
+     * @param string $quotaType
+     * @param int $amount
+     * @return bool
+     */
+    public function canUseQuota($quotaType, $amount = 1)
+    {
+        $level = $this->getCurrentMembershipLevel();
+        
+        if (!$level) {
+            return false;
+        }
+        
+        $quota = $level->{"${quotaType}_quota"} ?? 0;
+        
+        // 无限配额
+        if ($quota < 0) {
+            return true;
+        }
+        
+        $used = $this->getQuotaUsage($quotaType);
+        
+        return ($used + $amount) <= $quota;
+    }
+
+    /**
+     * 记录配额使用
+     *
+     * @param string $quotaType
+     * @param int $amount
+     * @param string|null $description
+     * @return bool
+     */
+    public function recordQuotaUsage($quotaType, $amount = 1, $description = null)
+    {
+        if (!$this->canUseQuota($quotaType, $amount)) {
+            return false;
+        }
+        
+        $this->quotaUsages()->create([
+            "quota_type" => $quotaType,
+            "amount" => $amount,
+            "description" => $description,
+        ]);
+        
+        return true;
     }
 }

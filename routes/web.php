@@ -1,349 +1,101 @@
 <?php
 
+use App\Http\Controllers\ApiKeyController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Security\QuantumSecurityDashboardController;
-use App\Http\Controllers\User\MembershipController;
-use App\Http\Controllers\User\QuotaController;
-use App\Http\Controllers\User\PointController;
-use App\Http\Controllers\User\PrivilegeController;
-use App\Http\Controllers\User\ReferralController;
 
 /*
 |--------------------------------------------------------------------------
-| Web路由
+| Web Routes
 |--------------------------------------------------------------------------
 |
-| 这里定义了所有与Web相关的路由
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
 |
 */
 
-// 默认首页
-Route::get("/", function () {
-    return redirect("/dashboard");
-});
+// 前台路由
+Route::get("/", [HomeController::class, "index"])->name("home");
+Route::get("/about", [PageController::class, "about"])->name("about");
+Route::get("/features", [PageController::class, "features"])->name("features");
+Route::get("/pricing", [PageController::class, "pricing"])->name("pricing");
+Route::get("/contact", [PageController::class, "contact"])->name("contact");
+Route::get("/terms", [PageController::class, "terms"])->name("terms");
+Route::get("/privacy", [PageController::class, "privacy"])->name("privacy");
 
-// 仪表盘路由
-Route::get("/dashboard", function () {
-    return view("dashboard");
-})->name("dashboard");
+// 认证路由
+Auth::routes(["verify" => true]);
 
-// 量子安全仪表盘路由
-Route::get("/security/quantum-dashboard", [QuantumSecurityDashboardController::class, "index"])
-    ->name("security.quantum-dashboard");
-
-// 其他安全相关路由
-Route::prefix("security")->group(function () {
-    // 安全概览
-    Route::get("/", function () {
-        return view("security.overview");
-    })->name("security.overview");
+// 需要认证的路由
+Route::middleware(["auth"])->group(function () {
+    // 仪表盘
+    Route::get("/dashboard", [DashboardController::class, "index"])->name("dashboard");
     
-    // 威胁管理
-    Route::get("/threats", function () {
-        return view("security.threats");
-    })->name("security.threats");
-    
-    // 漏洞扫描
-    Route::get("/vulnerabilities", function () {
-        return view("security.vulnerabilities");
-    })->name("security.vulnerabilities");
-    
-    // 安全测试
-    Route::get("/tests", function () {
-        return view("security.tests");
-    })->name("security.tests");
-    
-    // 量子加密
-    Route::get("/quantum-crypto", function () {
-        return view("security.quantum-crypto");
-    })->name("security.quantum-crypto");
-});
-
-// 安全隔离区路由
-Route::prefix("security")->name("security.")->middleware(["auth", "admin"])->group(function () {
-    // 量子安全仪表盘
-    Route::get("/quantum-dashboard", "Security\QuantumSecurityDashboardController@index")->name("quantum-dashboard");
-    
-    // 隔离区路由
-    Route::prefix("quarantine")->name("quarantine.")->group(function () {
-        Route::get("/", "Security\QuarantineController@index")->name("index");
-        Route::get("/ip-bans", "Security\QuarantineController@ipBans")->name("ip-bans");
-        Route::get("/{id}", "Security\QuarantineController@show")->name("show");
-        Route::post("/{id}/update-status", "Security\QuarantineController@updateStatus")->name("update-status");
-        Route::post("/ban-ip", "Security\QuarantineController@banIp")->name("ban-ip");
-        Route::post("/revoke-ip-ban/{id}", "Security\QuarantineController@revokeIpBan")->name("revoke-ip-ban");
-    });
-});
-
-// 工单系统路由
-Route::prefix("tickets")->middleware(["auth"])->group(function () {
-    // 工单管理
-    Route::get("/", "Ticket\TicketController@index")->name("tickets.index");
-    Route::get("/create", "Ticket\TicketController@create")->name("tickets.create");
-    Route::post("/", "Ticket\TicketController@store")->name("tickets.store");
-    Route::get("/{id}", "Ticket\TicketController@show")->name("tickets.show");
-    Route::put("/{id}", "Ticket\TicketController@update")->name("tickets.update");
-    
-    // 工单回复
-    Route::post("/{id}/reply", "Ticket\TicketController@reply")->name("tickets.reply");
-    
-    // 工单操作
-    Route::post("/{id}/assign", "Ticket\TicketController@assign")->name("tickets.assign");
-    Route::post("/{id}/close", "Ticket\TicketController@close")->name("tickets.close");
-    Route::post("/{id}/reopen", "Ticket\TicketController@reopen")->name("tickets.reopen");
-    
-    // 附件管理
-    Route::delete("/{id}/attachment/{attachmentId}", "Ticket\TicketController@deleteAttachment")
-        ->name("tickets.attachment.delete");
-});
-
-// 工单部门和分类管理路由（仅管理员）
-Route::prefix("admin/tickets")->middleware(["auth", "role:admin"])->group(function () {
-    // 部门管理
-    Route::get("/departments", "Ticket\TicketDepartmentController@index")->name("ticket.departments.index");
-    Route::get("/departments/create", "Ticket\TicketDepartmentController@create")->name("ticket.departments.create");
-    Route::post("/departments", "Ticket\TicketDepartmentController@store")->name("ticket.departments.store");
-    Route::get("/departments/{id}/edit", "Ticket\TicketDepartmentController@edit")->name("ticket.departments.edit");
-    Route::put("/departments/{id}", "Ticket\TicketDepartmentController@update")->name("ticket.departments.update");
-    Route::delete("/departments/{id}", "Ticket\TicketDepartmentController@destroy")->name("ticket.departments.destroy");
-    
-    // 分类管理
-    Route::get("/categories", "Ticket\TicketCategoryController@index")->name("ticket.categories.index");
-    Route::get("/categories/create", "Ticket\TicketCategoryController@create")->name("ticket.categories.create");
-    Route::post("/categories", "Ticket\TicketCategoryController@store")->name("ticket.categories.store");
-    Route::get("/categories/{id}/edit", "Ticket\TicketCategoryController@edit")->name("ticket.categories.edit");
-    Route::put("/categories/{id}", "Ticket\TicketCategoryController@update")->name("ticket.categories.update");
-    Route::delete("/categories/{id}", "Ticket\TicketCategoryController@destroy")->name("ticket.categories.destroy");
-    Route::get("/categories/by-department", "Ticket\TicketCategoryController@getByDepartment")
-        ->name("ticket.categories.by-department");
-});
-
-// 网站管理设置路由
-Route::prefix("admin/settings")->middleware(["auth", "role:admin"])->group(function () {
-    Route::get("/", "Admin\SettingController@index")->name("admin.settings.index");
-    Route::get("/group/{group}", "Admin\SettingController@showGroup")->name("admin.settings.group");
-    Route::post("/group/{group}", "Admin\SettingController@saveGroup")->name("admin.settings.group.save");
-    
-    Route::get("/create", "Admin\SettingController@create")->name("admin.settings.create");
-    Route::post("/", "Admin\SettingController@store")->name("admin.settings.store");
-    Route::get("/{id}/edit", "Admin\SettingController@edit")->name("admin.settings.edit");
-    Route::put("/{id}", "Admin\SettingController@update")->name("admin.settings.update");
-    Route::delete("/{id}", "Admin\SettingController@destroy")->name("admin.settings.destroy");
-    
-    Route::post("/clear-cache", "Admin\SettingController@clearCache")->name("admin.settings.clear-cache");
-    Route::post("/init-system", "Admin\SettingController@initSystemSettings")->name("admin.settings.init-system");
-});
-
-// 前台新闻路由
-Route::prefix("news")->name("news.")->group(function () {
-    Route::get("/", "News\NewsController@index")->name("index");
-    Route::get("/{slug}", "News\NewsController@show")->name("show");
-    Route::get("/category/{slug}", "News\NewsController@category")->name("category");
-    Route::get("/tag/{slug}", "News\NewsController@tag")->name("tag");
-    Route::post("/{slug}/comment", "News\NewsController@comment")->name("comment");
-});
-
-// 后台新闻管理路由
-Route::prefix("admin/news")->name("admin.news.")->middleware(["auth", "role:admin,editor"])->group(function () {
-    // 新闻管理
-    Route::get("/", "Admin\News\NewsController@index")->name("index");
-    Route::get("/create", "Admin\News\NewsController@create")->name("create");
-    Route::post("/", "Admin\News\NewsController@store")->name("store");
-    Route::get("/{id}/edit", "Admin\News\NewsController@edit")->name("edit");
-    Route::put("/{id}", "Admin\News\NewsController@update")->name("update");
-    Route::delete("/{id}", "Admin\News\NewsController@destroy")->name("destroy");
-    
-    // 新闻操作
-    Route::post("/{id}/toggle-featured", "Admin\News\NewsController@toggleFeatured")->name("toggle-featured");
-    Route::post("/{id}/publish", "Admin\News\NewsController@publish")->name("publish");
-    Route::post("/{id}/draft", "Admin\News\NewsController@draft")->name("draft");
-    Route::post("/{id}/archive", "Admin\News\NewsController@archive")->name("archive");
-    
-    // 分类管理
-    Route::get("/categories", "Admin\News\NewsCategoryController@index")->name("categories.index");
-    Route::get("/categories/create", "Admin\News\NewsCategoryController@create")->name("categories.create");
-    Route::post("/categories", "Admin\News\NewsCategoryController@store")->name("categories.store");
-    Route::get("/categories/{id}/edit", "Admin\News\NewsCategoryController@edit")->name("categories.edit");
-    Route::put("/categories/{id}", "Admin\News\NewsCategoryController@update")->name("categories.update");
-    Route::delete("/categories/{id}", "Admin\News\NewsCategoryController@destroy")->name("categories.destroy");
-    Route::post("/categories/{id}/toggle-status", "Admin\News\NewsCategoryController@toggleStatus")->name("categories.toggle-status");
-    
-    // 标签管理
-    Route::get("/tags", "Admin\News\NewsTagController@index")->name("tags.index");
-    Route::get("/tags/create", "Admin\News\NewsTagController@create")->name("tags.create");
-    Route::post("/tags", "Admin\News\NewsTagController@store")->name("tags.store");
-    Route::get("/tags/{id}/edit", "Admin\News\NewsTagController@edit")->name("tags.edit");
-    Route::put("/tags/{id}", "Admin\News\NewsTagController@update")->name("tags.update");
-    Route::delete("/tags/{id}", "Admin\News\NewsTagController@destroy")->name("tags.destroy");
-    Route::post("/tags/{id}/toggle-status", "Admin\News\NewsTagController@toggleStatus")->name("tags.toggle-status");
-    
-    // 评论管理
-    Route::get("/comments", "Admin\News\NewsCommentController@index")->name("comments.index");
-    Route::get("/comments/{id}", "Admin\News\NewsCommentController@show")->name("comments.show");
-    Route::post("/comments/{id}/approve", "Admin\News\NewsCommentController@approve")->name("comments.approve");
-    Route::post("/comments/{id}/reject", "Admin\News\NewsCommentController@reject")->name("comments.reject");
-    Route::post("/comments/{id}/reply", "Admin\News\NewsCommentController@reply")->name("comments.reply");
-    Route::delete("/comments/{id}", "Admin\News\NewsCommentController@destroy")->name("comments.destroy");
-    Route::post("/comments/batch-action", "Admin\News\NewsCommentController@batchAction")->name("comments.batch-action");
-}); 
-
-// OAuth路由
-Route::prefix("auth")->name("auth.")->group(function () {
-    Route::get("/{provider}/redirect", "OAuth\OAuthController@redirect")->name("oauth.redirect");
-    Route::get("/{provider}/callback", "OAuth\OAuthController@callback")->name("oauth.callback");
-    Route::post("/{provider}/unlink", "OAuth\OAuthController@unlink")->middleware("auth")->name("oauth.unlink");
-});
-
-// 支付相关路由
-Route::prefix("payment")->name("payment.")->group(function () {
-    // 支付回调
-    Route::any("/alipay/notify", "PaymentController@alipayNotify")->name("alipay.notify");
-    Route::any("/wechat/notify", "PaymentController@wechatNotify")->name("wechat.notify");
-    
-    // 支付状态查询
-    Route::get("/query/{order}", "PaymentController@queryStatus")->name("query")->middleware("auth");
-    
-    // 微信二维码生成
-    Route::get("/wechat/qrcode", "PaymentController@qrcode")->name("wechat.qrcode");
-});
-
-// 用户端套餐购买路由
-Route::prefix("user/billing")->name("user.billing.")->middleware(["auth"])->group(function () {
-    // 额度页面
-    Route::get("/quota", "User\BillingController@quota")->name("quota");
-    
-    // 套餐购买
-    Route::get("/packages", "User\BillingController@packages")->name("packages");
-    
-    // 结账
-    Route::post("/checkout/{package}", "PaymentController@checkout")->name("checkout");
-    
-    // 支付页面
-    Route::get("/pay", "User\BillingController@pay")->name("pay");
-    
-    // 支付成功
-    Route::get("/success/{order}", "User\BillingController@success")->name("success");
-    
-    // 订单列表
-    Route::get("/orders", "User\BillingController@orders")->name("orders");
-    
-    // 订单详情
-    Route::get("/order/{order}", "User\BillingController@orderDetail")->name("order");
-    
-    // 额度使用统计
-    Route::get("/stats", "User\BillingController@stats")->name("stats");
-});
-
-// 会员管理相关路由
-Route::prefix("user/membership")->name("user.membership.")->middleware(["auth"])->group(function () {
-    // 会员中心主页
-    Route::get("/", [MembershipController::class, "index"])->name("index");
-    
-    // 会员套餐选择
-    Route::get("/plans", [MembershipController::class, "plans"])->name("plans");
+    // 个人资料
+    Route::get("/profile", [ProfileController::class, "show"])->name("profile");
+    Route::put("/profile", [ProfileController::class, "update"])->name("profile.update");
+    Route::put("/profile/password", [ProfileController::class, "updatePassword"])->name("profile.password");
     
     // 会员订阅
-    Route::post("/subscribe", [MembershipController::class, "subscribe"])->name("subscribe");
+    Route::get("/subscription", [MembershipController::class, "index"])->name("subscription");
+    Route::get("/subscription/upgrade", [MembershipController::class, "showUpgrade"])->name("subscription.upgrade");
+    Route::post("/subscription/upgrade", [MembershipController::class, "processUpgrade"])->name("subscription.upgrade.process");
+    Route::post("/subscription/cancel", [MembershipController::class, "cancel"])->name("subscription.cancel");
+    Route::get("/subscription/history", [MembershipController::class, "history"])->name("subscription.history");
     
-    // 会员续费
-    Route::get("/renew", [MembershipController::class, "renew"])->name("renew");
+    // API密钥管理
+    Route::get("/api-keys", [ApiKeyController::class, "index"])->name("api-keys");
+    Route::post("/api-keys", [ApiKeyController::class, "store"])->name("api-keys.store");
+    Route::put("/api-keys/{id}", [ApiKeyController::class, "update"])->name("api-keys.update");
+    Route::delete("/api-keys/{id}", [ApiKeyController::class, "destroy"])->name("api-keys.destroy");
     
-    // 开启自动续费
-    Route::post("/auto-renew/enable", [MembershipController::class, "enableAutoRenew"])->name("auto-renew.enable");
+    // API文档和测试工具
+    Route::get("/api-docs", [PageController::class, "apiDocs"])->name("api-docs");
+    Route::get("/api-playground", [PageController::class, "apiPlayground"])->name("api-playground");
     
-    // 取消自动续费
-    Route::post("/auto-renew/cancel", [MembershipController::class, "cancelAutoRenew"])->name("auto-renew.cancel");
+    // 支付
+    Route::get("/payment/{orderNo}", [PaymentController::class, "show"])->name("payment.show");
+    Route::post("/payment/{orderNo}", [PaymentController::class, "process"])->name("payment.process");
+    Route::get("/payment/{orderNo}/query", [PaymentController::class, "query"])->name("payment.query");
     
-    // 支付页面
-    Route::get("/pay", [MembershipController::class, "pay"])->name("pay");
+    // 订单
+    Route::get("/orders", [OrderController::class, "index"])->name("orders");
+    Route::get("/orders/{id}", [OrderController::class, "show"])->name("order.show");
 });
 
-// 会员积分路由
-Route::prefix("user/points")->name("user.points.")->middleware(["auth"])->group(function () {
-    // 积分首页
-    Route::get("/", [PointController::class, "index"])->name("index");
+// 支付回调
+Route::prefix("payment")->group(function () {
+    // 支付通知
+    Route::post("/notify/alipay", [PaymentController::class, "alipayNotify"]);
+    Route::post("/notify/wechat", [PaymentController::class, "wechatNotify"]);
+    Route::post("/notify/card", [PaymentController::class, "cardNotify"]);
     
-    // 积分历史
-    Route::get("/history", [PointController::class, "history"])->name("history");
-    
-    // 积分兑换
-    Route::get("/exchange", [PointController::class, "exchange"])->name("exchange");
-    Route::post("/exchange", [PointController::class, "doExchange"])->name("do-exchange");
+    // 支付同步回调
+    Route::get("/return/alipay", [PaymentController::class, "alipayReturn"]);
+    Route::get("/return/wechat", [PaymentController::class, "wechatReturn"]);
+    Route::get("/return/card", [PaymentController::class, "cardReturn"]);
 });
 
-// 会员特权路由
-Route::prefix("user/privileges")->name("user.privileges.")->middleware(["auth"])->group(function () {
-    // 特权首页
-    Route::get("/", [PrivilegeController::class, "index"])->name("index");
+// 管理员路由
+Route::prefix("admin")->middleware(["auth", "admin"])->group(function () {
+    // 管理员仪表盘
+    Route::get("/", "App\\Http\\Controllers\\Admin\\DashboardController@index")->name("admin.dashboard");
     
-    // 特权详情
-    Route::get("/{code}", [PrivilegeController::class, "show"])->name("show");
-});
-
-// 会员推荐路由
-Route::prefix("user/referrals")->name("user.referrals.")->middleware(["auth"])->group(function () {
-    // 推荐首页
-    Route::get("/", [ReferralController::class, "index"])->name("index");
-    
-    // 更多推荐列表
-    Route::get("/more", [ReferralController::class, "moreReferrals"])->name("more");
-});
-
-// 额度使用统计路由
-Route::prefix("user/quota")->name("user.quota.")->middleware(["auth"])->group(function () {
-    // 额度使用情况
-    Route::get("/", [QuotaController::class, "index"])->name("index");
-    
-    // 额度使用统计数据
-    Route::get("/stats", [QuotaController::class, "stats"])->name("stats");
-    
-    // 额度使用趋势数据
-    Route::get("/trend", [QuotaController::class, "trend"])->name("trend");
-});
-
-// 后台套餐管理路由
-Route::prefix("admin/billing")->name("admin.billing.")->middleware(["auth", "role:admin"])->group(function () {
-    // 套餐管理
-    Route::resource("packages", "Admin\Billing\PackageController");
+    // 会员管理
+    Route::resource("members", "App\\Http\\Controllers\\Admin\\MemberController");
+    Route::resource("membership-levels", "App\\Http\\Controllers\\Admin\\MembershipLevelController");
+    Route::resource("membership-privileges", "App\\Http\\Controllers\\Admin\\MembershipPrivilegeController");
     
     // 订单管理
-    Route::resource("orders", "Admin\Billing\OrderController")->except(["create", "store"]);
+    Route::resource("orders", "App\\Http\\Controllers\\Admin\\OrderController");
+    
+    // 系统设置
+    Route::get("/settings", "App\\Http\\Controllers\\Admin\\SettingController@index")->name("admin.settings");
+    Route::post("/settings", "App\\Http\\Controllers\\Admin\\SettingController@update")->name("admin.settings.update");
 });
-
-// 后台会员管理路由
-Route::prefix("admin/membership")->name("admin.membership.")->middleware(["auth", "role:admin"])->group(function () {
-    // 会员等级管理
-    Route::resource("levels", "Admin\Membership\MembershipLevelController");
-    
-    // 会员订阅管理
-    Route::resource("subscriptions", "Admin\Membership\MembershipSubscriptionController")->except(["create", "store"]);
-    
-    // 会员统计
-    Route::get("/stats", "Admin\Membership\MembershipStatsController@index")->name("stats");
-    
-    // 会员特权管理
-    Route::resource("privileges", "Admin\Membership\MemberPrivilegeController");
-    
-    // 会员积分管理
-    Route::get("/points", "Admin\Membership\MemberPointController@index")->name("points.index");
-    Route::get("/points/{user}", "Admin\Membership\MemberPointController@show")->name("points.show");
-    Route::post("/points/{user}/add", "Admin\Membership\MemberPointController@addPoints")->name("points.add");
-    Route::post("/points/{user}/deduct", "Admin\Membership\MemberPointController@deductPoints")->name("points.deduct");
-    
-    // 会员推荐管理
-    Route::get("/referrals", "Admin\Membership\MemberReferralController@index")->name("referrals.index");
-    Route::get("/referrals/{id}", "Admin\Membership\MemberReferralController@show")->name("referrals.show");
-    Route::post("/referrals/{id}/complete", "Admin\Membership\MemberReferralController@complete")->name("referrals.complete");
-    Route::post("/referrals/{id}/reject", "Admin\Membership\MemberReferralController@reject")->name("referrals.reject");
-    
-    // 会员分析报表
-    Route::get("/analytics", "Admin\Membership\MembershipAnalyticsController@index")->name("analytics.index");
-    Route::get("/analytics/growth", "Admin\Membership\MembershipAnalyticsController@growth")->name("analytics.growth");
-    Route::get("/analytics/retention", "Admin\Membership\MembershipAnalyticsController@retention")->name("analytics.retention");
-    Route::get("/analytics/revenue", "Admin\Membership\MembershipAnalyticsController@revenue")->name("analytics.revenue");
-    Route::get("/analytics/upgrades", "Admin\Membership\MembershipAnalyticsController@upgrades")->name("analytics.upgrades");
-    Route::get("/analytics/export", "Admin\Membership\MembershipAnalyticsController@export")->name("analytics.export");
-});
-
-// 注册时处理推荐
-Route::post("/register/referral", "Auth\RegisterController@processReferral")->name("register.referral");

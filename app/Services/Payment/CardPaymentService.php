@@ -4,30 +4,28 @@ namespace App\Services\Payment;
 
 use Illuminate\Support\Facades\Log;
 
-class WechatPayService implements PaymentServiceInterface
+class CardPaymentService implements PaymentServiceInterface
 {
     /**
-     * 微信支付配置
+     * 银行卡支付配置
      *
      * @var array
      */
     protected $config;
     
     /**
-     * 创建微信支付服务实例
+     * 创建银行卡支付服务实例
      *
      * @return void
      */
     public function __construct()
     {
         $this->config = [
-            "app_id" => config("payment.wechat.app_id"),
-            "mch_id" => config("payment.wechat.mch_id"),
-            "key" => config("payment.wechat.key"),
-            "cert_path" => config("payment.wechat.cert_path"),
-            "key_path" => config("payment.wechat.key_path"),
-            "notify_url" => config("payment.wechat.notify_url"),
-            "return_url" => config("payment.wechat.return_url"),
+            "api_key" => config("payment.card.api_key"),
+            "api_secret" => config("payment.card.api_secret"),
+            "gateway" => config("payment.card.gateway"),
+            "notify_url" => config("payment.card.notify_url"),
+            "return_url" => config("payment.card.return_url"),
         ];
     }
     
@@ -40,31 +38,30 @@ class WechatPayService implements PaymentServiceInterface
     public function createPayment(array $data): array
     {
         try {
-            // 实际项目中，这里应该调用微信支付SDK创建支付
+            // 实际项目中，这里应该调用银行卡支付网关API创建支付
             // 为了演示，我们返回模拟数据
             
             $orderNo = $data["order_no"];
             $amount = $data["amount"];
             $subject = $data["subject"];
             
-            Log::info("创建微信支付", [
+            Log::info("创建银行卡支付", [
                 "order_no" => $orderNo,
                 "amount" => $amount,
                 "subject" => $subject
             ]);
             
             // 模拟支付链接
-            $codeUrl = "weixin://wxpay/bizpayurl?pr=XXXXXXX";
+            $paymentUrl = "https://payment.example.com/card?order_no={$orderNo}&amount={$amount}&return_url=" . urlencode($this->config["return_url"]);
             
             return [
                 "success" => true,
-                "payment_id" => "wechat_" . $orderNo,
-                "code_url" => $codeUrl,
-                "qr_code" => "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" . urlencode($codeUrl),
+                "payment_id" => "card_" . $orderNo,
+                "payment_url" => $paymentUrl,
                 "message" => "支付创建成功"
             ];
         } catch (\Exception $e) {
-            Log::error("创建微信支付失败", [
+            Log::error("创建银行卡支付失败", [
                 "error" => $e->getMessage(),
                 "data" => $data
             ]);
@@ -85,29 +82,29 @@ class WechatPayService implements PaymentServiceInterface
     public function queryPayment(string $paymentId): array
     {
         try {
-            // 实际项目中，这里应该调用微信支付SDK查询支付状态
+            // 实际项目中，这里应该调用银行卡支付网关API查询支付状态
             // 为了演示，我们返回模拟数据
             
-            $orderNo = str_replace("wechat_", "", $paymentId);
+            $orderNo = str_replace("card_", "", $paymentId);
             
-            Log::info("查询微信支付状态", [
+            Log::info("查询银行卡支付状态", [
                 "payment_id" => $paymentId,
                 "order_no" => $orderNo
             ]);
             
             // 模拟支付状态
-            $status = rand(0, 10) > 3 ? "SUCCESS" : "NOTPAY";
+            $status = rand(0, 10) > 3 ? "PAID" : "PENDING";
             
             return [
                 "success" => true,
                 "payment_id" => $paymentId,
                 "order_no" => $orderNo,
                 "status" => $status,
-                "paid_at" => $status === "SUCCESS" ? date("Y-m-d H:i:s") : null,
+                "paid_at" => $status === "PAID" ? date("Y-m-d H:i:s") : null,
                 "message" => "查询成功"
             ];
         } catch (\Exception $e) {
-            Log::error("查询微信支付状态失败", [
+            Log::error("查询银行卡支付状态失败", [
                 "error" => $e->getMessage(),
                 "payment_id" => $paymentId
             ]);
@@ -128,12 +125,12 @@ class WechatPayService implements PaymentServiceInterface
     public function cancelPayment(string $paymentId): array
     {
         try {
-            // 实际项目中，这里应该调用微信支付SDK取消支付
+            // 实际项目中，这里应该调用银行卡支付网关API取消支付
             // 为了演示，我们返回模拟数据
             
-            $orderNo = str_replace("wechat_", "", $paymentId);
+            $orderNo = str_replace("card_", "", $paymentId);
             
-            Log::info("取消微信支付", [
+            Log::info("取消银行卡支付", [
                 "payment_id" => $paymentId,
                 "order_no" => $orderNo
             ]);
@@ -145,7 +142,7 @@ class WechatPayService implements PaymentServiceInterface
                 "message" => "支付取消成功"
             ];
         } catch (\Exception $e) {
-            Log::error("取消微信支付失败", [
+            Log::error("取消银行卡支付失败", [
                 "error" => $e->getMessage(),
                 "payment_id" => $paymentId
             ]);
@@ -168,12 +165,12 @@ class WechatPayService implements PaymentServiceInterface
     public function refund(string $paymentId, float $amount, string $reason = ""): array
     {
         try {
-            // 实际项目中，这里应该调用微信支付SDK退款
+            // 实际项目中，这里应该调用银行卡支付网关API退款
             // 为了演示，我们返回模拟数据
             
-            $orderNo = str_replace("wechat_", "", $paymentId);
+            $orderNo = str_replace("card_", "", $paymentId);
             
-            Log::info("微信支付退款", [
+            Log::info("银行卡支付退款", [
                 "payment_id" => $paymentId,
                 "order_no" => $orderNo,
                 "amount" => $amount,
@@ -189,7 +186,7 @@ class WechatPayService implements PaymentServiceInterface
                 "message" => "退款申请成功"
             ];
         } catch (\Exception $e) {
-            Log::error("微信支付退款失败", [
+            Log::error("银行卡支付退款失败", [
                 "error" => $e->getMessage(),
                 "payment_id" => $paymentId,
                 "amount" => $amount
@@ -211,26 +208,26 @@ class WechatPayService implements PaymentServiceInterface
     public function verifyNotify(array $data): array
     {
         try {
-            // 实际项目中，这里应该调用微信支付SDK验证通知
+            // 实际项目中，这里应该调用银行卡支付网关API验证通知
             // 为了演示，我们返回模拟数据
             
-            Log::info("验证微信支付通知", [
+            Log::info("验证银行卡支付通知", [
                 "data" => $data
             ]);
             
             // 假设验证成功
             return [
                 "success" => true,
-                "payment_id" => "wechat_" . ($data["out_trade_no"] ?? ""),
-                "order_no" => $data["out_trade_no"] ?? "",
+                "payment_id" => "card_" . ($data["order_no"] ?? ""),
+                "order_no" => $data["order_no"] ?? "",
                 "transaction_id" => $data["transaction_id"] ?? "",
-                "amount" => isset($data["total_fee"]) ? $data["total_fee"] / 100 : 0,
-                "status" => $data["result_code"] ?? "",
+                "amount" => $data["amount"] ?? 0,
+                "status" => $data["status"] ?? "",
                 "paid_at" => date("Y-m-d H:i:s"),
                 "message" => "通知验证成功"
             ];
         } catch (\Exception $e) {
-            Log::error("验证微信支付通知失败", [
+            Log::error("验证银行卡支付通知失败", [
                 "error" => $e->getMessage(),
                 "data" => $data
             ]);
