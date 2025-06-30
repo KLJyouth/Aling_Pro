@@ -1,17 +1,17 @@
 <?php
 /**
  * 文件名：NERModel.php
- * 功能描述：命名实体识别模�?- 实现文本中命名实体的识别
- * 创建时间�?025-01-XX
+ * 功能描述：命名实体识别模型 - 实现文本中命名实体的识别
+ * 创建时间：2025-01-XX
  * 最后修改：2025-01-XX
- * 版本�?.0.0
+ * 版本：1.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
 namespace AlingAi\AI\Engines\NLP;
 
@@ -21,7 +21,7 @@ use InvalidArgumentException;
 /**
  * 命名实体识别模型
  *
- * 实现文本中命名实体的识别，支持多种语言和实体类�?
+ * 实现文本中命名实体的识别，支持多种语言和实体类型
  */
 class NERModel
 {
@@ -46,15 +46,15 @@ class NERModel
     private array $entityTypes;
 
     /**
-     * 构造函�?
+     * 构造函数
      *
      * @param array $config 配置参数
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config];
+        $this->config = array_merge($this->getDefaultConfig(), $config);
         $this->entityTypes = $this->config['entity_types'];
-        $this->loadResources(];
+        $this->loadResources();
     }
 
     /**
@@ -62,8 +62,8 @@ class NERModel
      */
     private function loadResources(): void
     {
-        $this->loadEnglishRules(];
-        $this->loadChineseRules(];
+        $this->loadEnglishRules();
+        $this->loadChineseRules();
     }
 
     /**
@@ -71,13 +71,13 @@ class NERModel
      */
     private function loadEnglishRules(): void
     {
-        // 简化版的英文命名实体规�?
+        // 简化版的英文命名实体规则
         $this->englishRules = [
             // 人名规则
             'PERSON' => [
                 'patterns' => [
-                    '/\b[A-Z][a-z]+ [A-Z][a-z]+\b/',  // �?�?
-                    '/\b(Mr|Mrs|Ms|Dr|Prof)\. [A-Z][a-z]+\b/',  // 称谓 �?
+                    '/\b[A-Z][a-z]+ [A-Z][a-z]+\b/',  // 名 姓
+                    '/\b(Mr|Mrs|Ms|Dr|Prof)\. [A-Z][a-z]+\b/',  // 称谓 姓
                 ], 
                 'keywords' => [
                     'John', 'David', 'Michael', 'Robert', 'William', 'Richard', 'Joseph',
@@ -120,9 +120,9 @@ class NERModel
             // 日期规则
             'DATE' => [
                 'patterns' => [
-                    '/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/',  // MM/DD/YYYY �?DD/MM/YYYY
-                    '/\b(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}\b/',  // �?�? �?
-                    '/\b\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December) \d{4}\b/',  // �?�?�?
+                    '/\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/',  // MM/DD/YYYY 或 DD/MM/YYYY
+                    '/\b(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4}\b/',  // 月 日, 年
+                    '/\b\d{1,2} (January|February|March|April|May|June|July|August|September|October|November|December) \d{4}\b/',  // 日 月 年
                 ], 
                 'keywords' => [
                     'today', 'tomorrow', 'yesterday', 'last week', 'next week',
@@ -149,7 +149,7 @@ class NERModel
                 ], 
                 'keywords' => []
             ], 
-            // 百分比规�?
+            // 百分比规则
             'PERCENT' => [
                 'patterns' => [
                     '/\b\d+(\.\d+)?%\b/',  // 数字%
@@ -165,24 +165,24 @@ class NERModel
      */
     private function loadChineseRules(): void
     {
-        // 简化版的中文命名实体规�?
+        // 简化版的中文命名实体规则
         $this->chineseRules = [
             // 人名规则
             'PERSON' => [
                 'patterns' => [
-                    '/[\x{4e00}-\x{9fa5}) {2,3}/u',  // 2-3个汉�?
+                    '/[\x{4e00}-\x{9fa5}]{2,3}/u',  // 2-3个汉字
                 ], 
                 'keywords' => [
                     '张三', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十',
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?, '�?,
-                    '�?, '�?, '�?, '�?, '�?
+                    '张', '王', '李', '赵', '钱', '孙', '周', '吴', '郑', '陈', '冯', '褚',
+                    '卫', '蒋', '沈', '韩', '杨', '朱', '秦', '尤', '许', '何', '吕', '施',
+                    '桓', '孔', '曹', '严', '华', '金', '魏', '陶', '姜', '戚', '邹', '喻',
+                    '柏', '水', '窦', '章', '云', '苏', '潘', '葛', '范', '彭', '郎', '鲁',
+                    '韦', '昌', '马', '苗', '凤', '花', '方', '俞', '任', '袁', '柳', '酆',
+                    '鲍', '史', '唐', '费', '廉', '岑', '薛', '雷', '贺', '倪', '汤', '滕',
+                    '殷', '罗', '毕', '郝', '邬', '安', '常', '乐', '于', '时', '傅', '皮',
+                    '卞', '齐', '康', '伍', '余', '元', '卜', '顾', '孟', '平', '黄', '和',
+                    '穆', '萧', '尹', '姚', '邵'
                 ]
             ], 
             // 组织机构规则
@@ -192,10 +192,10 @@ class NERModel
                 ], 
                 'keywords' => [
                     '腾讯', '阿里巴巴', '百度', '华为', '小米', '京东', '网易', '美团', '字节跳动',
-                    '中国移动', '中国电信', '中国联�?, '中国石油', '中国石化', '中国银行', '工商银行',
-                    '建设银行', '农业银行', '招商银行', '平安保险', '太平洋保�?, '中国人寿',
-                    '清华大学', '北京大学', '复旦大学', '上海交通大�?, '浙江大学', '南京大学',
-                    '中国科学�?, '中国社会科学�?, '中国工程�?, '国务�?, '中央政府', '国家发改�?
+                    '中国移动', '中国电信', '中国联通', '中国石油', '中国石化', '中国银行', '工商银行',
+                    '建设银行', '农业银行', '招商银行', '平安保险', '太平洋保险', '中国人寿',
+                    '清华大学', '北京大学', '复旦大学', '上海交通大学', '浙江大学', '南京大学',
+                    '中国科学院', '中国社会科学院', '中国工程院', '国务院', '中央政府', '国家发改委'
                 ]
             ], 
             // 地点规则
@@ -205,30 +205,30 @@ class NERModel
                 ], 
                 'keywords' => [
                     '北京', '上海', '广州', '深圳', '杭州', '南京', '武汉', '成都', '重庆', '西安',
-                    '天津', '苏州', '无锡', '宁波', '青岛', '大连', '厦门', '福州', '哈尔�?, '长春',
+                    '天津', '苏州', '无锡', '宁波', '青岛', '大连', '厦门', '福州', '哈尔滨', '长春',
                     '沈阳', '济南', '郑州', '长沙', '昆明', '贵阳', '南宁', '海口', '三亚', '兰州',
-                    '西宁', '银川', '乌鲁木齐', '拉萨', '呼和浩特', '南昌', '合肥', '太原', '石家�?,
-                    '中国', '美国', '日本', '韩国', '俄罗�?, '英国', '法国', '德国', '意大�?, '加拿�?,
-                    '澳大利亚', '新西�?, '印度', '巴西', '南非', '埃及', '尼日利亚', '肯尼�?
+                    '西宁', '银川', '乌鲁木齐', '拉萨', '呼和浩特', '南昌', '合肥', '太原', '石家庄',
+                    '中国', '美国', '日本', '韩国', '俄罗斯', '英国', '法国', '德国', '意大利', '加拿大',
+                    '澳大利亚', '新西兰', '印度', '巴西', '南非', '埃及', '尼日利亚', '肯尼亚'
                 ]
             ], 
             // 日期规则
             'DATE' => [
                 'patterns' => [
-                    '/\d{4}年\d{1,2}月\d{1,2}�?',  // YYYY年MM月DD�?
+                    '/\d{4}年\d{1,2}月\d{1,2}日/',  // YYYY年MM月DD日
                     '/\d{4}-\d{1,2}-\d{1,2}/',  // YYYY-MM-DD
                     '/\d{4}\/\d{1,2}\/\d{1,2}/',  // YYYY/MM/DD
                 ], 
                 'keywords' => [
                     '今天', '明天', '后天', '昨天', '前天', '上周', '本周', '下周',
-                    '上个�?, '这个�?, '下个�?, '去年', '今年', '明年',
+                    '上个月', '这个月', '下个月', '去年', '今年', '明年',
                     '春天', '夏天', '秋天', '冬天', '周一', '周二', '周三', '周四', '周五', '周六', '周日'
                 ]
             ], 
             // 时间规则
             'TIME' => [
                 'patterns' => [
-                    '/\d{1,2}时\d{1,2}�?\d{1,2}�??/',  // HH时MM分SS�?
+                    '/\d{1,2}时\d{1,2}分\d{1,2}秒?/',  // HH时MM分SS秒
                     '/\d{1,2}:\d{2}(:\d{2})?/',  // HH:MM:SS
                 ], 
                 'keywords' => [
@@ -240,16 +240,16 @@ class NERModel
             'MONEY' => [
                 'patterns' => [
                     '/\d+(\.\d+)?(元|块|圆|角|分|美元|欧元|英镑|日元|韩元)/',  // 金额单位
-                    '/人民币\d+(\.\d+)?/',  // 人民币金�?
+                    '/人民币\d+(\.\d+)?/',  // 人民币金额
                     '/\$\d+(\.\d{2})?/',  // $金额
                 ], 
                 'keywords' => []
             ], 
-            // 百分比规�?
+            // 百分比规则
             'PERCENT' => [
                 'patterns' => [
                     '/\d+(\.\d+)?%/',  // 数字%
-                    '/百分之\d+(\.\d+)?/',  // 百分之数�?
+                    '/百分之\d+(\.\d+)?/',  // 百分之数
                 ], 
                 'keywords' => []
             ]
@@ -275,7 +275,7 @@ class NERModel
      * 识别命名实体
      *
      * @param array $tokens 分词结果
-     * @param string|null $language 语言代码，如果为null则自动检�?
+     * @param string|null $language 语言代码，如果为null则自动检测
      * @return array 命名实体识别结果
      */
     public function recognize(array $tokens, ?string $language = null): array
@@ -286,17 +286,17 @@ class NERModel
 
         // 检测语言
         if ($language === null) {
-            $language = $this->detectLanguage($tokens];
+            $language = $this->detectLanguage($tokens);
         }
 
         // 根据语言选择识别方法
         switch ($language) {
             case 'en':
-                return $this->recognizeEnglish($tokens];
+                return $this->recognizeEnglish($tokens);
             case 'zh':
-                return $this->recognizeChinese($tokens];
+                return $this->recognizeChinese($tokens);
             default:
-                return $this->recognizeEnglish($tokens]; // 默认使用英文识别
+                return $this->recognizeEnglish($tokens); // 默认使用英文识别
         }
     }
 
@@ -310,7 +310,7 @@ class NERModel
     {
         $chineseCount = 0;
         $englishCount = 0;
-        $totalCount = count($tokens];
+        $totalCount = count($tokens);
 
         if ($totalCount === 0) {
             return $this->config['default_language'];
@@ -344,7 +344,7 @@ class NERModel
      */
     private function recognizeEnglish(array $tokens): array
     {
-        $text = $this->tokensToText($tokens];
+        $text = $this->tokensToText($tokens);
         $entities = [];
 
         // 使用规则识别实体
@@ -364,7 +364,7 @@ class NERModel
                         $endPos = $startPos + strlen($entityText) - 1;
 
                         // 查找对应的tokens
-                        $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos];
+                        $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos);
 
                         if (!empty($entityTokens)) {
                             $entities[] = [
@@ -380,16 +380,16 @@ class NERModel
                 }
             }
 
-            // 使用关键词匹�?
+            // 使用关键词匹配
             foreach ($rules['keywords'] as $keyword) {
                 $pos = 0;
                 while (($pos = stripos($text, $keyword, $pos)) !== false) {
-                    $entityText = substr($text, $pos, strlen($keyword)];
+                    $entityText = substr($text, $pos, strlen($keyword));
                     $startPos = $pos;
                     $endPos = $pos + strlen($keyword) - 1;
 
                     // 查找对应的tokens
-                    $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos];
+                    $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos);
 
                     if (!empty($entityTokens)) {
                         $entities[] = [
@@ -402,13 +402,13 @@ class NERModel
                         ];
                     }
 
-                    $pos += strlen($keyword];
+                    $pos += strlen($keyword);
                 }
             }
         }
 
-        // 去重和合�?
-        $entities = $this->mergeOverlappingEntities($entities];
+        // 去重和合并
+        $entities = $this->mergeOverlappingEntities($entities);
 
         return $entities;
     }
@@ -421,7 +421,7 @@ class NERModel
      */
     private function recognizeChinese(array $tokens): array
     {
-        $text = $this->tokensToText($tokens];
+        $text = $this->tokensToText($tokens);
         $entities = [];
 
         // 使用规则识别实体
@@ -441,7 +441,7 @@ class NERModel
                         $endPos = $startPos + mb_strlen($entityText, 'UTF-8') - 1;
 
                         // 查找对应的tokens
-                        $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos];
+                        $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos);
 
                         if (!empty($entityTokens)) {
                             $entities[] = [
@@ -457,16 +457,16 @@ class NERModel
                 }
             }
 
-            // 使用关键词匹�?
+            // 使用关键词匹配
             foreach ($rules['keywords'] as $keyword) {
                 $pos = 0;
                 while (($pos = mb_stripos($text, $keyword, $pos, 'UTF-8')) !== false) {
-                    $entityText = mb_substr($text, $pos, mb_strlen($keyword, 'UTF-8'], 'UTF-8'];
+                    $entityText = mb_substr($text, $pos, mb_strlen($keyword, 'UTF-8'), 'UTF-8');
                     $startPos = $pos;
                     $endPos = $pos + mb_strlen($keyword, 'UTF-8') - 1;
 
                     // 查找对应的tokens
-                    $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos];
+                    $entityTokens = $this->findTokensByPosition($tokens, $startPos, $endPos);
 
                     if (!empty($entityTokens)) {
                         $entities[] = [
@@ -479,19 +479,19 @@ class NERModel
                         ];
                     }
 
-                    $pos += mb_strlen($keyword, 'UTF-8'];
+                    $pos += mb_strlen($keyword, 'UTF-8');
                 }
             }
         }
 
-        // 去重和合�?
-        $entities = $this->mergeOverlappingEntities($entities];
+        // 去重和合并
+        $entities = $this->mergeOverlappingEntities($entities);
 
         return $entities;
     }
 
     /**
-     * 将tokens转换为文�?
+     * 将tokens转换为文本
      *
      * @param array $tokens 分词结果
      * @return string 文本
@@ -532,7 +532,7 @@ class NERModel
     }
 
     /**
-     * 合并重叠的实�?
+     * 合并重叠的实体
      *
      * @param array $entities 实体列表
      * @return array 合并后的实体列表
@@ -543,27 +543,27 @@ class NERModel
             return $entities;
         }
 
-        // 按起始位置排�?
+        // 按起始位置排序
         usort($entities, function($a, $b) {
             if ($a['start'] == $b['start']) {
-                return $b['end'] - $a['end']; // 如果起始位置相同，优先选择更长的实�?
+                return $b['end'] - $a['end']; // 如果起始位置相同，优先选择更长的实体
             }
             return $a['start'] - $b['start'];
-        }];
+        });
 
         $result = [];
         $current = $entities[0];
 
-        for ($i = 1; $i < count($entities]; $i++) {
+        for ($i = 1; $i < count($entities); $i++) {
             $next = $entities[$i];
 
-            // 检查是否重�?
+            // 检查是否重叠
             if ($current['end'] >= $next['start']) {
-                // 如果当前实体的置信度更高，保留当前实�?
+                // 如果当前实体的置信度更高，保留当前实体
                 if ($current['confidence'] >= $next['confidence']) {
                     continue;
                 } else {
-                    // 否则，使用下一个实体替换当前实�?
+                    // 否则，使用下一个实体替换当前实体
                     $current = $next;
                 }
             } else {
@@ -573,7 +573,7 @@ class NERModel
             }
         }
 
-        // 添加最后一个实�?
+        // 添加最后一个实体
         $result[] = $current;
 
         return $result;
@@ -597,7 +597,7 @@ class NERModel
      */
     public function setConfig(array $config): void
     {
-        $this->config = array_merge($this->config, $config];
+        $this->config = array_merge($this->config, $config);
         if (isset($config['entity_types'])) {
             $this->entityTypes = $config['entity_types'];
         }
@@ -623,7 +623,7 @@ class NERModel
      */
     public function addEnglishRule(string $entityType, string $pattern, bool $isPattern = true): void
     {
-        if (!in_[$entityType, $this->entityTypes)) {
+        if (!in_array($entityType, $this->entityTypes)) {
             $this->entityTypes[] = $entityType;
         }
 
@@ -661,7 +661,7 @@ class NERModel
      */
     public function addChineseRule(string $entityType, string $pattern, bool $isPattern = true): void
     {
-        if (!in_[$entityType, $this->entityTypes)) {
+        if (!in_array($entityType, $this->entityTypes)) {
             $this->entityTypes[] = $entityType;
         }
 

@@ -8,12 +8,12 @@ class ChineseTokenizer implements TokenizerInterface
     private array $specialChars;
     private array $stopwords;
 
-    public function __construct(array $config = []]
+    public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config];
-        $this->initPunctuations(];
-        $this->initSpecialChars(];
-        $this->initStopwords(];
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->initPunctuations();
+        $this->initSpecialChars();
+        $this->initStopwords();
     }
 
     private function getDefaultConfig(): array
@@ -27,59 +27,59 @@ class ChineseTokenizer implements TokenizerInterface
     private function initPunctuations(): void
     {
         $this->punctuations = [
-            "\u{3002}", // ¾äºÅ
-            "\u{FF0C}", // ¶ººÅ
-            "\u{3001}", // ¶ÙºÅ
-            "\u{FF1A}", // Ã°ºÅ
-            "\u{FF1B}", // ·ÖºÅ
-            "\u{FF01}", // ¸ĞÌ¾ºÅ
-            "\u{FF1F}", // ÎÊºÅ
-            "\u{FF08}", // ×óÀ¨ºÅ
-            "\u{FF09}", // ÓÒÀ¨ºÅ
-            "\u{300A}", // ×óÊéÃûºÅ
-            "\u{300B}", // ÓÒÊéÃûºÅ
-            "\u{201C}", // ×óË«ÒıºÅ
-            "\u{201D}", // ÓÒË«ÒıºÅ
-            "\u{2018}", // ×óµ¥ÒıºÅ
-            "\u{2019}"  // ÓÒµ¥ÒıºÅ
+            "\u{3002}", // å¥å·
+            "\u{FF0C}", // é€—å·
+            "\u{3001}", // é¡¿å·
+            "\u{FF1A}", // å†’å·
+            "\u{FF1B}", // åˆ†å·
+            "\u{FF01}", // æ„Ÿå¹å·
+            "\u{FF1F}", // é—®å·
+            "\u{FF08}", // å·¦æ‹¬å·
+            "\u{FF09}", // å³æ‹¬å·
+            "\u{300A}", // å·¦ä¹¦åå·
+            "\u{300B}", // å³ä¹¦åå·
+            "\u{201C}", // å·¦åŒå¼•å·
+            "\u{201D}", // å³åŒå¼•å·
+            "\u{2018}", // å·¦å•å¼•å·
+            "\u{2019}"  // å³å•å¼•å·
         ];
     }
     
     private function initSpecialChars(): void
     {
         $this->specialChars = [
-            "Year", // Äê
-            "Month", // ÔÂ
-            "Day", // ÈÕ
-            "Hour", // Ê±
-            "Minute", // ·Ö
-            "Second" // Ãë
+            "Year", // å¹´
+            "Month", // æœˆ
+            "Day", // æ—¥
+            "Hour", // æ—¶
+            "Minute", // åˆ†
+            "Second" // ç§’
         ];
     }
 
     private function initStopwords(): void
     {
         $this->stopwords = [
-            "µÄ", "ÁË", "ºÍ", "ÊÇ", "¾Í", "¶¼", "¶ø", "¼°", "Óë", "×Å",
-            "»ò", "Ò»¸ö", "Ã»ÓĞ", "ÎÒÃÇ", "ÄãÃÇ", "ËûÃÇ", "ËıÃÇ", "Õâ¸ö",
-            "ÄÇ¸ö", "ÕâĞ©", "ÄÇĞ©", "²»", "ÔÚ", "ÓĞ", "¸ö", "ÄÜ", "»á"
+            "çš„", "äº†", "æ˜¯", "åœ¨", "æˆ‘", "æœ‰", "å’Œ", "å°±", "ä¸", "äºº",
+            "éƒ½", "ä¸€", "ä¸€ä¸ª", "æ²¡æœ‰", "è¿™ä¸ª", "é‚£ä¸ª", "ä»€ä¹ˆ", "è¿™æ ·",
+            "é‚£ä¸ª", "è¿™äº›", "é‚£äº›", "ä½ ", "æˆ‘", "ä»–", "å¥¹", "å®ƒ", "ä»¬"
         ];
     }
 
     public function tokenize(string $text, array $options = []): array
     {
-        // ¼òµ¥ÊµÏÖ£¬Êµ¼ÊÏîÄ¿ÖĞÓ¦Ê¹ÓÃ¸ü¸´ÔÓµÄ·Ö´ÊËã·¨
+        // ç®€å®ç°ï¼Œå®é™…é¡¹ç›®ä¸­åº”ä½¿ç”¨æ›´å¤æ‚çš„åˆ†è¯ç®—æ³•
         $tokens = [];
         
-        // ÊµÏÖ»ù±¾µÄ·Ö´ÊÂß¼­
-        $chars = preg_split("//u", $text, -1, PREG_SPLIT_NO_EMPTY];
-        $currentToken = ";
+        // å®ç°åŸºæœ¬çš„åˆ†è¯é€»è¾‘
+        $chars = preg_split("//u", $text, -1, PREG_SPLIT_NO_EMPTY);
+        $currentToken = "";
         
         foreach ($chars as $char) {
-            if (in_[$char, $this->punctuations]) {
-                if (!empty($currentToken]) {
+            if (in_array($char, $this->punctuations)) {
+                if (!empty($currentToken)) {
                     $tokens[] = $currentToken;
-                    $currentToken = ";
+                    $currentToken = "";
                 }
                 $tokens[] = $char;
             } else {
@@ -87,7 +87,7 @@ class ChineseTokenizer implements TokenizerInterface
             }
         }
         
-        if (!empty($currentToken]) {
+        if (!empty($currentToken)) {
             $tokens[] = $currentToken;
         }
         
@@ -101,19 +101,19 @@ class ChineseTokenizer implements TokenizerInterface
     
     public function addStopwords(array $words, ?string $language = null): bool
     {
-        $this->stopwords = array_merge($this->stopwords, $words];
+        $this->stopwords = array_merge($this->stopwords, $words);
         return true;
     }
     
     public function removeStopwords(array $words, ?string $language = null): bool
     {
-        $this->stopwords = array_diff($this->stopwords, $words];
+        $this->stopwords = array_diff($this->stopwords, $words);
         return true;
     }
     
     public function tokensToString(array $tokens, string $delimiter = ' '): string
     {
-        return implode($delimiter, $tokens];
+        return implode($delimiter, $tokens);
     }
     
     public function filterTokens(array $tokens, array $options = []): array
@@ -123,11 +123,11 @@ class ChineseTokenizer implements TokenizerInterface
         $removePunctuations = $options['remove_punctuations'] ?? false;
         
         foreach ($tokens as $token) {
-            if ($removeStopwords && in_[$token, $this->stopwords]) {
+            if ($removeStopwords && in_array($token, $this->stopwords)) {
                 continue;
             }
             
-            if ($removePunctuations && in_[$token, $this->punctuations]) {
+            if ($removePunctuations && in_array($token, $this->punctuations)) {
                 continue;
             }
             
@@ -149,19 +149,19 @@ class ChineseTokenizer implements TokenizerInterface
     
     public function detectLanguage(string $text): ?string
     {
-        // ¼òµ¥ÊµÏÖ£¬¼ÙÉèËùÓĞÎÄ±¾¶¼ÊÇÖĞÎÄ
+        // ç®€å®ç°ï¼Œä»…æ£€æµ‹æ–‡æœ¬æ˜¯å¦åŒ…å«ä¸­æ–‡
         return "zh-CN";
     }
     
     public function stem(string $word, ?string $language = null): string
     {
-        // ÖĞÎÄÃ»ÓĞ´Ê¸ÉÌáÈ¡µÄ¸ÅÄî£¬Ö±½Ó·µ»ØÔ­´Ê
+        // ä¸­æ–‡æ²¡æœ‰è¯å¹²æå–çš„æ¦‚å¿µï¼Œç›´æ¥è¿”å›åŸè¯
         return $word;
     }
     
     public function lemmatize(string $word, ?string $language = null): string
     {
-        // ÖĞÎÄÃ»ÓĞ´ÊĞÎ»¹Ô­µÄ¸ÅÄî£¬Ö±½Ó·µ»ØÔ­´Ê
+        // ä¸­æ–‡æ²¡æœ‰è¯ä½è¿˜åŸçš„æ¦‚å¿µï¼Œç›´æ¥è¿”å›åŸè¯
         return $word;
     }
 }

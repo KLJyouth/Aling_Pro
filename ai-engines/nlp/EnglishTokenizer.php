@@ -7,16 +7,16 @@ class EnglishTokenizer implements TokenizerInterface
     private array $dictionary;
     private array $stopwords;
 
-    public function __construct(array $config = []]
+    public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config];
-        $this->loadResources(];
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->loadResources();
     }
     
     private function loadResources(): void
     {
-        $this->loadDictionary(];
-        $this->loadStopwords(];
+        $this->loadDictionary();
+        $this->loadStopwords();
     }
 
     private function loadDictionary(): void
@@ -41,7 +41,7 @@ class EnglishTokenizer implements TokenizerInterface
 
     public function tokenize(string $text, array $options = []): array
     {
-        $tokens = preg_split("/\s+/", $text, -1, PREG_SPLIT_NO_EMPTY];
+        $tokens = preg_split("/\s+/", $text, -1, PREG_SPLIT_NO_EMPTY);
         return $tokens;
     }
 
@@ -52,19 +52,19 @@ class EnglishTokenizer implements TokenizerInterface
     
     public function addStopwords(array $words, ?string $language = null): bool
     {
-        $this->stopwords = array_merge($this->stopwords, $words];
+        $this->stopwords = array_merge($this->stopwords, $words);
         return true;
     }
     
     public function removeStopwords(array $words, ?string $language = null): bool
     {
-        $this->stopwords = array_diff($this->stopwords, $words];
+        $this->stopwords = array_diff($this->stopwords, $words);
         return true;
     }
     
     public function tokensToString(array $tokens, string $delimiter = " "): string
     {
-        return implode($delimiter, $tokens];
+        return implode($delimiter, $tokens);
     }
     
     public function filterTokens(array $tokens, array $options = []): array

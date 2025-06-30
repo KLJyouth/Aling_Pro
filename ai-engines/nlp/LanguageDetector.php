@@ -1,10 +1,10 @@
 <?php
 /**
  * 文件名：LanguageDetector.php
- * 功能描述：语言检测器 - 实现文本语言自动检测功�?
- * 创建时间�?025-01-XX
+ * 功能描述：语言检测器 - 实现文本语言自动检测功�?
+ * 创建时间�?025-01-XX
  * 最后修改：2025-01-XX
- * 版本�?.0.0
+ * 版本�?.0.0
  *
  * @package AlingAi\AI\Engines\NLP
  * @author AlingAi Team
@@ -33,31 +33,31 @@ class LanguageDetector
     private array $config;
     
     /**
-     * 语言特征�?
+     * 语言特征�?
      */
     private array $languageProfiles = [];
     
     /**
-     * 检测结果缓�?
+     * 检测结果缓�?
      */
     private array $cache = [];
     
     /**
-     * 日志�?
+     * 日志�?
      */
     private ?LoggerInterface $logger;
     
     /**
-     * 缓存管理�?
+     * 缓存管理�?
      */
     private ?CacheManager $cacheManager;
     
     /**
-     * 构造函�?
+     * 构造函�?
      *
      * @param array $config 配置参数
-     * @param LoggerInterface|null $logger 日志�?
-     * @param CacheManager|null $cacheManager 缓存管理�?
+     * @param LoggerInterface|null $logger 日志�?
+     * @param CacheManager|null $cacheManager 缓存管理�?
      */
     public function __construct(array $config = [],  ?LoggerInterface $logger = null, ?CacheManager $cacheManager = null)
     {
@@ -68,7 +68,7 @@ class LanguageDetector
         $this->loadLanguageProfiles(];
         
         if ($this->logger) {
-            $this->logger->info('语言检测器初始化成�?, [
+            $this->logger->info('语言检测器初始化成�?, [
                 'supported_languages' => implode(', ', array_keys($this->languageProfiles))
             ]];
         }
@@ -98,11 +98,11 @@ class LanguageDetector
     }
     
     /**
-     * 加载语言特征�?
+     * 加载语言特征�?
      */
     private function loadLanguageProfiles(): void
     {
-        // 尝试从缓存加�?
+        // 尝试从缓存加�?
         if ($this->cacheManager && $this->config['use_cache']) {
             $cacheKey = 'language_profiles';
             if ($this->cacheManager->has($cacheKey)) {
@@ -111,7 +111,7 @@ class LanguageDetector
             }
         }
         
-        // 从文件加�?
+        // 从文件加�?
         foreach ($this->config['supported_languages'] as $language) {
             $profilePath = __DIR__ . "/resources/language_profiles/{$language}.php";
             if (file_exists($profilePath)) {
@@ -127,7 +127,7 @@ class LanguageDetector
             $this->loadBuiltinProfiles(];
         }
         
-        // 保存到缓�?
+        // 保存到缓�?
         if ($this->cacheManager && $this->config['use_cache']) {
             $cacheKey = 'language_profiles';
             $this->cacheManager->set($cacheKey, $this->languageProfiles, $this->config['cache_ttl']];
@@ -139,15 +139,15 @@ class LanguageDetector
      */
     private function loadBuiltinProfiles(): void
     {
-        // 简化的语言特征库，基于常用字符和词�?
+        // 简化的语言特征库，基于常用字符和词�?
         $this->languageProfiles = [
             'zh-CN' => [
                 'chars' => [
-                    '�? => 0.0950, '一' => 0.0350, '�? => 0.0320, '�? => 0.0280,
-                    '�? => 0.0260, '�? => 0.0240, '�? => 0.0210, '�? => 0.0190,
-                    '�? => 0.0180, '�? => 0.0170, '�? => 0.0160, '�? => 0.0150,
-                    '�? => 0.0140, '�? => 0.0130, '�? => 0.0120, '�? => 0.0110,
-                    '�? => 0.0100, '�? => 0.0095, '�? => 0.0090, '�? => 0.0085
+                    '�? => 0.0950, '一' => 0.0350, '�? => 0.0320, '�? => 0.0280,
+                    '�? => 0.0260, '�? => 0.0240, '�? => 0.0210, '�? => 0.0190,
+                    '�? => 0.0180, '�? => 0.0170, '�? => 0.0160, '�? => 0.0150,
+                    '�? => 0.0140, '�? => 0.0130, '�? => 0.0120, '�? => 0.0110,
+                    '�? => 0.0100, '�? => 0.0095, '�? => 0.0090, '�? => 0.0085
                 ], 
                 'script' => 'Han'
             ], 
@@ -163,19 +163,19 @@ class LanguageDetector
             ], 
             'ja-JP' => [
                 'chars' => [
-                    '�? => 0.0950, '�? => 0.0850, '�? => 0.0750, '�? => 0.0650,
-                    '�? => 0.0600, '�? => 0.0550, '�? => 0.0500, '�? => 0.0450,
-                    '�? => 0.0400, '�? => 0.0350, '�? => 0.0300, '�? => 0.0280,
-                    '�? => 0.0260, '�? => 0.0240, '�? => 0.0220, '�? => 0.0200
+                    '�? => 0.0950, '�? => 0.0850, '�? => 0.0750, '�? => 0.0650,
+                    '�? => 0.0600, '�? => 0.0550, '�? => 0.0500, '�? => 0.0450,
+                    '�? => 0.0400, '�? => 0.0350, '�? => 0.0300, '�? => 0.0280,
+                    '�? => 0.0260, '�? => 0.0240, '�? => 0.0220, '�? => 0.0200
                 ], 
                 'script' => 'Hiragana'
             ], 
             'ko-KR' => [
                 'chars' => [
-                    '�? => 0.0900, '�? => 0.0850, '�? => 0.0750, '�? => 0.0700,
-                    '가' => 0.0650, '�? => 0.0600, '�? => 0.0550, '�? => 0.0500,
-                    '�? => 0.0450, '�? => 0.0400, '와' => 0.0350, '�? => 0.0300,
-                    '지' => 0.0280, '�? => 0.0260, '�? => 0.0240, '�? => 0.0220
+                    '�? => 0.0900, '�? => 0.0850, '�? => 0.0750, '�? => 0.0700,
+                    '가' => 0.0650, '�? => 0.0600, '�? => 0.0550, '�? => 0.0500,
+                    '�? => 0.0450, '�? => 0.0400, '와' => 0.0350, '�? => 0.0300,
+                    '지' => 0.0280, '�? => 0.0260, '�? => 0.0240, '�? => 0.0220
                 ], 
                 'script' => 'Hangul'
             ], 
@@ -206,21 +206,21 @@ class LanguageDetector
             'threshold' => $this->config['confidence_threshold']
         ],  $options];
         
-        // 文本预处�?
+        // 文本预处�?
         $text = $this->preprocessText($text];
         
-        // 检查文本长�?
+        // 检查文本长�?
         if (mb_strlen($text) < $this->config['min_text_length']) {
             return $this->formatResult('unknown', 0, $options['detailed']];
         }
         
-        // 检查缓�?
+        // 检查缓�?
         $cacheKey = md5($text];
         if ($this->config['use_cache'] && isset($this->cache[$cacheKey])) {
             return $this->cache[$cacheKey];
         }
         
-        // 快速脚本检�?
+        // 快速脚本检�?
         $scriptResult = $this->detectByScript($text];
         if ($scriptResult['confidence'] > 0.9) {
             $result = $this->formatResult($scriptResult['language'],  $scriptResult['confidence'],  $options['detailed']];
@@ -236,7 +236,7 @@ class LanguageDetector
         // 提取文本特征
         $textProfile = $this->extractTextProfile($text];
         
-        // 计算与各语言特征库的相似�?
+        // 计算与各语言特征库的相似�?
         $similarities = [];
         foreach ($this->languageProfiles as $language => $profile) {
             $similarities[$language] = $this->calculateSimilarity($textProfile, $profile];
@@ -266,16 +266,16 @@ class LanguageDetector
      * 通过脚本类型快速检测语言
      *
      * @param string $text 文本
-     * @return array 检测结�?
+     * @return array 检测结�?
      */
     private function detectByScript(string $text): array
     {
         $scripts = [
             'Han' => '/[\x{4e00}-\x{9fff}]/u',  // 中文
-            'Hiragana' => '/[\x{3040}-\x{309f}]/u',  // 日文平假�?
-            'Katakana' => '/[\x{30a0}-\x{30ff}]/u',  // 日文片假�?
+            'Hiragana' => '/[\x{3040}-\x{309f}]/u',  // 日文平假�?
+            'Katakana' => '/[\x{30a0}-\x{30ff}]/u',  // 日文片假�?
             'Hangul' => '/[\x{ac00}-\x{d7af}]/u',  // 韩文
-            'Cyrillic' => '/[\x{0400}-\x{04ff}]/u',  // 西里尔字�?
+            'Cyrillic' => '/[\x{0400}-\x{04ff}]/u',  // 西里尔字�?
             'Latin' => '/[a-zA-Z]/u'  // 拉丁字母
         ];
         
@@ -301,7 +301,7 @@ class LanguageDetector
             'Latin' => 'en-US'  // 默认英语，但拉丁字母有多种语言
         ];
         
-        // 如果是拉丁字母，需要进一步分�?
+        // 如果是拉丁字母，需要进一步分�?
         $language = $scriptToLanguage[$dominantScript] ?? 'unknown';
         
         return [
@@ -319,7 +319,7 @@ class LanguageDetector
      */
     private function extractTextProfile(string $text): array
     {
-        // 对于过长的文本，取样�?
+        // 对于过长的文本，取样�?
         if (mb_strlen($text) > $this->config['sample_size']) {
             $text = mb_substr($text, 0, $this->config['sample_size']];
         }
@@ -380,11 +380,11 @@ class LanguageDetector
     }
     
     /**
-     * 计算相似�?
+     * 计算相似�?
      *
      * @param array $textProfile 文本特征
      * @param array $languageProfile 语言特征
-     * @return float 相似�?
+     * @return float 相似�?
      */
     private function calculateSimilarity(array $textProfile, array $languageProfile): float
     {
@@ -397,7 +397,7 @@ class LanguageDetector
         $textMagnitude = 0;
         $langMagnitude = 0;
         
-        // 计算点积和向量大�?
+        // 计算点积和向量大�?
         foreach ($textChars as $char => $freq) {
             $textMagnitude += $freq * $freq;
             if (isset($langChars[$char])) {
@@ -409,7 +409,7 @@ class LanguageDetector
             $langMagnitude += $freq * $freq;
         }
         
-        // 计算余弦相似�?
+        // 计算余弦相似�?
         $textMagnitude = sqrt($textMagnitude];
         $langMagnitude = sqrt($langMagnitude];
         
@@ -417,14 +417,14 @@ class LanguageDetector
             $similarity = $dotProduct / ($textMagnitude * $langMagnitude];
         }
         
-        // 如果有n-gram特征，也计算n-gram相似�?
+        // 如果有n-gram特征，也计算n-gram相似�?
         if (isset($textProfile['ngrams']) && isset($languageProfile['ngrams'])) {
             $ngramSimilarity = $this->calculateNgramSimilarity(
                 $textProfile['ngrams'], 
                 $languageProfile['ngrams']
             ];
             
-            // 综合字符和n-gram相似�?
+            // 综合字符和n-gram相似�?
             $similarity = ($similarity + $ngramSimilarity) / 2;
         }
         
@@ -442,11 +442,11 @@ class LanguageDetector
     }
     
     /**
-     * 计算n-gram相似�?
+     * 计算n-gram相似�?
      *
      * @param array $textNgrams 文本n-gram
      * @param array $langNgrams 语言n-gram
-     * @return float 相似�?
+     * @return float 相似�?
      */
     private function calculateNgramSimilarity(array $textNgrams, array $langNgrams): float
     {
@@ -454,7 +454,7 @@ class LanguageDetector
         $textMagnitude = 0;
         $langMagnitude = 0;
         
-        // 计算点积和向量大�?
+        // 计算点积和向量大�?
         foreach ($textNgrams as $ngram => $freq) {
             $textMagnitude += $freq * $freq;
             if (isset($langNgrams[$ngram])) {
@@ -466,7 +466,7 @@ class LanguageDetector
             $langMagnitude += $freq * $freq;
         }
         
-        // 计算余弦相似�?
+        // 计算余弦相似�?
         $textMagnitude = sqrt($textMagnitude];
         $langMagnitude = sqrt($langMagnitude];
         
@@ -478,10 +478,10 @@ class LanguageDetector
     }
     
     /**
-     * 获取脚本正则表达�?
+     * 获取脚本正则表达�?
      *
      * @param string $script 脚本名称
-     * @return string 正则表达�?
+     * @return string 正则表达�?
      */
     private function getScriptPattern(string $script): string
     {
@@ -498,30 +498,30 @@ class LanguageDetector
     }
     
     /**
-     * 文本预处�?
+     * 文本预处�?
      *
-     * @param string $text 原文�?
+     * @param string $text 原文�?
      * @return string 处理后的文本
      */
     private function preprocessText(string $text): string
     {
-        // 转换为小�?
+        // 转换为小�?
         $text = mb_strtolower($text];
         
         // 移除多余空白
         $text = preg_replace('/\s+/u', ' ', $text];
         
-        // 移除标点和数�?
+        // 移除标点和数�?
         $text = preg_replace('/[\p{P}\p{N}]/u', '', $text];
         
         return trim($text];
     }
     
     /**
-     * 格式化结�?
+     * 格式化结�?
      *
      * @param string $language 语言代码
-     * @param float $confidence 置信�?
+     * @param float $confidence 置信�?
      * @param bool $detailed 是否返回详细信息
      * @param array|null $allSimilarities 所有语言的相似度
      * @return array 格式化的结果
