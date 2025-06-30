@@ -1,262 +1,268 @@
 <?php
 /**
- * AlingAi Pro ÓÃ»§°²È«µÇÂ¼Ò³Ãæ
- * Ìá¹©¶àÖÖ°²È«µÇÂ¼·½Ê½ºÍ¸ß¼¶±£»¤
+ * AlingAi Pro - ç™»å½•å¤„ç†
  * 
- * @version 1.0.0
- * @author AlingAi Team
+ * å¤„ç†ç”¨æˆ·ç™»å½•è¯·æ±‚ï¼ŒåŒ…æ‹¬å¸¸è§„ç™»å½•å’Œç¤¾äº¤ç™»å½•
  */
 
-// ÉèÖÃÒ³Ãæ°²È«Í·
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;'];
-header('X-Content-Type-Options: nosniff'];
-header('X-Frame-Options: DENY'];
-header('X-XSS-Protection: 1; mode=block'];
+// å¯åŠ¨ä¼šè¯
+session_start();
 
-// Æô¶¯»á»°
-session_start(];
+// è®¾ç½®å¢å¼ºçš„å®‰å…¨å¤´éƒ¨
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
-// ÒıÈëÓÃ»§°²È«Àà
-require_once __DIR__ . '/includes/UserSecurity.php';
-
-use AlingAi\Security\UserSecurity;
-
-// ³õÊ¼»¯±äÁ¿
-$loginError = '';
-$loginSuccess = false;
-$twoFactorRequired = false;
-$csrfToken = UserSecurity::generateCsrfToken('login_form'];
-
-// ´¦ÀíÒÑµÇÂ¼ÓÃ»§
-if (UserSecurity::validateSession(false, null)) {
-    header('Location: dashboard.php'];
+// æ£€æŸ¥æ˜¯å¦å·²ç™»å½•
+if (isset($_SESSION['user_id']) && !isset($_GET['logout'])) {
+    // å·²ç™»å½•ï¼Œé‡å®šå‘åˆ°ä»ªè¡¨ç›˜
+    header('Location: /dashboard');
     exit;
 }
 
-// ´¦ÀíµÇÂ¼ÇëÇó
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login_submit'])) {
-    // CSRF±£»¤
-    if (!isset($_POST['csrf_token']) || !UserSecurity::validateCsrfToken($_POST['csrf_token'],  'login_form')) {
-        $loginError = '°²È«ÑéÖ¤Ê§°Ü£¬ÇëÖØĞÂ³¢ÊÔµÇÂ¼';
-    } else {
-        // »ù±¾ÑéÖ¤
-        $username = trim($_POST['username'] ?? ''];
-        $password = $_POST['password'] ?? '';
-        
-        if (empty($username) || empty($password)) {
-            $loginError = 'ÇëÊäÈëÓÃ»§ÃûºÍÃÜÂë';
-        } else {
-            try {
-                // Á¬½ÓÊı¾İ¿â
-                $configFile = dirname(__DIR__) . '/config/config.php';
-                if (file_exists($configFile)) {
-                    $config = require $configFile;
-                    
-                    // Á¬½ÓÊı¾İ¿â
-                    if ($config['database']['type'] === 'sqlite') {
-                        $dbPath = dirname(__DIR__) . '/' . $config['database']['path'];
-                        $pdo = new PDO("sqlite:{$dbPath}"];
-                    } else {
-                        $host = $config['database']['host'];
-                        $port = $config['database']['port'] ?? 3306;
-                        $dbname = $config['database']['database'];
-                        $dbuser = $config['database']['username'];
-                        $dbpass = $config['database']['password'];
-                        
-                        $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
-                    }
-                    
-                    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
-                    
-                    // ²éÑ¯ÓÃ»§
-                    $stmt = $pdo->prepare("SELECT * FROM users WHERE (username = ? OR email = ?) AND status = 'active' LIMIT 1"];
-                    $stmt->execute([$username, $username]];
-                    $user = $stmt->fetch(PDO::FETCH_ASSOC];
-                    
-                    if ($user && UserSecurity::verifyPassword($password, $user['password'])) {
-                        // ÃÜÂëÕıÈ·
-                        
-                        // ¼ì²éÊÇ·ñĞèÒª¶şÒòËØÈÏÖ¤
-                        $requireTwoFactor = !empty($user['two_factor_secret']];
-                        
-                        if ($requireTwoFactor) {
-                            // Ôİ´æÓÃ»§ĞÅÏ¢ÒÔ¹©¶şÒòËØÑéÖ¤Ê¹ÓÃ
-                            $_SESSION['temp_user_id'] = $user['id'];
-                            $_SESSION['temp_username'] = $user['username'];
-                            $twoFactorRequired = true;
-                        } else {
-                            // Ö±½ÓµÇÂ¼
-                            $_SESSION['user_id'] = $user['id'];
-                            $_SESSION['username'] = $user['username'];
-                            $_SESSION['email'] = $user['email'];
-                            $_SESSION['user_role'] = $user['role'];
-                            $_SESSION['last_activity'] = time(];
-                            
-                            // ¸üĞÂ×îºóµÇÂ¼Ê±¼ä
-                            $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?"];
-                            $updateStmt->execute([$user['id']]];
-                            
-                            // ¼ÇÂ¼³É¹¦µÇÂ¼
-                            UserSecurity::logSecurityEvent($user['id'],  'login', 'ÓÃ»§µÇÂ¼³É¹¦', 'info', 'success'];
-                            
-                            // Éú³É°²È«»á»°ID
-                            session_regenerate_id(true];
-                            
-                            // ÉèÖÃ¼Ç×¡ÎÒ
-                            if (isset($_POST['remember_me']) && $_POST['remember_me'] === 'on') {
-                                $token = UserSecurity::generateRandomToken(];
-                                $expiresAt = date('Y-m-d H:i:s', time() + 30 * 24 * 60 * 60];
-                                
-                                $stmt = $pdo->prepare("INSERT INTO user_sessions (user_id, token, ip_address, user_agent, expires_at) 
-                                                    VALUES (?, ?, ?, ?, ?)"];
-                                $stmt->execute([
-                                    $user['id'], 
-                                    $token,
-                                    $_SERVER['REMOTE_ADDR'], 
-                                    $_SERVER['HTTP_USER_AGENT'] ?? '',
-                                    $expiresAt
-                                ]];
-                                
-                                // ÉèÖÃCookie
-                                setcookie(
-                                    'remember_user', 
-                                    $token, 
-                                    time() + 30 * 24 * 60 * 60, 
-                                    '/', 
-                                    '', 
-                                    true, // ½öHTTPS
-                                    true  // HttpOnly
-                                ];
-                            }
-                            
-                            $loginSuccess = true;
-                            
-                            // ÖØ¶¨Ïòµ½¿ØÖÆÃæ°å
-                            header('Location: dashboard.php'];
-                            exit;
-                        }
-                    } else {
-                        // ÃÜÂë´íÎó
-                        $loginError = 'ÓÃ»§Ãû»òÃÜÂë´íÎó';
-                        UserSecurity::logSecurityEvent(
-                            $user['id'] ?? 0,
-                            'login_failed',
-                            "ÓÃ»§µÇÂ¼Ê§°Ü: {$username}",
-                            'warning',
-                            'failed'
-                        ];
-                    }
-                } else {
-                    $loginError = 'ÏµÍ³ÅäÖÃ´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±';
-                }
-            } catch (Exception $e) {
-                $loginError = 'µÇÂ¼¹ı³ÌÖĞ·¢Éú´íÎó£¬ÇëÉÔºóÔÙÊÔ';
-                error_log('Login error: ' . $e->getMessage()];
-            }
-        }
-    }
-}
-
-// ¼ì²éºÍ´¦Àí¶şÒòËØÑéÖ¤
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['two_factor_submit']) && isset($_SESSION['temp_user_id'])) {
-    $code = trim($_POST['two_factor_code'] ?? ''];
+// å¤„ç†ç™»å‡ºè¯·æ±‚
+if (isset($_GET['logout'])) {
+    // æ¸…é™¤ä¼šè¯æ•°æ®
+    session_unset();
+    session_destroy();
     
-    if (empty($code)) {
-        $loginError = 'ÇëÊäÈë¶şÒòËØÑéÖ¤Âë';
+    // é‡å®šå‘åˆ°é¦–é¡µ
+    header('Location: /');
+    exit;
+}
+
+// å¤„ç†ç¤¾äº¤ç™»å½•
+if (isset($_GET['provider'])) {
+    $provider = $_GET['provider'];
+    
+    // éªŒè¯æä¾›å•†
+    if (!in_array($provider, ['google', 'github'])) {
+        $_SESSION['error'] = 'ä¸æ”¯æŒçš„ç™»å½•æ–¹å¼';
+        header('Location: /login');
+        exit;
+    }
+    
+    // æ£€æŸ¥æ˜¯å¦ä¸ºå›è°ƒ
+    if (isset($_GET['callback'])) {
+        // å¤„ç†ç¤¾äº¤ç™»å½•å›è°ƒ
+        processSocialCallback($provider);
     } else {
-        try {
-            // Á¬½ÓÊı¾İ¿â
-            $configFile = dirname(__DIR__) . '/config/config.php';
-            if (file_exists($configFile)) {
-                $config = require $configFile;
-                
-                if ($config['database']['type'] === 'sqlite') {
-                    $dbPath = dirname(__DIR__) . '/' . $config['database']['path'];
-                    $pdo = new PDO("sqlite:{$dbPath}"];
-                } else {
-                    $host = $config['database']['host'];
-                    $port = $config['database']['port'] ?? 3306;
-                    $dbname = $config['database']['database'];
-                    $dbuser = $config['database']['username'];
-                    $dbpass = $config['database']['password'];
-                    
-                    $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
-                }
-                
-                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
-                
-                // »ñÈ¡ÓÃ»§¶şÒòËØÈÏÖ¤ĞÅÏ¢
-                $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ? LIMIT 1"];
-                $stmt->execute([$_SESSION['temp_user_id']]];
-                $user = $stmt->fetch(PDO::FETCH_ASSOC];
-                
-                if ($user) {
-                    // TODO: ÑéÖ¤¶şÒòËØÈÏÖ¤Âë£¬ÕâÀïĞèÒª¼¯³É¾ßÌåµÄ¶şÒòËØÈÏÖ¤¿â
-                    $twoFactorValid = ($code === '123456']; // Ê¾ÀıÑéÖ¤£¬Êµ¼ÊÓ¦ÓÃÖĞÓ¦Ê¹ÓÃTOTPËã·¨ÑéÖ¤
-                    
-                    if ($twoFactorValid) {
-                        // ¶şÒòËØÑéÖ¤³É¹¦£¬´´½¨»á»°
-                        $_SESSION['user_id'] = $user['id'];
-                        $_SESSION['username'] = $user['username'];
-                        $_SESSION['email'] = $user['email'];
-                        $_SESSION['user_role'] = $user['role'];
-                        $_SESSION['last_activity'] = time(];
-                        
-                        // Çå³ıÁÙÊ±»á»°Êı¾İ
-                        unset($_SESSION['temp_user_id']];
-                        unset($_SESSION['temp_username']];
-                        
-                        // ¸üĞÂ×îºóµÇÂ¼Ê±¼ä
-                        $updateStmt = $pdo->prepare("UPDATE users SET last_login = NOW() WHERE id = ?"];
-                        $updateStmt->execute([$user['id']]];
-                        
-                        // ¼ÇÂ¼³É¹¦µÇÂ¼
-                        UserSecurity::logSecurityEvent($user['id'],  'login_2fa', 'ÓÃ»§Íê³É¶şÒòËØÑéÖ¤µÇÂ¼', 'info', 'success'];
-                        
-                        // Éú³É°²È«»á»°ID
-                        session_regenerate_id(true];
-                        
-                        $loginSuccess = true;
-                        
-                        // ÖØ¶¨Ïòµ½¿ØÖÆÃæ°å
-                        header('Location: dashboard.php'];
-                        exit;
-                    } else {
-                        $loginError = '¶şÒòËØÑéÖ¤ÂëÎŞĞ§';
-                        $twoFactorRequired = true;
-                        UserSecurity::logSecurityEvent($user['id'],  'login_2fa_failed', '¶şÒòËØÑéÖ¤Ê§°Ü', 'warning', 'failed'];
-                    }
-                } else {
-                    $loginError = 'ÓÃ»§»á»°ÒÑ¹ıÆÚ£¬ÇëÖØĞÂµÇÂ¼';
-                    unset($_SESSION['temp_user_id']];
-                    unset($_SESSION['temp_username']];
-                }
+        // é‡å®šå‘åˆ°ç¤¾äº¤ç™»å½•æä¾›å•†
+        redirectToProvider($provider);
+    }
+    
+    exit;
+}
+
+// å¤„ç†è¡¨å•æäº¤
+$error = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // éªŒè¯è¡¨å•æ•°æ®
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $password = $_POST['password'] ?? '';
+    $remember = isset($_POST['remember']);
+    
+    if (!$email) {
+        $error = 'è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€';
+    } elseif (empty($password)) {
+        $error = 'è¯·è¾“å…¥å¯†ç ';
+    } else {
+        // å°è¯•ç™»å½•
+        $user = authenticateUser($email, $password);
+        
+        if ($user) {
+            // ç™»å½•æˆåŠŸï¼Œè®¾ç½®ä¼šè¯
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['name'];
+            $_SESSION['user_email'] = $user['email'];
+            $_SESSION['user_role'] = $user['role'];
+            
+            // å¦‚æœé€‰æ‹©äº†"è®°ä½æˆ‘"ï¼Œè®¾ç½®cookie
+            if ($remember) {
+                $token = generateRememberToken($user['id']);
+                setcookie('remember_token', $token, time() + 60*60*24*30, '/', '', true, true);
             }
-        } catch (Exception $e) {
-            $loginError = '¶şÒòËØÑéÖ¤¹ı³ÌÖĞ·¢Éú´íÎó';
-            error_log('2FA error: ' . $e->getMessage()];
+            
+            // è®°å½•ç™»å½•ä¿¡æ¯
+            recordLogin($user['id'], $_SERVER['REMOTE_ADDR']);
+            
+            // é‡å®šå‘åˆ°ä»ªè¡¨ç›˜
+            header('Location: /dashboard');
+            exit;
+        } else {
+            $error = 'é‚®ç®±æˆ–å¯†ç é”™è¯¯';
         }
     }
 }
 
-// ¼ì²éIP·çÏÕ
-$ipRisk = UserSecurity::assessIpRisk($_SERVER['REMOTE_ADDR']];
-$ipRiskLevel = $ipRisk['level'];
+/**
+ * éªŒè¯ç”¨æˆ·å‡­æ®
+ * 
+ * @param string $email ç”¨æˆ·é‚®ç®±
+ * @param string $password ç”¨æˆ·å¯†ç 
+ * @return array|false æˆåŠŸæ—¶è¿”å›ç”¨æˆ·æ•°æ®ï¼Œå¤±è´¥æ—¶è¿”å›false
+ */
+function authenticateUser($email, $password) {
+    // è¿æ¥æ•°æ®åº“
+    $db = connectToDatabase();
+    
+    // æŸ¥è¯¢ç”¨æˆ·
+    $stmt = $db->prepare('SELECT id, name, email, password, role, status FROM users WHERE email = ? AND status = "active"');
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // éªŒè¯å¯†ç 
+    if ($user && password_verify($password, $user['password'])) {
+        return $user;
+    }
+    
+    return false;
+}
+
+/**
+ * è¿æ¥åˆ°æ•°æ®åº“
+ * 
+ * @return PDO æ•°æ®åº“è¿æ¥
+ */
+function connectToDatabase() {
+    $host = 'localhost';
+    $dbname = 'alingai_pro';
+    $username = 'root';
+    $password = '';
+    
+    try {
+        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
+    } catch (PDOException $e) {
+        die('æ•°æ®åº“è¿æ¥å¤±è´¥: ' . $e->getMessage());
+    }
+}
+
+/**
+ * ç”Ÿæˆ"è®°ä½æˆ‘"ä»¤ç‰Œ
+ * 
+ * @param int $userId ç”¨æˆ·ID
+ * @return string ç”Ÿæˆçš„ä»¤ç‰Œ
+ */
+function generateRememberToken($userId) {
+    $token = bin2hex(random_bytes(32));
+    $expires = date('Y-m-d H:i:s', time() + 60*60*24*30);
+    
+    $db = connectToDatabase();
+    $stmt = $db->prepare('INSERT INTO remember_tokens (user_id, token, expires_at) VALUES (?, ?, ?)');
+    $stmt->execute([$userId, $token, $expires]);
+    
+    return $token;
+}
+
+/**
+ * è®°å½•ç”¨æˆ·ç™»å½•
+ * 
+ * @param int $userId ç”¨æˆ·ID
+ * @param string $ip ç”¨æˆ·IPåœ°å€
+ */
+function recordLogin($userId, $ip) {
+    $db = connectToDatabase();
+    $stmt = $db->prepare('INSERT INTO login_history (user_id, ip_address, user_agent) VALUES (?, ?, ?)');
+    $stmt->execute([$userId, $ip, $_SERVER['HTTP_USER_AGENT']]);
+}
+
+/**
+ * é‡å®šå‘åˆ°ç¤¾äº¤ç™»å½•æä¾›å•†
+ * 
+ * @param string $provider æä¾›å•†åç§°
+ */
+function redirectToProvider($provider) {
+    switch ($provider) {
+        case 'google':
+            $clientId = 'YOUR_GOOGLE_CLIENT_ID';
+            $redirectUri = urlencode('http://' . $_SERVER['HTTP_HOST'] . '/login/google/callback');
+            $url = "https://accounts.google.com/o/oauth2/auth?client_id=$clientId&redirect_uri=$redirectUri&response_type=code&scope=email%20profile";
+            header("Location: $url");
+            break;
+            
+        case 'github':
+            $clientId = 'YOUR_GITHUB_CLIENT_ID';
+            $redirectUri = urlencode('http://' . $_SERVER['HTTP_HOST'] . '/login/github/callback');
+            $url = "https://github.com/login/oauth/authorize?client_id=$clientId&redirect_uri=$redirectUri&scope=user:email";
+            header("Location: $url");
+            break;
+    }
+}
+
+/**
+ * å¤„ç†ç¤¾äº¤ç™»å½•å›è°ƒ
+ * 
+ * @param string $provider æä¾›å•†åç§°
+ */
+function processSocialCallback($provider) {
+    // è¿™é‡Œåº”è¯¥å¤„ç†OAuthå›è°ƒï¼Œè·å–ç”¨æˆ·ä¿¡æ¯å¹¶ç™»å½•
+    // å®é™…é¡¹ç›®ä¸­ï¼Œåº”è¯¥ä½¿ç”¨é€‚å½“çš„OAuthåº“æ¥å¤„ç†è¿™äº›è¯·æ±‚
+    
+    // ç¤ºä¾‹ï¼šæ¨¡æ‹ŸæˆåŠŸè·å–ç”¨æˆ·ä¿¡æ¯
+    $socialUser = [
+        'id' => 'social_' . rand(1000, 9999),
+        'name' => 'ç¤¾äº¤ç”¨æˆ·',
+        'email' => 'social_user@example.com',
+    ];
+    
+    // æŸ¥æ‰¾æˆ–åˆ›å»ºç”¨æˆ·
+    $db = connectToDatabase();
+    $stmt = $db->prepare('SELECT id, name, email, role, status FROM users WHERE email = ?');
+    $stmt->execute([$socialUser['email']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$user) {
+        // åˆ›å»ºæ–°ç”¨æˆ·
+        $password = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
+        $stmt = $db->prepare('INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, "user", "active")');
+        $stmt->execute([$socialUser['name'], $socialUser['email'], $password]);
+        
+        $userId = $db->lastInsertId();
+        $user = [
+            'id' => $userId,
+            'name' => $socialUser['name'],
+            'email' => $socialUser['email'],
+            'role' => 'user',
+            'status' => 'active'
+        ];
+    }
+    
+    // ç™»å½•ç”¨æˆ·
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['user_name'] = $user['name'];
+    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_role'] = $user['role'];
+    
+    // è®°å½•ç™»å½•ä¿¡æ¯
+    recordLogin($user['id'], $_SERVER['REMOTE_ADDR']);
+    
+    // é‡å®šå‘åˆ°ä»ªè¡¨ç›˜
+    header('Location: /dashboard');
+    exit;
+}
+
+// æ˜¾ç¤ºç™»å½•é¡µé¢
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>°²È«µÇÂ¼ - AlingAi Pro</title>
-    <meta name="description" content="AlingAi ProÁãĞÅÈÎ°²È«µÇÂ¼ÏµÍ³">
+    <title>å®‰å…¨ç™»å½• - AlingAi Pro</title>
+    <meta name="description" content="AlingAi Proé›¶ä¿¡ä»»å®‰å…¨ç™»å½•ç³»ç»Ÿ">
     
-    <!-- ºËĞÄ×ÊÔ´ -->
+    <!-- æ ¸å¿ƒèµ„æº -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- TailwindÅäÖÃ -->
+    <!-- Tailwindé…ç½® -->
     <script>
         tailwind.config = {
             theme: {
@@ -269,7 +275,7 @@ $ipRiskLevel = $ipRisk['level'];
                         'cyber-orange': '#F59E0B'
                     },
                     fontFamily: {
-                        'mono': ['JetBrains Mono', 'monospace'], 
+                        'mono': ['JetBrains Mono', 'monospace'],
                         'sans': ['Inter', 'sans-serif']
                     }
                 }
@@ -279,328 +285,135 @@ $ipRiskLevel = $ipRisk['level'];
     
     <style>
         body {
-            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%];
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
         
         .glassmorphism {
-            background: rgba(255, 255, 255, 0.05];
-            backdrop-filter: blur(20px];
-            border: 1px solid rgba(255, 255, 255, 0.1];
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2];
-        }
-        
-        .quantum-particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, rgba(107, 70, 193, 0.8], transparent];
-            border-radius: 50%;
-            animation: quantumFloat 8s ease-in-out infinite;
-        }
-        
-        @keyframes quantumFloat {
-            0%, 100% { 
-                transform: translateY(0px) translateX(0px) rotate(0deg];
-                opacity: 0.3;
-            }
-            25% { 
-                transform: translateY(-30px) translateX(15px) rotate(90deg];
-                opacity: 0.8;
-            }
-            50% { 
-                transform: translateY(-15px) translateX(-20px) rotate(180deg];
-                opacity: 0.5;
-            }
-            75% { 
-                transform: translateY(-25px) translateX(25px) rotate(270deg];
-                opacity: 0.9;
-            }
-        }
-        
-        .security-indicator {
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .security-indicator::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.3], transparent];
-            animation: securityScan 2s infinite;
-        }
-        
-        @keyframes securityScan {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #6B46C1, #3B82F6];
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
             border: none;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
         
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2], transparent];
-            transition: left 0.5s;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.4);
         }
         
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        
-        .two-factor-input {
-            letter-spacing: 0.5em;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        
-        .biometric-scanner {
-            background: radial-gradient(circle, rgba(16, 185, 129, 0.1], transparent];
-            border: 2px solid rgba(16, 185, 129, 0.3];
-            animation: biometricPulse 2s ease-in-out infinite;
-        }
-        
-        @keyframes biometricPulse {
-            0%, 100% { 
-                box-shadow: 0 0 20px rgba(16, 185, 129, 0.3];
-                transform: scale(1];
-            }
-            50% { 
-                box-shadow: 0 0 40px rgba(16, 185, 129, 0.6];
-                transform: scale(1.05];
-            }
-        }
-        
-        .auth-method-card {
+        .social-btn {
             transition: all 0.3s ease;
-            cursor: pointer;
         }
         
-        .auth-method-card:hover {
-            transform: translateY(-5px];
-            box-shadow: 0 15px 35px rgba(107, 70, 193, 0.3];
-        }
-        
-        .security-level {
-            background: linear-gradient(135deg, #10B981, #059669];
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-        
-        .ip-risk-low {
-            background: linear-gradient(135deg, #10B981, #059669];
-        }
-        
-        .ip-risk-medium {
-            background: linear-gradient(135deg, #F59E0B, #D97706];
-        }
-        
-        .ip-risk-high {
-            background: linear-gradient(135deg, #EF4444, #B91C1C];
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-    <!-- Á¿×ÓÁ£×Ó±³¾° -->
-    <div id="quantum-particles" class="fixed inset-0 pointer-events-none z-0"></div>
-    
-    <!-- °²È«µÇÂ¼ÈİÆ÷ -->
+    <!-- ç™»å½•å®¹å™¨ -->
     <div class="glassmorphism rounded-3xl p-8 w-full max-w-lg shadow-2xl z-10 relative">
-        <!-- IP·çÏÕÖ¸Ê¾Æ÷ -->
-        <div class="absolute top-4 right-4 flex items-center space-x-2">
-            <div class="security-indicator w-3 h-3 bg-green-500 rounded-full"></div>
-            <span class="text-xs font-mono <?php echo $ipRiskLevel === 'low' ? 'text-green-400' : ($ipRiskLevel === 'medium' ? 'text-yellow-400' : 'text-red-400']; ?>">
-                <?php echo strtoupper($ipRiskLevel === 'low' ? 'SECURE' : ($ipRiskLevel === 'medium' ? 'CAUTION' : 'WARNING')]; ?>
-            </span>
-        </div>
-    
-        <!-- LogoºÍ±êÌâ -->
+        <!-- Logoå’Œæ ‡é¢˜ -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 mx-auto mb-4 glassmorphism rounded-full flex items-center justify-center">
                 <i class="fas fa-shield-halved text-3xl text-blue-400"></i>
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">ÁãĞÅÈÎµÇÂ¼</h1>
-            <p class="text-gray-300">¶àÖØÉí·İÑéÖ¤±£»¤ÄúµÄÕË»§°²È«</p>
-            <div class="security-level mt-3 inline-block">
-                <i class="fas fa-lock mr-1"></i>¾üÓÃ¼¶¼ÓÃÜ
-            </div>
+            <h1 class="text-3xl font-bold text-white mb-2">å®‰å…¨ç™»å½•</h1>
+            <p class="text-gray-300">å¤šé‡èº«ä»½éªŒè¯ä¿æŠ¤æ‚¨çš„è´¦æˆ·å®‰å…¨</p>
         </div>
         
-        <?php if (!empty($loginError)): ?>
-        <div class="bg-red-900/30 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6 glassmorphism">
-            <div class="flex items-center">
-                <i class="fas fa-exclamation-triangle mr-3 text-red-400"></i>
-                <p><?php echo htmlspecialchars($loginError]; ?></p>
+        <?php if (!empty($error)): ?>
+            <div class="bg-red-500/20 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6">
+                <i class="fas fa-exclamation-triangle mr-2"></i> <?php echo htmlspecialchars($error); ?>
             </div>
-        </div>
         <?php endif; ?>
         
-        <?php if ($twoFactorRequired): ?>
-        <!-- ¶şÒòËØÑéÖ¤±íµ¥ -->
-        <div id="twoFactorForm">
-            <div class="text-center mb-6">
-                <div class="bg-blue-900/30 border border-blue-500/50 text-blue-100 px-4 py-3 rounded-lg mb-6 glassmorphism">
-                    <p><i class="fas fa-info-circle mr-2"></i> ĞèÒª½øĞĞ¶şÒòËØÑéÖ¤</p>
-                </div>
-                <p class="text-gray-300 mb-2">ÇëÊäÈëÄúµÄÑéÖ¤Æ÷Ó¦ÓÃÖĞÏÔÊ¾µÄ6Î»ÑéÖ¤Âë</p>
-                <p class="text-gray-400 text-sm">ÓÃ»§Ãû: <?php echo htmlspecialchars($_SESSION['temp_username']]; ?></p>
+        <!-- ç™»å½•è¡¨å• -->
+        <form method="POST" action="/login" class="space-y-6">
+            <div>
+                <label for="email" class="block text-gray-300 text-sm font-medium mb-2">
+                    <i class="fas fa-envelope mr-2"></i>é‚®ç®±åœ°å€
+                </label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    placeholder="è¯·è¾“å…¥æ‚¨çš„é‚®ç®±åœ°å€">
             </div>
             
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="space-y-6">
-                <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-                
-                <div class="flex justify-center">
-                    <input type="text" name="two_factor_code" id="two_factor_code" 
-                        class="glassmorphism text-center w-48 px-4 py-3 rounded-lg text-white font-mono text-2xl tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        maxlength="6" inputmode="numeric" pattern="[0-9) {6}" autocomplete="one-time-code" required>
-                </div>
-                
-                <div>
-                    <button type="submit" name="two_factor_submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold">
-                        <i class="fas fa-shield-alt mr-2"></i>ÑéÖ¤²¢µÇÂ¼
-                    </button>
-                </div>
-                
-                <div class="text-center">
-                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="text-blue-400 hover:text-blue-300 text-sm">
-                        <i class="fas fa-arrow-left mr-1"></i>·µ»ØµÇÂ¼
-                    </a>
-                </div>
-            </form>
-        </div>
-        
-        <?php else: ?>
-        <!-- ±ê×¼µÇÂ¼±íµ¥ -->
-        <div id="emailAuthForm" class="auth-form">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="space-y-6">
-                <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-                
-                <div>
-                    <label class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-user mr-2"></i>ÓÃ»§Ãû»òÓÊÏä
-                    </label>
-                    <input type="text" id="username" name="username" required
+            <div>
+                <label for="password" class="block text-gray-300 text-sm font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>å¯†ç 
+                </label>
+                <div class="relative">
+                    <input type="password" id="password" name="password" required
                         class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        placeholder="ÇëÊäÈëÓÃ»§Ãû»òÓÊÏäµØÖ·">
-                </div>
-                
-                <div>
-                    <label class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-lock mr-2"></i>ÃÜÂë
-                    </label>
-                    <div class="relative">
-                        <input type="password" id="password" name="password" required
-                            class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all pr-12"
-                            placeholder="ÇëÊäÈëÃÜÂë">
-                        <button type="button" id="togglePassword" 
-                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input type="checkbox" id="remember_me" name="remember_me" 
-                            class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 glassmorphism">
-                        <label for="remember_me" class="ml-2 block text-sm text-gray-300">
-                            ¼Ç×¡ÎÒ
-                        </label>
-                    </div>
-                    <div class="text-sm">
-                        <a href="forgot-password.php" class="text-blue-400 hover:text-blue-300 font-medium">
-                            Íü¼ÇÃÜÂë?
-                        </a>
-                    </div>
-                </div>
-                
-                <div>
-                    <button type="submit" name="login_submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold">
-                        <i class="fas fa-sign-in-alt mr-2"></i>°²È«µÇÂ¼
+                        placeholder="è¯·è¾“å…¥æ‚¨çš„å¯†ç ">
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
+                        <i class="fas fa-eye"></i>
                     </button>
                 </div>
-                
-                <div class="text-center">
-                    <p class="text-gray-400 text-sm">
-                        Ã»ÓĞÕË»§? <a href="register.php" class="text-blue-400 hover:text-blue-300">×¢²á</a>
-                    </p>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500">
+                    <label for="remember" class="ml-2 block text-sm text-gray-300">è®°ä½æˆ‘</label>
                 </div>
-            </form>
-        </div>
-        <?php endif; ?>
+                <a href="/forgot-password" class="text-sm text-blue-400 hover:text-blue-300">å¿˜è®°å¯†ç ï¼Ÿ</a>
+            </div>
+            
+            <div>
+                <button type="submit" class="w-full btn-primary text-white py-3 px-4 rounded-lg font-medium">
+                    <i class="fas fa-sign-in-alt mr-2"></i>ç™»å½•
+                </button>
+            </div>
+        </form>
         
-        <!-- µÇÂ¼°²È«ÌáÊ¾ -->
-        <div class="mt-8 p-4 rounded-lg glassmorphism">
-            <p class="text-gray-300 text-sm mb-2">
-                <i class="fas fa-shield-alt text-green-400 mr-2"></i>Á¬½Ó°²È«ÌáÊ¾:
+        <!-- åˆ†éš”çº¿ -->
+        <div class="relative flex items-center my-8">
+            <div class="flex-grow border-t border-gray-600"></div>
+            <span class="flex-shrink mx-4 text-gray-400">æˆ–ä½¿ç”¨ä»¥ä¸‹æ–¹å¼ç™»å½•</span>
+            <div class="flex-grow border-t border-gray-600"></div>
+        </div>
+        
+        <!-- ç¤¾äº¤ç™»å½•æŒ‰é’® -->
+        <div class="grid grid-cols-2 gap-4">
+            <a href="/login/google" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
+                <i class="fab fa-google text-red-400 mr-2"></i> Googleç™»å½•
+            </a>
+            <a href="/login/github" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
+                <i class="fab fa-github text-gray-300 mr-2"></i> GitHubç™»å½•
+            </a>
+        </div>
+        
+        <!-- æ³¨å†Œé“¾æ¥ -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-400">
+                è¿˜æ²¡æœ‰è´¦å·ï¼Ÿ
+                <a href="/register" class="text-blue-400 hover:text-blue-300">ç«‹å³æ³¨å†Œ</a>
             </p>
-            <ul class="text-gray-400 text-xs space-y-1 pl-6">
-                <li>¡¤ ÇëÈ·ÈÏÄúÕıÔÚ·ÃÎÊÕıÈ·µÄÍøÕ¾µØÖ·</li>
-                <li>¡¤ ÎÒÃÇ´Ó²»Í¨¹ıµç×ÓÓÊ¼şÇëÇóÄúµÄÃÜÂë</li>
-                <li>¡¤ ÇëÎğÔÚ¹«¹²Éè±¸ÉÏÑ¡Ôñ"¼Ç×¡ÎÒ"</li>
-            </ul>
         </div>
     </div>
     
     <script>
-        // Éú³ÉÁ¿×ÓÁ£×Ó±³¾°
-        document.addEventListener('DOMContentLoaded', function() {
-            const particlesContainer = document.getElementById('quantum-particles'];
-            const particleCount = 50;
+        // åˆ‡æ¢å¯†ç æ˜¾ç¤º/éšè—
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div'];
-                particle.className = 'quantum-particle';
-                
-                // Ëæ»úÎ»ÖÃ
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.left = `${Math.random() * 100}%`;
-                
-                // Ëæ»ú´óĞ¡
-                const size = Math.random() * 6 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Ëæ»ú¶¯»­ÑÓ³Ù
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesContainer.appendChild(particle];
-            }
-        }];
-        
-        // ÇĞ»»ÃÜÂë¿É¼ûĞÔ
-        document.getElementById('togglePassword')?.addEventListener('click', function() {
-            const passwordInput = document.getElementById('password'];
-            const toggleIcon = this.querySelector('i'];
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye'];
-                toggleIcon.classList.add('fa-eye-slash'];
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash'];
-                toggleIcon.classList.add('fa-eye'];
-            }
-        }];
+            // åˆ‡æ¢å›¾æ ‡
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
     </script>
 </body>
 </html>

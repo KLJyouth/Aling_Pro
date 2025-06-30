@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     /**
-     * ´´½¨ĞÂµÄ¿ØÖÆÆ÷ÊµÀı
+     * åˆ›å»ºæ–°çš„æ§åˆ¶å™¨å®ä¾‹
      *
      * @return void
      */
@@ -22,7 +22,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * ÏÔÊ¾ÓÃ»§ÒÇ±íÅÌ
+     * æ˜¾ç¤ºç”¨æˆ·ä»ªè¡¨ç›˜
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
@@ -31,36 +31,36 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         
-        // »ñÈ¡µ±Ç°»áÔ±¶©ÔÄ
+        // è·å–å½“å‰ä¼šå‘˜ç­‰çº§
         $subscription = $user->currentSubscription;
         $membershipLevel = $user->getCurrentMembershipLevel();
         
-        // »ñÈ¡APIÊ¹ÓÃÇé¿ö
+        // è·å–APIä½¿ç”¨æƒ…å†µ
         $apiUsageToday = $user->getQuotaUsage("api");
         $apiQuota = $membershipLevel ? $membershipLevel->api_quota : 0;
         $apiUsagePercent = $apiQuota > 0 ? min(100, round(($apiUsageToday / $apiQuota) * 100)) : 0;
         
-        // »ñÈ¡AIÊ¹ÓÃÇé¿ö
+        // è·å–AIä½¿ç”¨æƒ…å†µ
         $aiUsageToday = $user->getQuotaUsage("ai");
         $aiQuota = $membershipLevel ? $membershipLevel->ai_quota : 0;
         $aiUsagePercent = $aiQuota > 0 ? min(100, round(($aiUsageToday / $aiQuota) * 100)) : 0;
         
-        // »ñÈ¡´æ´¢Ê¹ÓÃÇé¿ö
+        // è·å–å­˜å‚¨ä½¿ç”¨æƒ…å†µ
         $storageUsed = $user->getQuotaUsage("storage");
         $storageQuota = $membershipLevel ? $membershipLevel->storage_quota : 0;
         $storageUsagePercent = $storageQuota > 0 ? min(100, round(($storageUsed / $storageQuota) * 100)) : 0;
         
-        // »ñÈ¡»ı·ÖĞÅÏ¢
+        // è·å–ç§¯åˆ†ä¿¡æ¯
         $pointService = app(PointService::class);
         $pointsStats = $pointService->getPointsStats($user);
         $recentPoints = $pointService->getPointsHistory($user, 5);
         
-        // »ñÈ¡ÍÆ¼öĞÅÏ¢
+        // è·å–æ¨èä¿¡æ¯
         $referralService = app(ReferralService::class);
         $referralStats = $referralService->getReferralStats($user);
         $referralLink = $referralService->getReferralLink($user);
         
-        // »ñÈ¡×î½üµÄAPIµ÷ÓÃ¼ÇÂ¼
+        // è·å–æœ€è¿‘APIè°ƒç”¨è®°å½•
         $recentApiCalls = $user->apiKeys()
             ->with("logs")
             ->get()
@@ -70,7 +70,7 @@ class DashboardController extends Controller
             ->sortByDesc("created_at")
             ->take(5);
         
-        // »ñÈ¡Ê¹ÓÃÇ÷ÊÆÊı¾İ
+        // è·å–ä½¿ç”¨é‡è¶‹åŠ¿æ•°æ®
         $usageTrend = $this->getUsageTrendData($user);
         
         return view("dashboard.index", compact(
@@ -96,18 +96,18 @@ class DashboardController extends Controller
     }
     
     /**
-     * »ñÈ¡Ê¹ÓÃÇ÷ÊÆÊı¾İ
+     * è·å–ä½¿ç”¨é‡è¶‹åŠ¿æ•°æ®
      *
      * @param  \App\Models\User  $user
      * @return array
      */
     protected function getUsageTrendData($user)
     {
-        // »ñÈ¡¹ıÈ¥7ÌìµÄÊı¾İ
+        // è·å–è¿‡å»7å¤©çš„æ•°æ®
         $startDate = now()->subDays(6)->startOfDay();
         $endDate = now()->endOfDay();
         
-        // ³õÊ¼»¯Êı¾İ½á¹¹
+        // åˆå§‹åŒ–æ•°æ®ç»“æ„
         $dates = [];
         $apiData = [];
         $aiData = [];
@@ -116,14 +116,14 @@ class DashboardController extends Controller
             $dateString = $date->format("Y-m-d");
             $dates[] = $date->format("m-d");
             
-            // ²éÑ¯APIÊ¹ÓÃÁ¿
+            // æŸ¥è¯¢APIä½¿ç”¨é‡
             $apiUsage = QuotaUsage::where("user_id", $user->id)
                 ->where("quota_type", "api")
                 ->whereDate("created_at", $date)
                 ->sum("amount");
             $apiData[] = $apiUsage;
             
-            // ²éÑ¯AIÊ¹ÓÃÁ¿
+            // æŸ¥è¯¢AIä½¿ç”¨é‡
             $aiUsage = QuotaUsage::where("user_id", $user->id)
                 ->where("quota_type", "ai")
                 ->whereDate("created_at", $date)

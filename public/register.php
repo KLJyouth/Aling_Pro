@@ -1,163 +1,323 @@
 <?php
 /**
- * AlingAi Pro ÓÃ»§°²È«×¢²áÒ³Ãæ
- * Ìá¹©°²È«µÄÓÃ»§×¢²áÁ÷³ÌºÍ¸öÈËĞÅÏ¢±£»¤
+ * AlingAi Pro - æ³¨å†Œå¤„ç†
  * 
- * @version 1.0.0
- * @author AlingAi Team
+ * å¤„ç†ç”¨æˆ·æ³¨å†Œè¯·æ±‚ï¼ŒåŒ…æ‹¬é‚®ç®±éªŒè¯å’Œæ¨èç åŠŸèƒ½
  */
 
-// ÉèÖÃÒ³Ãæ°²È«Í·
-header('Content-Security-Policy: default-src \'self\'; script-src \'self\' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com \'unsafe-inline\'; style-src \'self\' https://cdnjs.cloudflare.com https://fonts.googleapis.com \'unsafe-inline\'; font-src \'self\' https://fonts.gstatic.com; img-src \'self\' data:;'];
-header('X-Content-Type-Options: nosniff'];
-header('X-Frame-Options: DENY'];
-header('X-XSS-Protection: 1; mode=block'];
+// å¯åŠ¨ä¼šè¯
+session_start();
 
-// Æô¶¯»á»°
-session_start(];
+// è®¾ç½®å¢å¼ºçš„å®‰å…¨å¤´éƒ¨
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
-// ÒıÈëÓÃ»§°²È«Àà
-require_once __DIR__ . '/includes/UserSecurity.php';
-
-use AlingAi\Security\UserSecurity;
-
-// ³õÊ¼»¯±äÁ¿
-$registerError = '';
-$registerSuccess = false;
-$csrfToken = UserSecurity::generateCsrfToken('register_form'];
-
-// ´¦ÀíÒÑµÇÂ¼ÓÃ»§
-if (UserSecurity::validateSession(false, null)) {
-    header('Location: dashboard.php'];
+// æ£€æŸ¥æ˜¯å¦å·²ç™»å½•
+if (isset($_SESSION['user_id'])) {
+    // å·²ç™»å½•ï¼Œé‡å®šå‘åˆ°ä»ªè¡¨ç›˜
+    header('Location: /dashboard');
     exit;
 }
 
-// ´¦Àí×¢²áÇëÇó
+// å¤„ç†æ¨èç 
+$referralCode = '';
+if (isset($_GET['ref'])) {
+    $referralCode = $_GET['ref'];
+    $_SESSION['referral_code'] = $referralCode;
+} elseif (isset($_SESSION['referral_code'])) {
+    $referralCode = $_SESSION['referral_code'];
+}
+
+// å¦‚æœæœ‰æ¨èç ï¼ŒéªŒè¯å…¶æœ‰æ•ˆæ€§
+if (!empty($referralCode)) {
+    $referrerExists = checkReferralCode($referralCode);
+    if (!$referrerExists) {
+        $referralCode = '';
+        unset($_SESSION['referral_code']);
+    }
+}
+
+// å¤„ç†è¡¨å•æäº¤
+$error = '';
+$success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // CSRF±£»¤
-    if (!isset($_POST['csrf_token']) || !UserSecurity::validateCsrfToken($_POST['csrf_token'],  'register_form')) {
-        $registerError = '°²È«ÑéÖ¤Ê§°Ü£¬ÇëÖØĞÂ³¢ÊÔ×¢²á';
+    // éªŒè¯è¡¨å•æ•°æ®
+    $name = trim($_POST['name'] ?? '');
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $password = $_POST['password'] ?? '';
+    $passwordConfirmation = $_POST['password_confirmation'] ?? '';
+    $terms = isset($_POST['terms']);
+    $referralCode = $_POST['referral_code'] ?? '';
+    
+    // éªŒè¯æ•°æ®
+    if (empty($name)) {
+        $error = 'è¯·è¾“å…¥æ‚¨çš„å§“å';
+    } elseif (!$email) {
+        $error = 'è¯·è¾“å…¥æœ‰æ•ˆçš„ç”µå­é‚®ä»¶åœ°å€';
+    } elseif (empty($password)) {
+        $error = 'è¯·è¾“å…¥å¯†ç ';
+    } elseif (strlen($password) < 8) {
+        $error = 'å¯†ç è‡³å°‘éœ€è¦8ä¸ªå­—ç¬¦';
+    } elseif ($password !== $passwordConfirmation) {
+        $error = 'ä¸¤æ¬¡è¾“å…¥çš„å¯†ç ä¸ä¸€è‡´';
+    } elseif (!$terms) {
+        $error = 'æ‚¨å¿…é¡»åŒæ„æœåŠ¡æ¡æ¬¾å’Œéšç§æ”¿ç­–';
+    } elseif (!empty($referralCode) && !checkReferralCode($referralCode)) {
+        $error = 'æ— æ•ˆçš„æ¨èç ';
     } else {
-        // »ñÈ¡±íµ¥Êı¾İ
-        $username = trim($_POST['username'] ?? ''];
-        $email = trim($_POST['email'] ?? ''];
-        $password = $_POST['password'] ?? '';
-        $confirmPassword = $_POST['confirm_password'] ?? '';
-        $agreeTerms = isset($_POST['agree_terms']];
-        
-        // »ù´¡ÑéÖ¤
-        if (empty($username) || empty($email) || empty($password)) {
-            $registerError = 'ËùÓĞ×Ö¶Î¶¼ÊÇ±ØÌîµÄ';
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $registerError = 'ÇëÊäÈëÓĞĞ§µÄµç×ÓÓÊÏäµØÖ·';
-        } elseif ($password !== $confirmPassword) {
-            $registerError = 'Á½´ÎÊäÈëµÄÃÜÂë²»Æ¥Åä';
-        } elseif (strlen($password) < 8) {
-            $registerError = 'ÃÜÂë³¤¶È±ØĞëÖÁÉÙÎª8¸ö×Ö·û';
-        } elseif (!$agreeTerms) {
-            $registerError = 'Äú±ØĞëÍ¬Òâ·şÎñÌõ¿îºÍÒşË½Õş²ß';
+        // æ£€æŸ¥é‚®ç®±æ˜¯å¦å·²å­˜åœ¨
+        if (emailExists($email)) {
+            $error = 'è¯¥é‚®ç®±å·²è¢«æ³¨å†Œ';
         } else {
-            // ¼ì²éÃÜÂëÇ¿¶È
-            $passwordStrength = UserSecurity::checkPasswordStrength($password];
-            if ($passwordStrength['strength'] === 'weak') {
-                $registerError = 'ÃÜÂëÇ¿¶È²»×ã: ' . implode(', ', $passwordStrength['feedback']];
-            } else {
-                try {
-                    // ¼ÓÔØÅäÖÃÎÄ¼ş
-                    $configFile = dirname(__DIR__) . '/config/config.php';
-                    if (file_exists($configFile)) {
-                        $config = require $configFile;
-                        
-                        // Á¬½ÓÊı¾İ¿â
-                        if ($config['database']['type'] === 'sqlite') {
-                            $dbPath = dirname(__DIR__) . '/' . $config['database']['path'];
-                            $pdo = new PDO("sqlite:{$dbPath}"];
-                        } else {
-                            $host = $config['database']['host'];
-                            $port = $config['database']['port'] ?? 3306;
-                            $dbname = $config['database']['database'];
-                            $dbuser = $config['database']['username'];
-                            $dbpass = $config['database']['password'];
-                            
-                            $pdo = new PDO("mysql:host={$host};port={$port};dbname={$dbname}", $dbuser, $dbpass];
-                        }
-                        
-                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION];
-                        
-                        // ¼ì²éÓÃ»§Ãû»òÓÊÏäÊÇ·ñÒÑ´æÔÚ
-                        $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ? OR email = ?"];
-                        $stmt->execute([$username, $email]];
-                        
-                        if ($stmt->fetchColumn() > 0) {
-                            $registerError = 'ÓÃ»§Ãû»òµç×ÓÓÊÏäÒÑ±»Ê¹ÓÃ';
-                        } else {
-                            // ´´½¨ÓÃ»§
-                            $hashedPassword = UserSecurity::hashPassword($password];
-                            
-                            $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role, status, created_at) 
-                                               VALUES (?, ?, ?, 'user', 'active', NOW())"];
-                            $stmt->execute([$username, $email, $hashedPassword]];
-                            
-                            $userId = $pdo->lastInsertId(];
-                            
-                            // ´´½¨Ä¬ÈÏÓÃ»§Åä¶î
-                            $stmt = $pdo->prepare("INSERT INTO user_usage_quota (user_id, quota_type, limit_value, reset_period, next_reset) 
-                                               VALUES (?, 'tokens', 100000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))"];
-                            $stmt->execute([$userId]];
-                            
-                            $stmt = $pdo->prepare("INSERT INTO user_usage_quota (user_id, quota_type, limit_value, reset_period, next_reset) 
-                                               VALUES (?, 'requests', 1000, 'monthly', DATE_ADD(CURRENT_DATE(), INTERVAL 1 MONTH))"];
-                            $stmt->execute([$userId]];
-                            
-                            // ¼ÇÂ¼×¢²áÊÂ¼ş
-                            UserSecurity::logSecurityEvent($userId, 'user_register', 'ĞÂÓÃ»§×¢²á', 'info', 'success'];
-                            
-                            $registerSuccess = true;
-                            
-                            // ×Ô¶¯µÇÂ¼ÓÃ»§
-                            $_SESSION['user_id'] = $userId;
-                            $_SESSION['username'] = $username;
-                            $_SESSION['email'] = $email;
-                            $_SESSION['user_role'] = 'user';
-                            $_SESSION['last_activity'] = time(];
-                            
-                            // Éú³É°²È«»á»°ID
-                            session_regenerate_id(true];
-                            
-                            // ÖØ¶¨Ïòµ½»¶Ó­Ò³Ãæ
-                            header('Location: welcome.php'];
-                            exit;
-                        }
-                    } else {
-                        $registerError = 'ÏµÍ³ÅäÖÃ´íÎó£¬ÇëÁªÏµ¹ÜÀíÔ±';
-                    }
-                } catch (Exception $e) {
-                    $registerError = '×¢²á¹ı³ÌÖĞ·¢Éú´íÎó£¬ÇëÉÔºóÔÙÊÔ';
-                    error_log('Registration error: ' . $e->getMessage()];
+            // åˆ›å»ºç”¨æˆ·
+            $userId = createUser($name, $email, $password);
+            
+            if ($userId) {
+                // å¤„ç†æ¨èç 
+                if (!empty($referralCode)) {
+                    processReferral($userId, $referralCode);
                 }
+                
+                // ç”ŸæˆéªŒè¯ä»¤ç‰Œå¹¶å‘é€éªŒè¯é‚®ä»¶
+                $verificationToken = generateVerificationToken($userId);
+                sendVerificationEmail($email, $name, $userId, $verificationToken);
+                
+                // è‡ªåŠ¨ç™»å½•
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['user_name'] = $name;
+                $_SESSION['user_email'] = $email;
+                $_SESSION['user_role'] = 'user';
+                
+                // è®°å½•æ³¨å†Œä¿¡æ¯
+                recordRegistration($userId, $_SERVER['REMOTE_ADDR']);
+                
+                // é‡å®šå‘åˆ°ä»ªè¡¨ç›˜ï¼Œå¹¶æ˜¾ç¤ºéªŒè¯é‚®ä»¶æç¤º
+                header('Location: /dashboard?verified=0');
+                exit;
+            } else {
+                $error = 'æ³¨å†Œå¤±è´¥ï¼Œè¯·ç¨åå†è¯•';
             }
         }
     }
 }
 
-// ¼ì²éIP·çÏÕ
-$ipRisk = UserSecurity::assessIpRisk($_SERVER['REMOTE_ADDR']];
-$ipRiskLevel = $ipRisk['level'];
+/**
+ * æ£€æŸ¥æ¨èç æ˜¯å¦æœ‰æ•ˆ
+ * 
+ * @param string $code æ¨èç 
+ * @return bool æ˜¯å¦æœ‰æ•ˆ
+ */
+function checkReferralCode($code) {
+    $db = connectToDatabase();
+    $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
+    $stmt->execute([$code]);
+    return $stmt->fetch() !== false;
+}
+
+/**
+ * æ£€æŸ¥é‚®ç®±æ˜¯å¦å·²å­˜åœ¨
+ * 
+ * @param string $email é‚®ç®±
+ * @return bool æ˜¯å¦å­˜åœ¨
+ */
+function emailExists($email) {
+    $db = connectToDatabase();
+    $stmt = $db->prepare('SELECT id FROM users WHERE email = ?');
+    $stmt->execute([$email]);
+    return $stmt->fetch() !== false;
+}
+
+/**
+ * åˆ›å»ºæ–°ç”¨æˆ·
+ * 
+ * @param string $name å§“å
+ * @param string $email é‚®ç®±
+ * @param string $password å¯†ç 
+ * @return int|false æˆåŠŸæ—¶è¿”å›ç”¨æˆ·IDï¼Œå¤±è´¥æ—¶è¿”å›false
+ */
+function createUser($name, $email, $password) {
+    $db = connectToDatabase();
+    
+    // ç”Ÿæˆå¯†ç å“ˆå¸Œ
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    
+    // ç”Ÿæˆå”¯ä¸€æ¨èç 
+    $referralCode = generateReferralCode();
+    
+    try {
+        $stmt = $db->prepare('INSERT INTO users (name, email, password, referral_code, role, status, created_at) VALUES (?, ?, ?, ?, "user", "active", NOW())');
+        $stmt->execute([$name, $email, $passwordHash, $referralCode]);
+        return $db->lastInsertId();
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+/**
+ * ç”Ÿæˆå”¯ä¸€æ¨èç 
+ * 
+ * @return string æ¨èç 
+ */
+function generateReferralCode() {
+    $db = connectToDatabase();
+    
+    do {
+        // ç”Ÿæˆ8ä½éšæœºå­—æ¯æ•°å­—ç»„åˆ
+        $code = substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+        
+        // æ£€æŸ¥æ˜¯å¦å·²å­˜åœ¨
+        $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
+        $stmt->execute([$code]);
+        $exists = $stmt->fetch() !== false;
+    } while ($exists);
+    
+    return $code;
+}
+
+/**
+ * å¤„ç†æ¨èæ³¨å†Œ
+ * 
+ * @param int $userId æ–°ç”¨æˆ·ID
+ * @param string $referralCode æ¨èç 
+ */
+function processReferral($userId, $referralCode) {
+    $db = connectToDatabase();
+    
+    // æŸ¥æ‰¾æ¨èäºº
+    $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
+    $stmt->execute([$referralCode]);
+    $referrer = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($referrer) {
+        // è®°å½•æ¨èå…³ç³»
+        $stmt = $db->prepare('INSERT INTO referrals (referrer_id, referred_id, created_at) VALUES (?, ?, NOW())');
+        $stmt->execute([$referrer['id'], $userId]);
+        
+        // è¿™é‡Œå¯ä»¥æ·»åŠ å¥–åŠ±é€»è¾‘ï¼Œå¦‚ç§¯åˆ†ã€ä¼˜æƒ åˆ¸ç­‰
+    }
+}
+
+/**
+ * ç”Ÿæˆé‚®ç®±éªŒè¯ä»¤ç‰Œ
+ * 
+ * @param int $userId ç”¨æˆ·ID
+ * @return string éªŒè¯ä»¤ç‰Œ
+ */
+function generateVerificationToken($userId) {
+    $token = bin2hex(random_bytes(32));
+    $expires = date('Y-m-d H:i:s', time() + 60*60*24); // 24å°æ—¶æœ‰æ•ˆæœŸ
+    
+    $db = connectToDatabase();
+    $stmt = $db->prepare('INSERT INTO email_verifications (user_id, token, expires_at) VALUES (?, ?, ?)');
+    $stmt->execute([$userId, $token, $expires]);
+    
+    return $token;
+}
+
+/**
+ * å‘é€éªŒè¯é‚®ä»¶
+ * 
+ * @param string $email é‚®ç®±
+ * @param string $name å§“å
+ * @param int $userId ç”¨æˆ·ID
+ * @param string $token éªŒè¯ä»¤ç‰Œ
+ */
+function sendVerificationEmail($email, $name, $userId, $token) {
+    $verificationUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/email/verify?id=' . $userId . '&token=' . $token;
+    
+    $subject = 'AlingAi Pro - éªŒè¯æ‚¨çš„é‚®ç®±';
+    
+    $message = "
+    <html>
+    <head>
+        <title>éªŒè¯æ‚¨çš„é‚®ç®±</title>
+    </head>
+    <body>
+        <div style='max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;'>
+            <div style='background-color: #6B46C1; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;'>
+                <h1>éªŒè¯æ‚¨çš„é‚®ç®±</h1>
+            </div>
+            <div style='background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px;'>
+                <p>å°Šæ•¬çš„ {$name}ï¼Œ</p>
+                <p>æ„Ÿè°¢æ‚¨æ³¨å†Œ AlingAi Proï¼è¯·ç‚¹å‡»ä¸‹é¢çš„æŒ‰é’®éªŒè¯æ‚¨çš„é‚®ç®±åœ°å€ï¼š</p>
+                <p style='text-align: center;'>
+                    <a href='{$verificationUrl}' style='display: inline-block; background-color: #6B46C1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;'>éªŒè¯é‚®ç®±</a>
+                </p>
+                <p>æˆ–è€…ï¼Œæ‚¨å¯ä»¥å¤åˆ¶ä»¥ä¸‹é“¾æ¥å¹¶ç²˜è´´åˆ°æµè§ˆå™¨åœ°å€æ ä¸­ï¼š</p>
+                <p>{$verificationUrl}</p>
+                <p>æ­¤é“¾æ¥å°†åœ¨24å°æ—¶åè¿‡æœŸã€‚</p>
+                <p>å¦‚æœæ‚¨æ²¡æœ‰æ³¨å†Œ AlingAi Proï¼Œè¯·å¿½ç•¥æ­¤é‚®ä»¶ã€‚</p>
+                <p>è°¢è°¢ï¼<br>AlingAi Pro å›¢é˜Ÿ</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    ";
+    
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
+    $headers .= "From: AlingAi Pro <noreply@alingai.pro>\r\n";
+    
+    // å®é™…é¡¹ç›®ä¸­ï¼Œåº”è¯¥ä½¿ç”¨ä¸“ä¸šçš„é‚®ä»¶å‘é€æœåŠ¡
+    mail($email, $subject, $message, $headers);
+}
+
+/**
+ * è®°å½•ç”¨æˆ·æ³¨å†Œ
+ * 
+ * @param int $userId ç”¨æˆ·ID
+ * @param string $ip ç”¨æˆ·IPåœ°å€
+ */
+function recordRegistration($userId, $ip) {
+    $db = connectToDatabase();
+    $stmt = $db->prepare('INSERT INTO registration_history (user_id, ip_address, user_agent) VALUES (?, ?, ?)');
+    $stmt->execute([$userId, $ip, $_SERVER['HTTP_USER_AGENT']]);
+}
+
+/**
+ * è¿æ¥åˆ°æ•°æ®åº“
+ * 
+ * @return PDO æ•°æ®åº“è¿æ¥
+ */
+function connectToDatabase() {
+    $host = 'localhost';
+    $dbname = 'alingai_pro';
+    $username = 'root';
+    $password = '';
+    
+    try {
+        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $db;
+    } catch (PDOException $e) {
+        die('æ•°æ®åº“è¿æ¥å¤±è´¥: ' . $e->getMessage());
+    }
+}
+
+// æ˜¾ç¤ºæ³¨å†Œé¡µé¢
 ?>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>×¢²áÕË»§ - AlingAi Pro</title>
-    <meta name="description" content="×¢²áAlingAi ProÕË»§£¬¿ªÊ¼ÖÇÄÜ¶Ô»°Ö®ÂÃ">
+    <title>å®‰å…¨æ³¨å†Œ - AlingAi Pro</title>
+    <meta name="description" content="AlingAi Proé›¶ä¿¡ä»»å®‰å…¨æ³¨å†Œç³»ç»Ÿ">
     
-    <!-- ºËĞÄ×ÊÔ´ -->
+    <!-- æ ¸å¿ƒèµ„æº -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <!-- TailwindÅäÖÃ -->
+    <!-- å¯†ç å¼ºåº¦æ£€æµ‹ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+    
+    <!-- Tailwindé…ç½® -->
     <script>
         tailwind.config = {
             theme: {
@@ -170,7 +330,7 @@ $ipRiskLevel = $ipRisk['level'];
                         'cyber-orange': '#F59E0B'
                     },
                     fontFamily: {
-                        'mono': ['JetBrains Mono', 'monospace'], 
+                        'mono': ['JetBrains Mono', 'monospace'],
                         'sans': ['Inter', 'sans-serif']
                     }
                 }
@@ -180,299 +340,252 @@ $ipRiskLevel = $ipRisk['level'];
     
     <style>
         body {
-            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%];
+            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
         
         .glassmorphism {
-            background: rgba(255, 255, 255, 0.05];
-            backdrop-filter: blur(20px];
-            border: 1px solid rgba(255, 255, 255, 0.1];
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2];
-        }
-        
-        .quantum-particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: radial-gradient(circle, rgba(107, 70, 193, 0.8], transparent];
-            border-radius: 50%;
-            animation: quantumFloat 8s ease-in-out infinite;
-        }
-        
-        @keyframes quantumFloat {
-            0%, 100% { 
-                transform: translateY(0px) translateX(0px) rotate(0deg];
-                opacity: 0.3;
-            }
-            25% { 
-                transform: translateY(-30px) translateX(15px) rotate(90deg];
-                opacity: 0.8;
-            }
-            50% { 
-                transform: translateY(-15px) translateX(-20px) rotate(180deg];
-                opacity: 0.5;
-            }
-            75% { 
-                transform: translateY(-25px) translateX(25px) rotate(270deg];
-                opacity: 0.9;
-            }
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
         }
         
         .btn-primary {
-            background: linear-gradient(135deg, #6B46C1, #3B82F6];
+            background: linear-gradient(135deg, #6B46C1, #3B82F6);
             border: none;
             transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
         
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2], transparent];
-            transition: left 0.5s;
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.4);
         }
         
-        .btn-primary:hover::before {
-            left: 100%;
+        .password-strength-bar {
+            height: 6px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
+            background-size: 400% 100%;
         }
         
-        .password-strength {
-            height: 4px;
+        .strength-weak { background-position: 0% 50%; width: 25%; }
+        .strength-fair { background-position: 33% 50%; width: 50%; }
+        .strength-good { background-position: 66% 50%; width: 75%; }
+        .strength-strong { background-position: 100% 50%; width: 100%; }
+        
+        .social-btn {
             transition: all 0.3s ease;
         }
         
-        .strength-weak {
-            width: 33%;
-            background-color: #EF4444;
-        }
-        
-        .strength-medium {
-            width: 66%;
-            background-color: #F59E0B;
-        }
-        
-        .strength-strong {
-            width: 100%;
-            background-color: #10B981;
+        .social-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-    <!-- Á¿×ÓÁ£×Ó±³¾° -->
-    <div id="quantum-particles" class="fixed inset-0 pointer-events-none z-0"></div>
-    
-    <!-- ×¢²á±íµ¥ÈİÆ÷ -->
+    <!-- æ³¨å†Œå®¹å™¨ -->
     <div class="glassmorphism rounded-3xl p-8 w-full max-w-xl shadow-2xl z-10 relative">
-        <!-- LogoºÍ±êÌâ -->
+        <!-- Logoå’Œæ ‡é¢˜ -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 mx-auto mb-4 glassmorphism rounded-full flex items-center justify-center">
                 <i class="fas fa-user-plus text-3xl text-blue-400"></i>
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">´´½¨ÕË»§</h1>
-            <p class="text-gray-300">¼ÓÈëAlingAi Pro£¬¿ªÆôÖÇÄÜ¶Ô»°Ö®ÂÃ</p>
+            <h1 class="text-3xl font-bold text-white mb-2">åˆ›å»ºå®‰å…¨è´¦æˆ·</h1>
+            <p class="text-gray-300">åŠ å…¥AlingAi Proï¼Œä½“éªŒæœ€å…ˆè¿›çš„AIæœåŠ¡</p>
         </div>
         
-        <?php if (!empty($registerError)): ?>
-        <div class="bg-red-900/30 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6 glassmorphism">
-            <div class="flex items-center">
-                <i class="fas fa-exclamation-triangle mr-3 text-red-400"></i>
-                <p><?php echo htmlspecialchars($registerError]; ?></p>
+        <?php if (!empty($error)): ?>
+            <div class="bg-red-500/20 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6">
+                <i class="fas fa-exclamation-triangle mr-2"></i> <?php echo htmlspecialchars($error); ?>
             </div>
-        </div>
         <?php endif; ?>
         
-        <!-- ×¢²á±íµ¥ -->
-        <form id="registerForm" method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']]; ?>" class="space-y-6">
-            <input type="hidden" name="csrf_token" value="<?php echo $csrfToken; ?>">
-            
-            <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-user mr-2"></i>ÓÃ»§Ãû
-                </label>
-                <input type="text" id="username" name="username" required
-                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="ÇëÑ¡ÔñÒ»¸ö¶ÀÌØµÄÓÃ»§Ãû" value="<?php echo htmlspecialchars($_POST['username'] ?? '']; ?>">
+        <!-- æ³¨å†Œè¡¨å• -->
+        <form method="POST" action="/register" class="space-y-6">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label for="name" class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-user mr-2"></i>å§“å
+                    </label>
+                    <input type="text" id="name" name="name" required
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="è¯·è¾“å…¥æ‚¨çš„å§“å"
+                        value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-envelope mr-2"></i>é‚®ç®±åœ°å€
+                    </label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="è¯·è¾“å…¥æ‚¨çš„é‚®ç®±åœ°å€"
+                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
+                </div>
             </div>
             
             <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-envelope mr-2"></i>µç×ÓÓÊÏä
-                </label>
-                <input type="email" id="email" name="email" required
-                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="ÄúµÄµç×ÓÓÊÏäµØÖ·" value="<?php echo htmlspecialchars($_POST['email'] ?? '']; ?>">
-            </div>
-            
-            <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-lock mr-2"></i>ÉèÖÃÃÜÂë
+                <label for="password" class="block text-gray-300 text-sm font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>å¯†ç 
                 </label>
                 <div class="relative">
                     <input type="password" id="password" name="password" required
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all pr-12"
-                        placeholder="ÉèÖÃÒ»¸öÇ¿ÃÜÂë">
-                    <button type="button" id="togglePassword" 
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white">
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="è¯·è®¾ç½®æ‚¨çš„å¯†ç ï¼ˆè‡³å°‘8ä¸ªå­—ç¬¦ï¼‰">
+                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
-                <!-- ÃÜÂëÇ¿¶ÈÖ¸Ê¾Æ÷ -->
+                
+                <!-- å¯†ç å¼ºåº¦æŒ‡ç¤ºå™¨ -->
                 <div class="mt-2">
-                    <div class="bg-gray-700 rounded-full h-1">
-                        <div id="passwordStrength" class="password-strength rounded-full"></div>
+                    <div class="w-full bg-gray-700 rounded-full h-1.5">
+                        <div id="passwordStrength" class="password-strength-bar rounded-full"></div>
                     </div>
-                    <p id="passwordFeedback" class="text-xs mt-1 text-gray-400"></p>
+                    <p id="passwordFeedback" class="text-xs text-gray-400 mt-1">è¯·è¾“å…¥è‡³å°‘8ä¸ªå­—ç¬¦çš„å¯†ç </p>
                 </div>
             </div>
             
             <div>
-                <label class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-lock mr-2"></i>È·ÈÏÃÜÂë
+                <label for="password_confirmation" class="block text-gray-300 text-sm font-medium mb-2">
+                    <i class="fas fa-lock mr-2"></i>ç¡®è®¤å¯†ç 
                 </label>
-                <input type="password" id="confirm_password" name="confirm_password" required
+                <input type="password" id="password_confirmation" name="password_confirmation" required
                     class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="ÔÙ´ÎÊäÈëÄúµÄÃÜÂë">
+                    placeholder="è¯·å†æ¬¡è¾“å…¥å¯†ç ">
             </div>
             
-            <div class="flex items-start">
-                <div class="flex items-center h-5">
-                    <input id="agree_terms" name="agree_terms" type="checkbox" required
-                        class="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 glassmorphism">
+            <?php if (!empty($referralCode)): ?>
+                <div>
+                    <label for="referral_code" class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-user-friends mr-2"></i>æ¨èç 
+                    </label>
+                    <input type="text" id="referral_code" name="referral_code" readonly
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-gray-700/50"
+                        value="<?php echo htmlspecialchars($referralCode); ?>">
+                    <p class="text-green-400 text-xs mt-1">
+                        <i class="fas fa-check-circle mr-1"></i>æ‚¨æ­£åœ¨ä½¿ç”¨æ¨èç æ³¨å†Œï¼Œæ³¨å†ŒæˆåŠŸååŒæ–¹éƒ½å°†è·å¾—å¥–åŠ±ï¼
+                    </p>
                 </div>
-                <label for="agree_terms" class="ml-3 block text-sm text-gray-300">
-                    ÎÒÍ¬Òâ <a href="terms.php" class="text-blue-400 hover:text-blue-300">·şÎñÌõ¿î</a> ºÍ <a href="privacy.php" class="text-blue-400 hover:text-blue-300">ÒşË½Õş²ß</a>
+            <?php else: ?>
+                <div>
+                    <label for="referral_code" class="block text-gray-300 text-sm font-medium mb-2">
+                        <i class="fas fa-user-friends mr-2"></i>æ¨èç ï¼ˆå¯é€‰ï¼‰
+                    </label>
+                    <input type="text" id="referral_code" name="referral_code"
+                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                        placeholder="å¦‚æœæ‚¨æœ‰æ¨èç ï¼Œè¯·åœ¨æ­¤å¤„è¾“å…¥"
+                        value="<?php echo htmlspecialchars($_POST['referral_code'] ?? ''); ?>">
+                </div>
+            <?php endif; ?>
+            
+            <div class="flex items-center">
+                <input id="terms" name="terms" type="checkbox" required
+                    class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
+                    <?php echo isset($_POST['terms']) ? 'checked' : ''; ?>>
+                <label for="terms" class="ml-2 block text-sm text-gray-300">
+                    æˆ‘å·²é˜…è¯»å¹¶åŒæ„ <a href="/terms" class="text-blue-400 hover:text-blue-300">æœåŠ¡æ¡æ¬¾</a> å’Œ <a href="/privacy" class="text-blue-400 hover:text-blue-300">éšç§æ”¿ç­–</a>
                 </label>
             </div>
             
             <div>
-                <button type="submit" class="btn-primary w-full py-3 px-4 rounded-lg text-white font-semibold">
-                    <i class="fas fa-user-plus mr-2"></i>´´½¨ÕË»§
+                <button type="submit" class="w-full btn-primary text-white py-3 px-4 rounded-lg font-medium">
+                    <i class="fas fa-user-plus mr-2"></i>æ³¨å†Œ
                 </button>
-            </div>
-            
-            <div class="text-center">
-                <p class="text-gray-400 text-sm">
-                    ÒÑÓĞÕË»§? <a href="login.php" class="text-blue-400 hover:text-blue-300">µÇÂ¼</a>
-                </p>
             </div>
         </form>
         
-        <!-- °²È«ÌáÊ¾ -->
-        <div class="mt-8 p-4 rounded-lg glassmorphism">
-            <p class="text-gray-300 text-sm mb-2">
-                <i class="fas fa-shield-alt text-green-400 mr-2"></i>°²È«ÌáÊ¾:
+        <!-- åˆ†éš”çº¿ -->
+        <div class="relative flex items-center my-8">
+            <div class="flex-grow border-t border-gray-600"></div>
+            <span class="flex-shrink mx-4 text-gray-400">æˆ–ä½¿ç”¨ä»¥ä¸‹æ–¹å¼æ³¨å†Œ</span>
+            <div class="flex-grow border-t border-gray-600"></div>
+        </div>
+        
+        <!-- ç¤¾äº¤ç™»å½•æŒ‰é’® -->
+        <div class="grid grid-cols-2 gap-4">
+            <a href="/login/google" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
+                <i class="fab fa-google text-red-400 mr-2"></i> Googleæ³¨å†Œ
+            </a>
+            <a href="/login/github" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
+                <i class="fab fa-github text-gray-300 mr-2"></i> GitHubæ³¨å†Œ
+            </a>
+        </div>
+        
+        <!-- ç™»å½•é“¾æ¥ -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-400">
+                å·²æœ‰è´¦å·ï¼Ÿ
+                <a href="/login" class="text-blue-400 hover:text-blue-300">ç«‹å³ç™»å½•</a>
             </p>
-            <ul class="text-gray-400 text-xs space-y-1 pl-6">
-                <li>¡¤ Ê¹ÓÃÇ¿ÃÜÂë£¬°üº¬´óĞ¡Ğ´×ÖÄ¸¡¢Êı×ÖºÍÌØÊâ×Ö·û</li>
-                <li>¡¤ ²»ÒªÔÚ¶à¸öÍøÕ¾ÖØ¸´Ê¹ÓÃÏàÍ¬ÃÜÂë</li>
-                <li>¡¤ ÎÒÃÇÓÀÔ¶²»»áÍ¨¹ıµç×ÓÓÊ¼şÒªÇóÄúÌá¹©ÃÜÂë</li>
-            </ul>
         </div>
     </div>
     
     <script>
-        // Éú³ÉÁ¿×ÓÁ£×Ó±³¾°
-        document.addEventListener('DOMContentLoaded', function() {
-            const particlesContainer = document.getElementById('quantum-particles'];
-            const particleCount = 50;
+        // åˆ‡æ¢å¯†ç æ˜¾ç¤º/éšè—
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div'];
-                particle.className = 'quantum-particle';
-                
-                // Ëæ»úÎ»ÖÃ
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.left = `${Math.random() * 100}%`;
-                
-                // Ëæ»ú´óĞ¡
-                const size = Math.random() * 6 + 2;
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                
-                // Ëæ»ú¶¯»­ÑÓ³Ù
-                particle.style.animationDelay = `${Math.random() * 5}s`;
-                
-                particlesContainer.appendChild(particle];
-            }
-        }];
+            // åˆ‡æ¢å›¾æ ‡
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
         
-        // ÇĞ»»ÃÜÂë¿É¼ûĞÔ
-        document.getElementById('togglePassword')?.addEventListener('click', function() {
-            const passwordInput = document.getElementById('password'];
-            const toggleIcon = this.querySelector('i'];
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleIcon.classList.remove('fa-eye'];
-                toggleIcon.classList.add('fa-eye-slash'];
-            } else {
-                passwordInput.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash'];
-                toggleIcon.classList.add('fa-eye'];
-            }
-        }];
-        
-        // ÃÜÂëÇ¿¶È¼ì²é
-        const passwordInput = document.getElementById('password'];
-        const strengthIndicator = document.getElementById('passwordStrength'];
-        const feedbackText = document.getElementById('passwordFeedback'];
-        
-        passwordInput?.addEventListener('input', function() {
+        // å¯†ç å¼ºåº¦æ£€æµ‹
+        document.getElementById('password').addEventListener('input', function() {
             const password = this.value;
-            let strength = 0;
+            const strengthBar = document.getElementById('passwordStrength');
+            const feedback = document.getElementById('passwordFeedback');
             
-            // ³¤¶È¼ì²é
-            if (password.length >= 8) {
-                strength += 1;
-            }
-            
-            // ¸´ÔÓĞÔ¼ì²é
-            if (password.match(/[A-Z]/)) strength += 1;
-            if (password.match(/[a-z]/)) strength += 1;
-            if (password.match(/[0-9]/)) strength += 1;
-            if (password.match(/[^A-Za-z0-9]/)) strength += 1;
-            
-            // ¸üĞÂÇ¿¶ÈÏÔÊ¾
             if (password.length === 0) {
-                strengthIndicator.className = 'password-strength rounded-full';
-                strengthIndicator.style.width = '0';
-                feedbackText.textContent = '';
-            } else if (strength < 3) {
-                strengthIndicator.className = 'password-strength rounded-full strength-weak';
-                feedbackText.textContent = 'ÈõÃÜÂë - ³¢ÊÔÌí¼Ó´óĞ¡Ğ´×ÖÄ¸¡¢Êı×ÖºÍÌØÊâ×Ö·û';
-                feedbackText.className = 'text-xs mt-1 text-red-400';
-            } else if (strength < 5) {
-                strengthIndicator.className = 'password-strength rounded-full strength-medium';
-                feedbackText.textContent = 'ÖĞµÈÇ¿¶È - ¿ÉÒÔ¸üÇ¿';
-                feedbackText.className = 'text-xs mt-1 text-yellow-400';
-            } else {
-                strengthIndicator.className = 'password-strength rounded-full strength-strong';
-                feedbackText.textContent = 'Ç¿ÃÜÂë';
-                feedbackText.className = 'text-xs mt-1 text-green-400';
+                strengthBar.className = 'password-strength-bar rounded-full';
+                strengthBar.style.width = '0';
+                feedback.textContent = 'è¯·è¾“å…¥è‡³å°‘8ä¸ªå­—ç¬¦çš„å¯†ç ';
+                feedback.className = 'text-xs text-gray-400 mt-1';
+                return;
             }
-        }];
-        
-        // È·ÈÏÃÜÂëÆ¥Åä¼ì²é
-        const confirmPasswordInput = document.getElementById('confirm_password'];
-        const registerForm = document.getElementById('registerForm'];
-        
-        registerForm?.addEventListener('submit', function(e) {
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
             
-            if (password !== confirmPassword) {
-                e.preventDefault(];
-                alert('Á½´ÎÊäÈëµÄÃÜÂë²»Æ¥Åä£¡'];
-                confirmPasswordInput.focus(];
+            // ä½¿ç”¨zxcvbnæ£€æµ‹å¯†ç å¼ºåº¦
+            const result = zxcvbn(password);
+            const score = result.score; // 0-4
+            
+            // æ›´æ–°å¼ºåº¦æ¡
+            strengthBar.className = 'password-strength-bar rounded-full';
+            
+            if (score === 0) {
+                strengthBar.classList.add('strength-weak');
+                feedback.textContent = 'å¯†ç å¼ºåº¦ï¼šéå¸¸å¼±';
+                feedback.className = 'text-xs text-red-400 mt-1';
+            } else if (score === 1) {
+                strengthBar.classList.add('strength-weak');
+                feedback.textContent = 'å¯†ç å¼ºåº¦ï¼šå¼±';
+                feedback.className = 'text-xs text-red-400 mt-1';
+            } else if (score === 2) {
+                strengthBar.classList.add('strength-fair');
+                feedback.textContent = 'å¯†ç å¼ºåº¦ï¼šä¸€èˆ¬';
+                feedback.className = 'text-xs text-orange-400 mt-1';
+            } else if (score === 3) {
+                strengthBar.classList.add('strength-good');
+                feedback.textContent = 'å¯†ç å¼ºåº¦ï¼šè‰¯å¥½';
+                feedback.className = 'text-xs text-yellow-400 mt-1';
+            } else {
+                strengthBar.classList.add('strength-strong');
+                feedback.textContent = 'å¯†ç å¼ºåº¦ï¼šæå¼º';
+                feedback.className = 'text-xs text-green-400 mt-1';
             }
-        }];
+            
+            // æ˜¾ç¤ºåé¦ˆå»ºè®®
+            if (result.feedback.warning) {
+                feedback.textContent += ' - ' + result.feedback.warning;
+            }
+        });
     </script>
 </body>
 </html>

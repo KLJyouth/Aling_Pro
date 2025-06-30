@@ -1,0 +1,14 @@
+ /* 
+ * AlingAi Pro 字体定义
+ * 创建日期: 2025-06-30
+ */
+
+/* Quantum Sans - 系统主字体 */
+@font-face {
+  font-family: 'Quantum Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/assets/fonts/quantum-sans.woff2') format('woff2'),
+       url('https://fonts.gstatic.com/s/roboto/v48/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbWmT.ttf') format('truetype');
+}

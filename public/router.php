@@ -9,6 +9,15 @@
 define('BASE_PATH', __DIR__);
 define('START_TIME', microtime(true));
 
+// 设置增强的安全头部
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';");
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
+
 // Get the request URI
 $requestUri = $_SERVER['REQUEST_URI'];
 $path = parse_url($requestUri, PHP_URL_PATH);
@@ -23,12 +32,42 @@ if (empty($path)) {
 $routes = [
     // Core pages
     'index' => 'index.html',
-    'login' => 'login.html',
-    'register' => 'register.html',
+    'login' => 'login.php',  // 使用PHP处理登录
+    'register' => 'register.php', // 使用PHP处理注册
     'dashboard' => 'dashboard.html',
     'profile' => 'profile.html',
     'chat' => 'chat.html',
     'chat-enhanced' => 'chat-new.html',
+    
+    // 社交登录路由
+    'login/google' => 'login.php?provider=google',
+    'login/github' => 'login.php?provider=github',
+    'login/google/callback' => 'login.php?provider=google&callback=1',
+    'login/github/callback' => 'login.php?provider=github&callback=1',
+    
+    // 邮箱验证路由
+    'email/verify' => 'email_verify.php',
+    'email/verification-notification' => 'email_verification_notification.php',
+    
+    // 用户控制台路由
+    'user/dashboard' => 'user/dashboard.php',
+    'user/profile' => 'user/profile.php',
+    'user/api-keys' => 'user/api-keys.php',
+    'user/subscription' => 'user/subscription.php',
+    'user/orders' => 'user/orders.php',
+    'user/payment' => 'user/payment.php',
+    'user/referrals' => 'user/referrals.php',
+    
+    // 管理后台路由
+    'admin' => 'admin-center/index.php',
+    'admin/dashboard' => 'admin-center/index.php',
+    'admin/members' => 'admin-center/members.php',
+    'admin/orders' => 'admin-center/orders.php',
+    'admin/settings' => 'admin-center/settings.php',
+    'admin/logs' => 'admin-center/logs.php',
+    'admin/tools' => 'admin-center/tools.php',
+    'admin/security' => 'admin-center/security.php',
+    'admin/reports' => 'admin-center/reports.php',
     
     // Information & Support pages
     'security' => 'quantum-security.html',
@@ -147,13 +186,6 @@ function serveFile($filePath) {
         // No caching for HTML and dynamic content
         header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
         header("Pragma: no-cache");
-    }
-    
-    // Add security headers for HTML files
-    if ($extension === 'html') {
-        header("X-Content-Type-Options: nosniff");
-        header("X-XSS-Protection: 1; mode=block");
-        header("X-Frame-Options: SAMEORIGIN");
     }
     
     // Output the file
