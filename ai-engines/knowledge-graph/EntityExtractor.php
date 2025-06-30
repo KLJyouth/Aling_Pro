@@ -1,17 +1,17 @@
-<?php
+ï»¿<?php
 /**
- * ÎÄ¼şÃû£ºEntityExtractor.php
- * ¹¦ÄÜÃèÊö£ºÊµÌåÌáÈ¡Æ÷ - ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå
- * ´´½¨Ê±¼ä£º2025-01-XX
- * ×îºóĞŞ¸Ä£º2025-01-XX
- * °æ±¾£º1.0.0
+ * æ–‡ä»¶åï¼šEntityExtractor.php
+ * åŠŸèƒ½æè¿°ï¼šå®ä½“æå–å™¨ - ä»æ–‡æœ¬ä¸­æå–å®ä½“
+ * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
+ * æœ€åä¿®æ”¹ï¼š2025-01-XX
+ * ç‰ˆæœ¬ï¼š1.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
@@ -22,128 +22,128 @@ use AlingAi\AI\Engines\NLP\TokenizerInterface;
 use AlingAi\AI\Engines\NLP\UniversalTokenizer;
 
 /**
- * ÊµÌåÌáÈ¡Æ÷
+ * å®ä½“æå–å™¨
  * 
- * ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå£¬Ö§³Ö¶àÖÖÊµÌåÀàĞÍºÍÓïÑÔ
+ * ä»æ–‡æœ¬ä¸­æå–å®ä½“ï¼Œæ”¯æŒå¤šç§å®ä½“ç±»å‹å’Œè¯­è¨€
  */
 class EntityExtractor
 {
     /**
-     * ÅäÖÃ²ÎÊı
+     * é…ç½®å‚æ•°
      */
     private array $config;
     
     /**
-     * ÃüÃûÊµÌåÊ¶±ğÄ£ĞÍ
+     * å‘½åå®ä½“è¯†åˆ«æ¨¡å‹
      */
     private ?NERModel $nerModel = null;
     
     /**
-     * ·Ö´ÊÆ÷
+     * åˆ†è¯å™¨
      */
     private ?TokenizerInterface $tokenizer = null;
     
     /**
-     * ÊµÌåÀàĞÍÓ³Éä
+     * å®ä½“ç±»å‹æ˜ å°„
      */
     private array $entityTypeMap = [];
 
 
     /**
-     * ¹¹Ôìº¯Êı
+     * æ„é€ å‡½æ•°
      * 
-     * @param array $config ÅäÖÃ²ÎÊı
+     * @param array $config é…ç½®å‚æ•°
      */
     public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config];
-        $this->initializeComponents(];
-        $this->initializeEntityTypeMap(];
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->initializeComponents();
+        $this->initializeEntityTypeMap();
     }
     
     /**
-     * »ñÈ¡Ä¬ÈÏÅäÖÃ
+     * è·å–é»˜è®¤é…ç½®
      * 
-     * @return array Ä¬ÈÏÅäÖÃ
+     * @return array é»˜è®¤é…ç½®
      */
     private function getDefaultConfig(): array
     {
         return [
-            'confidence_threshold' => 0.7,
-            'max_entity_length' => 50,
-            'entity_types' => [
-                'PERSON', 'ORGANIZATION', 'LOCATION', 'DATE', 'TIME',
-                'MONEY', 'PERCENT', 'PRODUCT', 'EVENT', 'WORK_OF_ART'
+            "confidence_threshold" => 0.7,
+            "max_entity_length" => 50,
+            "entity_types" => [
+                "PERSON", "ORGANIZATION", "LOCATION", "DATE", "TIME",
+                "MONEY", "PERCENT", "PRODUCT", "EVENT", "WORK_OF_ART"
             ], 
-            'enable_entity_linking' => true,
-            'enable_coreference_resolution' => true
+            "enable_entity_linking" => true,
+            "enable_coreference_resolution" => true
         ];
     }
     
     /**
-     * ³õÊ¼»¯×é¼ş
+     * åˆå§‹åŒ–ç»„ä»¶
      */
     private function initializeComponents(): void
     {
-        $this->nerModel = new NERModel(];
-        $this->tokenizer = new UniversalTokenizer(];
+        $this->nerModel = new NERModel();
+        $this->tokenizer = new UniversalTokenizer();
     }
     
     /**
-     * ³õÊ¼»¯ÊµÌåÀàĞÍÓ³Éä
+     * åˆå§‹åŒ–å®ä½“ç±»å‹æ˜ å°„
      */
     private function initializeEntityTypeMap(): void
     {
         $this->entityTypeMap = [
-            'PERSON' => 'Person',
-            'ORGANIZATION' => 'Organization',
-            'LOCATION' => 'Location',
-            'DATE' => 'Date',
-            'TIME' => 'Time',
-            'MONEY' => 'Money',
-            'PERCENT' => 'Percent',
-            'PRODUCT' => 'Product',
-            'EVENT' => 'Event',
-            'WORK_OF_ART' => 'WorkOfArt'
+            "PERSON" => "Person",
+            "ORGANIZATION" => "Organization",
+            "LOCATION" => "Location",
+            "DATE" => "Date",
+            "TIME" => "Time",
+            "MONEY" => "Money",
+            "PERCENT" => "Percent",
+            "PRODUCT" => "Product",
+            "EVENT" => "Event",
+            "WORK_OF_ART" => "WorkOfArt"
         ];
     }
 
     
     /**
-     * ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå
+     * ä»æ–‡æœ¬ä¸­æå–å®ä½“
      * 
-     * @param string $text ÊäÈëÎÄ±¾
-     * @param array $options ÌáÈ¡Ñ¡Ïî
-     * @return array ÌáÈ¡µÄÊµÌå
+     * @param string $text è¾“å…¥æ–‡æœ¬
+     * @param array $options æå–é€‰é¡¹
+     * @return array æå–çš„å®ä½“
      * @throws InvalidArgumentException
      */
     public function extract(string $text, array $options = []): array
     {
-        // ÑéÖ¤ÎÄ±¾
+        // éªŒè¯æ–‡æœ¬
         if (empty($text)) {
-            throw new InvalidArgumentException('ÎÄ±¾²»ÄÜÎª¿Õ'];
+            throw new InvalidArgumentException("æ–‡æœ¬ä¸èƒ½ä¸ºç©º");
         }
         
-        // ´¦ÀíÑ¡Ïî
-        $options = array_merge($this->config, $options];
+        // åˆå¹¶é€‰é¡¹
+        $options = array_merge($this->config, $options);
         
-        // ·Ö´Ê
-        $tokens = $this->tokenizer->tokenize($text];
+        // åˆ†è¯
+        $tokens = $this->tokenizer->tokenize($text);
         
-        // ÃüÃûÊµÌåÊ¶±ğ
-        $entities = $this->nerModel->recognize($tokens];
+        // å‘½åå®ä½“è¯†åˆ«
+        $entities = $this->nerModel->recognize($tokens);
         
-        // ¹ıÂËºÍ×ª»»ÊµÌå
-        $filteredEntities = $this->filterAndTransformEntities($entities, $options];
+        // è¿‡æ»¤å’Œè½¬æ¢å®ä½“
+        $filteredEntities = $this->filterAndTransformEntities($entities, $options);
         
-        // ÊµÌåÁ´½Ó
-        if ($options['enable_entity_linking']) {
-            $filteredEntities = $this->linkEntities($filteredEntities, $options];
+        // å®ä½“é“¾æ¥
+        if ($options["enable_entity_linking"]) {
+            $filteredEntities = $this->linkEntities($filteredEntities, $options);
         }
         
-        // ¹²Ö¸Ïû½â
-        if ($options['enable_coreference_resolution']) {
-            $filteredEntities = $this->resolveCoreferenceEntities($filteredEntities, $text, $options];
+        // æŒ‡ä»£è§£æ
+        if ($options["enable_coreference_resolution"]) {
+            $filteredEntities = $this->resolveCoreferenceEntities($filteredEntities, $text, $options);
         }
         
         return $filteredEntities;
@@ -151,104 +151,51 @@ class EntityExtractor
 
     
     /**
-     * ¹ıÂËºÍ×ª»»ÊµÌå
+     * è¿‡æ»¤å’Œè½¬æ¢å®ä½“
      * 
-     * @param array $entities ÊµÌåÁĞ±í
-     * @param array $options Ñ¡Ïî
-     * @return array ¹ıÂËºÍ×ª»»ºóµÄÊµÌå
+     * @param array $entities å®ä½“åˆ—è¡¨
+     * @param array $options é€‰é¡¹
+     * @return array è¿‡æ»¤å’Œè½¬æ¢åçš„å®ä½“
      */
     private function filterAndTransformEntities(array $entities, array $options): array
     {
         $result = [];
-        $confidenceThreshold = $options['confidence_threshold'];
-        $maxEntityLength = $options['max_entity_length'];
-        $allowedEntityTypes = $options['entity_types'];
+        $confidenceThreshold = $options["confidence_threshold"];
+        $maxEntityLength = $options["max_entity_length"];
+        $allowedEntityTypes = $options["entity_types"];
         
         foreach ($entities as $entity) {
-            // ¹ıÂËµÍÖÃĞÅ¶ÈÊµÌå
-            if ($entity['confidence'] < $confidenceThreshold) {
+            // è¿‡æ»¤ä½ç½®ä¿¡åº¦å®ä½“
+            if ($entity["confidence"] < $confidenceThreshold) {
                 continue;
             }
             
-            // ¹ıÂË¹ı³¤µÄÊµÌå
-            if (mb_strlen($entity['text'],  'UTF-8') > $maxEntityLength) {
+            // è¿‡æ»¤è¿‡é•¿çš„å®ä½“
+            if (mb_strlen($entity["text"], "UTF-8") > $maxEntityLength) {
                 continue;
             }
             
-            // ¹ıÂË²»ÔÚÔÊĞíÀàĞÍÁĞ±íÖĞµÄÊµÌå
-            if (!in_[$entity['type'],  $allowedEntityTypes)) {
+            // è¿‡æ»¤ä¸åœ¨å…è®¸ç±»å‹åˆ—è¡¨ä¸­çš„å®ä½“
+            if (!in_array($entity["type"], $allowedEntityTypes)) {
                 continue;
             }
             
-            // ×ª»»ÊµÌåÀàĞÍ
-            $entityType = $this->mapEntityType($entity['type']];
+            // è½¬æ¢å®ä½“ç±»å‹
+            $entityType = $this->mapEntityType($entity["type"]);
             
-            // ¹¹½¨ÊµÌå¶ÔÏó
+            // æ„å»ºå®ä½“å¯¹è±¡
             $result[] = [
-                'id' => $this->generateEntityId($entity],
-                'text' => $entity['text'], 
-                'type' => $entityType,
-                'confidence' => $entity['confidence'], 
-                'start_pos' => $entity['start_pos'], 
-                'end_pos' => $entity['end_pos'], 
-                'metadata' => [
-                    'source' => 'text_extraction',
-                    'extraction_time' => time()
+                "id" => $this->generateEntityId($entity),
+                "text" => $entity["text"], 
+                "type" => $entityType,
+                "confidence" => $entity["confidence"], 
+                "start_pos" => $entity["start_pos"], 
+                "end_pos" => $entity["end_pos"], 
+                "metadata" => [
+                    "source" => "text_extraction",
+                    "extraction_time" => time()
                 ], 
-                'attributes' => $this->extractEntityAttributes($entity)
-            ];
-        }
-        
-        return $result;
-    }
-
-    
-    /**
-     * ¹ıÂËºÍ×ª»»ÊµÌå
-     * 
-     * @param array $entities ÊµÌåÁĞ±í
-     * @param array $options Ñ¡Ïî
-     * @return array ¹ıÂËºÍ×ª»»ºóµÄÊµÌå
-     */
-    private function filterAndTransformEntities(array $entities, array $options): array
-    {
-        $result = [];
-        $confidenceThreshold = $options['confidence_threshold'];
-        $maxEntityLength = $options['max_entity_length'];
-        $allowedEntityTypes = $options['entity_types'];
-        
-        foreach ($entities as $entity) {
-            // ¹ıÂËµÍÖÃĞÅ¶ÈÊµÌå
-            if ($entity['confidence'] < $confidenceThreshold) {
-                continue;
-            }
-            
-            // ¹ıÂË¹ı³¤µÄÊµÌå
-            if (mb_strlen($entity['text'],  'UTF-8') > $maxEntityLength) {
-                continue;
-            }
-            
-            // ¹ıÂË²»ÔÚÔÊĞíÀàĞÍÁĞ±íÖĞµÄÊµÌå
-            if (!in_[$entity['type'],  $allowedEntityTypes)) {
-                continue;
-            }
-            
-            // ×ª»»ÊµÌåÀàĞÍ
-            $entityType = $this->mapEntityType($entity['type']];
-            
-            // ¹¹½¨ÊµÌå¶ÔÏó
-            $result[] = [
-                'id' => $this->generateEntityId($entity],
-                'text' => $entity['text'], 
-                'type' => $entityType,
-                'confidence' => $entity['confidence'], 
-                'start_pos' => $entity['start_pos'], 
-                'end_pos' => $entity['end_pos'], 
-                'metadata' => [
-                    'source' => 'text_extraction',
-                    'extraction_time' => time()
-                ], 
-                'attributes' => $this->extractEntityAttributes($entity)
+                "attributes" => $this->extractEntityAttributes($entity)
             ];
         }
         
@@ -256,94 +203,257 @@ class EntityExtractor
     }
 
     /**
-     * Ó³ÉäÊµÌåÀàĞÍ
+     * æ˜ å°„å®ä½“ç±»å‹
      * 
-     * @param string $nerType NERÊµÌåÀàĞÍ
-     * @return string Ó³ÉäºóµÄÊµÌåÀàĞÍ
+     * @param string $nerType NERç±»å‹
+     * @return string æ˜ å°„åçš„ç±»å‹
      */
     private function mapEntityType(string $nerType): string
     {
-        return $this->entityTypeMap[$nerType] ?? 'Unknown';
+        return $this->entityTypeMap[$nerType] ?? "Unknown";
     }
     
     /**
-     * Éú³ÉÊµÌåID
+     * ç”Ÿæˆå®ä½“ID
      * 
-     * @param array $entity ÊµÌå
-     * @return string ÊµÌåID
+     * @param array $entity å®ä½“
+     * @return string å®ä½“ID
      */
     private function generateEntityId(array $entity): string
     {
-        return md5($entity['text'] . $entity['type'] . $entity['start_pos'] . $entity['end_pos']];
+        // ä½¿ç”¨å®ä½“æ–‡æœ¬ã€ç±»å‹å’Œä½ç½®ç”Ÿæˆå”¯ä¸€ID
+        $idBase = $entity["text"] . "_" . $entity["type"] . "_" . $entity["start_pos"] . "_" . $entity["end_pos"];
+        return md5($idBase);
     }
     
     /**
-     * ÌáÈ¡ÊµÌåÊôĞÔ
+     * æå–å®ä½“å±æ€§
      * 
-     * @param array $entity ÊµÌå
-     * @return array ÊµÌåÊôĞÔ
+     * @param array $entity å®ä½“
+     * @return array å®ä½“å±æ€§
      */
     private function extractEntityAttributes(array $entity): array
     {
         $attributes = [];
         
-        // ¸ù¾İÊµÌåÀàĞÍÌáÈ¡ÌØ¶¨ÊôĞÔ
-        switch ($entity['type']) {
-            case 'PERSON':
-                // ¿ÉÒÔÌáÈ¡ÈËÃûµÄĞÕ¡¢ÃûµÈĞÅÏ¢
-                break;
-            case 'ORGANIZATION':
-                // ¿ÉÒÔÌáÈ¡×éÖ¯»ú¹¹µÄÀàĞÍ¡¢ĞĞÒµµÈĞÅÏ¢
-                break;
-            case 'LOCATION':
-                // ¿ÉÒÔÌáÈ¡µØµãµÄ¾­Î³¶È¡¢ËùÊô¹ú¼ÒµÈĞÅÏ¢
-                break;
-            case 'DATE':
-                // ¿ÉÒÔÌáÈ¡ÈÕÆÚµÄÄê¡¢ÔÂ¡¢ÈÕµÈĞÅÏ¢
-                if (isset($entity['normalized_value'])) {
-                    $attributes['normalized_date'] = $entity['normalized_value'];
+        // æ ¹æ®å®ä½“ç±»å‹æå–ä¸åŒå±æ€§
+        switch ($entity["type"]) {
+            case "PERSON":
+                // å¯èƒ½çš„äººç‰©å±æ€§
+                if (isset($entity["gender"])) {
+                    $attributes["gender"] = $entity["gender"];
                 }
                 break;
-            case 'TIME':
-                // ¿ÉÒÔÌáÈ¡Ê±¼äµÄĞ¡Ê±¡¢·ÖÖÓµÈĞÅÏ¢
-                if (isset($entity['normalized_value'])) {
-                    $attributes['normalized_time'] = $entity['normalized_value'];
+                
+            case "ORGANIZATION":
+                // å¯èƒ½çš„ç»„ç»‡å±æ€§
+                if (isset($entity["org_type"])) {
+                    $attributes["organizationType"] = $entity["org_type"];
+                }
+                break;
+                
+            case "LOCATION":
+                // å¯èƒ½çš„ä½ç½®å±æ€§
+                if (isset($entity["location_type"])) {
+                    $attributes["locationType"] = $entity["location_type"];
+                }
+                if (isset($entity["coordinates"])) {
+                    $attributes["coordinates"] = $entity["coordinates"];
+                }
+                break;
+                
+            case "DATE":
+                // å¯èƒ½çš„æ—¥æœŸå±æ€§
+                if (isset($entity["normalized_date"])) {
+                    $attributes["normalizedDate"] = $entity["normalized_date"];
                 }
                 break;
         }
         
         return $attributes;
     }
-
+    
     /**
-     * ÅĞ¶ÏÁ½¸öÊµÌåÊÇ·ñ´æÔÚ¹²Ö¸¹ØÏµ
+     * å®ä½“é“¾æ¥ - å°†æå–çš„å®ä½“é“¾æ¥åˆ°çŸ¥è¯†åº“
      * 
-     * @param array $entity1 µÚÒ»¸öÊµÌå
-     * @param array $entity2 µÚ¶ş¸öÊµÌå
-     * @param string $text Ô­Ê¼ÎÄ±¾
-     * @return bool ÊÇ·ñ´æÔÚ¹²Ö¸¹ØÏµ
+     * @param array $entities å®ä½“åˆ—è¡¨
+     * @param array $options é€‰é¡¹
+     * @return array é“¾æ¥åçš„å®ä½“
      */
-    private function areCorefEntities(array $entity1, array $entity2, string $text): bool
+    private function linkEntities(array $entities, array $options): array
     {
-        // ÊµÏÖ¹²Ö¸¹ØÏµÅĞ¶ÏÂß¼­
-        // ÕâÀï¿ÉÒÔÊ¹ÓÃ¸ü¸´ÔÓµÄËã·¨£¬Èç»ùÓÚ¹æÔò»ò»úÆ÷Ñ§Ï°µÄ·½·¨
-        // ¼òµ¥ÊµÏÖ£º¼ì²éÎÄ±¾ÏàËÆ¶ÈºÍÎ»ÖÃ¹ØÏµ
+        // å®é™…é¡¹ç›®ä¸­ï¼Œè¿™é‡Œä¼šè°ƒç”¨çŸ¥è¯†åº“APIè¿›è¡Œå®ä½“é“¾æ¥
+        // æœ¬å®ç°ä¸ºæ¨¡æ‹Ÿ
         
-        // Èç¹ûÁ½¸öÊµÌåÎÄ±¾ÍêÈ«ÏàÍ¬£¬¿ÉÄÜÊÇ¹²Ö¸
-        if ($entity1['text'] === $entity2['text']) {
-            return true;
+        foreach ($entities as &$entity) {
+            // æ¨¡æ‹ŸçŸ¥è¯†åº“é“¾æ¥
+            $entity["knowledge_links"] = $this->simulateKnowledgeLinks($entity);
         }
         
-        // Èç¹ûÒ»¸öÊµÌåÊÇÁíÒ»¸öµÄ×Ó´®£¬¿ÉÄÜÊÇ¹²Ö¸
-        if (stripos($entity1['text'],  $entity2['text']) !== false || 
-            stripos($entity2['text'],  $entity1['text']) !== false) {
-            return true;
+        return $entities;
+    }
+    
+    /**
+     * æ¨¡æ‹ŸçŸ¥è¯†åº“é“¾æ¥
+     * 
+     * @param array $entity å®ä½“
+     * @return array çŸ¥è¯†é“¾æ¥
+     */
+    private function simulateKnowledgeLinks(array $entity): array
+    {
+        $links = [];
+        
+        // æ ¹æ®å®ä½“ç±»å‹ç”Ÿæˆä¸åŒçš„æ¨¡æ‹Ÿé“¾æ¥
+        switch ($entity["type"]) {
+            case "Person":
+                $links[] = [
+                    "source" => "internal_kb",
+                    "id" => "person_" . md5($entity["text"]),
+                    "confidence" => 0.85,
+                    "url" => "/kb/person/" . urlencode($entity["text"])
+                ];
+                break;
+                
+            case "Organization":
+                $links[] = [
+                    "source" => "internal_kb",
+                    "id" => "org_" . md5($entity["text"]),
+                    "confidence" => 0.82,
+                    "url" => "/kb/organization/" . urlencode($entity["text"])
+                ];
+                break;
+                
+            case "Location":
+                $links[] = [
+                    "source" => "internal_kb",
+                    "id" => "loc_" . md5($entity["text"]),
+                    "confidence" => 0.9,
+                    "url" => "/kb/location/" . urlencode($entity["text"])
+                ];
+                break;
         }
         
-        // ¸ü¸´ÔÓµÄ¹²Ö¸¼ì²âÂß¼­¿ÉÒÔÔÚÕâÀïÊµÏÖ
-        // ÀıÈç£¬¼ì²é´ú´ÊºÍÃû´ÊÖ®¼äµÄ¹ØÏµ£¬»òÕßÊ¹ÓÃÍâ²¿·şÎñ
+        return $links;
+    }
+    
+    /**
+     * è§£ææŒ‡ä»£å®ä½“ - è§£å†³ä»£è¯å’ŒæŒ‡ä»£é—®é¢˜
+     * 
+     * @param array $entities å®ä½“åˆ—è¡¨
+     * @param string $text åŸæ–‡æœ¬
+     * @param array $options é€‰é¡¹
+     * @return array è§£æåçš„å®ä½“
+     */
+    private function resolveCoreferenceEntities(array $entities, string $text, array $options): array
+    {
+        // å®é™…é¡¹ç›®ä¸­ï¼Œè¿™é‡Œä¼šä½¿ç”¨æŒ‡ä»£è§£ææ¨¡å‹
+        // æœ¬å®ç°ä¸ºç®€åŒ–ç‰ˆ
         
-        return false;
+        // æ¨¡æ‹Ÿä¸€äº›æŒ‡ä»£å…³ç³»
+        $coreferences = $this->simulateCoreferences($text, $entities);
+        
+        // åˆå¹¶æŒ‡ä»£å®ä½“
+        foreach ($coreferences as $coref) {
+            foreach ($entities as &$entity) {
+                if ($entity["id"] === $coref["entity_id"]) {
+                    if (!isset($entity["coreferences"])) {
+                        $entity["coreferences"] = [];
+                    }
+                    $entity["coreferences"][] = [
+                        "text" => $coref["mention"],
+                        "start_pos" => $coref["start_pos"],
+                        "end_pos" => $coref["end_pos"],
+                        "type" => "pronoun"
+                    ];
+                    break;
+                }
+            }
+        }
+        
+        return $entities;
+    }
+    
+    /**
+     * æ¨¡æ‹ŸæŒ‡ä»£å…³ç³»
+     * 
+     * @param string $text æ–‡æœ¬
+     * @param array $entities å®ä½“åˆ—è¡¨
+     * @return array æŒ‡ä»£å…³ç³»
+     */
+    private function simulateCoreferences(string $text, array $entities): array
+    {
+        $coreferences = [];
+        
+        // è¿™é‡Œä»…åšç®€å•æ¨¡æ‹Ÿ
+        // å®é™…é¡¹ç›®ä¸­éœ€è¦ä½¿ç”¨æ›´å¤æ‚çš„æŒ‡ä»£è§£æç®—æ³•
+        
+        // æŸ¥æ‰¾äººç§°ä»£è¯
+        $pronouns = ["ä»–", "å¥¹", "å®ƒ", "ä»–ä»¬", "å¥¹ä»¬", "å®ƒä»¬", "è¿™ä¸ª", "é‚£ä¸ª", "è¿™äº›", "é‚£äº›"];
+        
+        foreach ($pronouns as $pronoun) {
+            $pos = mb_strpos($text, $pronoun);
+            while ($pos !== false) {
+                // æ‰¾åˆ°æœ€è¿‘çš„å‰ç½®å®ä½“
+                $closestEntity = null;
+                $minDistance = PHP_INT_MAX;
+                
+                foreach ($entities as $entity) {
+                    if ($entity["end_pos"] < $pos) {
+                        $distance = $pos - $entity["end_pos"];
+                        if ($distance < $minDistance) {
+                            $minDistance = $distance;
+                            $closestEntity = $entity;
+                        }
+                    }
+                }
+                
+                if ($closestEntity && $minDistance < 100) { // ç®€å•çš„è·ç¦»é˜ˆå€¼
+                    $coreferences[] = [
+                        "entity_id" => $closestEntity["id"],
+                        "mention" => $pronoun,
+                        "start_pos" => $pos,
+                        "end_pos" => $pos + mb_strlen($pronoun)
+                    ];
+                }
+                
+                $pos = mb_strpos($text, $pronoun, $pos + mb_strlen($pronoun));
+            }
+        }
+        
+        return $coreferences;
+    }
+    
+    /**
+     * æ‰¹é‡æå–å®ä½“
+     * 
+     * @param array $texts æ–‡æœ¬æ•°ç»„
+     * @param array $options é€‰é¡¹
+     * @return array å®ä½“æ•°ç»„
+     */
+    public function batchExtract(array $texts, array $options = []): array
+    {
+        $results = [];
+        
+        foreach ($texts as $index => $text) {
+            try {
+                $results[$index] = $this->extract($text, $options);
+            } catch (Exception $e) {
+                $results[$index] = [
+                    "error" => $e->getMessage()
+                ];
+            }
+        }
+        
+        return $results;
+    }
+    
+    /**
+     * è·å–æ”¯æŒçš„å®ä½“ç±»å‹
+     * 
+     * @return array æ”¯æŒçš„å®ä½“ç±»å‹
+     */
+    public function getSupportedEntityTypes(): array
+    {
+        return array_values($this->entityTypeMap);
     }
 }
-

@@ -1,17 +1,17 @@
 <?php
 /**
- * ÎÄ¼şÃû£ºRelationExtractor.php
- * ¹¦ÄÜÃèÊö£º¹ØÏµÌáÈ¡Æ÷ - ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå¼ä¹ØÏµ
- * ´´½¨Ê±¼ä£º2025-01-XX
- * ×îºóĞŞ¸Ä£º2025-01-XX
- * °æ±¾£º1.0.0
+ * æ–‡ä»¶åï¼šRelationExtractor.php
+ * åŠŸèƒ½æè¿°ï¼šå…³ç³»æå–å™¨ - ä»æ–‡æœ¬ä¸­æå–å®ä½“å…³ç³»
+ * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
+ * æœ€åä¿®æ”¹ï¼š2025-01-XX
+ * ç‰ˆæœ¬ï¼š1.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
@@ -22,53 +22,53 @@ use AlingAi\AI\Engines\NLP\TokenizerInterface;
 use AlingAi\AI\Engines\NLP\UniversalTokenizer;
 
 /**
- * ¹ØÏµÌáÈ¡Æ÷
+ * å…³ç³»æå–å™¨
  * 
- * ´ÓÎÄ±¾ÖĞÌáÈ¡ÊµÌå¼äµÄ¹ØÏµ£¬Ö§³Ö¶àÖÖ¹ØÏµÀàĞÍºÍÓïÑÔ
+ * ä»æ–‡æœ¬ä¸­æå–å®ä½“çš„å…³ç³»ï¼Œæ”¯æŒå¤šç§å…³ç³»ç±»å‹å’Œè¯­è¨€
  */
 class RelationExtractor
 {
     /**
-     * ÅäÖÃ²ÎÊı
+     * é…ç½®å‚æ•°
      */
     private array $config;
     
     /**
-     * ´ÊĞÔ±ê×¢Æ÷
+     * è¯æ€§æ ‡æ³¨å™¨
      */
     private ?POSTagger $posTagger = null;
     
     /**
-     * ·Ö´ÊÆ÷
+     * åˆ†è¯å™¨
      */
     private ?TokenizerInterface $tokenizer = null;
     
     /**
-     * ÊµÌåÌáÈ¡Æ÷
+     * å®ä½“æå–å™¨
      */
     private ?EntityExtractor $entityExtractor = null;
     
     /**
-     * ¹ØÏµÀàĞÍÓ³Éä
+     * å…³ç³»ç±»å‹æ˜ å°„
      */
     private array $relationTypeMap = [];
 
     /**
-     * ¹¹Ôìº¯Êı
+     * æ„é€ å‡½æ•°
      * 
-     * @param array $config ÅäÖÃ²ÎÊı
+     * @param array $config é…ç½®å‚æ•°
      */
-    public function __construct(array $config = []]
+    public function __construct(array $config = [])
     {
-        $this->config = array_merge($this->getDefaultConfig(), $config];
-        $this->initializeComponents(];
-        $this->initializeRelationTypeMap(];
+        $this->config = array_merge($this->getDefaultConfig(), $config);
+        $this->initializeComponents();
+        $this->initializeRelationTypeMap();
     }
     
     /**
-     * »ñÈ¡Ä¬ÈÏÅäÖÃ
+     * è·å–é»˜è®¤é…ç½®
      * 
-     * @return array Ä¬ÈÏÅäÖÃ
+     * @return array é»˜è®¤é…ç½®
      */
     private function getDefaultConfig(): array
     {
@@ -79,24 +79,24 @@ class RelationExtractor
                 'FOUNDED', 'SPOUSE', 'PARENT', 'CHILD', 'SIBLING',
                 'OWNS', 'CREATED', 'MEMBER_OF', 'CONTAINS'
             ], 
-            'max_entity_distance' => 15, // ×î´óÊµÌå¼ä¾à
+            'max_entity_distance' => 15, // æœ€å¤§å®ä½“è·ç¦»
             'enable_negation_detection' => true,
             'enable_temporal_analysis' => true
         ];
     }
     
     /**
-     * ³õÊ¼»¯×é¼ş
+     * åˆå§‹åŒ–ç»„ä»¶
      */
     private function initializeComponents(): void
     {
-        $this->posTagger = new POSTagger(];
-        $this->tokenizer = new UniversalTokenizer(];
-        $this->entityExtractor = new EntityExtractor(];
+        $this->posTagger = new POSTagger();
+        $this->tokenizer = new UniversalTokenizer();
+        $this->entityExtractor = new EntityExtractor();
     }
     
     /**
-     * ³õÊ¼»¯¹ØÏµÀàĞÍÓ³Éä
+     * åˆå§‹åŒ–å…³ç³»ç±»å‹æ˜ å°„
      */
     private function initializeRelationTypeMap(): void
     {
@@ -118,65 +118,65 @@ class RelationExtractor
     }
 
     /**
-     * ´ÓÎÄ±¾ÖĞÌáÈ¡¹ØÏµ
+     * ä»æ–‡æœ¬ä¸­æå–å…³ç³»
      * 
-     * @param string $text ÊäÈëÎÄ±¾
-     * @param array|null $entities Ô¤ÏÈÌáÈ¡µÄÊµÌå£¬Èç¹ûÎªnullÔò×Ô¶¯ÌáÈ¡
-     * @param array $options ÌáÈ¡Ñ¡Ïî
-     * @return array ÌáÈ¡µÄ¹ØÏµ
+     * @param string $text è¾“å…¥æ–‡æœ¬
+     * @param array|null $entities é¢„å…ˆæå–çš„å®ä½“ï¼Œå¦‚æœä¸ºnullåˆ™è‡ªåŠ¨æå–
+     * @param array $options æå–é€‰é¡¹
+     * @return array æå–çš„å…³ç³»
      * @throws InvalidArgumentException
      */
     public function extract(string $text, ?array $entities = null, array $options = []): array
     {
-        // ÑéÖ¤ÎÄ±¾
-        if (empty($text]) {
-            throw new InvalidArgumentException('ÎÄ±¾²»ÄÜÎª¿Õ'];
+        // éªŒè¯æ–‡æœ¬
+        if (empty($text)) {
+            throw new InvalidArgumentException('æ–‡æœ¬ä¸èƒ½ä¸ºç©º');
         }
         
-        // ´¦ÀíÑ¡Ïî
-        $options = array_merge($this->config, $options];
+        // åˆå¹¶é€‰é¡¹
+        $options = array_merge($this->config, $options);
         
-        // Èç¹ûÃ»ÓĞÌá¹©ÊµÌå£¬ÔòÌáÈ¡ÊµÌå
+        // å¦‚æœæ²¡æœ‰æä¾›å®ä½“ï¼Œåˆ™æå–å®ä½“
         if ($entities === null) {
-            $entities = $this->entityExtractor->extract($text, $options];
+            $entities = $this->entityExtractor->extract($text, $options);
         }
         
-        // Èç¹ûÃ»ÓĞÊµÌå£¬Ôò·µ»Ø¿ÕÊı×é
-        if (empty($entities]) {
+        // å¦‚æœæ²¡æœ‰å®ä½“ï¼Œåˆ™è¿”å›ç©ºæ•°ç»„
+        if (empty($entities)) {
             return [];
         }
         
-        // ·Ö´ÊºÍ´ÊĞÔ±ê×¢
-        $tokens = $this->tokenizer->tokenize($text];
-        $taggedTokens = $this->posTagger->tag($tokens];
+        // åˆ†è¯å’Œè¯æ€§æ ‡æ³¨
+        $tokens = $this->tokenizer->tokenize($text);
+        $taggedTokens = $this->posTagger->tag($tokens);
         
-        // ÌáÈ¡ÊµÌå¶ÔÖ®¼äµÄ¹ØÏµ
-        $relations = $this->extractRelationsBetweenEntities($entities, $taggedTokens, $text, $options];
+        // æå–å®ä½“ä¹‹é—´çš„å…³ç³»
+        $relations = $this->extractRelationsBetweenEntities($entities, $taggedTokens, $text, $options);
         
-        // ¹ıÂË¹ØÏµ
-        $relations = $this->filterRelations($relations, $options];
+        // è¿‡æ»¤å…³ç³»
+        $relations = $this->filterRelations($relations, $options);
         
         return $relations;
     }
 
     /**
-     * ÌáÈ¡ÊµÌå¶ÔÖ®¼äµÄ¹ØÏµ
+     * æå–å®ä½“ä¹‹é—´çš„å…³ç³»
      * 
-     * @param array $entities ÊµÌåÁĞ±í
-     * @param array $taggedTokens ±ê×¢ÁË´ÊĞÔµÄtokenÁĞ±í
-     * @param string $text Ô­Ê¼ÎÄ±¾
-     * @param array $options Ñ¡Ïî
-     * @return array ¹ØÏµÁĞ±í
+     * @param array $entities å®ä½“åˆ—è¡¨
+     * @param array $taggedTokens æ ‡æ³¨äº†è¯æ€§çš„tokenåˆ—è¡¨
+     * @param string $text åŸå§‹æ–‡æœ¬
+     * @param array $options é€‰é¡¹
+     * @return array å…³ç³»åˆ—è¡¨
      */
     private function extractRelationsBetweenEntities(array $entities, array $taggedTokens, string $text, array $options): array
     {
         $relations = [];
-        $entityCount = count($entities];
+        $entityCount = count($entities);
         
-        // ±éÀúËùÓĞÊµÌå¶Ô
-        for ($i = 0;$i <$entityCount;++$i) {
-            for ($j = 0;$j <$entityCount;++$j) {
-                // Ìø¹ıÏàÍ¬ÊµÌå
+        // éå†æ‰€æœ‰å®ä½“å¯¹
+        for ($i = 0; $i < $entityCount; ++$i) {
+            for ($j = 0; $j < $entityCount; ++$j) {
+                // è·³è¿‡ç›¸åŒå®ä½“
                 if ($i === $j) {
                     continue;
                 }
@@ -184,13 +184,13 @@ class RelationExtractor
                 $entity1 = $entities[$i];
                 $entity2 = $entities[$j];
                 
-                // ¼ì²éÊµÌå¼ä¾àÊÇ·ñ³¬¹ıãĞÖµ
-                if ($this->getEntityDistance($entity1, $entity2] > $options['max_entity_distance']) {
+                // æ£€æŸ¥å®ä½“è·ç¦»æ˜¯å¦è¶…è¿‡é˜ˆå€¼
+                if ($this->getEntityDistance($entity1, $entity2) > $options['max_entity_distance']) {
                     continue;
                 }
                 
-                // ÌáÈ¡Á½¸öÊµÌåÖ®¼äµÄ¹ØÏµ
-                $relation = $this->detectRelation($entity1, $entity2, $taggedTokens, $text, $options];
+                // æå–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„å…³ç³»
+                $relation = $this->detectRelation($entity1, $entity2, $taggedTokens, $text, $options);
                 
                 if ($relation !== null) {
                     $relations[] = $relation;
@@ -202,68 +202,65 @@ class RelationExtractor
     }
     
     /**
-     * ¼ÆËãÁ½¸öÊµÌåÖ®¼äµÄ¾àÀë
+     * è®¡ç®—ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„è·ç¦»
      * 
-     * @param array $entity1 µÚÒ»¸öÊµÌå
-     * @param array $entity2 µÚ¶ş¸öÊµÌå
-     * @return int ÊµÌå¼äµÄ¾àÀë£¨tokenÊıÁ¿£©
+     * @param array $entity1 ç¬¬ä¸€ä¸ªå®ä½“
+     * @param array $entity2 ç¬¬äºŒä¸ªå®ä½“
+     * @return int å®ä½“è·ç¦»ï¼ˆtokenæ•°é‡ï¼‰
      */
     private function getEntityDistance(array $entity1, array $entity2): int
     {
-        // ¼ÆËãÁ½¸öÊµÌåÖ®¼äµÄtokenÊıÁ¿
-        // Èç¹ûÊµÌåÖØµş£¬Ôò¾àÀëÎª0
+        // å¦‚æœå®ä½“æ˜¯è¯æ€§æ ‡æ³¨çš„ï¼Œåˆ™è·ç¦»ä¸º0
         if ($entity1['end_pos'] >= $entity1['start_pos'] && $entity1['start_pos'] <= $entity1['end_pos']) {
             return 0;
         }
         
-        // ¼ÆËãÁ½¸öÊµÌåÖ®¼äµÄ¾àÀë
-        return ($entity1['end_pos'] <$entity1['start_pos']] 
-            ? $entity1['start_pos') - $entity1['end_pos'] 
-            : $entity1['start_pos') - $entity1['end_pos'];
+        // è®¡ç®—ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„è·ç¦»
+        return ($entity1['end_pos'] < $entity1['start_pos']) ? $entity1['start_pos'] - $entity1['end_pos'] : $entity1['start_pos'] - $entity1['end_pos'];
     }
 
     /**
-     * ¼ì²âÁ½¸öÊµÌåÖ®¼äµÄ¹ØÏµ
+     * æ£€æµ‹ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„å…³ç³»
      * 
-     * @param array $entity1 Ô´ÊµÌå
-     * @param array $entity2 Ä¿±êÊµÌå
-     * @param array $taggedTokens ±ê×¢ÁË´ÊĞÔµÄtokenÁĞ±í
-     * @param string $text Ô­Ê¼ÎÄ±¾
-     * @param array $options Ñ¡Ïî
-     * @return array|null ¼ì²âµ½µÄ¹ØÏµ£¬Èç¹ûÃ»ÓĞ¼ì²âµ½Ôò·µ»Ønull
+     * @param array $entity1 æºå®ä½“
+     * @param array $entity2 ç›®æ ‡å®ä½“
+     * @param array $taggedTokens æ ‡æ³¨äº†è¯æ€§çš„tokenåˆ—è¡¨
+     * @param string $text åŸå§‹æ–‡æœ¬
+     * @param array $options é€‰é¡¹
+     * @return array|null æ£€æµ‹åˆ°çš„å…³ç³»ï¼Œå¦‚æœæ²¡æœ‰æ£€æµ‹åˆ°åˆ™è¿”å›null
      */
     private function detectRelation(array $entity1, array $entity2, array $taggedTokens, string $text, array $options): ?array
     {
-        // »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾¶Î
-        $textBetweenEntities = $this->getTextBetweenEntities($entity1, $entity2, $text];
+        // è·å–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
+        $textBetweenEntities = $this->getTextBetweenEntities($entity1, $entity2, $text);
         
-        // ¸ù¾İÊµÌåÀàĞÍºÍÖĞ¼äÎÄ±¾ÅĞ¶Ï¹ØÏµÀàĞÍ
-        $relationType = $this->determineRelationType($entity1, $entity2, $textBetweenEntities, $taggedTokens];
+        // æ ¹æ®å®ä½“ç±»å‹å’Œæ–‡æœ¬åˆ¤æ–­å…³ç³»ç±»å‹
+        $relationType = $this->determineRelationType($entity1, $entity2, $textBetweenEntities, $taggedTokens);
         
         if ($relationType === null) {
             return null;
         }
         
-        // ¼ÆËã¹ØÏµµÄÖÃĞÅ¶È
-        $confidence = $this->calculateRelationConfidence($entity1, $entity2, $relationType, $textBetweenEntities];
+        // è®¡ç®—å…³ç³»ç½®ä¿¡åº¦
+        $confidence = $this->calculateRelationConfidence($entity1, $entity2, $relationType, $textBetweenEntities);
         
-        // Èç¹ûÖÃĞÅ¶ÈµÍÓÚãĞÖµ£¬Ôò²»·µ»Ø¹ØÏµ
-        if ($confidence <$options['confidence_threshold']) {
+        // å¦‚æœç½®ä¿¡åº¦ä½äºé˜ˆå€¼åˆ™ä¸è¿”å›å…³ç³»
+        if ($confidence < $options['confidence_threshold']) {
             return null;
         }
         
-        // ¼ì²â·ñ¶¨
-        $isNegated = $options['enable_negation_detection'] && $this->isRelationNegated($text];
+        // æ£€æŸ¥å…³ç³»æ˜¯å¦è¢«å¦å®š
+        $isNegated = $options['enable_negation_detection'] && $this->isRelationNegated($text);
         
-        // ¼ì²âÊ±Ì¬
-        $temporalInfo = $options['enable_temporal_analysis'] ? $this->extractTemporalInfo($text):  null;
+        // æå–æ—¶é—´ä¿¡æ¯
+        $temporalInfo = $options['enable_temporal_analysis'] ? $this->extractTemporalInfo($text) : null;
         
-        // ¹¹½¨¹ØÏµ¶ÔÏó
+        // æ„å»ºå…³ç³»
         return [
-            'id' => $this->generateRelationId($entity1, $entity2, $relationType], 
+            'id' => $this->generateRelationId($entity1, $entity2, $relationType), 
             'source_id' => $entity1['id'], 
             'target_id' => $entity2['id'], 
-            'type' => $this->mapRelationType($relationType], 
+            'type' => $this->mapRelationType($relationType), 
             'confidence' => $confidence,
             'is_negated' => $isNegated,
             'temporal_info' => $temporalInfo,
@@ -276,145 +273,145 @@ class RelationExtractor
     }
 
     /**
-     * »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾
+     * è·å–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
      * 
-     * @param array $entity1 µÚÒ»¸öÊµÌå
-     * @param array $entity2 µÚ¶ş¸öÊµÌå
-     * @param string $text Ô­Ê¼ÎÄ±¾
-     * @return string Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾
+     * @param array $entity1 ç¬¬ä¸€ä¸ªå®ä½“
+     * @param array $entity2 ç¬¬äºŒä¸ªå®ä½“
+     * @param string $text åŸå§‹æ–‡æœ¬
+     * @return string ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
      */
     private function getTextBetweenEntities(array $entity1, array $entity2, string $text): string
     {
-        // È·¶¨Ç°ºóÊµÌå
-        $entity1 = ($entity1['start_pos'] <$entity2['start_pos']] ? $entity1 : $entity2;
-        $entity2 = ($entity1['start_pos'] <$entity2['start_pos']] ? $entity2 : $entity1;
+        // ç¡®å®šå‰ä¸€ä¸ªå®ä½“
+        $entity1 = ($entity1['start_pos'] < $entity2['start_pos']) ? $entity1 : $entity2;
+        $entity2 = ($entity1['start_pos'] < $entity2['start_pos']) ? $entity2 : $entity1;
         
-        // ÌáÈ¡Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾
-        $textBetweenEntities = substr($text, $entity1['end_pos'],  $entity2['start_pos') - $entity1['end_pos']];
+        // è·å–ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
+        $textBetweenEntities = substr($text, $entity1['end_pos'], $entity2['start_pos'] - $entity1['end_pos']);
         
         return $textBetweenEntities;
     }
     
     /**
-     * ¸ù¾İÊµÌåÀàĞÍºÍÖĞ¼äÎÄ±¾È·¶¨¹ØÏµÀàĞÍ
+     * æ ¹æ®å®ä½“ç±»å‹å’Œæ–‡æœ¬åˆ¤æ–­å…³ç³»ç±»å‹
      * 
-     * @param array $entity1 Ô´ÊµÌå
-     * @param array $entity2 Ä¿±êÊµÌå
-     * @param string $textBetweenEntities Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾
-     * @param array $taggedTokens ±ê×¢ÁË´ÊĞÔµÄtokenÁĞ±í
-     * @return string|null ¹ØÏµÀàĞÍ£¬Èç¹ûÎŞ·¨È·¶¨Ôò·µ»Ønull
+     * @param array $entity1 æºå®ä½“
+     * @param array $entity2 ç›®æ ‡å®ä½“
+     * @param string $textBetweenEntities ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
+     * @param array $taggedTokens æ ‡æ³¨äº†è¯æ€§çš„tokenåˆ—è¡¨
+     * @return string|null å…³ç³»ç±»å‹ï¼Œå¦‚æœæ— æ³•ç¡®å®šåˆ™è¿”å›null
      */
     private function determineRelationType(array $entity1, array $entity2, string $textBetweenEntities, array $taggedTokens): ?string
     {
-        // »ùÓÚ¹æÔòµÄ¹ØÏµÀàĞÍÅĞ¶Ï
-        // ÕâÀï¿ÉÒÔÊµÏÖ¸ü¸´ÔÓµÄÂß¼­£¬Èç»ùÓÚ»úÆ÷Ñ§Ï°µÄ·½·¨
+        // æ ¹æ®å·²çŸ¥çš„å…³ç³»ç±»å‹å’Œå®ä½“ç±»å‹åˆ¤æ–­å…³ç³»
+        // è¿™é‡Œå¯ä»¥æ ¹æ®å·²æœ‰çš„å®ä½“ç±»å‹å’Œå…³ç³»ç±»å‹å­¦ä¹ å‡ºæ–°çš„å…³ç³»ç±»å‹åˆ¤æ–­æ–¹æ³•
         
-        // Ê¾Àı¹æÔò£º¸ù¾İÊµÌåÀàĞÍºÍÖĞ¼äÎÄ±¾ÅĞ¶Ï¹ØÏµ
+        // ç¤ºä¾‹ï¼šæ ¹æ®å®ä½“ç±»å‹å’Œæ–‡æœ¬åˆ¤æ–­å…³ç³»
         $type1 = $entity1['type'];
         $type2 = $entity2['type'];
         
-        // ÈËÓë×éÖ¯Ö®¼äµÄ¹ØÏµ
+        // äººç‰©å’Œç»„ç»‡ä¹‹é—´çš„å…³ç³»
         if ($type1 === 'Person' && $type2 === 'Organization') {
-            if (preg_match('/\\b(work|works|working|worked]\\s+(for|at|in]\\b/i', $textBetweenEntities] ||
-                preg_match('/\\b(join|joins|joining|joined]\\b/i', $textBetweenEntities] ||
-                preg_match('/\\b(employ|employs|employed|employee|employees]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(work|works|working|worked)\\s+(for|at|in)\\b/i', $textBetweenEntities) ||
+                preg_match('/\\b(join|joins|joining|joined)\\b/i', $textBetweenEntities) ||
+                preg_match('/\\b(employ|employs|employed|employee|employees)\\b/i', $textBetweenEntities)) {
                 return 'WORKS_FOR';
             }
             
-            if (preg_match('/\\b(found|founded|founder|founders|established|created]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(found|founded|founder|founders|established|created)\\b/i', $textBetweenEntities)) {
                 return 'FOUNDED';
             }
             
-            if (preg_match('/\\b(member|members]\\s+(of]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(member|members)\\s+(of)\\b/i', $textBetweenEntities)) {
                 return 'MEMBER_OF';
             }
         }
         
-        // ÈËÓëµØµãÖ®¼äµÄ¹ØÏµ
+        // äººç‰©å’Œåœ°ç‚¹ä¹‹é—´çš„å…³ç³»
         if ($type1 === 'Person' && $type2 === 'Location') {
-            if (preg_match('/\\b(born|birth]\\s+(in|at]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(born|birth)\\s+(in|at)\\b/i', $textBetweenEntities)) {
                 return 'BORN_IN';
             }
             
-            if (preg_match('/\\b(live|lives|living|lived]\\s+(in|at]\\b/i', $textBetweenEntities] ||
-                preg_match('/\\b(reside|resides|residing|resided]\\s+(in|at]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(live|lives|living|lived)\\s+(in|at)\\b/i', $textBetweenEntities) ||
+                preg_match('/\\b(reside|resides|residing|resided)\\s+(in|at)\\b/i', $textBetweenEntities)) {
                 return 'LOCATED_IN';
             }
         }
         
-        // ×éÖ¯ÓëµØµãÖ®¼äµÄ¹ØÏµ
+        // ç»„ç»‡å’Œåœ°ç‚¹ä¹‹é—´çš„å…³ç³»
         if ($type1 === 'Organization' && $type2 === 'Location') {
-            if (preg_match('/\\b(located|location|headquarters|based]\\s+(in|at]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(located|location|headquarters|based)\\s+(in|at)\\b/i', $textBetweenEntities)) {
                 return 'LOCATED_IN';
             }
         }
         
-        // ÈËÓëÈËÖ®¼äµÄ¹ØÏµ
+        // äººç‰©ä¹‹é—´çš„å…³ç³»
         if ($type1 === 'Person' && $type2 === 'Person') {
-            if (preg_match('/\\b(married|marry|marries|marriage|spouse|husband|wife]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(married|marry|marries|marriage|spouse|husband|wife)\\b/i', $textBetweenEntities)) {
                 return 'SPOUSE';
             }
             
-            if (preg_match('/\\b(parent|father|mother|dad|mom]\\s+(of|to]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(parent|father|mother|dad|mom)\\s+(of|to)\\b/i', $textBetweenEntities)) {
                 return 'PARENT';
             }
             
-            if (preg_match('/\\b(child|son|daughter]\\s+(of|to]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(child|son|daughter)\\s+(of|to)\\b/i', $textBetweenEntities)) {
                 return 'CHILD';
             }
             
-            if (preg_match('/\\b(brother|sister|sibling]\\s+(of|to]\\b/i', $textBetweenEntities]) {
+            if (preg_match('/\\b(brother|sister|sibling)\\s+(of|to)\\b/i', $textBetweenEntities)) {
                 return 'SIBLING';
             }
         }
         
-        // ÎŞ·¨È·¶¨¹ØÏµÀàĞÍ
+        // æ— æ³•ç¡®å®šçš„å…³ç³»
         return null;
     }
 
     /**
-     * ¼ÆËã¹ØÏµµÄÖÃĞÅ¶È
+     * è®¡ç®—å…³ç³»ç½®ä¿¡åº¦
      * 
-     * @param array $entity1 Ô´ÊµÌå
-     * @param array $entity2 Ä¿±êÊµÌå
-     * @param string $relationType ¹ØÏµÀàĞÍ
-     * @param string $textBetweenEntities Á½¸öÊµÌåÖ®¼äµÄÎÄ±¾
-     * @return float ÖÃĞÅ¶È£¨0-1Ö®¼ä£©
+     * @param array $entity1 æºå®ä½“
+     * @param array $entity2 ç›®æ ‡å®ä½“
+     * @param string $relationType å…³ç³»ç±»å‹
+     * @param string $textBetweenEntities ä¸¤ä¸ªå®ä½“ä¹‹é—´çš„æ–‡æœ¬
+     * @return float ç½®ä¿¡åº¦ï¼ˆ0-1ä¹‹é—´ï¼‰
      */
     private function calculateRelationConfidence(array $entity1, array $entity2, string $relationType, string $textBetweenEntities): float
     {
-        // »ù´¡ÖÃĞÅ¶È
+        // åŸºç¡€ç½®ä¿¡åº¦
         $baseConfidence = 0.7;
         
-        // ¸ù¾İÊµÌåµÄÖÃĞÅ¶Èµ÷Õû
-        $baseConfidence *= ($entity1['confidence') + $entity2['confidence']] / 2;
+        // ä½¿ç”¨å®ä½“ç½®ä¿¡åº¦
+        $baseConfidence *= ($entity1['confidence'] + $entity2['confidence']) / 2;
         
-        // ¸ù¾İÎÄ±¾³¤¶Èµ÷Õû£¨½Ï¶ÌµÄÎÄ±¾Í¨³£¸ü¿É¿¿£©
-        $textLength = mb_strlen($textBetweenEntities, 'UTF-8'];
+        // ä½¿ç”¨æ–‡æœ¬é•¿åº¦è°ƒæ•´ç½®ä¿¡åº¦
+        $textLength = mb_strlen($textBetweenEntities, 'UTF-8');
         if ($textLength > 50) {
-            $baseConfidence *= 0.9;// ½µµÍ³¤ÎÄ±¾µÄÖÃĞÅ¶È
-        } else if ($textLength <10) {
-            $baseConfidence *= 1.1;// Ìá¸ß¶ÌÎÄ±¾µÄÖÃĞÅ¶È
+            $baseConfidence *= 0.9; // é•¿æ–‡æœ¬çš„ç½®ä¿¡åº¦
+        } else if ($textLength < 10) {
+            $baseConfidence *= 1.1; // çŸ­æ–‡æœ¬çš„ç½®ä¿¡åº¦
         }
         
-        // ¸ù¾İ¹Ø¼ü´ÊÆ¥Åä¶Èµ÷Õû
-        $keywords = $this->getRelationTypeKeywords($relationType];
+        // æ ¹æ®å…³é”®è¯åŒ¹é…è°ƒæ•´ç½®ä¿¡åº¦
+        $keywords = $this->getRelationTypeKeywords($relationType);
         foreach ($keywords as $keyword) {
-            if (stripos($textBetweenEntities, $keyword] !== false) {
-                $baseConfidence *= 1.05;// Ã¿Æ¥ÅäÒ»¸ö¹Ø¼ü´Ê£¬Ìá¸ßÖÃĞÅ¶È
-                break;// Ö»¼ÆËãÒ»´Î
+            if (stripos($textBetweenEntities, $keyword) !== false) {
+                $baseConfidence *= 1.05; // æ¯ä¸ªåŒ¹é…çš„å…³é”®è¯å¢åŠ ç½®ä¿¡åº¦
+                break; // åªåŒ¹é…ä¸€ä¸ª
             }
         }
         
-        // È·±£ÖÃĞÅ¶ÈÔÚ0-1Ö®¼ä
-        return min(1.0, max(0.0, $baseConfidence]];
+        // ç¡®ä¿ç½®ä¿¡åº¦åœ¨0-1ä¹‹é—´
+        return min(1.0, max(0.0, $baseConfidence));
     }
     
     /**
-     * »ñÈ¡¹ØÏµÀàĞÍµÄ¹Ø¼ü´Ê
+     * è·å–å…³ç³»ç±»å‹çš„å…³é”®è¯
      * 
-     * @param string $relationType ¹ØÏµÀàĞÍ
-     * @return array ¹Ø¼ü´ÊÁĞ±í
+     * @param string $relationType å…³ç³»ç±»å‹
+     * @return array å…³é”®è¯åˆ—è¡¨
      */
     private function getRelationTypeKeywords(string $relationType): array
     {
@@ -438,18 +435,18 @@ class RelationExtractor
     }
     
     /**
-     * ¼ì²â¹ØÏµÊÇ·ñ±»·ñ¶¨
+     * æ£€æŸ¥å…³ç³»æ˜¯å¦è¢«å¦å®š
      * 
-     * @param string $text ÎÄ±¾
-     * @return bool ÊÇ·ñ±»·ñ¶¨
+     * @param string $text æ–‡æœ¬
+     * @return bool æ˜¯å¦è¢«å¦å®š
      */
     private function isRelationNegated(string $text): bool
     {
-        // ¼ì²â·ñ¶¨´Ê
+        // å¦å®šè¯
         $negationWords = ['not', 'no', 'never', 'neither', 'nor', 'without', "doesn't", "don't", "didn't", "isn't", "aren't", "wasn't", "weren't"];
         
         foreach ($negationWords as $word) {
-            if (preg_match('/\\b' . preg_quote($word, '/'] . '\\b/i', $text]) {
+            if (preg_match('/\\b' . preg_quote($word, '/') . '\\b/i', $text)) {
                 return true;
             }
         }
@@ -458,31 +455,31 @@ class RelationExtractor
     }
 
     /**
-     * ÌáÈ¡Ê±Ì¬ĞÅÏ¢
+     * æå–æ—¶é—´ä¿¡æ¯
      * 
-     * @param string $text ÎÄ±¾
-     * @return array|null Ê±Ì¬ĞÅÏ¢£¬Èç¹ûÎŞ·¨ÌáÈ¡Ôò·µ»Ønull
+     * @param string $text æ–‡æœ¬
+     * @return array|null æ—¶é—´ä¿¡æ¯ï¼Œå¦‚æœæ— æ³•æå–åˆ™è¿”å›null
      */
     private function extractTemporalInfo(string $text): ?array
     {
-        // ÌáÈ¡Ê±¼ä±í´ïÊ½
+        // æå–æ—¶é—´è¡¨è¾¾å¼
         $timeExpression = null;
         
-        // ¼ì²â¹ıÈ¥Ê±Ì¬
-        if (preg_match('/\\b(was|were|had|did|used to|previously|formerly|once|earlier|before|ago|in the past]\\b/i', $text]) {
+        // æå–è¿‡å»æ—¶é—´è¡¨è¾¾å¼
+        if (preg_match('/\\b(was|were|had|did|used to|previously|formerly|once|earlier|before|ago|in the past)\\b/i', $text)) {
             $timeExpression = ['tense' => 'past'];
         }
-        // ¼ì²âÏÖÔÚÊ±Ì¬
-        else if (preg_match('/\\b(is|are|am|has|have|currently|presently|now|today|nowadays]\\b/i', $text]) {
+        // æå–ç°åœ¨æ—¶é—´è¡¨è¾¾å¼
+        else if (preg_match('/\\b(is|are|am|has|have|currently|presently|now|today|nowadays)\\b/i', $text)) {
             $timeExpression = ['tense' => 'present'];
         }
-        // ¼ì²â½«À´Ê±Ì¬
-        else if (preg_match('/\\b(will|shall|going to|would|in the future|soon|later|next]\\b/i', $text]) {
+        // æå–å°†æ¥æ—¶é—´è¡¨è¾¾å¼
+        else if (preg_match('/\\b(will|shall|going to|would|in the future|soon|later|next)\\b/i', $text)) {
             $timeExpression = ['tense' => 'future'];
         }
         
-        // ³¢ÊÔÌáÈ¡¾ßÌåÈÕÆÚ»òÊ±¼ä¶Î
-        if (preg_match('/\\b(in|on|at|during|since|for|from]\\s+(\\d{4}|january|february|march|april|may|june|july|august|september|october|november|december]\\b/i', $text, $matches]) {
+        // æå–æ—¶é—´è¡¨è¾¾å¼ä¸­çš„æ—¶é—´è¡¨è¾¾å¼
+        if (preg_match('/\\b(in|on|at|during|since|for|from)\\s+(\\d{4}|january|february|march|april|may|june|july|august|september|october|november|december)\\b/i', $text, $matches)) {
             if ($timeExpression === null) {
                 $timeExpression = [];
             }
@@ -493,10 +490,10 @@ class RelationExtractor
     }
     
     /**
-     * Ó³Éä¹ØÏµÀàĞÍ
+     * æ˜ å°„å…³ç³»ç±»å‹
      * 
-     * @param string $relationType ¹ØÏµÀàĞÍ
-     * @return string Ó³ÉäºóµÄ¹ØÏµÀàĞÍ
+     * @param string $relationType å…³ç³»ç±»å‹
+     * @return string æ˜ å°„åçš„å…³ç³»ç±»å‹
      */
     private function mapRelationType(string $relationType): string
     {
@@ -504,24 +501,24 @@ class RelationExtractor
     }
     
     /**
-     * Éú³É¹ØÏµID
+     * ç”Ÿæˆå…³ç³»ID
      * 
-     * @param array $entity1 Ô´ÊµÌå
-     * @param array $entity2 Ä¿±êÊµÌå
-     * @param string $relationType ¹ØÏµÀàĞÍ
-     * @return string ¹ØÏµID
+     * @param array $entity1 æºå®ä½“
+     * @param array $entity2 ç›®æ ‡å®ä½“
+     * @param string $relationType å…³ç³»ç±»å‹
+     * @return string å…³ç³»ID
      */
     private function generateRelationId(array $entity1, array $entity2, string $relationType): string
     {
-        return md5($entity1['id'] . $entity2['id'] . $relationType];
+        return md5($entity1['id'] . $entity2['id'] . $relationType);
     }
     
     /**
-     * ¹ıÂË¹ØÏµ
+     * è¿‡æ»¤å…³ç³»
      * 
-     * @param array $relations ¹ØÏµÁĞ±í
-     * @param array $options Ñ¡Ïî
-     * @return array ¹ıÂËºóµÄ¹ØÏµ
+     * @param array $relations å…³ç³»åˆ—è¡¨
+     * @param array $options é€‰é¡¹
+     * @return array è¿‡æ»¤åçš„å…³ç³»
      */
     private function filterRelations(array $relations, array $options): array
     {
@@ -530,14 +527,14 @@ class RelationExtractor
         $allowedRelationTypes = $options['relation_types'];
         
         foreach ($relations as $relation) {
-            // ¹ıÂËµÍÖÃĞÅ¶È¹ØÏµ
-            if ($relation['confidence'] <$confidenceThreshold) {
+            // è¿‡æ»¤ç½®ä¿¡åº¦ä½çš„å…³è”
+            if ($relation['confidence'] < $confidenceThreshold) {
                 continue;
             }
             
-            // ¹ıÂË²»ÔÚÔÊĞíÀàĞÍÁĞ±íÖĞµÄ¹ØÏµ
+            // è¿‡æ»¤ä¸å…è®¸çš„å…³è”ç±»å‹
             $relationType = $relation['type'];
-            if (!in_[$relationType, $allowedRelationTypes]) {
+            if (!in_array($relationType, $allowedRelationTypes)) {
                 continue;
             }
             

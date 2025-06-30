@@ -1,17 +1,17 @@
 <?php
 /**
- * ÎÄ¼şÃû£ºUniversalTokenizer.php
- * ¹¦ÄÜÃèÊö£ºÍ¨ÓÃ·Ö´ÊÆ÷ - Ö§³Ö¶àÓïÑÔ·Ö´Ê´¦Àí
- * ´´½¨Ê±¼ä£º2025-01-XX
- * ×îºóĞŞ¸Ä£º2025-01-XX
- * °æ±¾£º1.0.0
+ * æ–‡ä»¶åç§°UniversalTokenizer.php
+ * é€šç”¨åˆ†è¯å™¨ - æ”¯æŒå¤šç§è¯­è¨€çš„åˆ†è¯
+ * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
+ * ä¿®æ”¹æ—¶é—´ï¼š2025-01-XX
+ * ç‰ˆæœ¬ï¼š1.0.0
  *
  * @package AlingAi\Engines\NLP
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
 namespace AlingAi\Engines\NLP;
 
@@ -21,86 +21,86 @@ use AlingAi\Core\Logger\LoggerInterface;
 use AlingAi\Utils\CacheManager;
 
 /**
- * Í¨ÓÃ·Ö´ÊÆ÷
+ * é€šç”¨åˆ†è¯å™¨
  *
- * Ìá¹©¶àÓïÑÔ·Ö´ÊÖ§³Ö£¬Õë¶Ô²»Í¬ÓïÑÔÊ¹ÓÃ²»Í¬µÄ·Ö´Ê²ßÂÔ
+ * æä¾›å¤šç§è¯­è¨€çš„åˆ†è¯æ”¯æŒï¼Œä¸åŒçš„è¯­è¨€ä½¿ç”¨ä¸åŒçš„åˆ†è¯ç­–ç•¥
  */
 class UniversalTokenizer implements TokenizerInterface
 {
     /**
-     * @var array ÅäÖÃÑ¡Ïî
+     * @var array é…ç½®é€‰é¡¹
      */
     private array $config;
     
     /**
-     * @var LoggerInterface|null ÈÕÖ¾Æ÷
+     * @var LoggerInterface|null æ—¥å¿—è®°å½•å™¨
      */
     private ?LoggerInterface $logger;
     
     /**
-     * @var CacheManager|null »º´æ¹ÜÀíÆ÷
+     * @var CacheManager|null ç¼“å­˜ç®¡ç†å™¨
      */
     private ?CacheManager $cache;
     
     /**
-     * @var array Í£ÓÃ´ÊÁĞ±í [language => [word1, word2, ...]]
+     * @var array åœç”¨è¯åˆ—è¡¨ [language => [word1, word2, ...]]
      */
     private array $stopwords = [];
     
     /**
-     * @var string µ±Ç°ÓïÑÔ
+     * @var string å½“å‰è¯­è¨€
      */
     private string $currentLanguage;
     
     /**
-     * @var array ÓïÑÔ¼ì²âÄ£ĞÍ
+     * @var array è¯­è¨€æ£€æµ‹æ¨¡å‹
      */
     private array $languageDetectionModels = [];
     
     /**
-     * @var array ´Ê¸ÉÌáÈ¡Æ÷
+     * @var array è¯å¹²æå–å™¨
      */
     private array $stemmers = [];
     
     /**
-     * @var array ´ÊĞÎ»¹Ô­Æ÷
+     * @var array è¯å½¢è¿˜åŸå™¨
      */
     private array $lemmatizers = [];
 
     /**
-     * ¹¹Ôìº¯Êı
+     * æ„é€ å‡½æ•°
      *
-     * @param array $config ÅäÖÃÑ¡Ïî
-     * @param LoggerInterface|null $logger ÈÕÖ¾Æ÷
-     * @param CacheManager|null $cache »º´æ¹ÜÀíÆ÷
+     * @param array $config é…ç½®é€‰é¡¹
+     * @param LoggerInterface|null $logger æ—¥å¿—è®°å½•å™¨
+     * @param CacheManager|null $cache ç¼“å­˜ç®¡ç†å™¨
      */
     public function __construct(array $config = [],  ?LoggerInterface $logger = null, ?CacheManager $cache = null)
     {
-        $this->config = $this->mergeConfig($config];
+        $this->config = $this->mergeConfig($config);
         $this->logger = $logger;
         $this->cache = $cache;
         
         $this->currentLanguage = $this->config['default_language'];
         
-        $this->initializeStopwords(];
+        $this->initializeStopwords();
         
         if ($this->logger) {
-            $this->logger->info('Í¨ÓÃ·Ö´ÊÆ÷³õÊ¼»¯³É¹¦', [
+            $this->logger->info('é€šç”¨åˆ†è¯å™¨åˆå§‹åŒ–æˆåŠŸ', [
                 'default_language' => $this->currentLanguage,
                 'supported_languages' => implode(', ', $this->config['supported_languages'])
-            ]];
+            ]);
         }
     }
     
     /**
-     * ºÏ²¢Ä¬ÈÏÅäÖÃºÍÓÃ»§ÅäÖÃ
+     * åˆå¹¶é»˜è®¤é…ç½®å’Œç”¨æˆ·é…ç½®
      *
-     * @param array $config ÓÃ»§ÅäÖÃ
-     * @return array ºÏ²¢ºóµÄÅäÖÃ
+     * @param array $config ç”¨æˆ·é…ç½®
+     * @return array åˆå¹¶åçš„é…ç½®
      */
     private function mergeConfig(array $config): array
     {
-        // Ä¬ÈÏÅäÖÃ
+        // é»˜è®¤é…ç½®
         $defaultConfig = [
             'default_language' => 'zh-CN',
             'supported_languages' => ['zh-CN', 'en-US'], 
@@ -113,18 +113,18 @@ class UniversalTokenizer implements TokenizerInterface
             'remove_stopwords' => false
         ];
         
-        return array_merge($defaultConfig, $config];
+        return array_merge($defaultConfig, $config);
     }
     
     /**
-     * ³õÊ¼»¯Í£ÓÃ´Ê
+     * åˆå§‹åŒ–åœç”¨è¯
      */
     private function initializeStopwords(): void
     {
-        // ¼ÓÔØÄ¬ÈÏÓïÑÔµÄÍ£ÓÃ´Ê
-        $this->loadStopwords($this->currentLanguage];
+        // åŠ è½½é»˜è®¤è¯­è¨€çš„åœç”¨è¯
+        $this->loadStopwords($this->currentLanguage);
         
-        // Èç¹ûÉèÖÃÁË»º´æ£¬³¢ÊÔ´Ó»º´æ¼ÓÔØÆäËûÖ§³ÖÓïÑÔµÄÍ£ÓÃ´Ê
+        // å¦‚æœå¯ç”¨ç¼“å­˜ï¼Œå°è¯•åŠ è½½å…¶ä»–æ”¯æŒè¯­è¨€çš„åœç”¨è¯
         if ($this->cache && $this->config['use_cache']) {
             foreach ($this->config['supported_languages'] as $language) {
                 if ($language === $this->currentLanguage) {
@@ -133,17 +133,17 @@ class UniversalTokenizer implements TokenizerInterface
                 
                 $cacheKey = "stopwords_{$language}";
                 if ($this->cache->has($cacheKey)) {
-                    $this->stopwords[$language] = $this->cache->get($cacheKey];
+                    $this->stopwords[$language] = $this->cache->get($cacheKey);
                 }
             }
         }
     }
     
     /**
-     * ¼ÓÔØÌØ¶¨ÓïÑÔµÄÍ£ÓÃ´Ê
+     * åŠ è½½ç‰¹å®šè¯­è¨€çš„åœç”¨è¯
      *
-     * @param string $language ÓïÑÔ´úÂë
-     * @return bool ÊÇ·ñ¼ÓÔØ³É¹¦
+     * @param string $language è¯­è¨€ä»£ç 
+     * @return bool æ˜¯å¦åŠ è½½æˆåŠŸ
      */
     private function loadStopwords(string $language): bool
     {
@@ -151,50 +151,50 @@ class UniversalTokenizer implements TokenizerInterface
             return true;
         }
         
-        // ³¢ÊÔ´Ó»º´æ¼ÓÔØ
+        // å°è¯•ä»ç¼“å­˜åŠ è½½
         if ($this->cache && $this->config['use_cache']) {
             $cacheKey = "stopwords_{$language}";
             if ($this->cache->has($cacheKey)) {
-                $this->stopwords[$language] = $this->cache->get($cacheKey];
+                $this->stopwords[$language] = $this->cache->get($cacheKey);
                 return true;
             }
         }
         
-        // ´ÓÎÄ¼ş¼ÓÔØÍ£ÓÃ´Ê
+        // ä»æ–‡ä»¶åŠ è½½åœç”¨è¯
         $stopwordsFile = __DIR__ . "/resources/stopwords/{$language}.php";
         
         if (file_exists($stopwordsFile)) {
             $stopwords = include $stopwordsFile;
-            if (is_[$stopwords)) {
+            if (is_array($stopwords)) {
                 $this->stopwords[$language] = $stopwords;
                 
-                // ±£´æµ½»º´æ
+                // ä¿å­˜åˆ°ç¼“å­˜
                 if ($this->cache && $this->config['use_cache']) {
                     $cacheKey = "stopwords_{$language}";
-                    $this->cache->set($cacheKey, $stopwords, $this->config['cache_ttl']];
+                    $this->cache->set($cacheKey, $stopwords, $this->config['cache_ttl']);
                 }
                 
                 return true;
             }
         }
         
-        // Èç¹ûÎŞ·¨¼ÓÔØÌØ¶¨ÓïÑÔµÄÍ£ÓÃ´Ê£¬Ê¹ÓÃÓ²±àÂëµÄ»ù±¾Í£ÓÃ´Ê
-        $this->stopwords[$language] = $this->getDefaultStopwords($language];
+        // å¦‚æœæ— æ³•åŠ è½½ç‰¹å®šè¯­è¨€çš„åœç”¨è¯ï¼Œä½¿ç”¨ç¡¬ç¼–ç çš„åŸºæœ¬åœç”¨è¯
+        $this->stopwords[$language] = $this->getDefaultStopwords($language);
         
         return false;
     }
     
     /**
-     * »ñÈ¡Ä¬ÈÏµÄÍ£ÓÃ´Ê
+     * è·å–é»˜è®¤åœç”¨è¯
      *
-     * @param string $language ÓïÑÔ´úÂë
-     * @return array Ä¬ÈÏÍ£ÓÃ´ÊÁĞ±í
+     * @param string $language è¯­è¨€ä»£ç 
+     * @return array é»˜è®¤åœç”¨è¯åˆ—è¡¨
      */
     private function getDefaultStopwords(string $language): array
     {
         switch ($language) {
             case 'zh-CN':
-                return ['µÄ', 'ÁË', 'ºÍ', 'ÊÇ', '¾Í', '¶¼', '¶ø', '¼°', 'Óë', 'Õâ', 'ÄÇ', 'ÓĞ', 'ÔÚ', 'ÖĞ', 'Îª', '¶Ô', 'Ò²'];
+                return ['çš„', 'äº†', 'æ˜¯', 'åœ¨', 'æˆ‘', 'æœ‰', 'å’Œ', 'ä»–', 'è¿™', 'ä¸º', 'ä»–', 'ä½†', 'å¥¹', 'çš„', 'ä¹Ÿ'];
             case 'en-US':
                 return ['the', 'a', 'an', 'and', 'or', 'but', 'if', 'then', 'else', 'when', 'at', 'from', 'by', 'on', 'for', 'to', 'in', 'of'];
             default:
@@ -203,102 +203,102 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ·Ö´Ê·½·¨
+     * åˆ†è¯
      *
-     * @param string $text Òª·Ö´ÊµÄÎÄ±¾
-     * @param array $options ·Ö´ÊÑ¡Ïî
-     * @return array ·Ö´Ê½á¹û
+     * @param string $text è¦åˆ†è¯çš„æ–‡æœ¬
+     * @param array $options åˆ†è¯é€‰é¡¹
+     * @return array åˆ†è¯ç»“æœ
      */
     public function tokenize(string $text, array $options = []): array
     {
-        // ºÏ²¢Ñ¡Ïî
-        $options = array_merge($this->config, $options];
+        // åˆå¹¶é€‰é¡¹
+        $options = array_merge($this->config, $options);
         
-        // ¼ì²é»º´æ
+        // ç¼“å­˜é”®
         $cacheKey = null;
         if ($this->cache && $options['use_cache']) {
-            $cacheKey = "tokenize_" . md5($text . json_encode($options)];
+            $cacheKey = "tokenize_" . md5($text . json_encode($options));
             if ($this->cache->has($cacheKey)) {
-                return $this->cache->get($cacheKey];
+                return $this->cache->get($cacheKey);
             }
         }
         
-        // ¼ì²âÓïÑÔ£¨Èç¹ûÃ»ÓĞÖ¸¶¨£©
+        // æ£€æµ‹è¯­è¨€ï¼Œå¦‚æœæœªæŒ‡å®š
         $language = $options['language'] ?? null;
         if (!$language) {
             $language = $this->detectLanguage($text) ?? $this->currentLanguage;
         }
         
-        // ¸ù¾İÓïÑÔÑ¡Ôñ·Ö´Ê²ßÂÔ
-        $tokens = $this->tokenizeByLanguage($text, $language, $options];
+        // æ ¹æ®è¯­è¨€é€‰æ‹©åˆ†è¯ç­–ç•¥
+        $tokens = $this->tokenizeByLanguage($text, $language, $options);
         
-        // Èç¹ûĞèÒª¹ıÂËÍ£ÓÃ´Ê
+        // å¦‚æœéœ€è¦ï¼Œç§»é™¤åœç”¨è¯
         if ($options['remove_stopwords'] ?? false) {
-            $tokens = $this->filterTokens($tokens, ['remove_stopwords' => true]];
+            $tokens = $this->filterTokens($tokens, ['remove_stopwords' => true]);
         }
         
-        // »º´æ½á¹û
+        // ç¼“å­˜ç»“æœ
         if ($this->cache && $options['use_cache'] && $cacheKey) {
-            $this->cache->set($cacheKey, $tokens, $options['cache_ttl']];
+            $this->cache->set($cacheKey, $tokens, $options['cache_ttl']);
         }
         
         return $tokens;
     }
     
     /**
-     * ¸ù¾İÓïÑÔµ÷ÓÃ²»Í¬µÄ·Ö´Ê·½·¨
+     * æ ¹æ®è¯­è¨€è¿›è¡Œåˆ†è¯
      *
-     * @param string $text ÎÄ±¾
-     * @param string $language ÓïÑÔ´úÂë
-     * @param array $options Ñ¡Ïî
-     * @return array ·Ö´Ê½á¹û
+     * @param string $text æ–‡æœ¬
+     * @param string $language è¯­è¨€ä»£ç 
+     * @param array $options é€‰é¡¹
+     * @return array åˆ†è¯ç»“æœ
      */
     private function tokenizeByLanguage(string $text, string $language, array $options): array
     {
         switch ($language) {
             case 'zh-CN':
-                return $this->tokenizeChineseText($text, $options];
+                return $this->tokenizeChineseText($text, $options);
             case 'en-US':
             default:
-                return $this->tokenizeEnglishText($text, $options];
+                return $this->tokenizeEnglishText($text, $options);
         }
     }
     
     /**
-     * ÖĞÎÄ·Ö´Ê
+     * ä¸­æ–‡åˆ†è¯
      *
-     * @param string $text ÖĞÎÄÎÄ±¾
-     * @param array $options Ñ¡Ïî
-     * @return array ·Ö´Ê½á¹û
+     * @param string $text ä¸­æ–‡æ–‡æœ¬
+     * @param array $options é€‰é¡¹
+     * @return array åˆ†è¯ç»“æœ
      */
     private function tokenizeChineseText(string $text, array $options): array
     {
-        // ÕâÀïÓ¦¸ÃÊ¹ÓÃ×¨ÒµµÄÖĞÎÄ·Ö´Ê¿â
-        // ÀıÈç jieba-php, phpanalysis µÈ
-        // ¼òµ¥Æğ¼û£¬ÕâÀïÊ¹ÓÃ×Ö·û·Ö¸î·½Ê½£¬Êµ¼ÊÓ¦ÓÃÓ¦Ê¹ÓÃ×¨ÒµËã·¨
+        // åº”è¯¥ä½¿ç”¨ç›¸åº”çš„ä¸­æ–‡åˆ†è¯åº“
+        // ä¾‹å¦‚ jieba-php, phpanalysis ç­‰
+        // å¦‚æœæ²¡æœ‰å¯ç”¨çš„åº“ï¼Œåº”è¯¥ä½¿ç”¨å­—ç¬¦ä¸²åˆ†å‰²æ–¹å¼å®ç°ä¸­æ–‡åˆ†è¯
         $tokens = [];
-        $text = trim($text];
+        $text = trim($text);
         $position = 0;
         
-        // Ê¹ÓÃÕıÔòÊ¶±ğ²»Í¬ÀàĞÍµÄµ¥Ôª
+        // ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…ä¸åŒçš„å…ƒç´ 
         $pattern = '/([a-zA-Z0-9]+|[\x{4e00}-\x{9fa5}]|[^\s\x{4e00}-\x{9fa5}a-zA-Z0-9])/u';
-        preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE];
+        preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE);
         
         foreach ($matches[0] as $match) {
             $tokenText = $match[0];
             $start = $match[1];
-            $length = mb_strlen($tokenText];
+            $length = mb_strlen($tokenText);
             
-            // È·¶¨tokenÀàĞÍ
-            $type = $this->determineTokenType($tokenText];
+            // ç¡®å®štokenç±»å‹
+            $type = $this->determineTokenType($tokenText);
             
-            // ¼ì²éÊÇ·ñÎªÍ£ÓÃ´Ê
-            $isStopWord = in_[$tokenText, $this->stopwords[$this->currentLanguage] ?? []];
+            // æ£€æŸ¥æ˜¯å¦ä¸ºåœç”¨è¯
+            $isStopWord = in_array($tokenText, $this->stopwords[$this->currentLanguage] ?? []);
             
             $token = [
                 'text' => $tokenText,
                 'start' => $start,
-                'end' => $start + strlen($tokenText],
+                'end' => $start + strlen($tokenText),
                 'length' => $length,
                 'type' => $type,
                 'is_stop_word' => $isStopWord,
@@ -311,41 +311,41 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * Ó¢ÎÄ·Ö´Ê
+     * è‹±æ–‡åˆ†è¯
      *
-     * @param string $text Ó¢ÎÄÎÄ±¾
-     * @param array $options Ñ¡Ïî
-     * @return array ·Ö´Ê½á¹û
+     * @param string $text è‹±æ–‡æ–‡æœ¬
+     * @param array $options é€‰é¡¹
+     * @return array åˆ†è¯ç»“æœ
      */
     private function tokenizeEnglishText(string $text, array $options): array
     {
         $tokens = [];
         $preserve_case = $options['preserve_case'] ?? true;
         
-        // ¼òµ¥µÄ»ùÓÚ¿Õ¸ñºÍ±êµãµÄ·Ö´Ê
+        // ä½¿ç”¨æ­£åˆ™è¡¨è¾¾å¼åŒ¹é…å•è¯å’Œæ ‡ç‚¹ç¬¦å·
         $pattern = '/\b\w+\b|[^\w\s]/u';
-        preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE];
+        preg_match_all($pattern, $text, $matches, PREG_OFFSET_CAPTURE);
         
         foreach ($matches[0] as $match) {
             $tokenText = $match[0];
             $start = $match[1];
             
-            // Èç¹û²»±£Áô´óĞ¡Ğ´£¬Ôò×ªÎªĞ¡Ğ´
+            // å¦‚æœä¸ä¿ç•™å¤§å°å†™ï¼Œå°†æ‰€æœ‰å­—æ¯è½¬ä¸ºå°å†™
             if (!$preserve_case) {
-                $tokenText = strtolower($tokenText];
+                $tokenText = strtolower($tokenText);
             }
             
-            // È·¶¨tokenÀàĞÍ
-            $type = $this->determineTokenType($tokenText];
+            // ç¡®å®štokenç±»å‹
+            $type = $this->determineTokenType($tokenText);
             
-            // ¼ì²éÊÇ·ñÎªÍ£ÓÃ´Ê
-            $isStopWord = in_[strtolower($tokenText], $this->stopwords['en-US'] ?? []];
+            // æ£€æŸ¥æ˜¯å¦ä¸ºåœç”¨è¯
+            $isStopWord = in_array(strtolower($tokenText), $this->stopwords['en-US'] ?? []);
             
             $token = [
                 'text' => $tokenText,
                 'start' => $start,
-                'end' => $start + strlen($tokenText],
-                'length' => mb_strlen($tokenText],
+                'end' => $start + strlen($tokenText),
+                'length' => mb_strlen($tokenText),
                 'type' => $type,
                 'is_stop_word' => $isStopWord,
             ];
@@ -357,10 +357,10 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * È·¶¨tokenÀàĞÍ
+     * ç¡®å®štokenç±»å‹
      *
-     * @param string $token tokenÎÄ±¾
-     * @return string tokenÀàĞÍ
+     * @param string $token tokenæ–‡æœ¬
+     * @return string tokenç±»å‹
      */
     private function determineTokenType(string $token): string
     {
@@ -380,75 +380,75 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * »ñÈ¡Í£ÓÃ´ÊÁĞ±í
+     * è·å–åœç”¨è¯åˆ—è¡¨
      *
-     * @param string|null $language ÓïÑÔ´úÂë
-     * @return array Í£ÓÃ´ÊÁĞ±í
+     * @param string|null $language è¯­è¨€ä»£ç 
+     * @return array åœç”¨è¯åˆ—è¡¨
      */
     public function getStopwords(?string $language = null): array
     {
         $language = $language ?? $this->currentLanguage;
         
-        // È·±£ÓïÑÔµÄÍ£ÓÃ´ÊÒÑ¼ÓÔØ
+        // ç¡®ä¿æŒ‡å®šè¯­è¨€çš„åœç”¨è¯å·²åŠ è½½
         if (!isset($this->stopwords[$language])) {
-            $this->loadStopwords($language];
+            $this->loadStopwords($language);
         }
         
         return $this->stopwords[$language] ?? [];
     }
     
     /**
-     * Ìí¼Ó×Ô¶¨ÒåÍ£ÓÃ´Ê
+     * æ·»åŠ è‡ªå®šä¹‰åœç”¨è¯
      *
-     * @param array $words ÒªÌí¼ÓµÄÍ£ÓÃ´Ê
-     * @param string|null $language ÓïÑÔ´úÂë
-     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
+     * @param array $words è¦æ·»åŠ çš„åœç”¨è¯
+     * @param string|null $language è¯­è¨€ä»£ç 
+     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
      */
     public function addStopwords(array $words, ?string $language = null): bool
     {
         $language = $language ?? $this->currentLanguage;
         
-        // È·±£ÓïÑÔµÄÍ£ÓÃ´ÊÒÑ¼ÓÔØ
+        // ç¡®ä¿æŒ‡å®šè¯­è¨€çš„åœç”¨è¯å·²åŠ è½½
         if (!isset($this->stopwords[$language])) {
-            $this->loadStopwords($language];
+            $this->loadStopwords($language);
         }
         
-        // ºÏ²¢²¢È¥ÖØ
-        $this->stopwords[$language] = array_unique(array_merge($this->stopwords[$language] ?? [],  $words)];
+        // åˆå¹¶å¹¶å»é‡
+        $this->stopwords[$language] = array_unique(array_merge($this->stopwords[$language] ?? [],  $words));
         
-        // ¸üĞÂ»º´æ
+        // æ›´æ–°ç¼“å­˜
         if ($this->cache && $this->config['use_cache']) {
             $cacheKey = "stopwords_{$language}";
-            $this->cache->set($cacheKey, $this->stopwords[$language],  $this->config['cache_ttl']];
+            $this->cache->set($cacheKey, $this->stopwords[$language],  $this->config['cache_ttl']);
         }
         
         return true;
     }
     
     /**
-     * ÒÆ³ıÍ£ÓÃ´Ê
+     * ç§»é™¤åœç”¨è¯
      *
-     * @param array $words ÒªÒÆ³ıµÄÍ£ÓÃ´Ê
-     * @param string|null $language ÓïÑÔ´úÂë
-     * @return bool ÊÇ·ñÒÆ³ı³É¹¦
+     * @param array $words è¦ç§»é™¤çš„åœç”¨è¯
+     * @param string|null $language è¯­è¨€ä»£ç 
+     * @return bool æ˜¯å¦ç§»é™¤æˆåŠŸ
      */
     public function removeStopwords(array $words, ?string $language = null): bool
     {
         $language = $language ?? $this->currentLanguage;
         
-        // È·±£ÓïÑÔµÄÍ£ÓÃ´ÊÒÑ¼ÓÔØ
+        // ç¡®ä¿æŒ‡å®šè¯­è¨€çš„åœç”¨è¯å·²åŠ è½½
         if (!isset($this->stopwords[$language])) {
-            $this->loadStopwords($language];
+            $this->loadStopwords($language);
         }
         
-        // ÒÆ³ıÖ¸¶¨µÄÍ£ÓÃ´Ê
+        // ç§»é™¤æŒ‡å®šçš„åœç”¨è¯
         if (isset($this->stopwords[$language])) {
-            $this->stopwords[$language] = array_diff($this->stopwords[$language],  $words];
+            $this->stopwords[$language] = array_diff($this->stopwords[$language],  $words);
             
-            // ¸üĞÂ»º´æ
+            // æ›´æ–°ç¼“å­˜
             if ($this->cache && $this->config['use_cache']) {
                 $cacheKey = "stopwords_{$language}";
-                $this->cache->set($cacheKey, $this->stopwords[$language],  $this->config['cache_ttl']];
+                $this->cache->set($cacheKey, $this->stopwords[$language],  $this->config['cache_ttl']);
             }
             
             return true;
@@ -458,57 +458,57 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ½«·Ö´Ê½á¹û×ª»»Îª×Ö·û´®
+     * å°†åˆ†è¯ç»“æœè½¬æ¢ä¸ºå­—ç¬¦ä¸²
      *
-     * @param array $tokens ·Ö´Ê½á¹û
-     * @param string $delimiter ·Ö¸ô·û
-     * @return string ×ª»»ºóµÄ×Ö·û´®
+     * @param array $tokens åˆ†è¯ç»“æœ
+     * @param string $delimiter åˆ†éš”ç¬¦
+     * @return string è½¬æ¢åçš„å­—ç¬¦ä¸²
      */
     public function tokensToString(array $tokens, string $delimiter = ' '): string
     {
-        $textArray = array_column($tokens, 'text'];
-        return implode($delimiter, $textArray];
+        $textArray = array_column($tokens, 'text');
+        return implode($delimiter, $textArray);
     }
     
     /**
-     * ¹ıÂË·Ö´Ê½á¹û
+     * è¿‡æ»¤åˆ†è¯ç»“æœ
      *
-     * @param array $tokens Ô­Ê¼·Ö´Ê½á¹û
-     * @param array $options ¹ıÂËÑ¡Ïî
-     * @return array ¹ıÂËºóµÄ·Ö´Ê½á¹û
+     * @param array $tokens åŸå§‹åˆ†è¯ç»“æœ
+     * @param array $options è¿‡æ»¤é€‰é¡¹
+     * @return array è¿‡æ»¤åçš„åˆ†è¯ç»“æœ
      */
     public function filterTokens(array $tokens, array $options = []): array
     {
         $result = [];
         
-        // ºÏ²¢Ä¬ÈÏÑ¡ÏîºÍÓÃ»§Ñ¡Ïî
+        // åˆå¹¶é»˜è®¤é€‰é¡¹å’Œç”¨æˆ·é€‰é¡¹
         $options = array_merge([
             'remove_stopwords' => false,
             'remove_punctuation' => false,
             'min_length' => 0,
             'max_length' => PHP_INT_MAX,
-            'types' => null, // Ö¸¶¨Òª±£ÁôµÄÀàĞÍ
-        ],  $options];
+            'types' => null, // æŒ‡å®šè¦ä¿ç•™çš„tokenç±»å‹
+        ],  $options);
         
         foreach ($tokens as $token) {
-            // Ìø¹ıÍ£ÓÃ´Ê
+            // ç§»é™¤åœç”¨è¯
             if ($options['remove_stopwords'] && ($token['is_stop_word'] ?? false)) {
                 continue;
             }
             
-            // Ìø¹ı±êµã
+            // ç§»é™¤æ ‡ç‚¹ç¬¦å·
             if ($options['remove_punctuation'] && $token['type'] === 'PUNCTUATION') {
                 continue;
             }
             
-            // ¼ì²é³¤¶È
-            $length = mb_strlen($token['text']];
+            // é•¿åº¦é™åˆ¶
+            $length = mb_strlen($token['text']);
             if ($length < $options['min_length'] || $length > $options['max_length']) {
                 continue;
             }
             
-            // ¼ì²éÀàĞÍ
-            if ($options['types'] !== null && !in_[$token['type'],  (array)$options['types'])) {
+            // ç±»å‹é™åˆ¶
+            if ($options['types'] !== null && !in_array($token['type'],  (array)$options['types'])) {
                 continue;
             }
             
@@ -519,9 +519,9 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * »ñÈ¡·Ö´ÊÆ÷ĞÅÏ¢
+     * è·å–åˆ†è¯å™¨ä¿¡æ¯
      *
-     * @return array ·Ö´ÊÆ÷ĞÅÏ¢
+     * @return array åˆ†è¯å™¨ä¿¡æ¯
      */
     public function getTokenizerInfo(): array
     {
@@ -540,65 +540,65 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ¼ì²âÓïÑÔ
+     * æ£€æµ‹è¯­è¨€
      *
-     * @param string $text Òª¼ì²âµÄÎÄ±¾
-     * @return string|null ¼ì²âµ½µÄÓïÑÔ´úÂë
+     * @param string $text è¦æ£€æµ‹çš„æ–‡æœ¬
+     * @return string|null æ£€æµ‹åˆ°çš„è¯­è¨€
      */
     public function detectLanguage(string $text): ?string
     {
-        // ¼òµ¥µÄÓïÑÔ¼ì²âÂß¼­
-        // ÔÚÊµ¼ÊÓ¦ÓÃÖĞ£¬Ó¦¸ÃÊ¹ÓÃ¸ü¸´ÔÓµÄÓïÑÔ¼ì²âËã·¨
+        // ä½¿ç”¨ç®€å•çš„ç»Ÿè®¡æ–¹æ³•
+        // åº”è¯¥å®ç°æ›´å¤æ‚çš„è¯­è¨€æ£€æµ‹ç®—æ³•
         
-        // ¼ì²é»º´æ
+        // ç¼“å­˜é”®
         if ($this->cache && $this->config['use_cache']) {
-            $cacheKey = "lang_detect_" . md5($text];
+            $cacheKey = "lang_detect_" . md5($text);
             if ($this->cache->has($cacheKey)) {
-                return $this->cache->get($cacheKey];
+                return $this->cache->get($cacheKey);
             }
         }
         
-        // ¼ÆËãÖĞÎÄ×Ö·ûµÄ±ÈÀı
-        $totalLength = mb_strlen($text];
+        // è®¡ç®—æ€»å­—ç¬¦æ•°
+        $totalLength = mb_strlen($text);
         if ($totalLength === 0) {
             return null;
         }
         
-        // ¼ÆËãÖĞÎÄ×Ö·ûÊıÁ¿
-        $chineseCount = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text];
+        // è®¡ç®—ä¸­æ–‡å­—ç¬¦æ•°
+        $chineseCount = preg_match_all('/[\x{4e00}-\x{9fa5}]/u', $text);
         
-        // Èç¹ûÖĞÎÄ×Ö·ûÕ¼±È³¬¹ı15%£¬ÈÏÎªÊÇÖĞÎÄ
+        // å¦‚æœä¸­æ–‡å­—ç¬¦å æ€»å­—ç¬¦çš„15%ä»¥ä¸Šï¼Œåˆ™åˆ¤å®šä¸ºä¸­æ–‡
         $chineseRatio = $totalLength > 0 ? $chineseCount / $totalLength : 0;
         $detectedLanguage = $chineseRatio > 0.15 ? 'zh-CN' : 'en-US';
         
-        // »º´æ½á¹û
+        // ç¼“å­˜ç»“æœ
         if ($this->cache && $this->config['use_cache']) {
-            $cacheKey = "lang_detect_" . md5($text];
-            $this->cache->set($cacheKey, $detectedLanguage, $this->config['cache_ttl']];
+            $cacheKey = "lang_detect_" . md5($text);
+            $this->cache->set($cacheKey, $detectedLanguage, $this->config['cache_ttl']);
         }
         
         return $detectedLanguage;
     }
     
     /**
-     * »ñÈ¡´Ê¸É
+     * è·å–è¯å¹²
      *
-     * @param string $word ÒªÌáÈ¡´Ê¸ÉµÄµ¥´Ê
-     * @param string|null $language ÓïÑÔ´úÂë
-     * @return string ÌáÈ¡µÄ´Ê¸É
+     * @param string $word è¦è·å–è¯å¹²çš„å•è¯
+     * @param string|null $language è¯­è¨€ä»£ç 
+     * @return string è·å–åˆ°çš„è¯å¹²
      */
     public function stem(string $word, ?string $language = null): string
     {
         $language = $language ?? $this->currentLanguage;
         
-        // Õë¶Ô²»Í¬ÓïÑÔÊ¹ÓÃ²»Í¬µÄ´Ê¸ÉÌáÈ¡Ëã·¨
+        // ä¸åŒçš„è¯­è¨€ä½¿ç”¨ä¸åŒçš„è¯å¹²æå–æ–¹æ³•
         switch ($language) {
             case 'en-US':
-                // ÕâÀïÓ¦¸ÃÊ¹ÓÃ×¨ÒµµÄÓ¢ÎÄ´Ê¸ÉÌáÈ¡¿â£¬Èç porter stemming algorithm
-                // ¼òµ¥Ê¾Àı£¬ÕæÊµÊµÏÖĞèÒªÒ»¸öÍêÕûµÄ´Ê¸ÉÌáÈ¡Æ÷
-                return $this->porterStem($word];
+                // åº”è¯¥ä½¿ç”¨è‹±æ–‡çš„Porterè¯å¹²æå–ç®—æ³•
+                // è¿™é‡Œåªæ˜¯ä¸€ä¸ªç®€å•çš„ç¤ºä¾‹ï¼Œå®é™…åº”è¯¥ä½¿ç”¨ä¸€ä¸ªæˆç†Ÿçš„Porterè¯å¹²æå–åº“
+                return $this->porterStem($word);
             case 'zh-CN':
-                // ÖĞÎÄÍ¨³£²»ĞèÒª´Ê¸ÉÌáÈ¡
+                // ä¸­æ–‡é€šå¸¸ä¸éœ€è¦è¯å¹²æå–
                 return $word;
             default:
                 return $word;
@@ -606,65 +606,65 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ¼òµ¥µÄPorter´Ê¸ÉÌáÈ¡Ëã·¨ÊµÏÖ
+     * å®ç°Porterè¯å¹²æå–ç®—æ³•
      *
-     * @param string $word Ó¢ÎÄµ¥´Ê
-     * @return string ÌáÈ¡µÄ´Ê¸É
+     * @param string $word è‹±æ–‡å•è¯
+     * @return string æå–åˆ°çš„è¯å¹²
      */
     private function porterStem(string $word): string
     {
-        // ×ªÎªĞ¡Ğ´
-        $word = strtolower($word];
+        // è½¬ä¸ºå°å†™
+        $word = strtolower($word);
         
-        // ¼ò»¯µÄPorter´Ê¸ÉÌáÈ¡¹æÔò
-        // ×¢Òâ£ºÕâÊÇÒ»¸ö·Ç³£¼ò»¯µÄ°æ±¾£¬Êµ¼ÊÊ¹ÓÃÊ±Ó¦¸ÃÊ¹ÓÃÍêÕûµÄPorterËã·¨
+        // å®ç°Porterè¯å¹²æå–ç®—æ³•
+        // æ³¨æ„ï¼šè¿™é‡Œä½¿ç”¨çš„æ˜¯ä¸€ä¸ªç®€åŒ–ç‰ˆæœ¬çš„Porterç®—æ³•ï¼Œå®é™…ä½¿ç”¨æ—¶åº”è¯¥ä½¿ç”¨å®Œæ•´çš„Porterç®—æ³•
         
-        // ´¦Àí¸´ÊıĞÎÊ½
-        $word = preg_replace('/(s|es)$/', '', $word];
+        // å»é™¤sæˆ–esç»“å°¾
+        $word = preg_replace('/(s|es)$/', '', $word);
         
-        // ´¦Àíing½áÎ²
+        // å»é™¤ingç»“å°¾
         if (preg_match('/ing$/', $word)) {
-            $stem = preg_replace('/ing$/', '', $word];
-            // Èç¹ûÈ¥µôingºóÖÁÉÙÓĞ3¸ö×Ö·û£¬ÔòÈÏÎªÊÇÓĞĞ§µÄ´Ê¸É
+            $stem = preg_replace('/ing$/', '', $word);
+            // å»é™¤ingåè‡³å°‘ä¿ç•™3ä¸ªå­—ç¬¦ï¼Œå¦åˆ™ä¸ºæ— æ•ˆè¯å¹²
             if (strlen($stem) >= 3) {
                 $word = $stem;
             }
         }
         
-        // ´¦Àíed½áÎ²
+        // å»é™¤edç»“å°¾
         if (preg_match('/ed$/', $word)) {
-            $stem = preg_replace('/ed$/', '', $word];
-            // Èç¹ûÈ¥µôedºóÖÁÉÙÓĞ3¸ö×Ö·û£¬ÔòÈÏÎªÊÇÓĞĞ§µÄ´Ê¸É
+            $stem = preg_replace('/ed$/', '', $word);
+            // å»é™¤edåè‡³å°‘ä¿ç•™3ä¸ªå­—ç¬¦ï¼Œå¦åˆ™ä¸ºæ— æ•ˆè¯å¹²
             if (strlen($stem) >= 3) {
                 $word = $stem;
             }
         }
         
-        // ´¦Àíly½áÎ²
-        $word = preg_replace('/ly$/', '', $word];
+        // å»é™¤lyç»“å°¾
+        $word = preg_replace('/ly$/', '', $word);
         
         return $word;
     }
     
     /**
-     * ´ÊĞÎ»¹Ô­
+     * è¯å½¢è¿˜åŸ
      *
-     * @param string $word Òª»¹Ô­µÄµ¥´Ê
-     * @param string|null $language ÓïÑÔ´úÂë
-     * @return string »¹Ô­ºóµÄ´ÊĞÎ
+     * @param string $word è¦è¿˜åŸçš„å•è¯
+     * @param string|null $language è¯­è¨€ä»£ç 
+     * @return string è¿˜åŸåçš„å•è¯
      */
     public function lemmatize(string $word, ?string $language = null): string
     {
         $language = $language ?? $this->currentLanguage;
         
-        // Õë¶Ô²»Í¬ÓïÑÔÊ¹ÓÃ²»Í¬µÄ´ÊĞÎ»¹Ô­Ëã·¨
+        // ä¸åŒçš„è¯­è¨€ä½¿ç”¨ä¸åŒçš„è¯å½¢è¿˜åŸæ–¹æ³•
         switch ($language) {
             case 'en-US':
-                // ÕâÀïÓ¦Ê¹ÓÃ´ÊĞÎ»¹Ô­¿â
-                // ¼òµ¥Ê¾Àı£¬ÕæÊµÊµÏÖĞèÒªÍêÕûµÄ´ÊĞÎ»¹Ô­¿âºÍ´Êµä
-                return $this->simpleLemmatize($word];
+                // åº”è¯¥ä½¿ç”¨è‹±æ–‡çš„è¯å½¢è¿˜åŸ
+                // è¿™é‡Œåªæ˜¯ä¸€ä¸ªç®€å•çš„ç¤ºä¾‹ï¼Œå®é™…åº”è¯¥ä½¿ç”¨ä¸€ä¸ªæˆç†Ÿçš„è‹±æ–‡è¯å½¢è¿˜åŸåº“
+                return $this->simpleLemmatize($word);
             case 'zh-CN':
-                // ÖĞÎÄÍ¨³£²»ĞèÒª´ÊĞÎ»¹Ô­
+                // ä¸­æ–‡é€šå¸¸ä¸éœ€è¦è¯å½¢è¿˜åŸ
                 return $word;
             default:
                 return $word;
@@ -672,17 +672,18 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ¼òµ¥µÄ´ÊĞÎ»¹Ô­Âß¼­
+     * ç®€å•çš„è‹±æ–‡è¯å½¢è¿˜åŸé€»è¾‘
      *
-     * @param string $word µ¥´Ê
-     * @return string »¹Ô­ºóµÄ´ÊĞÎ
+     * @param string $word å•è¯
+     * @return string è¿˜åŸåçš„å•è¯
      */
     private function simpleLemmatize(string $word): string
     {
-        // ×ªÎªĞ¡Ğ´
-        $word = strtolower($word];
+        // è½¬ä¸ºå°å†™
+        $word = strtolower($word);
         
-        // ¼òµ¥µÄÓ¢ÎÄ´ÊĞÎ»¹Ô­´Êµä
+        // å®ç°ç®€å•çš„è‹±æ–‡è¯å½¢è¿˜åŸé€»è¾‘
+        // ï¿½òµ¥µï¿½Ó¢ï¿½Ä´ï¿½ï¿½Î»ï¿½Ô­ï¿½Êµï¿½
         $lemmaDict = [
             'am' => 'be',
             'is' => 'be',
@@ -713,47 +714,47 @@ class UniversalTokenizer implements TokenizerInterface
             'leaves' => 'leaf',
         ];
         
-        // ²éÕÒ´Êµä
+        // ï¿½ï¿½ï¿½Ò´Êµï¿½
         if (isset($lemmaDict[$word])) {
             return $lemmaDict[$word];
         }
         
-        // ´¦Àí³£¼ûµÄ´ÊÎ²±ä»¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä´ï¿½Î²ï¿½ä»¯
         
-        // ´¦Àí¸´Êı
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (preg_match('/s$/', $word) && !preg_match('/(ss|us|is|os|xis)$/', $word)) {
             $singular = preg_replace('/s$/', '', $word];
-            // È·±£µ¥ÊıĞÎÊ½ÊÇÓĞĞ§´Ê
+            // È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½Ğ§ï¿½ï¿½
             if (strlen($singular) >= 2) {
                 return $singular;
             }
         }
         
-        // ´¦ÀíÌØÊâµÄies½áÎ²£¨Èçstories -> story£©
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iesï¿½ï¿½Î²ï¿½ï¿½ï¿½ï¿½stories -> storyï¿½ï¿½
         if (preg_match('/ies$/', $word)) {
             return preg_replace('/ies$/', 'y', $word];
         }
         
-        // ´¦Àí¹ıÈ¥Ê±ºÍ¹ıÈ¥·Ö´Ê
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¥Ê±ï¿½Í¹ï¿½È¥ï¿½Ö´ï¿½
         if (preg_match('/ed$/', $word) && !preg_match('/(eed|ied)$/', $word)) {
-            // È¥µôed
+            // È¥ï¿½ï¿½ed
             $lemma = preg_replace('/ed$/', '', $word];
             
-            // Èç¹ûµ¹ÊıµÚ¶ş¸ö×Ö·ûÊÇÖØ¸´µÄ£¬È¥µôÒ»¸ö£¨Èç£ºstopped -> stop£©
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Ä£ï¿½È¥ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ç£ºstopped -> stopï¿½ï¿½
             $lemma = preg_replace('/([^aeiou])\1$/', '$1', $lemma];
             
             return $lemma;
         }
         
-        // ´¦Àí½øĞĞÊ±
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±
         if (preg_match('/ing$/', $word)) {
-            // È¥µôing
+            // È¥ï¿½ï¿½ing
             $lemma = preg_replace('/ing$/', '', $word];
             
-            // Èç¹û½áÎ²ÊÇÖØ¸´µÄ¸¨Òô×ÖÄ¸£¬È¥µôÒ»¸ö
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Î²ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½Ä¸ï¿½ï¿½ï¿½ï¿½ï¿½Ä¸ï¿½ï¿½È¥ï¿½ï¿½Ò»ï¿½ï¿½
             $lemma = preg_replace('/([^aeiou])\1$/', '$1', $lemma];
             
-            // Èç¹û´Ê³¤¶È×ã¹»£¬ÈÏÎªÊÇÓĞĞ§µÄ´Ê¸ù
+            // ï¿½ï¿½ï¿½ï¿½Ê³ï¿½ï¿½ï¿½ï¿½ã¹»ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½Ğ§ï¿½Ä´Ê¸ï¿½
             if (strlen($lemma) >= 2) {
                 return $lemma;
             }
@@ -763,9 +764,9 @@ class UniversalTokenizer implements TokenizerInterface
     }
     
     /**
-     * ÉèÖÃµ±Ç°ÓïÑÔ
+     * ï¿½ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½
      *
-     * @param string $language ÓïÑÔ´úÂë
+     * @param string $language ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
      * @return void
      */
     public function setLanguage(string $language): void
@@ -773,19 +774,19 @@ class UniversalTokenizer implements TokenizerInterface
         if (in_[$language, $this->config['supported_languages'])) {
             $this->currentLanguage = $language;
             
-            // È·±£¸ÃÓïÑÔµÄÍ£ÓÃ´ÊÒÑ¼ÓÔØ
+            // È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½Í£ï¿½Ã´ï¿½ï¿½Ñ¼ï¿½ï¿½ï¿½
             if (!isset($this->stopwords[$language])) {
                 $this->loadStopwords($language];
             }
         } else {
-            throw new InvalidArgumentException("²»Ö§³ÖµÄÓïÑÔ: {$language}"];
+            throw new InvalidArgumentException("ï¿½ï¿½Ö§ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½: {$language}"];
         }
     }
     
     /**
-     * »ñÈ¡µ±Ç°ÉèÖÃµÄÓïÑÔ
+     * ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½
      *
-     * @return string µ±Ç°ÓïÑÔ´úÂë
+     * @return string ï¿½ï¿½Ç°ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
      */
     public function getLanguage(): string
     {

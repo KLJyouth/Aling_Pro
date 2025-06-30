@@ -1,147 +1,146 @@
-<?php
+ï»¿<?php
 /**
- * ÎÄ¼þÃû£ºGraphStoreInterface.php
- * ¹¦ÄÜÃèÊö£ºÖªÊ¶Í¼Æ×´æ´¢½Ó¿Ú
- * ´´½¨Ê±¼ä£º2025-01-XX
- * ×îºóÐÞ¸Ä£º2025-01-XX
- * °æ±¾£º1.0.0
+ * æ–‡ä»¶åï¼šGraphStoreInterface.php
+ * åŠŸèƒ½æè¿°ï¼šçŸ¥è¯†å›¾è°±å­˜å‚¨æŽ¥å£
+ * åˆ›å»ºæ—¶é—´ï¼š2025-01-XX
+ * æœ€åŽä¿®æ”¹ï¼š2025-01-XX
+ * ç‰ˆæœ¬ï¼š1.0.0
  * 
  * @package AlingAi\AI\Engines\KnowledgeGraph
  * @author AlingAi Team
  * @license MIT
  */
 
-declare(strict_types=1];
+declare(strict_types=1);
 
 namespace AlingAi\AI\Engines\KnowledgeGraph;
 
 /**
- * ÖªÊ¶Í¼Æ×´æ´¢½Ó¿Ú
+ * çŸ¥è¯†å›¾è°±å­˜å‚¨æŽ¥å£
  * 
- * ¶¨ÒåÁËÖªÊ¶Í¼Æ×´æ´¢µÄ»ù±¾²Ù×÷½Ó¿Ú£¬°üÀ¨ÊµÌåºÍ¹ØÏµµÄÔöÉ¾¸Ä²é
+ * å®šä¹‰äº†çŸ¥è¯†å›¾è°±å­˜å‚¨çš„åŸºæœ¬æ“ä½œæŽ¥å£ï¼ŒåŒ…æ‹¬å®žä½“å’Œå…³ç³»çš„å¢žåˆ æ”¹æŸ¥
  */
 interface GraphStoreInterface
 {
     /**
-     * »ñÈ¡ÊµÌåÍ¨¹ýID
+     * èŽ·å–å®žä½“é€šè¿‡ID
      * 
-     * @param string $entityId ÊµÌåID
-     * @return array|null ÊµÌåÊý¾Ý£¬Èç¹û²»´æÔÚÔò·µ»Ønull
+     * @param string $entityId å®žä½“ID
+     * @return array|null å®žä½“æ•°æ®ï¼Œå¦‚æžœä¸å­˜åœ¨åˆ™è¿”å›žnull
      */
     public function getEntityById(string $entityId): ?array;
     
     /**
-     * »ñÈ¡ËùÓÐÊµÌå
+     * èŽ·å–æ‰€æœ‰å®žä½“
      * 
-     * @return array ËùÓÐÊµÌåµÄÁÐ±í
+     * @return array æ‰€æœ‰å®žä½“åˆ—è¡¨
      */
     public function getAllEntities(): array;
     
     /**
-     * »ñÈ¡ÓëÖ¸¶¨ÊµÌåÓÐÖ¸¶¨¹ØÏµµÄÊµÌåÁÐ±í
+     * èŽ·å–ä¸ŽæŒ‡å®šå®žä½“æœ‰æŒ‡å®šå…³ç³»çš„å®žä½“åˆ—è¡¨
      * 
-     * @param string $entityId ÊµÌåID
-     * @param string $relationType ¹ØÏµÀàÐÍ
-     * @return array Ïà¹ØÊµÌåÁÐ±í
+     * @param string $entityId å®žä½“ID
+     * @param string $relationType å…³ç³»ç±»åž‹
+     * @return array ç›¸å…³å®žä½“åˆ—è¡¨
      */
     public function getRelatedEntities(string $entityId, string $relationType): array;
     
     /**
-     * »ñÈ¡ÓëÖ¸¶¨ÊµÌåÓÐÖ¸¶¨¹ØÏµµÄÊµÌåÁÐ±í£¨·´Ïò£©
+     * èŽ·å–ä¸ŽæŒ‡å®šå®žä½“æœ‰æŒ‡å®šå…³ç³»çš„å®žä½“åˆ—è¡¨ï¼ˆåå‘ï¼‰
      * 
-     * @param string $relationType ¹ØÏµÀàÐÍ
-     * @param string $targetEntityId Ä¿±êÊµÌåID
-     * @return array Ïà¹ØÊµÌåÁÐ±í
+     * @param string $relationType å…³ç³»ç±»åž‹
+     * @param string $targetEntityId ç›®æ ‡å®žä½“ID
+     * @return array ç›¸å…³å®žä½“åˆ—è¡¨
      */
     public function getEntitiesWithRelation(string $relationType, string $targetEntityId): array;
     
     /**
-     * »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄ¹ØÏµ
+     * èŽ·å–ä¸¤ä¸ªå®žä½“ä¹‹é—´çš„å…³ç³»
      * 
-     * @param string $sourceEntityId Ô´ÊµÌåID
-     * @param string $targetEntityId Ä¿±êÊµÌåID
-     * @param string|null $relationType ¹ØÏµÀàÐÍ£¬Èç¹ûÎªnullÔò·µ»ØËùÓÐÀàÐÍµÄ¹ØÏµ
-     * @return array|null ¹ØÏµÊý¾Ý£¬Èç¹û²»´æÔÚÔò·µ»Ønull
+     * @param string $sourceEntityId æºå®žä½“ID
+     * @param string $targetEntityId ç›®æ ‡å®žä½“ID
+     * @param string|null $relationType å…³ç³»ç±»åž‹ï¼Œå¦‚æžœä¸ºnullåˆ™è¿”å›žä»»æ„ç±»åž‹çš„å…³ç³»
+     * @return array|null å…³ç³»æ•°æ®ï¼Œå¦‚æžœä¸å­˜åœ¨åˆ™è¿”å›žnull
      */
     public function getRelationBetween(string $sourceEntityId, string $targetEntityId, ?string $relationType = null): ?array;
     
     /**
-     * »ñÈ¡Á½¸öÊµÌåÖ®¼äµÄËùÓÐ¹ØÏµ
+     * èŽ·å–ä¸¤ä¸ªå®žä½“ä¹‹é—´çš„æ‰€æœ‰å…³ç³»
      * 
-     * @param string $sourceEntityId Ô´ÊµÌåID
-     * @param string $targetEntityId Ä¿±êÊµÌåID
-     * @return array ¹ØÏµÊý¾ÝÁÐ±í
+     * @param string $sourceEntityId æºå®žä½“ID
+     * @param string $targetEntityId ç›®æ ‡å®žä½“ID
+     * @return array å…³ç³»æ•°æ®åˆ—è¡¨
      */
     public function getRelationsBetween(string $sourceEntityId, string $targetEntityId): array;
     
     /**
-     * Ìí¼ÓÊµÌå
+     * æ·»åŠ å®žä½“
      * 
-     * @param array $entityData ÊµÌåÊý¾Ý
-     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
+     * @param array $entityData å®žä½“æ•°æ®
+     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
      */
     public function addEntity(array $entityData): bool;
     
     /**
-     * ¸üÐÂÊµÌå
+     * æ›´æ–°å®žä½“
      * 
-     * @param string $entityId ÊµÌåID
-     * @param array $data ¸üÐÂµÄÊý¾Ý
-     * @return bool ÊÇ·ñ¸üÐÂ³É¹¦
+     * @param string $entityId å®žä½“ID
+     * @param array $data æ›´æ–°çš„æ•°æ®
+     * @return bool æ˜¯å¦æ›´æ–°æˆåŠŸ
      */
     public function updateEntity(string $entityId, array $data): bool;
     
     /**
-     * É¾³ýÊµÌå
+     * åˆ é™¤å®žä½“
      * 
-     * @param string $entityId ÊµÌåID
-     * @return bool ÊÇ·ñÉ¾³ý³É¹¦
+     * @param string $entityId å®žä½“ID
+     * @return bool æ˜¯å¦åˆ é™¤æˆåŠŸ
      */
     public function deleteEntity(string $entityId): bool;
     
     /**
-     * Ìí¼Ó¹ØÏµ
+     * æ·»åŠ å…³ç³»
      * 
-     * @param array $relationData ¹ØÏµÊý¾Ý
-     * @return bool ÊÇ·ñÌí¼Ó³É¹¦
+     * @param array $relationData å…³ç³»æ•°æ®
+     * @return bool æ˜¯å¦æ·»åŠ æˆåŠŸ
      */
     public function addRelation(array $relationData): bool;
     
     /**
-     * ¸üÐÂ¹ØÏµ
+     * æ›´æ–°å…³ç³»
      * 
-     * @param string $relationId ¹ØÏµID
-     * @param array $data ¸üÐÂµÄÊý¾Ý
-     * @return bool ÊÇ·ñ¸üÐÂ³É¹¦
+     * @param string $relationId å…³ç³»ID
+     * @param array $data æ›´æ–°çš„æ•°æ®
+     * @return bool æ˜¯å¦æ›´æ–°æˆåŠŸ
      */
     public function updateRelation(string $relationId, array $data): bool;
     
     /**
-     * É¾³ý¹ØÏµ
+     * åˆ é™¤å…³ç³»
      * 
-     * @param string $relationId ¹ØÏµID
-     * @return bool ÊÇ·ñÉ¾³ý³É¹¦
+     * @param string $relationId å…³ç³»ID
+     * @return bool æ˜¯å¦åˆ é™¤æˆåŠŸ
      */
     public function deleteRelation(string $relationId): bool;
     
     /**
-     * ²éÑ¯ÊµÌå
+     * æŸ¥è¯¢å®žä½“
      * 
-     * @param array $criteria ²éÑ¯Ìõ¼þ
-     * @param int $limit ÏÞÖÆ½á¹ûÊýÁ¿
-     * @param int $offset ½á¹ûÆ«ÒÆÁ¿
-     * @return array ·ûºÏÌõ¼þµÄÊµÌåÁÐ±í
+     * @param array $criteria æŸ¥è¯¢æ¡ä»¶
+     * @param int $limit é™åˆ¶ç»“æžœæ•°é‡
+     * @param int $offset ç»“æžœåç§»é‡
+     * @return array ç¬¦åˆæ¡ä»¶çš„å®žä½“åˆ—è¡¨
      */
     public function queryEntities(array $criteria, int $limit = 100, int $offset = 0): array;
     
     /**
-     * ²éÑ¯¹ØÏµ
+     * æŸ¥è¯¢å…³ç³»
      * 
-     * @param array $criteria ²éÑ¯Ìõ¼þ
-     * @param int $limit ÏÞÖÆ½á¹ûÊýÁ¿
-     * @param int $offset ½á¹ûÆ«ÒÆÁ¿
-     * @return array ·ûºÏÌõ¼þµÄ¹ØÏµÁÐ±í
+     * @param array $criteria æŸ¥è¯¢æ¡ä»¶
+     * @param int $limit é™åˆ¶ç»“æžœæ•°é‡
+     * @param int $offset ç»“æžœåç§»é‡
+     * @return array ç¬¦åˆæ¡ä»¶çš„å…³ç³»åˆ—è¡¨
      */
     public function queryRelations(array $criteria, int $limit = 100, int $offset = 0): array;
 }
-
