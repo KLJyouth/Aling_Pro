@@ -27,7 +27,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareGroups = [
-        'web' => [
+        "web" => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
@@ -37,8 +37,8 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api' => [
-            'throttle:api',
+        "api" => [
+            "throttle:api",
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -49,29 +49,32 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'cache.headers' => \Illuminate\Http\Middleware\SetCacheHeaders::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
-        'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'db.security' => \App\Http\Middleware\DatabaseSecurityMiddleware::class,
+        "auth" => \App\Http\Middleware\Authenticate::class,
+        "auth.basic" => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        "cache.headers" => \Illuminate\Http\Middleware\SetCacheHeaders::class,
+        "can" => \Illuminate\Auth\Middleware\Authorize::class,
+        "guest" => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        "password.confirm" => \Illuminate\Auth\Middleware\RequirePassword::class,
+        "signed" => \Illuminate\Routing\Middleware\ValidateSignature::class,
+        "throttle" => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        "verified" => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        "db.security" => \App\Http\Middleware\DatabaseSecurityMiddleware::class,
         
         // 零信任安全中间件
-        'zero_trust' => \App\Http\Middleware\ZeroTrustMiddleware::class,
+        "zero_trust" => \App\Http\Middleware\ZeroTrustMiddleware::class,
         
         // 多因素认证中间件
-        'require_mfa' => \App\Http\Middleware\RequireMfaMiddleware::class,
+        "require_mfa" => \App\Http\Middleware\RequireMfaMiddleware::class,
         
         // 设备验证中间件
-        'verify_device' => \App\Http\Middleware\VerifyDeviceMiddleware::class,
+        "verify_device" => \App\Http\Middleware\VerifyDeviceMiddleware::class,
         
         // 角色和权限中间件
-        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        "role" => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        "permission" => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        "role_or_permission" => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+        
+        // 会员额度检查中间件
+        "check_quota" => \App\Http\Middleware\CheckQuota::class,
     ];
 }

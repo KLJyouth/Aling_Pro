@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\DatabaseSecurityMonitor::class,
+        \App\Console\Commands\ProcessMembershipRenewals::class,
     ];
 
     /**
@@ -30,7 +31,7 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->appendOutputTo(storage_path("logs/monitoring.log"));
             
-        // 每10分钟执行一次安全威胁检查
+        // 每10分钟执行一次安全威胁检测
         $schedule->command("security:check-threats")
             ->everyTenMinutes()
             ->withoutOverlapping()
@@ -42,17 +43,23 @@ class Kernel extends ConsoleKernel
             ->withoutOverlapping()
             ->appendOutputTo(storage_path("logs/db-security.log"));
             
-        // 每小时终止一次长时间运行的查询
+        // 每小时终止一次超时过长的查询
         $schedule->command("db:security-monitor --kill-long-queries")
             ->hourly()
             ->withoutOverlapping()
             ->appendOutputTo(storage_path("logs/db-security.log"));
             
-        // 每天监控一次数据库结构变化
+        // 每天监控数据库结构变化
         $schedule->command("db:security-monitor --monitor-changes")
             ->daily()
             ->withoutOverlapping()
             ->appendOutputTo(storage_path("logs/db-security.log"));
+            
+        // 每天凌晨2点处理会员自动续费
+        $schedule->command("membership:process-renewals")
+            ->dailyAt("02:00")
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path("logs/membership.log"));
     }
 
     /**

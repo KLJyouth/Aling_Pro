@@ -19,13 +19,13 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'phone_number',
-        'has_mfa',
-        'last_login_at',
-        'last_login_ip',
+        "name",
+        "email",
+        "password",
+        "phone_number",
+        "has_mfa",
+        "last_login_at",
+        "last_login_ip",
     ];
 
     /**
@@ -34,9 +34,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
-        'mfa_recovery_codes',
+        "password",
+        "remember_token",
+        "mfa_recovery_codes",
     ];
 
     /**
@@ -45,12 +45,12 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'phone_verified_at' => 'datetime',
-        'password' => 'hashed',
-        'has_mfa' => 'boolean',
-        'mfa_recovery_codes' => 'array',
-        'last_login_at' => 'datetime',
+        "email_verified_at" => "datetime",
+        "phone_verified_at" => "datetime",
+        "password" => "hashed",
+        "has_mfa" => "boolean",
+        "mfa_recovery_codes" => "array",
+        "last_login_at" => "datetime",
     ];
     
     /**
@@ -100,13 +100,13 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function currentDevice()
     {
-        $deviceId = request()->header('X-Device-ID');
-        $deviceFingerprint = request()->header('X-Device-Fingerprint');
+        $deviceId = request()->header("X-Device-ID");
+        $deviceFingerprint = request()->header("X-Device-Fingerprint");
         
         if ($deviceId) {
-            return $this->devices()->where('device_id', $deviceId)->first();
+            return $this->devices()->where("device_id", $deviceId)->first();
         } elseif ($deviceFingerprint) {
-            return $this->devices()->where('device_fingerprint', $deviceFingerprint)->first();
+            return $this->devices()->where("device_fingerprint", $deviceFingerprint)->first();
         }
         
         return null;
@@ -120,7 +120,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasDevice(string $deviceId): bool
     {
-        return $this->devices()->where('device_id', $deviceId)->exists();
+        return $this->devices()->where("device_id", $deviceId)->exists();
     }
     
     /**
@@ -131,7 +131,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function hasMfaMethod(string $method): bool
     {
-        return $this->mfaMethods()->where('method', $method)->exists();
+        return $this->mfaMethods()->where("method", $method)->exists();
     }
     
     /**
@@ -141,7 +141,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function primaryMfaMethod()
     {
-        return $this->mfaMethods()->where('is_primary', true)->first();
+        return $this->mfaMethods()->where("is_primary", true)->first();
     }
     
     /**
@@ -158,12 +158,12 @@ class User extends Authenticatable implements MustVerifyEmail
         
         // 创建安全日志
         $this->securityLogs()->create([
-            'ip_address' => $ip,
-            'user_agent' => request()->userAgent(),
-            'event_type' => 'login',
-            'context' => 'auth',
-            'metadata' => [
-                'timestamp' => now()->timestamp,
+            "ip_address" => $ip,
+            "user_agent" => request()->userAgent(),
+            "event_type" => "login",
+            "context" => "auth",
+            "metadata" => [
+                "timestamp" => now()->timestamp,
             ],
         ]);
     }
@@ -175,7 +175,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function needsMfaVerification(): bool
     {
-        return $this->has_mfa && !session('mfa_verified', false);
+        return $this->has_mfa && !session("mfa_verified", false);
     }
     
     /**
@@ -185,12 +185,12 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function needsDeviceVerification(): bool
     {
-        if (!config('zero_trust.device_binding.enabled', true)) {
+        if (!config("zero_trust.device_binding.enabled", true)) {
             return false;
         }
         
-        $deviceId = request()->header('X-Device-ID');
-        $deviceFingerprint = request()->header('X-Device-Fingerprint');
+        $deviceId = request()->header("X-Device-ID");
+        $deviceFingerprint = request()->header("X-Device-Fingerprint");
         
         if (!$deviceId && !$deviceFingerprint) {
             return true;
@@ -199,5 +199,45 @@ class User extends Authenticatable implements MustVerifyEmail
         $device = $this->currentDevice();
         
         return !$device || !$device->is_verified;
+    }
+    
+    /**
+     * 获取用户的会员订阅
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(\App\Models\Membership\MembershipSubscription::class);
+    }
+    
+    /**
+     * 获取用户当前活跃的会员订阅
+     * 
+     * @return \App\Models\Membership\MembershipSubscription|null
+     */
+    public function activeSubscription()
+    {
+        return $this->subscriptions()
+            ->where("status", "active")
+            ->where("end_date", ">", now())
+            ->orderBy("end_date", "desc")
+            ->first();
+    }
+    
+    /**
+     * 检查用户是否是会员
+     * 
+     * @return bool
+     */
+    public function isMember(): bool
+    {
+        return $this->activeSubscription() !== null;
+    }
+    
+    /**
+     * 获取用户的额度使用记录
+     */
+    public function quotaUsages()
+    {
+        return $this->hasMany(QuotaUsage::class);
     }
 }

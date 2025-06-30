@@ -2,192 +2,195 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Security\QuantumSecurityDashboardController;
+use App\Http\Controllers\User\MembershipController;
+use App\Http\Controllers\User\QuotaController;
 
 /*
 |--------------------------------------------------------------------------
-| Webè·¯ç”±
+| WebÂ·ÓÉ
 |--------------------------------------------------------------------------
 |
-| è¿™é‡Œå®šä¹‰äº†æ‰€æœ‰ä¸Webç›¸å…³çš„è·¯ç”±
+| ÕâÀï¶¨ÒåÁËËùÓĞÓëWebÏà¹ØµÄÂ·ÓÉ
 |
 */
 
-// é»˜è®¤é¦–é¡µ
-Route::get('/', function () {
-    return redirect('/dashboard');
+// Ä¬ÈÏÊ×Ò³
+Route::get("/", function () {
+    return redirect("/dashboard");
 });
 
-// ä»ªè¡¨ç›˜è·¯ç”±
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+// ÒÇ±íÅÌÂ·ÓÉ
+Route::get("/dashboard", function () {
+    return view("dashboard");
+})->name("dashboard");
 
-// é‡å­å®‰å…¨ä»ªè¡¨ç›˜è·¯ç”±
-Route::get('/security/quantum-dashboard', [QuantumSecurityDashboardController::class, 'index'])
-    ->name('security.quantum-dashboard');
+// Á¿×Ó°²È«ÒÇ±íÅÌÂ·ÓÉ
+Route::get("/security/quantum-dashboard", [QuantumSecurityDashboardController::class, "index"])
+    ->name("security.quantum-dashboard");
 
-// å…¶ä»–å®‰å…¨ç›¸å…³è·¯ç”±
-Route::prefix('security')->group(function () {
-    // å®‰å…¨æ¦‚è§ˆ
-    Route::get('/', function () {
-        return view('security.overview');
-    })->name('security.overview');
+// ÆäËû°²È«Ïà¹ØÂ·ÓÉ
+Route::prefix("security")->group(function () {
+    // °²È«¸ÅÀÀ
+    Route::get("/", function () {
+        return view("security.overview");
+    })->name("security.overview");
     
-    // å¨èƒç®¡ç†
-    Route::get('/threats', function () {
-        return view('security.threats');
-    })->name('security.threats');
+    // ÍşĞ²¹ÜÀí
+    Route::get("/threats", function () {
+        return view("security.threats");
+    })->name("security.threats");
     
-    // æ¼æ´æ‰«æ
-    Route::get('/vulnerabilities', function () {
-        return view('security.vulnerabilities');
-    })->name('security.vulnerabilities');
+    // Â©¶´É¨Ãè
+    Route::get("/vulnerabilities", function () {
+        return view("security.vulnerabilities");
+    })->name("security.vulnerabilities");
     
-    // å®‰å…¨æµ‹è¯•
-    Route::get('/tests', function () {
-        return view('security.tests');
-    })->name('security.tests');
+    // °²È«²âÊÔ
+    Route::get("/tests", function () {
+        return view("security.tests");
+    })->name("security.tests");
     
-    // é‡å­åŠ å¯†
-    Route::get('/quantum-crypto', function () {
-        return view('security.quantum-crypto');
-    })->name('security.quantum-crypto');
+    // Á¿×Ó¼ÓÃÜ
+    Route::get("/quantum-crypto", function () {
+        return view("security.quantum-crypto");
+    })->name("security.quantum-crypto");
 });
 
-// å®‰å…¨éš”ç¦»åŒºè·¯ç”±
-Route::prefix('security')->name('security.')->middleware(['auth', 'admin'])->group(function () {
-    // é‡å­å®‰å…¨ä»ªè¡¨ç›˜
-    Route::get('/quantum-dashboard', 'Security\QuantumSecurityDashboardController@index')->name('quantum-dashboard');
+// °²È«¸ôÀëÇøÂ·ÓÉ
+Route::prefix("security")->name("security.")->middleware(["auth", "admin"])->group(function () {
+    // Á¿×Ó°²È«ÒÇ±íÅÌ
+    Route::get("/quantum-dashboard", "Security\QuantumSecurityDashboardController@index")->name("quantum-dashboard");
     
-    // éš”ç¦»åŒºè·¯ç”±
-    Route::prefix('quarantine')->name('quarantine.')->group(function () {
-        Route::get('/', 'Security\QuarantineController@index')->name('index');
-        Route::get('/ip-bans', 'Security\QuarantineController@ipBans')->name('ip-bans');
-        Route::get('/{id}', 'Security\QuarantineController@show')->name('show');
-        Route::post('/{id}/update-status', 'Security\QuarantineController@updateStatus')->name('update-status');
-        Route::post('/ban-ip', 'Security\QuarantineController@banIp')->name('ban-ip');
-        Route::post('/revoke-ip-ban/{id}', 'Security\QuarantineController@revokeIpBan')->name('revoke-ip-ban');
+    // ¸ôÀëÇøÂ·ÓÉ
+    Route::prefix("quarantine")->name("quarantine.")->group(function () {
+        Route::get("/", "Security\QuarantineController@index")->name("index");
+        Route::get("/ip-bans", "Security\QuarantineController@ipBans")->name("ip-bans");
+        Route::get("/{id}", "Security\QuarantineController@show")->name("show");
+        Route::post("/{id}/update-status", "Security\QuarantineController@updateStatus")->name("update-status");
+        Route::post("/ban-ip", "Security\QuarantineController@banIp")->name("ban-ip");
+        Route::post("/revoke-ip-ban/{id}", "Security\QuarantineController@revokeIpBan")->name("revoke-ip-ban");
     });
 });
 
-// å·¥å•ç³»ç»Ÿè·¯ç”±
-Route::prefix('tickets')->middleware(['auth'])->group(function () {
-    // å·¥å•ç®¡ç†
-    Route::get('/', 'Ticket\TicketController@index')->name('tickets.index');
-    Route::get('/create', 'Ticket\TicketController@create')->name('tickets.create');
-    Route::post('/', 'Ticket\TicketController@store')->name('tickets.store');
-    Route::get('/{id}', 'Ticket\TicketController@show')->name('tickets.show');
-    Route::put('/{id}', 'Ticket\TicketController@update')->name('tickets.update');
+// ¹¤µ¥ÏµÍ³Â·ÓÉ
+Route::prefix("tickets")->middleware(["auth"])->group(function () {
+    // ¹¤µ¥¹ÜÀí
+    Route::get("/", "Ticket\TicketController@index")->name("tickets.index");
+    Route::get("/create", "Ticket\TicketController@create")->name("tickets.create");
+    Route::post("/", "Ticket\TicketController@store")->name("tickets.store");
+    Route::get("/{id}", "Ticket\TicketController@show")->name("tickets.show");
+    Route::put("/{id}", "Ticket\TicketController@update")->name("tickets.update");
     
-    // å·¥å•å›å¤
-    Route::post('/{id}/reply', 'Ticket\TicketController@reply')->name('tickets.reply');
+    // ¹¤µ¥»Ø¸´
+    Route::post("/{id}/reply", "Ticket\TicketController@reply")->name("tickets.reply");
     
-    // å·¥å•æ“ä½œ
-    Route::post('/{id}/assign', 'Ticket\TicketController@assign')->name('tickets.assign');
-    Route::post('/{id}/close', 'Ticket\TicketController@close')->name('tickets.close');
-    Route::post('/{id}/reopen', 'Ticket\TicketController@reopen')->name('tickets.reopen');
+    // ¹¤µ¥²Ù×÷
+    Route::post("/{id}/assign", "Ticket\TicketController@assign")->name("tickets.assign");
+    Route::post("/{id}/close", "Ticket\TicketController@close")->name("tickets.close");
+    Route::post("/{id}/reopen", "Ticket\TicketController@reopen")->name("tickets.reopen");
     
-    // é™„ä»¶ç®¡ç†
-    Route::delete('/{id}/attachment/{attachmentId}', 'Ticket\TicketController@deleteAttachment')
-        ->name('tickets.attachment.delete');
+    // ¸½¼ş¹ÜÀí
+    Route::delete("/{id}/attachment/{attachmentId}", "Ticket\TicketController@deleteAttachment")
+        ->name("tickets.attachment.delete");
 });
 
-// å·¥å•éƒ¨é—¨å’Œåˆ†ç±»ç®¡ç†è·¯ç”±ï¼ˆä»…ç®¡ç†å‘˜ï¼‰
-Route::prefix('admin/tickets')->middleware(['auth', 'role:admin'])->group(function () {
-    // éƒ¨é—¨ç®¡ç†
-    Route::get('/departments', 'Ticket\TicketDepartmentController@index')->name('ticket.departments.index');
-    Route::get('/departments/create', 'Ticket\TicketDepartmentController@create')->name('ticket.departments.create');
-    Route::post('/departments', 'Ticket\TicketDepartmentController@store')->name('ticket.departments.store');
-    Route::get('/departments/{id}/edit', 'Ticket\TicketDepartmentController@edit')->name('ticket.departments.edit');
-    Route::put('/departments/{id}', 'Ticket\TicketDepartmentController@update')->name('ticket.departments.update');
-    Route::delete('/departments/{id}', 'Ticket\TicketDepartmentController@destroy')->name('ticket.departments.destroy');
+// ¹¤µ¥²¿ÃÅºÍ·ÖÀà¹ÜÀíÂ·ÓÉ£¨½ö¹ÜÀíÔ±£©
+Route::prefix("admin/tickets")->middleware(["auth", "role:admin"])->group(function () {
+    // ²¿ÃÅ¹ÜÀí
+    Route::get("/departments", "Ticket\TicketDepartmentController@index")->name("ticket.departments.index");
+    Route::get("/departments/create", "Ticket\TicketDepartmentController@create")->name("ticket.departments.create");
+    Route::post("/departments", "Ticket\TicketDepartmentController@store")->name("ticket.departments.store");
+    Route::get("/departments/{id}/edit", "Ticket\TicketDepartmentController@edit")->name("ticket.departments.edit");
+    Route::put("/departments/{id}", "Ticket\TicketDepartmentController@update")->name("ticket.departments.update");
+    Route::delete("/departments/{id}", "Ticket\TicketDepartmentController@destroy")->name("ticket.departments.destroy");
     
-    // åˆ†ç±»ç®¡ç†
-    Route::get('/categories', 'Ticket\TicketCategoryController@index')->name('ticket.categories.index');
-    Route::get('/categories/create', 'Ticket\TicketCategoryController@create')->name('ticket.categories.create');
-    Route::post('/categories', 'Ticket\TicketCategoryController@store')->name('ticket.categories.store');
-    Route::get('/categories/{id}/edit', 'Ticket\TicketCategoryController@edit')->name('ticket.categories.edit');
-    Route::put('/categories/{id}', 'Ticket\TicketCategoryController@update')->name('ticket.categories.update');
-    Route::delete('/categories/{id}', 'Ticket\TicketCategoryController@destroy')->name('ticket.categories.destroy');
-    Route::get('/categories/by-department', 'Ticket\TicketCategoryController@getByDepartment')
-        ->name('ticket.categories.by-department');
+    // ·ÖÀà¹ÜÀí
+    Route::get("/categories", "Ticket\TicketCategoryController@index")->name("ticket.categories.index");
+    Route::get("/categories/create", "Ticket\TicketCategoryController@create")->name("ticket.categories.create");
+    Route::post("/categories", "Ticket\TicketCategoryController@store")->name("ticket.categories.store");
+    Route::get("/categories/{id}/edit", "Ticket\TicketCategoryController@edit")->name("ticket.categories.edit");
+    Route::put("/categories/{id}", "Ticket\TicketCategoryController@update")->name("ticket.categories.update");
+    Route::delete("/categories/{id}", "Ticket\TicketCategoryController@destroy")->name("ticket.categories.destroy");
+    Route::get("/categories/by-department", "Ticket\TicketCategoryController@getByDepartment")
+        ->name("ticket.categories.by-department");
 });
 
-// ç½‘ç«™ç®¡ç†è®¾ç½®è·¯ç”±
-Route::prefix('admin/settings')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/', 'Admin\SettingController@index')->name('admin.settings.index');
-    Route::get('/group/{group}', 'Admin\SettingController@showGroup')->name('admin.settings.group');
-    Route::post('/group/{group}', 'Admin\SettingController@saveGroup')->name('admin.settings.group.save');
+// ÍøÕ¾¹ÜÀíÉèÖÃÂ·ÓÉ
+Route::prefix("admin/settings")->middleware(["auth", "role:admin"])->group(function () {
+    Route::get("/", "Admin\SettingController@index")->name("admin.settings.index");
+    Route::get("/group/{group}", "Admin\SettingController@showGroup")->name("admin.settings.group");
+    Route::post("/group/{group}", "Admin\SettingController@saveGroup")->name("admin.settings.group.save");
     
-    Route::get('/create', 'Admin\SettingController@create')->name('admin.settings.create');
-    Route::post('/', 'Admin\SettingController@store')->name('admin.settings.store');
-    Route::get('/{id}/edit', 'Admin\SettingController@edit')->name('admin.settings.edit');
-    Route::put('/{id}', 'Admin\SettingController@update')->name('admin.settings.update');
-    Route::delete('/{id}', 'Admin\SettingController@destroy')->name('admin.settings.destroy');
+    Route::get("/create", "Admin\SettingController@create")->name("admin.settings.create");
+    Route::post("/", "Admin\SettingController@store")->name("admin.settings.store");
+    Route::get("/{id}/edit", "Admin\SettingController@edit")->name("admin.settings.edit");
+    Route::put("/{id}", "Admin\SettingController@update")->name("admin.settings.update");
+    Route::delete("/{id}", "Admin\SettingController@destroy")->name("admin.settings.destroy");
     
-    Route::post('/clear-cache', 'Admin\SettingController@clearCache')->name('admin.settings.clear-cache');
-    Route::post('/init-system', 'Admin\SettingController@initSystemSettings')->name('admin.settings.init-system');
+    Route::post("/clear-cache", "Admin\SettingController@clearCache")->name("admin.settings.clear-cache");
+    Route::post("/init-system", "Admin\SettingController@initSystemSettings")->name("admin.settings.init-system");
 });
 
-// å‰å°æ–°é—»è·¯ç”±
-Route::prefix('news')->name('news.')->group(function () {
-    Route::get('/', 'News\NewsController@index')->name('index');
-    Route::get('/{slug}', 'News\NewsController@show')->name('show');
-    Route::get('/category/{slug}', 'News\NewsController@category')->name('category');
-    Route::get('/tag/{slug}', 'News\NewsController@tag')->name('tag');
-    Route::post('/{slug}/comment', 'News\NewsController@comment')->name('comment');
+// Ç°Ì¨ĞÂÎÅÂ·ÓÉ
+Route::prefix("news")->name("news.")->group(function () {
+    Route::get("/", "News\NewsController@index")->name("index");
+    Route::get("/{slug}", "News\NewsController@show")->name("show");
+    Route::get("/category/{slug}", "News\NewsController@category")->name("category");
+    Route::get("/tag/{slug}", "News\NewsController@tag")->name("tag");
+    Route::post("/{slug}/comment", "News\NewsController@comment")->name("comment");
 });
 
-// åå°æ–°é—»ç®¡ç†è·¯ç”±
-Route::prefix('admin/news')->name('admin.news.')->middleware(['auth', 'role:admin,editor'])->group(function () {
-    // æ–°é—»ç®¡ç†
-    Route::get('/', 'Admin\News\NewsController@index')->name('index');
-    Route::get('/create', 'Admin\News\NewsController@create')->name('create');
-    Route::post('/', 'Admin\News\NewsController@store')->name('store');
-    Route::get('/{id}/edit', 'Admin\News\NewsController@edit')->name('edit');
-    Route::put('/{id}', 'Admin\News\NewsController@update')->name('update');
-    Route::delete('/{id}', 'Admin\News\NewsController@destroy')->name('destroy');
+// ºóÌ¨ĞÂÎÅ¹ÜÀíÂ·ÓÉ
+Route::prefix("admin/news")->name("admin.news.")->middleware(["auth", "role:admin,editor"])->group(function () {
+    // ĞÂÎÅ¹ÜÀí
+    Route::get("/", "Admin\News\NewsController@index")->name("index");
+    Route::get("/create", "Admin\News\NewsController@create")->name("create");
+    Route::post("/", "Admin\News\NewsController@store")->name("store");
+    Route::get("/{id}/edit", "Admin\News\NewsController@edit")->name("edit");
+    Route::put("/{id}", "Admin\News\NewsController@update")->name("update");
+    Route::delete("/{id}", "Admin\News\NewsController@destroy")->name("destroy");
     
-    // æ–°é—»æ“ä½œ
-    Route::post('/{id}/toggle-featured', 'Admin\News\NewsController@toggleFeatured')->name('toggle-featured');
-    Route::post('/{id}/publish', 'Admin\News\NewsController@publish')->name('publish');
-    Route::post('/{id}/draft', 'Admin\News\NewsController@draft')->name('draft');
-    Route::post('/{id}/archive', 'Admin\News\NewsController@archive')->name('archive');
+    // ĞÂÎÅ²Ù×÷
+    Route::post("/{id}/toggle-featured", "Admin\News\NewsController@toggleFeatured")->name("toggle-featured");
+    Route::post("/{id}/publish", "Admin\News\NewsController@publish")->name("publish");
+    Route::post("/{id}/draft", "Admin\News\NewsController@draft")->name("draft");
+    Route::post("/{id}/archive", "Admin\News\NewsController@archive")->name("archive");
     
-    // åˆ†ç±»ç®¡ç†
-    Route::get('/categories', 'Admin\News\NewsCategoryController@index')->name('categories.index');
-    Route::get('/categories/create', 'Admin\News\NewsCategoryController@create')->name('categories.create');
-    Route::post('/categories', 'Admin\News\NewsCategoryController@store')->name('categories.store');
-    Route::get('/categories/{id}/edit', 'Admin\News\NewsCategoryController@edit')->name('categories.edit');
-    Route::put('/categories/{id}', 'Admin\News\NewsCategoryController@update')->name('categories.update');
-    Route::delete('/categories/{id}', 'Admin\News\NewsCategoryController@destroy')->name('categories.destroy');
-    Route::post('/categories/{id}/toggle-status', 'Admin\News\NewsCategoryController@toggleStatus')->name('categories.toggle-status');
+    // ·ÖÀà¹ÜÀí
+    Route::get("/categories", "Admin\News\NewsCategoryController@index")->name("categories.index");
+    Route::get("/categories/create", "Admin\News\NewsCategoryController@create")->name("categories.create");
+    Route::post("/categories", "Admin\News\NewsCategoryController@store")->name("categories.store");
+    Route::get("/categories/{id}/edit", "Admin\News\NewsCategoryController@edit")->name("categories.edit");
+    Route::put("/categories/{id}", "Admin\News\NewsCategoryController@update")->name("categories.update");
+    Route::delete("/categories/{id}", "Admin\News\NewsCategoryController@destroy")->name("categories.destroy");
+    Route::post("/categories/{id}/toggle-status", "Admin\News\NewsCategoryController@toggleStatus")->name("categories.toggle-status");
     
-    // æ ‡ç­¾ç®¡ç†
-    Route::get('/tags', 'Admin\News\NewsTagController@index')->name('tags.index');
-    Route::get('/tags/create', 'Admin\News\NewsTagController@create')->name('tags.create');
-    Route::post('/tags', 'Admin\News\NewsTagController@store')->name('tags.store');
-    Route::get('/tags/{id}/edit', 'Admin\News\NewsTagController@edit')->name('tags.edit');
-    Route::put('/tags/{id}', 'Admin\News\NewsTagController@update')->name('tags.update');
-    Route::delete('/tags/{id}', 'Admin\News\NewsTagController@destroy')->name('tags.destroy');
-    Route::post('/tags/{id}/toggle-status', 'Admin\News\NewsTagController@toggleStatus')->name('tags.toggle-status');
+    // ±êÇ©¹ÜÀí
+    Route::get("/tags", "Admin\News\NewsTagController@index")->name("tags.index");
+    Route::get("/tags/create", "Admin\News\NewsTagController@create")->name("tags.create");
+    Route::post("/tags", "Admin\News\NewsTagController@store")->name("tags.store");
+    Route::get("/tags/{id}/edit", "Admin\News\NewsTagController@edit")->name("tags.edit");
+    Route::put("/tags/{id}", "Admin\News\NewsTagController@update")->name("tags.update");
+    Route::delete("/tags/{id}", "Admin\News\NewsTagController@destroy")->name("tags.destroy");
+    Route::post("/tags/{id}/toggle-status", "Admin\News\NewsTagController@toggleStatus")->name("tags.toggle-status");
     
-    // è¯„è®ºç®¡ç†
-    Route::get('/comments', 'Admin\News\NewsCommentController@index')->name('comments.index');
-    Route::get('/comments/{id}', 'Admin\News\NewsCommentController@show')->name('comments.show');
-    Route::post('/comments/{id}/approve', 'Admin\News\NewsCommentController@approve')->name('comments.approve');
-    Route::post('/comments/{id}/reject', 'Admin\News\NewsCommentController@reject')->name('comments.reject');
-    Route::post('/comments/{id}/reply', 'Admin\News\NewsCommentController@reply')->name('comments.reply');
-    Route::delete('/comments/{id}', 'Admin\News\NewsCommentController@destroy')->name('comments.destroy');
-    Route::post('/comments/batch-action', 'Admin\News\NewsCommentController@batchAction')->name('comments.batch-action');
+    // ÆÀÂÛ¹ÜÀí
+    Route::get("/comments", "Admin\News\NewsCommentController@index")->name("comments.index");
+    Route::get("/comments/{id}", "Admin\News\NewsCommentController@show")->name("comments.show");
+    Route::post("/comments/{id}/approve", "Admin\News\NewsCommentController@approve")->name("comments.approve");
+    Route::post("/comments/{id}/reject", "Admin\News\NewsCommentController@reject")->name("comments.reject");
+    Route::post("/comments/{id}/reply", "Admin\News\NewsCommentController@reply")->name("comments.reply");
+    Route::delete("/comments/{id}", "Admin\News\NewsCommentController@destroy")->name("comments.destroy");
+    Route::post("/comments/batch-action", "Admin\News\NewsCommentController@batchAction")->name("comments.batch-action");
 }); 
- / /   O A u t h ï1u
- R o u t e : : p r e f i x ( " a u t h " ) - > n a m e ( " a u t h . " ) - > g r o u p ( f u n c t i o n   ( )   { 
-         R o u t e : : g e t ( " / { p r o v i d e r } / r e d i r e c t " ,   " O A u t h \ O A u t h C o n t r o l l e r @ r e d i r e c t " ) - > n a m e ( " o a u t h . r e d i r e c t " ) ; 
-         R o u t e : : g e t ( " / { p r o v i d e r } / c a l l b a c k " ,   " O A u t h \ O A u t h C o n t r o l l e r @ c a l l b a c k " ) - > n a m e ( " o a u t h . c a l l b a c k " ) ; 
-         R o u t e : : p o s t ( " / { p r o v i d e r } / u n l i n k " ,   " O A u t h \ O A u t h C o n t r o l l e r @ u n l i n k " ) - > m i d d l e w a r e ( " a u t h " ) - > n a m e ( " o a u t h . u n l i n k " ) ; 
- } ) ;  
- 
+
+// OAuthÂ·ÓÉ
+Route::prefix("auth")->name("auth.")->group(function () {
+    Route::get("/{provider}/redirect", "OAuth\OAuthController@redirect")->name("oauth.redirect");
+    Route::get("/{provider}/callback", "OAuth\OAuthController@callback")->name("oauth.callback");
+    Route::post("/{provider}/unlink", "OAuth\OAuthController@unlink")->middleware("auth")->name("oauth.unlink");
+});
+
 // Ö§¸¶Ïà¹ØÂ·ÓÉ
 Route::prefix("payment")->name("payment.")->group(function () {
     // Ö§¸¶»Øµ÷
@@ -201,7 +204,7 @@ Route::prefix("payment")->name("payment.")->group(function () {
     Route::get("/wechat/qrcode", "PaymentController@qrcode")->name("wechat.qrcode");
 });
 
-// ÓÃ»§ÕËµ¥ºÍÌ×²ÍÏà¹ØÂ·ÓÉ
+// ÓÃ»§¶ËÌ×²Í¹ºÂòÂ·ÓÉ
 Route::prefix("user/billing")->name("user.billing.")->middleware(["auth"])->group(function () {
     // ¶î¶ÈÒ³Ãæ
     Route::get("/quota", "User\BillingController@quota")->name("quota");
@@ -228,16 +231,40 @@ Route::prefix("user/billing")->name("user.billing.")->middleware(["auth"])->grou
     Route::get("/stats", "User\BillingController@stats")->name("stats");
 });
 
-// »áÔ±ÖĞĞÄÏà¹ØÂ·ÓÉ
+// »áÔ±¹ÜÀíÏà¹ØÂ·ÓÉ
 Route::prefix("user/membership")->name("user.membership.")->middleware(["auth"])->group(function () {
-    // »áÔ±ÖĞĞÄÊ×Ò³
-    Route::get("/", "User\MembershipController@index")->name("index");
+    // »áÔ±ÖĞĞÄÖ÷Ò³
+    Route::get("/", [MembershipController::class, "index"])->name("index");
     
-    // »áÔ±µÈ¼¶ÁĞ±í
-    Route::get("/levels", "User\MembershipController@levels")->name("levels");
+    // »áÔ±Ì×²ÍÑ¡Ôñ
+    Route::get("/plans", [MembershipController::class, "plans"])->name("plans");
     
-    // »áÔ±¶©ÔÄ¼ÇÂ¼
-    Route::get("/subscriptions", "User\MembershipController@subscriptions")->name("subscriptions");
+    // »áÔ±¶©ÔÄ
+    Route::post("/subscribe", [MembershipController::class, "subscribe"])->name("subscribe");
+    
+    // »áÔ±Ğø·Ñ
+    Route::get("/renew", [MembershipController::class, "renew"])->name("renew");
+    
+    // ¿ªÆô×Ô¶¯Ğø·Ñ
+    Route::post("/auto-renew/enable", [MembershipController::class, "enableAutoRenew"])->name("auto-renew.enable");
+    
+    // È¡Ïû×Ô¶¯Ğø·Ñ
+    Route::post("/auto-renew/cancel", [MembershipController::class, "cancelAutoRenew"])->name("auto-renew.cancel");
+    
+    // Ö§¸¶Ò³Ãæ
+    Route::get("/pay", [MembershipController::class, "pay"])->name("pay");
+});
+
+// ¶î¶ÈÊ¹ÓÃÍ³¼ÆÂ·ÓÉ
+Route::prefix("user/quota")->name("user.quota.")->middleware(["auth"])->group(function () {
+    // ¶î¶ÈÊ¹ÓÃÇé¿ö
+    Route::get("/", [QuotaController::class, "index"])->name("index");
+    
+    // ¶î¶ÈÊ¹ÓÃÍ³¼ÆÊı¾İ
+    Route::get("/stats", [QuotaController::class, "stats"])->name("stats");
+    
+    // ¶î¶ÈÊ¹ÓÃÇ÷ÊÆÊı¾İ
+    Route::get("/trend", [QuotaController::class, "trend"])->name("trend");
 });
 
 // ºóÌ¨Ì×²Í¹ÜÀíÂ·ÓÉ
@@ -247,21 +274,16 @@ Route::prefix("admin/billing")->name("admin.billing.")->middleware(["auth", "rol
     
     // ¶©µ¥¹ÜÀí
     Route::resource("orders", "Admin\Billing\OrderController")->except(["create", "store"]);
-    
-    // ¶î¶È¼ÇÂ¼
-    Route::get("/quota-logs", "Admin\Billing\QuotaLogController@index")->name("quota-logs.index");
-    Route::get("/quota-logs/{id}", "Admin\Billing\QuotaLogController@show")->name("quota-logs.show");
 });
 
 // ºóÌ¨»áÔ±¹ÜÀíÂ·ÓÉ
 Route::prefix("admin/membership")->name("admin.membership.")->middleware(["auth", "role:admin"])->group(function () {
     // »áÔ±µÈ¼¶¹ÜÀí
-    Route::resource("levels", "Admin\Membership\LevelController");
+    Route::resource("levels", "Admin\Membership\MembershipLevelController");
     
     // »áÔ±¶©ÔÄ¹ÜÀí
-    Route::resource("subscriptions", "Admin\Membership\SubscriptionController")->except(["create", "store"]);
+    Route::resource("subscriptions", "Admin\Membership\MembershipSubscriptionController")->except(["create", "store"]);
+    
+    // »áÔ±Í³¼Æ
+    Route::get("/stats", "Admin\Membership\MembershipStatsController@index")->name("stats");
 });
-
-
-// °²È«Ïà¹ØÂ·ÓÉ
-require __DIR__ . '/security.php';
