@@ -6,51 +6,47 @@
  */
 
 return [
-    // 仪表盘路由
-    'GET|/' => 'DashboardController@index',
-    'GET|/dashboard' => 'DashboardController@index',
+    // 主页
+    '/' => ['HomeController', 'index'],
+    '/dashboard' => ['HomeController', 'index'],
     
-    // 认证路由
-    'GET|/login' => 'AuthController@showLoginForm',
-    'POST|/login' => 'AuthController@login',
-    'GET|/logout' => 'AuthController@logout',
+    // 用户管理
+    '/users' => ['UserController', 'index'],
+    '/users/add' => ['UserController', 'add'],
+    '/users/edit/([0-9]+)' => ['UserController', 'edit'],
+    '/users/delete/([0-9]+)' => ['UserController', 'delete'],
     
-    // 用户管理路由
-    'GET|/users' => 'UserController@index',
-    'GET|/users/create' => 'UserController@create',
-    'POST|/users/store' => 'UserController@store',
-    'GET|/users/:id' => 'UserController@show',
-    'GET|/users/:id/edit' => 'UserController@edit',
-    'POST|/users/:id/update' => 'UserController@update',
-    'POST|/users/:id/delete' => 'UserController@delete',
+    // 系统设置
+    '/settings' => ['SettingController', 'index'],
+    '/settings/save' => ['SettingController', 'save'],
     
-    // 系统设置路由
-    'GET|/settings' => 'SettingController@index',
-    'POST|/settings/save' => 'SettingController@save',
-    'GET|/cache/clear' => 'SettingController@clearCache',
-    'GET|/database/optimize' => 'SettingController@optimizeDatabase',
-    'GET|/maintenance/toggle' => 'SettingController@toggleMaintenanceMode',
+    // 日志管理
+    '/logs' => ['LogController', 'index'],
+    '/logs/([0-9]+)' => ['LogController', 'show'],
+    '/logs/clear' => ['LogController', 'clear'],
     
-    // 系统日志路由
-    'GET|/logs' => 'LogController@index',
-    'GET|/logs/:id' => 'LogController@show',
-    'POST|/logs/clear' => 'LogController@clear',
-    'POST|/logs/:id/delete' => 'LogController@delete',
+    // 备份管理
+    '/backup' => ['BackupController', 'index'],
+    '/backup/create' => ['BackupController', 'create'],
+    '/backup/([^/]+)/download' => ['BackupController', 'download'],
+    '/backup/([^/]+)/restore' => ['BackupController', 'restore'],
+    '/backup/([^/]+)/delete' => ['BackupController', 'delete'],
     
-    // 备份管理路由
-    'GET|/backup' => 'BackupController@index',
-    'GET|/backup/create' => 'BackupController@create',
-    'GET|/backup/:filename/download' => 'BackupController@download',
-    'POST|/backup/:filename/delete' => 'BackupController@delete',
-    'POST|/backup/:filename/restore' => 'BackupController@restore',
+    // 系统工具
+    '/tools' => ['ToolController', 'index'],
+    '/tools/phpinfo' => ['ToolController', 'phpInfo'],
+    '/tools/server-info' => ['ToolController', 'serverInfo'],
+    '/tools/database-info' => ['ToolController', 'databaseInfo'],
     
-    // 系统工具路由
-    'GET|/tools' => 'ToolController@index',
-    'GET|/tools/phpinfo' => 'ToolController@phpInfo',
-    'GET|/tools/server-info' => 'ToolController@serverInfo',
-    'GET|/tools/database-info' => 'ToolController@databaseInfo',
+    // 缓存管理
+    '/cache/clear' => ['CacheController', 'clear'],
     
-    // 404页面
-    '404' => 'ErrorController@notFound',
-    '500' => 'ErrorController@serverError'
+    // 数据库优化
+    '/database/optimize' => ['DatabaseController', 'optimize'],
+    
+    // 错误页面
+    '/error/404' => ['ErrorController', 'notFound'],
+    '/error/500' => ['ErrorController', 'serverError'],
+    '/error/403' => ['ErrorController', 'forbidden'],
+    '/error/maintenance' => ['ErrorController', 'maintenance'],
 ]; 

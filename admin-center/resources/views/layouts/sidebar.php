@@ -1,84 +1,113 @@
 <div class="sidebar">
     <div class="sidebar-header">
-        <div class="app-brand">
-            <a href="/admin" class="brand-link">
-                <span class="brand-logo">
-                    <i class="bi bi-shield-lock-fill"></i>
-                </span>
-                <span class="brand-text">IT运维中心</span>
+        <div class="logo">
+            <a href="/admin">
+                <img src="/admin-center/assets/images/logo.png" alt="AlingAi Pro" class="logo-img">
+                <span class="logo-text">IT运维中心</span>
             </a>
         </div>
+        <button class="sidebar-toggle d-lg-none" id="sidebarToggle">
+            <i class="bi bi-x-lg"></i>
+        </button>
     </div>
-
+    
     <div class="sidebar-body">
-        <ul class="nav">
+        <ul class="nav flex-column">
             <!-- 仪表盘 -->
             <li class="nav-item">
                 <a href="/admin" class="nav-link <?= $currentPage === 'dashboard' ? 'active' : '' ?>">
-                    <i class="nav-icon bi bi-speedometer2"></i>
-                    <span class="nav-text">仪表盘</span>
+                    <i class="bi bi-speedometer2"></i>
+                    <span>仪表盘</span>
                 </a>
             </li>
-
+            
             <!-- 用户管理 -->
             <li class="nav-item">
                 <a href="/admin/users" class="nav-link <?= $currentPage === 'users' ? 'active' : '' ?>">
-                    <i class="nav-icon bi bi-people"></i>
-                    <span class="nav-text">用户管理</span>
+                    <i class="bi bi-people"></i>
+                    <span>用户管理</span>
                 </a>
             </li>
             
-            <!-- 系统日志 -->
+            <!-- 日志管理 -->
             <li class="nav-item">
                 <a href="/admin/logs" class="nav-link <?= $currentPage === 'logs' ? 'active' : '' ?>">
-                    <i class="nav-icon bi bi-journal-text"></i>
-                    <span class="nav-text">系统日志</span>
-                </a>
-            </li>
-            
-            <!-- 备份管理 -->
-            <li class="nav-item">
-                <a href="/admin/backup" class="nav-link <?= $currentPage === 'backup' ? 'active' : '' ?>">
-                    <i class="nav-icon bi bi-archive"></i>
-                    <span class="nav-text">备份管理</span>
+                    <i class="bi bi-journal-text"></i>
+                    <span>日志管理</span>
                 </a>
             </li>
             
             <!-- 系统工具 -->
             <li class="nav-item">
-                <a href="#" class="nav-link <?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info']) ? 'active' : '' ?>" data-bs-toggle="collapse" data-bs-target="#tools-collapse" aria-expanded="<?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info']) ? 'true' : 'false' ?>">
-                    <i class="nav-icon bi bi-tools"></i>
-                    <span class="nav-text">系统工具</span>
-                    <i class="nav-arrow bi bi-chevron-down"></i>
+                <a href="#toolsSubmenu" data-bs-toggle="collapse" class="nav-link <?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info']) ? 'active' : '' ?>">
+                    <i class="bi bi-tools"></i>
+                    <span>系统工具</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
                 </a>
-                <div class="collapse <?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info']) ? 'show' : '' ?>" id="tools-collapse">
-                    <ul class="nav-sub">
-                        <li class="nav-item">
-                            <a href="/admin/tools/phpinfo" class="nav-link <?= $currentPage === 'phpinfo' ? 'active' : '' ?>">
-                                <span class="nav-text">PHP信息</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/admin/tools/server-info" class="nav-link <?= $currentPage === 'server-info' ? 'active' : '' ?>">
-                                <span class="nav-text">服务器信息</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/admin/tools/database-info" class="nav-link <?= $currentPage === 'database-info' ? 'active' : '' ?>">
-                                <span class="nav-text">数据库信息</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="collapse <?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info']) ? 'show' : '' ?>" id="toolsSubmenu">
+                    <li>
+                        <a href="/admin/tools" class="nav-link <?= $currentPage === 'tools' ? 'active' : '' ?>">
+                            <i class="bi bi-circle"></i> 工具首页
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/tools/phpinfo" class="nav-link <?= $currentPage === 'phpinfo' ? 'active' : '' ?>">
+                            <i class="bi bi-circle"></i> PHP信息
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/tools/server-info" class="nav-link <?= $currentPage === 'server-info' ? 'active' : '' ?>">
+                            <i class="bi bi-circle"></i> 服务器信息
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/tools/database-info" class="nav-link <?= $currentPage === 'database-info' ? 'active' : '' ?>">
+                            <i class="bi bi-circle"></i> 数据库信息
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
+            <!-- 备份管理 -->
+            <li class="nav-item">
+                <a href="/admin/backup" class="nav-link <?= $currentPage === 'backup' ? 'active' : '' ?>">
+                    <i class="bi bi-archive"></i>
+                    <span>备份管理</span>
+                </a>
             </li>
             
             <!-- 系统设置 -->
             <li class="nav-item">
                 <a href="/admin/settings" class="nav-link <?= $currentPage === 'settings' ? 'active' : '' ?>">
-                    <i class="nav-icon bi bi-gear"></i>
-                    <span class="nav-text">系统设置</span>
+                    <i class="bi bi-gear"></i>
+                    <span>系统设置</span>
+                </a>
+            </li>
+            
+            <!-- 分隔线 -->
+            <li class="nav-divider"></li>
+            
+            <!-- 官方网站 -->
+            <li class="nav-item">
+                <a href="/" target="_blank" class="nav-link">
+                    <i class="bi bi-house"></i>
+                    <span>官方网站</span>
+                </a>
+            </li>
+            
+            <!-- 帮助文档 -->
+            <li class="nav-item">
+                <a href="/docs" target="_blank" class="nav-link">
+                    <i class="bi bi-question-circle"></i>
+                    <span>帮助文档</span>
                 </a>
             </li>
         </ul>
+    </div>
+    
+    <div class="sidebar-footer">
+        <div class="version">
+            <span>版本: 1.0.0</span>
+        </div>
     </div>
 </div> 
