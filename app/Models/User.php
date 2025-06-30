@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Membership\MemberPoint;
+use App\Models\Membership\MemberReferral;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,7 +16,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
-     * The attributes that are mass assignable.
+     * 可批量赋值的属性
      *
      * @var array<int, string>
      */
@@ -26,10 +28,13 @@ class User extends Authenticatable implements MustVerifyEmail
         "has_mfa",
         "last_login_at",
         "last_login_ip",
+        "referral_code",
+        "total_referrals",
+        "total_referral_points",
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * 应被隐藏的属性
      *
      * @var array<int, string>
      */
@@ -40,7 +45,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * The attributes that should be cast.
+     * 应该被转换成原生类型的属性
      *
      * @var array<string, string>
      */
@@ -51,6 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
         "has_mfa" => "boolean",
         "mfa_recovery_codes" => "array",
         "last_login_at" => "datetime",
+        "total_referrals" => "integer",
+        "total_referral_points" => "integer",
     ];
     
     /**
@@ -210,7 +217,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     
     /**
-     * 获取用户当前活跃的会员订阅
+     * 获取用户当前有效的会员订阅
      * 
      * @return \App\Models\Membership\MembershipSubscription|null
      */
@@ -234,10 +241,100 @@ class User extends Authenticatable implements MustVerifyEmail
     }
     
     /**
-     * 获取用户的额度使用记录
+     * 获取用户的配额使用记录
      */
     public function quotaUsages()
     {
         return $this->hasMany(QuotaUsage::class);
+    }
+
+    /**
+     * 获取用户的会员积分记录
+     */
+    public function points()
+    {
+        return $this->hasMany(MemberPoint::class);
+    }
+
+    /**
+     * 获取用户作为推荐人的推荐记录
+     */
+    public function referrals()
+    {
+        return $this->hasMany(MemberReferral::class, "referrer_id");
+    }
+
+    /**
+     * 获取推荐该用户的推荐记录
+     */
+    public function referredBy()
+    {
+        return $this->hasOne(MemberReferral::class, "referred_id");
+    }
+
+    /**
+     * 检查用户是否有指定会员特权
+     * 
+     * @param string $privilegeCode 特权代码
+     * @return bool
+     */
+    public function hasPrivilege(string $privilegeCode): bool
+    {
+        // 依赖注入会导致循环依赖，因此这里手动实例化服务
+        $privilegeService = app(\App\Services\Membership\PrivilegeService::class);
+        return $privilegeService->hasPrivilege($this, $privilegeCode);
+    }
+
+    /**
+     * 获取用户的特权值
+     * 
+     * @param string $privilegeCode 特权代码
+     * @param mixed $default 默认值
+     * @return mixed
+     */
+    public function getPrivilegeValue(string $privilegeCode, $default = null)
+    {
+        // 依赖注入会导致循环依赖，因此这里手动实例化服务
+        $privilegeService = app(\App\Services\Membership\PrivilegeService::class);
+        return $privilegeService->getPrivilegeValue($this, $privilegeCode, $default);
+    }
+
+    /**
+     * 检查用户的会员等级是否需要升级
+     * 
+     * @return bool
+     */
+    public function checkAndUpgradeLevel(): bool
+    {
+        // 依赖注入会导致循环依赖，因此这里手动实例化服务
+        $upgradeService = app(\App\Services\Membership\LevelUpgradeService::class);
+        return $upgradeService->checkAndUpgradeLevel($this);
+    }
+
+    /**
+     * 获取用户的推荐码
+     * 
+     * @return string
+     */
+    public function getReferralCode(): string
+    {
+        // 如果用户没有推荐码，生成一个
+        if (!$this->referral_code) {
+            $referralService = app(\App\Services\Membership\ReferralService::class);
+            return $referralService->generateReferralCode($this);
+        }
+
+        return $this->referral_code;
+    }
+
+    /**
+     * 获取用户当前有效积分
+     * 
+     * @return int
+     */
+    public function getCurrentPoints(): int
+    {
+        $pointService = app(\App\Services\Membership\PointService::class);
+        return $pointService->getCurrentPoints($this);
     }
 }

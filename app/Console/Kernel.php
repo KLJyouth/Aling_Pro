@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\DatabaseSecurityMonitor::class,
         \App\Console\Commands\ProcessMembershipRenewals::class,
+        \App\Console\Commands\ProcessMemberLevelUpgrades::class,
     ];
 
     /**
@@ -58,6 +59,12 @@ class Kernel extends ConsoleKernel
         // 每天凌晨2点处理会员自动续费
         $schedule->command("membership:process-renewals")
             ->dailyAt("02:00")
+            ->withoutOverlapping()
+            ->appendOutputTo(storage_path("logs/membership.log"));
+            
+        // 每天凌晨3点处理会员等级自动升级
+        $schedule->command("membership:process-upgrades")
+            ->dailyAt("03:00")
             ->withoutOverlapping()
             ->appendOutputTo(storage_path("logs/membership.log"));
     }

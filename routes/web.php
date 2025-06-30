@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Security\QuantumSecurityDashboardController;
 use App\Http\Controllers\User\MembershipController;
 use App\Http\Controllers\User\QuotaController;
+use App\Http\Controllers\User\PointController;
+use App\Http\Controllers\User\PrivilegeController;
+use App\Http\Controllers\User\ReferralController;
 
 /*
 |--------------------------------------------------------------------------
@@ -255,6 +258,37 @@ Route::prefix("user/membership")->name("user.membership.")->middleware(["auth"])
     Route::get("/pay", [MembershipController::class, "pay"])->name("pay");
 });
 
+// 会员积分路由
+Route::prefix("user/points")->name("user.points.")->middleware(["auth"])->group(function () {
+    // 积分首页
+    Route::get("/", [PointController::class, "index"])->name("index");
+    
+    // 积分历史
+    Route::get("/history", [PointController::class, "history"])->name("history");
+    
+    // 积分兑换
+    Route::get("/exchange", [PointController::class, "exchange"])->name("exchange");
+    Route::post("/exchange", [PointController::class, "doExchange"])->name("do-exchange");
+});
+
+// 会员特权路由
+Route::prefix("user/privileges")->name("user.privileges.")->middleware(["auth"])->group(function () {
+    // 特权首页
+    Route::get("/", [PrivilegeController::class, "index"])->name("index");
+    
+    // 特权详情
+    Route::get("/{code}", [PrivilegeController::class, "show"])->name("show");
+});
+
+// 会员推荐路由
+Route::prefix("user/referrals")->name("user.referrals.")->middleware(["auth"])->group(function () {
+    // 推荐首页
+    Route::get("/", [ReferralController::class, "index"])->name("index");
+    
+    // 更多推荐列表
+    Route::get("/more", [ReferralController::class, "moreReferrals"])->name("more");
+});
+
 // 额度使用统计路由
 Route::prefix("user/quota")->name("user.quota.")->middleware(["auth"])->group(function () {
     // 额度使用情况
@@ -286,4 +320,30 @@ Route::prefix("admin/membership")->name("admin.membership.")->middleware(["auth"
     
     // 会员统计
     Route::get("/stats", "Admin\Membership\MembershipStatsController@index")->name("stats");
+    
+    // 会员特权管理
+    Route::resource("privileges", "Admin\Membership\MemberPrivilegeController");
+    
+    // 会员积分管理
+    Route::get("/points", "Admin\Membership\MemberPointController@index")->name("points.index");
+    Route::get("/points/{user}", "Admin\Membership\MemberPointController@show")->name("points.show");
+    Route::post("/points/{user}/add", "Admin\Membership\MemberPointController@addPoints")->name("points.add");
+    Route::post("/points/{user}/deduct", "Admin\Membership\MemberPointController@deductPoints")->name("points.deduct");
+    
+    // 会员推荐管理
+    Route::get("/referrals", "Admin\Membership\MemberReferralController@index")->name("referrals.index");
+    Route::get("/referrals/{id}", "Admin\Membership\MemberReferralController@show")->name("referrals.show");
+    Route::post("/referrals/{id}/complete", "Admin\Membership\MemberReferralController@complete")->name("referrals.complete");
+    Route::post("/referrals/{id}/reject", "Admin\Membership\MemberReferralController@reject")->name("referrals.reject");
+    
+    // 会员分析报表
+    Route::get("/analytics", "Admin\Membership\MembershipAnalyticsController@index")->name("analytics.index");
+    Route::get("/analytics/growth", "Admin\Membership\MembershipAnalyticsController@growth")->name("analytics.growth");
+    Route::get("/analytics/retention", "Admin\Membership\MembershipAnalyticsController@retention")->name("analytics.retention");
+    Route::get("/analytics/revenue", "Admin\Membership\MembershipAnalyticsController@revenue")->name("analytics.revenue");
+    Route::get("/analytics/upgrades", "Admin\Membership\MembershipAnalyticsController@upgrades")->name("analytics.upgrades");
+    Route::get("/analytics/export", "Admin\Membership\MembershipAnalyticsController@export")->name("analytics.export");
 });
+
+// 注册时处理推荐
+Route::post("/register/referral", "Auth\RegisterController@processReferral")->name("register.referral");
