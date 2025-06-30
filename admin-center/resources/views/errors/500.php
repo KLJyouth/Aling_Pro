@@ -1,69 +1,76 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>500 - 系统错误 | IT运维中心</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        body {
-            font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .error-container {
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
-            padding: 2rem;
-        }
-        .error-icon {
-            font-size: 5rem;
-            color: #dc3545;
-            margin-bottom: 1.5rem;
-        }
-        .error-title {
-            font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .error-message {
-            color: #6c757d;
-            margin-bottom: 2rem;
-        }
-        .btn-return {
-            padding: 0.75rem 2rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="error-container">
-        <div class="error-icon">
-            <i class="bi bi-exclamation-triangle"></i>
+<?php
+/**
+ * 500 服务器错误页面
+ */
+?>
+
+<div class="container-fluid">
+    <div class="error-page text-center py-5">
+        <div class="error-code mb-4">
+            <h1 class="display-1 fw-bold text-muted">500</h1>
         </div>
-        <h1 class="error-title">500 - 系统错误</h1>
-        <p class="error-message">
-            很抱歉，系统遇到了意外错误。我们的技术团队已经收到通知并正在处理此问题。
-        </p>
-        <p class="error-message">
-            请稍后再试或联系系统管理员获取帮助。
-        </p>
-        <div class="d-flex justify-content-center gap-3">
-            <a href="/admin" class="btn btn-primary btn-return">
-                <i class="bi bi-house"></i> 返回首页
+        <div class="error-icon mb-4">
+            <i class="bi bi-exclamation-triangle text-danger" style="font-size: 5rem;"></i>
+        </div>
+        <div class="error-message mb-4">
+            <h2>服务器内部错误</h2>
+            <p class="lead text-muted">
+                抱歉，服务器遇到了一个错误，无法完成您的请求。
+            </p>
+        </div>
+        <div class="error-actions">
+            <a href="/admin" class="btn btn-primary btn-lg">
+                <i class="bi bi-house-door"></i> 返回首页
             </a>
-            <button onclick="window.location.reload()" class="btn btn-outline-secondary btn-return">
+            <button onclick="location.reload()" class="btn btn-outline-secondary btn-lg ms-2">
                 <i class="bi bi-arrow-clockwise"></i> 刷新页面
             </button>
         </div>
-        <div class="mt-4 text-muted small">
-            <p>错误ID: <?= uniqid('err_') ?></p>
-            <p>时间: <?= date('Y-m-d H:i:s') ?></p>
-        </div>
+        
+        <?php if ($isDebug && isset($exception)): ?>
+            <div class="error-details mt-5">
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">错误详情</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            <strong>注意：</strong> 这些错误详情仅在调试模式下显示。在生产环境中，请关闭调试模式以保护敏感信息。
+                        </div>
+                        
+                        <h6 class="mb-2">错误消息:</h6>
+                        <pre class="bg-light p-3 rounded mb-3"><?= htmlspecialchars($exception->getMessage()) ?></pre>
+                        
+                        <h6 class="mb-2">文件:</h6>
+                        <pre class="bg-light p-3 rounded mb-3"><?= htmlspecialchars($exception->getFile()) ?> (行: <?= $exception->getLine() ?>)</pre>
+                        
+                        <h6 class="mb-2">堆栈跟踪:</h6>
+                        <pre class="bg-light p-3 rounded mb-3 overflow-auto" style="max-height: 300px;"><?= htmlspecialchars($exception->getTraceAsString()) ?></pre>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
     </div>
-</body>
-</html> 
+</div>
+
+<style>
+    .error-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    .error-code {
+        opacity: 0.8;
+    }
+    
+    .error-icon {
+        animation: shake 1s ease-in-out;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+</style> 
