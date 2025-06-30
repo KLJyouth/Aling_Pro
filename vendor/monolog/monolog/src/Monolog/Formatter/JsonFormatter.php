@@ -11,7 +11,6 @@
 
 namespace Monolog\Formatter;
 
-use Stringable;
 use Throwable;
 use Monolog\LogRecord;
 
@@ -74,38 +73,7 @@ class JsonFormatter extends NormalizerFormatter
      */
     public function format(LogRecord $record): string
     {
-        $normalized = $this->normalizeRecord($record);
-
-        return $this->toJson($normalized, true) . ($this->appendNewline ? "\n" : '');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function formatBatch(array $records): string
-    {
-        return match ($this->batchMode) {
-            static::BATCH_MODE_NEWLINES => $this->formatBatchNewlines($records),
-            default => $this->formatBatchJson($records),
-        };
-    }
-
-    /**
-     * @return $this
-     */
-    public function includeStacktraces(bool $include = true): self
-    {
-        $this->includeStacktraces = $include;
-
-        return $this;
-    }
-
-    /**
-     * @return array<array<mixed>|bool|float|int|\stdClass|string|null>
-     */
-    protected function normalizeRecord(LogRecord $record): array
-    {
-        $normalized = parent::normalizeRecord($record);
+        $normalized = parent::format($record);
 
         if (isset($normalized['context']) && $normalized['context'] === []) {
             if ($this->ignoreEmptyContextAndExtra) {
@@ -122,7 +90,25 @@ class JsonFormatter extends NormalizerFormatter
             }
         }
 
-        return $normalized;
+        return $this->toJson($normalized, true) . ($this->appendNewline ? "\n" : '');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function formatBatch(array $records): string
+    {
+        return match ($this->batchMode) {
+            static::BATCH_MODE_NEWLINES => $this->formatBatchNewlines($records),
+            default => $this->formatBatchJson($records),
+        };
+    }
+
+    public function includeStacktraces(bool $include = true): self
+    {
+        $this->includeStacktraces = $include;
+
+        return $this;
     }
 
     /**
@@ -132,9 +118,7 @@ class JsonFormatter extends NormalizerFormatter
      */
     protected function formatBatchJson(array $records): string
     {
-        $formatted = array_map(fn (LogRecord $record) => $this->normalizeRecord($record), $records);
-
-        return $this->toJson($formatted, true);
+        return $this->toJson($this->normalize($records), true);
     }
 
     /**
@@ -155,8 +139,6 @@ class JsonFormatter extends NormalizerFormatter
 
     /**
      * Normalizes given $data.
-     *
-     * @return null|scalar|array<mixed[]|scalar|null|object>|object
      */
     protected function normalize(mixed $data, int $depth = 0): mixed
     {
@@ -164,13 +146,13 @@ class JsonFormatter extends NormalizerFormatter
             return 'Over '.$this->maxNormalizeDepth.' levels deep, aborting normalization';
         }
 
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $normalized = [];
 
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ > $this->maxNormalizeItemCount) {
-                    $normalized['...'] = 'Over '.$this->maxNormalizeItemCount.' items ('.\count($data).' total), aborting normalization';
+                    $normalized['...'] = 'Over '.$this->maxNormalizeItemCount.' items ('.count($data).' total), aborting normalization';
                     break;
                 }
 
@@ -180,32 +162,15 @@ class JsonFormatter extends NormalizerFormatter
             return $normalized;
         }
 
-        if (\is_object($data)) {
-            if ($data instanceof \DateTimeInterface) {
-                return $this->formatDate($data);
-            }
-
-            if ($data instanceof Throwable) {
-                return $this->normalizeException($data, $depth);
-            }
-
-            // if the object has specific json serializability we want to make sure we skip the __toString treatment below
-            if ($data instanceof \JsonSerializable) {
-                return $data;
-            }
-
-            if ($data instanceof Stringable) {
-                return $data->__toString();
-            }
-
-            if (\get_class($data) === '__PHP_Incomplete_Class') {
-                return new \ArrayObject($data);
-            }
-
-            return $data;
+        if ($data instanceof \DateTimeInterface) {
+            return $this->formatDate($data);
         }
 
-        if (\is_resource($data)) {
+        if ($data instanceof Throwable) {
+            return $this->normalizeException($data, $depth);
+        }
+
+        if (is_resource($data)) {
             return parent::normalize($data);
         }
 
@@ -216,7 +181,7 @@ class JsonFormatter extends NormalizerFormatter
      * Normalizes given exception with or without its own stack trace based on
      * `includeStacktraces` property.
      *
-     * @return array<array-key, string|int|array<string|int|array<string>>>
+     * @inheritDoc
      */
     protected function normalizeException(Throwable $e, int $depth = 0): array
     {

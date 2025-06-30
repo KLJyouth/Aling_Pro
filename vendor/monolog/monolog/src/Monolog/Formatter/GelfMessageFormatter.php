@@ -63,9 +63,6 @@ class GelfMessageFormatter extends NormalizerFormatter
         };
     }
 
-    /**
-     * @throws \RuntimeException
-     */
     public function __construct(?string $systemName = null, ?string $extraPrefix = null, string $contextPrefix = 'ctxt_', ?int $maxLength = null)
     {
         if (!class_exists(Message::class)) {
@@ -74,11 +71,11 @@ class GelfMessageFormatter extends NormalizerFormatter
 
         parent::__construct('U.u');
 
-        $this->systemName = (null === $systemName || $systemName === '') ? (string) gethostname() : $systemName;
+        $this->systemName = (is_null($systemName) || $systemName === '') ? (string) gethostname() : $systemName;
 
-        $this->extraPrefix = null === $extraPrefix ? '' : $extraPrefix;
+        $this->extraPrefix = is_null($extraPrefix) ? '' : $extraPrefix;
         $this->contextPrefix = $contextPrefix;
-        $this->maxLength = null === $maxLength ? self::DEFAULT_MAX_LENGTH : $maxLength;
+        $this->maxLength = is_null($maxLength) ? self::DEFAULT_MAX_LENGTH : $maxLength;
     }
 
     /**
@@ -88,11 +85,11 @@ class GelfMessageFormatter extends NormalizerFormatter
     {
         $context = $extra = [];
         if (isset($record->context)) {
-            /** @var array<array<mixed>|bool|float|int|string|null> $context */
+            /** @var mixed[] $context */
             $context = parent::normalize($record->context);
         }
         if (isset($record->extra)) {
-            /** @var array<array<mixed>|bool|float|int|string|null> $extra */
+            /** @var mixed[] $extra */
             $extra = parent::normalize($record->extra);
         }
 
@@ -104,7 +101,7 @@ class GelfMessageFormatter extends NormalizerFormatter
             ->setLevel($this->getGraylog2Priority($record->level));
 
         // message length + system name length + 200 for padding / metadata
-        $len = 200 + \strlen($record->message) + \strlen($this->systemName);
+        $len = 200 + strlen($record->message) + strlen($this->systemName);
 
         if ($len > $this->maxLength) {
             $message->setShortMessage(Utils::substr($record->message, 0, $this->maxLength));
@@ -113,11 +110,18 @@ class GelfMessageFormatter extends NormalizerFormatter
         if (isset($record->channel)) {
             $message->setAdditional('facility', $record->channel);
         }
+        if (isset($extra['line'])) {
+            $message->setAdditional('line', $extra['line']);
+            unset($extra['line']);
+        }
+        if (isset($extra['file'])) {
+            $message->setAdditional('file', $extra['file']);
+            unset($extra['file']);
+        }
 
         foreach ($extra as $key => $val) {
-            $key = (string) preg_replace('#[^\w.-]#', '-', (string) $key);
-            $val = \is_scalar($val) || null === $val ? $val : $this->toJson($val);
-            $len = \strlen($this->extraPrefix . $key . $val);
+            $val = is_scalar($val) || null === $val ? $val : $this->toJson($val);
+            $len = strlen($this->extraPrefix . $key . $val);
             if ($len > $this->maxLength) {
                 $message->setAdditional($this->extraPrefix . $key, Utils::substr((string) $val, 0, $this->maxLength));
 
@@ -127,9 +131,8 @@ class GelfMessageFormatter extends NormalizerFormatter
         }
 
         foreach ($context as $key => $val) {
-            $key = (string) preg_replace('#[^\w.-]#', '-', (string) $key);
-            $val = \is_scalar($val) || null === $val ? $val : $this->toJson($val);
-            $len = \strlen($this->contextPrefix . $key . $val);
+            $val = is_scalar($val) || null === $val ? $val : $this->toJson($val);
+            $len = strlen($this->contextPrefix . $key . $val);
             if ($len > $this->maxLength) {
                 $message->setAdditional($this->contextPrefix . $key, Utils::substr((string) $val, 0, $this->maxLength));
 

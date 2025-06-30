@@ -32,8 +32,7 @@ class TagProcessor implements ProcessorInterface
     }
 
     /**
-     * @param  string[] $tags
-     * @return $this
+     * @param string[] $tags
      */
     public function addTags(array $tags = []): self
     {
@@ -43,8 +42,7 @@ class TagProcessor implements ProcessorInterface
     }
 
     /**
-     * @param  string[] $tags
-     * @return $this
+     * @param string[] $tags
      */
     public function setTags(array $tags = []): self
     {

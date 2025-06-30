@@ -49,68 +49,11 @@ ini_set('session.cookie_httponly', '1');
 ini_set('session.cookie_secure', $isProduction ? '1' : '0');
 ini_set('session.use_strict_mode', '1');
 
-// 自动加载
-require_once APP_ROOT . '/vendor/autoload.php';
+// 直接包含路由器
+include_once __DIR__ . '/router_standalone.php';
 
-// 加载环境变量
-if (file_exists(APP_ROOT . '/.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
-    $dotenv->load();
-}
-
-try {
-    // 调试信息
-    error_log("=== Starting AlingAi Pro Application ===");
-    error_log("APP_ROOT: " . APP_ROOT);
-    error_log("APP_ENV: " . getenv('APP_ENV'));
-    
-    // 创建应用实例
-    error_log("Creating AlingAiProApplication instance...");
-    
-    // 检查核心文件
-    $appFile = APP_ROOT . '/src/Core/AlingAiProApplication.php';
-    if (!file_exists($appFile)) {
-        throw new Exception("核心应用文件不存在: " . $appFile);
-    }
-    
-    // 加载应用核心
-    require_once $appFile;
-    
-    // 启动应用
-    $app = new AlingAi\Core\AlingAiProApplication();
-    $app->run();
-    
-} catch (Throwable $e) {
-    // 错误处理
-    http_response_code(500);
-    
-    // 记录错误日志
-    error_log(sprintf(
-        "[%s] FATAL ERROR: %s in %s:%d\nStack trace:\n%s",
-        date('Y-m-d H:i:s'),
-        $e->getMessage(),
-        $e->getFile(),
-        $e->getLine(),
-        $e->getTraceAsString()
-    ));
-    
-    // 显示错误信息
-    if (getenv('APP_ENV') === 'development') {
-        echo "<h1>Application Error</h1>";
-        echo "<p><strong>Message:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
-        echo "<p><strong>File:</strong> " . htmlspecialchars($e->getFile()) . "</p>";
-        echo "<p><strong>Line:</strong> " . $e->getLine() . "</p>";
-        echo "<h2>Stack Trace:</h2>";
-        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
-    } else {
-        echo "<h1>服务器错误</h1>";
-        echo "<p>服务器遇到了一个错误，请稍后再试。</p>";
-        echo "<p>如果问题持续存在，请联系系统管理员。</p>";
-    }
-}
-
-// 记录执行时间
+// 输出执行时间
 $executionTime = microtime(true) - APP_START_TIME;
-error_log("Application execution completed in " . number_format($executionTime, 4) . " seconds");
+echo "<!-- 应用程序执行完成，耗时 " . round($executionTime, 4) . " 秒 -->";
 ?>
 

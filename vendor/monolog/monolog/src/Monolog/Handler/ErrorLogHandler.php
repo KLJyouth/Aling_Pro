@@ -27,21 +27,18 @@ class ErrorLogHandler extends AbstractProcessingHandler
     public const OPERATING_SYSTEM = 0;
     public const SAPI = 4;
 
-    /** @var 0|4 */
     protected int $messageType;
     protected bool $expandNewlines;
 
     /**
-     * @param 0|4 $messageType    Says where the error should go.
+     * @param int  $messageType    Says where the error should go.
      * @param bool $expandNewlines If set to true, newlines in the message will be expanded to be take multiple log entries
-     *
-     * @throws \InvalidArgumentException If an unsupported message type is set
      */
     public function __construct(int $messageType = self::OPERATING_SYSTEM, int|string|Level $level = Level::Debug, bool $bubble = true, bool $expandNewlines = false)
     {
         parent::__construct($level, $bubble);
 
-        if (false === \in_array($messageType, self::getAvailableTypes(), true)) {
+        if (false === in_array($messageType, self::getAvailableTypes(), true)) {
             $message = sprintf('The given message type "%s" is not supported', print_r($messageType, true));
 
             throw new \InvalidArgumentException($message);
@@ -85,7 +82,7 @@ class ErrorLogHandler extends AbstractProcessingHandler
         if ($lines === false) {
             $pcreErrorCode = preg_last_error();
 
-            throw new \RuntimeException('Failed to preg_split formatted string: ' . $pcreErrorCode . ' / '. preg_last_error_msg());
+            throw new \RuntimeException('Failed to preg_split formatted string: ' . $pcreErrorCode . ' / '. Utils::pcreLastErrorMessage($pcreErrorCode));
         }
         foreach ($lines as $line) {
             error_log($line, $this->messageType);

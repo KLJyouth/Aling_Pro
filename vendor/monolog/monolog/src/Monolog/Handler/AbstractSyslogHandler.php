@@ -23,6 +23,23 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
     protected int $facility;
 
     /**
+     * Translates Monolog log levels to syslog log priorities.
+     */
+    protected function toSyslogPriority(Level $level): int
+    {
+        return match ($level) {
+            Level::Debug     => \LOG_DEBUG,
+            Level::Info      => \LOG_INFO,
+            Level::Notice    => \LOG_NOTICE,
+            Level::Warning   => \LOG_WARNING,
+            Level::Error     => \LOG_ERR,
+            Level::Critical  => \LOG_CRIT,
+            Level::Alert     => \LOG_ALERT,
+            Level::Emergency => \LOG_EMERG,
+        };
+    }
+
+    /**
      * List of valid log facility names.
      * @var array<string, int>
      */
@@ -41,21 +58,13 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
     ];
 
     /**
-     * Translates Monolog log levels to syslog log priorities.
-     */
-    protected function toSyslogPriority(Level $level): int
-    {
-        return $level->toRFC5424Level();
-    }
-
-    /**
      * @param string|int $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
      */
     public function __construct(string|int $facility = \LOG_USER, int|string|Level $level = Level::Debug, bool $bubble = true)
     {
         parent::__construct($level, $bubble);
 
-        if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->facilities['local0'] = \LOG_LOCAL0;
             $this->facilities['local1'] = \LOG_LOCAL1;
             $this->facilities['local2'] = \LOG_LOCAL2;
@@ -76,9 +85,9 @@ abstract class AbstractSyslogHandler extends AbstractProcessingHandler
         }
 
         // convert textual description of facility to syslog constant
-        if (\is_string($facility) && \array_key_exists(strtolower($facility), $this->facilities)) {
+        if (is_string($facility) && array_key_exists(strtolower($facility), $this->facilities)) {
             $facility = $this->facilities[strtolower($facility)];
-        } elseif (!\in_array($facility, array_values($this->facilities), true)) {
+        } elseif (!in_array($facility, array_values($this->facilities), true)) {
             throw new \UnexpectedValueException('Unknown facility value "'.$facility.'" given');
         }
 
