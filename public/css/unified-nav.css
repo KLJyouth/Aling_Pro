@@ -1,0 +1,238 @@
+/* 
+ * 统一导航栏样式
+ * 适用于所有前台页面
+ */
+
+/* 导航栏基础样式 */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.header.scrolled {
+    padding: 10px 0;
+    background-color: var(--bg-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    transition: all 0.3s ease;
+}
+
+.header.scrolled .logo img {
+    width: 100px;
+}
+
+/* 导航菜单 */
+.nav-menu {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+}
+
+.nav-item {
+    position: relative;
+}
+
+.nav-link {
+    color: var(--text-light);
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    padding: 8px 0;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover:after,
+.nav-link.active:after {
+    width: 100%;
+}
+
+.nav-link.active {
+    color: var(--primary-light);
+}
+
+/* 导航按钮 */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 用户下拉菜单样式 */
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--border-radius);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all var(--transition-fast) ease;
+}
+
+.user-dropdown-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    min-width: 200px;
+    background-color: var(--bg-medium);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+.user-dropdown-content.show {
+    display: block;
+}
+
+.user-dropdown-content a {
+    display: block;
+    padding: 12px 16px;
+    color: var(--text-light);
+    text-decoration: none;
+    transition: background-color var(--transition-fast) ease;
+}
+
+.user-dropdown-content a:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--primary-color);
+}
+
+.user-dropdown-content hr {
+    margin: 5px 0;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* 导航切换按钮（移动端） */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--text-light);
+    border-radius: 3px;
+    transition: all var(--transition-fast) ease;
+}
+
+/* 响应式导航栏 */
+@media (max-width: 992px) {
+    .nav {
+        position: relative;
+    }
+    
+    .nav-toggle {
+        display: flex;
+    }
+    
+    .nav-toggle.active span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    
+    .nav-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .nav-toggle.active span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+    
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--bg-medium);
+        flex-direction: column;
+        padding: 20px;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+        box-shadow: var(--box-shadow);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: all var(--transition-fast) ease;
+        z-index: 100;
+        gap: 10px;
+    }
+    
+    .nav-menu.active {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-actions {
+        gap: 8px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+    
+    .user-dropdown-btn span {
+        display: none;
+    }
+} 
