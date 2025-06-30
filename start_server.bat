@@ -21,8 +21,8 @@ if %ERRORLEVEL% neq 0 (
 )
 
 :: 检查工作目录
-if not exist public\index.php (
-    echo [错误] 未找到主程序文件 (public\index.php)!
+if not exist public\index.html (
+    echo [错误] 未找到主程序文件 (public\index.html)!
     echo 请确保您在正确的目录中运行此脚本。
     pause
     exit /b 1
@@ -45,7 +45,7 @@ echo.
 :: 启动PHP开发服务器
 cd public
 echo [启动] 服务器启动时间: %TIME%
-php -S localhost:%PORT% router.php
+php -S localhost:%PORT% router_fixed.php
 
 :: 如果服务器意外终止
 echo.

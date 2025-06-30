@@ -330,7 +330,7 @@ function connectToDatabase() {
                         'cyber-orange': '#F59E0B'
                     },
                     fontFamily: {
-                        'mono': ['JetBrains Mono', 'monospace'],
+                        'mono': ['JetBrains Mono', 'monospace'], 
                         'sans': ['Inter', 'sans-serif']
                     }
                 }
@@ -401,28 +401,28 @@ function connectToDatabase() {
         <?php if (!empty($error)): ?>
             <div class="bg-red-500/20 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6">
                 <i class="fas fa-exclamation-triangle mr-2"></i> <?php echo htmlspecialchars($error); ?>
-            </div>
+        </div>
         <?php endif; ?>
         
         <!-- 注册表单 -->
         <form method="POST" action="/register" class="space-y-6">
             <div class="grid md:grid-cols-2 gap-6">
-                <div>
+            <div>
                     <label for="name" class="block text-gray-300 text-sm font-medium mb-2">
                         <i class="fas fa-user mr-2"></i>姓名
-                    </label>
+                </label>
                     <input type="text" id="name" name="name" required
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         placeholder="请输入您的姓名"
                         value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
-                </div>
-                
-                <div>
+            </div>
+            
+            <div>
                     <label for="email" class="block text-gray-300 text-sm font-medium mb-2">
                         <i class="fas fa-envelope mr-2"></i>邮箱地址
-                    </label>
-                    <input type="email" id="email" name="email" required
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                </label>
+                <input type="email" id="email" name="email" required
+                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                         placeholder="请输入您的邮箱地址"
                         value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
                 </div>

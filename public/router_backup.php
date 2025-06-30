@@ -1,11 +1,11 @@
 <?php
 /**
- * AlingAi Pro - 主路由器
+ * AlingAi Pro - Main Router
  * 
- * 根据URL路径将请求路由到适当的HTML文件
+ * Routes requests to the appropriate HTML file based on the URL path
  */
 
-// 定义HTML文件的基础路径
+// Define base path for HTML files
 define("BASE_PATH", __DIR__);
 define("START_TIME", microtime(true));
 
@@ -25,18 +25,23 @@ $path = ltrim($path, "/");
 
 // Default page is index
 if (empty($path)) {
-    $path = "index";
+    $path = "simple-index";
 }
 
 // Map routes to HTML files
 $routes = [
     // Core pages
     "index" => "index.html",
-    "login" => "login.php",  // 使用PHP处理登录
-    "register" => "register.php", // 使用PHP处理注册
+    "simple-index" => "simple-index.php", // 简单首页
+    "login" => "simple-login.php",  // 简单登录
+    "register" => "simple-register.php", // 简单注册
+    "login-html" => "login.html", // 直接使用HTML登录页面
+    "register-html" => "register.html", // 直接使用HTML注册页面
+    "index-simple" => "index-simple.html", // 简单首页HTML
     "dashboard" => "dashboard.html",
     "profile" => "profile.html",
     "chat" => "chat.html",
+    "chat-enhanced" => "chat-new.html",
     
     // 社交登录路由
     "login/google" => "login.php?provider=google",
@@ -47,6 +52,15 @@ $routes = [
     // 邮箱验证路由
     "email/verify" => "email_verify.php",
     "email/verification-notification" => "email_verification_notification.php",
+    
+    // 用户控制台路由
+    "user/dashboard" => "user/dashboard.php",
+    "user/profile" => "user/profile.php",
+    "user/api-keys" => "user/api-keys.php",
+    "user/subscription" => "user/subscription.php",
+    "user/orders" => "user/orders.php",
+    "user/payment" => "user/payment.php",
+    "user/referrals" => "user/referrals.php",
     
     // 管理后台路由
     "admin" => "admin-center/index.php",
