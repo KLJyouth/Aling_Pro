@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiKeyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -26,8 +27,18 @@ Route::get("/about", [PageController::class, "about"])->name("about");
 Route::get("/features", [PageController::class, "features"])->name("features");
 Route::get("/pricing", [PageController::class, "pricing"])->name("pricing");
 Route::get("/contact", [PageController::class, "contact"])->name("contact");
+Route::post("/contact", [PageController::class, "submitContact"])->name("submit-contact");
 Route::get("/terms", [PageController::class, "terms"])->name("terms");
 Route::get("/privacy", [PageController::class, "privacy"])->name("privacy");
+Route::get("/faq", [PageController::class, "faq"])->name("faq");
+Route::get("/team", [PageController::class, "team"])->name("team");
+Route::get("/careers", [PageController::class, "careers"])->name("careers");
+Route::get("/examples", [PageController::class, "examples"])->name("examples");
+Route::get("/tutorials", [PageController::class, "tutorials"])->name("tutorials");
+Route::get("/support", [PageController::class, "support"])->name("support");
+Route::get("/security", [PageController::class, "security"])->name("security");
+Route::get("/blog", [PageController::class, "blog"])->name("blog");
+Route::get("/blog/{slug}", [PageController::class, "blogPost"])->name("blog.post");
 
 // 认证路由
 Auth::routes(["verify" => true]);
@@ -42,12 +53,13 @@ Route::middleware(["auth"])->group(function () {
     Route::put("/profile", [ProfileController::class, "update"])->name("profile.update");
     Route::put("/profile/password", [ProfileController::class, "updatePassword"])->name("profile.password");
     
-    // 会员订阅
+    // 会员管理
     Route::get("/subscription", [MembershipController::class, "index"])->name("subscription");
     Route::get("/subscription/upgrade", [MembershipController::class, "showUpgrade"])->name("subscription.upgrade");
     Route::post("/subscription/upgrade", [MembershipController::class, "processUpgrade"])->name("subscription.upgrade.process");
     Route::post("/subscription/cancel", [MembershipController::class, "cancel"])->name("subscription.cancel");
     Route::get("/subscription/history", [MembershipController::class, "history"])->name("subscription.history");
+    Route::get("/membership/subscribe/{id}", [MembershipController::class, "subscribe"])->name("membership.subscribe");
     
     // API密钥管理
     Route::get("/api-keys", [ApiKeyController::class, "index"])->name("api-keys");

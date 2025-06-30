@@ -1,9 +1,9 @@
-<footer class="bg-dark text-white py-5">
+ï»¿<footer class="bg-dark text-white py-5">
     <div class="container">
         <div class="row">
             <div class="col-md-4 mb-4 mb-md-0">
-                <h5 class="mb-3">¹ØÓÚÎÒÃÇ</h5>
-                <p class="text-muted">AlingAi ProÊÇÒ»¸öÇ¿´óµÄÈË¹¤ÖÇÄÜÆ½Ì¨£¬Ìá¹©ÏÈ½øµÄAI¹¤¾ßºÍAPI·þÎñ£¬°ïÖú¿ª·¢ÕßºÍÆóÒµ¿ìËÙÊµÏÖAI¸³ÄÜ¡£</p>
+                <h5 class="mb-3">å…³äºŽæˆ‘ä»¬</h5>
+                <p class="text-muted">AlingAi Proæ˜¯ä¸€ä¸ªå¼ºå¤§çš„äººå·¥æ™ºèƒ½å¹³å°ï¼Œæä¾›å…ˆè¿›çš„AIå·¥å…·å’ŒAPIæœåŠ¡ï¼Œå¸®åŠ©å¼€å‘è€…å’Œä¼ä¸šè½»æ¾å®žçŽ°AIèƒ½åŠ›ã€‚</p>
                 <div class="d-flex gap-2 mt-3">
                     <a href="#" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
                     <a href="#" class="text-white"><i class="fab fa-twitter fa-lg"></i></a>
@@ -12,56 +12,56 @@
                 </div>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <h5 class="mb-3">²úÆ·</h5>
+                <h5 class="mb-3">äº§å“</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="{{ route("features") }}" class="text-muted text-decoration-none">¹¦ÄÜ</a></li>
-                    <li class="mb-2"><a href="{{ route("pricing") }}" class="text-muted text-decoration-none">¼Û¸ñ</a></li>
-                    <li class="mb-2"><a href="{{ route("api-docs") }}" class="text-muted text-decoration-none">APIÎÄµµ</a></li>
-                    <li class="mb-2"><a href="{{ route("examples") }}" class="text-muted text-decoration-none">Ê¾Àý</a></li>
+                    <li class="mb-2"><a href="{{ route("features") }}" class="text-muted text-decoration-none">åŠŸèƒ½</a></li>
+                    <li class="mb-2"><a href="{{ route("pricing") }}" class="text-muted text-decoration-none">ä»·æ ¼</a></li>
+                    <li class="mb-2"><a href="{{ route("api-docs") }}" class="text-muted text-decoration-none">API æ–‡æ¡£</a></li>
+                    <li class="mb-2"><a href="{{ route("examples") }}" class="text-muted text-decoration-none">ç¤ºä¾‹</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <h5 class="mb-3">×ÊÔ´</h5>
+                <h5 class="mb-3">èµ„æº</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="{{ route("blog") }}" class="text-muted text-decoration-none">²©¿Í</a></li>
-                    <li class="mb-2"><a href="{{ route("tutorials") }}" class="text-muted text-decoration-none">½Ì³Ì</a></li>
-                    <li class="mb-2"><a href="{{ route("faq") }}" class="text-muted text-decoration-none">³£¼ûÎÊÌâ</a></li>
-                    <li class="mb-2"><a href="{{ route("support") }}" class="text-muted text-decoration-none">Ö§³Ö</a></li>
+                    <li class="mb-2"><a href="{{ route("blog") }}" class="text-muted text-decoration-none">åšå®¢</a></li>
+                    <li class="mb-2"><a href="{{ route("tutorials") }}" class="text-muted text-decoration-none">æ•™ç¨‹</a></li>
+                    <li class="mb-2"><a href="{{ route("faq") }}" class="text-muted text-decoration-none">å¸¸è§é—®é¢˜</a></li>
+                    <li class="mb-2"><a href="{{ route("support") }}" class="text-muted text-decoration-none">æ”¯æŒ</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <h5 class="mb-3">¹«Ë¾</h5>
+                <h5 class="mb-3">å…¬å¸</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="{{ route("about") }}" class="text-muted text-decoration-none">¹ØÓÚÎÒÃÇ</a></li>
-                    <li class="mb-2"><a href="{{ route("team") }}" class="text-muted text-decoration-none">ÍÅ¶Ó</a></li>
-                    <li class="mb-2"><a href="{{ route("careers") }}" class="text-muted text-decoration-none">ÕÐÆ¸</a></li>
-                    <li class="mb-2"><a href="{{ route("contact") }}" class="text-muted text-decoration-none">ÁªÏµÎÒÃÇ</a></li>
+                    <li class="mb-2"><a href="{{ route("about") }}" class="text-muted text-decoration-none">å…³äºŽæˆ‘ä»¬</a></li>
+                    <li class="mb-2"><a href="{{ route("team") }}" class="text-muted text-decoration-none">å›¢é˜Ÿ</a></li>
+                    <li class="mb-2"><a href="{{ route("careers") }}" class="text-muted text-decoration-none">æ‹›è˜</a></li>
+                    <li class="mb-2"><a href="{{ route("contact") }}" class="text-muted text-decoration-none">è”ç³»æˆ‘ä»¬</a></li>
                 </ul>
             </div>
             <div class="col-md-2 mb-4 mb-md-0">
-                <h5 class="mb-3">·¨ÂÉ</h5>
+                <h5 class="mb-3">æ³•å¾‹</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="{{ route("terms") }}" class="text-muted text-decoration-none">·þÎñÌõ¿î</a></li>
-                    <li class="mb-2"><a href="{{ route("privacy") }}" class="text-muted text-decoration-none">ÒþË½Õþ²ß</a></li>
-                    <li class="mb-2"><a href="{{ route("security") }}" class="text-muted text-decoration-none">°²È«</a></li>
+                    <li class="mb-2"><a href="{{ route("terms") }}" class="text-muted text-decoration-none">æœåŠ¡æ¡æ¬¾</a></li>
+                    <li class="mb-2"><a href="{{ route("privacy") }}" class="text-muted text-decoration-none">éšç§æ”¿ç­–</a></li>
+                    <li class="mb-2"><a href="{{ route("security") }}" class="text-muted text-decoration-none">å®‰å…¨</a></li>
                 </ul>
             </div>
         </div>
         <hr class="my-4 bg-secondary">
         <div class="row align-items-center">
             <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                <p class="text-muted mb-0">&copy; {{ date("Y") }} AlingAi Pro. ±£ÁôËùÓÐÈ¨Àû¡£</p>
+                <p class="text-muted mb-0">&copy; {{ date("Y") }} AlingAi Pro. ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚</p>
             </div>
             <div class="col-md-6 text-center text-md-end">
                 <div class="dropdown">
                     <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-globe me-1"></i> ¼òÌåÖÐÎÄ
+                        <i class="fas fa-globe me-1"></i> ç®€ä½“ä¸­æ–‡
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                        <li><a class="dropdown-item active" href="#">¼òÌåÖÐÎÄ</a></li>
+                        <li><a class="dropdown-item active" href="#">ç®€ä½“ä¸­æ–‡</a></li>
                         <li><a class="dropdown-item" href="#">English</a></li>
-                        <li><a class="dropdown-item" href="#">ÈÕ±¾ÕZ</a></li>
-                        <li><a class="dropdown-item" href="#">???</a></li>
+                        <li><a class="dropdown-item" href="#">æ—¥æœ¬èªž</a></li>
+                        <li><a class="dropdown-item" href="#">í•œêµ­ì–´</a></li>
                     </ul>
                 </div>
             </div>

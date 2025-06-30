@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="{{ str_replace("_", "-", app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -7,41 +7,41 @@
 
     <title>@yield("title", config("app.name", "AlingAi Pro"))</title>
     
-    <!-- ÍøÕ¾Í¼±ê -->
+    <!-- ç½‘ç«™å›¾æ ‡ -->
     <link rel="icon" href="{{ asset("favicon.ico") }}">
     
-    <!-- ×ÖÌå -->
+    <!-- å­—ä½“ -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- ÑùÊ½ -->
+    <!-- æ ·å¼ -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="{{ asset("css/app.css") }}" rel="stylesheet">
     
-    <!-- Ò³ÃæÌØ¶¨ÑùÊ½ -->
+    <!-- é¡µé¢ç‰¹å®šæ ·å¼ -->
     @yield("styles")
 </head>
 <body>
     <div id="app">
-        <!-- µ¼º½À¸ -->
+        <!-- å¯¼èˆªæ  -->
         @include("layouts.partials.navbar")
         
-        <!-- Ö÷ÒªÄÚÈÝ -->
+        <!-- ä¸»è¦å†…å®¹ -->
         <main>
             @yield("content")
         </main>
         
-        <!-- Ò³½Å -->
+        <!-- é¡µè„š -->
         @include("layouts.partials.footer")
     </div>
     
-    <!-- ½Å±¾ -->
+    <!-- è„šæœ¬ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset("js/app.js") }}"></script>
     
-    <!-- Ò³ÃæÌØ¶¨½Å±¾ -->
+    <!-- é¡µé¢ç‰¹å®šè„šæœ¬ -->
     @yield("scripts")
 </body>
 </html>
