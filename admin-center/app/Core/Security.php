@@ -33,26 +33,35 @@ class Security
      * @param array $config 会话安全配置
      * @return void
      */
-    private static function setupSessionSecurity(array $config)
+    private static function setupSessionSecurity(array $config = [])
     {
-        // 设置会话名称
+        // 检查会话状态
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            // 会话已经启动，不能更改会话名称和cookie参数
+            if (class_exists('\App\Core\Logger')) {
+                \App\Core\Logger::warning('尝试在会话已激活时更改会话安全设置，这将被忽略');
+            } else {
+                error_log('尝试在会话已激活时更改会话安全设置，这将被忽略');
+            }
+            return; // 直接返回，不做任何更改
+        }
+        
+        // 会话尚未启动，可以设置会话名称和cookie参数
         if (!empty($config['name'])) {
             session_name($config['name']);
         }
         
         // 设置会话cookie参数
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            $params = session_get_cookie_params();
-            
-            session_set_cookie_params([
-                'lifetime' => $config['lifetime'] ?? $params['lifetime'],
-                'path' => $params['path'],
-                'domain' => $params['domain'],
-                'secure' => $config['secure'] ?? $params['secure'],
-                'httponly' => $config['httponly'] ?? $params['httponly'],
-                'samesite' => $config['samesite'] ?? 'Lax'
-            ]);
-        }
+        $params = session_get_cookie_params();
+        
+        session_set_cookie_params([
+            'lifetime' => $config['lifetime'] ?? $params['lifetime'],
+            'path' => $params['path'],
+            'domain' => $params['domain'],
+            'secure' => $config['secure'] ?? $params['secure'],
+            'httponly' => $config['httponly'] ?? $params['httponly'],
+            'samesite' => $config['samesite'] ?? 'Lax'
+        ]);
     }
     
     /**
@@ -263,5 +272,195 @@ class Security
     public static function passwordNeedsRehash($hash)
     {
         return password_needs_rehash($hash, PASSWORD_DEFAULT, ['cost' => 12]);
+    }
+
+    /**
+     * 生成API令牌
+     * @param int $userId 用户ID
+     * @param array $permissions 权限数组
+     * @param int $expiry 过期时间（秒）
+     * @return string 生成的JWT令牌
+     */
+    public static function generateApiToken($userId, array $permissions = [], $expiry = null)
+    {
+        if ($expiry === null) {
+            $expiry = self::$config['token']['lifetime'] ?? 86400; // 默认24小时
+        }
+        
+        // 创建有效载荷
+        $payload = [
+            'sub' => $userId,               // subject (用户ID)
+            'iat' => time(),                // issued at (签发时间)
+            'exp' => time() + $expiry,      // expiration time (过期时间)
+            'jti' => self::generateRandomString(16),  // JWT ID (唯一标识)
+            'perm' => $permissions          // 权限
+        ];
+        
+        // 加密令牌
+        return self::encodeJwt($payload);
+    }
+
+    /**
+     * 验证API令牌
+     * @param string $token JWT令牌
+     * @return array|false 验证成功返回解码后的载荷，失败返回false
+     */
+    public static function validateApiToken($token)
+    {
+        // 解码令牌
+        $payload = self::decodeJwt($token);
+        
+        if ($payload === false) {
+            return false;
+        }
+        
+        // 检查令牌是否过期
+        if ($payload['exp'] < time()) {
+            return false;
+        }
+        
+        return $payload;
+    }
+
+    /**
+     * 刷新API令牌
+     * @param string $token 现有JWT令牌
+     * @return string|false 刷新的JWT令牌，失败返回false
+     */
+    public static function refreshApiToken($token)
+    {
+        $payload = self::validateApiToken($token);
+        
+        if ($payload === false) {
+            return false;
+        }
+        
+        // 获取刷新时间
+        $refreshTime = self::$config['token']['refresh_time'] ?? 3600; // 默认1小时
+        
+        // 创建新的有效载荷
+        $newPayload = [
+            'sub' => $payload['sub'],
+            'iat' => time(),
+            'exp' => time() + ($payload['exp'] - $payload['iat']), // 保持原有的有效期
+            'jti' => self::generateRandomString(16),
+            'perm' => $payload['perm'] ?? []
+        ];
+        
+        // 加密新令牌
+        return self::encodeJwt($newPayload);
+    }
+
+    /**
+     * 编码JWT
+     * @param array $payload 有效载荷
+     * @return string JWT令牌
+     */
+    private static function encodeJwt(array $payload)
+    {
+        // 获取密钥
+        $secret = self::getJwtSecret();
+        
+        // 创建头部
+        $header = [
+            'alg' => 'HS256',
+            'typ' => 'JWT'
+        ];
+        
+        // 编码头部和载荷
+        $base64UrlHeader = self::base64UrlEncode(json_encode($header));
+        $base64UrlPayload = self::base64UrlEncode(json_encode($payload));
+        
+        // 创建签名
+        $signature = hash_hmac('sha256', $base64UrlHeader . '.' . $base64UrlPayload, $secret, true);
+        $base64UrlSignature = self::base64UrlEncode($signature);
+        
+        // 组合JWT
+        return $base64UrlHeader . '.' . $base64UrlPayload . '.' . $base64UrlSignature;
+    }
+
+    /**
+     * 解码JWT
+     * @param string $token JWT令牌
+     * @return array|false 解码后的载荷，失败返回false
+     */
+    private static function decodeJwt($token)
+    {
+        // 分割令牌
+        $parts = explode('.', $token);
+        
+        if (count($parts) !== 3) {
+            return false;
+        }
+        
+        list($base64UrlHeader, $base64UrlPayload, $base64UrlSignature) = $parts;
+        
+        // 解码载荷
+        $payload = json_decode(self::base64UrlDecode($base64UrlPayload), true);
+        
+        if ($payload === null) {
+            return false;
+        }
+        
+        // 验证签名
+        $secret = self::getJwtSecret();
+        $signature = self::base64UrlDecode($base64UrlSignature);
+        $expectedSignature = hash_hmac('sha256', $base64UrlHeader . '.' . $base64UrlPayload, $secret, true);
+        
+        if (!hash_equals($signature, $expectedSignature)) {
+            return false;
+        }
+        
+        return $payload;
+    }
+
+    /**
+     * 获取JWT密钥
+     * @return string JWT密钥
+     */
+    private static function getJwtSecret()
+    {
+        // 从配置获取密钥，如果不存在则使用一个默认值
+        // 注意：在生产环境中，应该使用一个安全的密钥存储机制
+        $secret = self::$config['token']['secret'] ?? getenv('JWT_SECRET');
+        
+        if (empty($secret)) {
+            // 如果没有设置密钥，使用应用密钥（如果有的话）
+            $secret = getenv('APP_KEY');
+            
+            if (empty($secret)) {
+                // 警告：这不是一个安全的做法，仅用于开发环境
+                Logger::warning('没有配置JWT密钥，使用默认密钥。这在生产环境中是不安全的。');
+                $secret = 'default_insecure_jwt_secret_please_change_this';
+            }
+        }
+        
+        return $secret;
+    }
+
+    /**
+     * Base64 URL编码
+     * @param string $data 要编码的数据
+     * @return string 编码后的字符串
+     */
+    private static function base64UrlEncode($data)
+    {
+        $base64 = base64_encode($data);
+        return str_replace(['+', '/', '='], ['-', '_', ''], $base64);
+    }
+
+    /**
+     * Base64 URL解码
+     * @param string $data 要解码的数据
+     * @return string 解码后的字符串
+     */
+    private static function base64UrlDecode($data)
+    {
+        $base64 = str_replace(['-', '_'], ['+', '/'], $data);
+        $padLength = strlen($base64) % 4;
+        if ($padLength > 0) {
+            $base64 .= str_repeat('=', 4 - $padLength);
+        }
+        return base64_decode($base64);
     }
 } 

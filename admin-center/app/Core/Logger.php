@@ -59,6 +59,36 @@ class Logger
     private static $minLevel = self::DEBUG;
     
     /**
+     * 日志级别
+     * @var int
+     */
+    private static $level = self::DEBUG;
+    
+    /**
+     * 日志格式
+     * @var string
+     */
+    private static $format = '[%datetime%] %level_name%: %message% %context%';
+    
+    /**
+     * 日期格式
+     * @var string
+     */
+    private static $dateFormat = 'Y-m-d H:i:s';
+    
+    /**
+     * 最大日志文件数
+     * @var int
+     */
+    private static $maxFiles = 30;
+    
+    /**
+     * 日志通道
+     * @var array
+     */
+    private static $channels = [];
+    
+    /**
      * 初始化日志系统
      * @param array $config 日志配置
      * @return void
@@ -68,21 +98,72 @@ class Logger
         // 设置日志目录
         self::$logPath = $config['path'] ?? BASE_PATH . '/storage/logs';
         
-        // 确保日志目录存在
-        if (!is_dir(self::$logPath)) {
-            mkdir(self::$logPath, 0755, true);
+        // 设置日志级别
+        self::$level = self::parseLevel($config['level'] ?? 'debug');
+        
+        // 设置日志格式
+        self::$format = $config['format'] ?? '[%datetime%] %level_name%: %message% %context%';
+        self::$dateFormat = $config['date_format'] ?? 'Y-m-d H:i:s';
+        
+        // 设置最大日志文件数
+        self::$maxFiles = $config['max_files'] ?? 30;
+        
+        // 设置日志通道
+        if (isset($config['channels']) && is_array($config['channels'])) {
+            self::$channels = $config['channels'];
         }
         
-        // 设置日志文件格式
-        self::$logFormat = $config['format'] ?? 'Y-m-d';
-        
-        // 设置日志条目格式
-        self::$entryFormat = $config['entry_format'] ?? '[%datetime%] %level_name%: %message% %context% %extra%';
-        
-        // 设置最低日志级别
-        $levelName = strtoupper($config['level'] ?? 'debug');
-        $level = array_search($levelName, array_map('strtoupper', self::$levels));
-        self::$minLevel = $level !== false ? $level : self::DEBUG;
+        // 确保日志目录存在
+        self::ensureLogDirectoryExists();
+    }
+    
+    /**
+     * 确保日志目录存在
+     * @return void
+     */
+    private static function ensureLogDirectoryExists()
+    {
+        try {
+            // 检查日志目录是否存在
+            if (!is_dir(self::$logPath)) {
+                // 获取目录的父级目录
+                $parentDir = dirname(self::$logPath);
+                
+                // 确保父目录存在
+                if (!is_dir($parentDir)) {
+                    // 尝试创建父目录
+                    if (!@mkdir($parentDir, 0755, true)) {
+                        error_log("无法创建日志父目录: " . $parentDir);
+                        return;
+                    }
+                }
+                
+                // 尝试创建日志目录
+                if (!@mkdir(self::$logPath, 0755, true)) {
+                    error_log("无法创建日志目录: " . self::$logPath);
+                    return;
+                }
+            }
+            
+            // 如果目录存在但不可写，记录错误
+            if (is_dir(self::$logPath) && !is_writable(self::$logPath)) {
+                error_log("日志目录不可写: " . self::$logPath);
+                return;
+            }
+            
+            // 确保通道日志目录存在
+            foreach (self::$channels as $channel => $config) {
+                $channelPath = self::$logPath . '/' . $channel;
+                if (!is_dir($channelPath)) {
+                    if (!@mkdir($channelPath, 0755, true)) {
+                        error_log("无法创建通道日志目录: " . $channelPath);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            // 记录异常到系统日志
+            error_log("创建日志目录时发生异常: " . $e->getMessage());
+        }
     }
     
     /**
@@ -174,119 +255,205 @@ class Logger
     }
     
     /**
-     * 记录日志
+     * 写入日志
      * @param int $level 日志级别
      * @param string $message 日志消息
      * @param array $context 上下文数据
-     * @return bool 是否成功
+     * @param string|null $channel 日志通道，默认为null（使用默认通道）
+     * @return bool 是否成功写入
      */
-    public static function log($level, $message, array $context = [])
+    public static function log($level, $message, array $context = [], $channel = null)
     {
         // 检查日志级别
-        if ($level < self::$minLevel) {
+        if ($level < self::$level) {
             return false;
         }
         
-        // 获取日志级别名称
-        $levelName = self::$levels[$level] ?? 'UNKNOWN';
+        // 确保日志目录存在
+        if (!is_dir(self::$logPath) || !is_writable(self::$logPath)) {
+            self::ensureLogDirectoryExists();
+        }
         
-        // 获取日志文件路径
-        $logFile = self::getLogFile($level);
-        
-        // 格式化日志条目
-        $entry = self::formatEntry($level, $levelName, $message, $context);
-        
-        // 写入日志文件
-        return self::writeLog($logFile, $entry);
+        try {
+            // 获取日志级别名称
+            $levelName = self::getLevelName($level);
+            
+            // 格式化日志条目
+            $entry = self::formatEntry($levelName, $message, $context);
+            
+            // 获取日志文件路径
+            $logFile = self::getLogFile($levelName, $channel);
+            
+            // 写入日志
+            if (file_put_contents($logFile, $entry . PHP_EOL, FILE_APPEND | LOCK_EX) === false) {
+                error_log("无法写入日志文件: $logFile");
+                return false;
+            }
+            
+            // 日志轮转（如果需要）
+            self::rotateLogFile($logFile);
+            
+            return true;
+        } catch (\Exception $e) {
+            error_log("写入日志失败: " . $e->getMessage());
+            return false;
+        }
     }
     
     /**
      * 获取日志文件路径
-     * @param int $level 日志级别
+     * @param string $levelName 日志级别名称
+     * @param string|null $channel 日志通道
      * @return string 日志文件路径
      */
-    private static function getLogFile($level)
+    private static function getLogFile($levelName, $channel = null)
     {
-        // 根据日志级别获取日志文件名前缀
-        $prefix = '';
-        
-        if ($level >= self::ERROR) {
-            $prefix = 'error-';
-        } elseif ($level >= self::WARNING) {
-            $prefix = 'warning-';
-        } elseif ($level >= self::INFO) {
-            $prefix = 'info-';
-        } else {
-            $prefix = 'debug-';
+        // 如果指定了通道，优先使用通道配置
+        if ($channel !== null && isset(self::$channels[$channel])) {
+            $channelConfig = self::$channels[$channel];
+            $channelDir = self::$logPath . '/' . $channel;
+            $fileName = $channelConfig['file'] ?? 'channel.log';
+            
+            // 确保通道目录存在
+            if (!is_dir($channelDir)) {
+                if (!@mkdir($channelDir, 0755, true)) {
+                    // 如果无法创建通道目录，回退到默认日志目录
+                    return self::$logPath . '/' . date('Y-m-d') . '.log';
+                }
+            }
+            
+            return $channelDir . '/' . $fileName;
         }
         
-        // 生成日志文件名
-        $date = date(self::$logFormat);
-        $filename = $prefix . $date . '.log';
+        // 否则根据日志级别确定日志文件
+        $fileName = strtolower($levelName);
         
-        return self::$logPath . '/' . $filename;
+        // 按级别分类
+        switch ($fileName) {
+            case 'emergency':
+            case 'alert':
+            case 'critical':
+            case 'error':
+                return self::$logPath . '/error.log';
+            case 'warning':
+                return self::$logPath . '/warning.log';
+            case 'notice':
+            case 'info':
+                return self::$logPath . '/info.log';
+            case 'debug':
+            default:
+                return self::$logPath . '/debug.log';
+        }
     }
     
     /**
      * 格式化日志条目
-     * @param int $level 日志级别
      * @param string $levelName 日志级别名称
      * @param string $message 日志消息
      * @param array $context 上下文数据
-     * @return string 格式化后的日志条目
+     * @return string 格式化的日志条目
      */
-    private static function formatEntry($level, $levelName, $message, array $context = [])
+    private static function formatEntry($levelName, $message, array $context)
     {
-        // 准备替换变量
-        $vars = [
-            '%datetime%' => date('Y-m-d H:i:s'),
-            '%level%' => $level,
-            '%level_name%' => $levelName,
-            '%message%' => $message
-        ];
+        // 替换日志格式中的占位符
+        $entry = self::$format;
         
-        // 处理上下文数据
-        $contextStr = !empty($context) ? json_encode($context, JSON_UNESCAPED_UNICODE) : '';
-        $vars['%context%'] = $contextStr;
+        // 替换日期时间
+        $entry = str_replace('%datetime%', date(self::$dateFormat), $entry);
         
-        // 处理额外数据
-        $extra = [
-            'ip' => $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0',
-            'user_agent' => $_SERVER['HTTP_USER_AGENT'] ?? 'unknown',
-            'uri' => $_SERVER['REQUEST_URI'] ?? 'unknown'
-        ];
-        $extraStr = !empty($extra) ? json_encode($extra, JSON_UNESCAPED_UNICODE) : '';
-        $vars['%extra%'] = $extraStr;
+        // 替换级别名称
+        $entry = str_replace('%level_name%', $levelName, $entry);
         
-        // 替换格式占位符
-        $entry = strtr(self::$entryFormat, $vars);
+        // 替换消息
+        $entry = str_replace('%message%', $message, $entry);
         
-        return $entry . PHP_EOL;
+        // 替换上下文
+        if (!empty($context)) {
+            $contextJson = self::jsonEncode($context);
+            $entry = str_replace('%context%', $contextJson, $entry);
+        } else {
+            $entry = str_replace('%context%', '', $entry);
+        }
+        
+        // 替换其他占位符
+        $entry = str_replace('%extra%', '', $entry);
+        
+        return $entry;
     }
     
     /**
-     * 写入日志文件
+     * 日志文件轮转
      * @param string $logFile 日志文件路径
-     * @param string $entry 日志条目
-     * @return bool 是否成功
+     * @return void
      */
-    private static function writeLog($logFile, $entry)
+    private static function rotateLogFile($logFile)
     {
+        // 检查文件是否需要轮转
+        if (!file_exists($logFile) || filesize($logFile) < 10485760) { // 10MB
+            return;
+        }
+        
         try {
-            $dir = dirname($logFile);
+            $fileInfo = pathinfo($logFile);
+            $baseName = $fileInfo['filename'];
+            $extension = $fileInfo['extension'] ?? 'log';
+            $dirName = $fileInfo['dirname'];
             
-            // 确保日志目录存在
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
+            // 查找现有的轮转日志文件
+            $existingLogs = glob("$dirName/$baseName.*.{$extension}");
+            
+            // 对现有文件按数字排序
+            usort($existingLogs, function($a, $b) use ($baseName, $extension) {
+                preg_match("/$baseName\.(\d+)\.{$extension}/", $a, $matchesA);
+                preg_match("/$baseName\.(\d+)\.{$extension}/", $b, $matchesB);
+                
+                $numA = isset($matchesA[1]) ? intval($matchesA[1]) : 0;
+                $numB = isset($matchesB[1]) ? intval($matchesB[1]) : 0;
+                
+                return $numB - $numA; // 降序排序
+            });
+            
+            // 轮转现有日志文件
+            foreach ($existingLogs as $log) {
+                preg_match("/$baseName\.(\d+)\.{$extension}/", $log, $matches);
+                $index = intval($matches[1]);
+                
+                // 如果达到最大文件数，删除最旧的日志
+                if ($index >= self::$maxFiles - 1) {
+                    @unlink($log);
+                    continue;
+                }
+                
+                // 轮转日志文件
+                $newIndex = $index + 1;
+                $newFile = "$dirName/$baseName.$newIndex.$extension";
+                @rename($log, $newFile);
             }
             
-            // 写入日志文件
-            $result = file_put_contents($logFile, $entry, FILE_APPEND | LOCK_EX);
+            // 将当前日志文件轮转为第1个备份
+            $backupFile = "$dirName/$baseName.1.$extension";
+            @rename($logFile, $backupFile);
             
-            return $result !== false;
+            // 创建新的日志文件
+            @touch($logFile);
+            @chmod($logFile, 0644);
         } catch (\Exception $e) {
-            error_log('写入日志失败: ' . $e->getMessage());
-            return false;
+            error_log("日志轮转失败: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * 将数据编码为JSON
+     * @param mixed $data 要编码的数据
+     * @return string JSON字符串
+     */
+    private static function jsonEncode($data)
+    {
+        try {
+            $json = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            return $json ?: '';
+        } catch (\Exception $e) {
+            return '{"error": "无法编码为JSON"}';
         }
     }
     
@@ -322,5 +489,45 @@ class Logger
         }
         
         return $count;
+    }
+    
+    /**
+     * 获取日志级别名称
+     * @param int $level 日志级别
+     * @return string 日志级别名称
+     */
+    private static function getLevelName($level)
+    {
+        return self::$levels[$level] ?? 'UNKNOWN';
+    }
+    
+    /**
+     * 解析日志级别
+     * @param string $level 日志级别名称
+     * @return int 日志级别
+     */
+    private static function parseLevel($level)
+    {
+        $level = strtolower($level);
+        
+        switch ($level) {
+            case 'emergency':
+                return self::EMERGENCY;
+            case 'alert':
+                return self::ALERT;
+            case 'critical':
+                return self::CRITICAL;
+            case 'error':
+                return self::ERROR;
+            case 'warning':
+                return self::WARNING;
+            case 'notice':
+                return self::NOTICE;
+            case 'info':
+                return self::INFO;
+            case 'debug':
+            default:
+                return self::DEBUG;
+        }
     }
 } 

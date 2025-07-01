@@ -92,6 +92,85 @@ class ToolController extends Controller
     }
     
     /**
+     * 数据库管理页面
+     */
+    public function databaseManagement()
+    {
+        try {
+            // 获取数据库连接
+            $db = Database::getInstance();
+            
+            // 获取所有表
+            $stmt = $db->query("SHOW TABLES");
+            $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
+            
+            // 获取操作类型
+            $action = $_GET['action'] ?? '';
+            $table = $_GET['table'] ?? '';
+            
+            // 处理不同操作类型
+            $result = null;
+            if (!empty($action) && !empty($table)) {
+                switch ($action) {
+                    case 'structure':
+                        $stmt = $db->query("DESCRIBE `{$table}`");
+                        $result = [
+                            'type' => 'structure',
+                            'data' => $stmt->fetchAll(\PDO::FETCH_ASSOC)
+                        ];
+                        break;
+                    case 'data':
+                        $limit = 100; // 限制显示记录数
+                        $stmt = $db->query("SELECT * FROM `{$table}` LIMIT {$limit}");
+                        $result = [
+                            'type' => 'data',
+                            'data' => $stmt->fetchAll(\PDO::FETCH_ASSOC),
+                            'limit' => $limit
+                        ];
+                        break;
+                    case 'optimize':
+                        $db->query("OPTIMIZE TABLE `{$table}`");
+                        $result = [
+                            'type' => 'optimize',
+                            'message' => "表 {$table} 优化完成"
+                        ];
+                        break;
+                }
+            }
+            
+            // 渲染视图
+            View::display('tools.database-management', [
+                'pageTitle' => '数据库管理 - IT运维中心',
+                'pageHeader' => '数据库管理',
+                'currentPage' => 'database-management',
+                'breadcrumbs' => [
+                    '/admin' => '首页',
+                    '/admin/tools' => '系统工具',
+                    '/admin/tools/database-management' => '数据库管理'
+                ],
+                'tables' => $tables,
+                'currentTable' => $table,
+                'result' => $result
+            ]);
+        } catch (\Exception $e) {
+            Logger::error('访问数据库管理页面失败: ' . $e->getMessage());
+            
+            // 渲染错误视图
+            View::display('tools.database-management', [
+                'pageTitle' => '数据库管理 - IT运维中心',
+                'pageHeader' => '数据库管理',
+                'currentPage' => 'database-management',
+                'breadcrumbs' => [
+                    '/admin' => '首页',
+                    '/admin/tools' => '系统工具',
+                    '/admin/tools/database-management' => '数据库管理'
+                ],
+                'error' => '连接数据库失败: ' . $e->getMessage()
+            ]);
+        }
+    }
+    
+    /**
      * 获取服务器信息
      * 
      * @return array 服务器信息

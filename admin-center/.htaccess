@@ -1,0 +1,53 @@
+# 确保启用RewriteEngine
+RewriteEngine On
+
+# 设置基础路径
+RewriteBase /
+
+# 如果是通过/admin访问
+RewriteCond %{REQUEST_URI} ^/admin/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin/(.*)$ admin-center/index.php [QSA,L]
+
+# 如果是通过/admin-center访问
+RewriteCond %{REQUEST_URI} ^/admin-center/
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^admin-center/(.*)$ admin-center/index.php [QSA,L]
+
+# 如果文件或目录不存在，则将请求转发到index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [QSA,L]
+
+# 安全设置
+# 阻止直接访问敏感文件
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+<FilesMatch "\.(env|log|yml|ini|config|example|json|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# 禁止目录列表
+Options -Indexes
+
+# 设置安全头部
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# 启用CORS支持
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+    Header set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+</IfModule> 

@@ -1,1 +1,26 @@
-{ "name": "alingai/admin-center", "description": "AlingAi_pro Admin IT Center", "type": "project", "require": { "php": "^8.1" } } 
+{
+    "name": "alingai/admin-center",
+    "description": "AlingAi_pro Admin IT Center",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "vlucas/phpdotenv": "^5.5",
+        "monolog/monolog": "^3.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "AlingAi Team",
+            "email": "dev@alingai.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    }
+} 

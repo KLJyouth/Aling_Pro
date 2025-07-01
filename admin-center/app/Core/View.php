@@ -2,273 +2,250 @@
 namespace App\Core;
 
 /**
- * 视图渲染助手类
- * 负责渲染和管理视图
+ * 视图类
+ * 负责渲染视图文件
  */
 class View
 {
     /**
-     * 渲染视图
-     * @param string $view 视图路径，使用点号分隔
-     * @param array $data 要传递给视图的数据
-     * @param string|null $layout 布局文件路径，不使用布局则传null
-     * @return string 渲染后的内容
+     * 共享数据，适用于所有视图
+     * @var array
      */
-    public static function render($view, array $data = [], $layout = 'layouts.app')
+    protected static $shared = [];
+    
+    /**
+     * 视图数据
+     * @var array
+     */
+    protected $data = [];
+    
+    /**
+     * 设置视图数据
+     * @param string $key 键名
+     * @param mixed $value 值
+     * @return $this
+     */
+    public function with($key, $value)
     {
-        // 提取数据到变量
-        extract($data);
+        $this->data[$key] = $value;
+        return $this;
+    }
+    
+    /**
+     * 共享数据到所有视图
+     * @param string $key 键名
+     * @param mixed $value 值
+     * @return void
+     */
+    public static function share($key, $value)
+    {
+        self::$shared[$key] = $value;
+    }
+    
+    /**
+     * 渲染视图
+     * @param string $view 视图文件路径（相对于视图目录）
+     * @param array $data 视图数据
+     * @param bool $return 是否返回而不是输出
+     * @return string|null 如果$return为true，则返回渲染结果
+     */
+    public function render($view, array $data = [], $return = false)
+    {
+        // 合并共享数据和视图数据
+        $data = array_merge(self::$shared, $this->data, $data);
         
-        // 构建视图文件路径
-        $viewPath = VIEWS_PATH . '/' . str_replace('.', '/', $view) . '.php';
+        // 将视图名称转换为文件路径
+        $viewPath = $this->resolvePath($view);
         
         // 检查视图文件是否存在
         if (!file_exists($viewPath)) {
-            throw new \Exception("视图 {$view} 不存在");
+            throw new \Exception("视图文件不存在: {$viewPath}");
         }
         
-        // 启动输出缓冲
+        // 提取变量
+        extract($data);
+        
+        // 开始输出缓冲
         ob_start();
         
         // 包含视图文件
         include $viewPath;
         
-        // 获取渲染后的内容
+        // 获取渲染内容
         $content = ob_get_clean();
         
-        // 不使用布局则直接返回视图内容
-        if ($layout === null) {
+        // 如果需要返回，则返回内容
+        if ($return) {
             return $content;
         }
         
-        // 构建布局文件路径
-        $layoutPath = VIEWS_PATH . '/' . str_replace('.', '/', $layout) . '.php';
-        
-        // 检查布局文件是否存在
-        if (!file_exists($layoutPath)) {
-            throw new \Exception("布局 {$layout} 不存在");
-        }
-        
-        // 再次启动输出缓冲
-        ob_start();
-        
-        // 包含布局文件
-        include $layoutPath;
-        
-        // 获取完整页面内容
-        $page = ob_get_clean();
-        
-        return $page;
+        // 否则直接输出
+        echo $content;
+        return null;
     }
     
     /**
-     * 输出视图
-     * @param string $view 视图路径，使用点号分隔
-     * @param array $data 要传递给视图的数据
-     * @param string|null $layout 布局文件路径，不使用布局则传null
+     * 渲染并返回视图内容
+     * @param string $view 视图文件路径
+     * @param array $data 视图数据
+     * @return string 渲染结果
+     */
+    public function fetch($view, array $data = [])
+    {
+        return $this->render($view, $data, true);
+    }
+    
+    /**
+     * 静态渲染方法
+     * @param string $view 视图文件路径
+     * @param array $data 视图数据
      * @return void
      */
-    public static function display($view, array $data = [], $layout = 'layouts.app')
+    public static function display($view, array $data = [])
     {
-        echo self::render($view, $data, $layout);
+        $instance = new self();
+        $instance->render($view, $data);
     }
     
     /**
-     * 生成完整URL
-     * @param string $path 相对路径
-     * @return string 完整URL
+     * 解析视图路径
+     * @param string $view 视图名称，如 'auth.login'
+     * @return string 完整的视图文件路径
      */
-    public static function url($path = '')
+    protected function resolvePath($view)
     {
-        $baseUrl = Config::get('app.url', 'http://localhost');
+        // 将点号语法转换为目录分隔符
+        $path = str_replace('.', '/', $view);
         
-        return rtrim($baseUrl, '/') . '/' . ltrim($path, '/');
+        // 构建完整路径
+        return VIEWS_PATH . '/' . $path . '.php';
     }
     
     /**
-     * 生成资源URL
-     * @param string $path 资源相对路径
-     * @return string 资源URL
+     * 包含一个子视图
+     * @param string $view 子视图名称
+     * @param array $data 子视图数据
+     * @return void
      */
-    public static function asset($path)
+    public static function include($view, array $data = [])
     {
-        return self::url('assets/' . ltrim($path, '/'));
+        self::display($view, $data);
     }
     
     /**
-     * 设置页面标题
-     * @param string $title 页面标题
-     * @param string $separator 分隔符
-     * @return string 格式化的页面标题
+     * 扩展布局视图
+     * @param string $layout 布局视图名称
+     * @param array $data 布局视图数据
+     * @return void
      */
-    public static function title($title, $separator = ' - ')
+    public function extends($layout, array $data = [])
     {
-        $appName = Config::get('app.name', 'AlingAi Pro');
+        // 将当前渲染的内容保存，以便后续在布局中使用
+        $content = ob_get_clean();
         
-        return $title . $separator . $appName;
+        // 将内容添加到数据中
+        $data['content'] = $content;
+        
+        // 渲染布局视图
+        $this->render($layout, $data);
+        
+        // 确保脚本终止
+        exit;
     }
     
     /**
-     * 加载局部视图
-     * @param string $view 视图路径，使用点号分隔
-     * @param array $data 要传递给视图的数据
-     * @return string 渲染后的内容
-     */
-    public static function partial($view, array $data = [])
-    {
-        // 提取数据到变量
-        extract($data);
-        
-        // 构建视图文件路径
-        $viewPath = VIEWS_PATH . '/' . str_replace('.', '/', $view) . '.php';
-        
-        // 检查视图文件是否存在
-        if (!file_exists($viewPath)) {
-            throw new \Exception("局部视图 {$view} 不存在");
-        }
-        
-        // 启动输出缓冲
-        ob_start();
-        
-        // 包含视图文件
-        include $viewPath;
-        
-        // 获取渲染后的内容
-        return ob_get_clean();
-    }
-    
-    /**
-     * 显示CSRF令牌字段
-     * @return string HTML表单字段
-     */
-    public static function csrfField()
-    {
-        return Security::csrfField();
-    }
-    
-    /**
-     * 检查当前URL是否与给定路径匹配
-     * @param string $path 路径
-     * @return bool 是否匹配
-     */
-    public static function isActive($path)
-    {
-        $currentPath = $_SERVER['REQUEST_URI'] ?? '';
-        
-        // 提取路径部分
-        $currentPath = parse_url($currentPath, PHP_URL_PATH);
-        
-        // 规范化路径
-        $currentPath = '/' . trim($currentPath, '/');
-        $path = '/' . trim($path, '/');
-        
-        return $currentPath === $path || strpos($currentPath, $path) === 0;
-    }
-    
-    /**
-     * 格式化日期
-     * @param string|int $date 日期字符串或时间戳
-     * @param string $format 日期格式
-     * @return string 格式化后的日期
-     */
-    public static function formatDate($date, $format = 'Y-m-d H:i:s')
-    {
-        if (is_numeric($date)) {
-            return date($format, $date);
-        }
-        
-        return date($format, strtotime($date));
-    }
-    
-    /**
-     * 将字符串截断到指定长度
-     * @param string $string 原始字符串
-     * @param int $length 截断长度
-     * @param string $append 追加内容
-     * @return string 截断后的字符串
-     */
-    public static function truncate($string, $length = 100, $append = '...')
-    {
-        if (mb_strlen($string, 'UTF-8') <= $length) {
-            return $string;
-        }
-        
-        return mb_substr($string, 0, $length, 'UTF-8') . $append;
-    }
-    
-    /**
-     * HTML转义
-     * @param string $string 原始字符串
+     * 转义HTML字符
+     * @param string $value 要转义的字符串
      * @return string 转义后的字符串
      */
-    public static function escape($string)
+    public static function escape($value)
     {
-        return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+        return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
     }
     
     /**
-     * 生成分页HTML
-     * @param int $total 总记录数
-     * @param int $perPage 每页记录数
-     * @param int $currentPage 当前页
-     * @param string $urlPattern URL模式，使用:page作为页码占位符
-     * @return string 分页HTML
+     * 生成CSRF令牌输入字段
+     * @return string HTML表单字段
      */
-    public static function paginate($total, $perPage, $currentPage, $urlPattern)
+    public static function csrf()
     {
-        $totalPages = ceil($total / $perPage);
-        
-        if ($totalPages <= 1) {
-            return '';
+        if (class_exists('\\App\\Core\\Security')) {
+            return Security::csrfField();
         }
         
-        $html = '<nav aria-label="分页导航"><ul class="pagination">';
-        
-        // 上一页
-        if ($currentPage > 1) {
-            $prevUrl = str_replace(':page', $currentPage - 1, $urlPattern);
-            $html .= '<li class="page-item"><a class="page-link" href="' . $prevUrl . '">&laquo; 上一页</a></li>';
-        } else {
-            $html .= '<li class="page-item disabled"><span class="page-link">&laquo; 上一页</span></li>';
+        // 如果安全类不存在，使用简单的CSRF保护
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
         }
         
-        // 页码
-        $start = max(1, $currentPage - 2);
-        $end = min($totalPages, $currentPage + 2);
+        return '<input type="hidden" name="csrf_token" value="' . self::escape($_SESSION['csrf_token']) . '">';
+    }
+    
+    /**
+     * 生成表单方法覆盖输入字段
+     * @param string $method HTTP方法（PUT, PATCH, DELETE）
+     * @return string HTML表单字段
+     */
+    public static function method($method)
+    {
+        return '<input type="hidden" name="_method" value="' . self::escape($method) . '">';
+    }
+    
+    /**
+     * 获取旧输入值
+     * @param string $key 输入字段名
+     * @param mixed $default 默认值
+     * @return mixed 旧输入值或默认值
+     */
+    public static function old($key, $default = '')
+    {
+        return $_SESSION['old_input'][$key] ?? $default;
+    }
+    
+    /**
+     * 检查是否有错误
+     * @param string $field 字段名
+     * @return bool 是否有错误
+     */
+    public static function hasError($field)
+    {
+        return isset($_SESSION['errors'][$field]);
+    }
+    
+    /**
+     * 获取错误消息
+     * @param string $field 字段名
+     * @return string|null 错误消息
+     */
+    public static function getError($field)
+    {
+        return $_SESSION['errors'][$field] ?? null;
+    }
+    
+    /**
+     * 获取所有错误
+     * @return array 错误数组
+     */
+    public static function getErrors()
+    {
+        return $_SESSION['errors'] ?? [];
+    }
+    
+    /**
+     * 获取闪存消息
+     * @param string $key 消息键名
+     * @param mixed $default 默认值
+     * @return mixed 闪存消息或默认值
+     */
+    public static function flash($key, $default = null)
+    {
+        $value = $_SESSION["flash_{$key}"] ?? $default;
         
-        if ($start > 1) {
-            $html .= '<li class="page-item"><a class="page-link" href="' . str_replace(':page', 1, $urlPattern) . '">1</a></li>';
-            if ($start > 2) {
-                $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-            }
+        // 读取后删除闪存消息
+        if (isset($_SESSION["flash_{$key}"])) {
+            unset($_SESSION["flash_{$key}"]);
         }
         
-        for ($i = $start; $i <= $end; $i++) {
-            if ($i == $currentPage) {
-                $html .= '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
-            } else {
-                $pageUrl = str_replace(':page', $i, $urlPattern);
-                $html .= '<li class="page-item"><a class="page-link" href="' . $pageUrl . '">' . $i . '</a></li>';
-            }
-        }
-        
-        if ($end < $totalPages) {
-            if ($end < $totalPages - 1) {
-                $html .= '<li class="page-item disabled"><span class="page-link">...</span></li>';
-            }
-            $html .= '<li class="page-item"><a class="page-link" href="' . str_replace(':page', $totalPages, $urlPattern) . '">' . $totalPages . '</a></li>';
-        }
-        
-        // 下一页
-        if ($currentPage < $totalPages) {
-            $nextUrl = str_replace(':page', $currentPage + 1, $urlPattern);
-            $html .= '<li class="page-item"><a class="page-link" href="' . $nextUrl . '">下一页 &raquo;</a></li>';
-        } else {
-            $html .= '<li class="page-item disabled"><span class="page-link">下一页 &raquo;</span></li>';
-        }
-        
-        $html .= '</ul></nav>';
-        
-        return $html;
+        return $value;
     }
 } 
