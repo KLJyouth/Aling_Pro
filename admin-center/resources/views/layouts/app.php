@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- 自定义样式 -->
+    <link rel="stylesheet" href="/admin-center/public/assets/css/admin.css">
     <style>
         body {
             font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
@@ -144,58 +145,7 @@
 </head>
 <body>
     <!-- 侧边栏 -->
-    <div class="sidebar col-md-3 col-lg-2 d-md-block collapse" style="width: 240px;">
-        <div class="logo">
-            <h5>AlingAi Pro</h5>
-            <p>IT运维中心</p>
-        </div>
-        <ul class="nav flex-column mt-3">
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'dashboard' ? 'active' : '' ?>" href="/admin/dashboard">
-                    <i class="bi bi-speedometer2"></i> 仪表盘
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'users' ? 'active' : '' ?>" href="/admin/users">
-                    <i class="bi bi-people"></i> 用户管理
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'tools' ? 'active' : '' ?>" href="/admin/tools">
-                    <i class="bi bi-tools"></i> 维护工具
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'monitoring' ? 'active' : '' ?>" href="/admin/monitoring">
-                    <i class="bi bi-graph-up"></i> 系统监控
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'security' ? 'active' : '' ?>" href="/admin/security">
-                    <i class="bi bi-shield-lock"></i> 安全管理
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'reports' ? 'active' : '' ?>" href="/admin/reports">
-                    <i class="bi bi-file-earmark-text"></i> 运维报告
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'logs' ? 'active' : '' ?>" href="/admin/logs">
-                    <i class="bi bi-journal-text"></i> 日志管理
-                </a>
-            </li>
-            <li class="nav-item px-2">
-                <a class="nav-link <?= $currentPage === 'settings' ? 'active' : '' ?>" href="/admin/settings">
-                    <i class="bi bi-gear"></i> 系统设置
-                </a>
-            </li>
-        </ul>
-        <div class="sidebar-footer">
-            <p>&copy; <?= date('Y') ?> AlingAi Pro</p>
-            <p>版本: <?= \App\Core\Config::get('app.version') ?></p>
-        </div>
-    </div>
+    <?php include VIEWS_PATH . '/layouts/sidebar.php'; ?>
 
     <!-- 主内容 -->
     <div class="main-content">
@@ -281,7 +231,7 @@
                 ?>
             <?php endif; ?>
             
-            <?= $content ?>
+            <?php $content(); ?>
         </div>
         
         <!-- 页脚 -->
@@ -292,32 +242,7 @@
 
     <!-- 基础脚本 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // 侧边栏切换
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            const sidebar = document.querySelector('.sidebar');
-            const mainContent = document.querySelector('.main-content');
-            
-            if (sidebar.style.display === 'none' || window.getComputedStyle(sidebar).display === 'none') {
-                sidebar.style.display = 'block';
-                mainContent.style.marginLeft = '240px';
-            } else {
-                sidebar.style.display = 'none';
-                mainContent.style.marginLeft = '0';
-            }
-        });
-        
-        // 自动关闭消息提示
-        document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.alert-dismissible');
-            alerts.forEach(function(alert) {
-                setTimeout(function() {
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 5000);
-            });
-        });
-    </script>
+    <script src="/admin-center/public/assets/js/admin.js"></script>
     <?php if (isset($extraScripts)): ?>
         <?= $extraScripts ?>
     <?php endif; ?>

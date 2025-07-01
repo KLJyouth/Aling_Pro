@@ -2,13 +2,19 @@
 /**
  * 数据库管理页面视图
  */
-// 引入布局模板
-include_once VIEWS_PATH . '/layouts/header.php';
-?>
 
+// 使用extract函数将变量导出到当前作用域
+extract($viewData ?? []);
+
+// 确保变量存在
+$error = $error ?? null;
+$tables = $tables ?? [];
+$currentTable = $currentTable ?? '';
+$result = $result ?? [];
+
+$content = function() use ($error, $tables, $currentTable, $result) {
+?>
 <div class="container-fluid py-4">
-    <h2 class="mb-4"><?= $pageHeader ?? '数据库管理' ?></h2>
-    
     <?php if (isset($error)): ?>
         <div class="alert alert-danger">
             <i class="bi bi-exclamation-triangle-fill me-2"></i>
@@ -85,16 +91,18 @@ include_once VIEWS_PATH . '/layouts/header.php';
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($result['data'] as $column): ?>
-                                                <tr>
-                                                    <td><?= htmlspecialchars($column['Field']) ?></td>
-                                                    <td><?= htmlspecialchars($column['Type']) ?></td>
-                                                    <td><?= $column['Null'] == 'YES' ? 'Yes' : 'No' ?></td>
-                                                    <td><?= htmlspecialchars($column['Key']) ?></td>
-                                                    <td><?= $column['Default'] !== null ? htmlspecialchars($column['Default']) : '<em>NULL</em>' ?></td>
-                                                    <td><?= htmlspecialchars($column['Extra']) ?></td>
-                                                </tr>
-                                            <?php endforeach; ?>
+                                            <?php if(isset($result['data']) && is_array($result['data'])): ?>
+                                                <?php foreach ($result['data'] as $column): ?>
+                                                    <tr>
+                                                        <td><?= htmlspecialchars($column['Field']) ?></td>
+                                                        <td><?= htmlspecialchars($column['Type']) ?></td>
+                                                        <td><?= $column['Null'] == 'YES' ? 'Yes' : 'No' ?></td>
+                                                        <td><?= htmlspecialchars($column['Key']) ?></td>
+                                                        <td><?= $column['Default'] !== null ? htmlspecialchars($column['Default']) : '<em>NULL</em>' ?></td>
+                                                        <td><?= htmlspecialchars($column['Extra']) ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            <?php endif; ?>
                                         </tbody>
                                     </table>
                                 </div>
@@ -136,7 +144,7 @@ include_once VIEWS_PATH . '/layouts/header.php';
                                         </table>
                                     </div>
                                     
-                                    <?php if (count($result['data']) >= $result['limit']): ?>
+                                    <?php if (isset($result['limit']) && count($result['data']) >= $result['limit']): ?>
                                         <div class="alert alert-warning mt-3">
                                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
                                             显示的记录已达到限制 (<?= $result['limit'] ?> 条)
@@ -159,8 +167,9 @@ include_once VIEWS_PATH . '/layouts/header.php';
         </div>
     <?php endif; ?>
 </div>
-
 <?php
-// 引入布局底部
-include_once VIEWS_PATH . '/layouts/footer.php';
+};
+
+// 使用app布局渲染
+include VIEWS_PATH . '/layouts/app.php';
 ?> 

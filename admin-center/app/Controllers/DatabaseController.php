@@ -2,177 +2,210 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\View;
 use App\Core\Database;
 use App\Core\Logger;
 
 /**
  * 数据库控制器
- * 负责处理数据库相关请求
+ * 负责处理数据库相关操作
  */
 class DatabaseController extends Controller
 {
     /**
-     * 优化数据库
+     * 数据库信息页面
+     * @return void
      */
-    public function optimize()
+    public function info()
     {
-        try {
-            $db = Database::getInstance();
-            
-            // 获取所有表
-            $stmt = $db->query("SHOW TABLES");
-            $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-            
-            $optimizedTables = [];
-            $errors = [];
-            
-            // 优化每个表
-            foreach ($tables as $table) {
-                try {
-                    $db->exec("OPTIMIZE TABLE `$table`");
-                    $optimizedTables[] = $table;
-                } catch (\Exception $e) {
-                    $errors[$table] = $e->getMessage();
-                }
-            }
-            
-            // 记录日志
-            Logger::info('数据库已优化', [
-                'user_id' => $_SESSION['user_id'] ?? 0,
-                'ip' => $_SERVER['REMOTE_ADDR'],
-                'optimized_tables' => count($optimizedTables),
-                'total_tables' => count($tables),
-                'errors' => count($errors)
-            ]);
-            
-            if (count($errors) > 0) {
-                $_SESSION['flash_message'] = '数据库部分优化成功，' . count($optimizedTables) . ' 个表已优化，' . count($errors) . ' 个表失败';
-                $_SESSION['flash_message_type'] = 'warning';
-            } else {
-                $_SESSION['flash_message'] = '数据库优化成功，共优化 ' . count($optimizedTables) . ' 个表';
-                $_SESSION['flash_message_type'] = 'success';
-            }
-        } catch (\Exception $e) {
-            // 记录错误
-            Logger::error('数据库优化失败: ' . $e->getMessage());
-            
-            $_SESSION['flash_message'] = '数据库优化失败: ' . $e->getMessage();
-            $_SESSION['flash_message_type'] = 'danger';
-        }
+        // 获取数据库信息
+        $dbInfo = $this->getDatabaseInfo();
         
-        // 重定向回上一页或工具页
-        $referer = $_SERVER['HTTP_REFERER'] ?? '/admin/tools';
-        header('Location: ' . $referer);
-        exit;
+        // 渲染视图
+        View::display('tools.database-info', [
+            'pageTitle' => '数据库信息 - IT运维中心',
+            'pageHeader' => '数据库信息',
+            'currentPage' => 'database-info',
+            'breadcrumbs' => [
+                '/admin' => '首页',
+                '/admin/tools' => '系统工具',
+                '/admin/tools/database-info' => '数据库信息'
+            ],
+            'dbInfo' => $dbInfo
+        ]);
     }
     
     /**
-     * 修复数据库
+     * 数据库管理页面
+     * @return void
      */
-    public function repair()
+    public function management()
     {
         try {
+            // 获取数据库连接
             $db = Database::getInstance();
             
             // 获取所有表
             $stmt = $db->query("SHOW TABLES");
             $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
             
-            $repairedTables = [];
-            $errors = [];
+            // 获取操作类型
+            $action = $_GET['action'] ?? '';
+            $table = $_GET['table'] ?? '';
             
-            // 修复每个表
-            foreach ($tables as $table) {
-                try {
-                    $db->exec("REPAIR TABLE `$table`");
-                    $repairedTables[] = $table;
-                } catch (\Exception $e) {
-                    $errors[$table] = $e->getMessage();
+            // 处理不同操作类型
+            $result = [];
+            if (!empty($action) && !empty($table)) {
+                switch ($action) {
+                    case 'structure':
+                        $stmt = $db->query("DESCRIBE `{$table}`");
+                        $result = [
+                            'type' => 'structure',
+                            'data' => $stmt->fetchAll(\PDO::FETCH_ASSOC)
+                        ];
+                        break;
+                    case 'data':
+                        $limit = 100; // 限制显示记录数
+                        $stmt = $db->query("SELECT * FROM `{$table}` LIMIT {$limit}");
+                        $result = [
+                            'type' => 'data',
+                            'data' => $stmt->fetchAll(\PDO::FETCH_ASSOC),
+                            'limit' => $limit
+                        ];
+                        break;
+                    case 'optimize':
+                        $db->query("OPTIMIZE TABLE `{$table}`");
+                        $result = [
+                            'type' => 'optimize',
+                            'message' => "表 {$table} 优化完成"
+                        ];
+                        break;
                 }
             }
             
-            // 记录日志
-            Logger::info('数据库已修复', [
-                'user_id' => $_SESSION['user_id'] ?? 0,
-                'ip' => $_SERVER['REMOTE_ADDR'],
-                'repaired_tables' => count($repairedTables),
-                'total_tables' => count($tables),
-                'errors' => count($errors)
+            // 渲染视图
+            View::display('tools.database-management', [
+                'pageTitle' => '数据库管理 - IT运维中心',
+                'pageHeader' => '数据库管理',
+                'currentPage' => 'database-management',
+                'breadcrumbs' => [
+                    '/admin' => '首页',
+                    '/admin/tools' => '系统工具',
+                    '/admin/tools/database-management' => '数据库管理'
+                ],
+                'tables' => $tables,
+                'currentTable' => $table,
+                'result' => $result
             ]);
-            
-            if (count($errors) > 0) {
-                $_SESSION['flash_message'] = '数据库部分修复成功，' . count($repairedTables) . ' 个表已修复，' . count($errors) . ' 个表失败';
-                $_SESSION['flash_message_type'] = 'warning';
-            } else {
-                $_SESSION['flash_message'] = '数据库修复成功，共修复 ' . count($repairedTables) . ' 个表';
-                $_SESSION['flash_message_type'] = 'success';
-            }
         } catch (\Exception $e) {
-            // 记录错误
-            Logger::error('数据库修复失败: ' . $e->getMessage());
+            Logger::error('访问数据库管理页面失败: ' . $e->getMessage());
             
-            $_SESSION['flash_message'] = '数据库修复失败: ' . $e->getMessage();
-            $_SESSION['flash_message_type'] = 'danger';
+            // 渲染错误视图
+            View::display('tools.database-management', [
+                'pageTitle' => '数据库管理 - IT运维中心',
+                'pageHeader' => '数据库管理',
+                'currentPage' => 'database-management',
+                'breadcrumbs' => [
+                    '/admin' => '首页',
+                    '/admin/tools' => '系统工具',
+                    '/admin/tools/database-management' => '数据库管理'
+                ],
+                'error' => '连接数据库失败: ' . $e->getMessage()
+            ]);
         }
-        
-        // 重定向回上一页或工具页
-        $referer = $_SERVER['HTTP_REFERER'] ?? '/admin/tools';
-        header('Location: ' . $referer);
-        exit;
     }
     
     /**
-     * 分析数据库
+     * 获取数据库信息
+     * @return array 数据库信息
      */
-    public function analyze()
+    private function getDatabaseInfo()
     {
         try {
             $db = Database::getInstance();
+            
+            // 获取数据库版本
+            $stmt = $db->query("SELECT VERSION() as version");
+            $version = $stmt->fetch(\PDO::FETCH_ASSOC)['version'] ?? 'Unknown';
+            
+            // 获取数据库状态
+            $stmt = $db->query("SHOW STATUS");
+            $statusRows = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+            
+            // 获取数据库变量
+            $stmt = $db->query("SHOW VARIABLES");
+            $variableRows = $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
             
             // 获取所有表
             $stmt = $db->query("SHOW TABLES");
             $tables = $stmt->fetchAll(\PDO::FETCH_COLUMN);
             
-            $analyzedTables = [];
-            $errors = [];
-            
-            // 分析每个表
+            // 获取表信息
+            $tableInfo = [];
             foreach ($tables as $table) {
-                try {
-                    $db->exec("ANALYZE TABLE `$table`");
-                    $analyzedTables[] = $table;
-                } catch (\Exception $e) {
-                    $errors[$table] = $e->getMessage();
-                }
+                $stmt = $db->query("SHOW TABLE STATUS LIKE '{$table}'");
+                $info = $stmt->fetch(\PDO::FETCH_ASSOC);
+                $tableInfo[$table] = $info;
             }
             
-            // 记录日志
-            Logger::info('数据库已分析', [
-                'user_id' => $_SESSION['user_id'] ?? 0,
-                'ip' => $_SERVER['REMOTE_ADDR'],
-                'analyzed_tables' => count($analyzedTables),
-                'total_tables' => count($tables),
-                'errors' => count($errors)
-            ]);
-            
-            if (count($errors) > 0) {
-                $_SESSION['flash_message'] = '数据库部分分析成功，' . count($analyzedTables) . ' 个表已分析，' . count($errors) . ' 个表失败';
-                $_SESSION['flash_message_type'] = 'warning';
-            } else {
-                $_SESSION['flash_message'] = '数据库分析成功，共分析 ' . count($analyzedTables) . ' 个表';
-                $_SESSION['flash_message_type'] = 'success';
+            // 计算总大小
+            $totalSize = 0;
+            $totalRows = 0;
+            foreach ($tableInfo as $info) {
+                $totalSize += ($info['Data_length'] + $info['Index_length']);
+                $totalRows += $info['Rows'];
             }
+            
+            return [
+                'version' => $version,
+                'status' => [
+                    'uptime' => $statusRows['Uptime'] ?? 0,
+                    'threads' => $statusRows['Threads_connected'] ?? 0,
+                    'questions' => $statusRows['Questions'] ?? 0,
+                    'slowQueries' => $statusRows['Slow_queries'] ?? 0,
+                    'opens' => $statusRows['Opened_tables'] ?? 0,
+                    'flushes' => $statusRows['Flush_commands'] ?? 0,
+                    'openFiles' => $statusRows['Open_files'] ?? 0,
+                    'queriesPerSecond' => $statusRows['Queries'] / $statusRows['Uptime'],
+                ],
+                'variables' => [
+                    'charset' => $variableRows['character_set_database'] ?? 'Unknown',
+                    'collation' => $variableRows['collation_database'] ?? 'Unknown',
+                    'maxConnections' => $variableRows['max_connections'] ?? 0,
+                    'bufferSize' => $variableRows['key_buffer_size'] ?? 0,
+                    'maxPacket' => $variableRows['max_allowed_packet'] ?? 0,
+                    'timeout' => $variableRows['wait_timeout'] ?? 0,
+                ],
+                'tables' => $tableInfo,
+                'totalTables' => count($tables),
+                'totalSize' => $totalSize,
+                'totalRows' => $totalRows,
+                'formattedSize' => $this->formatBytes($totalSize)
+            ];
         } catch (\Exception $e) {
-            // 记录错误
-            Logger::error('数据库分析失败: ' . $e->getMessage());
-            
-            $_SESSION['flash_message'] = '数据库分析失败: ' . $e->getMessage();
-            $_SESSION['flash_message_type'] = 'danger';
+            Logger::error('获取数据库信息失败: ' . $e->getMessage());
+            return [
+                'error' => $e->getMessage()
+            ];
         }
+    }
+    
+    /**
+     * 格式化字节大小
+     * @param int $bytes 字节数
+     * @param int $precision 精度
+     * @return string 格式化后的大小
+     */
+    private function formatBytes($bytes, $precision = 2)
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         
-        // 重定向回上一页或工具页
-        $referer = $_SERVER['HTTP_REFERER'] ?? '/admin/tools';
-        header('Location: ' . $referer);
-        exit;
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+        
+        $bytes /= (1 << (10 * $pow));
+        
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 } 
