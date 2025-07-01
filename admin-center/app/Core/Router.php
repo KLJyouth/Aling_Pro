@@ -19,6 +19,31 @@ class Router
     ];
 
     /**
+     * 添加路由（支持从bootstrap中注册的路由格式）
+     * @param string $uri URI路径
+     * @param array|string $handler 处理器配置
+     * @param string $method 请求方法，默认为GET
+     * @return void
+     */
+    public function addRoute($uri, $handler, $method = 'GET')
+    {
+        // 如果handler是数组格式 ['Controller', 'method']
+        if (is_array($handler)) {
+            $controller = $handler[0];
+            $method = $handler[1];
+            
+            // 转换为Router类期望的格式
+            $action = "{$controller}@{$method}";
+            
+            // 注册路由
+            $this->routes['GET'][$this->formatUri($uri)] = $action;
+        } else {
+            // 直接注册路由（handler已经是字符串格式）
+            $this->routes['GET'][$this->formatUri($uri)] = $handler;
+        }
+    }
+
+    /**
      * 注册GET路由
      * @param string $uri URI路径
      * @param string $controller 控制器@方法

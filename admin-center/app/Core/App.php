@@ -20,9 +20,21 @@ class App
     private $config = [];
     
     /**
-     * 私有构造函数，防止直接创建对象
+     * 路由配置
+     * @var array
      */
-    private function __construct() {}
+    private $routes = [];
+    
+    /**
+     * 构造函数，接收路由参数
+     * @param array $router 路由配置
+     */
+    public function __construct(array $router = [])
+    {
+        self::$instance = $this;
+        $this->routes = $router;
+        $this->init();
+    }
     
     /**
      * 获取应用实例
@@ -104,11 +116,20 @@ class App
                 exit;
             }
             
-            // 加载路由
-            require_once ROUTES_PATH . '/web.php';
+            // 初始化路由器
+            $router = new Router();
+            
+            // 使用构造函数传入的路由配置
+            if (!empty($this->routes)) {
+                foreach ($this->routes as $route => $handler) {
+                    $router->addRoute($route, $handler);
+                }
+            } else {
+                // 如果没有传入路由配置，则从文件加载
+                require_once ROUTES_PATH . '/web.php';
+            }
             
             // 分发请求
-            $router = new Router();
             $router->dispatch($requestUri, $requestMethod);
             
         } catch (\Exception $e) {

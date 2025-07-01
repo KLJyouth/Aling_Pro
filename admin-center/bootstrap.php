@@ -14,16 +14,16 @@ date_default_timezone_set('Asia/Shanghai');
 // 设置内部字符编码
 mb_internal_encoding('UTF-8');
 
-// 定义常量
-define('BASE_PATH', dirname(__FILE__));
-define('APP_PATH', BASE_PATH . '/app');
-define('CONFIG_PATH', BASE_PATH . '/config');
-define('ROUTES_PATH', BASE_PATH . '/routes');
-define('VIEWS_PATH', BASE_PATH . '/resources/views');
-define('STORAGE_PATH', BASE_PATH . '/storage');
-define('PUBLIC_PATH', BASE_PATH . '/public');
-define('LOGS_PATH', STORAGE_PATH . '/logs');
-define('UPLOADS_PATH', STORAGE_PATH . '/uploads');
+// 定义常量（如果尚未定义）
+if (!defined('BASE_PATH')) define('BASE_PATH', dirname(__FILE__));
+if (!defined('APP_PATH')) define('APP_PATH', BASE_PATH . '/app');
+if (!defined('CONFIG_PATH')) define('CONFIG_PATH', BASE_PATH . '/config');
+if (!defined('ROUTES_PATH')) define('ROUTES_PATH', BASE_PATH . '/routes');
+if (!defined('VIEWS_PATH')) define('VIEWS_PATH', BASE_PATH . '/resources/views');
+if (!defined('STORAGE_PATH')) define('STORAGE_PATH', BASE_PATH . '/storage');
+if (!defined('PUBLIC_PATH')) define('PUBLIC_PATH', BASE_PATH . '/public');
+if (!defined('LOGS_PATH')) define('LOGS_PATH', STORAGE_PATH . '/logs');
+if (!defined('UPLOADS_PATH')) define('UPLOADS_PATH', STORAGE_PATH . '/uploads');
 
 // 创建必要的目录
 $directories = [
@@ -296,5 +296,5 @@ function matchRoute($pattern, $path) {
     return false;
 }
 
-// 返回路由配置
+// 返回路由数组
 return $router; 
