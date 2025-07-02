@@ -459,14 +459,14 @@ renderPageHeader();
         font-size: 1rem;
         cursor: pointer;
         transition: all var(--transition-fast);
-    }
-    
-    .btn-primary {
+        }
+        
+        .btn-primary {
         background-color: var(--accent-color);
         color: var(--text-color);
-    }
-    
-    .btn-primary:hover {
+        }
+        
+        .btn-primary:hover {
         background-color: rgba(10, 132, 255, 0.8);
     }
     
@@ -572,11 +572,11 @@ renderPageHeader();
 </style>
 
 <!-- 注册页面脚本 -->
-<script>
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     // 密码显示/隐藏功能
     const togglePassword = document.querySelector('.toggle-password');
-    const passwordInput = document.getElementById('password');
+            const passwordInput = document.getElementById('password');
     
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', function() {
@@ -644,8 +644,8 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('社交注册功能正在开发中，敬请期待！');
         });
     });
-});
-</script>
+        });
+    </script>
 
 <?php
 // 渲染页面页脚

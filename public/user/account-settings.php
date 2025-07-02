@@ -18,9 +18,9 @@ header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
 
 // 妫�鏌ユ槸鍚﹀凡鐧诲綍
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION["user_id"])) {
     // 鏈櫥褰曪紝閲嶅畾鍚戝埌鐧诲綍椤甸潰
-    header('Location: /login');
+    header("Location: /login");
     exit;
 }
 
@@ -112,29 +112,3 @@ function getUserInfo($db, $userId) {
     $stmt->execute([$userId]);
     return $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
 }
-<?php
-/**
- * AlingAi Pro - 用户账号设置
- * 
- * 允许用户管理其账号设置，包括个人资料、密码、通知首选项等
- */
-
-// 启动会话
-session_start();
-
-// 设置增强的安全头部
-header("Content-Security-Policy: default-src \"self\"; script-src \"self\" \"unsafe-inline\" https://cdn.jsdelivr.net; style-src \"self\" \"unsafe-inline\" https://fonts.googleapis.com; font-src \"self\" https://fonts.gstatic.com; img-src \"self\" data:; connect-src \"self\";");
-header("X-Content-Type-Options: nosniff");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-XSS-Protection: 1; mode=block");
-header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
-header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-
-// 检查是否已登录
-if (!isset($_SESSION["user_id"])) {
-    // 未登录，重定向到登录页面
-    header("Location: /login");
-    exit;
-}
-

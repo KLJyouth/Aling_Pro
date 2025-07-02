@@ -56,6 +56,8 @@ $userInfo = isset($_SESSION['user']) ? $_SESSION['user'] : null;
                 
                 <li class="nav-item"><a href="/docs" class="nav-link">文档</a></li>
                 
+                <li class="nav-item"><a href="/api-docs" class="nav-link">API</a></li>
+                
                 <li class="nav-item"><a href="/about" class="nav-link">关于我们</a></li>
                 
                 <li class="nav-item"><a href="/contact" class="nav-link">联系我们</a></li>

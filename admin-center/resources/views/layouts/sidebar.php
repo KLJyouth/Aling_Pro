@@ -94,6 +94,32 @@
                 </ul>
             </li>
             
+            <!-- ÂÜÖÂÆπÁÆ°ÁêÜ -->
+            <li class="nav-item">
+                <a href="#contentSubmenu" data-bs-toggle="collapse" class="nav-link <?= in_array($currentPage, ["content", "news", "pages"]) ? "active" : "" ?>">
+                    <i class="bi bi-file-earmark-richtext"></i>
+                    <span>ÂÜÖÂÆπÁÆ°ÁêÜ</span>
+                    <i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul class="collapse <?= in_array($currentPage, ["content", "news", "pages"]) ? "show" : "" ?>" id="contentSubmenu">
+                    <li>
+                        <a href="/admin/content" class="nav-link <?= $currentPage === "content" ? "active" : "" ?>">
+                            <i class="bi bi-circle"></i> ÂÜÖÂÆπÊ¶ÇËßà
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/content/news" class="nav-link <?= $currentPage === "news" ? "active" : "" ?>">
+                            <i class="bi bi-circle"></i> Êñ∞ÈóªÁÆ°ÁêÜ
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/admin/content/pages" class="nav-link <?= $currentPage === "pages" ? "active" : "" ?>">
+                            <i class="bi bi-circle"></i> È°µÈù¢ÁÆ°ÁêÜ
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            
             <!-- Á≥ªÁªüÂ∑•ÂÖ∑ -->
             <li class="nav-item">
                 <a href="#toolsSubmenu" data-bs-toggle="collapse" class="nav-link <?= in_array($currentPage, ['tools', 'phpinfo', 'server-info', 'database-info', 'database-management', 'cache-optimizer', 'security-checker']) ? 'active' : '' ?>">
@@ -216,4 +242,30 @@
             <span>ÁâàÊú¨: <?= \App\Core\Config::get('app.version', '1.0.0') ?></span>
         </div>
     </div>
-</div> 
+</div>  
+ < ! - -   ÖQπ[°{t  - - >  
+ < l i   c l a s s = " n a v - i t e m " >  
+         < a   h r e f = " # c o n t e n t S u b m e n u "   d a t a - b s - t o g g l e = " c o l l a p s e "   c l a s s = " n a v - l i n k   < ? =   i n _ a r r a y ( $ c u r r e n t P a g e ,   [ \ " c o n t e n t \ " ,   \ " n e w s \ " ,   \ " p a g e s \ " ] )   ?   \ " a c t i v e \ "   :   \ " \ "   ? > " >  
+                 < i   c l a s s = " b i   b i - f i l e - e a r m a r k - r i c h t e x t " > < / i >  
+                 < s p a n > ÖQπ[°{t< / s p a n >  
+                 < i   c l a s s = " b i   b i - c h e v r o n - d o w n   m s - a u t o " > < / i >  
+         < / a >  
+         < u l   c l a s s = " c o l l a p s e   < ? =   i n _ a r r a y ( $ c u r r e n t P a g e ,   [ \ " c o n t e n t \ " ,   \ " n e w s \ " ,   \ " p a g e s \ " ] )   ?   \ " s h o w \ "   :   \ " \ "   ? > "   i d = " c o n t e n t S u b m e n u " >  
+                 < l i >  
+                         < a   h r e f = " / a d m i n / c o n t e n t "   c l a s s = " n a v - l i n k   < ? =   $ c u r r e n t P a g e   = = =   \ " c o n t e n t \ "   ?   \ " a c t i v e \ "   :   \ " \ "   ? > " >  
+                                 < i   c l a s s = " b i   b i - c i r c l e " > < / i >   ÖQπ[Çi»â 
+                         < / a >  
+                 < / l i >  
+                 < l i >  
+                         < a   h r e f = " / a d m i n / c o n t e n t / n e w s "   c l a s s = " n a v - l i n k   < ? =   $ c u r r e n t P a g e   = = =   \ " n e w s \ "   ?   \ " a c t i v e \ "   :   \ " \ "   ? > " >  
+                                 < i   c l a s s = " b i   b i - c i r c l e " > < / i >   ∞e˚ï°{t 
+                         < / a >  
+                 < / l i >  
+                 < l i >  
+                         < a   h r e f = " / a d m i n / c o n t e n t / p a g e s "   c l a s s = " n a v - l i n k   < ? =   $ c u r r e n t P a g e   = = =   \ " p a g e s \ "   ?   \ " a c t i v e \ "   :   \ " \ "   ? > " >  
+                                 < i   c l a s s = " b i   b i - c i r c l e " > < / i >   uòbó°{t 
+                         < / a >  
+                 < / l i >  
+         < / u l >  
+ < / l i >  
+ 
