@@ -7,7 +7,8 @@
  */
 
 spl_autoload_register(function ($class) {
-    // 类映�?    $classMap = [
+    // 类映射
+    $classMap = [
         'AlingAi\\AI\\AgentScheduler\\IntelligentAgentCoordinator' => __DIR__ . '/src/AI/AgentScheduler/IntelligentAgentCoordinator.php',
         'AlingAi\\AI\\AgentScheduler\\IntelligentAgentScheduler' => __DIR__ . '/src/AI/AgentScheduler/IntelligentAgentScheduler.php',
         'AlingAi\\AI\\AgentScheduler\\IntelligentAgentScheduler_backup' => __DIR__ . '/src/AI/AgentScheduler/IntelligentAgentScheduler_backup.php',
@@ -412,15 +413,15 @@ spl_autoload_register(function ($class) {
     $base_dir = __DIR__ . '/src/';
 
     // 检查类是否使用前缀
-    $len = strlen($prefix];
+    $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
         return false;
     }
 
     // 获取相对类名
-    $relative_class = substr($class, $len];
+    $relative_class = substr($class, $len);
 
-    // 将命名空间前缀替换为基础目录，用目录分隔符替换命名空间分隔符�?    // 附加.php
+    // 将命名空间前缀替换为基础目录，用目录分隔符替换命名空间分隔符，附加.php
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
 
     // 如果文件存在，加载它
@@ -430,7 +431,7 @@ spl_autoload_register(function ($class) {
     }
 
     return false;
-}];
+});
 
 // 加载全局辅助函数
 require_once __DIR__ . '/src/helpers.php';

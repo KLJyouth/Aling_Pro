@@ -6,7 +6,9 @@
  */
 
 // 定义基本路径常量
-define('BASE_PATH', __DIR__);
+if (!defined('BASE_PATH')) {
+    define('BASE_PATH', __DIR__);
+}
 define('APP_PATH', BASE_PATH . '/app');
 define('CONFIG_PATH', BASE_PATH . '/config');
 define('ROUTES_PATH', BASE_PATH . '/routes');
@@ -46,6 +48,59 @@ foreach ($directories as $dir) {
     if (!is_dir($dir)) {
         mkdir($dir, 0755, true);
     }
+}
+
+// 检查核心类文件是否存在
+$appCorePath = APP_PATH . '/Core';
+if (!is_dir($appCorePath)) {
+    // 如果目录不存在，创建它
+    mkdir($appCorePath, 0755, true);
+    
+    // 记录错误
+    error_log("警告: 核心类目录不存在，已自动创建: {$appCorePath}");
+    
+    // 显示错误信息并退出
+    echo "<h1>系统初始化错误</h1>";
+    echo "<p>核心类目录不存在，请确保应用程序正确安装。</p>";
+    echo "<p>系统已尝试创建目录: {$appCorePath}</p>";
+    echo "<p>请联系管理员完成系统设置。</p>";
+    exit;
+}
+
+// 检查核心类文件
+$coreFiles = [
+    'Config.php',
+    'Logger.php',
+    'Database.php',
+    'Security.php',
+    'Controller.php',
+    'Model.php',
+    'View.php',
+    'Router.php',
+    'App.php'
+];
+
+$missingFiles = [];
+foreach ($coreFiles as $file) {
+    if (!file_exists($appCorePath . '/' . $file)) {
+        $missingFiles[] = $file;
+    }
+}
+
+if (!empty($missingFiles)) {
+    // 记录错误
+    error_log("错误: 缺少核心类文件: " . implode(', ', $missingFiles));
+    
+    // 显示错误信息并退出
+    echo "<h1>系统初始化错误</h1>";
+    echo "<p>缺少以下核心类文件:</p>";
+    echo "<ul>";
+    foreach ($missingFiles as $file) {
+        echo "<li>{$file}</li>";
+    }
+    echo "</ul>";
+    echo "<p>请联系管理员完成系统设置。</p>";
+    exit;
 }
 
 // 加载核心类

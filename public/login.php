@@ -91,7 +91,7 @@ renderPageHeader();
         <div class="auth-error">
             <i class="fas fa-exclamation-circle"></i>
             <p><?= htmlspecialchars($errorMessage) ?></p>
-        </div>
+            </div>
         <?php endif; ?>
         
         <div class="auth-form">
@@ -102,8 +102,8 @@ renderPageHeader();
                         <i class="fas fa-envelope"></i>
                         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
                     </div>
-                </div>
-                
+            </div>
+            
                 <div class="form-group">
                     <div class="password-label">
                         <label for="password">密码</label>
@@ -113,11 +113,11 @@ renderPageHeader();
                         <i class="fas fa-lock"></i>
                         <input type="password" id="password" name="password" required>
                         <button type="button" class="toggle-password" aria-label="显示密码">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
+                        <i class="fas fa-eye"></i>
+                    </button>
                 </div>
-                
+            </div>
+            
                 <div class="form-group remember-me">
                     <label class="checkbox">
                         <input type="checkbox" name="remember_me" id="remember_me">
@@ -134,8 +134,8 @@ renderPageHeader();
         
         <div class="auth-divider">
             <span>或</span>
-        </div>
-        
+            </div>
+            
         <div class="social-login">
             <button class="btn btn-social btn-wechat">
                 <i class="fab fa-weixin"></i>
@@ -144,13 +144,13 @@ renderPageHeader();
             <button class="btn btn-social btn-qq">
                 <i class="fab fa-qq"></i>
                 QQ登录
-            </button>
-        </div>
-        
+                </button>
+            </div>
+            
         <div class="auth-footer">
             <p>还没有账户？<a href="/register">立即注册</a></p>
-        </div>
-        
+            </div>
+            
         <!-- 演示账户提示 -->
         <div class="demo-account">
             <div class="demo-header">
@@ -488,18 +488,18 @@ renderPageHeader();
 </style>
 
 <!-- 登录页面脚本 -->
-<script>
+    <script>
 document.addEventListener('DOMContentLoaded', function() {
     // 密码显示/隐藏功能
     const togglePassword = document.querySelector('.toggle-password');
-    const passwordInput = document.getElementById('password');
+                const passwordInput = document.getElementById('password');
     
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', function() {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // 切换图标
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                // 切换图标
             this.querySelector('i').classList.toggle('fa-eye');
             this.querySelector('i').classList.toggle('fa-eye-slash');
         });
@@ -513,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-</script>
+    </script>
 
 <?php
 // 渲染页面页脚

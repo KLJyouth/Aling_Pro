@@ -97,7 +97,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">量子安全</h3>
                     <p class="solution-description">前沿量子加密和安全架构，为企业数据和系统提供最高级别保护。</p>
-                    <a href="/solutions/quantum-security.html" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/quantum-security.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>

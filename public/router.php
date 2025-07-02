@@ -28,6 +28,15 @@ if (empty($path)) {
     $path = "index";
 }
 
+// 处理管理后台请求
+if ($path === 'admin' || strpos($path, 'admin/') === 0) {
+    $adminFile = BASE_PATH . '/admin/index.php';
+    if (file_exists($adminFile)) {
+        include_once($adminFile);
+        exit;
+    }
+}
+
 // Map routes to HTML files
 $routes = [
     // Core pages
@@ -49,34 +58,34 @@ $routes = [
     "email/verification-notification" => "email_verification_notification.php",
     
     // 管理后台路由
-    "admin" => "admin-center/index.php",
-    "admin/dashboard" => "admin-center/index.php",
-    "admin/members" => "admin-center/members.php",
-    "admin/orders" => "admin-center/orders.php",
-    "admin/settings" => "admin-center/settings.php",
-    "admin/logs" => "admin-center/logs.php",
-    "admin/tools" => "admin-center/tools.php",
-    "admin/security" => "admin-center/security.php",
-    "admin/reports" => "admin-center/reports.php",
+    "admin" => "admin/index.php",
+    "admin/dashboard" => "admin/index.php",
+    "admin/members" => "admin/index.php",
+    "admin/orders" => "admin/index.php",
+    "admin/settings" => "admin/index.php",
+    "admin/logs" => "admin/index.php",
+    "admin/tools" => "admin/index.php",
+    "admin/security" => "admin/index.php",
+    "admin/reports" => "admin/index.php",
     
     // Information & Support pages
-    "security" => "quantum-security.html",
-    "docs" => "docs-center.html",
-    "api-docs" => "api-docs.html",
-    "terms" => "terms.html",
-    "privacy" => "privacy.html",
-    "support" => "tech-support.html",
-    "help" => "help-center.html",
-    "system-status" => "system-status.html",
-    "partners" => "partners.html",
-    "contact" => "contact.html",
+    "security" => "security.php",
+    "docs" => "docs.php",
+    "api-docs" => "api-docs.php",
+    "terms" => "terms.php",
+    "privacy" => "privacy.php",
+    "support" => "support.php",
+    "help" => "help.php",
+    "system-status" => "system-status.php",
+    "partners" => "partners.php",
+    "contact" => "contact.php",
     
     // Feature pages
-    "platform" => "platform.html",
-    "ecosystem" => "ecosystem.html",
-    "portal" => "portal.html",
-    "zero-trust" => "zero-trust.html",
-    "ai-assistant" => "ai-assistant.html"
+    "platform" => "platform.php",
+    "ecosystem" => "ecosystem.php",
+    "portal" => "portal.php",
+    "zero-trust" => "zero-trust.php",
+    "ai-assistant" => "ai-assistant.php"
 ];
 
 // Handle the request

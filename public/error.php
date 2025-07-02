@@ -2,70 +2,73 @@
 /**
  * 通用错误页面
  * 
- * 显示服务器错误和其他错误信息
+ * 显示各种服务器错误
  */
 
-// 引入配置文件
-require_once __DIR__ . '/config/config_loader.php';
+// 获取错误代码，默认为500
+$errorCode = isset($_GET['code']) ? intval($_GET['code']) : 500;
+$errorTitle = isset($_GET['title']) ? $_GET['title'] : '服务器错误';
 
-// 获取错误代码
-$errorCode = $_SERVER['REDIRECT_STATUS'] ?? 500;
-$errorTitle = "服务器错误";
-$errorMessage = "抱歉，服务器遇到了问题，请稍后再试。";
+// 根据错误代码设置适当的HTTP状态码
+http_response_code($errorCode);
 
-// 根据错误代码设置不同的消息
-switch ($errorCode) {
-    case 403:
-        $errorTitle = "访问被拒绝";
-        $errorMessage = "抱歉，您没有权限访问此页面。";
-        break;
-    case 404:
-        $errorTitle = "页面未找到";
-        $errorMessage = "抱歉，您访问的页面不存在或已被移动。";
-        break;
-    case 500:
-        $errorTitle = "服务器错误";
-        $errorMessage = "抱歉，服务器遇到了问题，请稍后再试。";
-        break;
-    default:
-        $errorTitle = "发生错误";
-        $errorMessage = "抱歉，发生了未知错误，请稍后再试。";
-        break;
-}
+// 错误信息映射
+$errorMessages = [
+    400 => '请求无效，服务器无法理解您的请求',
+    401 => '您需要登录后才能访问此页面',
+    403 => '您没有权限访问此页面',
+    500 => '服务器遇到了一个错误，无法完成您的请求',
+    503 => '服务暂时不可用，请稍后再试'
+];
 
-// 页面标题
-$pageTitle = $errorTitle . " - AlingAi Pro";
-$pageDescription = $errorMessage;
+// 获取错误信息
+$errorMessage = isset($errorMessages[$errorCode]) ? $errorMessages[$errorCode] : '发生了一个错误';
 
-// 添加页面特定的CSS
-$additionalCSS = ['/css/error.css'];
+// 页面标题和描述
+$pageTitle = "$errorCode - $errorTitle - AlingAi Pro";
+$pageDescription = "发生错误: $errorCode $errorTitle";
 
-// 开始输出缓冲
+// 额外CSS和JS
+$additionalCSS = ["/css/error.css"];
+$additionalJS = [];
+
+// 页面内容
 ob_start();
 ?>
 
-<!-- 页面主要内容 -->
-<main class="error-page">
-    <div class="container">
-        <div class="error-content glass-card">
-            <div class="error-icon">
-                <i class="fas fa-exclamation-circle"></i>
-            </div>
-            <h1 class="error-title"><?php echo $errorCode; ?></h1>
-            <h2 class="error-subtitle"><?php echo $errorTitle; ?></h2>
-            <p class="error-message"><?php echo $errorMessage; ?></p>
-            <div class="error-actions">
-                <a href="/" class="btn btn-primary">返回首页</a>
-                <a href="/contact" class="btn btn-outline-primary">联系我们</a>
-            </div>
-        </div>
+<div class="error-container">
+    <div class="error-code"><?php echo $errorCode; ?></div>
+    <h1 class="error-title"><?php echo htmlspecialchars($errorTitle); ?></h1>
+    <p class="error-message"><?php echo htmlspecialchars($errorMessage); ?></p>
+    
+    <div class="error-actions">
+        <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> 返回首页
+        </a>
+        <a href="javascript:history.back()" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> 返回上一页
+        </a>
+        <a href="/contact.php" class="btn btn-outline">
+            <i class="fas fa-envelope"></i> 联系支持
+        </a>
     </div>
-</main>
+    
+    <?php if ($errorCode == 500): ?>
+    <div class="error-help">
+        <h2>您可以尝试：</h2>
+        <ul>
+            <li>刷新页面</li>
+            <li>清除浏览器缓存后重试</li>
+            <li>稍后再试</li>
+            <li>如果问题持续存在，请联系我们的技术支持</li>
+        </ul>
+    </div>
+    <?php endif; ?>
+</div>
 
 <?php
-// 获取缓冲内容
 $pageContent = ob_get_clean();
 
-// 使用页面模板
-require_once __DIR__ . '/templates/page.php';
+// 引入布局模板
+require_once __DIR__ . '/templates/layout.php';
 ?> 

@@ -1,0 +1,1 @@
+<h1>系统初始化错误</h1><p>缺少以下核心类文件:</p><ul><li>Config.php</li><li>Logger.php</li><li>Database.php</li><li>Security.php</li><li>Controller.php</li><li>Model.php</li><li>View.php</li><li>Router.php</li><li>App.php</li></ul><p>请联系管理员完成系统设置。</p>
