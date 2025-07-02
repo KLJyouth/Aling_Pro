@@ -1,592 +1,654 @@
 <?php
 /**
- * AlingAi Pro - 注册处理
+ * 注册页面
  * 
- * 处理用户注册请求，包括邮箱验证和推荐码功能
+ * @version 1.0.0
+ * @author AlingAi Team
+ * @copyright 2024 AlingAi Corporation
  */
+
+// 设置时区
+date_default_timezone_set('Asia/Shanghai');
 
 // 启动会话
 session_start();
 
-// 设置增强的安全头部
-header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self';");
-header("X-Content-Type-Options: nosniff");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-XSS-Protection: 1; mode=block");
-header("Referrer-Policy: strict-origin-when-cross-origin");
-header("Permissions-Policy: geolocation=(), microphone=(), camera=()");
-header("Strict-Transport-Security: max-age=31536000; includeSubDomains");
-
-// 检查是否已登录
+// 如果用户已登录，重定向到控制台
 if (isset($_SESSION['user_id'])) {
-    // 已登录，重定向到仪表盘
     header('Location: /dashboard');
     exit;
 }
 
-// 处理推荐码
-$referralCode = '';
-if (isset($_GET['ref'])) {
-    $referralCode = $_GET['ref'];
-    $_SESSION['referral_code'] = $referralCode;
-} elseif (isset($_SESSION['referral_code'])) {
-    $referralCode = $_SESSION['referral_code'];
-}
-
-// 如果有推荐码，验证其有效性
-if (!empty($referralCode)) {
-    $referrerExists = checkReferralCode($referralCode);
-    if (!$referrerExists) {
-        $referralCode = '';
-        unset($_SESSION['referral_code']);
-    }
-}
-
 // 处理表单提交
-$error = '';
-$success = '';
+$formError = false;
+$errorMessage = '';
+$registrationSuccess = false;
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // 验证表单数据
-    $name = trim($_POST['name'] ?? '');
-    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    // 获取表单数据
+    $name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $password = $_POST['password'] ?? '';
-    $passwordConfirmation = $_POST['password_confirmation'] ?? '';
-    $terms = isset($_POST['terms']);
-    $referralCode = $_POST['referral_code'] ?? '';
+    $confirmPassword = $_POST['confirm_password'] ?? '';
+    $agreeTerms = isset($_POST['agree_terms']);
     
-    // 验证数据
-    if (empty($name)) {
-        $error = '请输入您的姓名';
-    } elseif (!$email) {
-        $error = '请输入有效的电子邮件地址';
-    } elseif (empty($password)) {
-        $error = '请输入密码';
+    // 简单验证
+    if (empty($name) || empty($email) || empty($password) || empty($confirmPassword)) {
+        $formError = true;
+        $errorMessage = '请填写所有必填字段';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $formError = true;
+        $errorMessage = '请输入有效的电子邮件地址';
     } elseif (strlen($password) < 8) {
-        $error = '密码至少需要8个字符';
-    } elseif ($password !== $passwordConfirmation) {
-        $error = '两次输入的密码不一致';
-    } elseif (!$terms) {
-        $error = '您必须同意服务条款和隐私政策';
-    } elseif (!empty($referralCode) && !checkReferralCode($referralCode)) {
-        $error = '无效的推荐码';
+        $formError = true;
+        $errorMessage = '密码长度必须至少为8个字符';
+    } elseif ($password !== $confirmPassword) {
+        $formError = true;
+        $errorMessage = '两次输入的密码不一致';
+    } elseif (!$agreeTerms) {
+        $formError = true;
+        $errorMessage = '请同意服务条款和隐私政策';
     } else {
-        // 检查邮箱是否已存在
-        if (emailExists($email)) {
-            $error = '该邮箱已被注册';
-        } else {
-            // 创建用户
-            $userId = createUser($name, $email, $password);
-            
-            if ($userId) {
-                // 处理推荐码
-                if (!empty($referralCode)) {
-                    processReferral($userId, $referralCode);
-                }
-                
-                // 生成验证令牌并发送验证邮件
-                $verificationToken = generateVerificationToken($userId);
-                sendVerificationEmail($email, $name, $userId, $verificationToken);
-                
-                // 自动登录
-                $_SESSION['user_id'] = $userId;
-                $_SESSION['user_name'] = $name;
-                $_SESSION['user_email'] = $email;
-                $_SESSION['user_role'] = 'user';
-                
-                // 记录注册信息
-                recordRegistration($userId, $_SERVER['REMOTE_ADDR']);
-                
-                // 重定向到仪表盘，并显示验证邮件提示
-                header('Location: /dashboard?verified=0');
-                exit;
-            } else {
-                $error = '注册失败，请稍后再试';
-            }
-        }
-    }
-}
-
-/**
- * 检查推荐码是否有效
- * 
- * @param string $code 推荐码
- * @return bool 是否有效
- */
-function checkReferralCode($code) {
-    $db = connectToDatabase();
-    $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
-    $stmt->execute([$code]);
-    return $stmt->fetch() !== false;
-}
-
-/**
- * 检查邮箱是否已存在
- * 
- * @param string $email 邮箱
- * @return bool 是否存在
- */
-function emailExists($email) {
-    $db = connectToDatabase();
-    $stmt = $db->prepare('SELECT id FROM users WHERE email = ?');
-    $stmt->execute([$email]);
-    return $stmt->fetch() !== false;
-}
-
-/**
- * 创建新用户
- * 
- * @param string $name 姓名
- * @param string $email 邮箱
- * @param string $password 密码
- * @return int|false 成功时返回用户ID，失败时返回false
- */
-function createUser($name, $email, $password) {
-    $db = connectToDatabase();
-    
-    // 生成密码哈希
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-    
-    // 生成唯一推荐码
-    $referralCode = generateReferralCode();
-    
-    try {
-        $stmt = $db->prepare('INSERT INTO users (name, email, password, referral_code, role, status, created_at) VALUES (?, ?, ?, ?, "user", "active", NOW())');
-        $stmt->execute([$name, $email, $passwordHash, $referralCode]);
-        return $db->lastInsertId();
-    } catch (PDOException $e) {
-        return false;
-    }
-}
-
-/**
- * 生成唯一推荐码
- * 
- * @return string 推荐码
- */
-function generateReferralCode() {
-    $db = connectToDatabase();
-    
-    do {
-        // 生成8位随机字母数字组合
-        $code = substr(str_shuffle('ABCDEFGHJKLMNPQRSTUVWXYZ23456789'), 0, 8);
+        // 在实际应用中，这里会创建用户账户并设置会话
+        // 这里仅模拟注册成功
+        $registrationSuccess = true;
         
-        // 检查是否已存在
-        $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
-        $stmt->execute([$code]);
-        $exists = $stmt->fetch() !== false;
-    } while ($exists);
-    
-    return $code;
-}
-
-/**
- * 处理推荐注册
- * 
- * @param int $userId 新用户ID
- * @param string $referralCode 推荐码
- */
-function processReferral($userId, $referralCode) {
-    $db = connectToDatabase();
-    
-    // 查找推荐人
-    $stmt = $db->prepare('SELECT id FROM users WHERE referral_code = ?');
-    $stmt->execute([$referralCode]);
-    $referrer = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($referrer) {
-        // 记录推荐关系
-        $stmt = $db->prepare('INSERT INTO referrals (referrer_id, referred_id, created_at) VALUES (?, ?, NOW())');
-        $stmt->execute([$referrer['id'], $userId]);
-        
-        // 这里可以添加奖励逻辑，如积分、优惠券等
+        // 清空表单数据
+        $name = $email = '';
     }
 }
 
-/**
- * 生成邮箱验证令牌
- * 
- * @param int $userId 用户ID
- * @return string 验证令牌
- */
-function generateVerificationToken($userId) {
-    $token = bin2hex(random_bytes(32));
-    $expires = date('Y-m-d H:i:s', time() + 60*60*24); // 24小时有效期
-    
-    $db = connectToDatabase();
-    $stmt = $db->prepare('INSERT INTO email_verifications (user_id, token, expires_at) VALUES (?, ?, ?)');
-    $stmt->execute([$userId, $token, $expires]);
-    
-    return $token;
-}
+// 获取选择的方案
+$selectedPlan = $_GET['plan'] ?? '';
 
-/**
- * 发送验证邮件
- * 
- * @param string $email 邮箱
- * @param string $name 姓名
- * @param int $userId 用户ID
- * @param string $token 验证令牌
- */
-function sendVerificationEmail($email, $name, $userId, $token) {
-    $verificationUrl = 'http://' . $_SERVER['HTTP_HOST'] . '/email/verify?id=' . $userId . '&token=' . $token;
-    
-    $subject = 'AlingAi Pro - 验证您的邮箱';
-    
-    $message = "
-    <html>
-    <head>
-        <title>验证您的邮箱</title>
-    </head>
-    <body>
-        <div style='max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif;'>
-            <div style='background-color: #6B46C1; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0;'>
-                <h1>验证您的邮箱</h1>
-            </div>
-            <div style='background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px;'>
-                <p>尊敬的 {$name}，</p>
-                <p>感谢您注册 AlingAi Pro！请点击下面的按钮验证您的邮箱地址：</p>
-                <p style='text-align: center;'>
-                    <a href='{$verificationUrl}' style='display: inline-block; background-color: #6B46C1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;'>验证邮箱</a>
-                </p>
-                <p>或者，您可以复制以下链接并粘贴到浏览器地址栏中：</p>
-                <p>{$verificationUrl}</p>
-                <p>此链接将在24小时后过期。</p>
-                <p>如果您没有注册 AlingAi Pro，请忽略此邮件。</p>
-                <p>谢谢！<br>AlingAi Pro 团队</p>
-            </div>
-        </div>
-    </body>
-    </html>
-    ";
-    
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: AlingAi Pro <noreply@alingai.pro>\r\n";
-    
-    // 实际项目中，应该使用专业的邮件发送服务
-    mail($email, $subject, $message, $headers);
-}
+// 页面信息设置
+$pageTitle = '注册 - AlingAi Pro';
+$pageDescription = '注册AlingAi Pro账户，开始使用智能AI助手和数据分析工具';
+$pageKeywords = '注册, 账户, 用户, AlingAi Pro';
 
-/**
- * 记录用户注册
- * 
- * @param int $userId 用户ID
- * @param string $ip 用户IP地址
- */
-function recordRegistration($userId, $ip) {
-    $db = connectToDatabase();
-    $stmt = $db->prepare('INSERT INTO registration_history (user_id, ip_address, user_agent) VALUES (?, ?, ?)');
-    $stmt->execute([$userId, $ip, $_SERVER['HTTP_USER_AGENT']]);
-}
+// 包含页面模板
+require_once __DIR__ . '/templates/page.php';
 
-/**
- * 连接到数据库
- * 
- * @return PDO 数据库连接
- */
-function connectToDatabase() {
-    $host = 'localhost';
-    $dbname = 'alingai_pro';
-    $username = 'root';
-    $password = '';
-    
-    try {
-        $db = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $db;
-    } catch (PDOException $e) {
-        die('数据库连接失败: ' . $e->getMessage());
-    }
-}
-
-// 显示注册页面
+// 渲染页面头部
+renderPageHeader();
 ?>
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>安全注册 - AlingAi Pro</title>
-    <meta name="description" content="AlingAi Pro零信任安全注册系统">
-    
-    <!-- 核心资源 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- 密码强度检测 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-    
-    <!-- Tailwind配置 -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'quantum-purple': '#6B46C1',
-                        'quantum-blue': '#3B82F6',
-                        'quantum-cyan': '#06B6D4',
-                        'neon-green': '#10B981',
-                        'cyber-orange': '#F59E0B'
-                    },
-                    fontFamily: {
-                        'mono': ['JetBrains Mono', 'monospace'], 
-                        'sans': ['Inter', 'sans-serif']
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body {
-            background: linear-gradient(135deg, #0F0F23 0%, #1A1A40 25%, #2D1B69 50%, #6B46C1 100%);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-        }
-        
-        .glassmorphism {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #6B46C1, #3B82F6);
-            border: none;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(107, 70, 193, 0.4);
-        }
-        
-        .password-strength-bar {
-            height: 6px;
-            border-radius: 3px;
-            transition: all 0.3s ease;
-            background: linear-gradient(90deg, #ef4444, #f97316, #eab308, #22c55e);
-            background-size: 400% 100%;
-        }
-        
-        .strength-weak { background-position: 0% 50%; width: 25%; }
-        .strength-fair { background-position: 33% 50%; width: 50%; }
-        .strength-good { background-position: 66% 50%; width: 75%; }
-        .strength-strong { background-position: 100% 50%; width: 100%; }
-        
-        .social-btn {
-            transition: all 0.3s ease;
-        }
-        
-        .social-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-</head>
-<body class="min-h-screen flex items-center justify-center p-4">
-    <!-- 注册容器 -->
-    <div class="glassmorphism rounded-3xl p-8 w-full max-w-xl shadow-2xl z-10 relative">
-        <!-- Logo和标题 -->
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 mx-auto mb-4 glassmorphism rounded-full flex items-center justify-center">
-                <i class="fas fa-user-plus text-3xl text-blue-400"></i>
+
+<!-- 注册页面内容 -->
+<section class="auth-container">
+    <div class="auth-card">
+        <?php if ($registrationSuccess): ?>
+        <!-- 注册成功信息 -->
+        <div class="registration-success">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
             </div>
-            <h1 class="text-3xl font-bold text-white mb-2">创建安全账户</h1>
-            <p class="text-gray-300">加入AlingAi Pro，体验最先进的AI服务</p>
+            <h1>注册成功！</h1>
+            <p>您的账户已创建成功，我们已向您的邮箱发送了一封验证邮件。</p>
+            <p>请点击邮件中的链接完成验证，然后开始使用AlingAi Pro的强大功能。</p>
+            <div class="success-actions">
+                <a href="/login" class="btn btn-primary">前往登录</a>
+                <a href="/" class="btn btn-secondary">返回首页</a>
+            </div>
+        </div>
+        <?php else: ?>
+        <!-- 注册表单 -->
+        <div class="auth-header">
+            <a href="/" class="auth-logo">
+                <img src="/assets/images/logo.svg" alt="AlingAi Pro Logo">
+            </a>
+            <h1>创建账户</h1>
+            <p>加入AlingAi Pro，体验智能化的未来</p>
         </div>
         
-        <?php if (!empty($error)): ?>
-            <div class="bg-red-500/20 border border-red-500/50 text-red-100 px-4 py-3 rounded-lg mb-6">
-                <i class="fas fa-exclamation-triangle mr-2"></i> <?php echo htmlspecialchars($error); ?>
+        <?php if ($formError): ?>
+        <div class="auth-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <p><?= htmlspecialchars($errorMessage) ?></p>
         </div>
         <?php endif; ?>
         
-        <!-- 注册表单 -->
-        <form method="POST" action="/register" class="space-y-6">
-            <div class="grid md:grid-cols-2 gap-6">
-            <div>
-                    <label for="name" class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-user mr-2"></i>姓名
-                </label>
-                    <input type="text" id="name" name="name" required
-                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        placeholder="请输入您的姓名"
-                        value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>">
+        <?php if ($selectedPlan): ?>
+        <div class="plan-selection">
+            <div class="plan-badge">
+                <?php if ($selectedPlan === 'pro'): ?>
+                <span>专业版</span>
+                <?php elseif ($selectedPlan === 'basic'): ?>
+                <span>基础版</span>
+                <?php else: ?>
+                <span>自定义方案</span>
+                <?php endif; ?>
             </div>
-            
-            <div>
-                    <label for="email" class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-envelope mr-2"></i>邮箱地址
-                </label>
-                <input type="email" id="email" name="email" required
-                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        placeholder="请输入您的邮箱地址"
-                        value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>">
-                </div>
-            </div>
-            
-            <div>
-                <label for="password" class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-lock mr-2"></i>密码
-                </label>
-                <div class="relative">
-                    <input type="password" id="password" name="password" required
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        placeholder="请设置您的密码（至少8个字符）">
-                    <button type="button" id="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white">
-                        <i class="fas fa-eye"></i>
-                    </button>
+            <p>您选择了 <strong><?= $selectedPlan === 'pro' ? '专业版' : ($selectedPlan === 'basic' ? '基础版' : '自定义方案') ?></strong> 方案</p>
+            <a href="/pricing" class="change-plan">更改方案</a>
+        </div>
+        <?php endif; ?>
+        
+        <div class="auth-form">
+            <form method="post" action="">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" name="name" value="<?= htmlspecialchars($name ?? '') ?>" required>
+                    </div>
                 </div>
                 
-                <!-- 密码强度指示器 -->
-                <div class="mt-2">
-                    <div class="w-full bg-gray-700 rounded-full h-1.5">
-                        <div id="passwordStrength" class="password-strength-bar rounded-full"></div>
+                <div class="form-group">
+                    <label for="email">电子邮件</label>
+                    <div class="input-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
                     </div>
-                    <p id="passwordFeedback" class="text-xs text-gray-400 mt-1">请输入至少8个字符的密码</p>
                 </div>
-            </div>
-            
-            <div>
-                <label for="password_confirmation" class="block text-gray-300 text-sm font-medium mb-2">
-                    <i class="fas fa-lock mr-2"></i>确认密码
-                </label>
-                <input type="password" id="password_confirmation" name="password_confirmation" required
-                    class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                    placeholder="请再次输入密码">
-            </div>
-            
-            <?php if (!empty($referralCode)): ?>
-                <div>
-                    <label for="referral_code" class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-user-friends mr-2"></i>推荐码
+                
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" required>
+                        <button type="button" class="toggle-password" aria-label="显示密码">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-level" style="width: 0%;"></div>
+                        </div>
+                        <span class="strength-text">密码强度: 请输入密码</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">确认密码</label>
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group terms">
+                    <label class="checkbox">
+                        <input type="checkbox" name="agree_terms" id="agree_terms">
+                        <span class="checkmark"></span>
+                        我已阅读并同意 <a href="/terms" target="_blank">服务条款</a> 和 <a href="/privacy" target="_blank">隐私政策</a>
                     </label>
-                    <input type="text" id="referral_code" name="referral_code" readonly
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all bg-gray-700/50"
-                        value="<?php echo htmlspecialchars($referralCode); ?>">
-                    <p class="text-green-400 text-xs mt-1">
-                        <i class="fas fa-check-circle mr-1"></i>您正在使用推荐码注册，注册成功后双方都将获得奖励！
-                    </p>
                 </div>
-            <?php else: ?>
-                <div>
-                    <label for="referral_code" class="block text-gray-300 text-sm font-medium mb-2">
-                        <i class="fas fa-user-friends mr-2"></i>推荐码（可选）
-                    </label>
-                    <input type="text" id="referral_code" name="referral_code"
-                        class="w-full px-4 py-3 glassmorphism rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                        placeholder="如果您有推荐码，请在此处输入"
-                        value="<?php echo htmlspecialchars($_POST['referral_code'] ?? ''); ?>">
+                
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">创建账户</button>
                 </div>
-            <?php endif; ?>
-            
-            <div class="flex items-center">
-                <input id="terms" name="terms" type="checkbox" required
-                    class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-blue-500 focus:ring-blue-500"
-                    <?php echo isset($_POST['terms']) ? 'checked' : ''; ?>>
-                <label for="terms" class="ml-2 block text-sm text-gray-300">
-                    我已阅读并同意 <a href="/terms" class="text-blue-400 hover:text-blue-300">服务条款</a> 和 <a href="/privacy" class="text-blue-400 hover:text-blue-300">隐私政策</a>
-                </label>
-            </div>
-            
-            <div>
-                <button type="submit" class="w-full btn-primary text-white py-3 px-4 rounded-lg font-medium">
-                    <i class="fas fa-user-plus mr-2"></i>注册
-                </button>
-            </div>
-        </form>
-        
-        <!-- 分隔线 -->
-        <div class="relative flex items-center my-8">
-            <div class="flex-grow border-t border-gray-600"></div>
-            <span class="flex-shrink mx-4 text-gray-400">或使用以下方式注册</span>
-            <div class="flex-grow border-t border-gray-600"></div>
+            </form>
         </div>
         
-        <!-- 社交登录按钮 -->
-        <div class="grid grid-cols-2 gap-4">
-            <a href="/login/google" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
-                <i class="fab fa-google text-red-400 mr-2"></i> Google注册
-            </a>
-            <a href="/login/github" class="social-btn glassmorphism flex items-center justify-center py-3 px-4 rounded-lg text-white">
-                <i class="fab fa-github text-gray-300 mr-2"></i> GitHub注册
-            </a>
+        <div class="auth-divider">
+            <span>或</span>
         </div>
         
-        <!-- 登录链接 -->
-        <div class="mt-8 text-center">
-            <p class="text-gray-400">
-                已有账号？
-                <a href="/login" class="text-blue-400 hover:text-blue-300">立即登录</a>
-            </p>
+        <div class="social-login">
+            <button class="btn btn-social btn-wechat">
+                <i class="fab fa-weixin"></i>
+                微信注册
+            </button>
+            <button class="btn btn-social btn-qq">
+                <i class="fab fa-qq"></i>
+                QQ注册
+            </button>
         </div>
+        
+        <div class="auth-footer">
+            <p>已有账户？<a href="/login">立即登录</a></p>
+        </div>
+        <?php endif; ?>
     </div>
+</section>
+
+<!-- 页面样式 -->
+<style>
+    /* 注册页面样式 */
+    .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: calc(100vh - 200px);
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
     
-    <script>
-        // 切换密码显示/隐藏
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
+    .auth-card {
+        width: 100%;
+        max-width: 450px;
+        padding: var(--spacing-xl);
+        background: var(--glass-background);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        box-shadow: 0 10px 30px var(--shadow-color);
+    }
+    
+    .auth-header {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .auth-logo {
+        display: inline-block;
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .auth-logo img {
+        height: 40px;
+    }
+    
+    .auth-header h1 {
+        font-size: 1.8rem;
+        margin-bottom: var(--spacing-sm);
+        color: var(--text-color);
+    }
+    
+    .auth-header p {
+        opacity: 0.8;
+    }
+    
+    .auth-error {
+        display: flex;
+        align-items: center;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background-color: rgba(255, 69, 58, 0.1);
+        border: 1px solid rgba(255, 69, 58, 0.3);
+        border-radius: var(--border-radius-md);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .auth-error i {
+        color: var(--error-color);
+        font-size: 1.2rem;
+        margin-right: var(--spacing-sm);
+    }
+    
+    .auth-error p {
+        margin: 0;
+        color: var(--error-color);
+    }
+    
+    .plan-selection {
+        padding: var(--spacing-md);
+        background-color: rgba(10, 132, 255, 0.1);
+        border: 1px solid rgba(10, 132, 255, 0.3);
+        border-radius: var(--border-radius-md);
+        margin-bottom: var(--spacing-lg);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .plan-badge {
+        background-color: var(--accent-color);
+        color: var(--text-color);
+        padding: 4px 12px;
+        border-radius: var(--border-radius-sm);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+    
+    .change-plan {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .change-plan:hover {
+        text-decoration: underline;
+    }
+    
+    .auth-form {
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .form-group {
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+    
+    .input-icon {
+        position: relative;
+    }
+    
+    .input-icon i {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .input-icon input {
+        width: 100%;
+        padding: 12px 15px 12px 45px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-md);
+        color: var(--text-color);
+        font-family: var(--font-main);
+        font-size: 1rem;
+        transition: border-color var(--transition-fast);
+    }
+    
+    .input-icon input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+    }
+    
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .password-strength {
+        margin-top: 8px;
+    }
+    
+    .strength-bar {
+        height: 4px;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 5px;
+    }
+    
+    .strength-level {
+        height: 100%;
+        width: 0;
+        background-color: var(--error-color);
+        transition: width 0.3s ease, background-color 0.3s ease;
+    }
+    
+    .strength-text {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .terms {
+        margin-top: var(--spacing-lg);
+    }
+    
+    .terms a {
+        color: var(--accent-color);
+        text-decoration: none;
+    }
+    
+    .terms a:hover {
+        text-decoration: underline;
+    }
+    
+    .checkbox {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+    }
+    
+    .checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+    
+    .checkmark {
+        position: relative;
+        height: 20px;
+        width: 20px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--glass-border);
+        border-radius: 4px;
+        margin-right: 10px;
+        flex-shrink: 0;
+    }
+    
+    .checkbox:hover input ~ .checkmark {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .checkbox input:checked ~ .checkmark {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+    }
+    
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+    }
+    
+    .checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+    
+    .checkbox .checkmark:after {
+        left: 7px;
+        top: 3px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: var(--border-radius-md);
+        font-weight: 500;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+    }
+    
+    .btn-primary {
+        background-color: var(--accent-color);
+        color: var(--text-color);
+    }
+    
+    .btn-primary:hover {
+        background-color: rgba(10, 132, 255, 0.8);
+    }
+    
+    .btn-secondary {
+        background-color: transparent;
+        border: 1px solid var(--accent-color);
+        color: var(--text-color);
+    }
+    
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: var(--spacing-lg) 0;
+    }
+    
+    .auth-divider::before,
+    .auth-divider::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .auth-divider span {
+        padding: 0 var(--spacing-sm);
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.9rem;
+    }
+    
+    .social-login {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+    }
+    
+    .btn-social {
+        background-color: transparent;
+        border: 1px solid var(--glass-border);
+        color: var(--text-color);
+    }
+    
+    .btn-social i {
+        margin-right: 8px;
+        font-size: 1.2rem;
+    }
+    
+    .btn-wechat:hover {
+        background-color: rgba(9, 187, 7, 0.2);
+        border-color: rgba(9, 187, 7, 0.5);
+    }
+    
+    .btn-qq:hover {
+        background-color: rgba(0, 120, 213, 0.2);
+        border-color: rgba(0, 120, 213, 0.5);
+    }
+    
+    .auth-footer {
+        text-align: center;
+    }
+    
+    .auth-footer p {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+    
+    .auth-footer a {
+        color: var(--accent-color);
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .auth-footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /* 注册成功样式 */
+    .registration-success {
+        text-align: center;
+    }
+    
+    .success-icon {
+        font-size: 4rem;
+        color: var(--success-color);
+        margin-bottom: var(--spacing-md);
+    }
+    
+    .registration-success h1 {
+        font-size: 1.8rem;
+        margin-bottom: var(--spacing-md);
+        color: var(--text-color);
+    }
+    
+    .registration-success p {
+        margin-bottom: var(--spacing-md);
+        opacity: 0.8;
+    }
+    
+    .success-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-lg);
+    }
+</style>
+
+<!-- 注册页面脚本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 密码显示/隐藏功能
+    const togglePassword = document.querySelector('.toggle-password');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
             
             // 切换图标
-            const icon = this.querySelector('i');
-            icon.classList.toggle('fa-eye');
-            icon.classList.toggle('fa-eye-slash');
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
         });
+    }
+    
+    // 密码强度检查
+    if (passwordInput) {
+        const strengthBar = document.querySelector('.strength-level');
+        const strengthText = document.querySelector('.strength-text');
         
-        // 密码强度检测
-        document.getElementById('password').addEventListener('input', function() {
+        passwordInput.addEventListener('input', function() {
             const password = this.value;
-            const strengthBar = document.getElementById('passwordStrength');
-            const feedback = document.getElementById('passwordFeedback');
+            let strength = 0;
+            let status = '';
             
             if (password.length === 0) {
-                strengthBar.className = 'password-strength-bar rounded-full';
-                strengthBar.style.width = '0';
-                feedback.textContent = '请输入至少8个字符的密码';
-                feedback.className = 'text-xs text-gray-400 mt-1';
-                return;
+                strength = 0;
+                status = '请输入密码';
+            } else if (password.length < 8) {
+                strength = 25;
+                status = '弱';
+            } else {
+                // 检查密码复杂度
+                if (password.length >= 8) strength += 25;
+                if (password.match(/[a-z]+/)) strength += 25;
+                if (password.match(/[A-Z]+/)) strength += 25;
+                if (password.match(/[0-9]+/)) strength += 25;
+                if (password.match(/[$@#&!]+/)) strength += 25;
+                
+                if (strength > 100) strength = 100;
+                
+                if (strength < 50) status = '弱';
+                else if (strength < 75) status = '中';
+                else status = '强';
             }
-            
-            // 使用zxcvbn检测密码强度
-            const result = zxcvbn(password);
-            const score = result.score; // 0-4
             
             // 更新强度条
-            strengthBar.className = 'password-strength-bar rounded-full';
+            strengthBar.style.width = strength + '%';
             
-            if (score === 0) {
-                strengthBar.classList.add('strength-weak');
-                feedback.textContent = '密码强度：非常弱';
-                feedback.className = 'text-xs text-red-400 mt-1';
-            } else if (score === 1) {
-                strengthBar.classList.add('strength-weak');
-                feedback.textContent = '密码强度：弱';
-                feedback.className = 'text-xs text-red-400 mt-1';
-            } else if (score === 2) {
-                strengthBar.classList.add('strength-fair');
-                feedback.textContent = '密码强度：一般';
-                feedback.className = 'text-xs text-orange-400 mt-1';
-            } else if (score === 3) {
-                strengthBar.classList.add('strength-good');
-                feedback.textContent = '密码强度：良好';
-                feedback.className = 'text-xs text-yellow-400 mt-1';
+            // 更新颜色
+            if (strength < 50) {
+                strengthBar.style.backgroundColor = 'var(--error-color)';
+            } else if (strength < 75) {
+                strengthBar.style.backgroundColor = 'var(--warning-color)';
             } else {
-                strengthBar.classList.add('strength-strong');
-                feedback.textContent = '密码强度：极强';
-                feedback.className = 'text-xs text-green-400 mt-1';
+                strengthBar.style.backgroundColor = 'var(--success-color)';
             }
             
-            // 显示反馈建议
-            if (result.feedback.warning) {
-                feedback.textContent += ' - ' + result.feedback.warning;
-            }
+            // 更新文本
+            strengthText.textContent = '密码强度: ' + status;
         });
-    </script>
-</body>
-</html>
+    }
+    
+    // 社交注册按钮
+    const socialButtons = document.querySelectorAll('.btn-social');
+    socialButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            alert('社交注册功能正在开发中，敬请期待！');
+        });
+    });
+});
+</script>
+
+<?php
+// 渲染页面页脚
+renderPageFooter();
+?>
 

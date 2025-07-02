@@ -1,53 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
-  <!-- 背景圆形 -->
-  <circle cx="100" cy="100" r="90" fill="#0a0e17" />
+<svg width="120" height="40" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 主要圆形 -->
+  <circle cx="20" cy="20" r="16" fill="url(#gradient1)" opacity="0.8"/>
   
-  <!-- 外环 - 量子环 -->
-  <circle cx="100" cy="100" r="80" fill="none" stroke="#0a84ff" stroke-width="3" stroke-dasharray="10 5" />
-  
-  <!-- 中环 - 渐变 -->
-  <circle cx="100" cy="100" r="65" fill="none" stroke="url(#gradientStroke)" stroke-width="4" />
-  
-  <!-- 内环 - 脉冲效果 -->
-  <circle cx="100" cy="100" r="50" fill="none" stroke="#00c8ff" stroke-width="2" stroke-dasharray="1 2" />
-  
-  <!-- 中心核心 -->
-  <circle cx="100" cy="100" r="30" fill="url(#coreGradient)" />
-  
-  <!-- 发光效果 -->
-  <circle cx="100" cy="100" r="25" fill="#5e17eb" opacity="0.6" filter="url(#glow)" />
-  
-  <!-- 字母A -->
-  <path d="M90 130 L100 80 L110 130 M85 115 L115 115" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+  <!-- 量子轨道 -->
+  <ellipse cx="20" cy="20" rx="16" ry="8" stroke="#5AC8FA" stroke-width="0.5" stroke-dasharray="2 2" transform="rotate(30 20 20)"/>
+  <ellipse cx="20" cy="20" rx="16" ry="8" stroke="#5AC8FA" stroke-width="0.5" stroke-dasharray="2 2" transform="rotate(90 20 20)"/>
+  <ellipse cx="20" cy="20" rx="16" ry="8" stroke="#5AC8FA" stroke-width="0.5" stroke-dasharray="2 2" transform="rotate(150 20 20)"/>
   
   <!-- 量子粒子 -->
-  <circle cx="70" cy="90" r="4" fill="#00c8ff" />
-  <circle cx="130" cy="90" r="4" fill="#00c8ff" />
-  <circle cx="100" cy="60" r="4" fill="#00c8ff" />
-  <circle cx="100" cy="140" r="4" fill="#00c8ff" />
+  <circle cx="20" cy="4" r="2" fill="#BF5AF2"/>
+  <circle cx="36" cy="20" r="2" fill="#0A84FF"/>
+  <circle cx="20" cy="36" r="2" fill="#5AC8FA"/>
+  <circle cx="4" cy="20" r="2" fill="#30D158"/>
   
-  <!-- 连接线 -->
-  <line x1="70" y1="90" x2="100" y2="60" stroke="#5e17eb" stroke-width="1.5" />
-  <line x1="100" y1="60" x2="130" y2="90" stroke="#5e17eb" stroke-width="1.5" />
-  <line x1="130" y1="90" x2="100" y2="140" stroke="#5e17eb" stroke-width="1.5" />
-  <line x1="100" y1="140" x2="70" y2="90" stroke="#5e17eb" stroke-width="1.5" />
+  <!-- 中心点 -->
+  <circle cx="20" cy="20" r="4" fill="url(#gradient2)"/>
   
-  <!-- 定义渐变 -->
+  <!-- 文字部分 -->
+  <path d="M50 14H53.5L57 26L60.5 14H64L58.5 30H55.5L50 14Z" fill="#E6F1FF"/>
+  <path d="M65 14H68V30H65V14Z" fill="#E6F1FF"/>
+  <path d="M70 14H73V27H79V30H70V14Z" fill="#E6F1FF"/>
+  <path d="M80 14H83V27H89V30H80V14Z" fill="#E6F1FF"/>
+  <path d="M90 14H93.5L97 26L100.5 14H104L98.5 30H95.5L90 14Z" fill="#E6F1FF"/>
+  <path d="M105 14H108V30H105V14Z" fill="#E6F1FF"/>
+  
+  <!-- 渐变定义 -->
   <defs>
-    <linearGradient id="gradientStroke" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a84ff" />
-      <stop offset="100%" stop-color="#5e17eb" />
+    <linearGradient id="gradient1" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0A84FF"/>
+      <stop offset="1" stop-color="#BF5AF2"/>
     </linearGradient>
-    
-    <radialGradient id="coreGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
-      <stop offset="0%" stop-color="#00c8ff" />
-      <stop offset="100%" stop-color="#0a84ff" />
+    <radialGradient id="gradient2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(20 20) rotate(90) scale(4)">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#5AC8FA"/>
     </radialGradient>
-    
-    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur stdDeviation="5" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
   </defs>
+  
+  <!-- 动画效果 -->
+  <style>
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; }
+      100% { opacity: 0.8; }
+    }
+    circle:nth-child(1) {
+      animation: pulse 3s infinite;
+    }
+    ellipse {
+      animation: rotate 10s linear infinite;
+    }
+    @keyframes rotate {
+      from { transform-origin: 20px 20px; transform: rotate(0deg); }
+      to { transform-origin: 20px 20px; transform: rotate(360deg); }
+    }
+    circle:nth-child(3), circle:nth-child(4), circle:nth-child(5), circle:nth-child(6) {
+      animation: blink 5s infinite alternate;
+    }
+    @keyframes blink {
+      0% { opacity: 0.5; }
+      100% { opacity: 1; }
+    }
+  </style>
 </svg>
