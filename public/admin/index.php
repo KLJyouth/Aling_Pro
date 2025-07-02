@@ -1,59 +1,57 @@
 <?php
 /**
- * AlingAi Pro - 管理中心入口点文件
+ * AlingAi Pro 后台管理入口文件
  * 
- * 此文件作为前端入口点，将请求重定向到实际的admin-center应用
- * 遵循入口点(Entry Point)模式，增强安全性
+ * 处理所有后台管理请求
  */
 
-// 定义一个标识，表明这是一个有效的入口点
-define('ADMIN_ENTRY_POINT', true);
+// 定义应用根目录
+define('ROOT_PATH', dirname(dirname(__DIR__)));
+define('ADMIN_PATH', ROOT_PATH . '/admin-center');
 
-// 设置相对路径
-$adminCenterPath = dirname(dirname(__DIR__)) . '/admin-center';
+// 引入配置文件
+require_once ROOT_PATH . '/public/config/config_loader.php';
 
-// 检查必要的目录是否存在
-$storagePaths = [
-    $adminCenterPath . '/storage',
-    $adminCenterPath . '/storage/logs',
-    $adminCenterPath . '/storage/cache',
-    $adminCenterPath . '/storage/temp',
-    $adminCenterPath . '/storage/uploads',
-    $adminCenterPath . '/storage/backups'
-];
+// 引入后台引导文件
+require_once ADMIN_PATH . '/bootstrap.php';
 
-foreach ($storagePaths as $path) {
-    if (!is_dir($path)) {
-        @mkdir($path, 0755, true);
-    }
+// 获取请求URI
+$requestUri = $_SERVER['REQUEST_URI'] ?? '/';
+
+// 移除基础路径
+$basePath = '/admin';
+if (strpos($requestUri, $basePath) === 0) {
+    $requestUri = substr($requestUri, strlen($basePath)) ?: '/';
 }
 
-// 包含admin-center的引导文件
-try {
-    // 加载引导文件
-    require_once $adminCenterPath . '/bootstrap.php';
-    
-    // 获取路由实例
-    $router = new \App\Core\Router();
-    
-    // 加载路由配置
-    if (file_exists($adminCenterPath . '/routes/web.php')) {
-        require_once $adminCenterPath . '/routes/web.php';
-    }
-    
-    if (file_exists($adminCenterPath . '/routes/api.php')) {
-        require_once $adminCenterPath . '/routes/api.php';
-    }
+// 移除查询字符串
+$position = strpos($requestUri, '?');
+if ($position !== false) {
+    $requestUri = substr($requestUri, 0, $position);
+}
 
-    // 创建App实例并运行
+// 获取请求方法
+$requestMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+try {
+    // 初始化应用
     $app = new \App\Core\App($router);
+    
+    // 运行应用
     $app->run();
 } catch (Exception $e) {
-    // 捕获并显示错误
-    header('HTTP/1.1 500 Internal Server Error');
-    echo '<h1>系统错误</h1>';
-    echo '<p>' . htmlspecialchars($e->getMessage()) . '</p>';
+    // 记录错误
+    error_log("后台错误: " . $e->getMessage());
     
-    // 记录错误日志
-    error_log('管理中心启动失败: ' . $e->getMessage() . ' 在 ' . $e->getFile() . ' 第 ' . $e->getLine() . ' 行');
-} 
+    // 显示错误页面
+    if ($config['debug']) {
+        echo "<h1>系统错误</h1>";
+        echo "<p>" . $e->getMessage() . "</p>";
+        echo "<pre>" . $e->getTraceAsString() . "</pre>";
+    } else {
+        // 重定向到错误页面
+        header('Location: /admin/error');
+        exit;
+    }
+}
+?> 

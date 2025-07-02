@@ -6,7 +6,7 @@
  */
 
 // 引入配置文件
-require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../config/config_loader.php';
 
 // 页面标题
 $pageTitle = "解决方案 - AlingAi Pro";
@@ -47,7 +47,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">企业应用</h3>
                     <p class="solution-description">优化业务流程，提升团队协作效率，实现企业智能化转型。</p>
-                    <a href="/solutions/enterprise" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/enterprise.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- 教育培训 -->
@@ -57,7 +57,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">教育培训</h3>
                     <p class="solution-description">个性化学习体验，智能内容生成，提高教学效率和学习成效。</p>
-                    <a href="/solutions/education" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/education.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- 医疗健康 -->
@@ -67,7 +67,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">医疗健康</h3>
                     <p class="solution-description">辅助诊断、医疗数据分析和患者管理，提升医疗服务质量。</p>
-                    <a href="/solutions/healthcare" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/healthcare.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- 金融科技 -->
@@ -77,7 +77,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">金融科技</h3>
                     <p class="solution-description">智能风控、量化分析、客户服务，推动金融服务智能化升级。</p>
-                    <a href="/solutions/finance" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/finance.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- 零售商业 -->
@@ -87,7 +87,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">零售商业</h3>
                     <p class="solution-description">智能客服、个性化推荐、供应链优化，提升零售业务绩效。</p>
-                    <a href="/solutions/retail" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/retail.php" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
                 
                 <!-- 量子安全 -->
@@ -97,7 +97,7 @@ ob_start();
                     </div>
                     <h3 class="solution-title">量子安全</h3>
                     <p class="solution-description">前沿量子加密和安全架构，为企业数据和系统提供最高级别保护。</p>
-                    <a href="/solutions/quantum-security" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
+                    <a href="/solutions/quantum-security.html" class="solution-link">了解更多 <i class="fas fa-arrow-right"></i></a>
                 </div>
             </div>
         </div>
