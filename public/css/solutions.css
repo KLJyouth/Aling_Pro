@@ -1,0 +1,603 @@
+/**
+ * 解决方案页面样式
+ * 
+ * 包含解决方案相关页面的所有样式定义
+ */
+
+/* 通用样式 */
+.solutions-page {
+    color: var(--text-color);
+    font-family: var(--font-family);
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+.section-description {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: var(--text-color-light);
+}
+
+/* 英雄区域 */
+.hero-section {
+    padding: 120px 0 80px;
+    text-align: center;
+    color: white;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.hero-subtitle {
+    font-size: 1.5rem;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* 解决方案概述 */
+.solutions-overview {
+    padding: 80px 0;
+}
+
+.solutions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+.solution-card {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.solution-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.solution-icon {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.solution-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.solution-description {
+    flex-grow: 1;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color-light);
+}
+
+.solution-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+}
+
+.solution-link:hover {
+    gap: 12px;
+}
+
+/* 方法论部分 */
+.methodology-section {
+    padding: 80px 0;
+}
+
+.methodology-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+.step {
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.step-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    opacity: 0.7;
+    margin-bottom: 15px;
+    line-height: 1;
+}
+
+.step-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.step-content p {
+    font-size: 1rem;
+    color: var(--text-color-light);
+    line-height: 1.6;
+}
+
+/* 核心优势 */
+.advantages-section {
+    padding: 80px 0;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+.advantage-card {
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.advantage-icon {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.advantage-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.advantage-card p {
+    font-size: 1rem;
+    color: var(--text-color-light);
+    line-height: 1.6;
+}
+
+/* 成功案例 */
+.case-studies-section {
+    padding: 80px 0;
+}
+
+.case-studies-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 40px;
+    margin-top: 2rem;
+}
+
+.case-study-card {
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-study-image {
+    overflow: hidden;
+    height: 200px;
+}
+
+.case-study-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.case-study-card:hover .case-study-image img {
+    transform: scale(1.05);
+}
+
+.case-study-content {
+    padding: 30px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.case-study-tag {
+    display: inline-block;
+    padding: 5px 15px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.case-study-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.case-study-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color-light);
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+.read-more {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s ease;
+}
+
+.read-more:hover {
+    gap: 12px;
+}
+
+.view-all-cases {
+    margin-top: 50px;
+    text-align: center;
+}
+
+/* 客户评价 */
+.testimonials-section {
+    padding: 80px 0;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+.testimonial {
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-content {
+    flex-grow: 1;
+    margin-bottom: 20px;
+}
+
+.testimonial-content p {
+    font-size: 1.1rem;
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--text-color);
+    position: relative;
+    padding: 0 10px;
+}
+
+.testimonial-content p::before,
+.testimonial-content p::after {
+    content: '"';
+    font-size: 2rem;
+    color: var(--primary-color);
+    opacity: 0.5;
+    position: absolute;
+}
+
+.testimonial-content p::before {
+    left: -15px;
+    top: -10px;
+}
+
+.testimonial-content p::after {
+    right: -15px;
+    bottom: -20px;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.author-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.author-info h4 {
+    font-size: 1.1rem;
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.author-info p {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--text-color-light);
+}
+
+/* CTA区域 */
+.cta-section {
+    padding: 80px 0;
+    color: white;
+}
+
+.cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 50px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cta-content h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-dark);
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    background-color: white;
+    color: var(--primary-color);
+}
+
+.btn-light:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    border: 2px solid white;
+    color: white;
+    background-color: transparent;
+}
+
+.btn-outline-light:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 子解决方案页面特定样式 */
+.solution-detail-hero {
+    padding: 120px 0 80px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+}
+
+.solution-detail-section {
+    padding: 80px 0;
+}
+
+.solution-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.solution-detail-image {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.solution-detail-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.solution-detail-content {
+    padding: 20px 0;
+}
+
+.solution-detail-content h2 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    color: var(--primary-color);
+}
+
+.solution-detail-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    color: var(--text-color-light);
+}
+
+.solution-detail-content ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.solution-detail-content ul li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+    color: var(--text-color);
+}
+
+.solution-detail-content ul li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* 量子安全特定样式 */
+.quantum-security-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 2rem;
+}
+
+.quantum-feature-item {
+    padding: 30px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.quantum-feature-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.quantum-feature-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.quantum-feature-item p {
+    font-size: 1rem;
+    color: var(--text-color-light);
+    line-height: 1.6;
+}
+
+/* 响应式样式 */
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.3rem;
+    }
+    
+    .section-title {
+        font-size: 2.2rem;
+    }
+    
+    .solution-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .case-studies-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.3rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 量子科技风格 */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.quantum-bg-light {
+    background: linear-gradient(135deg, rgba(25, 118, 210, 0.05) 0%, rgba(106, 27, 154, 0.05) 100%);
+}
+
+.quantum-gradient {
+    background: linear-gradient(135deg, #1976d2 0%, #6a1b9a 100%);
+}
+
+.rounded-image {
+    border-radius: 15px;
+} 

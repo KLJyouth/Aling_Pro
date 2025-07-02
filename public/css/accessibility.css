@@ -1,0 +1,206 @@
+/**
+ * 无障碍样式
+ * 
+ * 为网站提供无障碍功能的样式定义，包括高对比度模式和无障碍控制面板
+ */
+
+/* 无障碍控制面板 */
+.accessibility-panel {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.accessibility-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.accessibility-toggle:hover,
+.accessibility-toggle:focus {
+    background-color: var(--primary-color-dark);
+    transform: scale(1.05);
+}
+
+.accessibility-toggle:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+.accessibility-panel-content {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: 280px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    display: none;
+}
+
+.accessibility-panel.active .accessibility-panel-content {
+    display: block;
+}
+
+.accessibility-group {
+    margin-bottom: 20px;
+}
+
+.accessibility-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.accessibility-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.accessibility-controls button {
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex: 1;
+}
+
+.accessibility-controls button:hover,
+.accessibility-controls button:focus {
+    background-color: #e0e0e0;
+}
+
+.accessibility-controls button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.accessibility-reset {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.accessibility-reset:hover,
+.accessibility-reset:focus {
+    background-color: var(--primary-color-dark);
+}
+
+/* 高对比度模式 */
+body.high-contrast {
+    background-color: black;
+    color: white;
+}
+
+body.high-contrast a {
+    color: yellow;
+}
+
+body.high-contrast button,
+body.high-contrast .btn {
+    background-color: white;
+    color: black;
+    border: 2px solid white;
+}
+
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast h4,
+body.high-contrast h5,
+body.high-contrast h6 {
+    color: white;
+}
+
+body.high-contrast .glass-card {
+    background-color: black;
+    border: 2px solid white;
+    box-shadow: none;
+}
+
+body.high-contrast .quantum-gradient,
+body.high-contrast .hero-section {
+    background: black;
+    color: white;
+}
+
+body.high-contrast input,
+body.high-contrast textarea,
+body.high-contrast select {
+    background-color: black;
+    color: white;
+    border: 2px solid white;
+}
+
+body.high-contrast .nav-item,
+body.high-contrast .nav-link {
+    color: white;
+}
+
+body.high-contrast .nav-item.active,
+body.high-contrast .nav-link.active {
+    color: yellow;
+}
+
+/* 焦点样式增强 */
+:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* 跳过导航链接（Tab键首次访问页面时显示） */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 8px 15px;
+    z-index: 10000;
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* 响应式设计调整 */
+@media (max-width: 768px) {
+    .accessibility-panel {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .accessibility-panel-content {
+        width: 250px;
+        right: 0;
+    }
+} 

@@ -83,6 +83,8 @@ function renderPageHeader() {
             --primary-color: #0a84ff;
             --text-color-light: rgba(230, 241, 255, 0.7);
             --font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            --primary-color-rgb: 10, 132, 255;
+            --primary-color-dark: #0065c8;
         }
         
         /* 基础重置 */
@@ -147,6 +149,12 @@ function renderPageHeader() {
     <!-- 加载统一导航栏样式 -->
     <link rel="stylesheet" href="/css/unified-nav.css">
     
+    <!-- 加载无障碍样式 -->
+    <link rel="stylesheet" href="/css/accessibility.css">
+    
+    <!-- 加载用户反馈样式 -->
+    <link rel="stylesheet" href="/css/user-feedback.css">
+    
     <!-- 加载额外的CSS文件 -->
     <?php foreach ($additionalCSS as $cssFile): ?>
     <link rel="stylesheet" href="<?= htmlspecialchars($cssFile) ?>">
@@ -160,9 +168,12 @@ function renderPageHeader() {
     <?php endforeach; ?>
 </head>
 <body>
+    <!-- 跳过导航链接（无障碍功能） -->
+    <a href="#main-content" class="skip-link">跳到主要内容</a>
+    
     <?php include __DIR__ . '/nav.php'; ?>
     
-    <main>
+    <main id="main-content">
 <?php
 }
 
@@ -237,7 +248,8 @@ function renderPageFooter() {
                 <p style="margin-top: 5px;">
                     <a href="/privacy" style="color: inherit; margin-right: 15px;">隐私政策</a>
                     <a href="/terms" style="color: inherit; margin-right: 15px;">服务条款</a>
-                    <a href="/security" style="color: inherit;">安全</a>
+                    <a href="/security" style="color: inherit; margin-right: 15px;">安全</a>
+                    <a href="/accessibility" style="color: inherit;">无障碍</a>
                 </p>
             </div>
         </div>
@@ -321,6 +333,12 @@ function renderPageFooter() {
     
     <!-- 加载统一导航栏脚本 -->
     <script src="/js/unified-nav.js"></script>
+    
+    <!-- 加载无障碍脚本 -->
+    <script src="/js/accessibility.js"></script>
+    
+    <!-- 加载用户反馈脚本 -->
+    <script src="/js/user-feedback.js"></script>
     
     <!-- 加载额外的JS文件（底部） -->
     <?php if (isset($additionalJS) && is_array($additionalJS)): ?>

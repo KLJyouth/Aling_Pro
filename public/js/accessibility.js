@@ -1,376 +1,278 @@
-// 辅助功能模块
-class AccessibilityManager {
-    constructor() {
-        this.fontSizeLevel = 0; // -2 to +2
-        this.highContrastEnabled = false;
-        this.animationsEnabled = true;
-        this.screenReaderEnabled = false;
-        this.speechSynthesis = window.speechSynthesis;
-        
-        this.init();
-    }
+/**
+ * 网站无障碍功能脚本
+ * 
+ * 提供网站无障碍功能，包括高对比度模式、字体大小调整和屏幕阅读器兼容性增强
+ */
+
+(function() {
+    'use strict';
     
-    init() {
-        this.setupEventListeners();
-        this.loadSettings();
-        this.setupKeyboardShortcuts();
-    }
+    // 初始设置
+    let currentFontSize = 100; // 百分比
+    let isHighContrast = false;
     
-    setupEventListeners() {
-        // 工具栏切换
-        const toggleBtn = document.getElementById('accessibilityToggle');
-        const toolbar = document.getElementById('accessibilityToolbar');
-        const closeBtn = document.getElementById('closeAccessibilityToolbar');
-        
-        toggleBtn?.addEventListener('click', () => this.toggleToolbar());
-        closeBtn?.addEventListener('click', () => this.hideToolbar());
-        
-        // 字体大小控制
-        document.getElementById('decreaseFontSize')?.addEventListener('click', () => this.adjustFontSize(-1));
-        document.getElementById('resetFontSize')?.addEventListener('click', () => this.resetFontSize());
-        document.getElementById('increaseFontSize')?.addEventListener('click', () => this.adjustFontSize(1));
-        
-        // 对比度切换
-        document.getElementById('toggleHighContrast')?.addEventListener('click', () => this.toggleHighContrast());
-        
-        // 动画切换
-        document.getElementById('toggleAnimations')?.addEventListener('click', () => this.toggleAnimations());
-        
-        // 朗读功能
-        document.getElementById('toggleScreenReader')?.addEventListener('click', () => this.toggleScreenReader());
-    }
-    
-    setupKeyboardShortcuts() {
-        document.addEventListener('keydown', (e) => {
-            // Alt + A: 打开辅助功能工具栏
-            if (e.altKey && e.key === 'a') {
-                e.preventDefault();
-                this.toggleToolbar();
-            }
+    // 从本地存储加载用户设置
+    function loadAccessibilitySettings() {
+        if (localStorage.getItem('accessibility')) {
+            const settings = JSON.parse(localStorage.getItem('accessibility'));
+            currentFontSize = settings.fontSize || 100;
+            isHighContrast = settings.highContrast || false;
             
-            // Alt + C: 切换对比度
-            if (e.altKey && e.key === 'c') {
-                e.preventDefault();
-                this.toggleHighContrast();
-            }
-            
-            // Alt + S: 朗读当前焦点元素
-            if (e.altKey && e.key === 's') {
-                e.preventDefault();
-                this.speakFocusedElement();
-            }
-            
-            // Alt + -/+: 字体大小调整
-            if (e.altKey && e.key === '-') {
-                e.preventDefault();
-                this.adjustFontSize(-1);
-            }
-            if (e.altKey && e.key === '=') {
-                e.preventDefault();
-                this.adjustFontSize(1);
-            }
-        });
-    }
-    
-    toggleToolbar() {
-        const toolbar = document.getElementById('accessibilityToolbar');
-        if (toolbar) {
-            toolbar.classList.toggle('-translate-y-full');
+            // 应用设置
+            applyFontSize();
+            applyContrastMode();
         }
     }
     
-    hideToolbar() {
-        const toolbar = document.getElementById('accessibilityToolbar');
-        if (toolbar) {
-            toolbar.classList.add('-translate-y-full');
-        }
-    }
-    
-    adjustFontSize(delta) {
-        this.fontSizeLevel = Math.max(-2, Math.min(2, this.fontSizeLevel + delta));
-        this.applyFontSize();
-        this.saveSettings();
-        
-        // 朗读反馈
-        if (this.screenReaderEnabled) {
-            this.speak(`字体大小调整为${this.fontSizeLevel > 0 ? '增大' : this.fontSizeLevel < 0 ? '减小' : '正常'}`);
-        }
-    }
-    
-    resetFontSize() {
-        this.fontSizeLevel = 0;
-        this.applyFontSize();
-        this.saveSettings();
-        
-        if (this.screenReaderEnabled) {
-            this.speak('字体大小已重置');
-        }
-    }
-    
-    applyFontSize() {
-        const baseSize = 16; // 基础字体大小
-        const newSize = baseSize + (this.fontSizeLevel * 2);
-        document.documentElement.style.fontSize = `${newSize}px`;
-    }
-    
-    toggleHighContrast() {
-        this.highContrastEnabled = !this.highContrastEnabled;
-        
-        if (this.highContrastEnabled) {
-            document.body.classList.add('high-contrast');
-            this.addHighContrastStyles();
-        } else {
-            document.body.classList.remove('high-contrast');
-            this.removeHighContrastStyles();
-        }
-        
-        this.saveSettings();
-        this.updateButtonText();
-        
-        if (this.screenReaderEnabled) {
-            this.speak(`高对比度模式${this.highContrastEnabled ? '已开启' : '已关闭'}`);
-        }
-    }
-    
-    addHighContrastStyles() {
-        if (!document.getElementById('high-contrast-styles')) {
-            const styles = document.createElement('style');
-            styles.id = 'high-contrast-styles';
-            styles.textContent = `
-                .high-contrast {
-                    filter: contrast(150%) brightness(1.2);
-                }
-                .high-contrast .glass-card {
-                    background: rgba(0, 0, 0, 0.9) !important;
-                    border: 2px solid #ffffff !important;
-                }
-                .high-contrast .text-gray-300,
-                .high-contrast .text-gray-400,
-                .high-contrast .text-gray-500 {
-                    color: #ffffff !important;
-                }
-                .high-contrast button:focus,
-                .high-contrast a:focus {
-                    outline: 3px solid #ffff00 !important;
-                    outline-offset: 2px !important;
-                }
-            `;
-            document.head.appendChild(styles);
-        }
-    }
-    
-    removeHighContrastStyles() {
-        const styles = document.getElementById('high-contrast-styles');
-        if (styles) {
-            styles.remove();
-        }
-    }
-    
-    toggleAnimations() {
-        this.animationsEnabled = !this.animationsEnabled;
-        
-        if (!this.animationsEnabled) {
-            document.body.classList.add('no-animations');
-            this.addNoAnimationStyles();
-        } else {
-            document.body.classList.remove('no-animations');
-            this.removeNoAnimationStyles();
-        }
-        
-        this.saveSettings();
-        this.updateButtonText();
-        
-        if (this.screenReaderEnabled) {
-            this.speak(`动画${this.animationsEnabled ? '已启用' : '已禁用'}`);
-        }
-    }
-    
-    addNoAnimationStyles() {
-        if (!document.getElementById('no-animation-styles')) {
-            const styles = document.createElement('style');
-            styles.id = 'no-animation-styles';
-            styles.textContent = `
-                .no-animations *,
-                .no-animations *::before,
-                .no-animations *::after {
-                    animation-duration: 0.01ms !important;
-                    animation-iteration-count: 1 !important;
-                    transition-duration: 0.01ms !important;
-                    scroll-behavior: auto !important;
-                }
-            `;
-            document.head.appendChild(styles);
-        }
-    }
-    
-    removeNoAnimationStyles() {
-        const styles = document.getElementById('no-animation-styles');
-        if (styles) {
-            styles.remove();
-        }
-    }
-    
-    toggleScreenReader() {
-        this.screenReaderEnabled = !this.screenReaderEnabled;
-        this.saveSettings();
-        this.updateButtonText();
-        
-        if (this.screenReaderEnabled) {
-            this.speak('朗读功能已开启');
-            this.setupScreenReaderFeatures();
-        } else {
-            this.speak('朗读功能已关闭');
-            this.speechSynthesis.cancel();
-        }
-    }
-    
-    setupScreenReaderFeatures() {
-        // 添加焦点朗读
-        document.addEventListener('focusin', (e) => {
-            if (this.screenReaderEnabled) {
-                this.speakElement(e.target);
-            }
-        });
-        
-        // 添加悬停朗读（可选）
-        document.addEventListener('mouseenter', (e) => {
-            if (this.screenReaderEnabled && e.target.matches('button, a, [role="button"]')) {
-                this.speakElement(e.target);
-            }
-        }, true);
-    }
-    
-    speakElement(element) {
-        if (!element || !this.speechSynthesis) return;
-        
-        let text = '';
-        
-        // 获取元素的可访问名称
-        if (element.getAttribute('aria-label')) {
-            text = element.getAttribute('aria-label');
-        } else if (element.getAttribute('title')) {
-            text = element.getAttribute('title');
-        } else if (element.textContent) {
-            text = element.textContent.trim();
-        } else if (element.getAttribute('alt')) {
-            text = element.getAttribute('alt');
-        }
-        
-        // 添加元素类型信息
-        if (element.tagName === 'BUTTON') {
-            text = `按钮: ${text}`;
-        } else if (element.tagName === 'A') {
-            text = `链接: ${text}`;
-        } else if (element.tagName === 'INPUT') {
-            text = `输入框: ${text}`;
-        }
-        
-        if (text) {
-            this.speak(text);
-        }
-    }
-    
-    speakFocusedElement() {
-        const focusedElement = document.activeElement;
-        if (focusedElement) {
-            this.speakElement(focusedElement);
-        }
-    }
-    
-    speak(text) {
-        if (!this.speechSynthesis || !text) return;
-        
-        // 停止当前朗读
-        this.speechSynthesis.cancel();
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 0.8;
-        utterance.pitch = 1;
-        utterance.volume = 0.8;
-        
-        // 使用中文语音（如果可用）
-        const voices = this.speechSynthesis.getVoices();
-        const chineseVoice = voices.find(voice => voice.lang.includes('zh'));
-        if (chineseVoice) {
-            utterance.voice = chineseVoice;
-        }
-        
-        this.speechSynthesis.speak(utterance);
-    }
-    
-    updateButtonText() {
-        const contrastBtn = document.getElementById('toggleHighContrast');
-        const animationBtn = document.getElementById('toggleAnimations');
-        const readerBtn = document.getElementById('toggleScreenReader');
-        
-        if (contrastBtn) {
-            contrastBtn.textContent = this.highContrastEnabled ? '正常对比度' : '高对比度';
-        }
-        
-        if (animationBtn) {
-            animationBtn.textContent = this.animationsEnabled ? '禁用动画' : '启用动画';
-        }
-        
-        if (readerBtn) {
-            const icon = readerBtn.querySelector('i');
-            const text = readerBtn.querySelector('span');
-            if (icon && text) {
-                icon.className = this.screenReaderEnabled ? 'fas fa-volume-mute' : 'fas fa-volume-up';
-                text.textContent = this.screenReaderEnabled ? '关闭朗读' : '朗读';
-            }
-        }
-    }
-    
-    saveSettings() {
+    // 保存用户设置到本地存储
+    function saveAccessibilitySettings() {
         const settings = {
-            fontSizeLevel: this.fontSizeLevel,
-            highContrastEnabled: this.highContrastEnabled,
-            animationsEnabled: this.animationsEnabled,
-            screenReaderEnabled: this.screenReaderEnabled
+            fontSize: currentFontSize,
+            highContrast: isHighContrast
         };
         
-        localStorage.setItem('accessibility-settings', JSON.stringify(settings));
+        localStorage.setItem('accessibility', JSON.stringify(settings));
     }
     
-    loadSettings() {
-        const saved = localStorage.getItem('accessibility-settings');
-        if (saved) {
-            try {
-                const settings = JSON.parse(saved);
-                
-                this.fontSizeLevel = settings.fontSizeLevel || 0;
-                this.highContrastEnabled = settings.highContrastEnabled || false;
-                this.animationsEnabled = settings.animationsEnabled !== false; // 默认启用
-                this.screenReaderEnabled = settings.screenReaderEnabled || false;
-                
-                // 应用设置
-                this.applyFontSize();
-                if (this.highContrastEnabled) {
-                    document.body.classList.add('high-contrast');
-                    this.addHighContrastStyles();
-                }
-                if (!this.animationsEnabled) {
-                    document.body.classList.add('no-animations');
-                    this.addNoAnimationStyles();
-                }
-                
-                this.updateButtonText();
-                
-            } catch (error) {
-                console.warn('无法加载辅助功能设置:', error);
-            }
+    // 应用字体大小
+    function applyFontSize() {
+        document.documentElement.style.fontSize = `${currentFontSize}%`;
+    }
+    
+    // 应用高对比度模式
+    function applyContrastMode() {
+        if (isHighContrast) {
+            document.body.classList.add('high-contrast');
+        } else {
+            document.body.classList.remove('high-contrast');
         }
     }
-}
-
-// 初始化辅助功能管理器
-let accessibilityManager;
-
-document.addEventListener('DOMContentLoaded', () => {
-    accessibilityManager = new AccessibilityManager();
-});
-
-// 导出以供其他模块使用
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = AccessibilityManager;
-}
+    
+    // 增加字体大小
+    function increaseFontSize() {
+        if (currentFontSize < 200) {
+            currentFontSize += 10;
+            applyFontSize();
+            saveAccessibilitySettings();
+            
+            // 通知屏幕阅读器
+            announceToScreenReader(`字体大小已增加到${currentFontSize}%`);
+        }
+    }
+    
+    // 减小字体大小
+    function decreaseFontSize() {
+        if (currentFontSize > 70) {
+            currentFontSize -= 10;
+            applyFontSize();
+            saveAccessibilitySettings();
+            
+            // 通知屏幕阅读器
+            announceToScreenReader(`字体大小已减小到${currentFontSize}%`);
+        }
+    }
+    
+    // 切换高对比度模式
+    function toggleHighContrast() {
+        isHighContrast = !isHighContrast;
+        applyContrastMode();
+        saveAccessibilitySettings();
+        
+        // 通知屏幕阅读器
+        announceToScreenReader(isHighContrast ? '已开启高对比度模式' : '已关闭高对比度模式');
+    }
+    
+    // 重置所有设置
+    function resetAccessibility() {
+        currentFontSize = 100;
+        isHighContrast = false;
+        
+        applyFontSize();
+        applyContrastMode();
+        saveAccessibilitySettings();
+        
+        // 通知屏幕阅读器
+        announceToScreenReader('已重置所有无障碍设置');
+    }
+    
+    // 创建辅助功能公告区域(用于屏幕阅读器)
+    function createAnnouncementArea() {
+        let announce = document.getElementById('accessibility-announcement');
+        
+        if (!announce) {
+            announce = document.createElement('div');
+            announce.id = 'accessibility-announcement';
+            announce.setAttribute('aria-live', 'polite');
+            announce.setAttribute('aria-atomic', 'true');
+            announce.style.position = 'absolute';
+            announce.style.width = '1px';
+            announce.style.height = '1px';
+            announce.style.padding = '0';
+            announce.style.margin = '-1px';
+            announce.style.overflow = 'hidden';
+            announce.style.clip = 'rect(0, 0, 0, 0)';
+            announce.style.whiteSpace = 'nowrap';
+            announce.style.border = '0';
+            
+            document.body.appendChild(announce);
+        }
+        
+        return announce;
+    }
+    
+    // 向屏幕阅读器通知消息
+    function announceToScreenReader(message) {
+        const announce = createAnnouncementArea();
+        announce.textContent = message;
+    }
+    
+    // 创建无障碍控制面板
+    function createAccessibilityPanel() {
+        const panel = document.createElement('div');
+        panel.className = 'accessibility-panel';
+        panel.setAttribute('aria-label', '无障碍选项');
+        
+        // 控制面板按钮
+        const toggleBtn = document.createElement('button');
+        toggleBtn.className = 'accessibility-toggle';
+        toggleBtn.innerHTML = '<i class="fas fa-universal-access"></i>';
+        toggleBtn.setAttribute('aria-label', '打开无障碍选项');
+        toggleBtn.setAttribute('title', '无障碍选项');
+        
+        // 控制面板内容
+        const panelContent = document.createElement('div');
+        panelContent.className = 'accessibility-panel-content';
+        
+        // 字体大小控制
+        const fontSizeGroup = document.createElement('div');
+        fontSizeGroup.className = 'accessibility-group';
+        
+        const fontSizeLabel = document.createElement('div');
+        fontSizeLabel.className = 'accessibility-label';
+        fontSizeLabel.textContent = '字体大小';
+        
+        const fontControls = document.createElement('div');
+        fontControls.className = 'accessibility-controls';
+        
+        const decreaseBtn = document.createElement('button');
+        decreaseBtn.innerHTML = 'A-';
+        decreaseBtn.setAttribute('aria-label', '减小字体');
+        
+        const resetFontBtn = document.createElement('button');
+        resetFontBtn.innerHTML = 'A';
+        resetFontBtn.setAttribute('aria-label', '重置字体大小');
+        
+        const increaseBtn = document.createElement('button');
+        increaseBtn.innerHTML = 'A+';
+        increaseBtn.setAttribute('aria-label', '增大字体');
+        
+        fontControls.appendChild(decreaseBtn);
+        fontControls.appendChild(resetFontBtn);
+        fontControls.appendChild(increaseBtn);
+        
+        fontSizeGroup.appendChild(fontSizeLabel);
+        fontSizeGroup.appendChild(fontControls);
+        
+        // 对比度控制
+        const contrastGroup = document.createElement('div');
+        contrastGroup.className = 'accessibility-group';
+        
+        const contrastLabel = document.createElement('div');
+        contrastLabel.className = 'accessibility-label';
+        contrastLabel.textContent = '高对比度';
+        
+        const contrastControl = document.createElement('div');
+        contrastControl.className = 'accessibility-controls';
+        
+        const contrastBtn = document.createElement('button');
+        contrastBtn.innerHTML = '开关';
+        contrastBtn.setAttribute('aria-label', '切换高对比度模式');
+        
+        contrastControl.appendChild(contrastBtn);
+        contrastGroup.appendChild(contrastLabel);
+        contrastGroup.appendChild(contrastControl);
+        
+        // 重置按钮
+        const resetGroup = document.createElement('div');
+        resetGroup.className = 'accessibility-group';
+        
+        const resetBtn = document.createElement('button');
+        resetBtn.className = 'accessibility-reset';
+        resetBtn.textContent = '重置所有设置';
+        
+        resetGroup.appendChild(resetBtn);
+        
+        // 组装面板
+        panelContent.appendChild(fontSizeGroup);
+        panelContent.appendChild(contrastGroup);
+        panelContent.appendChild(resetGroup);
+        
+        panel.appendChild(toggleBtn);
+        panel.appendChild(panelContent);
+        
+        // 事件处理
+        toggleBtn.addEventListener('click', function() {
+            panel.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                toggleBtn.setAttribute('aria-label', '关闭无障碍选项');
+            } else {
+                toggleBtn.setAttribute('aria-label', '打开无障碍选项');
+            }
+        });
+        
+        decreaseBtn.addEventListener('click', decreaseFontSize);
+        increaseBtn.addEventListener('click', increaseFontSize);
+        resetFontBtn.addEventListener('click', function() {
+            currentFontSize = 100;
+            applyFontSize();
+            saveAccessibilitySettings();
+            announceToScreenReader('已重置字体大小');
+        });
+        
+        contrastBtn.addEventListener('click', toggleHighContrast);
+        resetBtn.addEventListener('click', resetAccessibility);
+        
+        // 添加到文档
+        document.body.appendChild(panel);
+    }
+    
+    // 页面加载完成后初始化
+    window.addEventListener('DOMContentLoaded', function() {
+        // 创建公告区域
+        createAnnouncementArea();
+        
+        // 加载并应用设置
+        loadAccessibilitySettings();
+        
+        // 创建控制面板
+        createAccessibilityPanel();
+        
+        // 添加键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            // Alt + 加号: 增加字体
+            if (e.altKey && e.key === '+') {
+                increaseFontSize();
+                e.preventDefault();
+            }
+            
+            // Alt + 减号: 减小字体
+            if (e.altKey && e.key === '-') {
+                decreaseFontSize();
+                e.preventDefault();
+            }
+            
+            // Alt + C: 切换高对比度
+            if (e.altKey && e.key === 'c') {
+                toggleHighContrast();
+                e.preventDefault();
+            }
+            
+            // Alt + R: 重置所有设置
+            if (e.altKey && e.key === 'r') {
+                resetAccessibility();
+                e.preventDefault();
+            }
+        });
+    });
+})();
